@@ -50,11 +50,11 @@ class AccountsAccessBindings extends \Google\Site_Kit_Dependencies\Google\Servic
      * @return GoogleAnalyticsAdminV1alphaBatchCreateAccessBindingsResponse
      * @throws \Google\Service\Exception
      */
-    public function batchCreate($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaBatchCreateAccessBindingsRequest $postBody, $optParams = [])
+    public function batchCreate($parent, GoogleAnalyticsAdminV1alphaBatchCreateAccessBindingsRequest $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('batchCreate', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaBatchCreateAccessBindingsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('batchCreate', [$params], GoogleAnalyticsAdminV1alphaBatchCreateAccessBindingsResponse::class);
     }
     /**
      * Deletes information about multiple users' links to an account or property.
@@ -69,11 +69,11 @@ class AccountsAccessBindings extends \Google\Site_Kit_Dependencies\Google\Servic
      * @return GoogleProtobufEmpty
      * @throws \Google\Service\Exception
      */
-    public function batchDelete($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaBatchDeleteAccessBindingsRequest $postBody, $optParams = [])
+    public function batchDelete($parent, GoogleAnalyticsAdminV1alphaBatchDeleteAccessBindingsRequest $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('batchDelete', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleProtobufEmpty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('batchDelete', [$params], GoogleProtobufEmpty::class);
     }
     /**
      * Gets information about multiple access bindings to an account or property.
@@ -94,8 +94,8 @@ class AccountsAccessBindings extends \Google\Site_Kit_Dependencies\Google\Servic
     public function batchGet($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('batchGet', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaBatchGetAccessBindingsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('batchGet', [$params], GoogleAnalyticsAdminV1alphaBatchGetAccessBindingsResponse::class);
     }
     /**
      * Updates information about multiple access bindings to an account or property.
@@ -110,11 +110,11 @@ class AccountsAccessBindings extends \Google\Site_Kit_Dependencies\Google\Servic
      * @return GoogleAnalyticsAdminV1alphaBatchUpdateAccessBindingsResponse
      * @throws \Google\Service\Exception
      */
-    public function batchUpdate($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaBatchUpdateAccessBindingsRequest $postBody, $optParams = [])
+    public function batchUpdate($parent, GoogleAnalyticsAdminV1alphaBatchUpdateAccessBindingsRequest $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('batchUpdate', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaBatchUpdateAccessBindingsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('batchUpdate', [$params], GoogleAnalyticsAdminV1alphaBatchUpdateAccessBindingsResponse::class);
     }
     /**
      * Creates an access binding on an account or property. (accessBindings.create)
@@ -126,11 +126,11 @@ class AccountsAccessBindings extends \Google\Site_Kit_Dependencies\Google\Servic
      * @return GoogleAnalyticsAdminV1alphaAccessBinding
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessBinding $postBody, $optParams = [])
+    public function create($parent, GoogleAnalyticsAdminV1alphaAccessBinding $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessBinding::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], GoogleAnalyticsAdminV1alphaAccessBinding::class);
     }
     /**
      * Deletes an access binding on an account or property. (accessBindings.delete)
@@ -145,8 +145,8 @@ class AccountsAccessBindings extends \Google\Site_Kit_Dependencies\Google\Servic
     public function delete($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('delete', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleProtobufEmpty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('delete', [$params], GoogleProtobufEmpty::class);
     }
     /**
      * Gets information about an access binding. (accessBindings.get)
@@ -161,8 +161,8 @@ class AccountsAccessBindings extends \Google\Site_Kit_Dependencies\Google\Servic
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessBinding::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], GoogleAnalyticsAdminV1alphaAccessBinding::class);
     }
     /**
      * Lists all access bindings on an account or property.
@@ -186,8 +186,8 @@ class AccountsAccessBindings extends \Google\Site_Kit_Dependencies\Google\Servic
     public function listAccountsAccessBindings($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListAccessBindingsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], GoogleAnalyticsAdminV1alphaListAccessBindingsResponse::class);
     }
     /**
      * Updates an access binding on an account or property. (accessBindings.patch)
@@ -201,12 +201,12 @@ class AccountsAccessBindings extends \Google\Site_Kit_Dependencies\Google\Servic
      * @return GoogleAnalyticsAdminV1alphaAccessBinding
      * @throws \Google\Service\Exception
      */
-    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessBinding $postBody, $optParams = [])
+    public function patch($name, GoogleAnalyticsAdminV1alphaAccessBinding $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccessBinding::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('patch', [$params], GoogleAnalyticsAdminV1alphaAccessBinding::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\Resource\AccountsAccessBindings::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_AccountsAccessBindings');
+class_alias(AccountsAccessBindings::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_AccountsAccessBindings');

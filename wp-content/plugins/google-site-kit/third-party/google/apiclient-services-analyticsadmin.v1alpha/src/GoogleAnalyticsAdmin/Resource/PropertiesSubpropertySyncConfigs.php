@@ -43,8 +43,8 @@ class PropertiesSubpropertySyncConfigs extends \Google\Site_Kit_Dependencies\Goo
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertySyncConfig::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], GoogleAnalyticsAdminV1alphaSubpropertySyncConfig::class);
     }
     /**
      * List all `SubpropertySyncConfig` resources for a property.
@@ -68,8 +68,8 @@ class PropertiesSubpropertySyncConfigs extends \Google\Site_Kit_Dependencies\Goo
     public function listPropertiesSubpropertySyncConfigs($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListSubpropertySyncConfigsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], GoogleAnalyticsAdminV1alphaListSubpropertySyncConfigsResponse::class);
     }
     /**
      * Updates a `SubpropertySyncConfig`. (subpropertySyncConfigs.patch)
@@ -87,12 +87,12 @@ class PropertiesSubpropertySyncConfigs extends \Google\Site_Kit_Dependencies\Goo
      * @return GoogleAnalyticsAdminV1alphaSubpropertySyncConfig
      * @throws \Google\Service\Exception
      */
-    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertySyncConfig $postBody, $optParams = [])
+    public function patch($name, GoogleAnalyticsAdminV1alphaSubpropertySyncConfig $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertySyncConfig::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('patch', [$params], GoogleAnalyticsAdminV1alphaSubpropertySyncConfig::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\Resource\PropertiesSubpropertySyncConfigs::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesSubpropertySyncConfigs');
+class_alias(PropertiesSubpropertySyncConfigs::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesSubpropertySyncConfigs');

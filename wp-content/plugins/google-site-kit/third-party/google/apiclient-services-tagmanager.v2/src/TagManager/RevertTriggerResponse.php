@@ -19,7 +19,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 
 class RevertTriggerResponse extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $triggerType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Trigger::class;
+    protected $triggerType = Trigger::class;
     protected $triggerDataType = '';
     /**
      * Trigger as it appears in the latest container version since the last
@@ -28,7 +28,7 @@ class RevertTriggerResponse extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Trigger $trigger
      */
-    public function setTrigger(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Trigger $trigger)
+    public function setTrigger(Trigger $trigger)
     {
         $this->trigger = $trigger;
     }
@@ -41,4 +41,4 @@ class RevertTriggerResponse extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\RevertTriggerResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_RevertTriggerResponse');
+class_alias(RevertTriggerResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_RevertTriggerResponse');

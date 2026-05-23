@@ -1,3 +1,55 @@
+## [3.11.2](https://github.com/Automattic/newspack-ads/compare/v3.11.1...v3.11.2) (2026-05-19)
+
+
+### Bug Fixes
+
+* correct spacing between ad suppression toggles for WP 7.0 ([#1066](https://github.com/Automattic/newspack-ads/issues/1066)) ([e184999](https://github.com/Automattic/newspack-ads/commit/e1849995d16ad945e6ca56ff585a4834bef7dbbb))
+
+## [3.11.1](https://github.com/Automattic/newspack-ads/compare/v3.11.0...v3.11.1) (2026-05-18)
+
+
+### Bug Fixes
+
+* **suppression:** guard get_current_screen() in customizer preview ([#1072](https://github.com/Automattic/newspack-ads/issues/1072)) ([520240e](https://github.com/Automattic/newspack-ads/commit/520240e34d35f0e13a0487fd0793a79cc2d48430))
+
+# [3.11.0](https://github.com/Automattic/newspack-ads/compare/v3.10.4...v3.11.0) (2026-05-18)
+
+
+### Bug Fixes
+
+* force alpha release ([c54d906](https://github.com/Automattic/newspack-ads/commit/c54d90668345eb9c5f2efafd9ba90304d66a1b3d))
+* hide SCAIP's panel when Newspack Ads in active, since it has its own visibility controls ([#1064](https://github.com/Automattic/newspack-ads/issues/1064)) ([17f6c41](https://github.com/Automattic/newspack-ads/commit/17f6c4169c54b49cc4d4c761ad0af15c13e6fb60))
+* update blocks for compatibility with iframe-based Post Editor ([#1031](https://github.com/Automattic/newspack-ads/issues/1031)) ([ac8a876](https://github.com/Automattic/newspack-ads/commit/ac8a87619d0cb68f44325a46c64b8b3de547996b))
+
+
+### Features
+
+* add a warning message when hidden block contains an ad ([#1056](https://github.com/Automattic/newspack-ads/issues/1056)) ([f2b0919](https://github.com/Automattic/newspack-ads/commit/f2b091970d50fc83e0ce5eacfd5d9ae67dd49db0))
+
+## [3.10.4](https://github.com/Automattic/newspack-ads/compare/v3.10.3...v3.10.4) (2026-05-04)
+
+
+### Bug Fixes
+
+* **blocks:** deduplicate API calls across ad unit block instances ([#1043](https://github.com/Automattic/newspack-ads/issues/1043)) ([969994f](https://github.com/Automattic/newspack-ads/commit/969994ff136bafefd95ed60275d929b7237fdf7a))
+* refine phpcs:ignore comment per review feedback ([3a91118](https://github.com/Automattic/newspack-ads/commit/3a9111842f14a0a8523920fc965a9b3493bf3481))
+* remove wp_kses_post from tab block inner content output ([97d490b](https://github.com/Automattic/newspack-ads/commit/97d490b34de1641f3d0057b42f1aa9a4a4680a77))
+* remove wp_kses_post from tab block inner content output ([5e45116](https://github.com/Automattic/newspack-ads/commit/5e4511649adeac26f88e92c0190600c9a472bb2a))
+
+## [3.10.3](https://github.com/Automattic/newspack-ads/compare/v3.10.2...v3.10.3) (2026-04-13)
+
+
+### Bug Fixes
+
+* update newspack-scripts to npm registry version ([#1054](https://github.com/Automattic/newspack-ads/issues/1054)) ([d6b21c2](https://github.com/Automattic/newspack-ads/commit/d6b21c2207e7d429c6bbb3537192333e3b16fd75))
+
+## [3.10.2](https://github.com/Automattic/newspack-ads/compare/v3.10.1...v3.10.2) (2026-04-13)
+
+
+### Bug Fixes
+
+* remove ability to hide ad blocks ([#1046](https://github.com/Automattic/newspack-ads/issues/1046)) ([d37ea17](https://github.com/Automattic/newspack-ads/commit/d37ea17d817e8a961c0d566f8c0f91a27eb2e478))
+
 ## [3.10.1](https://github.com/Automattic/newspack-ads/compare/v3.10.0...v3.10.1) (2026-01-19)
 
 

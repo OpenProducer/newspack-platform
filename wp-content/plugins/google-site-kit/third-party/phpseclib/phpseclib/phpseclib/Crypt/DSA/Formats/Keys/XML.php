@@ -37,19 +37,19 @@ abstract class XML
      */
     public static function load($key, $password = '')
     {
-        if (!\Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::is_stringable($key)) {
-            throw new \UnexpectedValueException('Key should be a string - not a ' . \gettype($key));
+        if (!Strings::is_stringable($key)) {
+            throw new \UnexpectedValueException('Key should be a string - not a ' . gettype($key));
         }
-        if (!\class_exists('DOMDocument')) {
-            throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\BadConfigurationException('The dom extension is not setup correctly on this system');
+        if (!class_exists('DOMDocument')) {
+            throw new BadConfigurationException('The dom extension is not setup correctly on this system');
         }
-        $use_errors = \libxml_use_internal_errors(\true);
+        $use_errors = libxml_use_internal_errors(\true);
         $dom = new \DOMDocument();
-        if (\substr($key, 0, 5) != '<?xml') {
+        if (substr($key, 0, 5) != '<?xml') {
             $key = '<xml>' . $key . '</xml>';
         }
         if (!$dom->loadXML($key)) {
-            \libxml_use_internal_errors($use_errors);
+            libxml_use_internal_errors($use_errors);
             throw new \UnexpectedValueException('Key does not appear to contain XML');
         }
         $xpath = new \DOMXPath($dom);
@@ -60,7 +60,7 @@ abstract class XML
             if (!$temp->length) {
                 continue;
             }
-            $value = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(\Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_decode($temp->item(0)->nodeValue), 256);
+            $value = new BigInteger(Strings::base64_decode($temp->item(0)->nodeValue), 256);
             switch ($key) {
                 case 'p':
                     // a prime modulus meeting the [DSS] requirements
@@ -93,7 +93,7 @@ abstract class XML
                 case 'pgencounter':
             }
         }
-        \libxml_use_internal_errors($use_errors);
+        libxml_use_internal_errors($use_errors);
         if (!isset($components['y'])) {
             throw new \UnexpectedValueException('Key is missing y component');
         }
@@ -116,8 +116,8 @@ abstract class XML
      * @param BigInteger $y
      * @return string
      */
-    public static function savePublicKey(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $p, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $q, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $g, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $y)
+    public static function savePublicKey(BigInteger $p, BigInteger $q, BigInteger $g, BigInteger $y)
     {
-        return "<DSAKeyValue>\r\n" . '  <P>' . \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_encode($p->toBytes()) . "</P>\r\n" . '  <Q>' . \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_encode($q->toBytes()) . "</Q>\r\n" . '  <G>' . \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_encode($g->toBytes()) . "</G>\r\n" . '  <Y>' . \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_encode($y->toBytes()) . "</Y>\r\n" . '</DSAKeyValue>';
+        return "<DSAKeyValue>\r\n" . '  <P>' . Strings::base64_encode($p->toBytes()) . "</P>\r\n" . '  <Q>' . Strings::base64_encode($q->toBytes()) . "</Q>\r\n" . '  <G>' . Strings::base64_encode($g->toBytes()) . "</G>\r\n" . '  <Y>' . Strings::base64_encode($y->toBytes()) . "</Y>\r\n" . '</DSAKeyValue>';
     }
 }

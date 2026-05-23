@@ -54,7 +54,7 @@ class GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal extends \
      * @var bool
      */
     public $costDataSharingEnabled;
-    protected $linkProposalStatusDetailsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaLinkProposalStatusDetails::class;
+    protected $linkProposalStatusDetailsType = GoogleAnalyticsAdminV1alphaLinkProposalStatusDetails::class;
     protected $linkProposalStatusDetailsDataType = '';
     /**
      * Output only. The resource name for this
@@ -166,7 +166,7 @@ class GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal extends \
      *
      * @param GoogleAnalyticsAdminV1alphaLinkProposalStatusDetails $linkProposalStatusDetails
      */
-    public function setLinkProposalStatusDetails(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaLinkProposalStatusDetails $linkProposalStatusDetails)
+    public function setLinkProposalStatusDetails(GoogleAnalyticsAdminV1alphaLinkProposalStatusDetails $linkProposalStatusDetails)
     {
         $this->linkProposalStatusDetails = $linkProposalStatusDetails;
     }
@@ -219,4 +219,4 @@ class GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal extends \
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal');
+class_alias(GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal');

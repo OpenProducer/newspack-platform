@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsData;
 class PivotHeader extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'pivotDimensionHeaders';
-    protected $pivotDimensionHeadersType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\PivotDimensionHeader::class;
+    protected $pivotDimensionHeadersType = PivotDimensionHeader::class;
     protected $pivotDimensionHeadersDataType = 'array';
     /**
      * The cardinality of the pivot. The total number of rows for this pivot's
@@ -67,4 +67,4 @@ class PivotHeader extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\PivotHeader::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_PivotHeader');
+class_alias(PivotHeader::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_PivotHeader');

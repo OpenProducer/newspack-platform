@@ -21,7 +21,7 @@ use Google\Site_Kit_Dependencies\Monolog\Utils;
  * @author Jesper Skovgaard Nielsen <nulpunkt@gmail.com>
  * @author Dominik Kukacka <dominik.kukacka@gmail.com>
  */
-class SyslogUdpHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\AbstractSyslogHandler
+class SyslogUdpHandler extends AbstractSyslogHandler
 {
     const RFC3164 = 0;
     const RFC5424 = 1;
@@ -45,17 +45,17 @@ class SyslogUdpHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abs
      *
      * @phpstan-param self::RFC* $rfc
      */
-    public function __construct(string $host, int $port = 514, $facility = \LOG_USER, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG, bool $bubble = \true, string $ident = 'php', int $rfc = self::RFC5424)
+    public function __construct(string $host, int $port = 514, $facility = \LOG_USER, $level = Logger::DEBUG, bool $bubble = \true, string $ident = 'php', int $rfc = self::RFC5424)
     {
-        if (!\extension_loaded('sockets')) {
-            throw new \Google\Site_Kit_Dependencies\Monolog\Handler\MissingExtensionException('The sockets extension is required to use the SyslogUdpHandler');
+        if (!extension_loaded('sockets')) {
+            throw new MissingExtensionException('The sockets extension is required to use the SyslogUdpHandler');
         }
         parent::__construct($facility, $level, $bubble);
         $this->ident = $ident;
         $this->rfc = $rfc;
-        $this->socket = new \Google\Site_Kit_Dependencies\Monolog\Handler\SyslogUdp\UdpSocket($host, $port);
+        $this->socket = new UdpSocket($host, $port);
     }
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
         $lines = $this->splitMessageIntoLines($record['formatted']);
         $header = $this->makeCommonSyslogHeader($this->logLevels[$record['level']], $record['datetime']);
@@ -63,7 +63,7 @@ class SyslogUdpHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abs
             $this->socket->write($line, $header);
         }
     }
-    public function close() : void
+    public function close(): void
     {
         $this->socket->close();
     }
@@ -71,28 +71,28 @@ class SyslogUdpHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abs
      * @param  string|string[] $message
      * @return string[]
      */
-    private function splitMessageIntoLines($message) : array
+    private function splitMessageIntoLines($message): array
     {
-        if (\is_array($message)) {
-            $message = \implode("\n", $message);
+        if (is_array($message)) {
+            $message = implode("\n", $message);
         }
-        $lines = \preg_split('/$\\R?^/m', (string) $message, -1, \PREG_SPLIT_NO_EMPTY);
+        $lines = preg_split('/$\R?^/m', (string) $message, -1, \PREG_SPLIT_NO_EMPTY);
         if (\false === $lines) {
-            $pcreErrorCode = \preg_last_error();
-            throw new \RuntimeException('Could not preg_split: ' . $pcreErrorCode . ' / ' . \Google\Site_Kit_Dependencies\Monolog\Utils::pcreLastErrorMessage($pcreErrorCode));
+            $pcreErrorCode = preg_last_error();
+            throw new \RuntimeException('Could not preg_split: ' . $pcreErrorCode . ' / ' . Utils::pcreLastErrorMessage($pcreErrorCode));
         }
         return $lines;
     }
     /**
      * Make common syslog header (see rfc5424 or rfc3164)
      */
-    protected function makeCommonSyslogHeader(int $severity, \DateTimeInterface $datetime) : string
+    protected function makeCommonSyslogHeader(int $severity, DateTimeInterface $datetime): string
     {
         $priority = $severity + $this->facility;
-        if (!($pid = \getmypid())) {
+        if (!$pid = getmypid()) {
             $pid = '-';
         }
-        if (!($hostname = \gethostname())) {
+        if (!$hostname = gethostname()) {
             $hostname = '-';
         }
         if ($this->rfc === self::RFC3164) {
@@ -108,7 +108,7 @@ class SyslogUdpHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abs
     /**
      * Inject your own socket, mainly used for testing
      */
-    public function setSocket(\Google\Site_Kit_Dependencies\Monolog\Handler\SyslogUdp\UdpSocket $socket) : self
+    public function setSocket(UdpSocket $socket): self
     {
         $this->socket = $socket;
         return $this;

@@ -19,7 +19,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Exception\BadConfigurationException;
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\Engine
+class BCMath extends Engine
 {
     /**
      * Can Bitwise operations be done fast?
@@ -35,6 +35,10 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      */
     const ENGINE_DIR = 'BCMath';
     /**
+     * Test to see if bcmod() accepts 2 or 3 parameters
+     */
+    const BCMOD_THREE_PARAMS = \PHP_VERSION_ID >= 72000;
+    /**
      * Test for engine validity
      *
      * @return bool
@@ -42,7 +46,7 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      */
     public static function isValidEngine()
     {
-        return \extension_loaded('bcmath');
+        return extension_loaded('bcmath');
     }
     /**
      * Default constructor
@@ -57,7 +61,7 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
             static::$isValidEngine[static::class] = self::isValidEngine();
         }
         if (!static::$isValidEngine[static::class]) {
-            throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\BadConfigurationException('BCMath is not setup correctly on this system');
+            throw new BadConfigurationException('BCMath is not setup correctly on this system');
         }
         $this->value = '0';
         parent::__construct($x, $base);
@@ -70,24 +74,24 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      */
     protected function initialize($base)
     {
-        switch (\abs($base)) {
+        switch (abs($base)) {
             case 256:
                 // round $len to the nearest 4
-                $len = \strlen($this->value) + 3 & ~3;
-                $x = \str_pad($this->value, $len, \chr(0), \STR_PAD_LEFT);
+                $len = strlen($this->value) + 3 & ~3;
+                $x = str_pad($this->value, $len, chr(0), \STR_PAD_LEFT);
                 $this->value = '0';
                 for ($i = 0; $i < $len; $i += 4) {
-                    $this->value = \bcmul($this->value, '4294967296', 0);
+                    $this->value = bcmul($this->value, '4294967296', 0);
                     // 4294967296 == 2**32
-                    $this->value = \bcadd($this->value, 0x1000000 * \ord($x[$i]) + (\ord($x[$i + 1]) << 16 | \ord($x[$i + 2]) << 8 | \ord($x[$i + 3])), 0);
+                    $this->value = bcadd($this->value, 0x1000000 * ord($x[$i]) + (ord($x[$i + 1]) << 16 | ord($x[$i + 2]) << 8 | ord($x[$i + 3])), 0);
                 }
                 if ($this->is_negative) {
                     $this->value = '-' . $this->value;
                 }
                 break;
             case 16:
-                $x = \strlen($this->value) & 1 ? '0' . $this->value : $this->value;
-                $temp = new self(\Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::hex2bin($x), 256);
+                $x = strlen($this->value) & 1 ? '0' . $this->value : $this->value;
+                $temp = new self(Strings::hex2bin($x), 256);
                 $this->value = $this->is_negative ? '-' . $temp->value : $temp->value;
                 $this->is_negative = \false;
                 break;
@@ -107,7 +111,7 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
         if ($this->value === '0') {
             return '0';
         }
-        return \ltrim($this->value, '0');
+        return ltrim($this->value, '0');
     }
     /**
      * Converts a BigInteger to a byte string (eg. base-256).
@@ -123,14 +127,14 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
         $value = '';
         $current = $this->value;
         if ($current[0] == '-') {
-            $current = \substr($current, 1);
+            $current = substr($current, 1);
         }
-        while (\bccomp($current, '0', 0) > 0) {
-            $temp = \bcmod($current, '16777216');
-            $value = \chr($temp >> 16) . \chr($temp >> 8) . \chr($temp) . $value;
-            $current = \bcdiv($current, '16777216', 0);
+        while (bccomp($current, '0', 0) > 0) {
+            $temp = self::BCMOD_THREE_PARAMS ? bcmod($current, '16777216', 0) : bcmod($current, '16777216');
+            $value = chr($temp >> 16) . chr($temp >> 8 & 0xff) . chr($temp & 0xff) . $value;
+            $current = bcdiv($current, '16777216', 0);
         }
-        return $this->precision > 0 ? \substr(\str_pad($value, $this->precision >> 3, \chr(0), \STR_PAD_LEFT), -($this->precision >> 3)) : \ltrim($value, \chr(0));
+        return $this->precision > 0 ? substr(str_pad($value, $this->precision >> 3, chr(0), \STR_PAD_LEFT), -($this->precision >> 3)) : ltrim($value, chr(0));
     }
     /**
      * Adds two BigIntegers.
@@ -138,10 +142,10 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      * @param BCMath $y
      * @return BCMath
      */
-    public function add(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $y)
+    public function add(BCMath $y)
     {
         $temp = new self();
-        $temp->value = \bcadd($this->value, $y->value);
+        $temp->value = bcadd($this->value, $y->value, 0);
         return $this->normalize($temp);
     }
     /**
@@ -150,10 +154,10 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      * @param BCMath $y
      * @return BCMath
      */
-    public function subtract(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $y)
+    public function subtract(BCMath $y)
     {
         $temp = new self();
-        $temp->value = \bcsub($this->value, $y->value);
+        $temp->value = bcsub($this->value, $y->value, 0);
         return $this->normalize($temp);
     }
     /**
@@ -162,10 +166,10 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      * @param BCMath $x
      * @return BCMath
      */
-    public function multiply(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $x)
+    public function multiply(BCMath $x)
     {
         $temp = new self();
-        $temp->value = \bcmul($this->value, $x->value);
+        $temp->value = bcmul($this->value, $x->value, 0);
         return $this->normalize($temp);
     }
     /**
@@ -179,14 +183,14 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      * @param BCMath $y
      * @return array{static, static}
      */
-    public function divide(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $y)
+    public function divide(BCMath $y)
     {
         $quotient = new self();
         $remainder = new self();
-        $quotient->value = \bcdiv($this->value, $y->value, 0);
-        $remainder->value = \bcmod($this->value, $y->value);
+        $quotient->value = bcdiv($this->value, $y->value, 0);
+        $remainder->value = self::BCMOD_THREE_PARAMS ? bcmod($this->value, $y->value, 0) : bcmod($this->value, $y->value);
         if ($remainder->value[0] == '-') {
-            $remainder->value = \bcadd($remainder->value, $y->value[0] == '-' ? \substr($y->value, 1) : $y->value, 0);
+            $remainder->value = bcadd($remainder->value, $y->value[0] == '-' ? substr($y->value, 1) : $y->value, 0);
         }
         return [$this->normalize($quotient), $this->normalize($remainder)];
     }
@@ -198,7 +202,7 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      * @param BCMath $n
      * @return false|BCMath
      */
-    public function modInverse(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $n)
+    public function modInverse(BCMath $n)
     {
         return $this->modInverseHelper($n);
     }
@@ -213,7 +217,7 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      * @param BCMath $n
      * @return array{gcd: static, x: static, y: static}
      */
-    public function extendedGCD(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $n)
+    public function extendedGCD(BCMath $n)
     {
         // it might be faster to use the binary xGCD algorithim here, as well, but (1) that algorithim works
         // best when the base is a power of 2 and (2) i don't think it'd make much difference, anyway.  as is,
@@ -224,17 +228,17 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
         $b = '0';
         $c = '0';
         $d = '1';
-        while (\bccomp($v, '0', 0) != 0) {
-            $q = \bcdiv($u, $v, 0);
+        while (bccomp($v, '0', 0) != 0) {
+            $q = bcdiv($u, $v, 0);
             $temp = $u;
             $u = $v;
-            $v = \bcsub($temp, \bcmul($v, $q, 0), 0);
+            $v = bcsub($temp, bcmul($v, $q, 0), 0);
             $temp = $a;
             $a = $c;
-            $c = \bcsub($temp, \bcmul($a, $q, 0), 0);
+            $c = bcsub($temp, bcmul($a, $q, 0), 0);
             $temp = $b;
             $b = $d;
-            $d = \bcsub($temp, \bcmul($b, $q, 0), 0);
+            $d = bcsub($temp, bcmul($b, $q, 0), 0);
         }
         return ['gcd' => $this->normalize(new static($u)), 'x' => $this->normalize(new static($a)), 'y' => $this->normalize(new static($b))];
     }
@@ -246,10 +250,9 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      * @param BCMath $n
      * @return BCMath
      */
-    public function gcd(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $n)
+    public function gcd(BCMath $n)
     {
-        \extract($this->extendedGCD($n));
-        /** @var BCMath $gcd */
+        $gcd = $this->extendedGCD($n)['gcd'];
         return $gcd;
     }
     /**
@@ -260,7 +263,7 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
     public function abs()
     {
         $temp = new static();
-        $temp->value = \strlen($this->value) && $this->value[0] == '-' ? \substr($this->value, 1) : $this->value;
+        $temp->value = strlen($this->value) && $this->value[0] == '-' ? substr($this->value, 1) : $this->value;
         return $temp;
     }
     /**
@@ -269,7 +272,7 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      * @param BCMath $x
      * @return BCMath
      */
-    public function bitwise_and(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $x)
+    public function bitwise_and(BCMath $x)
     {
         return $this->bitwiseAndHelper($x);
     }
@@ -279,7 +282,7 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      * @param BCMath $x
      * @return BCMath
      */
-    public function bitwise_or(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $x)
+    public function bitwise_or(BCMath $x)
     {
         return $this->bitwiseOrHelper($x);
     }
@@ -289,7 +292,7 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      * @param BCMath $x
      * @return BCMath
      */
-    public function bitwise_xor(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $x)
+    public function bitwise_xor(BCMath $x)
     {
         return $this->bitwiseXorHelper($x);
     }
@@ -304,7 +307,7 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
     public function bitwise_rightShift($shift)
     {
         $temp = new static();
-        $temp->value = \bcdiv($this->value, \bcpow('2', $shift, 0), 0);
+        $temp->value = bcdiv($this->value, bcpow('2', $shift, 0), 0);
         return $this->normalize($temp);
     }
     /**
@@ -318,7 +321,7 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
     public function bitwise_leftShift($shift)
     {
         $temp = new static();
-        $temp->value = \bcmul($this->value, \bcpow('2', $shift, 0), 0);
+        $temp->value = bcmul($this->value, bcpow('2', $shift, 0), 0);
         return $this->normalize($temp);
     }
     /**
@@ -339,9 +342,9 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      * @return int in case < 0 if $this is less than $y; > 0 if $this is greater than $y, and 0 if they are equal.
      * @see self::equals()
      */
-    public function compare(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $y)
+    public function compare(BCMath $y)
     {
-        return \bccomp($this->value, $y->value, 0);
+        return bccomp($this->value, $y->value, 0);
     }
     /**
      * Tests the equality of two numbers.
@@ -351,7 +354,7 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      * @param BCMath $x
      * @return bool
      */
-    public function equals(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $x)
+    public function equals(BCMath $x)
     {
         return $this->value == $x->value;
     }
@@ -362,7 +365,7 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      * @param BCMath $n
      * @return BCMath
      */
-    public function modPow(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $e, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $n)
+    public function modPow(BCMath $e, BCMath $n)
     {
         return $this->powModOuter($e, $n);
     }
@@ -375,7 +378,7 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      * @param BCMath $n
      * @return BCMath
      */
-    public function powMod(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $e, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $n)
+    public function powMod(BCMath $e, BCMath $n)
     {
         return $this->powModOuter($e, $n);
     }
@@ -386,13 +389,13 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      * @param BCMath $n
      * @return BCMath
      */
-    protected function powModInner(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $e, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $n)
+    protected function powModInner(BCMath $e, BCMath $n)
     {
         try {
             $class = static::$modexpEngine[static::class];
             return $class::powModHelper($this, $e, $n, static::class);
         } catch (\Exception $err) {
-            return \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath\DefaultEngine::powModHelper($this, $e, $n, static::class);
+            return BCMath\DefaultEngine::powModHelper($this, $e, $n, static::class);
         }
     }
     /**
@@ -403,12 +406,12 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      * @param BCMath $result
      * @return BCMath
      */
-    protected function normalize(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $result)
+    protected function normalize(BCMath $result)
     {
         $result->precision = $this->precision;
         $result->bitmask = $this->bitmask;
         if ($result->bitmask !== \false) {
-            $result->value = \bcmod($result->value, $result->bitmask->value);
+            $result->value = self::BCMOD_THREE_PARAMS ? bcmod($result->value, $result->bitmask->value, 0) : bcmod($result->value, $result->bitmask->value);
         }
         return $result;
     }
@@ -421,7 +424,7 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      * @param BCMath $max
      * @return false|BCMath
      */
-    public static function randomRangePrime(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $min, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $max)
+    public static function randomRangePrime(BCMath $min, BCMath $max)
     {
         return self::randomRangePrimeOuter($min, $max);
     }
@@ -438,7 +441,7 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      * @param BCMath $max
      * @return BCMath
      */
-    public static function randomRange(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $min, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $max)
+    public static function randomRange(BCMath $min, BCMath $max)
     {
         return self::randomRangeHelper($min, $max);
     }
@@ -452,7 +455,7 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
     protected function make_odd()
     {
         if (!$this->isOdd()) {
-            $this->value = \bcadd($this->value, '1');
+            $this->value = bcadd($this->value, '1', 0);
         }
     }
     /**
@@ -468,12 +471,12 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
         if ($this->value === '2') {
             return \true;
         }
-        if ($this->value[\strlen($this->value) - 1] % 2 == 0) {
+        if ($this->value[strlen($this->value) - 1] % 2 == 0) {
             return \false;
         }
         $value = $this->value;
         foreach (self::PRIMES as $prime) {
-            $r = \bcmod($this->value, $prime);
+            $r = self::BCMOD_THREE_PARAMS ? bcmod($this->value, $prime, 0) : bcmod($this->value, $prime);
             if ($r == '0') {
                 return $this->value == $prime;
             }
@@ -489,13 +492,13 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      * @return int
      * @see self::isPrime()
      */
-    public static function scan1divide(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $r)
+    public static function scan1divide(BCMath $r)
     {
         $r_value =& $r->value;
         $s = 0;
         // if $n was 1, $r would be 0 and this would be an infinite loop, hence our $this->equals(static::$one[static::class]) check earlier
-        while ($r_value[\strlen($r_value) - 1] % 2 == 0) {
-            $r_value = \bcdiv($r_value, '2', 0);
+        while ($r_value[strlen($r_value) - 1] % 2 == 0) {
+            $r_value = bcdiv($r_value, '2', 0);
             ++$s;
         }
         return $s;
@@ -506,10 +509,10 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      * @param BCMath $n
      * @return BCMath
      */
-    public function pow(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $n)
+    public function pow(BCMath $n)
     {
         $temp = new self();
-        $temp->value = \bcpow($this->value, $n->value);
+        $temp->value = bcpow($this->value, $n->value, 0);
         return $this->normalize($temp);
     }
     /**
@@ -518,7 +521,7 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      * @param BCMath ...$nums
      * @return BCMath
      */
-    public static function min(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath ...$nums)
+    public static function min(BCMath ...$nums)
     {
         return self::minHelper($nums);
     }
@@ -528,7 +531,7 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      * @param BCMath ...$nums
      * @return BCMath
      */
-    public static function max(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath ...$nums)
+    public static function max(BCMath ...$nums)
     {
         return self::maxHelper($nums);
     }
@@ -539,7 +542,7 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      * @param BCMath $max
      * @return bool
      */
-    public function between(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $min, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\BCMath $max)
+    public function between(BCMath $min, BCMath $max)
     {
         return $this->compare($min) >= 0 && $this->compare($max) <= 0;
     }
@@ -562,7 +565,7 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      */
     public function isOdd()
     {
-        return $this->value[\strlen($this->value) - 1] % 2 == 1;
+        return $this->value[strlen($this->value) - 1] % 2 == 1;
     }
     /**
      * Tests if a bit is set
@@ -571,7 +574,8 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      */
     public function testBit($x)
     {
-        return \bccomp(\bcmod($this->value, \bcpow('2', $x + 1, 0)), \bcpow('2', $x, 0), 0) >= 0;
+        $divisor = bcpow('2', $x + 1, 0);
+        return bccomp(self::BCMOD_THREE_PARAMS ? bcmod($this->value, $divisor, 0) : bcmod($this->value, $divisor), bcpow('2', $x, 0), 0) >= 0;
     }
     /**
      * Is Negative?
@@ -580,7 +584,7 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
      */
     public function isNegative()
     {
-        return \strlen($this->value) && $this->value[0] == '-';
+        return strlen($this->value) && $this->value[0] == '-';
     }
     /**
      * Negate
@@ -592,10 +596,10 @@ class BCMath extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\En
     public function negate()
     {
         $temp = clone $this;
-        if (!\strlen($temp->value)) {
+        if (!strlen($temp->value)) {
             return $temp;
         }
-        $temp->value = $temp->value[0] == '-' ? \substr($this->value, 1) : '-' . $this->value;
+        $temp->value = $temp->value[0] == '-' ? substr($this->value, 1) : '-' . $this->value;
         return $temp;
     }
 }

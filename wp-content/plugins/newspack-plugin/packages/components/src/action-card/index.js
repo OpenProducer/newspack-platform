@@ -39,6 +39,9 @@ const ActionCard = ( {
 	heading = 2,
 	description,
 	handoff,
+	handoffUrl,
+	bannerText,
+	bannerButtonText,
 	editLink,
 	href,
 	notification,
@@ -187,7 +190,18 @@ const ActionCard = ( {
 						{ actionContent && actionContent }
 						{ actionText &&
 							( handoff ? (
-								<Handoff plugin={ handoff } editLink={ editLink } compact isLink>
+								<Handoff
+									plugin={ handoff }
+									editLink={ editLink }
+									bannerText={ bannerText }
+									bannerButtonText={ bannerButtonText }
+									compact
+									isLink
+								>
+									{ actionText }
+								</Handoff>
+							) : handoffUrl ? (
+								<Handoff url={ handoffUrl } bannerText={ bannerText } bannerButtonText={ bannerButtonText } compact isLink>
 									{ actionText }
 								</Handoff>
 							) : onClick || hasInternalLink ? (
@@ -302,7 +316,7 @@ const ActionCard = ( {
 						<Card className={ classes } onClick={ simple && onClick } id={ id ?? null } noBorder={ noBorder }>
 							<div className="newspack-action-card__draggable-controls">
 								<div className="drag-handle" draggable onDragStart={ onDraggableStart } onDragEnd={ onDraggableEnd }>
-									<Icon icon={ dragHandle } height={ 18 } width={ 18 } />
+									<Icon icon={ dragHandle } />
 								</div>
 								<div className="movers">
 									<Button

@@ -12,6 +12,11 @@ import { compose } from '@wordpress/compose';
 import { withDispatch, withSelect } from '@wordpress/data';
 
 /**
+ * Internal dependencies
+ */
+import './editor.scss';
+
+/**
  * Add a section to the Document settings with a toggle for suppressing ads on the current single.
  */
 class NewspackSuppressAdsPanel extends Component {
@@ -19,7 +24,11 @@ class NewspackSuppressAdsPanel extends Component {
 		const placements = window.newspackAdsSuppressAds?.placements || {};
 		const { newspack_ads_suppress_ads, newspack_ads_suppress_ads_placements, updateSuppressAds, updateSuppressPlacements } = this.props;
 		return (
-			<PluginDocumentSettingPanel name="newspack-ad-free" title={ __( 'Newspack Ads Settings', 'newspack-ads' ) } className="newspack-subtitle">
+			<PluginDocumentSettingPanel
+				name="newspack-ad-free"
+				title={ __( 'Newspack Ads Settings', 'newspack-ads' ) }
+				className="newspack-ads-settings"
+			>
 				<ToggleControl
 					label={ __( "Don't show ads on this content", 'newspack-ads' ) }
 					checked={ newspack_ads_suppress_ads }

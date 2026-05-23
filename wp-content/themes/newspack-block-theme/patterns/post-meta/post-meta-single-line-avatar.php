@@ -40,7 +40,9 @@ $registry = WP_Block_Type_Registry::get_instance();
 <hr class="wp-block-separator has-alpha-channel-opacity is-style-thick" style="margin-top:0;margin-bottom:0"/>
 <!-- /wp:separator -->
 
-<!-- wp:post-date {"lock":{"move":true,"remove":true}} /--></div>
+<!-- wp:post-date {"lock":{"move":true,"remove":true}} /-->
+
+<!-- wp:post-date {"metadata":{"bindings":{"datetime":{"source":"core/post-data","args":{"field":"modified"}}}},"className":"wp-block-post-date__modified-date","lock":{"move":true,"remove":true}} /--></div>
 <!-- /wp:group -->
 
 <!-- wp:pattern {"slug":"newspack-block-theme/jetpack-sharing-buttons-center"} /-->

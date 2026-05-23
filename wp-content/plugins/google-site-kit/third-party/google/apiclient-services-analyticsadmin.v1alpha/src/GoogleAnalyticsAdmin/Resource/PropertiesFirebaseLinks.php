@@ -41,11 +41,11 @@ class PropertiesFirebaseLinks extends \Google\Site_Kit_Dependencies\Google\Servi
      * @return GoogleAnalyticsAdminV1alphaFirebaseLink
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaFirebaseLink $postBody, $optParams = [])
+    public function create($parent, GoogleAnalyticsAdminV1alphaFirebaseLink $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaFirebaseLink::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], GoogleAnalyticsAdminV1alphaFirebaseLink::class);
     }
     /**
      * Deletes a FirebaseLink on a property (firebaseLinks.delete)
@@ -60,8 +60,8 @@ class PropertiesFirebaseLinks extends \Google\Site_Kit_Dependencies\Google\Servi
     public function delete($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('delete', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleProtobufEmpty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('delete', [$params], GoogleProtobufEmpty::class);
     }
     /**
      * Lists FirebaseLinks on a property. Properties can have at most one
@@ -85,9 +85,9 @@ class PropertiesFirebaseLinks extends \Google\Site_Kit_Dependencies\Google\Servi
     public function listPropertiesFirebaseLinks($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListFirebaseLinksResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], GoogleAnalyticsAdminV1alphaListFirebaseLinksResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\Resource\PropertiesFirebaseLinks::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesFirebaseLinks');
+class_alias(PropertiesFirebaseLinks::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesFirebaseLinks');

@@ -6,7 +6,7 @@ use Google\Site_Kit_Dependencies\GuzzleHttp\Utils;
 /**
  * Persists non-session cookies using a JSON formatted file
  */
-class FileCookieJar extends \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\CookieJar
+class FileCookieJar extends CookieJar
 {
     /**
      * @var string filename
@@ -48,16 +48,16 @@ class FileCookieJar extends \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\Cook
      *
      * @throws \RuntimeException if the file cannot be found or created
      */
-    public function save(string $filename) : void
+    public function save(string $filename): void
     {
         $json = [];
         /** @var SetCookie $cookie */
         foreach ($this as $cookie) {
-            if (\Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\CookieJar::shouldPersist($cookie, $this->storeSessionCookies)) {
+            if (CookieJar::shouldPersist($cookie, $this->storeSessionCookies)) {
                 $json[] = $cookie->toArray();
             }
         }
-        $jsonStr = \Google\Site_Kit_Dependencies\GuzzleHttp\Utils::jsonEncode($json);
+        $jsonStr = Utils::jsonEncode($json);
         if (\false === \file_put_contents($filename, $jsonStr, \LOCK_EX)) {
             throw new \RuntimeException("Unable to save file {$filename}");
         }
@@ -71,7 +71,7 @@ class FileCookieJar extends \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\Cook
      *
      * @throws \RuntimeException if the file cannot be loaded.
      */
-    public function load(string $filename) : void
+    public function load(string $filename): void
     {
         $json = \file_get_contents($filename);
         if (\false === $json) {
@@ -80,10 +80,10 @@ class FileCookieJar extends \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\Cook
         if ($json === '') {
             return;
         }
-        $data = \Google\Site_Kit_Dependencies\GuzzleHttp\Utils::jsonDecode($json, \true);
+        $data = Utils::jsonDecode($json, \true);
         if (\is_array($data)) {
             foreach ($data as $cookie) {
-                $this->setCookie(new \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\SetCookie($cookie));
+                $this->setCookie(new SetCookie($cookie));
             }
         } elseif (\is_scalar($data) && !empty($data)) {
             throw new \RuntimeException("Invalid cookie file: {$filename}");

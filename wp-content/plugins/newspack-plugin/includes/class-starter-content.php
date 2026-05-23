@@ -226,6 +226,17 @@ class Starter_Content {
 	 * @return bool E2E testing environment?
 	 */
 	public static function is_e2e() {
+		/**
+		 * Indicates the site is running in E2E (end-to-end) testing mode.
+		 * Used to adjust behavior during automated testing.
+		 *
+		 * @constant NEWSPACK_IS_E2E
+		 * @type     bool
+		 * @default  Normal operation
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_IS_E2E', true );
+		 */
 		return defined( 'NEWSPACK_IS_E2E' ) && NEWSPACK_IS_E2E;
 	}
 }

@@ -28,7 +28,7 @@ class GoogleAnalyticsAdminV1alphaEventCreateRule extends \Google\Site_Kit_Depend
      * @var string
      */
     public $destinationEvent;
-    protected $eventConditionsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaMatchingCondition::class;
+    protected $eventConditionsType = GoogleAnalyticsAdminV1alphaMatchingCondition::class;
     protected $eventConditionsDataType = 'array';
     /**
      * Output only. Resource name for this EventCreateRule resource. Format: prope
@@ -38,7 +38,7 @@ class GoogleAnalyticsAdminV1alphaEventCreateRule extends \Google\Site_Kit_Depend
      * @var string
      */
     public $name;
-    protected $parameterMutationsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaParameterMutation::class;
+    protected $parameterMutationsType = GoogleAnalyticsAdminV1alphaParameterMutation::class;
     protected $parameterMutationsDataType = 'array';
     /**
      * If true, the source parameters are copied to the new event. If false, or
@@ -138,4 +138,4 @@ class GoogleAnalyticsAdminV1alphaEventCreateRule extends \Google\Site_Kit_Depend
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaEventCreateRule::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaEventCreateRule');
+class_alias(GoogleAnalyticsAdminV1alphaEventCreateRule::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaEventCreateRule');

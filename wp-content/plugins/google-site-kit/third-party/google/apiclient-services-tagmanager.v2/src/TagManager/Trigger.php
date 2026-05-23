@@ -61,9 +61,9 @@ class Trigger extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $accountId;
-    protected $autoEventFilterType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Condition::class;
+    protected $autoEventFilterType = Condition::class;
     protected $autoEventFilterDataType = 'array';
-    protected $checkValidationType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $checkValidationType = Parameter::class;
     protected $checkValidationDataType = '';
     /**
      * GTM Container ID.
@@ -71,13 +71,13 @@ class Trigger extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $containerId;
-    protected $continuousTimeMinMillisecondsType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $continuousTimeMinMillisecondsType = Parameter::class;
     protected $continuousTimeMinMillisecondsDataType = '';
-    protected $customEventFilterType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Condition::class;
+    protected $customEventFilterType = Condition::class;
     protected $customEventFilterDataType = 'array';
-    protected $eventNameType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $eventNameType = Parameter::class;
     protected $eventNameDataType = '';
-    protected $filterType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Condition::class;
+    protected $filterType = Condition::class;
     protected $filterDataType = 'array';
     /**
      * The fingerprint of the GTM Trigger as computed at storage time. This value
@@ -86,15 +86,15 @@ class Trigger extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $fingerprint;
-    protected $horizontalScrollPercentageListType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $horizontalScrollPercentageListType = Parameter::class;
     protected $horizontalScrollPercentageListDataType = '';
-    protected $intervalType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $intervalType = Parameter::class;
     protected $intervalDataType = '';
-    protected $intervalSecondsType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $intervalSecondsType = Parameter::class;
     protected $intervalSecondsDataType = '';
-    protected $limitType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $limitType = Parameter::class;
     protected $limitDataType = '';
-    protected $maxTimerLengthSecondsType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $maxTimerLengthSecondsType = Parameter::class;
     protected $maxTimerLengthSecondsDataType = '';
     /**
      * Trigger display name.
@@ -108,7 +108,7 @@ class Trigger extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $notes;
-    protected $parameterType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $parameterType = Parameter::class;
     protected $parameterDataType = 'array';
     /**
      * Parent folder id.
@@ -122,7 +122,7 @@ class Trigger extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $path;
-    protected $selectorType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $selectorType = Parameter::class;
     protected $selectorDataType = '';
     /**
      * Auto generated link to the tag manager UI
@@ -130,7 +130,7 @@ class Trigger extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $tagManagerUrl;
-    protected $totalTimeMinMillisecondsType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $totalTimeMinMillisecondsType = Parameter::class;
     protected $totalTimeMinMillisecondsDataType = '';
     /**
      * The Trigger ID uniquely identifies the GTM Trigger.
@@ -144,19 +144,19 @@ class Trigger extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $type;
-    protected $uniqueTriggerIdType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $uniqueTriggerIdType = Parameter::class;
     protected $uniqueTriggerIdDataType = '';
-    protected $verticalScrollPercentageListType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $verticalScrollPercentageListType = Parameter::class;
     protected $verticalScrollPercentageListDataType = '';
-    protected $visibilitySelectorType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $visibilitySelectorType = Parameter::class;
     protected $visibilitySelectorDataType = '';
-    protected $visiblePercentageMaxType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $visiblePercentageMaxType = Parameter::class;
     protected $visiblePercentageMaxDataType = '';
-    protected $visiblePercentageMinType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $visiblePercentageMinType = Parameter::class;
     protected $visiblePercentageMinDataType = '';
-    protected $waitForTagsType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $waitForTagsType = Parameter::class;
     protected $waitForTagsDataType = '';
-    protected $waitForTagsTimeoutType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $waitForTagsTimeoutType = Parameter::class;
     protected $waitForTagsTimeoutDataType = '';
     /**
      * GTM Workspace ID.
@@ -203,7 +203,7 @@ class Trigger extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Parameter $checkValidation
      */
-    public function setCheckValidation(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter $checkValidation)
+    public function setCheckValidation(Parameter $checkValidation)
     {
         $this->checkValidation = $checkValidation;
     }
@@ -236,7 +236,7 @@ class Trigger extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Parameter $continuousTimeMinMilliseconds
      */
-    public function setContinuousTimeMinMilliseconds(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter $continuousTimeMinMilliseconds)
+    public function setContinuousTimeMinMilliseconds(Parameter $continuousTimeMinMilliseconds)
     {
         $this->continuousTimeMinMilliseconds = $continuousTimeMinMilliseconds;
     }
@@ -269,7 +269,7 @@ class Trigger extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Parameter $eventName
      */
-    public function setEventName(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter $eventName)
+    public function setEventName(Parameter $eventName)
     {
         $this->eventName = $eventName;
     }
@@ -320,7 +320,7 @@ class Trigger extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Parameter $horizontalScrollPercentageList
      */
-    public function setHorizontalScrollPercentageList(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter $horizontalScrollPercentageList)
+    public function setHorizontalScrollPercentageList(Parameter $horizontalScrollPercentageList)
     {
         $this->horizontalScrollPercentageList = $horizontalScrollPercentageList;
     }
@@ -337,7 +337,7 @@ class Trigger extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Parameter $interval
      */
-    public function setInterval(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter $interval)
+    public function setInterval(Parameter $interval)
     {
         $this->interval = $interval;
     }
@@ -354,7 +354,7 @@ class Trigger extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Parameter $intervalSeconds
      */
-    public function setIntervalSeconds(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter $intervalSeconds)
+    public function setIntervalSeconds(Parameter $intervalSeconds)
     {
         $this->intervalSeconds = $intervalSeconds;
     }
@@ -372,7 +372,7 @@ class Trigger extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Parameter $limit
      */
-    public function setLimit(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter $limit)
+    public function setLimit(Parameter $limit)
     {
         $this->limit = $limit;
     }
@@ -389,7 +389,7 @@ class Trigger extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Parameter $maxTimerLengthSeconds
      */
-    public function setMaxTimerLengthSeconds(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter $maxTimerLengthSeconds)
+    public function setMaxTimerLengthSeconds(Parameter $maxTimerLengthSeconds)
     {
         $this->maxTimerLengthSeconds = $maxTimerLengthSeconds;
     }
@@ -486,7 +486,7 @@ class Trigger extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Parameter $selector
      */
-    public function setSelector(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter $selector)
+    public function setSelector(Parameter $selector)
     {
         $this->selector = $selector;
     }
@@ -519,7 +519,7 @@ class Trigger extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Parameter $totalTimeMinMilliseconds
      */
-    public function setTotalTimeMinMilliseconds(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter $totalTimeMinMilliseconds)
+    public function setTotalTimeMinMilliseconds(Parameter $totalTimeMinMilliseconds)
     {
         $this->totalTimeMinMilliseconds = $totalTimeMinMilliseconds;
     }
@@ -582,7 +582,7 @@ class Trigger extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Parameter $uniqueTriggerId
      */
-    public function setUniqueTriggerId(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter $uniqueTriggerId)
+    public function setUniqueTriggerId(Parameter $uniqueTriggerId)
     {
         $this->uniqueTriggerId = $uniqueTriggerId;
     }
@@ -600,7 +600,7 @@ class Trigger extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Parameter $verticalScrollPercentageList
      */
-    public function setVerticalScrollPercentageList(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter $verticalScrollPercentageList)
+    public function setVerticalScrollPercentageList(Parameter $verticalScrollPercentageList)
     {
         $this->verticalScrollPercentageList = $verticalScrollPercentageList;
     }
@@ -617,7 +617,7 @@ class Trigger extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Parameter $visibilitySelector
      */
-    public function setVisibilitySelector(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter $visibilitySelector)
+    public function setVisibilitySelector(Parameter $visibilitySelector)
     {
         $this->visibilitySelector = $visibilitySelector;
     }
@@ -634,7 +634,7 @@ class Trigger extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Parameter $visiblePercentageMax
      */
-    public function setVisiblePercentageMax(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter $visiblePercentageMax)
+    public function setVisiblePercentageMax(Parameter $visiblePercentageMax)
     {
         $this->visiblePercentageMax = $visiblePercentageMax;
     }
@@ -651,7 +651,7 @@ class Trigger extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Parameter $visiblePercentageMin
      */
-    public function setVisiblePercentageMin(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter $visiblePercentageMin)
+    public function setVisiblePercentageMin(Parameter $visiblePercentageMin)
     {
         $this->visiblePercentageMin = $visiblePercentageMin;
     }
@@ -670,7 +670,7 @@ class Trigger extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Parameter $waitForTags
      */
-    public function setWaitForTags(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter $waitForTags)
+    public function setWaitForTags(Parameter $waitForTags)
     {
         $this->waitForTags = $waitForTags;
     }
@@ -688,7 +688,7 @@ class Trigger extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Parameter $waitForTagsTimeout
      */
-    public function setWaitForTagsTimeout(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter $waitForTagsTimeout)
+    public function setWaitForTagsTimeout(Parameter $waitForTagsTimeout)
     {
         $this->waitForTagsTimeout = $waitForTagsTimeout;
     }
@@ -717,4 +717,4 @@ class Trigger extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Trigger::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Trigger');
+class_alias(Trigger::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Trigger');

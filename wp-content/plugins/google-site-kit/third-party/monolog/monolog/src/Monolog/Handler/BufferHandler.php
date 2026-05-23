@@ -24,7 +24,7 @@ use Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface;
  *
  * @phpstan-import-type Record from \Monolog\Logger
  */
-class BufferHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\AbstractHandler implements \Google\Site_Kit_Dependencies\Monolog\Handler\ProcessableHandlerInterface, \Google\Site_Kit_Dependencies\Monolog\Handler\FormattableHandlerInterface
+class BufferHandler extends AbstractHandler implements ProcessableHandlerInterface, FormattableHandlerInterface
 {
     use ProcessableHandlerTrait;
     /** @var HandlerInterface */
@@ -44,7 +44,7 @@ class BufferHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstra
      * @param int              $bufferLimit     How many entries should be buffered at most, beyond that the oldest items are removed from the buffer.
      * @param bool             $flushOnOverflow If true, the buffer is flushed when the max size has been reached, by default oldest entries are discarded
      */
-    public function __construct(\Google\Site_Kit_Dependencies\Monolog\Handler\HandlerInterface $handler, int $bufferLimit = 0, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG, bool $bubble = \true, bool $flushOnOverflow = \false)
+    public function __construct(HandlerInterface $handler, int $bufferLimit = 0, $level = Logger::DEBUG, bool $bubble = \true, bool $flushOnOverflow = \false)
     {
         parent::__construct($level, $bubble);
         $this->handler = $handler;
@@ -54,21 +54,21 @@ class BufferHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstra
     /**
      * {@inheritDoc}
      */
-    public function handle(array $record) : bool
+    public function handle(array $record): bool
     {
         if ($record['level'] < $this->level) {
             return \false;
         }
         if (!$this->initialized) {
             // __destructor() doesn't get called on Fatal errors
-            \register_shutdown_function([$this, 'close']);
+            register_shutdown_function([$this, 'close']);
             $this->initialized = \true;
         }
         if ($this->bufferLimit > 0 && $this->bufferSize === $this->bufferLimit) {
             if ($this->flushOnOverflow) {
                 $this->flush();
             } else {
-                \array_shift($this->buffer);
+                array_shift($this->buffer);
                 $this->bufferSize--;
             }
         }
@@ -80,7 +80,7 @@ class BufferHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstra
         $this->bufferSize++;
         return \false === $this->bubble;
     }
-    public function flush() : void
+    public function flush(): void
     {
         if ($this->bufferSize === 0) {
             return;
@@ -97,7 +97,7 @@ class BufferHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstra
     /**
      * {@inheritDoc}
      */
-    public function close() : void
+    public function close(): void
     {
         $this->flush();
         $this->handler->close();
@@ -105,7 +105,7 @@ class BufferHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstra
     /**
      * Clears the buffer without flushing any messages down to the wrapped handler.
      */
-    public function clear() : void
+    public function clear(): void
     {
         $this->bufferSize = 0;
         $this->buffer = [];
@@ -115,29 +115,29 @@ class BufferHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstra
         $this->flush();
         parent::reset();
         $this->resetProcessors();
-        if ($this->handler instanceof \Google\Site_Kit_Dependencies\Monolog\ResettableInterface) {
+        if ($this->handler instanceof ResettableInterface) {
             $this->handler->reset();
         }
     }
     /**
      * {@inheritDoc}
      */
-    public function setFormatter(\Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface $formatter) : \Google\Site_Kit_Dependencies\Monolog\Handler\HandlerInterface
+    public function setFormatter(FormatterInterface $formatter): HandlerInterface
     {
-        if ($this->handler instanceof \Google\Site_Kit_Dependencies\Monolog\Handler\FormattableHandlerInterface) {
+        if ($this->handler instanceof FormattableHandlerInterface) {
             $this->handler->setFormatter($formatter);
             return $this;
         }
-        throw new \UnexpectedValueException('The nested handler of type ' . \get_class($this->handler) . ' does not support formatters.');
+        throw new \UnexpectedValueException('The nested handler of type ' . get_class($this->handler) . ' does not support formatters.');
     }
     /**
      * {@inheritDoc}
      */
-    public function getFormatter() : \Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface
+    public function getFormatter(): FormatterInterface
     {
-        if ($this->handler instanceof \Google\Site_Kit_Dependencies\Monolog\Handler\FormattableHandlerInterface) {
+        if ($this->handler instanceof FormattableHandlerInterface) {
             return $this->handler->getFormatter();
         }
-        throw new \UnexpectedValueException('The nested handler of type ' . \get_class($this->handler) . ' does not support formatters.');
+        throw new \UnexpectedValueException('The nested handler of type ' . get_class($this->handler) . ' does not support formatters.');
     }
 }

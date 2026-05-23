@@ -27,7 +27,7 @@ class ListSitesResponse extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $nextPageToken;
-    protected $sitesType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\Site::class;
+    protected $sitesType = Site::class;
     protected $sitesDataType = 'array';
     /**
      * Continuation token used to page through sites. To retrieve the next page of
@@ -64,4 +64,4 @@ class ListSitesResponse extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\ListSitesResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_ListSitesResponse');
+class_alias(ListSitesResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_ListSitesResponse');

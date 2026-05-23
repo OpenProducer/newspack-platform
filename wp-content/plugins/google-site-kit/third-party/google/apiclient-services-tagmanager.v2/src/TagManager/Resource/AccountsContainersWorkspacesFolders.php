@@ -40,11 +40,11 @@ class AccountsContainersWorkspacesFolders extends \Google\Site_Kit_Dependencies\
      * @return Folder
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Folder $postBody, $optParams = [])
+    public function create($parent, Folder $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Folder::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], Folder::class);
     }
     /**
      * Deletes a GTM Folder. (folders.delete)
@@ -56,7 +56,7 @@ class AccountsContainersWorkspacesFolders extends \Google\Site_Kit_Dependencies\
     public function delete($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('delete', [$params]);
     }
     /**
@@ -73,8 +73,8 @@ class AccountsContainersWorkspacesFolders extends \Google\Site_Kit_Dependencies\
     public function entities($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('entities', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\FolderEntities::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('entities', [$params], FolderEntities::class);
     }
     /**
      * Gets a GTM Folder. (folders.get)
@@ -87,8 +87,8 @@ class AccountsContainersWorkspacesFolders extends \Google\Site_Kit_Dependencies\
     public function get($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Folder::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], Folder::class);
     }
     /**
      * Lists all GTM Folders of a Container.
@@ -105,8 +105,8 @@ class AccountsContainersWorkspacesFolders extends \Google\Site_Kit_Dependencies\
     public function listAccountsContainersWorkspacesFolders($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\ListFoldersResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListFoldersResponse::class);
     }
     /**
      * Moves entities to a GTM Folder. If {folder_id} in the request path equals 0,
@@ -122,10 +122,10 @@ class AccountsContainersWorkspacesFolders extends \Google\Site_Kit_Dependencies\
      * @opt_param string variableId The variables to be moved to the folder.
      * @throws \Google\Service\Exception
      */
-    public function move_entities_to_folder($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Folder $postBody, $optParams = [])
+    public function move_entities_to_folder($path, Folder $postBody, $optParams = [])
     {
         $params = ['path' => $path, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('move_entities_to_folder', [$params]);
     }
     /**
@@ -142,8 +142,8 @@ class AccountsContainersWorkspacesFolders extends \Google\Site_Kit_Dependencies\
     public function revert($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('revert', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\RevertFolderResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('revert', [$params], RevertFolderResponse::class);
     }
     /**
      * Updates a GTM Folder. (folders.update)
@@ -157,12 +157,12 @@ class AccountsContainersWorkspacesFolders extends \Google\Site_Kit_Dependencies\
      * @return Folder
      * @throws \Google\Service\Exception
      */
-    public function update($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Folder $postBody, $optParams = [])
+    public function update($path, Folder $postBody, $optParams = [])
     {
         $params = ['path' => $path, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('update', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Folder::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('update', [$params], Folder::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Resource\AccountsContainersWorkspacesFolders::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Resource_AccountsContainersWorkspacesFolders');
+class_alias(AccountsContainersWorkspacesFolders::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Resource_AccountsContainersWorkspacesFolders');

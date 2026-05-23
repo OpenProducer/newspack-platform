@@ -22,7 +22,7 @@ use Google\Site_Kit_Dependencies\Psr\Log\LogLevel;
  * @phpstan-import-type Level from \Monolog\Logger
  * @phpstan-import-type LevelName from \Monolog\Logger
  */
-class GitProcessor implements \Google\Site_Kit_Dependencies\Monolog\Processor\ProcessorInterface
+class GitProcessor implements ProcessorInterface
 {
     /** @var int */
     private $level;
@@ -33,14 +33,14 @@ class GitProcessor implements \Google\Site_Kit_Dependencies\Monolog\Processor\Pr
      *
      * @phpstan-param Level|LevelName|LogLevel::* $level
      */
-    public function __construct($level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG)
+    public function __construct($level = Logger::DEBUG)
     {
-        $this->level = \Google\Site_Kit_Dependencies\Monolog\Logger::toMonologLevel($level);
+        $this->level = Logger::toMonologLevel($level);
     }
     /**
      * {@inheritDoc}
      */
-    public function __invoke(array $record) : array
+    public function __invoke(array $record): array
     {
         // return if the level is not high enough
         if ($record['level'] < $this->level) {
@@ -52,13 +52,13 @@ class GitProcessor implements \Google\Site_Kit_Dependencies\Monolog\Processor\Pr
     /**
      * @return array{branch: string, commit: string}|array<never>
      */
-    private static function getGitInfo() : array
+    private static function getGitInfo(): array
     {
         if (self::$cache) {
             return self::$cache;
         }
-        $branches = `git branch -v --no-abbrev`;
-        if ($branches && \preg_match('{^\\* (.+?)\\s+([a-f0-9]{40})(?:\\s|$)}m', $branches, $matches)) {
+        $branches = shell_exec('git branch -v --no-abbrev');
+        if ($branches && preg_match('{^\* (.+?)\s+([a-f0-9]{40})(?:\s|$)}m', $branches, $matches)) {
             return self::$cache = ['branch' => $matches[1], 'commit' => $matches[2]];
         }
         return self::$cache = [];

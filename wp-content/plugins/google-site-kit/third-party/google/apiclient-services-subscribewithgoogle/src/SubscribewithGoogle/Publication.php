@@ -38,7 +38,7 @@ class Publication extends \Google\Site_Kit_Dependencies\Google\Collection
      */
     public const ONBOARDING_STATE_ONBOARDING_COMPLETE = 'ONBOARDING_COMPLETE';
     protected $collection_key = 'verifiedDomains';
-    protected $contentPolicyStatusType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\ContentPolicyStatus::class;
+    protected $contentPolicyStatusType = ContentPolicyStatus::class;
     protected $contentPolicyStatusDataType = '';
     /**
      * The publication's readable name.
@@ -52,9 +52,9 @@ class Publication extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $onboardingState;
-    protected $paymentOptionsType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\PaymentOptions::class;
+    protected $paymentOptionsType = PaymentOptions::class;
     protected $paymentOptionsDataType = '';
-    protected $productsType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\Product::class;
+    protected $productsType = Product::class;
     protected $productsDataType = 'array';
     /**
      * Unique key for publications within SwG.
@@ -74,7 +74,7 @@ class Publication extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param ContentPolicyStatus $contentPolicyStatus
      */
-    public function setContentPolicyStatus(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\ContentPolicyStatus $contentPolicyStatus)
+    public function setContentPolicyStatus(ContentPolicyStatus $contentPolicyStatus)
     {
         $this->contentPolicyStatus = $contentPolicyStatus;
     }
@@ -125,7 +125,7 @@ class Publication extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param PaymentOptions $paymentOptions
      */
-    public function setPaymentOptions(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\PaymentOptions $paymentOptions)
+    public function setPaymentOptions(PaymentOptions $paymentOptions)
     {
         $this->paymentOptions = $paymentOptions;
     }
@@ -186,4 +186,4 @@ class Publication extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\Publication::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SubscribewithGoogle_Publication');
+class_alias(Publication::class, 'Google\Site_Kit_Dependencies\Google_Service_SubscribewithGoogle_Publication');

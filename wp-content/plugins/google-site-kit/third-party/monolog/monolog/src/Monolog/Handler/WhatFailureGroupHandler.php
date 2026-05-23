@@ -19,12 +19,12 @@ namespace Google\Site_Kit_Dependencies\Monolog\Handler;
  *
  * @phpstan-import-type Record from \Monolog\Logger
  */
-class WhatFailureGroupHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\GroupHandler
+class WhatFailureGroupHandler extends GroupHandler
 {
     /**
      * {@inheritDoc}
      */
-    public function handle(array $record) : bool
+    public function handle(array $record): bool
     {
         if ($this->processors) {
             /** @var Record $record */
@@ -42,7 +42,7 @@ class WhatFailureGroupHandler extends \Google\Site_Kit_Dependencies\Monolog\Hand
     /**
      * {@inheritDoc}
      */
-    public function handleBatch(array $records) : void
+    public function handleBatch(array $records): void
     {
         if ($this->processors) {
             $processed = array();
@@ -63,7 +63,7 @@ class WhatFailureGroupHandler extends \Google\Site_Kit_Dependencies\Monolog\Hand
     /**
      * {@inheritDoc}
      */
-    public function close() : void
+    public function close(): void
     {
         foreach ($this->handlers as $handler) {
             try {

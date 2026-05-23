@@ -19,6 +19,7 @@ export const name = 'ad-unit';
 export const title = __( 'Ad Unit', 'newspack-ads' );
 
 export const settings = {
+	apiVersion: 3,
 	title,
 	icon: {
 		src: icon,
@@ -50,6 +51,7 @@ export const settings = {
 			text: false,
 			background: true,
 		},
+		visibility: false,
 	},
 	edit,
 	save: () => null, // to use Newspack_Ads_Blocks::render_block()

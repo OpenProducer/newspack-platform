@@ -19,7 +19,7 @@ function WizardsTab( {
 	description,
 	...props
 }: {
-	title: string;
+	title?: string;
 	children: React.ReactNode;
 	isFetching?: boolean;
 	className?: string;
@@ -29,7 +29,7 @@ function WizardsTab( {
 	const className = props.className || '';
 	return (
 		<div className={ `${ isWizardLoading || isFetching ? 'is-fetching ' : '' }${ className } newspack-wizard__sections` }>
-			<h1>{ title }</h1>
+			{ title && <h1>{ title }</h1> }
 			{ description && <p className="newspack-wizard__sections__description">{ description }</p> }
 			{ children }
 		</div>

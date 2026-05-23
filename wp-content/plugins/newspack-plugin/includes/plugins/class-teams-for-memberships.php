@@ -13,6 +13,7 @@ use Newspack\Donations;
 use Newspack\Reader_Activation\Sync\Woocommerce as Sync_WooCommerce;
 use Newspack\Reader_Activation\Sync\Metadata as Sync_Metadata;
 use Newspack\Reader_Activation\Contact_Sync;
+use Newspack\Reader_Activation\Integrations;
 
 /**
  * Main class.
@@ -29,6 +30,7 @@ class Teams_For_Memberships {
 		add_filter( 'newspack_esp_sync_contact', [ __CLASS__, 'handle_esp_sync_contact' ] );
 		add_filter( 'newspack_my_account_disabled_pages', [ __CLASS__, 'enable_members_area_for_team_members' ] );
 		add_action( 'woocommerce_checkout_subscription_created', [ __CLASS__, 'update_team_subscription_on_resubscribe' ], 21, 2 );
+		add_filter( 'wc_memberships_for_teams_determine_order_item_action', [ __CLASS__, 'restore_team_meta_on_renewal' ], 10, 2 );
 	}
 
 	/**
@@ -186,7 +188,11 @@ class Teams_For_Memberships {
 			return $contact;
 		}
 
-		$filtered_enabled_fields = Sync_Metadata::filter_enabled_fields( [ 'woo_team' ] );
+		$esp = Integrations::get_integration( 'esp' );
+		if ( ! $esp ) {
+			return $contact;
+		}
+		$filtered_enabled_fields = $esp->filter_enabled_outgoing_fields( [ 'woo_team' ] );
 
 		if ( empty( $contact['email'] ) ) {
 			return $contact;
@@ -309,6 +315,76 @@ class Teams_For_Memberships {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Restore stripped team order-item meta on renewal orders.
+	 *
+	 * SkyVerge's Teams plugin dispatches team actions from order item meta:
+	 * `_wc_memberships_for_teams_team_id`, `_wc_memberships_for_teams_team_renewal`,
+	 * `_wc_memberships_for_teams_team_seat_change`. WC Subscriptions copies these onto
+	 * renewal order items at generation time, but if an admin manually replaces a
+	 * subscription line item in wp-admin, the replacement row has no such meta. On the
+	 * next renewal, Teams falls through to the `create` branch and creates a duplicate
+	 * team for an already-linked subscription.
+	 *
+	 * This filter runs on `wc_memberships_for_teams_determine_order_item_action`: when
+	 * the proposed action is `create` and the order is a subscription renewal whose
+	 * parent subscription already has a linked team for the same product, we restore
+	 * the stripped meta on the item and force the action to `renew`.
+	 *
+	 * @see https://linear.app/a8c/issue/NPPM-2741
+	 *
+	 * @param string         $action The action determined by SkyVerge Teams (create|renew|seat_change).
+	 * @param \WC_Order_Item $item   The order item being processed.
+	 * @return string The possibly-rewritten action.
+	 */
+	public static function restore_team_meta_on_renewal( $action, $item ) {
+		if ( 'create' !== $action ) {
+			return $action;
+		}
+		if ( ! function_exists( 'wcs_order_contains_renewal' ) || ! function_exists( 'wcs_get_subscriptions_for_renewal_order' ) ) {
+			return $action;
+		}
+		if ( ! method_exists( '\SkyVerge\WooCommerce\Memberships\Teams\Integrations\Subscriptions', 'get_teams_from_subscription' ) ) {
+			return $action;
+		}
+		if ( ! $item instanceof \WC_Order_Item_Product ) {
+			return $action;
+		}
+
+		$order = $item->get_order();
+		if ( ! $order instanceof \WC_Order || ! wcs_order_contains_renewal( $order ) ) {
+			return $action;
+		}
+
+		$subscriptions      = wcs_get_subscriptions_for_renewal_order( $order );
+		$team_subscriptions = new \SkyVerge\WooCommerce\Memberships\Teams\Integrations\Subscriptions();
+		// Variation line items expose the parent product id via get_product_id() and the variation
+		// id via get_variation_id(). Teams may have stored either on the team, so match against both.
+		$item_product_ids = array_filter(
+			[ (int) $item->get_product_id(), (int) $item->get_variation_id() ]
+		);
+
+		foreach ( $subscriptions as $subscription ) {
+			$teams = $team_subscriptions->get_teams_from_subscription( $subscription->get_id() );
+			if ( empty( $teams ) ) {
+				continue;
+			}
+			foreach ( $teams as $team ) {
+				if ( ! in_array( (int) $team->get_product_id(), $item_product_ids, true ) ) {
+					continue;
+				}
+				$item->update_meta_data( '_wc_memberships_for_teams_team_id', $team->get_id() );
+				$item->update_meta_data( '_wc_memberships_for_teams_team_renewal', true );
+				// Clear any stale seat-change flag so the dispatcher unambiguously treats this as a renewal.
+				$item->delete_meta_data( '_wc_memberships_for_teams_team_seat_change' );
+				$item->save();
+				return 'renew';
+			}
+		}
+
+		return $action;
 	}
 }
 

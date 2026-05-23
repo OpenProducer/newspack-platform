@@ -60,6 +60,45 @@ if ( ! function_exists( 'newspack_is_default_template' ) ) :
 endif;
 
 /**
+ * Adds check for pages that technically pass is_archive() checks but shouldn't get the classes.
+ *
+ * Inspects queried object + meta only — does not check is_feed()/is_admin().
+ * Safe for body_class (doesn't run on feeds); reuse elsewhere with care.
+ *
+ * @return bool
+ */
+function newspack_should_skip_archive_layout() {
+	if ( ! is_archive() && ! is_home() ) {
+		return false;
+	}
+
+	// Multibranded brand front page replaces a brand taxonomy archive with a page.
+	if (
+		class_exists( '\Newspack_Multibranded_Site\Meta\Show_Page_On_Front' )
+		&& class_exists( '\Newspack_Multibranded_Site\Taxonomy' )
+	) {
+		$queried_object = get_queried_object();
+		if (
+			$queried_object instanceof WP_Term
+			&& \Newspack_Multibranded_Site\Taxonomy::SLUG === $queried_object->taxonomy
+			&& ! empty( get_term_meta( $queried_object->term_id, \Newspack_Multibranded_Site\Meta\Show_Page_On_Front::get_key(), true ) )
+		) {
+			return true;
+		}
+	}
+
+	// Collections post type archive uses its own custom rendering.
+	if (
+		class_exists( '\Newspack\Collections\Post_Type' )
+		&& is_post_type_archive( \Newspack\Collections\Post_Type::get_post_type() )
+	) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
  * Adds custom classes to the array of body classes.
  *
  * @param array $classes Classes for the body element.
@@ -187,14 +226,10 @@ function newspack_body_classes( $classes ) {
 	}
 
 	// Add a special class for the single post's primary category.
-	if ( is_single() && class_exists( 'WPSEO_Primary_Term' ) ) {
-		$primary_term = new WPSEO_Primary_Term( 'category', $page_id );
-		$category_id  = $primary_term->get_primary_term();
-		if ( $category_id ) {
-			$category = get_term( $category_id );
-			if ( $category ) {
-				$classes[] = 'primary-cat-' . $category->slug;
-			}
+	if ( is_single() && class_exists( 'Newspack\Primary_Category' ) ) {
+		$primary = \Newspack\Primary_Category::get( $page_id );
+		if ( $primary ) {
+			$classes[] = 'primary-cat-' . $primary->slug;
 		}
 	}
 
@@ -219,35 +254,32 @@ function newspack_body_classes( $classes ) {
 		$classes[] = 'has-large-featured-image';
 	}
 
-	// Add a class if updated date should display
-	if ( newspack_should_display_updated_date() ) {
-		$classes[] = 'show-updated';
-	}
-
 	// Add a class if the post has a summary.
 	if ( '' !== newspack_has_post_summary() ) {
 		$classes[] = 'has-summary';
 	}
 
-	if ( is_home() ) {
+	$skip_archive_layout = newspack_should_skip_archive_layout();
+
+	if ( is_home() && ! $skip_archive_layout ) {
 		$classes[] = 'archive';
 	}
 
 	// Adds a class for the archive page layout.
 	$archive_layout = get_theme_mod( 'archive_layout', 'default' );
-	if ( ( is_archive() || is_home() ) && 'default' !== $archive_layout ) {
+	if ( ( is_archive() || is_home() ) && ! $skip_archive_layout && 'default' !== $archive_layout ) {
 		$classes[] = 'archive-' . esc_attr( $archive_layout );
 	}
 
 	// Adds a class for the archive page layout.
 	$archive_list_or_grid = get_theme_mod( 'archive_list_or_grid', 'list' );
-	if ( ( is_archive() || is_home() ) && 'list' !== $archive_list_or_grid ) {
+	if ( ( is_archive() || is_home() ) && ! $skip_archive_layout && 'list' !== $archive_list_or_grid ) {
 		$classes[] = 'archive-grid';
 	}
 
 	// Add a class when using the 'featured latest' archive layout.
 	$feature_latest_post = get_theme_mod( 'archive_feature_latest_post', true );
-	if ( ( is_archive() || is_home() ) && true === $feature_latest_post && ! is_post_type_archive( 'tribe_events' ) ) {
+	if ( ( is_archive() || is_home() ) && ! $skip_archive_layout && true === $feature_latest_post && ! is_post_type_archive( 'tribe_events' ) ) {
 		$classes[] = 'feature-latest';
 	}
 
@@ -343,17 +375,11 @@ function newspack_get_the_archive_title() {
 	} elseif ( is_author() ) {
 		$title = esc_html__( 'Author Archives: ', 'newspack-theme' ) . '<span class="page-description">' . get_the_author_meta( 'display_name' ) . '</span>';
 	} elseif ( is_year() ) {
-		remove_filter( 'get_the_date', 'newspack_convert_to_time_ago', 10, 3 );
 		$title = esc_html__( 'Yearly Archives: ', 'newspack-theme' ) . '<span class="page-description">' . get_the_date( _x( 'Y', 'yearly archives date format', 'newspack-theme' ) ) . '</span>';
-		add_filter( 'get_the_date', 'newspack_convert_to_time_ago', 10, 3 );
 	} elseif ( is_month() ) {
-		remove_filter( 'get_the_date', 'newspack_convert_to_time_ago', 10, 3 );
 		$title = esc_html__( 'Monthly Archives: ', 'newspack-theme' ) . '<span class="page-description">' . get_the_date( _x( 'F Y', 'monthly archives date format', 'newspack-theme' ) ) . '</span>';
-		add_filter( 'get_the_date', 'newspack_convert_to_time_ago', 10, 3 );
 	} elseif ( is_day() ) {
-		remove_filter( 'get_the_date', 'newspack_convert_to_time_ago', 10, 3 );
 		$title = esc_html__( 'Daily Archives: ', 'newspack-theme' ) . '<span class="page-description">' . get_the_date() . '</span>';
-		add_filter( 'get_the_date', 'newspack_convert_to_time_ago', 10, 3 );
 	} elseif ( is_post_type_archive() ) {
 		$title = esc_html__( 'Post Type Archives: ', 'newspack-theme' ) . '<span class="page-description">' . post_type_archive_title( '', false ) . '</span>';
 	} elseif ( is_tax() ) {
@@ -718,117 +744,6 @@ function newspack_accessibility_page_link() {
 }
 
 /**
- * Change date to 'time ago' format if enabled in the Customizer.
- */
-function newspack_math_to_time_ago( $post_time, $format, $post, $updated ) {
-	$use_time_ago = get_theme_mod( 'post_time_ago', false );
-
-	// Only filter time when $use_time_ago is enabled, and it's not using a machine-readable format (for datetime).
-	if ( true === $use_time_ago && 'Y-m-d\TH:i:sP' !== $format ) {
-		$current_time = current_time( 'timestamp' ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
-		$cut_off      = get_theme_mod( 'post_time_ago_cut_off', NP_DEFAULT_POST_TIME_AGO_CUT_OFF_DAYS );
-		$org_time     = strtotime( $post->post_date );
-
-		if ( true === $updated ) {
-			$org_time = strtotime( $post->post_modified );
-		}
-
-		// Transform cut off from days to seconds.
-		$cut_off_seconds = $cut_off * 86400;
-
-		if ( true === get_theme_mod( 'post_updated_date', false ) ) {
-			// Switch cut off to 24 hours.
-			$cut_off_seconds = 86400;
-		}
-
-		if ( $cut_off_seconds >= ( $current_time - $org_time ) ) {
-			$post_time = sprintf(
-				/* translators: %s: Time ago date format */
-				esc_html__( '%s ago', 'newspack-theme' ),
-				human_time_diff( $org_time, $current_time )
-			);
-		}
-	}
-
-	return $post_time;
-}
-
-/**
- * Apply time ago format to publish dates if enabled.
- */
-function newspack_convert_to_time_ago( $post_time, $format, $post ) {
-	// Don't override specifically requested formats.
-	if ( empty( $format ) ) {
-		$post_time = newspack_math_to_time_ago( $post_time, $format, $post, false );
-	}
-	return $post_time;
-}
-add_filter( 'get_the_date', 'newspack_convert_to_time_ago', 10, 3 );
-add_filter(
-	'newspack_blocks_formatted_displayed_post_date',
-	function ( $date_formatted, $post ) {
-		return newspack_math_to_time_ago( $date_formatted, '', $post, false );
-	},
-	10,
-	2
-);
-
-/**
- * Apply time ago format to modified dates if enabled.
- */
-function newspack_convert_modified_to_time_ago( $post_time, $format, $post ) {
-	return newspack_math_to_time_ago( $post_time, $format, $post, true );
-}
-
-/**
- * Return a filterable array of supported post types for the updated date functionality.
- *
- * @return array Array of post type slugs.
- */
-function newspack_get_updated_date_supported_post_types() {
-	/**
-	 * Filter post types that support the updated date functionality.
-	 *
-	 * @return array Array of post type slugs.
-	 */
-	return apply_filters( 'newspack_updated_date_supported_post_types', array( 'post' ) );
-}
-
-/**
- * Check whether updated date should be displayed.
- */
-function newspack_should_display_updated_date() {
-	$supported_post_types = newspack_get_updated_date_supported_post_types();
-	if ( ! is_singular( $supported_post_types ) ) {
-		return false;
-	}
-
-	$show_updated_date_sitewide = get_theme_mod( 'post_updated_date', false );
-
-	$hide_updated_date_post = get_post_meta( get_the_ID(), 'newspack_hide_updated_date', true );
-	$show_updated_date_post = get_post_meta( get_the_ID(), 'newspack_show_updated_date', true ) && ! $show_updated_date_sitewide;
-
-	if ( ( $show_updated_date_sitewide && ! $hide_updated_date_post ) || $show_updated_date_post ) {
-		$post          = get_post();
-		$publish_date  = $post->post_date;
-		$modified_date = $post->post_modified;
-
-		$publish_timestamp  = strtotime( $publish_date );
-		$modified_timestamp = strtotime( $modified_date );
-		$modified_threshold = get_theme_mod( 'post_updated_date_threshold', 24 );
-		$modified_cutoff    = strtotime( '+' . $modified_threshold . ' hours', $publish_timestamp );
-
-		// Show the updated date either if it's enabled site-wide and more than 24 hours past the publish date, or if it's enabled on this specific post:
-		if ( ( $modified_timestamp > $modified_cutoff && $show_updated_date_sitewide ) || $show_updated_date_post ) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	return false;
-}
-
-/**
  * Create a predictable unique ID for the search forms.
  *
  * @param string $prefix Text to prepend the ID with.
@@ -905,6 +820,17 @@ function newspack_corrections_per_page( $query ) { // phpcs:ignore WordPressVIPM
 		return;
 	}
 
+	/**
+	 * Sets the number of corrections to display per page on the corrections
+	 * archive page. Must be an integer value.
+	 *
+	 * @constant NEWSPACK_CORRECTIONS_ARCHIVE_PER_PAGE
+	 * @type     int
+	 * @default  20 items per page
+	 * @status   draft
+	 *
+	 * @example define( 'NEWSPACK_CORRECTIONS_ARCHIVE_PER_PAGE', 50 );
+	 */
 	$per_page = defined( 'NEWSPACK_CORRECTIONS_ARCHIVE_PER_PAGE' ) && is_int( NEWSPACK_CORRECTIONS_ARCHIVE_PER_PAGE ) ? NEWSPACK_CORRECTIONS_ARCHIVE_PER_PAGE : 20;
 
 	$query->set( 'posts_per_page', $per_page );

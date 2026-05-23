@@ -24,7 +24,7 @@ use Google\Site_Kit_Dependencies\Monolog\Utils;
  *
  * @author Nehal Patel <nehal@nehalpatel.me>
  */
-class IFTTTHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\AbstractProcessingHandler
+class IFTTTHandler extends AbstractProcessingHandler
 {
     /** @var string */
     private $eventName;
@@ -34,10 +34,10 @@ class IFTTTHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstrac
      * @param string $eventName The name of the IFTTT Maker event that should be triggered
      * @param string $secretKey A valid IFTTT secret key
      */
-    public function __construct(string $eventName, string $secretKey, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::ERROR, bool $bubble = \true)
+    public function __construct(string $eventName, string $secretKey, $level = Logger::ERROR, bool $bubble = \true)
     {
-        if (!\extension_loaded('curl')) {
-            throw new \Google\Site_Kit_Dependencies\Monolog\Handler\MissingExtensionException('The curl extension is needed to use the IFTTTHandler');
+        if (!extension_loaded('curl')) {
+            throw new MissingExtensionException('The curl extension is needed to use the IFTTTHandler');
         }
         $this->eventName = $eventName;
         $this->secretKey = $secretKey;
@@ -46,16 +46,16 @@ class IFTTTHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstrac
     /**
      * {@inheritDoc}
      */
-    public function write(array $record) : void
+    public function write(array $record): void
     {
         $postData = ["value1" => $record["channel"], "value2" => $record["level_name"], "value3" => $record["message"]];
-        $postString = \Google\Site_Kit_Dependencies\Monolog\Utils::jsonEncode($postData);
-        $ch = \curl_init();
-        \curl_setopt($ch, \CURLOPT_URL, "https://maker.ifttt.com/trigger/" . $this->eventName . "/with/key/" . $this->secretKey);
-        \curl_setopt($ch, \CURLOPT_POST, \true);
-        \curl_setopt($ch, \CURLOPT_RETURNTRANSFER, \true);
-        \curl_setopt($ch, \CURLOPT_POSTFIELDS, $postString);
-        \curl_setopt($ch, \CURLOPT_HTTPHEADER, ["Content-Type: application/json"]);
-        \Google\Site_Kit_Dependencies\Monolog\Handler\Curl\Util::execute($ch);
+        $postString = Utils::jsonEncode($postData);
+        $ch = curl_init();
+        curl_setopt($ch, \CURLOPT_URL, "https://maker.ifttt.com/trigger/" . $this->eventName . "/with/key/" . $this->secretKey);
+        curl_setopt($ch, \CURLOPT_POST, \true);
+        curl_setopt($ch, \CURLOPT_RETURNTRANSFER, \true);
+        curl_setopt($ch, \CURLOPT_POSTFIELDS, $postString);
+        curl_setopt($ch, \CURLOPT_HTTPHEADER, ["Content-Type: application/json"]);
+        Curl\Util::execute($ch);
     }
 }

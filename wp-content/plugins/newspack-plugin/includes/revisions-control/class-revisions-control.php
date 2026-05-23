@@ -62,7 +62,17 @@ class Revisions_Control {
 		if ( ! empty( $option ) ) {
 			return $option;
 		}
-		// TODO: When we allow users to modify the min_age via UI or hook, we need to make the Help text in self::admin_head dynamic.
+		/**
+		 * Maximum number of post revisions to retain. Older revisions
+		 * (more than 1 week old) beyond this limit are automatically deleted.
+		 *
+		 * @constant NEWSPACK_LIMIT_REVISIONS_NUMBER
+		 * @type     int
+		 * @default  Revisions not limited by Newspack
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_LIMIT_REVISIONS_NUMBER', 10 );
+		 */
 		if ( defined( 'NEWSPACK_LIMIT_REVISIONS_NUMBER' ) && is_int( NEWSPACK_LIMIT_REVISIONS_NUMBER ) ) {
 			return [
 				'active'  => true,

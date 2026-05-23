@@ -19,7 +19,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP\Base;
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-abstract class EvalBarrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP\Base
+abstract class EvalBarrett extends Base
 {
     /**
      * Custom Reduction Function
@@ -50,15 +50,15 @@ abstract class EvalBarrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math
      * @param string $class
      * @return callable
      */
-    protected static function generateCustomReduction(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\PHP $m, $class)
+    protected static function generateCustomReduction(PHP $m, $class)
     {
-        $m_length = \count($m->value);
+        $m_length = count($m->value);
         if ($m_length < 5) {
             $code = '
                 $lhs = new ' . $class . '();
                 $lhs->value = $x;
                 $rhs = new ' . $class . '();
-                $rhs->value = [' . \implode(',', \array_map(self::class . '::float2string', $m->value)) . '];
+                $rhs->value = [' . implode(',', array_map(self::class . '::float2string', $m->value)) . '];
                 list(, $temp) = $lhs->divide($rhs);
                 return $temp->value;
             ';
@@ -71,7 +71,7 @@ abstract class EvalBarrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math
         if ($m_length & 1) {
             $correctionNeeded = \true;
             $m = clone $m;
-            \array_unshift($m->value, 0);
+            array_unshift($m->value, 0);
             $m_length++;
         }
         $lhs = new $class();
@@ -91,14 +91,14 @@ abstract class EvalBarrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math
         }
         $m = $m->value;
         $m1 = $m1->value;
-        $cutoff = \count($m) + (\count($m) >> 1);
+        $cutoff = count($m) + (count($m) >> 1);
         $code = $correctionNeeded ? 'array_unshift($n, 0);' : '';
         $code .= '
-            if (count($n) > ' . 2 * \count($m) . ') {
+            if (count($n) > ' . 2 * count($m) . ') {
                 $lhs = new ' . $class . '();
                 $rhs = new ' . $class . '();
                 $lhs->value = $n;
-                $rhs->value = [' . \implode(',', \array_map(self::class . '::float2string', $m)) . '];
+                $rhs->value = [' . implode(',', array_map(self::class . '::float2string', $m)) . '];
                 list(, $temp) = $lhs->divide($rhs);
                 return $temp->value;
             }
@@ -108,10 +108,10 @@ abstract class EvalBarrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math
         $code .= self::generateInlineTrim('msd');
         $code .= self::generateInlineMultiply('msd', $m1, 'temp', $class);
         $code .= self::generateInlineAdd('lsd', 'temp', 'n', $class);
-        $code .= '$temp = array_slice($n, ' . (\count($m) - 1) . ');';
+        $code .= '$temp = array_slice($n, ' . (count($m) - 1) . ');';
         $code .= self::generateInlineMultiply('temp', $u, 'temp2', $class);
         $code .= self::generateInlineTrim('temp2');
-        $code .= $class::BASE == 26 ? '$temp = array_slice($temp2, ' . (\count($m) + 1) . ');' : '$temp = array_slice($temp2, ' . ((\count($m) >> 1) + 1) . ');';
+        $code .= $class::BASE == 26 ? '$temp = array_slice($temp2, ' . (count($m) + 1) . ');' : '$temp = array_slice($temp2, ' . ((count($m) >> 1) + 1) . ');';
         $code .= self::generateInlineMultiply('temp', $m, 'temp2', $class);
         $code .= self::generateInlineTrim('temp2');
         /*
@@ -162,7 +162,7 @@ abstract class EvalBarrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math
      */
     private static function generateInlineMultiply($input, array $arr, $output, $class)
     {
-        if (!\count($arr)) {
+        if (!count($arr)) {
             return 'return [];';
         }
         $regular = '
@@ -170,9 +170,9 @@ abstract class EvalBarrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math
             if (!$length) {
                 $' . $output . ' = [];
             }else{
-            $' . $output . ' = array_fill(0, $length + ' . \count($arr) . ', 0);
+            $' . $output . ' = array_fill(0, $length + ' . count($arr) . ', 0);
             $carry = 0;';
-        for ($i = 0; $i < \count($arr); $i++) {
+        for ($i = 0; $i < count($arr); $i++) {
             $regular .= '
                 $subtemp = $' . $input . '[0] * ' . $arr[$i];
             $regular .= $i ? ' + $carry;' : ';';
@@ -185,10 +185,10 @@ abstract class EvalBarrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math
             $regular .= '$subtemp - ' . $class::BASE_FULL . ' * $carry';
             $regular .= $class::BASE === 26 ? ');' : ';';
         }
-        $regular .= '$' . $output . '[' . \count($arr) . '] = $carry;';
+        $regular .= '$' . $output . '[' . count($arr) . '] = $carry;';
         $regular .= '
             for ($i = 1; $i < $length; ++$i) {';
-        for ($j = 0; $j < \count($arr); $j++) {
+        for ($j = 0; $j < count($arr); $j++) {
             $regular .= $j ? '$k++;' : '$k = $i;';
             $regular .= '
                 $subtemp = $' . $output . '[$k] + $' . $input . '[$i] * ' . $arr[$j];
@@ -317,7 +317,7 @@ abstract class EvalBarrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math
     private static function generateInlineSubtract1($unknown, array $known, $result, $class)
     {
         $code = '$' . $result . ' = $' . $unknown . ';';
-        for ($i = 0, $j = 1; $j < \count($known); $i += 2, $j += 2) {
+        for ($i = 0, $j = 1; $j < count($known); $i += 2, $j += 2) {
             $code .= '$sum = $' . $unknown . '[' . $j . '] * ' . $class::BASE_FULL . ' + $' . $unknown . '[' . $i . '] - ';
             $code .= self::float2string($known[$j] * $class::BASE_FULL + $known[$i]);
             if ($i != 0) {
@@ -342,7 +342,7 @@ abstract class EvalBarrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math
                 $' . $result . '[' . $j . '] = $subtemp;';
         }
         $code .= '$i = ' . $i . ';';
-        if ($j == \count($known)) {
+        if ($j == count($known)) {
             $code .= '
                 $sum = $' . $unknown . '[' . $i . '] - ' . $known[$i] . ' - $carry;
                 $carry = $sum < 0;
@@ -371,14 +371,14 @@ abstract class EvalBarrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math
      */
     private static function generateInlineCompare(array $known, $unknown, $subcode)
     {
-        $uniqid = \uniqid();
+        $uniqid = uniqid();
         $code = 'loop_' . $uniqid . ':
             $clength = count($' . $unknown . ');
             switch (true) {
-                case $clength < ' . \count($known) . ':
+                case $clength < ' . count($known) . ':
                     goto end_' . $uniqid . ';
-                case $clength > ' . \count($known) . ':';
-        for ($i = \count($known) - 1; $i >= 0; $i--) {
+                case $clength > ' . count($known) . ':';
+        for ($i = count($known) - 1; $i >= 0; $i--) {
             $code .= '
                 case $' . $unknown . '[' . $i . '] > ' . $known[$i] . ':
                     goto subcode_' . $uniqid . ';
@@ -407,16 +407,16 @@ abstract class EvalBarrett extends \Google\Site_Kit_Dependencies\phpseclib3\Math
      */
     private static function float2string($num)
     {
-        if (!\is_float($num)) {
+        if (!is_float($num)) {
             return (string) $num;
         }
         if ($num < 0) {
-            return '-' . self::float2string(\abs($num));
+            return '-' . self::float2string(abs($num));
         }
         $temp = '';
         while ($num) {
-            $temp = \fmod($num, 10) . $temp;
-            $num = \floor($num / 10);
+            $temp = fmod($num, 10) . $temp;
+            $num = floor($num / 10);
         }
         return $temp;
     }

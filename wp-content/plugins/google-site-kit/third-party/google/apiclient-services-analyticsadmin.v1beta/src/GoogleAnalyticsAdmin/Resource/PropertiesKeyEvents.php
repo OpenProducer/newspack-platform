@@ -40,11 +40,11 @@ class PropertiesKeyEvents extends \Google\Site_Kit_Dependencies\Google\Service\R
      * @return GoogleAnalyticsAdminV1betaKeyEvent
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaKeyEvent $postBody, $optParams = [])
+    public function create($parent, GoogleAnalyticsAdminV1betaKeyEvent $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaKeyEvent::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], GoogleAnalyticsAdminV1betaKeyEvent::class);
     }
     /**
      * Deletes a Key Event. (keyEvents.delete)
@@ -59,8 +59,8 @@ class PropertiesKeyEvents extends \Google\Site_Kit_Dependencies\Google\Service\R
     public function delete($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('delete', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleProtobufEmpty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('delete', [$params], GoogleProtobufEmpty::class);
     }
     /**
      * Retrieve a single Key Event. (keyEvents.get)
@@ -75,8 +75,8 @@ class PropertiesKeyEvents extends \Google\Site_Kit_Dependencies\Google\Service\R
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaKeyEvent::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], GoogleAnalyticsAdminV1betaKeyEvent::class);
     }
     /**
      * Returns a list of Key Events in the specified parent property. Returns an
@@ -99,8 +99,8 @@ class PropertiesKeyEvents extends \Google\Site_Kit_Dependencies\Google\Service\R
     public function listPropertiesKeyEvents($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaListKeyEventsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], GoogleAnalyticsAdminV1betaListKeyEventsResponse::class);
     }
     /**
      * Updates a Key Event. (keyEvents.patch)
@@ -117,12 +117,12 @@ class PropertiesKeyEvents extends \Google\Site_Kit_Dependencies\Google\Service\R
      * @return GoogleAnalyticsAdminV1betaKeyEvent
      * @throws \Google\Service\Exception
      */
-    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaKeyEvent $postBody, $optParams = [])
+    public function patch($name, GoogleAnalyticsAdminV1betaKeyEvent $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaKeyEvent::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('patch', [$params], GoogleAnalyticsAdminV1betaKeyEvent::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\Resource\PropertiesKeyEvents::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_Resource_PropertiesKeyEvents');
+class_alias(PropertiesKeyEvents::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_Resource_PropertiesKeyEvents');

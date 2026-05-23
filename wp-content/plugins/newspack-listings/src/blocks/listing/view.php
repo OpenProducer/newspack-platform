@@ -34,6 +34,7 @@ function register_blocks() {
 		register_block_type(
 			'newspack-listings/' . $label,
 			[
+				'api_version'     => $block_json['apiVersion'],
 				'attributes'      => $attributes,
 				'render_callback' => __NAMESPACE__ . '\render_block',
 			]

@@ -45,7 +45,7 @@ class Organization extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $domain;
-    protected $endDateType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Date::class;
+    protected $endDateType = Date::class;
     protected $endDateDataType = '';
     /**
      * Output only. The type of the organization translated and formatted in the
@@ -73,7 +73,7 @@ class Organization extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $location;
-    protected $metadataType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata::class;
+    protected $metadataType = FieldMetadata::class;
     protected $metadataDataType = '';
     /**
      * The name of the organization.
@@ -87,7 +87,7 @@ class Organization extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $phoneticName;
-    protected $startDateType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Date::class;
+    protected $startDateType = Date::class;
     protected $startDateDataType = '';
     /**
      * The symbol associated with the organization; for example, a stock ticker
@@ -180,7 +180,7 @@ class Organization extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Date $endDate
      */
-    public function setEndDate(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\Date $endDate)
+    public function setEndDate(Date $endDate)
     {
         $this->endDate = $endDate;
     }
@@ -262,7 +262,7 @@ class Organization extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param FieldMetadata $metadata
      */
-    public function setMetadata(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata $metadata)
+    public function setMetadata(FieldMetadata $metadata)
     {
         $this->metadata = $metadata;
     }
@@ -310,7 +310,7 @@ class Organization extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Date $startDate
      */
-    public function setStartDate(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\Date $startDate)
+    public function setStartDate(Date $startDate)
     {
         $this->startDate = $startDate;
     }
@@ -373,4 +373,4 @@ class Organization extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\Organization::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_Organization');
+class_alias(Organization::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_Organization');

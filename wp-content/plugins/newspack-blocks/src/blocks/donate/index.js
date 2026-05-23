@@ -23,7 +23,7 @@ import metadata from './block.json';
 import './styles/editor.scss';
 import './styles/view.scss';
 
-const { name, attributes, category, supports } = metadata;
+const { name, attributes, apiVersion, category, supports } = metadata;
 
 // Name must be exported separately.
 export { name };
@@ -31,6 +31,7 @@ export { name };
 export const title = __( 'Donate', 'newspack-blocks' );
 
 export const settings = {
+	apiVersion,
 	title,
 	icon: {
 		src: icon,

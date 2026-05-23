@@ -20,7 +20,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger;
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-abstract class JWK extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\Formats\Keys\JWK
+abstract class JWK extends Progenitor
 {
     /**
      * Break a public or private key down into its constituent components
@@ -38,11 +38,11 @@ abstract class JWK extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common
         $count = $publicCount = 0;
         $vars = ['n', 'e', 'd', 'p', 'q', 'dp', 'dq', 'qi'];
         foreach ($vars as $var) {
-            if (!isset($key->{$var}) || !\is_string($key->{$var})) {
+            if (!isset($key->{$var}) || !is_string($key->{$var})) {
                 continue;
             }
             $count++;
-            $value = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(\Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64url_decode($key->{$var}), 256);
+            $value = new BigInteger(Strings::base64url_decode($key->{$var}), 256);
             switch ($var) {
                 case 'n':
                     $publicCount++;
@@ -71,7 +71,7 @@ abstract class JWK extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common
                     $components['coefficients'][2] = $value;
             }
         }
-        if ($count == \count($vars)) {
+        if ($count == count($vars)) {
             return $components + ['isPublicKey' => \false];
         }
         if ($count == 2 && $publicCount == 2) {
@@ -92,12 +92,12 @@ abstract class JWK extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common
      * @param array $options optional
      * @return string
      */
-    public static function savePrivateKey(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $n, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $e, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $d, array $primes, array $exponents, array $coefficients, $password = '', array $options = [])
+    public static function savePrivateKey(BigInteger $n, BigInteger $e, BigInteger $d, array $primes, array $exponents, array $coefficients, $password = '', array $options = [])
     {
-        if (\count($primes) != 2) {
+        if (count($primes) != 2) {
             throw new \InvalidArgumentException('JWK does not support multi-prime RSA keys');
         }
-        $key = ['kty' => 'RSA', 'n' => \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64url_encode($n->toBytes()), 'e' => \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64url_encode($e->toBytes()), 'd' => \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64url_encode($d->toBytes()), 'p' => \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64url_encode($primes[1]->toBytes()), 'q' => \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64url_encode($primes[2]->toBytes()), 'dp' => \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64url_encode($exponents[1]->toBytes()), 'dq' => \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64url_encode($exponents[2]->toBytes()), 'qi' => \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64url_encode($coefficients[2]->toBytes())];
+        $key = ['kty' => 'RSA', 'n' => Strings::base64url_encode($n->toBytes()), 'e' => Strings::base64url_encode($e->toBytes()), 'd' => Strings::base64url_encode($d->toBytes()), 'p' => Strings::base64url_encode($primes[1]->toBytes()), 'q' => Strings::base64url_encode($primes[2]->toBytes()), 'dp' => Strings::base64url_encode($exponents[1]->toBytes()), 'dq' => Strings::base64url_encode($exponents[2]->toBytes()), 'qi' => Strings::base64url_encode($coefficients[2]->toBytes())];
         return self::wrapKey($key, $options);
     }
     /**
@@ -108,9 +108,9 @@ abstract class JWK extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common
      * @param array $options optional
      * @return string
      */
-    public static function savePublicKey(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $n, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $e, array $options = [])
+    public static function savePublicKey(BigInteger $n, BigInteger $e, array $options = [])
     {
-        $key = ['kty' => 'RSA', 'n' => \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64url_encode($n->toBytes()), 'e' => \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64url_encode($e->toBytes())];
+        $key = ['kty' => 'RSA', 'n' => Strings::base64url_encode($n->toBytes()), 'e' => Strings::base64url_encode($e->toBytes())];
         return self::wrapKey($key, $options);
     }
 }

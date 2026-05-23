@@ -23,7 +23,7 @@ use Google\Site_Kit_Dependencies\Monolog\Utils;
  * @author Christophe Coevoet <stof@notk.org>
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
-class RotatingFileHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\StreamHandler
+class RotatingFileHandler extends StreamHandler
 {
     public const FILE_PER_DAY = 'Y-m-d';
     public const FILE_PER_MONTH = 'Y-m';
@@ -46,9 +46,9 @@ class RotatingFileHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\
      * @param int|null   $filePermission Optional file permissions (default (0644) are only for owner read/write)
      * @param bool       $useLocking     Try to lock log file before doing any writes
      */
-    public function __construct(string $filename, int $maxFiles = 0, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG, bool $bubble = \true, ?int $filePermission = null, bool $useLocking = \false)
+    public function __construct(string $filename, int $maxFiles = 0, $level = Logger::DEBUG, bool $bubble = \true, ?int $filePermission = null, bool $useLocking = \false)
     {
-        $this->filename = \Google\Site_Kit_Dependencies\Monolog\Utils::canonicalizePath($filename);
+        $this->filename = Utils::canonicalizePath($filename);
         $this->maxFiles = $maxFiles;
         $this->nextRotation = new \DateTimeImmutable('tomorrow');
         $this->filenameFormat = '{filename}-{date}';
@@ -58,7 +58,7 @@ class RotatingFileHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\
     /**
      * {@inheritDoc}
      */
-    public function close() : void
+    public function close(): void
     {
         parent::close();
         if (\true === $this->mustRotate) {
@@ -75,13 +75,13 @@ class RotatingFileHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\
             $this->rotate();
         }
     }
-    public function setFilenameFormat(string $filenameFormat, string $dateFormat) : self
+    public function setFilenameFormat(string $filenameFormat, string $dateFormat): self
     {
-        if (!\preg_match('{^[Yy](([/_.-]?m)([/_.-]?d)?)?$}', $dateFormat)) {
-            throw new \InvalidArgumentException('Invalid date format - format must be one of ' . 'RotatingFileHandler::FILE_PER_DAY ("Y-m-d"), RotatingFileHandler::FILE_PER_MONTH ("Y-m") ' . 'or RotatingFileHandler::FILE_PER_YEAR ("Y"), or you can set one of the ' . 'date formats using slashes, underscores and/or dots instead of dashes.');
+        if (!preg_match('{^[Yy](([/_.-]?m)([/_.-]?d)?)?$}', $dateFormat)) {
+            throw new InvalidArgumentException('Invalid date format - format must be one of ' . 'RotatingFileHandler::FILE_PER_DAY ("Y-m-d"), RotatingFileHandler::FILE_PER_MONTH ("Y-m") ' . 'or RotatingFileHandler::FILE_PER_YEAR ("Y"), or you can set one of the ' . 'date formats using slashes, underscores and/or dots instead of dashes.');
         }
-        if (\substr_count($filenameFormat, '{date}') === 0) {
-            throw new \InvalidArgumentException('Invalid filename format - format must contain at least `{date}`, because otherwise rotating is impossible.');
+        if (substr_count($filenameFormat, '{date}') === 0) {
+            throw new InvalidArgumentException('Invalid filename format - format must contain at least `{date}`, because otherwise rotating is impossible.');
         }
         $this->filenameFormat = $filenameFormat;
         $this->dateFormat = $dateFormat;
@@ -92,11 +92,11 @@ class RotatingFileHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
         // on the first record written, if the log is new, we rotate (once per day) after the log has been written so that the new file exists
         if (null === $this->mustRotate) {
-            $this->mustRotate = null === $this->url || !\file_exists($this->url);
+            $this->mustRotate = null === $this->url || !file_exists($this->url);
         }
         // if the next rotation is expired, then we rotate immediately
         if ($this->nextRotation <= $record['datetime']) {
@@ -113,7 +113,7 @@ class RotatingFileHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\
     /**
      * Rotates the files.
      */
-    protected function rotate() : void
+    protected function rotate(): void
     {
         // update filename
         $this->url = $this->getTimedFilename();
@@ -123,44 +123,44 @@ class RotatingFileHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\
         if (0 === $this->maxFiles) {
             return;
         }
-        $logFiles = \glob($this->getGlobPattern());
+        $logFiles = glob($this->getGlobPattern());
         if (\false === $logFiles) {
             // failed to glob
             return;
         }
-        if ($this->maxFiles >= \count($logFiles)) {
+        if ($this->maxFiles >= count($logFiles)) {
             // no files to remove
             return;
         }
         // Sorting the files by name to remove the older ones
-        \usort($logFiles, function ($a, $b) {
-            return \strcmp($b, $a);
+        usort($logFiles, function ($a, $b) {
+            return strcmp($b, $a);
         });
-        foreach (\array_slice($logFiles, $this->maxFiles) as $file) {
-            if (\is_writable($file)) {
+        foreach (array_slice($logFiles, $this->maxFiles) as $file) {
+            if (is_writable($file)) {
                 // suppress errors here as unlink() might fail if two processes
                 // are cleaning up/rotating at the same time
-                \set_error_handler(function (int $errno, string $errstr, string $errfile, int $errline) : bool {
-                    return \false;
+                set_error_handler(function (int $errno, string $errstr, string $errfile, int $errline): bool {
+                    return \true;
                 });
-                \unlink($file);
-                \restore_error_handler();
+                unlink($file);
+                restore_error_handler();
             }
         }
     }
-    protected function getTimedFilename() : string
+    protected function getTimedFilename(): string
     {
-        $fileInfo = \pathinfo($this->filename);
-        $timedFilename = \str_replace(['{filename}', '{date}'], [$fileInfo['filename'], \date($this->dateFormat)], $fileInfo['dirname'] . '/' . $this->filenameFormat);
+        $fileInfo = pathinfo($this->filename);
+        $timedFilename = str_replace(['{filename}', '{date}'], [$fileInfo['filename'], date($this->dateFormat)], $fileInfo['dirname'] . '/' . $this->filenameFormat);
         if (isset($fileInfo['extension'])) {
             $timedFilename .= '.' . $fileInfo['extension'];
         }
         return $timedFilename;
     }
-    protected function getGlobPattern() : string
+    protected function getGlobPattern(): string
     {
-        $fileInfo = \pathinfo($this->filename);
-        $glob = \str_replace(['{filename}', '{date}'], [$fileInfo['filename'], \str_replace(['Y', 'y', 'm', 'd'], ['[0-9][0-9][0-9][0-9]', '[0-9][0-9]', '[0-9][0-9]', '[0-9][0-9]'], $this->dateFormat)], $fileInfo['dirname'] . '/' . $this->filenameFormat);
+        $fileInfo = pathinfo($this->filename);
+        $glob = str_replace(['{filename}', '{date}'], [$fileInfo['filename'], str_replace(['Y', 'y', 'm', 'd'], ['[0-9][0-9][0-9][0-9]', '[0-9][0-9]', '[0-9][0-9]', '[0-9][0-9]'], $this->dateFormat)], $fileInfo['dirname'] . '/' . $this->filenameFormat);
         if (isset($fileInfo['extension'])) {
             $glob .= '.' . $fileInfo['extension'];
         }

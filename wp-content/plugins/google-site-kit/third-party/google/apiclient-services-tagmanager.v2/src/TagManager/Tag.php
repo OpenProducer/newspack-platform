@@ -47,7 +47,7 @@ class Tag extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string[]
      */
     public $blockingTriggerId;
-    protected $consentSettingsType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\TagConsentSetting::class;
+    protected $consentSettingsType = TagConsentSetting::class;
     protected $consentSettingsDataType = '';
     /**
      * GTM Container ID.
@@ -76,7 +76,7 @@ class Tag extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var bool
      */
     public $liveOnly;
-    protected $monitoringMetadataType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $monitoringMetadataType = Parameter::class;
     protected $monitoringMetadataDataType = '';
     /**
      * If non-empty, then the tag display name will be included in the monitoring
@@ -97,7 +97,7 @@ class Tag extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $notes;
-    protected $parameterType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $parameterType = Parameter::class;
     protected $parameterDataType = 'array';
     /**
      * Parent folder id.
@@ -117,7 +117,7 @@ class Tag extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var bool
      */
     public $paused;
-    protected $priorityType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $priorityType = Parameter::class;
     protected $priorityDataType = '';
     /**
      * The end timestamp in milliseconds to schedule a tag.
@@ -131,7 +131,7 @@ class Tag extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $scheduleStartMs;
-    protected $setupTagType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\SetupTag::class;
+    protected $setupTagType = SetupTag::class;
     protected $setupTagDataType = 'array';
     /**
      * Option to fire this tag.
@@ -151,7 +151,7 @@ class Tag extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $tagManagerUrl;
-    protected $teardownTagType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\TeardownTag::class;
+    protected $teardownTagType = TeardownTag::class;
     protected $teardownTagDataType = 'array';
     /**
      * GTM Tag Type.
@@ -203,7 +203,7 @@ class Tag extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param TagConsentSetting $consentSettings
      */
-    public function setConsentSettings(\Google\Site_Kit_Dependencies\Google\Service\TagManager\TagConsentSetting $consentSettings)
+    public function setConsentSettings(TagConsentSetting $consentSettings)
     {
         $this->consentSettings = $consentSettings;
     }
@@ -289,7 +289,7 @@ class Tag extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Parameter $monitoringMetadata
      */
-    public function setMonitoringMetadata(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter $monitoringMetadata)
+    public function setMonitoringMetadata(Parameter $monitoringMetadata)
     {
         $this->monitoringMetadata = $monitoringMetadata;
     }
@@ -420,7 +420,7 @@ class Tag extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Parameter $priority
      */
-    public function setPriority(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter $priority)
+    public function setPriority(Parameter $priority)
     {
         $this->priority = $priority;
     }
@@ -580,4 +580,4 @@ class Tag extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Tag::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Tag');
+class_alias(Tag::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Tag');

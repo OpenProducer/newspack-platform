@@ -37,7 +37,7 @@ class Biography extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $contentType;
-    protected $metadataType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata::class;
+    protected $metadataType = FieldMetadata::class;
     protected $metadataDataType = '';
     /**
      * The short biography.
@@ -68,7 +68,7 @@ class Biography extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param FieldMetadata $metadata
      */
-    public function setMetadata(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata $metadata)
+    public function setMetadata(FieldMetadata $metadata)
     {
         $this->metadata = $metadata;
     }
@@ -97,4 +97,4 @@ class Biography extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\Biography::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_Biography');
+class_alias(Biography::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_Biography');

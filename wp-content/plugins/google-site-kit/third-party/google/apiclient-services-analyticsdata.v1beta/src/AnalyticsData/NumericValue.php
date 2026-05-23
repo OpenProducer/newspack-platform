@@ -57,4 +57,4 @@ class NumericValue extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\NumericValue::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_NumericValue');
+class_alias(NumericValue::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_NumericValue');

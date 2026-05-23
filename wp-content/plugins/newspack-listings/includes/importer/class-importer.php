@@ -658,6 +658,18 @@ final class Importer {
 	 */
 	public static function get_post_type_mapping( $data ) {
 		$field_map = NEWSPACK_LISTINGS_IMPORT_MAPPING; // Defined in config file.
+		/**
+		 * Sets the default post type for imported listings when the CSV data
+		 * does not specify a type. Must be a valid listing post type slug
+		 * (e.g., 'newspack_lst_place', 'newspack_lst_event').
+		 *
+		 * @constant NEWSPACK_LISTINGS_IMPORT_DEFAULT_POST_TYPE
+		 * @type     string
+		 * @default  Generic listing post type
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_LISTINGS_IMPORT_DEFAULT_POST_TYPE', 'newspack_lst_place' );
+		 */
 		$post_type = defined( 'NEWSPACK_LISTINGS_IMPORT_DEFAULT_POST_TYPE' ) && Core::is_listing( NEWSPACK_LISTINGS_IMPORT_DEFAULT_POST_TYPE ) ?
 			NEWSPACK_LISTINGS_IMPORT_DEFAULT_POST_TYPE :
 			Core::NEWSPACK_LISTINGS_POST_TYPES['generic'];

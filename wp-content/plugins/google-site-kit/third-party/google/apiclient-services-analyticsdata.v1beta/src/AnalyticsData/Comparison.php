@@ -26,7 +26,7 @@ class Comparison extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $comparison;
-    protected $dimensionFilterType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\FilterExpression::class;
+    protected $dimensionFilterType = FilterExpression::class;
     protected $dimensionFilterDataType = '';
     /**
      * Each comparison produces separate rows in the response. In the response,
@@ -58,7 +58,7 @@ class Comparison extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param FilterExpression $dimensionFilter
      */
-    public function setDimensionFilter(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\FilterExpression $dimensionFilter)
+    public function setDimensionFilter(FilterExpression $dimensionFilter)
     {
         $this->dimensionFilter = $dimensionFilter;
     }
@@ -89,4 +89,4 @@ class Comparison extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Comparison::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_Comparison');
+class_alias(Comparison::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_Comparison');

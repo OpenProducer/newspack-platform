@@ -19,6 +19,17 @@ class OAuth {
 	 * Get API key for proxies.
 	 */
 	public static function get_proxy_api_key() {
+		/**
+		 * Option name storing the Newspack Manager API key.
+		 * Required for OAuth proxy functionality.
+		 *
+		 * @constant NEWSPACK_MANAGER_API_KEY_OPTION_NAME
+		 * @type     string
+		 * @default  OAuth proxy unavailable
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_MANAGER_API_KEY_OPTION_NAME', 'newspack_manager_api_key' );
+		 */
 		if ( ! defined( 'NEWSPACK_MANAGER_API_KEY_OPTION_NAME' ) ) {
 			return false;
 		}
@@ -117,9 +128,31 @@ class OAuth {
 	private static function get_proxy_url( $type ) {
 		switch ( $type ) {
 			case 'google':
+				/**
+				 * Override URL for Google OAuth proxy. Takes precedence over
+				 * NEWSPACK_GOOGLE_OAUTH_PROXY. Use for development/testing.
+				 *
+				 * @constant NEWSPACK_GOOGLE_OAUTH_PROXY_OVERRIDE
+				 * @type     string
+				 * @default  Uses NEWSPACK_GOOGLE_OAUTH_PROXY or none
+				 * @status   draft
+				 *
+				 * @example define( 'NEWSPACK_GOOGLE_OAUTH_PROXY_OVERRIDE', 'https://dev-proxy.example.com' );
+				 */
 				if ( defined( 'NEWSPACK_GOOGLE_OAUTH_PROXY_OVERRIDE' ) ) {
 					return NEWSPACK_GOOGLE_OAUTH_PROXY_OVERRIDE;
 				}
+				/**
+				 * URL of the Google OAuth proxy service. Required for Google
+				 * sign-in functionality.
+				 *
+				 * @constant NEWSPACK_GOOGLE_OAUTH_PROXY
+				 * @type     string
+				 * @default  Google OAuth unavailable
+				 * @status   draft
+				 *
+				 * @example define( 'NEWSPACK_GOOGLE_OAUTH_PROXY', 'https://oauth.newspack.com' );
+				 */
 				if ( defined( 'NEWSPACK_GOOGLE_OAUTH_PROXY' ) ) {
 					return NEWSPACK_GOOGLE_OAUTH_PROXY;
 				}

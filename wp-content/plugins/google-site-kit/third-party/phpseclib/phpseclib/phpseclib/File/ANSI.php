@@ -153,9 +153,9 @@ class ANSI
         $this->max_y = $y - 1;
         $this->x = $this->y = 0;
         $this->history = $this->history_attrs = [];
-        $this->attr_row = \array_fill(0, $this->max_x + 2, $this->base_attr_cell);
-        $this->screen = \array_fill(0, $this->max_y + 1, '');
-        $this->attrs = \array_fill(0, $this->max_y + 1, $this->attr_row);
+        $this->attr_row = array_fill(0, $this->max_x + 2, $this->base_attr_cell);
+        $this->screen = array_fill(0, $this->max_y + 1, '');
+        $this->attrs = array_fill(0, $this->max_y + 1, $this->attr_row);
         $this->ansi = '';
     }
     /**
@@ -185,18 +185,18 @@ class ANSI
     public function appendString($source)
     {
         $this->tokenization = [''];
-        for ($i = 0; $i < \strlen($source); $i++) {
-            if (\strlen($this->ansi)) {
+        for ($i = 0; $i < strlen($source); $i++) {
+            if (strlen($this->ansi)) {
                 $this->ansi .= $source[$i];
-                $chr = \ord($source[$i]);
+                $chr = ord($source[$i]);
                 // http://en.wikipedia.org/wiki/ANSI_escape_code#Sequence_elements
                 // single character CSI's not currently supported
                 switch (\true) {
                     case $this->ansi == "\x1b=":
                         $this->ansi = '';
                         continue 2;
-                    case \strlen($this->ansi) == 2 && $chr >= 64 && $chr <= 95 && $chr != \ord('['):
-                    case \strlen($this->ansi) > 2 && $chr >= 64 && $chr <= 126:
+                    case strlen($this->ansi) == 2 && $chr >= 64 && $chr <= 95 && $chr != ord('['):
+                    case strlen($this->ansi) > 2 && $chr >= 64 && $chr <= 126:
                         break;
                     default:
                         continue 2;
@@ -213,23 +213,23 @@ class ANSI
                         break;
                     case "\x1b[J":
                         // Clear screen from cursor down
-                        $this->history = \array_merge($this->history, \array_slice(\array_splice($this->screen, $this->y + 1), 0, $this->old_y));
-                        $this->screen = \array_merge($this->screen, \array_fill($this->y, $this->max_y, ''));
-                        $this->history_attrs = \array_merge($this->history_attrs, \array_slice(\array_splice($this->attrs, $this->y + 1), 0, $this->old_y));
-                        $this->attrs = \array_merge($this->attrs, \array_fill($this->y, $this->max_y, $this->attr_row));
-                        if (\count($this->history) == $this->max_history) {
-                            \array_shift($this->history);
-                            \array_shift($this->history_attrs);
+                        $this->history = array_merge($this->history, array_slice(array_splice($this->screen, $this->y + 1), 0, $this->old_y));
+                        $this->screen = array_merge($this->screen, array_fill($this->y, $this->max_y, ''));
+                        $this->history_attrs = array_merge($this->history_attrs, array_slice(array_splice($this->attrs, $this->y + 1), 0, $this->old_y));
+                        $this->attrs = array_merge($this->attrs, array_fill($this->y, $this->max_y, $this->attr_row));
+                        if (count($this->history) == $this->max_history) {
+                            array_shift($this->history);
+                            array_shift($this->history_attrs);
                         }
                     // fall-through
                     case "\x1b[K":
                         // Clear screen from cursor right
-                        $this->screen[$this->y] = \substr($this->screen[$this->y], 0, $this->x);
-                        \array_splice($this->attrs[$this->y], $this->x + 1, $this->max_x - $this->x, \array_fill($this->x, $this->max_x - ($this->x - 1), $this->base_attr_cell));
+                        $this->screen[$this->y] = substr($this->screen[$this->y], 0, $this->x);
+                        array_splice($this->attrs[$this->y], $this->x + 1, $this->max_x - $this->x, array_fill($this->x, $this->max_x - ($this->x - 1), $this->base_attr_cell));
                         break;
                     case "\x1b[2K":
                         // Clear entire line
-                        $this->screen[$this->y] = \str_repeat(' ', $this->x);
+                        $this->screen[$this->y] = str_repeat(' ', $this->x);
                         $this->attrs[$this->y] = $this->attr_row;
                         break;
                     case "\x1b[?1h":
@@ -246,24 +246,24 @@ class ANSI
                         break;
                     default:
                         switch (\true) {
-                            case \preg_match('#\\x1B\\[(\\d+)B#', $this->ansi, $match):
+                            case preg_match('#\x1B\[(\d+)B#', $this->ansi, $match):
                                 // Move cursor down n lines
                                 $this->old_y = $this->y;
                                 $this->y += (int) $match[1];
                                 break;
-                            case \preg_match('#\\x1B\\[(\\d+);(\\d+)H#', $this->ansi, $match):
+                            case preg_match('#\x1B\[(\d+);(\d+)H#', $this->ansi, $match):
                                 // Move cursor to screen location v,h
                                 $this->old_x = $this->x;
                                 $this->old_y = $this->y;
                                 $this->x = $match[2] - 1;
                                 $this->y = (int) $match[1] - 1;
                                 break;
-                            case \preg_match('#\\x1B\\[(\\d+)C#', $this->ansi, $match):
+                            case preg_match('#\x1B\[(\d+)C#', $this->ansi, $match):
                                 // Move cursor right n lines
                                 $this->old_x = $this->x;
                                 $this->x += $match[1];
                                 break;
-                            case \preg_match('#\\x1B\\[(\\d+)D#', $this->ansi, $match):
+                            case preg_match('#\x1B\[(\d+)D#', $this->ansi, $match):
                                 // Move cursor left n lines
                                 $this->old_x = $this->x;
                                 $this->x -= $match[1];
@@ -271,13 +271,13 @@ class ANSI
                                     $this->x = 0;
                                 }
                                 break;
-                            case \preg_match('#\\x1B\\[(\\d+);(\\d+)r#', $this->ansi, $match):
+                            case preg_match('#\x1B\[(\d+);(\d+)r#', $this->ansi, $match):
                                 // Set top and bottom lines of a window
                                 break;
-                            case \preg_match('#\\x1B\\[(\\d*(?:;\\d*)*)m#', $this->ansi, $match):
+                            case preg_match('#\x1B\[(\d*(?:;\d*)*)m#', $this->ansi, $match):
                                 // character attributes
                                 $attr_cell =& $this->attr_cell;
-                                $mods = \explode(';', $match[1]);
+                                $mods = explode(';', $match[1]);
                                 foreach ($mods as $mod) {
                                     switch ($mod) {
                                         case '':
@@ -375,7 +375,7 @@ class ANSI
                 $this->ansi = '';
                 continue;
             }
-            $this->tokenization[\count($this->tokenization) - 1] .= $source[$i];
+            $this->tokenization[count($this->tokenization) - 1] .= $source[$i];
             switch ($source[$i]) {
                 case "\r":
                     $this->x = 0;
@@ -388,7 +388,7 @@ class ANSI
                     if ($this->x) {
                         $this->x--;
                         $this->attrs[$this->y][$this->x] = clone $this->base_attr_cell;
-                        $this->screen[$this->y] = \substr_replace($this->screen[$this->y], $source[$i], $this->x, 1);
+                        $this->screen[$this->y] = substr_replace($this->screen[$this->y], $source[$i], $this->x, 1);
                     }
                     break;
                 case "\x0f":
@@ -396,7 +396,7 @@ class ANSI
                     break;
                 case "\x1b":
                     // start ANSI escape code
-                    $this->tokenization[\count($this->tokenization) - 1] = \substr($this->tokenization[\count($this->tokenization) - 1], 0, -1);
+                    $this->tokenization[count($this->tokenization) - 1] = substr($this->tokenization[count($this->tokenization) - 1], 0, -1);
                     //if (!strlen($this->tokenization[count($this->tokenization) - 1])) {
                     //    array_pop($this->tokenization);
                     //}
@@ -404,10 +404,10 @@ class ANSI
                     break;
                 default:
                     $this->attrs[$this->y][$this->x] = clone $this->attr_cell;
-                    if ($this->x > \strlen($this->screen[$this->y])) {
-                        $this->screen[$this->y] = \str_repeat(' ', $this->x);
+                    if ($this->x > strlen($this->screen[$this->y])) {
+                        $this->screen[$this->y] = str_repeat(' ', $this->x);
                     }
-                    $this->screen[$this->y] = \substr_replace($this->screen[$this->y], $source[$i], $this->x, 1);
+                    $this->screen[$this->y] = substr_replace($this->screen[$this->y], $source[$i], $this->x, 1);
                     if ($this->x > $this->max_x) {
                         $this->x = 0;
                         $this->newLine();
@@ -429,13 +429,13 @@ class ANSI
         //    $this->y++;
         //}
         while ($this->y >= $this->max_y) {
-            $this->history = \array_merge($this->history, [\array_shift($this->screen)]);
+            $this->history = array_merge($this->history, [array_shift($this->screen)]);
             $this->screen[] = '';
-            $this->history_attrs = \array_merge($this->history_attrs, [\array_shift($this->attrs)]);
+            $this->history_attrs = array_merge($this->history_attrs, [array_shift($this->attrs)]);
             $this->attrs[] = $this->attr_row;
-            if (\count($this->history) >= $this->max_history) {
-                \array_shift($this->history);
-                \array_shift($this->history_attrs);
+            if (count($this->history) >= $this->max_history) {
+                array_shift($this->history);
+                array_shift($this->history_attrs);
             }
             $this->y--;
         }
@@ -493,7 +493,7 @@ class ANSI
             }
             $output .= $close . $open;
         }
-        $output .= \htmlspecialchars($char);
+        $output .= htmlspecialchars($char);
         return $output;
     }
     /**
@@ -513,10 +513,10 @@ class ANSI
             }
             $output .= "\r\n";
         }
-        $output = \substr($output, 0, -2);
+        $output = substr($output, 0, -2);
         // close any remaining open tags
         $output .= $this->processCoordinate($last_attr, $this->base_attr_cell, '');
-        return \rtrim($output);
+        return rtrim($output);
     }
     /**
      * Returns the current screen
@@ -536,7 +536,7 @@ class ANSI
     {
         $scrollback = '';
         $last_attr = $this->base_attr_cell;
-        for ($i = 0; $i < \count($this->history); $i++) {
+        for ($i = 0; $i < count($this->history); $i++) {
             for ($j = 0; $j <= $this->max_x + 1; $j++) {
                 $cur_attr = $this->history_attrs[$i][$j];
                 $scrollback .= $this->processCoordinate($last_attr, $cur_attr, isset($this->history[$i][$j]) ? $this->history[$i][$j] : '');

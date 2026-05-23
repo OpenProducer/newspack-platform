@@ -357,7 +357,7 @@ figcaption,
 		text-transform: uppercase;
 	}
 
-	&:not(.is-style-solid-color):not(.has-background) {
+	&:not(.is-style-solid-color):not(.has-background):not([style*="border-"]) {
 		blockquote {
 			padding-left: #{2 * structure.$size__spacing-unit};
 		}
@@ -365,7 +365,7 @@ figcaption,
 		&::before {
 			border-top: 8px solid;
 			border-left: 8px solid;
-			border-color: inherit;
+			border-color: var(--newspack-theme-color-primary);
 			content: "";
 			display: block;
 			height: 40px;

@@ -57,7 +57,7 @@ use InvalidArgumentException;
  *
  *   $res = $client->get('myproject/taskqueues/myqueue');
  */
-class ServiceAccountCredentials extends \Google\Site_Kit_Dependencies\Google\Auth\CredentialsLoader implements \Google\Site_Kit_Dependencies\Google\Auth\GetQuotaProjectInterface, \Google\Site_Kit_Dependencies\Google\Auth\SignBlobInterface, \Google\Site_Kit_Dependencies\Google\Auth\ProjectIdProviderInterface
+class ServiceAccountCredentials extends CredentialsLoader implements GetQuotaProjectInterface, SignBlobInterface, ProjectIdProviderInterface
 {
     use ServiceAccountSignerTrait;
     /**
@@ -105,32 +105,32 @@ class ServiceAccountCredentials extends \Google\Site_Kit_Dependencies\Google\Aut
      */
     public function __construct($scope, $jsonKey, $sub = null, $targetAudience = null)
     {
-        if (\is_string($jsonKey)) {
-            if (!\file_exists($jsonKey)) {
+        if (is_string($jsonKey)) {
+            if (!file_exists($jsonKey)) {
                 throw new \InvalidArgumentException('file does not exist');
             }
-            $jsonKeyStream = \file_get_contents($jsonKey);
-            if (!($jsonKey = \json_decode((string) $jsonKeyStream, \true))) {
+            $jsonKeyStream = file_get_contents($jsonKey);
+            if (!$jsonKey = json_decode((string) $jsonKeyStream, \true)) {
                 throw new \LogicException('invalid json for auth config');
             }
         }
-        if (!\array_key_exists('client_email', $jsonKey)) {
+        if (!array_key_exists('client_email', $jsonKey)) {
             throw new \InvalidArgumentException('json key is missing the client_email field');
         }
-        if (!\array_key_exists('private_key', $jsonKey)) {
+        if (!array_key_exists('private_key', $jsonKey)) {
             throw new \InvalidArgumentException('json key is missing the private_key field');
         }
-        if (\array_key_exists('quota_project_id', $jsonKey)) {
+        if (array_key_exists('quota_project_id', $jsonKey)) {
             $this->quotaProject = (string) $jsonKey['quota_project_id'];
         }
         if ($scope && $targetAudience) {
-            throw new \InvalidArgumentException('Scope and targetAudience cannot both be supplied');
+            throw new InvalidArgumentException('Scope and targetAudience cannot both be supplied');
         }
         $additionalClaims = [];
         if ($targetAudience) {
             $additionalClaims = ['target_audience' => $targetAudience];
         }
-        $this->auth = new \Google\Site_Kit_Dependencies\Google\Auth\OAuth2(['audience' => self::TOKEN_CREDENTIAL_URI, 'issuer' => $jsonKey['client_email'], 'scope' => $scope, 'signingAlgorithm' => 'RS256', 'signingKey' => $jsonKey['private_key'], 'sub' => $sub, 'tokenCredentialUri' => self::TOKEN_CREDENTIAL_URI, 'additionalClaims' => $additionalClaims]);
+        $this->auth = new OAuth2(['audience' => self::TOKEN_CREDENTIAL_URI, 'issuer' => $jsonKey['client_email'], 'scope' => $scope, 'signingAlgorithm' => 'RS256', 'signingKey' => $jsonKey['private_key'], 'sub' => $sub, 'tokenCredentialUri' => self::TOKEN_CREDENTIAL_URI, 'additionalClaims' => $additionalClaims]);
         $this->projectId = $jsonKey['project_id'] ?? null;
         $this->universeDomain = $jsonKey['universe_domain'] ?? self::DEFAULT_UNIVERSE_DOMAIN;
     }
@@ -238,7 +238,7 @@ class ServiceAccountCredentials extends \Google\Site_Kit_Dependencies\Google\Aut
         if (!$this->jwtAccessCredentials) {
             // Create credentials for self-signing a JWT (JwtAccess)
             $credJson = ['private_key' => $this->auth->getSigningKey(), 'client_email' => $this->auth->getIssuer()];
-            $this->jwtAccessCredentials = new \Google\Site_Kit_Dependencies\Google\Auth\Credentials\ServiceAccountJwtAccessCredentials($credJson, $this->auth->getScope());
+            $this->jwtAccessCredentials = new ServiceAccountJwtAccessCredentials($credJson, $this->auth->getScope());
         }
         return $this->jwtAccessCredentials;
     }
@@ -277,7 +277,7 @@ class ServiceAccountCredentials extends \Google\Site_Kit_Dependencies\Google\Aut
      *
      * @return string
      */
-    public function getUniverseDomain() : string
+    public function getUniverseDomain(): string
     {
         return $this->universeDomain;
     }
@@ -291,7 +291,7 @@ class ServiceAccountCredentials extends \Google\Site_Kit_Dependencies\Google\Aut
         if (null !== $this->auth->getSub()) {
             // If we are outside the GDU, we can't use domain-wide delegation
             if ($this->getUniverseDomain() !== self::DEFAULT_UNIVERSE_DOMAIN) {
-                throw new \LogicException(\sprintf('Service Account subject is configured for the credential. Domain-wide ' . 'delegation is not supported in universes other than %s.', self::DEFAULT_UNIVERSE_DOMAIN));
+                throw new \LogicException(sprintf('Service Account subject is configured for the credential. Domain-wide ' . 'delegation is not supported in universes other than %s.', self::DEFAULT_UNIVERSE_DOMAIN));
             }
             return \false;
         }
@@ -307,6 +307,6 @@ class ServiceAccountCredentials extends \Google\Site_Kit_Dependencies\Google\Aut
         if ($this->getUniverseDomain() !== self::DEFAULT_UNIVERSE_DOMAIN) {
             return \true;
         }
-        return \is_null($this->auth->getScope());
+        return is_null($this->auth->getScope());
     }
 }

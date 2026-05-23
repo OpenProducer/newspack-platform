@@ -20,5 +20,5 @@ use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1;
  */
 abstract class FieldID
 {
-    const MAP = ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_SEQUENCE, 'children' => ['fieldType' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_OBJECT_IDENTIFIER], 'parameters' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_ANY, 'optional' => \true]]];
+    const MAP = ['type' => ASN1::TYPE_SEQUENCE, 'children' => ['fieldType' => ['type' => ASN1::TYPE_OBJECT_IDENTIFIER], 'parameters' => ['type' => ASN1::TYPE_ANY, 'optional' => \true]]];
 }

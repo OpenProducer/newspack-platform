@@ -45,7 +45,7 @@ abstract class PuTTY
      */
     public static function setComment($comment)
     {
-        self::$comment = \str_replace(["\r", "\n"], '', $comment);
+        self::$comment = str_replace(["\r", "\n"], '', $comment);
     }
     /**
      * Sets the default version
@@ -70,11 +70,11 @@ abstract class PuTTY
     {
         $symkey = '';
         $sequence = 0;
-        while (\strlen($symkey) < $length) {
-            $temp = \pack('Na*', $sequence++, $password);
-            $symkey .= \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::hex2bin(\sha1($temp));
+        while (strlen($symkey) < $length) {
+            $temp = pack('Na*', $sequence++, $password);
+            $symkey .= Strings::hex2bin(sha1($temp));
         }
-        return \substr($symkey, 0, $length);
+        return substr($symkey, 0, $length);
     }
     /**
      * Generate a symmetric key for PuTTY v3 keys
@@ -88,7 +88,7 @@ abstract class PuTTY
      */
     private static function generateV3Key($password, $flavour, $memory, $passes, $salt)
     {
-        if (!\function_exists('sodium_crypto_pwhash')) {
+        if (!function_exists('sodium_crypto_pwhash')) {
             throw new \RuntimeException('sodium_crypto_pwhash needs to exist for Argon2 password hasing');
         }
         switch ($flavour) {
@@ -99,15 +99,15 @@ abstract class PuTTY
                 $flavour = \SODIUM_CRYPTO_PWHASH_ALG_ARGON2ID13;
                 break;
             default:
-                throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedAlgorithmException('Only Argon2i and Argon2id are supported');
+                throw new UnsupportedAlgorithmException('Only Argon2i and Argon2id are supported');
         }
         $length = 80;
         // keylen + ivlen + mac_keylen
-        $temp = \sodium_crypto_pwhash($length, $password, $salt, $passes, $memory << 10, $flavour);
-        $symkey = \substr($temp, 0, 32);
-        $symiv = \substr($temp, 32, 16);
-        $hashkey = \substr($temp, -32);
-        return \compact('symkey', 'symiv', 'hashkey');
+        $temp = sodium_crypto_pwhash($length, $password, $salt, $passes, $memory << 10, $flavour);
+        $symkey = substr($temp, 0, 32);
+        $symiv = substr($temp, 32, 16);
+        $hashkey = substr($temp, -32);
+        return compact('symkey', 'symiv', 'hashkey');
     }
     /**
      * Break a public or private key down into its constituent components
@@ -118,69 +118,69 @@ abstract class PuTTY
      */
     public static function load($key, $password)
     {
-        if (!\Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::is_stringable($key)) {
-            throw new \UnexpectedValueException('Key should be a string - not a ' . \gettype($key));
+        if (!Strings::is_stringable($key)) {
+            throw new \UnexpectedValueException('Key should be a string - not a ' . gettype($key));
         }
-        if (\strpos($key, 'BEGIN SSH2 PUBLIC KEY') !== \false) {
-            $lines = \preg_split('#[\\r\\n]+#', $key);
+        if (strpos($key, 'BEGIN SSH2 PUBLIC KEY') !== \false) {
+            $lines = preg_split('#[\r\n]+#', $key);
             switch (\true) {
                 case $lines[0] != '---- BEGIN SSH2 PUBLIC KEY ----':
                     throw new \UnexpectedValueException('Key doesn\'t start with ---- BEGIN SSH2 PUBLIC KEY ----');
-                case $lines[\count($lines) - 1] != '---- END SSH2 PUBLIC KEY ----':
+                case $lines[count($lines) - 1] != '---- END SSH2 PUBLIC KEY ----':
                     throw new \UnexpectedValueException('Key doesn\'t end with ---- END SSH2 PUBLIC KEY ----');
             }
-            $lines = \array_splice($lines, 1, -1);
-            $lines = \array_map(function ($line) {
-                return \rtrim($line, "\r\n");
+            $lines = array_splice($lines, 1, -1);
+            $lines = array_map(function ($line) {
+                return rtrim($line, "\r\n");
             }, $lines);
             $data = $current = '';
             $values = [];
             $in_value = \false;
             foreach ($lines as $line) {
                 switch (\true) {
-                    case \preg_match('#^(.*?): (.*)#', $line, $match):
-                        $in_value = $line[\strlen($line) - 1] == '\\';
-                        $current = \strtolower($match[1]);
-                        $values[$current] = $in_value ? \substr($match[2], 0, -1) : $match[2];
+                    case preg_match('#^(.*?): (.*)#', $line, $match):
+                        $in_value = $line[strlen($line) - 1] == '\\';
+                        $current = strtolower($match[1]);
+                        $values[$current] = $in_value ? substr($match[2], 0, -1) : $match[2];
                         break;
                     case $in_value:
-                        $in_value = $line[\strlen($line) - 1] == '\\';
-                        $values[$current] .= $in_value ? \substr($line, 0, -1) : $line;
+                        $in_value = $line[strlen($line) - 1] == '\\';
+                        $values[$current] .= $in_value ? substr($line, 0, -1) : $line;
                         break;
                     default:
                         $data .= $line;
                 }
             }
-            $components = \call_user_func([static::PUBLIC_HANDLER, 'load'], $data);
+            $components = call_user_func([static::PUBLIC_HANDLER, 'load'], $data);
             if ($components === \false) {
                 throw new \UnexpectedValueException('Unable to decode public key');
             }
             $components += $values;
-            $components['comment'] = \str_replace(['\\\\', '\\"'], ['\\', '"'], $values['comment']);
+            $components['comment'] = str_replace(['\\\\', '\"'], ['\\', '"'], $values['comment']);
             return $components;
         }
         $components = [];
-        $key = \preg_split('#\\r\\n|\\r|\\n#', \trim($key));
-        if (\Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::shift($key[0], \strlen('PuTTY-User-Key-File-')) != 'PuTTY-User-Key-File-') {
+        $key = preg_split('#\r\n|\r|\n#', trim($key));
+        if (Strings::shift($key[0], strlen('PuTTY-User-Key-File-')) != 'PuTTY-User-Key-File-') {
             return \false;
         }
-        $version = (int) \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::shift($key[0], 3);
+        $version = (int) Strings::shift($key[0], 3);
         // should be either "2: " or "3: 0" prior to int casting
         if ($version != 2 && $version != 3) {
             throw new \RuntimeException('Only v2 and v3 PuTTY private keys are supported');
         }
-        $components['type'] = $type = \rtrim($key[0]);
-        if (!\in_array($type, static::$types)) {
-            $error = \count(static::$types) == 1 ? 'Only ' . static::$types[0] . ' keys are supported. ' : '';
-            throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\UnsupportedAlgorithmException($error . 'This is an unsupported ' . $type . ' key');
+        $components['type'] = $type = rtrim($key[0]);
+        if (!in_array($type, static::$types)) {
+            $error = count(static::$types) == 1 ? 'Only ' . static::$types[0] . ' keys are supported. ' : '';
+            throw new UnsupportedAlgorithmException($error . 'This is an unsupported ' . $type . ' key');
         }
-        $encryption = \trim(\preg_replace('#Encryption: (.+)#', '$1', $key[1]));
-        $components['comment'] = \trim(\preg_replace('#Comment: (.+)#', '$1', $key[2]));
-        $publicLength = \trim(\preg_replace('#Public-Lines: (\\d+)#', '$1', $key[3]));
-        $public = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_decode(\implode('', \array_map('trim', \array_slice($key, 4, $publicLength))));
-        $source = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::packSSH2('ssss', $type, $encryption, $components['comment'], $public);
-        \extract(\unpack('Nlength', \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::shift($public, 4)));
-        $newtype = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::shift($public, $length);
+        $encryption = trim(preg_replace('#Encryption: (.+)#', '$1', $key[1]));
+        $components['comment'] = trim(preg_replace('#Comment: (.+)#', '$1', $key[2]));
+        $publicLength = trim(preg_replace('#Public-Lines: (\d+)#', '$1', $key[3]));
+        $public = Strings::base64_decode(implode('', array_map('trim', array_slice($key, 4, $publicLength))));
+        $source = Strings::packSSH2('ssss', $type, $encryption, $components['comment'], $public);
+        $length = unpack('Nlength', Strings::shift($public, 4))['length'];
+        $newtype = Strings::shift($public, $length);
         if ($newtype != $type) {
             throw new \RuntimeException('The binary type does not match the human readable type field');
         }
@@ -195,43 +195,46 @@ abstract class PuTTY
         $offset = $publicLength + 4;
         switch ($encryption) {
             case 'aes256-cbc':
-                $crypto = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\AES('cbc');
+                $crypto = new AES('cbc');
                 switch ($version) {
                     case 3:
-                        $flavour = \trim(\preg_replace('#Key-Derivation: (.*)#', '$1', $key[$offset++]));
-                        $memory = \trim(\preg_replace('#Argon2-Memory: (\\d+)#', '$1', $key[$offset++]));
-                        $passes = \trim(\preg_replace('#Argon2-Passes: (\\d+)#', '$1', $key[$offset++]));
-                        $parallelism = \trim(\preg_replace('#Argon2-Parallelism: (\\d+)#', '$1', $key[$offset++]));
-                        $salt = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::hex2bin(\trim(\preg_replace('#Argon2-Salt: ([0-9a-f]+)#', '$1', $key[$offset++])));
-                        \extract(self::generateV3Key($password, $flavour, $memory, $passes, $salt));
+                        $flavour = trim(preg_replace('#Key-Derivation: (.*)#', '$1', $key[$offset++]));
+                        $memory = trim(preg_replace('#Argon2-Memory: (\d+)#', '$1', $key[$offset++]));
+                        $passes = trim(preg_replace('#Argon2-Passes: (\d+)#', '$1', $key[$offset++]));
+                        $parallelism = trim(preg_replace('#Argon2-Parallelism: (\d+)#', '$1', $key[$offset++]));
+                        $salt = Strings::hex2bin(trim(preg_replace('#Argon2-Salt: ([0-9a-f]+)#', '$1', $key[$offset++])));
+                        $v3key = self::generateV3Key($password, $flavour, $memory, $passes, $salt);
+                        $symkey = $v3key['symkey'];
+                        $symiv = $v3key['symiv'];
+                        $hashkey = $v3key['hashkey'];
                         break;
                     case 2:
                         $symkey = self::generateV2Key($password, 32);
-                        $symiv = \str_repeat("\x00", $crypto->getBlockLength() >> 3);
+                        $symiv = str_repeat("\x00", $crypto->getBlockLength() >> 3);
                         $hashkey .= $password;
                 }
         }
         switch ($version) {
             case 3:
-                $hash = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Hash('sha256');
+                $hash = new Hash('sha256');
                 $hash->setKey($hashkey);
                 break;
             case 2:
-                $hash = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Hash('sha1');
-                $hash->setKey(\sha1($hashkey, \true));
+                $hash = new Hash('sha1');
+                $hash->setKey(sha1($hashkey, \true));
         }
-        $privateLength = \trim(\preg_replace('#Private-Lines: (\\d+)#', '$1', $key[$offset++]));
-        $private = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_decode(\implode('', \array_map('trim', \array_slice($key, $offset, $privateLength))));
+        $privateLength = trim(preg_replace('#Private-Lines: (\d+)#', '$1', $key[$offset++]));
+        $private = Strings::base64_decode(implode('', array_map('trim', array_slice($key, $offset, $privateLength))));
         if ($encryption != 'none') {
             $crypto->setKey($symkey);
             $crypto->setIV($symiv);
             $crypto->disablePadding();
             $private = $crypto->decrypt($private);
         }
-        $source .= \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::packSSH2('s', $private);
-        $hmac = \trim(\preg_replace('#Private-MAC: (.+)#', '$1', $key[$offset + $privateLength]));
-        $hmac = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::hex2bin($hmac);
-        if (!\hash_equals($hash->hash($source), $hmac)) {
+        $source .= Strings::packSSH2('s', $private);
+        $hmac = trim(preg_replace('#Private-MAC: (.+)#', '$1', $key[$offset + $privateLength]));
+        $hmac = Strings::hex2bin($hmac);
+        if (!hash_equals($hash->hash($source), $hmac)) {
             throw new \UnexpectedValueException('MAC validation error');
         }
         $components['private'] = $private;
@@ -249,50 +252,53 @@ abstract class PuTTY
      */
     protected static function wrapPrivateKey($public, $private, $type, $password, array $options = [])
     {
-        $encryption = !empty($password) || \is_string($password) ? 'aes256-cbc' : 'none';
+        $encryption = !empty($password) || is_string($password) ? 'aes256-cbc' : 'none';
         $comment = isset($options['comment']) ? $options['comment'] : self::$comment;
         $version = isset($options['version']) ? $options['version'] : self::$version;
         $key = "PuTTY-User-Key-File-{$version}: {$type}\r\n";
         $key .= "Encryption: {$encryption}\r\n";
         $key .= "Comment: {$comment}\r\n";
-        $public = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::packSSH2('s', $type) . $public;
-        $source = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::packSSH2('ssss', $type, $encryption, $comment, $public);
-        $public = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_encode($public);
-        $key .= "Public-Lines: " . (\strlen($public) + 63 >> 6) . "\r\n";
-        $key .= \chunk_split($public, 64);
-        if (empty($password) && !\is_string($password)) {
-            $source .= \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::packSSH2('s', $private);
+        $public = Strings::packSSH2('s', $type) . $public;
+        $source = Strings::packSSH2('ssss', $type, $encryption, $comment, $public);
+        $public = Strings::base64_encode($public);
+        $key .= "Public-Lines: " . (strlen($public) + 63 >> 6) . "\r\n";
+        $key .= chunk_split($public, 64);
+        if (empty($password) && !is_string($password)) {
+            $source .= Strings::packSSH2('s', $private);
             switch ($version) {
                 case 3:
-                    $hash = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Hash('sha256');
+                    $hash = new Hash('sha256');
                     $hash->setKey('');
                     break;
                 case 2:
-                    $hash = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Hash('sha1');
-                    $hash->setKey(\sha1('putty-private-key-file-mac-key', \true));
+                    $hash = new Hash('sha1');
+                    $hash->setKey(sha1('putty-private-key-file-mac-key', \true));
             }
         } else {
-            $private .= \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Random::string(16 - (\strlen($private) & 15));
-            $source .= \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::packSSH2('s', $private);
-            $crypto = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\AES('cbc');
+            $private .= Random::string(16 - (strlen($private) & 15));
+            $source .= Strings::packSSH2('s', $private);
+            $crypto = new AES('cbc');
             switch ($version) {
                 case 3:
-                    $salt = \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Random::string(16);
+                    $salt = Random::string(16);
                     $key .= "Key-Derivation: Argon2id\r\n";
                     $key .= "Argon2-Memory: 8192\r\n";
                     $key .= "Argon2-Passes: 13\r\n";
                     $key .= "Argon2-Parallelism: 1\r\n";
-                    $key .= "Argon2-Salt: " . \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::bin2hex($salt) . "\r\n";
-                    \extract(self::generateV3Key($password, 'Argon2id', 8192, 13, $salt));
-                    $hash = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Hash('sha256');
+                    $key .= "Argon2-Salt: " . Strings::bin2hex($salt) . "\r\n";
+                    $v3key = self::generateV3Key($password, 'Argon2id', 8192, 13, $salt);
+                    $symkey = $v3key['symkey'];
+                    $symiv = $v3key['symiv'];
+                    $hashkey = $v3key['hashkey'];
+                    $hash = new Hash('sha256');
                     $hash->setKey($hashkey);
                     break;
                 case 2:
                     $symkey = self::generateV2Key($password, 32);
-                    $symiv = \str_repeat("\x00", $crypto->getBlockLength() >> 3);
+                    $symiv = str_repeat("\x00", $crypto->getBlockLength() >> 3);
                     $hashkey = 'putty-private-key-file-mac-key' . $password;
-                    $hash = new \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Hash('sha1');
-                    $hash->setKey(\sha1($hashkey, \true));
+                    $hash = new Hash('sha1');
+                    $hash->setKey(sha1($hashkey, \true));
             }
             $crypto->setKey($symkey);
             $crypto->setIV($symiv);
@@ -300,10 +306,10 @@ abstract class PuTTY
             $private = $crypto->encrypt($private);
             $mac = $hash->hash($source);
         }
-        $private = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_encode($private);
-        $key .= 'Private-Lines: ' . (\strlen($private) + 63 >> 6) . "\r\n";
-        $key .= \chunk_split($private, 64);
-        $key .= 'Private-MAC: ' . \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::bin2hex($hash->hash($source)) . "\r\n";
+        $private = Strings::base64_encode($private);
+        $key .= 'Private-Lines: ' . (strlen($private) + 63 >> 6) . "\r\n";
+        $key .= chunk_split($private, 64);
+        $key .= 'Private-MAC: ' . Strings::bin2hex($hash->hash($source)) . "\r\n";
         return $key;
     }
     /**
@@ -317,8 +323,8 @@ abstract class PuTTY
      */
     protected static function wrapPublicKey($key, $type)
     {
-        $key = \pack('Na*a*', \strlen($type), $type, $key);
-        $key = "---- BEGIN SSH2 PUBLIC KEY ----\r\n" . 'Comment: "' . \str_replace(['\\', '"'], ['\\\\', '\\"'], self::$comment) . "\"\r\n" . \chunk_split(\Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_encode($key), 64) . '---- END SSH2 PUBLIC KEY ----';
+        $key = pack('Na*a*', strlen($type), $type, $key);
+        $key = "---- BEGIN SSH2 PUBLIC KEY ----\r\n" . 'Comment: "' . str_replace(['\\', '"'], ['\\\\', '\"'], self::$comment) . "\"\r\n" . chunk_split(Strings::base64_encode($key), 64) . '---- END SSH2 PUBLIC KEY ----';
         return $key;
     }
 }

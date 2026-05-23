@@ -58,7 +58,7 @@ class Nickname extends \Google\Site_Kit_Dependencies\Google\Model
      * @deprecated
      */
     public const TYPE_SHORT_NAME = 'SHORT_NAME';
-    protected $metadataType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata::class;
+    protected $metadataType = FieldMetadata::class;
     protected $metadataDataType = '';
     /**
      * The type of the nickname.
@@ -77,7 +77,7 @@ class Nickname extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param FieldMetadata $metadata
      */
-    public function setMetadata(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata $metadata)
+    public function setMetadata(FieldMetadata $metadata)
     {
         $this->metadata = $metadata;
     }
@@ -125,4 +125,4 @@ class Nickname extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\Nickname::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_Nickname');
+class_alias(Nickname::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_Nickname');

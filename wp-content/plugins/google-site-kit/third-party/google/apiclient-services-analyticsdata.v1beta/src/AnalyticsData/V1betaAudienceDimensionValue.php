@@ -43,4 +43,4 @@ class V1betaAudienceDimensionValue extends \Google\Site_Kit_Dependencies\Google\
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\V1betaAudienceDimensionValue::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_V1betaAudienceDimensionValue');
+class_alias(V1betaAudienceDimensionValue::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_V1betaAudienceDimensionValue');

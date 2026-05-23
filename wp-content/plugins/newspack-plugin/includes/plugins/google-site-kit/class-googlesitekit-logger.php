@@ -49,7 +49,15 @@ class GoogleSiteKit_Logger {
 		}
 
 		/**
-		 * Skip Site Kit checks for sites that don't need it.
+		 * Disables Google Site Kit connection checks and logging.
+		 * Use for sites that don't use Site Kit.
+		 *
+		 * @constant NEWSPACK_DISABLE_SITEKIT_CHECK
+		 * @type     bool
+		 * @default  Site Kit checks enabled
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_DISABLE_SITEKIT_CHECK', true );
 		 */
 		if ( defined( 'NEWSPACK_DISABLE_SITEKIT_CHECK' ) && NEWSPACK_DISABLE_SITEKIT_CHECK ) {
 			return false;

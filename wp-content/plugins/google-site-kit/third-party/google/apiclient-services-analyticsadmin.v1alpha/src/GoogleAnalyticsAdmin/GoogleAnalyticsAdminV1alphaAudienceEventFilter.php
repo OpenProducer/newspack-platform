@@ -25,7 +25,7 @@ class GoogleAnalyticsAdminV1alphaAudienceEventFilter extends \Google\Site_Kit_De
      * @var string
      */
     public $eventName;
-    protected $eventParameterFilterExpressionType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceFilterExpression::class;
+    protected $eventParameterFilterExpressionType = GoogleAnalyticsAdminV1alphaAudienceFilterExpression::class;
     protected $eventParameterFilterExpressionDataType = '';
     /**
      * Required. Immutable. The name of the event to match against.
@@ -54,7 +54,7 @@ class GoogleAnalyticsAdminV1alphaAudienceEventFilter extends \Google\Site_Kit_De
      *
      * @param GoogleAnalyticsAdminV1alphaAudienceFilterExpression $eventParameterFilterExpression
      */
-    public function setEventParameterFilterExpression(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceFilterExpression $eventParameterFilterExpression)
+    public function setEventParameterFilterExpression(GoogleAnalyticsAdminV1alphaAudienceFilterExpression $eventParameterFilterExpression)
     {
         $this->eventParameterFilterExpression = $eventParameterFilterExpression;
     }
@@ -67,4 +67,4 @@ class GoogleAnalyticsAdminV1alphaAudienceEventFilter extends \Google\Site_Kit_De
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceEventFilter::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAudienceEventFilter');
+class_alias(GoogleAnalyticsAdminV1alphaAudienceEventFilter::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAudienceEventFilter');

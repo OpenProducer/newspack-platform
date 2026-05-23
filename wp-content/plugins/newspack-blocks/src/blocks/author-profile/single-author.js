@@ -3,7 +3,7 @@
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { RawHTML } from '@wordpress/element';
 import { autop } from '@wordpress/autop';
 
@@ -79,7 +79,11 @@ export const SingleAuthor = ( { author, attributes } ) => {
 						<RawHTML>{ autop( author.bio ) } </RawHTML>
 						{ showArchiveLink && (
 							<a href="#" className="no-op">
-								{ __( 'More by', 'newspack-blocks' ) + ' ' + author.name }
+								{ sprintf(
+									/* translators: %s: author name. */
+									__( 'More by %s', 'newspack-blocks' ),
+									author.name
+								) }
 							</a>
 						) }
 					</p>

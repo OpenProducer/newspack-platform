@@ -56,9 +56,6 @@ import { redirect } from "@wordpress/route";
 // src/dashboard/wp-build/utils/preload.ts
 var import_data3 = __toESM(require_data(), 1);
 
-// src/dashboard/constants.ts
-var NON_TRASH_FORM_STATUSES = "publish,draft,pending,future,private";
-
 // src/dashboard/store/index.js
 var import_data2 = __toESM(require_data(), 1);
 
@@ -70,11 +67,13 @@ __export(actions_exports, {
   doBulkAction: () => doBulkAction,
   invalidateCounts: () => invalidateCounts,
   invalidateFilters: () => invalidateFilters,
+  invalidateFormStatusCounts: () => invalidateFormStatusCounts,
   markRecordsAsInvalid: () => markRecordsAsInvalid,
   receiveFilters: () => receiveFilters,
   removePendingAction: () => removePendingAction,
   setCounts: () => setCounts,
   setCurrentQuery: () => setCurrentQuery,
+  setFormStatusCounts: () => setFormStatusCounts,
   setSelectedResponses: () => setSelectedResponses,
   updateCountsOptimistically: () => updateCountsOptimistically
 });
@@ -92,6 +91,8 @@ var MARK_RECORDS_AS_INVALID = "MARK_RECORDS_AS_INVALID";
 var CLEAR_INVALID_RECORDS = "CLEAR_INVALID_RECORDS";
 var ADD_PENDING_ACTION = "ADD_PENDING_ACTION";
 var REMOVE_PENDING_ACTION = "REMOVE_PENDING_ACTION";
+var SET_FORM_STATUS_COUNTS = "SET_FORM_STATUS_COUNTS";
+var INVALIDATE_FORM_STATUS_COUNTS = "INVALIDATE_FORM_STATUS_COUNTS";
 
 // src/dashboard/store/actions.js
 function receiveFilters(filters2) {
@@ -117,7 +118,7 @@ function setCurrentQuery(currentQuery2) {
       ...currentQuery2,
       fields_format: currentQuery2.fields_format ?? previousQuery.fields_format ?? "collection"
     };
-    const filtersChanged = previousQuery.status !== queryWithFormat.status || previousQuery.search !== queryWithFormat.search || previousQuery.is_unread !== queryWithFormat.is_unread || previousQuery.parent !== queryWithFormat.parent || previousQuery.before !== queryWithFormat.before || previousQuery.after !== queryWithFormat.after;
+    const filtersChanged = previousQuery.status !== queryWithFormat.status || previousQuery.search !== queryWithFormat.search || previousQuery.is_unread !== queryWithFormat.is_unread || previousQuery.parent !== queryWithFormat.parent || previousQuery.source !== queryWithFormat.source || previousQuery.before !== queryWithFormat.before || previousQuery.after !== queryWithFormat.after;
     if (filtersChanged) {
       dispatch(clearInvalidRecords());
       if (registry && registry.dispatch("core")) {
@@ -169,6 +170,15 @@ function removePendingAction(actionId) {
     actionId
   };
 }
+function setFormStatusCounts(formStatusCounts2) {
+  return {
+    type: SET_FORM_STATUS_COUNTS,
+    formStatusCounts: formStatusCounts2
+  };
+}
+var invalidateFormStatusCounts = () => {
+  return { type: INVALIDATE_FORM_STATUS_COUNTS };
+};
 var doBulkAction = (ids, action) => async () => {
   try {
     await (0, import_api_fetch.default)({
@@ -220,7 +230,7 @@ var normalizeValue = (value) => {
   return String(value);
 };
 var getCacheKey = (queryParams = {}) => {
-  const keys = ["search", "parent", "before", "after", "is_unread"];
+  const keys = ["search", "parent", "source", "before", "after", "is_unread"];
   const parts = keys.filter((key) => queryParams[key] !== void 0).map((key) => `${key}:${normalizeValue(queryParams[key])}`);
   return parts.length > 0 ? parts.join("|") : "default";
 };
@@ -278,20 +288,28 @@ var pendingActions = (state = /* @__PURE__ */ new Set(), action) => {
   }
   return state;
 };
+var formStatusCounts = (state = null, action) => {
+  if (action.type === SET_FORM_STATUS_COUNTS) {
+    return action.formStatusCounts;
+  }
+  return state;
+};
 var reducer_default = (0, import_data.combineReducers)({
   selectedResponsesFromCurrentDataset,
   filters,
   currentQuery,
   counts,
   invalidRecords,
-  pendingActions
+  pendingActions,
+  formStatusCounts
 });
 
 // src/dashboard/store/resolvers.js
 var resolvers_exports = {};
 __export(resolvers_exports, {
   getCounts: () => getCounts,
-  getFilters: () => getFilters
+  getFilters: () => getFilters,
+  getFormStatusCounts: () => getFormStatusCounts
 });
 var import_api_fetch2 = __toESM(require_api_fetch(), 1);
 var import_url = __toESM(require_url(), 1);
@@ -310,6 +328,9 @@ var getCounts = (queryParams = {}) => async ({ dispatch }) => {
   if (queryParams?.parent) {
     params.parent = queryParams.parent;
   }
+  if (queryParams?.source) {
+    params.source = queryParams.source;
+  }
   if (queryParams?.before) {
     params.before = queryParams.before;
   }
@@ -324,6 +345,11 @@ var getCounts = (queryParams = {}) => async ({ dispatch }) => {
   dispatch.setCounts(response, queryParams);
 };
 getCounts.shouldInvalidate = (action) => action.type === INVALIDATE_COUNTS;
+var getFormStatusCounts = () => async ({ dispatch }) => {
+  const response = await (0, import_api_fetch2.default)({ path: "/wp/v2/jetpack-forms/status-counts" });
+  dispatch.setFormStatusCounts(response);
+};
+getFormStatusCounts.shouldInvalidate = (action) => action.type === INVALIDATE_FORM_STATUS_COUNTS;
 
 // src/dashboard/store/selectors.js
 var selectors_exports = {};
@@ -332,6 +358,7 @@ __export(selectors_exports, {
   getCurrentQuery: () => getCurrentQuery,
   getCurrentStatus: () => getCurrentStatus,
   getFilters: () => getFilters2,
+  getFormStatusCounts: () => getFormStatusCounts2,
   getInboxCount: () => getInboxCount,
   getInvalidRecords: () => getInvalidRecords,
   getPendingActions: () => getPendingActions,
@@ -375,6 +402,9 @@ var getPendingActions = (state) => {
 var hasPendingActions = (state) => {
   return (state.pendingActions?.size ?? 0) > 0;
 };
+var getFormStatusCounts2 = (state) => {
+  return state.formStatusCounts;
+};
 
 // src/dashboard/store/index.js
 var STORE_NAME = "FORM_RESPONSES";
@@ -388,21 +418,10 @@ var store = (0, import_data2.createReduxStore)(STORE_NAME, {
 
 // src/dashboard/wp-build/utils/preload.ts
 async function preloadGlobalInboxCounts() {
-  await (0, import_data3.resolveSelect)(STORE_NAME).getCounts();
-}
-async function preloadGlobalNonTrashFormsCount() {
-  await (0, import_data3.resolveSelect)("core").getEntityRecords("postType", "jetpack_form", {
-    context: "edit",
-    jetpack_forms_context: "dashboard",
-    order: "desc",
-    orderby: "modified",
-    page: 1,
-    per_page: 1,
-    status: NON_TRASH_FORM_STATUSES
-  });
+  await (0, import_data3.resolveSelect)(STORE_NAME).getCounts({});
 }
 async function preloadGlobalTabCounts() {
-  await Promise.all([preloadGlobalInboxCounts(), preloadGlobalNonTrashFormsCount()]);
+  await preloadGlobalInboxCounts();
 }
 
 // routes/responses/route.tsx

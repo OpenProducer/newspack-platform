@@ -121,5 +121,8 @@ async function initialize() {
   await initializeCategories();
   await initializeAbilities();
 }
-initialize();
+var ready = initialize();
+export {
+  ready
+};
 //# sourceMappingURL=index.js.map

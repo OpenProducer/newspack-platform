@@ -8,29 +8,29 @@ final class Is
     /**
      * Returns true if a promise is pending.
      */
-    public static function pending(\Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface $promise) : bool
+    public static function pending(PromiseInterface $promise): bool
     {
-        return $promise->getState() === \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface::PENDING;
+        return $promise->getState() === PromiseInterface::PENDING;
     }
     /**
      * Returns true if a promise is fulfilled or rejected.
      */
-    public static function settled(\Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface $promise) : bool
+    public static function settled(PromiseInterface $promise): bool
     {
-        return $promise->getState() !== \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface::PENDING;
+        return $promise->getState() !== PromiseInterface::PENDING;
     }
     /**
      * Returns true if a promise is fulfilled.
      */
-    public static function fulfilled(\Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface $promise) : bool
+    public static function fulfilled(PromiseInterface $promise): bool
     {
-        return $promise->getState() === \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface::FULFILLED;
+        return $promise->getState() === PromiseInterface::FULFILLED;
     }
     /**
      * Returns true if a promise is rejected.
      */
-    public static function rejected(\Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface $promise) : bool
+    public static function rejected(PromiseInterface $promise): bool
     {
-        return $promise->getState() === \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface::REJECTED;
+        return $promise->getState() === PromiseInterface::REJECTED;
     }
 }

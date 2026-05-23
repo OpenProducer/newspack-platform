@@ -84,7 +84,7 @@ export default function Edit( { attributes, context, setAttributes } ) {
 	}
 
 	// Render default WordPress author, or placeholder if no author found.
-	const authorName = defaultAuthor?.name || __( '[Author]', 'newspack-plugin' );
+	const authorName = defaultAuthor?.name || __( 'Author Name', 'newspack-plugin' );
 	return (
 		<>
 			<BylineInspectorControls attributes={ attributes } setAttributes={ setAttributes } isCustomByline={ false } />

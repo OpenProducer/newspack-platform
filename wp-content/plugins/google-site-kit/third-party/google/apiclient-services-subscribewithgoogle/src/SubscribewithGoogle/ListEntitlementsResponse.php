@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle;
 class ListEntitlementsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'entitlements';
-    protected $entitlementsType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\Entitlement::class;
+    protected $entitlementsType = Entitlement::class;
     protected $entitlementsDataType = 'array';
     /**
      * A token to retrieve next page of results. Pass this value in the
@@ -68,4 +68,4 @@ class ListEntitlementsResponse extends \Google\Site_Kit_Dependencies\Google\Coll
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\ListEntitlementsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SubscribewithGoogle_ListEntitlementsResponse');
+class_alias(ListEntitlementsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_SubscribewithGoogle_ListEntitlementsResponse');

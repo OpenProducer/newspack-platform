@@ -55,7 +55,7 @@ use Google\Site_Kit_Dependencies\Google\Auth\SignBlobInterface;
  * $res = $client->get('volumes?q=Henry+David+Thoreau&country=US');
  * ```
  */
-class AppIdentityCredentials extends \Google\Site_Kit_Dependencies\Google\Auth\CredentialsLoader implements \Google\Site_Kit_Dependencies\Google\Auth\SignBlobInterface, \Google\Site_Kit_Dependencies\Google\Auth\ProjectIdProviderInterface
+class AppIdentityCredentials extends CredentialsLoader implements SignBlobInterface, ProjectIdProviderInterface
 {
     /**
      * Result of fetchAuthToken.
@@ -78,7 +78,7 @@ class AppIdentityCredentials extends \Google\Site_Kit_Dependencies\Google\Auth\C
      */
     public function __construct($scope = [])
     {
-        $this->scope = \is_array($scope) ? $scope : \explode(' ', (string) $scope);
+        $this->scope = is_array($scope) ? $scope : explode(' ', (string) $scope);
     }
     /**
      * Determines if this an App Engine instance, by accessing the
@@ -89,7 +89,7 @@ class AppIdentityCredentials extends \Google\Site_Kit_Dependencies\Google\Auth\C
      */
     public static function onAppEngine()
     {
-        $appEngineProduction = isset($_SERVER['SERVER_SOFTWARE']) && 0 === \strpos($_SERVER['SERVER_SOFTWARE'], 'Google App Engine');
+        $appEngineProduction = isset($_SERVER['SERVER_SOFTWARE']) && 0 === strpos($_SERVER['SERVER_SOFTWARE'], 'Google App Engine');
         if ($appEngineProduction) {
             return \true;
         }
@@ -122,7 +122,7 @@ class AppIdentityCredentials extends \Google\Site_Kit_Dependencies\Google\Auth\C
             return [];
         }
         /** @phpstan-ignore-next-line */
-        $token = \Google\Site_Kit_Dependencies\google\appengine\api\app_identity\AppIdentityService::getAccessToken($this->scope);
+        $token = AppIdentityService::getAccessToken($this->scope);
         $this->lastReceivedToken = $token;
         return $token;
     }
@@ -139,7 +139,7 @@ class AppIdentityCredentials extends \Google\Site_Kit_Dependencies\Google\Auth\C
     {
         $this->checkAppEngineContext();
         /** @phpstan-ignore-next-line */
-        return \base64_encode(\Google\Site_Kit_Dependencies\google\appengine\api\app_identity\AppIdentityService::signForApp($stringToSign)['signature']);
+        return base64_encode(AppIdentityService::signForApp($stringToSign)['signature']);
     }
     /**
      * Get the project ID from AppIdentityService.
@@ -157,7 +157,7 @@ class AppIdentityCredentials extends \Google\Site_Kit_Dependencies\Google\Auth\C
             return null;
         }
         /** @phpstan-ignore-next-line */
-        return \Google\Site_Kit_Dependencies\google\appengine\api\app_identity\AppIdentityService::getApplicationId();
+        return AppIdentityService::getApplicationId();
     }
     /**
      * Get the client name from AppIdentityService.
@@ -173,7 +173,7 @@ class AppIdentityCredentials extends \Google\Site_Kit_Dependencies\Google\Auth\C
         $this->checkAppEngineContext();
         if (!$this->clientName) {
             /** @phpstan-ignore-next-line */
-            $this->clientName = \Google\Site_Kit_Dependencies\google\appengine\api\app_identity\AppIdentityService::getServiceAccountName();
+            $this->clientName = AppIdentityService::getServiceAccountName();
         }
         return $this->clientName;
     }
@@ -202,7 +202,7 @@ class AppIdentityCredentials extends \Google\Site_Kit_Dependencies\Google\Auth\C
      */
     private function checkAppEngineContext()
     {
-        if (!self::onAppEngine() || !\class_exists('Google\\Site_Kit_Dependencies\\google\\appengine\\api\\app_identity\\AppIdentityService')) {
+        if (!self::onAppEngine() || !class_exists('Google\Site_Kit_Dependencies\google\appengine\api\app_identity\AppIdentityService')) {
             throw new \Exception('This class must be run in App Engine, or you must include the AppIdentityService ' . 'mock class defined in tests/mocks/AppIdentityService.php');
         }
     }

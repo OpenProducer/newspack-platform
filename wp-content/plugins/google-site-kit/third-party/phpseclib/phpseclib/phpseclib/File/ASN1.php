@@ -175,7 +175,7 @@ abstract class ASN1
      */
     public static function decodeBER($encoded)
     {
-        if ($encoded instanceof \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Element) {
+        if ($encoded instanceof Element) {
             $encoded = $encoded->element;
         }
         self::$encoded = $encoded;
@@ -203,7 +203,7 @@ abstract class ASN1
         if (!isset($encoded[$encoded_pos])) {
             return \false;
         }
-        $type = \ord($encoded[$encoded_pos++]);
+        $type = ord($encoded[$encoded_pos++]);
         $startOffset = 1;
         $constructed = $type >> 5 & 1;
         $tag = $type & 0x1f;
@@ -214,7 +214,7 @@ abstract class ASN1
                 if (!isset($encoded[$encoded_pos])) {
                     return \false;
                 }
-                $temp = \ord($encoded[$encoded_pos++]);
+                $temp = ord($encoded[$encoded_pos++]);
                 $startOffset++;
                 $loop = $temp >> 7;
                 $tag <<= 7;
@@ -231,32 +231,31 @@ abstract class ASN1
         if (!isset($encoded[$encoded_pos])) {
             return \false;
         }
-        $length = \ord($encoded[$encoded_pos++]);
+        $length = ord($encoded[$encoded_pos++]);
         $start++;
         if ($length == 0x80) {
             // indefinite length
             // "[A sender shall] use the indefinite form (see 8.1.3.6) if the encoding is constructed and is not all
             //  immediately available." -- paragraph 8.1.3.2.c
-            $length = \strlen($encoded) - $encoded_pos;
+            $length = strlen($encoded) - $encoded_pos;
         } elseif ($length & 0x80) {
             // definite length, long form
             // technically, the long form of the length can be represented by up to 126 octets (bytes), but we'll only
             // support it up to four.
             $length &= 0x7f;
-            $temp = \substr($encoded, $encoded_pos, $length);
+            $temp = substr($encoded, $encoded_pos, $length);
             $encoded_pos += $length;
             // tags of indefinte length don't really have a header length; this length includes the tag
             $current += ['headerlength' => $length + 2];
             $start += $length;
-            \extract(\unpack('Nlength', \substr(\str_pad($temp, 4, \chr(0), \STR_PAD_LEFT), -4)));
-            /** @var integer $length */
+            $length = unpack('Nlength', substr(str_pad($temp, 4, chr(0), \STR_PAD_LEFT), -4))['length'];
         } else {
             $current += ['headerlength' => 2];
         }
-        if ($length > \strlen($encoded) - $encoded_pos) {
+        if ($length > strlen($encoded) - $encoded_pos) {
             return \false;
         }
-        $content = \substr($encoded, $encoded_pos, $length);
+        $content = substr($encoded, $encoded_pos, $length);
         $content_pos = 0;
         // at this point $length can be overwritten. it's only accurate for definite length things as is
         /* Class is UNIVERSAL, APPLICATION, PRIVATE, or CONTEXT-SPECIFIC. The UNIVERSAL class is restricted to the ASN.1
@@ -285,7 +284,7 @@ abstract class ASN1
                     }
                     $length = $temp['length'];
                     // end-of-content octets - see paragraph 8.1.5
-                    if (\substr($content, $content_pos + $length, 2) == "\x00\x00") {
+                    if (substr($content, $content_pos + $length, 2) == "\x00\x00") {
                         $length += 2;
                         $start += $length;
                         $newcontent[] = $temp;
@@ -312,17 +311,17 @@ abstract class ASN1
         switch ($tag) {
             case self::TYPE_BOOLEAN:
                 // "The contents octets shall consist of a single octet." -- paragraph 8.2.1
-                if ($constructed || \strlen($content) != 1) {
+                if ($constructed || strlen($content) != 1) {
                     return \false;
                 }
-                $current['content'] = (bool) \ord($content[$content_pos]);
+                $current['content'] = (bool) ord($content[$content_pos]);
                 break;
             case self::TYPE_INTEGER:
             case self::TYPE_ENUMERATED:
                 if ($constructed) {
                     return \false;
                 }
-                $current['content'] = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(\substr($content, $content_pos), -256);
+                $current['content'] = new BigInteger(substr($content, $content_pos), -256);
                 break;
             case self::TYPE_REAL:
                 // not currently supported
@@ -332,35 +331,35 @@ abstract class ASN1
                 // the number of unused bits in the final subsequent octet. The number shall be in the range zero to
                 // seven.
                 if (!$constructed) {
-                    $current['content'] = \substr($content, $content_pos);
+                    $current['content'] = substr($content, $content_pos);
                 } else {
                     $temp = self::decode_ber($content, $start, $content_pos);
                     if ($temp === \false) {
                         return \false;
                     }
-                    $length -= \strlen($content) - $content_pos;
-                    $last = \count($temp) - 1;
+                    $length -= strlen($content) - $content_pos;
+                    $last = count($temp) - 1;
                     for ($i = 0; $i < $last; $i++) {
                         // all subtags should be bit strings
                         if ($temp[$i]['type'] != self::TYPE_BIT_STRING) {
                             return \false;
                         }
-                        $current['content'] .= \substr($temp[$i]['content'], 1);
+                        $current['content'] .= substr($temp[$i]['content'], 1);
                     }
                     // all subtags should be bit strings
                     if ($temp[$last]['type'] != self::TYPE_BIT_STRING) {
                         return \false;
                     }
-                    $current['content'] = $temp[$last]['content'][0] . $current['content'] . \substr($temp[$i]['content'], 1);
+                    $current['content'] = $temp[$last]['content'][0] . $current['content'] . substr($temp[$i]['content'], 1);
                 }
                 break;
             case self::TYPE_OCTET_STRING:
                 if (!$constructed) {
-                    $current['content'] = \substr($content, $content_pos);
+                    $current['content'] = substr($content, $content_pos);
                 } else {
                     $current['content'] = '';
                     $length = 0;
-                    while (\substr($content, $content_pos, 2) != "\x00\x00") {
+                    while (substr($content, $content_pos, 2) != "\x00\x00") {
                         $temp = self::decode_ber($content, $length + $start, $content_pos);
                         if ($temp === \false) {
                             return \false;
@@ -373,7 +372,7 @@ abstract class ASN1
                         $current['content'] .= $temp['content'];
                         $length += $temp['length'];
                     }
-                    if (\substr($content, $content_pos, 2) == "\x00\x00") {
+                    if (substr($content, $content_pos, 2) == "\x00\x00") {
                         $length += 2;
                         // +2 for the EOC
                     }
@@ -381,7 +380,7 @@ abstract class ASN1
                 break;
             case self::TYPE_NULL:
                 // "The contents octets shall not contain any octets." -- paragraph 8.8.2
-                if ($constructed || \strlen($content)) {
+                if ($constructed || strlen($content)) {
                     return \false;
                 }
                 break;
@@ -392,11 +391,11 @@ abstract class ASN1
                 }
                 $offset = 0;
                 $current['content'] = [];
-                $content_len = \strlen($content);
+                $content_len = strlen($content);
                 while ($content_pos < $content_len) {
                     // if indefinite length construction was used and we have an end-of-content string next
                     // see paragraphs 8.1.1.3, 8.1.3.2, 8.1.3.6, 8.1.5, and (for an example) 8.6.4.2
-                    if (!isset($current['headerlength']) && \substr($content, $content_pos, 2) == "\x00\x00") {
+                    if (!isset($current['headerlength']) && substr($content, $content_pos, 2) == "\x00\x00") {
                         $length = $offset + 2;
                         // +2 for the EOC
                         break 2;
@@ -414,7 +413,7 @@ abstract class ASN1
                 if ($constructed) {
                     return \false;
                 }
-                $current['content'] = self::decodeOID(\substr($content, $content_pos));
+                $current['content'] = self::decodeOID(substr($content, $content_pos));
                 if ($current['content'] === \false) {
                     return \false;
                 }
@@ -450,14 +449,14 @@ abstract class ASN1
                 if ($constructed) {
                     return \false;
                 }
-                $current['content'] = \substr($content, $content_pos);
+                $current['content'] = substr($content, $content_pos);
                 break;
             case self::TYPE_UTC_TIME:
             case self::TYPE_GENERALIZED_TIME:
                 if ($constructed) {
                     return \false;
                 }
-                $current['content'] = self::decodeTime(\substr($content, $content_pos), $tag);
+                $current['content'] = self::decodeTime(substr($content, $content_pos), $tag);
                 break;
             default:
                 return \false;
@@ -480,18 +479,18 @@ abstract class ASN1
      */
     public static function asn1map(array $decoded, $mapping, $special = [])
     {
-        if (isset($mapping['explicit']) && \is_array($decoded['content'])) {
+        if (isset($mapping['explicit']) && is_array($decoded['content'])) {
             $decoded = $decoded['content'][0];
         }
         switch (\true) {
             case $mapping['type'] == self::TYPE_ANY:
                 $intype = $decoded['type'];
                 // !isset(self::ANY_MAP[$intype]) produces a fatal error on PHP 5.6
-                if (isset($decoded['constant']) || !\array_key_exists($intype, self::ANY_MAP) || \ord(self::$encoded[$decoded['start']]) & 0x20) {
-                    return new \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Element(\substr(self::$encoded, $decoded['start'], $decoded['length']));
+                if (isset($decoded['constant']) || !array_key_exists($intype, self::ANY_MAP) || ord(self::$encoded[$decoded['start']]) & 0x20) {
+                    return new Element(substr(self::$encoded, $decoded['start'], $decoded['length']));
                 }
                 $inmap = self::ANY_MAP[$intype];
-                if (\is_string($inmap)) {
+                if (is_string($inmap)) {
                     return [$inmap => self::asn1map($decoded, ['type' => $intype] + $mapping, $special)];
                 }
                 break;
@@ -549,7 +548,7 @@ abstract class ASN1
                     }
                     return $map;
                 }
-                $n = \count($decoded['content']);
+                $n = count($decoded['content']);
                 $i = 0;
                 foreach ($mapping['children'] as $key => $child) {
                     $maymatch = $i < $n;
@@ -575,7 +574,7 @@ abstract class ASN1
                                 $maymatch = $constant == $temp['constant'] && $childClass == $tempClass;
                             } else {
                                 // Can only match if no constant expected and type matches or is generic.
-                                $maymatch = !isset($child['constant']) && \array_search($child['type'], [$temp['type'], self::TYPE_ANY, self::TYPE_CHOICE]) !== \false;
+                                $maymatch = !isset($child['constant']) && array_search($child['type'], [$temp['type'], self::TYPE_ANY, self::TYPE_CHOICE]) !== \false;
                             }
                         }
                     }
@@ -613,7 +612,7 @@ abstract class ASN1
                     }
                     return $map;
                 }
-                for ($i = 0; $i < \count($decoded['content']); $i++) {
+                for ($i = 0; $i < count($decoded['content']); $i++) {
                     $temp = $decoded['content'][$i];
                     $tempClass = self::CLASS_UNIVERSAL;
                     if (isset($temp['constant'])) {
@@ -639,7 +638,7 @@ abstract class ASN1
                                 $maymatch = $constant == $temp['constant'] && $childClass == $tempClass;
                             } else {
                                 // Can only match if no constant expected and type matches or is generic.
-                                $maymatch = !isset($child['constant']) && \array_search($child['type'], [$temp['type'], self::TYPE_ANY, self::TYPE_CHOICE]) !== \false;
+                                $maymatch = !isset($child['constant']) && array_search($child['type'], [$temp['type'], self::TYPE_ANY, self::TYPE_CHOICE]) !== \false;
                             }
                         }
                         if ($maymatch) {
@@ -673,20 +672,20 @@ abstract class ASN1
             case self::TYPE_UTC_TIME:
             case self::TYPE_GENERALIZED_TIME:
                 // for explicitly tagged optional stuff
-                if (\is_array($decoded['content'])) {
+                if (is_array($decoded['content'])) {
                     $decoded['content'] = $decoded['content'][0]['content'];
                 }
                 // for implicitly tagged optional stuff
                 // in theory, doing isset($mapping['implicit']) would work but malformed certs do exist
                 // in the wild that OpenSSL decodes without issue so we'll support them as well
-                if (!\is_object($decoded['content'])) {
+                if (!is_object($decoded['content'])) {
                     $decoded['content'] = self::decodeTime($decoded['content'], $decoded['type']);
                 }
                 return $decoded['content'] ? $decoded['content']->format(self::$format) : \false;
             case self::TYPE_BIT_STRING:
                 if (isset($mapping['mapping'])) {
-                    $offset = \ord($decoded['content'][0]);
-                    $size = (\strlen($decoded['content']) - 1) * 8 - $offset;
+                    $offset = ord($decoded['content'][0]);
+                    $size = (strlen($decoded['content']) - 1) * 8 - $offset;
                     /*
                        From X.680-0207.pdf#page=46 (21.7):
                     
@@ -695,16 +694,16 @@ abstract class ASN1
                         therefore ensure that different semantics are not associated with such values which differ only in the number of trailing
                         0 bits."
                     */
-                    $bits = \count($mapping['mapping']) == $size ? [] : \array_fill(0, \count($mapping['mapping']) - $size, \false);
-                    for ($i = \strlen($decoded['content']) - 1; $i > 0; $i--) {
-                        $current = \ord($decoded['content'][$i]);
+                    $bits = count($mapping['mapping']) == $size ? [] : array_fill(0, count($mapping['mapping']) - $size, \false);
+                    for ($i = strlen($decoded['content']) - 1; $i > 0; $i--) {
+                        $current = ord($decoded['content'][$i]);
                         for ($j = $offset; $j < 8; $j++) {
                             $bits[] = (bool) ($current & 1 << $j);
                         }
                         $offset = 0;
                     }
                     $values = [];
-                    $map = \array_reverse($mapping['mapping']);
+                    $map = array_reverse($mapping['mapping']);
                     foreach ($map as $i => $value) {
                         if ($bits[$i]) {
                             $values[] = $value;
@@ -734,10 +733,17 @@ abstract class ASN1
             case self::TYPE_ENUMERATED:
                 $temp = $decoded['content'];
                 if (isset($mapping['implicit'])) {
-                    $temp = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($decoded['content'], -256);
+                    $temp = new BigInteger($temp, -256);
+                }
+                if (!$temp instanceof BigInteger) {
+                    return \false;
                 }
                 if (isset($mapping['mapping'])) {
-                    $temp = (int) $temp->toString();
+                    $temp = $temp->toString();
+                    if (strlen($temp) > 1) {
+                        return \false;
+                    }
+                    $temp = (int) $temp;
                     return isset($mapping['mapping'][$temp]) ? $mapping['mapping'][$temp] : \false;
                 }
                 return $temp;
@@ -754,12 +760,12 @@ abstract class ASN1
      */
     public static function decodeLength(&$string)
     {
-        $length = \ord(\Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::shift($string));
+        $length = ord(Strings::shift($string));
         if ($length & 0x80) {
             // definite length, long form
             $length &= 0x7f;
-            $temp = \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::shift($string, $length);
-            list(, $length) = \unpack('N', \substr(\str_pad($temp, 4, \chr(0), \STR_PAD_LEFT), -4));
+            $temp = Strings::shift($string, $length);
+            list(, $length) = unpack('N', substr(str_pad($temp, 4, chr(0), \STR_PAD_LEFT), -4));
         }
         return $length;
     }
@@ -792,7 +798,7 @@ abstract class ASN1
      */
     private static function encode_der($source, array $mapping, $idx = null, array $special = [])
     {
-        if ($source instanceof \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Element) {
+        if ($source instanceof Element) {
             return $source->element;
         }
         // do not encode (implicitly optional) fields with value set to default
@@ -829,14 +835,14 @@ abstract class ASN1
                     
                                            -- sec 11.6 of http://www.itu.int/ITU-T/studygroups/com17/languages/X.690-0207.pdf  */
                     if ($mapping['type'] == self::TYPE_SET) {
-                        \sort($value);
+                        sort($value);
                     }
-                    $value = \implode('', $value);
+                    $value = implode('', $value);
                     break;
                 }
                 $value = '';
                 foreach ($mapping['children'] as $key => $child) {
-                    if (!\array_key_exists($key, $source)) {
+                    if (!array_key_exists($key, $source)) {
                         if (!isset($child['optional'])) {
                             return \false;
                         }
@@ -863,11 +869,23 @@ abstract class ASN1
                            an untagged "DummyReference" (see ITU-T Rec. X.683 | ISO/IEC 8824-4, 8.3)."
                         */
                         if (isset($child['explicit']) || $child['type'] == self::TYPE_CHOICE) {
-                            $subtag = \chr(self::CLASS_CONTEXT_SPECIFIC << 6 | 0x20 | $child['constant']);
-                            $temp = $subtag . self::encodeLength(\strlen($temp)) . $temp;
+                            if ($child['constant'] <= 30) {
+                                $subtag = chr(self::CLASS_CONTEXT_SPECIFIC << 6 | 0x20 | $child['constant']);
+                            } else {
+                                $constant = $child['constant'];
+                                $subtag = '';
+                                while ($constant > 0) {
+                                    $subtagvalue = $constant & 0x7f;
+                                    $subtag = chr(0x80 | $subtagvalue) . $subtag;
+                                    $constant = $constant >> 7;
+                                }
+                                $subtag[strlen($subtag) - 1] = $subtag[strlen($subtag) - 1] & chr(0x7f);
+                                $subtag = chr(self::CLASS_CONTEXT_SPECIFIC << 6 | 0x20 | 0x1f) . $subtag;
+                            }
+                            $temp = $subtag . self::encodeLength(strlen($temp)) . $temp;
                         } else {
-                            $subtag = \chr(self::CLASS_CONTEXT_SPECIFIC << 6 | \ord($temp[0]) & 0x20 | $child['constant']);
-                            $temp = $subtag . \substr($temp, 1);
+                            $subtag = chr(self::CLASS_CONTEXT_SPECIFIC << 6 | ord($temp[0]) & 0x20 | $child['constant']);
+                            $temp = $subtag . substr($temp, 1);
                         }
                     }
                     $value .= $temp;
@@ -888,42 +906,42 @@ abstract class ASN1
                     if ($temp === '') {
                         continue;
                     }
-                    $tag = \ord($temp[0]);
+                    $tag = ord($temp[0]);
                     // if isset($child['constant']) is true then isset($child['optional']) should be true as well
                     if (isset($child['constant'])) {
                         if (isset($child['explicit']) || $child['type'] == self::TYPE_CHOICE) {
-                            $subtag = \chr(self::CLASS_CONTEXT_SPECIFIC << 6 | 0x20 | $child['constant']);
-                            $temp = $subtag . self::encodeLength(\strlen($temp)) . $temp;
+                            $subtag = chr(self::CLASS_CONTEXT_SPECIFIC << 6 | 0x20 | $child['constant']);
+                            $temp = $subtag . self::encodeLength(strlen($temp)) . $temp;
                         } else {
-                            $subtag = \chr(self::CLASS_CONTEXT_SPECIFIC << 6 | \ord($temp[0]) & 0x20 | $child['constant']);
-                            $temp = $subtag . \substr($temp, 1);
+                            $subtag = chr(self::CLASS_CONTEXT_SPECIFIC << 6 | ord($temp[0]) & 0x20 | $child['constant']);
+                            $temp = $subtag . substr($temp, 1);
                         }
                     }
                 }
                 if (isset($idx)) {
-                    \array_pop(self::$location);
+                    array_pop(self::$location);
                 }
                 if ($temp && isset($mapping['cast'])) {
-                    $temp[0] = \chr($mapping['class'] << 6 | $tag & 0x20 | $mapping['cast']);
+                    $temp[0] = chr($mapping['class'] << 6 | $tag & 0x20 | $mapping['cast']);
                 }
                 return $temp;
             case self::TYPE_INTEGER:
             case self::TYPE_ENUMERATED:
                 if (!isset($mapping['mapping'])) {
-                    if (\is_numeric($source)) {
-                        $source = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($source);
+                    if (is_numeric($source)) {
+                        $source = new BigInteger($source);
                     }
                     $value = $source->toBytes(\true);
                 } else {
-                    $value = \array_search($source, $mapping['mapping']);
+                    $value = array_search($source, $mapping['mapping']);
                     if ($value === \false) {
                         return \false;
                     }
-                    $value = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($value);
+                    $value = new BigInteger($value);
                     $value = $value->toBytes(\true);
                 }
-                if (!\strlen($value)) {
-                    $value = \chr(0);
+                if (!strlen($value)) {
+                    $value = chr(0);
                 }
                 break;
             case self::TYPE_UTC_TIME:
@@ -938,10 +956,10 @@ abstract class ASN1
                 break;
             case self::TYPE_BIT_STRING:
                 if (isset($mapping['mapping'])) {
-                    $bits = \array_fill(0, \count($mapping['mapping']), 0);
+                    $bits = array_fill(0, count($mapping['mapping']), 0);
                     $size = 0;
-                    for ($i = 0; $i < \count($mapping['mapping']); $i++) {
-                        if (\in_array($mapping['mapping'][$i], $source)) {
+                    for ($i = 0; $i < count($mapping['mapping']); $i++) {
+                        if (in_array($mapping['mapping'][$i], $source)) {
                             $bits[$i] = 1;
                             $size = $i;
                         }
@@ -951,14 +969,14 @@ abstract class ASN1
                     }
                     $offset = 8 - ($size + 1 & 7);
                     $offset = $offset !== 8 ? $offset : 0;
-                    $value = \chr($offset);
-                    for ($i = $size + 1; $i < \count($mapping['mapping']); $i++) {
+                    $value = chr($offset);
+                    for ($i = $size + 1; $i < count($mapping['mapping']); $i++) {
                         unset($bits[$i]);
                     }
-                    $bits = \implode('', \array_pad($bits, $size + $offset + 1, 0));
-                    $bytes = \explode(' ', \rtrim(\chunk_split($bits, 8, ' ')));
+                    $bits = implode('', array_pad($bits, $size + $offset + 1, 0));
+                    $bytes = explode(' ', rtrim(chunk_split($bits, 8, ' ')));
                     foreach ($bytes as $byte) {
-                        $value .= \chr(\bindec($byte));
+                        $value .= chr(bindec($byte));
                     }
                     break;
                 }
@@ -976,21 +994,21 @@ abstract class ASN1
             case self::TYPE_ANY:
                 $loc = self::$location;
                 if (isset($idx)) {
-                    \array_pop(self::$location);
+                    array_pop(self::$location);
                 }
                 switch (\true) {
                     case !isset($source):
                         return self::encode_der(null, ['type' => self::TYPE_NULL] + $mapping, null, $special);
-                    case \is_int($source):
-                    case $source instanceof \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger:
+                    case is_int($source):
+                    case $source instanceof BigInteger:
                         return self::encode_der($source, ['type' => self::TYPE_INTEGER] + $mapping, null, $special);
-                    case \is_float($source):
+                    case is_float($source):
                         return self::encode_der($source, ['type' => self::TYPE_REAL] + $mapping, null, $special);
-                    case \is_bool($source):
+                    case is_bool($source):
                         return self::encode_der($source, ['type' => self::TYPE_BOOLEAN] + $mapping, null, $special);
-                    case \is_array($source) && \count($source) == 1:
-                        $typename = \implode('', \array_keys($source));
-                        $outtype = \array_search($typename, self::ANY_MAP, \true);
+                    case is_array($source) && count($source) == 1:
+                        $typename = implode('', array_keys($source));
+                        $outtype = array_search($typename, self::ANY_MAP, \true);
                         if ($outtype !== \false) {
                             return self::encode_der($source[$typename], ['type' => $outtype] + $mapping, null, $special);
                         }
@@ -1004,7 +1022,7 @@ abstract class ASN1
                     $filters = $filters[$part];
                 }
                 if ($filters === \false) {
-                    throw new \RuntimeException('No filters defined for ' . \implode('/', $loc));
+                    throw new \RuntimeException('No filters defined for ' . implode('/', $loc));
                 }
                 return self::encode_der($source, $filters + $mapping, null, $special);
             case self::TYPE_NULL:
@@ -1027,20 +1045,20 @@ abstract class ASN1
                 $value = $source ? "\xff" : "\x00";
                 break;
             default:
-                throw new \RuntimeException('Mapping provides no type definition for ' . \implode('/', self::$location));
+                throw new \RuntimeException('Mapping provides no type definition for ' . implode('/', self::$location));
         }
         if (isset($idx)) {
-            \array_pop(self::$location);
+            array_pop(self::$location);
         }
         if (isset($mapping['cast'])) {
             if (isset($mapping['explicit']) || $mapping['type'] == self::TYPE_CHOICE) {
-                $value = \chr($tag) . self::encodeLength(\strlen($value)) . $value;
+                $value = chr($tag) . self::encodeLength(strlen($value)) . $value;
                 $tag = $mapping['class'] << 6 | 0x20 | $mapping['cast'];
             } else {
-                $tag = $mapping['class'] << 6 | \ord($temp[0]) & 0x20 | $mapping['cast'];
+                $tag = $mapping['class'] << 6 | ord($temp[0]) & 0x20 | $mapping['cast'];
             }
         }
-        return \chr($tag) . self::encodeLength(\strlen($value)) . $value;
+        return chr($tag) . self::encodeLength(strlen($value)) . $value;
     }
     /**
      * BER-decode the OID
@@ -1052,33 +1070,35 @@ abstract class ASN1
      */
     public static function decodeOID($content)
     {
+        // BigInteger's are used because of OIDs like 2.25.329800735698586629295641978511506172918
+        // https://healthcaresecprivacy.blogspot.com/2011/02/creating-and-using-unique-id-uuid-oid.html elaborates.
         static $eighty;
         if (!$eighty) {
-            $eighty = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(80);
+            $eighty = new BigInteger(80);
         }
         $oid = [];
         $pos = 0;
-        $len = \strlen($content);
+        $len = strlen($content);
         // see https://github.com/openjdk/jdk/blob/2deb318c9f047ec5a4b160d66a4b52f93688ec42/src/java.base/share/classes/sun/security/util/ObjectIdentifier.java#L55
         if ($len > 4096) {
             //throw new \RuntimeException("Object identifier size is limited to 4096 bytes ($len bytes present)");
             return \false;
         }
-        if (\ord($content[$len - 1]) & 0x80) {
+        if (ord($content[$len - 1]) & 0x80) {
             return \false;
         }
-        $n = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger();
+        $n = new BigInteger();
         while ($pos < $len) {
-            $temp = \ord($content[$pos++]);
+            $temp = ord($content[$pos++]);
             $n = $n->bitwise_leftShift(7);
-            $n = $n->bitwise_or(new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($temp & 0x7f));
+            $n = $n->bitwise_or(new BigInteger($temp & 0x7f));
             if (~$temp & 0x80) {
                 $oid[] = $n;
-                $n = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger();
+                $n = new BigInteger();
             }
         }
-        $part1 = \array_shift($oid);
-        $first = \floor(\ord($content[0]) / 40);
+        $part1 = array_shift($oid);
+        $first = floor(ord($content[0]) / 40);
         /*
           "This packing of the first two object identifier components recognizes that only three values are allocated from the root
            node, and at most 39 subsequent values from nodes reached by X = 0 and X = 1."
@@ -1087,13 +1107,13 @@ abstract class ASN1
         */
         if ($first <= 2) {
             // ie. 0 <= ord($content[0]) < 120 (0x78)
-            \array_unshift($oid, \ord($content[0]) % 40);
-            \array_unshift($oid, $first);
+            array_unshift($oid, ord($content[0]) % 40);
+            array_unshift($oid, $first);
         } else {
-            \array_unshift($oid, $part1->subtract($eighty));
-            \array_unshift($oid, 2);
+            array_unshift($oid, $part1->subtract($eighty));
+            array_unshift($oid, 2);
         }
-        return \implode('.', $oid);
+        return implode('.', $oid);
     }
     /**
      * DER-encode the OID
@@ -1107,11 +1127,11 @@ abstract class ASN1
     {
         static $mask, $zero, $forty;
         if (!$mask) {
-            $mask = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(0x7f);
-            $zero = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger();
-            $forty = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(40);
+            $mask = new BigInteger(0x7f);
+            $zero = new BigInteger();
+            $forty = new BigInteger(40);
         }
-        if (!\preg_match('#(?:\\d+\\.)+#', $source)) {
+        if (!preg_match('#(?:\d+\.)+#', $source)) {
             $oid = isset(self::$reverseOIDs[$source]) ? self::$reverseOIDs[$source] : \false;
         } else {
             $oid = $source;
@@ -1119,27 +1139,27 @@ abstract class ASN1
         if ($oid === \false) {
             throw new \RuntimeException('Invalid OID');
         }
-        $parts = \explode('.', $oid);
-        $part1 = \array_shift($parts);
-        $part2 = \array_shift($parts);
-        $first = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($part1);
+        $parts = explode('.', $oid);
+        $part1 = array_shift($parts);
+        $part2 = array_shift($parts);
+        $first = new BigInteger($part1);
         $first = $first->multiply($forty);
-        $first = $first->add(new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($part2));
-        \array_unshift($parts, $first->toString());
+        $first = $first->add(new BigInteger($part2));
+        array_unshift($parts, $first->toString());
         $value = '';
         foreach ($parts as $part) {
             if (!$part) {
                 $temp = "\x00";
             } else {
                 $temp = '';
-                $part = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($part);
+                $part = new BigInteger($part);
                 while (!$part->equals($zero)) {
                     $submask = $part->bitwise_and($mask);
                     $submask->setPrecision(8);
-                    $temp = (\chr(0x80) | $submask->toBytes()) . $temp;
+                    $temp = (chr(0x80) | $submask->toBytes()) . $temp;
                     $part = $part->bitwise_rightShift(7);
                 }
-                $temp[\strlen($temp) - 1] = $temp[\strlen($temp) - 1] & \chr(0x7f);
+                $temp[strlen($temp) - 1] = $temp[strlen($temp) - 1] & chr(0x7f);
             }
             $value .= $temp;
         }
@@ -1168,18 +1188,18 @@ abstract class ASN1
             // https://www.itu.int/ITU-T/studygroups/com17/languages/X.690-0207.pdf#page=28 says "the seconds
             // element shall always be present" but none-the-less I've seen X509 certs where it isn't and if the
             // browsers parse it phpseclib ought to too
-            if (\preg_match('#^(\\d{10})(Z|[+-]\\d{4})$#', $content, $matches)) {
+            if (preg_match('#^(\d{10})(Z|[+-]\d{4})$#', $content, $matches)) {
                 $content = $matches[1] . '00' . $matches[2];
             }
-            $prefix = \substr($content, 0, 2) >= 50 ? '19' : '20';
+            $prefix = substr($content, 0, 2) >= 50 ? '19' : '20';
             $content = $prefix . $content;
-        } elseif (\strpos($content, '.') !== \false) {
+        } elseif (strpos($content, '.') !== \false) {
             $format .= '.u';
         }
-        if ($content[\strlen($content) - 1] == 'Z') {
-            $content = \substr($content, 0, -1) . '+0000';
+        if ($content[strlen($content) - 1] == 'Z') {
+            $content = substr($content, 0, -1) . '+0000';
         }
-        if (\strpos($content, '-') !== \false || \strpos($content, '+') !== \false) {
+        if (strpos($content, '-') !== \false || strpos($content, '+') !== \false) {
             $format .= 'O';
         }
         // error supression isn't necessary as of PHP 7.0:
@@ -1208,7 +1228,7 @@ abstract class ASN1
     public static function loadOIDs(array $oids)
     {
         self::$reverseOIDs += $oids;
-        self::$oids = \array_flip(self::$reverseOIDs);
+        self::$oids = array_flip(self::$reverseOIDs);
     }
     /**
      * Set filters
@@ -1236,26 +1256,26 @@ abstract class ASN1
     public static function convert($in, $from = self::TYPE_UTF8_STRING, $to = self::TYPE_UTF8_STRING)
     {
         // isset(self::STRING_TYPE_SIZE[$from] returns a fatal error on PHP 5.6
-        if (!\array_key_exists($from, self::STRING_TYPE_SIZE) || !\array_key_exists($to, self::STRING_TYPE_SIZE)) {
+        if (!array_key_exists($from, self::STRING_TYPE_SIZE) || !array_key_exists($to, self::STRING_TYPE_SIZE)) {
             return \false;
         }
         $insize = self::STRING_TYPE_SIZE[$from];
         $outsize = self::STRING_TYPE_SIZE[$to];
-        $inlength = \strlen($in);
+        $inlength = strlen($in);
         $out = '';
         for ($i = 0; $i < $inlength;) {
             if ($inlength - $i < $insize) {
                 return \false;
             }
             // Get an input character as a 32-bit value.
-            $c = \ord($in[$i++]);
+            $c = ord($in[$i++]);
             switch (\true) {
                 case $insize == 4:
-                    $c = $c << 8 | \ord($in[$i++]);
-                    $c = $c << 8 | \ord($in[$i++]);
+                    $c = $c << 8 | ord($in[$i++]);
+                    $c = $c << 8 | ord($in[$i++]);
                 // fall-through
                 case $insize == 2:
-                    $c = $c << 8 | \ord($in[$i++]);
+                    $c = $c << 8 | ord($in[$i++]);
                 // fall-through
                 case $insize == 1:
                     break;
@@ -1266,10 +1286,10 @@ abstract class ASN1
                 default:
                     $bit = 6;
                     do {
-                        if ($bit > 25 || $i >= $inlength || (\ord($in[$i]) & 0xc0) != 0x80) {
+                        if ($bit > 25 || $i >= $inlength || (ord($in[$i]) & 0xc0) != 0x80) {
                             return \false;
                         }
-                        $c = $c << 6 | \ord($in[$i++]) & 0x3f;
+                        $c = $c << 6 | ord($in[$i++]) & 0x3f;
                         $bit += 5;
                         $mask = 1 << $bit;
                     } while ($c & $bit);
@@ -1280,17 +1300,17 @@ abstract class ASN1
             $v = '';
             switch (\true) {
                 case $outsize == 4:
-                    $v .= \chr($c & 0xff);
+                    $v .= chr($c & 0xff);
                     $c >>= 8;
-                    $v .= \chr($c & 0xff);
+                    $v .= chr($c & 0xff);
                     $c >>= 8;
                 // fall-through
                 case $outsize == 2:
-                    $v .= \chr($c & 0xff);
+                    $v .= chr($c & 0xff);
                     $c >>= 8;
                 // fall-through
                 case $outsize == 1:
-                    $v .= \chr($c & 0xff);
+                    $v .= chr($c & 0xff);
                     $c >>= 8;
                     if ($c) {
                         return \false;
@@ -1299,30 +1319,30 @@ abstract class ASN1
                 case ($c & (\PHP_INT_SIZE == 8 ? 0x80000000 : 1 << 31)) != 0:
                     return \false;
                 case $c >= 0x4000000:
-                    $v .= \chr(0x80 | $c & 0x3f);
+                    $v .= chr(0x80 | $c & 0x3f);
                     $c = $c >> 6 | 0x4000000;
                 // fall-through
                 case $c >= 0x200000:
-                    $v .= \chr(0x80 | $c & 0x3f);
+                    $v .= chr(0x80 | $c & 0x3f);
                     $c = $c >> 6 | 0x200000;
                 // fall-through
                 case $c >= 0x10000:
-                    $v .= \chr(0x80 | $c & 0x3f);
+                    $v .= chr(0x80 | $c & 0x3f);
                     $c = $c >> 6 | 0x10000;
                 // fall-through
                 case $c >= 0x800:
-                    $v .= \chr(0x80 | $c & 0x3f);
+                    $v .= chr(0x80 | $c & 0x3f);
                     $c = $c >> 6 | 0x800;
                 // fall-through
                 case $c >= 0x80:
-                    $v .= \chr(0x80 | $c & 0x3f);
+                    $v .= chr(0x80 | $c & 0x3f);
                     $c = $c >> 6 | 0xc0;
                 // fall-through
                 default:
-                    $v .= \chr($c);
+                    $v .= chr($c);
                     break;
             }
-            $out .= \strrev($v);
+            $out .= strrev($v);
         }
         return $out;
     }
@@ -1343,17 +1363,17 @@ abstract class ASN1
          * subject=/O=organization/OU=org unit/CN=common name
          * issuer=/O=organization/CN=common name
          */
-        if (\strlen($str) > \ini_get('pcre.backtrack_limit')) {
+        if (strlen($str) > ini_get('pcre.backtrack_limit')) {
             $temp = $str;
         } else {
-            $temp = \preg_replace('#.*?^-+[^-]+-+[\\r\\n ]*$#ms', '', $str, 1);
-            $temp = \preg_replace('#-+END.*[\\r\\n ]*.*#ms', '', $temp, 1);
+            $temp = preg_replace('#.*?^-+[^-]+-+[\r\n ]*$#ms', '', $str, 1);
+            $temp = preg_replace('#-+END.*[\r\n ]*.*#ms', '', $temp, 1);
         }
         // remove new lines
-        $temp = \str_replace(["\r", "\n", ' '], '', $temp);
+        $temp = str_replace(["\r", "\n", ' '], '', $temp);
         // remove the -----BEGIN CERTIFICATE----- and -----END CERTIFICATE----- stuff
-        $temp = \preg_replace('#^-+[^-]+-+|-+[^-]+-+$#', '', $temp);
-        $temp = \preg_match('#^[a-zA-Z\\d/+]*={0,2}$#', $temp) ? \Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::base64_decode($temp) : \false;
+        $temp = preg_replace('#^-+[^-]+-+|-+[^-]+-+$#', '', $temp);
+        $temp = preg_match('#^[a-zA-Z\d/+]*={0,2}$#', $temp) ? Strings::base64_decode($temp) : \false;
         return $temp != \false ? $temp : $str;
     }
     /**
@@ -1368,10 +1388,10 @@ abstract class ASN1
     public static function encodeLength($length)
     {
         if ($length <= 0x7f) {
-            return \chr($length);
+            return chr($length);
         }
-        $temp = \ltrim(\pack('N', $length), \chr(0));
-        return \pack('Ca*', 0x80 | \strlen($temp), $temp);
+        $temp = ltrim(pack('N', $length), chr(0));
+        return pack('Ca*', 0x80 | strlen($temp), $temp);
     }
     /**
      * Returns the OID corresponding to a name

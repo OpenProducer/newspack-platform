@@ -132,6 +132,17 @@ class Author_Filter {
 	}
 }
 
+/**
+ * Disables the author filter feature which provides enhanced
+ * author filtering and search capabilities in the admin.
+ *
+ * @constant NEWSPACK_DISABLE_AUTHORS_FILTER
+ * @type     bool
+ * @default  Authors filter enabled
+ * @status   draft
+ *
+ * @example define( 'NEWSPACK_DISABLE_AUTHORS_FILTER', true );
+ */
 if ( ! defined( 'NEWSPACK_DISABLE_AUTHORS_FILTER' ) || ! NEWSPACK_DISABLE_AUTHORS_FILTER ) {
 	Author_Filter::init();
 }

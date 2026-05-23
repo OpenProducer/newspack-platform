@@ -65,16 +65,6 @@ remove_action( 'woocommerce_checkout_order_review', 'woocommerce_checkout_paymen
 add_action( 'woocommerce_checkout_after_customer_details', 'woocommerce_checkout_payment' );
 
 /**
- * Add heading above payment info form.
- */
-function newspack_woo_payment_heading() {
-	?>
-	<h3><?php esc_html_e( 'Payment info', 'newspack-theme' ); ?></h3>
-	<?php
-}
-add_action( 'woocommerce_review_order_before_payment', 'newspack_woo_payment_heading' );
-
-/**
  * Add heading above checkout account creation form.
  */
 function newspack_woo_account_registration_heading() {

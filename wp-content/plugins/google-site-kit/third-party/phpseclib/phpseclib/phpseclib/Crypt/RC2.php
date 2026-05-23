@@ -38,19 +38,19 @@ use Google\Site_Kit_Dependencies\phpseclib3\Exception\BadModeException;
  * Pure-PHP implementation of RC2.
  *
  */
-class RC2 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCipher
+class RC2 extends BlockCipher
 {
     /**
      * Block Length of the cipher
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::block_size
+     * @see Common\SymmetricKey::block_size
      * @var int
      */
     protected $block_size = 8;
     /**
      * The Key
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::key
+     * @see Common\SymmetricKey::key
      * @see self::setKey()
      * @var string
      */
@@ -58,7 +58,7 @@ class RC2 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
     /**
      * The Original (unpadded) Key
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::key
+     * @see Common\SymmetricKey::key
      * @see self::setKey()
      * @see self::encrypt()
      * @see self::decrypt()
@@ -76,14 +76,14 @@ class RC2 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
     /**
      * The mcrypt specific name of the cipher
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::cipher_name_mcrypt
+     * @see Common\SymmetricKey::cipher_name_mcrypt
      * @var string
      */
     protected $cipher_name_mcrypt = 'rc2';
     /**
      * Optimizing value while CFB-encrypting
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::cfb_init_len
+     * @see Common\SymmetricKey::cfb_init_len
      * @var int
      */
     protected $cfb_init_len = 500;
@@ -141,7 +141,7 @@ class RC2 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
     {
         parent::__construct($mode);
         if ($this->mode == self::MODE_STREAM) {
-            throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\BadModeException('Block ciphers cannot be ran in stream mode');
+            throw new BadModeException('Block ciphers cannot be ran in stream mode');
         }
     }
     /**
@@ -149,7 +149,7 @@ class RC2 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
      *
      * This is mainly just a wrapper to set things up for \phpseclib3\Crypt\Common\SymmetricKey::isValidEngine()
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::__construct()
+     * @see Common\SymmetricKey::__construct()
      * @param int $engine
      * @return bool
      */
@@ -157,13 +157,13 @@ class RC2 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
     {
         switch ($engine) {
             case self::ENGINE_OPENSSL:
-                if ($this->current_key_length != 128 || \strlen($this->orig_key) < 16) {
+                if ($this->current_key_length != 128 || strlen($this->orig_key) < 16) {
                     return \false;
                 }
                 // quoting https://www.openssl.org/news/openssl-3.0-notes.html, OpenSSL 3.0.1
                 // "Moved all variations of the EVP ciphers CAST5, BF, IDEA, SEED, RC2, RC4, RC5, and DES to the legacy provider"
                 // in theory openssl_get_cipher_methods() should catch this but, on GitHub Actions, at least, it does not
-                if (\defined('OPENSSL_VERSION_TEXT') && \version_compare(\preg_replace('#OpenSSL (\\d+\\.\\d+\\.\\d+) .*#', '$1', \OPENSSL_VERSION_TEXT), '3.0.1', '>=')) {
+                if (defined('OPENSSL_VERSION_TEXT') && version_compare(preg_replace('#OpenSSL (\d+\.\d+\.\d+) .*#', '$1', \OPENSSL_VERSION_TEXT), '3.0.1', '>=')) {
                     return \false;
                 }
                 $this->cipher_name_openssl_ecb = 'rc2-ecb';
@@ -206,7 +206,7 @@ class RC2 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
      * has more then 128 bytes in it, and set $key to a single null byte if
      * it is empty.
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::setKey()
+     * @see Common\SymmetricKey::setKey()
      * @param string $key
      * @param int|boolean $t1 optional Effective key length in bits.
      * @throws \LengthException if the key length isn't supported
@@ -221,17 +221,17 @@ class RC2 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
             throw new \LengthException('Key size of ' . $length . ' bits is not supported by this algorithm. Only keys between 1 and 1024 bits, inclusive, are supported');
         }
         $this->current_key_length = $t1;
-        if (\strlen($key) < 1 || \strlen($key) > 128) {
-            throw new \LengthException('Key of size ' . \strlen($key) . ' not supported by this algorithm. Only keys of sizes between 8 and 1024 bits, inclusive, are supported');
+        if (strlen($key) < 1 || strlen($key) > 128) {
+            throw new \LengthException('Key of size ' . strlen($key) . ' not supported by this algorithm. Only keys of sizes between 8 and 1024 bits, inclusive, are supported');
         }
-        $t = \strlen($key);
+        $t = strlen($key);
         // The mcrypt RC2 implementation only supports effective key length
         // of 1024 bits. It is however possible to handle effective key
         // lengths in range 1..1024 by expanding the key and applying
         // inverse pitable mapping to the first byte before submitting it
         // to mcrypt.
         // Key expansion.
-        $l = \array_values(\unpack('C*', $key));
+        $l = array_values(unpack('C*', $key));
         $t8 = $t1 + 7 >> 3;
         $tm = 0xff >> 8 * $t8 - $t1;
         // Expand key.
@@ -246,9 +246,9 @@ class RC2 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
         }
         // Prepare the key for mcrypt.
         $l[0] = self::$invpitable[$l[0]];
-        \array_unshift($l, 'C*');
-        $this->key = \pack(...$l);
-        $this->key_length = \strlen($this->key);
+        array_unshift($l, 'C*');
+        $this->key = pack(...$l);
+        $this->key_length = strlen($this->key);
         $this->changed = $this->nonIVChanged = \true;
         $this->setEngine();
     }
@@ -295,14 +295,14 @@ class RC2 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
     /**
      * Encrypts a block
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::encryptBlock()
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::encrypt()
+     * @see Common\SymmetricKey::encryptBlock()
+     * @see Common\SymmetricKey::encrypt()
      * @param string $in
      * @return string
      */
     protected function encryptBlock($in)
     {
-        list($r0, $r1, $r2, $r3) = \array_values(\unpack('v*', $in));
+        list($r0, $r1, $r2, $r3) = array_values(unpack('v*', $in));
         $keys = $this->keys;
         $limit = 20;
         $actions = [$limit => 44, 44 => 64];
@@ -329,19 +329,19 @@ class RC2 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
                 $limit = $actions[$limit];
             }
         }
-        return \pack('vvvv', $r0, $r1, $r2, $r3);
+        return pack('vvvv', $r0, $r1, $r2, $r3);
     }
     /**
      * Decrypts a block
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::decryptBlock()
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::decrypt()
+     * @see Common\SymmetricKey::decryptBlock()
+     * @see Common\SymmetricKey::decrypt()
      * @param string $in
      * @return string
      */
     protected function decryptBlock($in)
     {
-        list($r0, $r1, $r2, $r3) = \array_values(\unpack('v*', $in));
+        list($r0, $r1, $r2, $r3) = array_values(unpack('v*', $in));
         $keys = $this->keys;
         $limit = 44;
         $actions = [$limit => 20, 20 => 0];
@@ -368,12 +368,12 @@ class RC2 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
                 $limit = $actions[$limit];
             }
         }
-        return \pack('vvvv', $r0, $r1, $r2, $r3);
+        return pack('vvvv', $r0, $r1, $r2, $r3);
     }
     /**
      * Creates the key schedule
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::setupKey()
+     * @see Common\SymmetricKey::setupKey()
      */
     protected function setupKey()
     {
@@ -382,8 +382,8 @@ class RC2 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
         }
         // Key has already been expanded in \phpseclib3\Crypt\RC2::setKey():
         // Only the first value must be altered.
-        $l = \unpack('Ca/Cb/v*', $this->key);
-        \array_unshift($l, self::$pitable[$l['a']] | $l['b'] << 8);
+        $l = unpack('Ca/Cb/v*', $this->key);
+        array_unshift($l, self::$pitable[$l['a']] | $l['b'] << 8);
         unset($l['a']);
         unset($l['b']);
         $this->keys = $l;
@@ -391,7 +391,7 @@ class RC2 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\BlockCip
     /**
      * Setup the performance-optimized function for de/encrypt()
      *
-     * @see \phpseclib3\Crypt\Common\SymmetricKey::setupInlineCrypt()
+     * @see Common\SymmetricKey::setupInlineCrypt()
      */
     protected function setupInlineCrypt()
     {

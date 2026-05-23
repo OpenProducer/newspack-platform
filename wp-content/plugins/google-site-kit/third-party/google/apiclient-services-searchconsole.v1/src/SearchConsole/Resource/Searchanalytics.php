@@ -44,12 +44,12 @@ class Searchanalytics extends \Google\Site_Kit_Dependencies\Google\Service\Resou
      * @return SearchAnalyticsQueryResponse
      * @throws \Google\Service\Exception
      */
-    public function query($siteUrl, \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\SearchAnalyticsQueryRequest $postBody, $optParams = [])
+    public function query($siteUrl, SearchAnalyticsQueryRequest $postBody, $optParams = [])
     {
         $params = ['siteUrl' => $siteUrl, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('query', [$params], \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\SearchAnalyticsQueryResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('query', [$params], SearchAnalyticsQueryResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\Resource\Searchanalytics::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SearchConsole_Resource_Searchanalytics');
+class_alias(Searchanalytics::class, 'Google\Site_Kit_Dependencies\Google_Service_SearchConsole_Resource_Searchanalytics');

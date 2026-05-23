@@ -64,7 +64,7 @@ class PersonMetadata extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string[]
      */
     public $previousResourceNames;
-    protected $sourcesType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Source::class;
+    protected $sourcesType = Source::class;
     protected $sourcesDataType = 'array';
     /**
      * Output only. True if the person resource has been deleted. Populated only
@@ -159,4 +159,4 @@ class PersonMetadata extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\PersonMetadata::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_PersonMetadata');
+class_alias(PersonMetadata::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_PersonMetadata');

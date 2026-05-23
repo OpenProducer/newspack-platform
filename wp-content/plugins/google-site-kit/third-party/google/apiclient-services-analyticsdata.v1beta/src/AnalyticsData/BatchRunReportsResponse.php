@@ -28,7 +28,7 @@ class BatchRunReportsResponse extends \Google\Site_Kit_Dependencies\Google\Colle
      * @var string
      */
     public $kind;
-    protected $reportsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\RunReportResponse::class;
+    protected $reportsType = RunReportResponse::class;
     protected $reportsDataType = 'array';
     /**
      * Identifies what kind of resource this message is. This `kind` is always the
@@ -66,4 +66,4 @@ class BatchRunReportsResponse extends \Google\Site_Kit_Dependencies\Google\Colle
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\BatchRunReportsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_BatchRunReportsResponse');
+class_alias(BatchRunReportsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_BatchRunReportsResponse');

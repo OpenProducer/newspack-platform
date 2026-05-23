@@ -14,9 +14,10 @@ const availableContentRules = window.newspackAudienceContentGates.available_cont
 interface ContentRulesProps {
 	rules: GateContentRule[];
 	onChange: ( rules: GateContentRule[] ) => void;
+	isNewsletter?: boolean;
 }
 
-export default function ContentRules( { rules, onChange }: ContentRulesProps ) {
+export default function ContentRules( { rules, onChange, isNewsletter = false }: ContentRulesProps ) {
 	const handleToggle = useCallback(
 		( slug: string ) => {
 			const hasRule = rules.find( r => r.slug === slug );
@@ -58,6 +59,7 @@ export default function ContentRules( { rules, onChange }: ContentRulesProps ) {
 							onChange={ handleChange( slug ) }
 							onChangeExclusion={ handleChangeExclusion( slug ) }
 							onToggle={ handleToggle }
+							isNewsletter={ isNewsletter }
 						/>
 						{ index < Object.keys( availableContentRules ).length - 1 && <CardDivider key={ index } /> }
 					</Fragment>

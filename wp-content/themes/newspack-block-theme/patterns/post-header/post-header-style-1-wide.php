@@ -15,7 +15,7 @@
 
 	<!-- wp:group {"align":"wide","style":{"spacing":{"blockGap":"var:preset|spacing|20"}},"layout":{"type":"flex","orientation":"vertical"}} -->
 	<div class="wp-block-group alignwide">
-		<!-- wp:post-terms {"term":"category","style":{"typography":{"fontStyle":"normal","fontWeight":"700","textTransform":"uppercase"}},"fontSize":"medium"} /-->
+		<!-- wp:post-terms {"term":"category","fontSize":"medium"} /-->
 
 		<!-- wp:post-title {"level":1,"fontSize":"xxxx-large"} /-->
 	</div>

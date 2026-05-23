@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 class BatchCreateContactsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'createdPeople';
-    protected $createdPeopleType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\PersonResponse::class;
+    protected $createdPeopleType = PersonResponse::class;
     protected $createdPeopleDataType = 'array';
     /**
      * The contacts that were created, unless the request `read_mask` is empty.
@@ -40,4 +40,4 @@ class BatchCreateContactsResponse extends \Google\Site_Kit_Dependencies\Google\C
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\BatchCreateContactsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_BatchCreateContactsResponse');
+class_alias(BatchCreateContactsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_BatchCreateContactsResponse');

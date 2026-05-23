@@ -19,7 +19,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 
 class RevertClientResponse extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $clientType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Client::class;
+    protected $clientType = Client::class;
     protected $clientDataType = '';
     /**
      * Client as it appears in the latest container version since the last
@@ -28,7 +28,7 @@ class RevertClientResponse extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Client $client
      */
-    public function setClient(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Client $client)
+    public function setClient(Client $client)
     {
         $this->client = $client;
     }
@@ -41,4 +41,4 @@ class RevertClientResponse extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\RevertClientResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_RevertClientResponse');
+class_alias(RevertClientResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_RevertClientResponse');

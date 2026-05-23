@@ -19,7 +19,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 
 class RevertTransformationResponse extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $transformationType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Transformation::class;
+    protected $transformationType = Transformation::class;
     protected $transformationDataType = '';
     /**
      * Transformation as it appears in the latest container version since the last
@@ -28,7 +28,7 @@ class RevertTransformationResponse extends \Google\Site_Kit_Dependencies\Google\
      *
      * @param Transformation $transformation
      */
-    public function setTransformation(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Transformation $transformation)
+    public function setTransformation(Transformation $transformation)
     {
         $this->transformation = $transformation;
     }
@@ -41,4 +41,4 @@ class RevertTransformationResponse extends \Google\Site_Kit_Dependencies\Google\
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\RevertTransformationResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_RevertTransformationResponse');
+class_alias(RevertTransformationResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_RevertTransformationResponse');

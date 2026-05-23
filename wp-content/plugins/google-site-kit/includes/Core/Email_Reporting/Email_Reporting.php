@@ -11,16 +11,17 @@
 namespace Google\Site_Kit\Core\Email_Reporting;
 
 use Google\Site_Kit\Context;
-use Google\Site_Kit\Core\Email\Email;
 use Google\Site_Kit\Core\Authentication\Authentication;
+use Google\Site_Kit\Core\Email\Email;
+use Google\Site_Kit\Core\Email_Reporting\Notices\Analytics_Setup_Email_Notice;
 use Google\Site_Kit\Core\Golinks\Golinks;
+use Google\Site_Kit\Core\Golinks\Settings_Golink_Handler;
 use Google\Site_Kit\Core\Modules\Modules;
 use Google\Site_Kit\Core\Storage\Options;
 use Google\Site_Kit\Core\Storage\User_Options;
 use Google\Site_Kit\Core\Tracking\Feature_Metrics_Trait;
 use Google\Site_Kit\Core\Tracking\Provides_Feature_Metrics;
 use Google\Site_Kit\Core\User\Email_Reporting_Settings as User_Email_Reporting_Settings;
-use Google\Site_Kit\Modules\Analytics_4;
 
 /**
  * Base class for Email Reporting feature.
@@ -96,6 +97,14 @@ class Email_Reporting implements Provides_Feature_Metrics {
 	 * @var User_Email_Reporting_Settings
 	 */
 	protected $user_settings;
+
+	/**
+	 * Email notices resolver.
+	 *
+	 * @since 1.175.0
+	 * @var Email_Notices
+	 */
+	protected $email_notices;
 
 	/**
 	 * Email log batch query instance.
@@ -218,15 +227,24 @@ class Email_Reporting implements Provides_Feature_Metrics {
 		$this->user_options   = $user_options ?: new User_Options( $this->context );
 		$this->settings       = new Email_Reporting_Settings( $this->options );
 		$this->user_settings  = new User_Email_Reporting_Settings( $this->user_options );
+		$frequency_planner    = new Frequency_Planner();
+		$this->scheduler      = new Email_Reporting_Scheduler( $frequency_planner );
+		$this->email_notices  = new Email_Notices(
+			$this->context,
+			$this->golinks,
+			array(
+				new Analytics_Setup_Email_Notice( $this->context, $this->modules, $this->golinks ),
+			)
+		);
 
-		$frequency_planner            = new Frequency_Planner();
 		$this->subscribed_users_query = new Subscribed_Users_Query( $this->user_settings, $this->modules );
 		$eligible_subscribers_query   = new Eligible_Subscribers_Query( $this->modules, $this->user_options );
 		$max_execution_limiter        = new Max_Execution_Limiter( (int) ini_get( 'max_execution_time' ) );
 		$this->email_log_batch_query  = new Email_Log_Batch_Query();
+		$health_check                 = new Cron_Health_Check( $this->email_log_batch_query, $this->scheduler );
 		$email_sender                 = new Email();
 		$section_builder              = new Email_Report_Section_Builder( $this->context );
-		$template_formatter           = new Email_Template_Formatter( $this->context, $section_builder, $this->golinks );
+		$template_formatter           = new Email_Template_Formatter( $this->context, $section_builder, $this->golinks, $this->email_notices );
 		$template_renderer_factory    = new Email_Template_Renderer_Factory( $this->context, $this->golinks );
 		$report_sender                = new Email_Report_Sender( $template_renderer_factory, $email_sender );
 		$log_processor                = new Email_Log_Processor( $this->email_log_batch_query, $this->data_requests, $template_formatter, $report_sender );
@@ -237,19 +255,22 @@ class Email_Reporting implements Provides_Feature_Metrics {
 			$this->user_settings,
 			$eligible_subscribers_query,
 			$email_sender,
-			$this->golinks
+			$this->golinks,
+			$health_check
 		);
 		$this->email_log         = new Email_Log();
-		$this->scheduler         = new Email_Reporting_Scheduler( $frequency_planner );
 		$this->initiator_task    = new Initiator_Task( $this->scheduler, $this->subscribed_users_query );
+		$notifier                = new Batch_Error_Notifier( $this->email_log_batch_query, $email_sender, $this->context, $this->golinks );
 		$this->worker_task       = new Worker_Task(
 			$max_execution_limiter,
 			$this->email_log_batch_query,
 			$this->scheduler,
 			$log_processor,
-			$this->data_requests
+			$this->data_requests,
+			$notifier,
+			$health_check
 		);
-		$this->fallback_task     = new Fallback_Task( $this->email_log_batch_query, $this->scheduler, $this->worker_task );
+		$this->fallback_task     = new Fallback_Task( $this->email_log_batch_query, $this->scheduler, $this->worker_task, $notifier );
 		$this->monitor_task      = new Monitor_Task( $this->scheduler, $this->settings );
 		$this->email_log_cleanup = new Email_Log_Cleanup( $this->settings );
 	}
@@ -261,6 +282,8 @@ class Email_Reporting implements Provides_Feature_Metrics {
 	 */
 	public function register() {
 		$this->golinks->register_handler( 'manage-subscription-email-reporting', new Email_Reporting_Golink_Handler() );
+		$this->golinks->register_handler( 'settings', new Settings_Golink_Handler() );
+		$this->golinks->register_handler( Email_Notices::GOLINK_NOTICE, new Email_Notice_Golink_Handler( $this->email_notices, $this->modules, $this->authentication ) );
 		$this->settings->register();
 		$this->rest_controller->register();
 		$this->register_feature_metrics();
@@ -277,7 +300,7 @@ class Email_Reporting implements Provides_Feature_Metrics {
 			$this->scheduler->schedule_monitor();
 			$this->scheduler->schedule_cleanup();
 
-			add_action( Email_Reporting_Scheduler::ACTION_INITIATOR, array( $this->initiator_task, 'handle_callback_action' ), 10, 1 );
+			add_action( Email_Reporting_Scheduler::ACTION_INITIATOR, array( $this->initiator_task, 'handle_callback_action' ), 10, 2 );
 			add_action( Email_Reporting_Scheduler::ACTION_MONITOR, array( $this->monitor_task, 'handle_monitor_action' ) );
 			add_action( Email_Reporting_Scheduler::ACTION_WORKER, array( $this->worker_task, 'handle_callback_action' ), 10, 3 );
 			add_action( Email_Reporting_Scheduler::ACTION_FALLBACK, array( $this->fallback_task, 'handle_fallback_action' ), 10, 3 );
@@ -310,6 +333,7 @@ class Email_Reporting implements Provides_Feature_Metrics {
 	 * Gets feature metrics for email reporting.
 	 *
 	 * @since 1.173.0
+	 * @since 1.179.0 Added email_reporting_enabled metric.
 	 *
 	 * @return array
 	 */
@@ -318,6 +342,7 @@ class Email_Reporting implements Provides_Feature_Metrics {
 		$batch_counts     = $this->email_log_batch_query->get_batch_counts( $latest_batch_ids );
 
 		return array(
+			'email_reporting_enabled'           => $this->settings->is_email_reporting_enabled(),
 			'email_reporting_total_sent'        => $this->email_log_batch_query->get_total_count_by_status( Email_Log::STATUS_SENT ),
 			'email_reporting_total_failed'      => $this->email_log_batch_query->get_total_count_by_status( Email_Log::STATUS_FAILED ),
 			'email_reporting_last_batch_sent'   => $batch_counts['sent'],

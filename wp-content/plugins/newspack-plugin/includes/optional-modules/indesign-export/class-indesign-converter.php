@@ -15,6 +15,19 @@ defined( 'ABSPATH' ) || exit;
 class InDesign_Converter {
 
 	/**
+	 * Block types with no print equivalent, excluded from InDesign export by default.
+	 * Filterable via the newspack_indesign_export_excluded_blocks filter.
+	 *
+	 * @var string[]
+	 */
+	const EXCLUDED_BLOCK_TYPES = [
+		'core/file',
+		'core/embed',
+		'core/video',
+		'core/audio',
+	];
+
+	/**
 	 * Default InDesign styles configuration.
 	 *
 	 * @var array
@@ -172,7 +185,20 @@ class InDesign_Converter {
 	 * @return string Content with processed blocks.
 	 */
 	private function process_blocks( $content ) {
-		$blocks = parse_blocks( $content );
+		// Rich media blocks have no print equivalent. Exclude them entirely to
+		// prevent raw HTML (e.g. <object> tags, embed URLs) from leaking into
+		// the InDesign output. Strip recursively so nested occurrences inside
+		// container blocks (core/group, core/columns, etc.) are also removed.
+		// Publishers can extend this list via the filter for custom block types.
+		// Normalize the filter result to an array of strings in case a callback
+		// returns a non-array or mixed-type value.
+		$excluded_block_types = (array) apply_filters(
+			'newspack_indesign_export_excluded_blocks',
+			self::EXCLUDED_BLOCK_TYPES
+		);
+		$excluded_block_types = array_values( array_filter( $excluded_block_types, 'is_string' ) );
+
+		$blocks  = $this->strip_excluded_blocks( parse_blocks( $content ), $excluded_block_types );
 		$content = '';
 		foreach ( $blocks as $block ) {
 			$tag = $this->get_block_tag( $block );
@@ -183,6 +209,81 @@ class InDesign_Converter {
 			}
 		}
 		return $content;
+	}
+
+	/**
+	 * Recursively remove excluded block types from a block tree.
+	 *
+	 * Strips both the top-level block and any occurrences nested inside
+	 * container blocks (core/group, core/columns, etc.) by filtering
+	 * innerBlocks and the corresponding innerContent null placeholders.
+	 *
+	 * @param array $blocks               Block list to filter.
+	 * @param array $excluded_block_types Block type names to remove.
+	 *
+	 * @return array Filtered block list.
+	 */
+	private function strip_excluded_blocks( $blocks, $excluded_block_types ) {
+		$filtered = [];
+		foreach ( $blocks as $block ) {
+			if ( $this->is_excluded_block( $block['blockName'], $excluded_block_types ) ) {
+				continue;
+			}
+			if ( ! empty( $block['innerBlocks'] ) ) {
+				$new_inner_blocks  = [];
+				$new_inner_content = [];
+				$inner_index       = 0;
+				foreach ( $block['innerContent'] as $chunk ) {
+					if ( is_string( $chunk ) ) {
+						$new_inner_content[] = $chunk;
+					} else {
+						if ( ! isset( $block['innerBlocks'][ $inner_index ] ) ) {
+							$inner_index++;
+							continue;
+						}
+						$inner_block = $block['innerBlocks'][ $inner_index++ ];
+						if ( ! $this->is_excluded_block( $inner_block['blockName'], $excluded_block_types ) ) {
+							$new_inner_blocks[]  = $inner_block;
+							$new_inner_content[] = null;
+						}
+					}
+				}
+				$block['innerBlocks']  = $this->strip_excluded_blocks( $new_inner_blocks, $excluded_block_types );
+				$block['innerContent'] = $new_inner_content;
+			}
+			$filtered[] = $block;
+		}
+		return $filtered;
+	}
+
+	/**
+	 * Check whether a block name should be excluded from export.
+	 *
+	 * Legacy core-embed/* block names (pre-WP 5.6) follow the same exclusion
+	 * state as core/embed — if core/embed is in the filtered list, its legacy
+	 * variants are excluded too.
+	 *
+	 * @param string   $block_name           Block type name.
+	 * @param string[] $excluded_block_types Filtered list of excluded block types.
+	 *
+	 * @return bool True if the block should be excluded.
+	 */
+	private function is_excluded_block( $block_name, $excluded_block_types ) {
+		// parse_blocks() returns null blockName for freeform/whitespace chunks.
+		if ( ! is_string( $block_name ) || '' === $block_name ) {
+			return false;
+		}
+		if ( in_array( $block_name, $excluded_block_types, true ) ) {
+			return true;
+		}
+		// Legacy core-embed/* variants follow core/embed's exclusion state.
+		if (
+			in_array( 'core/embed', $excluded_block_types, true )
+			&& 0 === strpos( $block_name, 'core-embed/' )
+		) {
+			return true;
+		}
+		return false;
 	}
 
 	/**

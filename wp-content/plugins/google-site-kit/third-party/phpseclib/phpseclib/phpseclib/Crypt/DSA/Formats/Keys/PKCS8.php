@@ -31,7 +31,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger;
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-abstract class PKCS8 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\Formats\Keys\PKCS8
+abstract class PKCS8 extends Progenitor
 {
     /**
      * OID Name
@@ -62,21 +62,21 @@ abstract class PKCS8 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
     {
         $key = parent::load($key, $password);
         $type = isset($key['privateKey']) ? 'privateKey' : 'publicKey';
-        $decoded = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::decodeBER($key[$type . 'Algorithm']['parameters']->element);
+        $decoded = ASN1::decodeBER($key[$type . 'Algorithm']['parameters']->element);
         if (!$decoded) {
             throw new \RuntimeException('Unable to decode BER of parameters');
         }
-        $components = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::asn1map($decoded[0], \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\DSAParams::MAP);
-        if (!\is_array($components)) {
+        $components = ASN1::asn1map($decoded[0], Maps\DSAParams::MAP);
+        if (!is_array($components)) {
             throw new \RuntimeException('Unable to perform ASN1 mapping on parameters');
         }
-        $decoded = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::decodeBER($key[$type]);
+        $decoded = ASN1::decodeBER($key[$type]);
         if (empty($decoded)) {
             throw new \RuntimeException('Unable to decode BER');
         }
         $var = $type == 'privateKey' ? 'x' : 'y';
-        $components[$var] = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::asn1map($decoded[0], \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\DSAPublicKey::MAP);
-        if (!$components[$var] instanceof \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger) {
+        $components[$var] = ASN1::asn1map($decoded[0], Maps\DSAPublicKey::MAP);
+        if (!$components[$var] instanceof BigInteger) {
             throw new \RuntimeException('Unable to perform ASN1 mapping');
         }
         if (isset($key['meta'])) {
@@ -96,12 +96,12 @@ abstract class PKCS8 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
      * @param array $options optional
      * @return string
      */
-    public static function savePrivateKey(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $p, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $q, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $g, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $y, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $x, $password = '', array $options = [])
+    public static function savePrivateKey(BigInteger $p, BigInteger $q, BigInteger $g, BigInteger $y, BigInteger $x, $password = '', array $options = [])
     {
         $params = ['p' => $p, 'q' => $q, 'g' => $g];
-        $params = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::encodeDER($params, \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\DSAParams::MAP);
-        $params = new \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Element($params);
-        $key = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::encodeDER($x, \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\DSAPublicKey::MAP);
+        $params = ASN1::encodeDER($params, Maps\DSAParams::MAP);
+        $params = new ASN1\Element($params);
+        $key = ASN1::encodeDER($x, Maps\DSAPublicKey::MAP);
         return self::wrapPrivateKey($key, [], $params, $password, null, '', $options);
     }
     /**
@@ -114,12 +114,12 @@ abstract class PKCS8 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\Comm
      * @param array $options optional
      * @return string
      */
-    public static function savePublicKey(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $p, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $q, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $g, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $y, array $options = [])
+    public static function savePublicKey(BigInteger $p, BigInteger $q, BigInteger $g, BigInteger $y, array $options = [])
     {
         $params = ['p' => $p, 'q' => $q, 'g' => $g];
-        $params = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::encodeDER($params, \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\DSAParams::MAP);
-        $params = new \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Element($params);
-        $key = \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::encodeDER($y, \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\DSAPublicKey::MAP);
+        $params = ASN1::encodeDER($params, Maps\DSAParams::MAP);
+        $params = new ASN1\Element($params);
+        $key = ASN1::encodeDER($y, Maps\DSAPublicKey::MAP);
         return self::wrapPublicKey($key, $params, null, $options);
     }
 }

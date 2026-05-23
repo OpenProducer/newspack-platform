@@ -19,6 +19,7 @@ function newspack_blocks_register_donate() {
 	register_block_type(
 		'newspack-blocks/' . $block_json['name'],
 		[
+			'api_version'     => $block_json['apiVersion'],
 			'attributes'      => $block_json['attributes'],
 			'render_callback' => 'Newspack_Blocks_Donate_Renderer::render',
 			'supports'        => $block_json['supports'],

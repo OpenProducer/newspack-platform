@@ -57,6 +57,7 @@ function registerPlaceholderBlock( blockName, { title, description, icon, messag
 		);
 	};
 	registerBlockType( blockName, {
+		apiVersion: 3,
 		title,
 		description,
 		icon,

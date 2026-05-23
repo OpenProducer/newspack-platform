@@ -25,7 +25,7 @@ class Account extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $accountId;
-    protected $featuresType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\AccountFeatures::class;
+    protected $featuresType = AccountFeatures::class;
     protected $featuresDataType = '';
     /**
      * The fingerprint of the GTM Account as computed at storage time. This value
@@ -83,7 +83,7 @@ class Account extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param AccountFeatures $features
      */
-    public function setFeatures(\Google\Site_Kit_Dependencies\Google\Service\TagManager\AccountFeatures $features)
+    public function setFeatures(AccountFeatures $features)
     {
         $this->features = $features;
     }
@@ -181,4 +181,4 @@ class Account extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Account::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Account');
+class_alias(Account::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Account');

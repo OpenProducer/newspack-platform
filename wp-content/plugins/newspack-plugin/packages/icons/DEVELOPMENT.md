@@ -42,7 +42,7 @@ All icons in this package are designed on a **24×24 grid/viewbox**. This ensure
 
 ## Available Icons
 
-This package includes 47 custom icons:
+This package includes 48 custom icons:
 
 - `accessibility` - Accessibility icon
 - `activity` - Activity icon
@@ -59,6 +59,7 @@ This package includes 47 custom icons:
 - `browser` - Browser icon
 - `collections` - Collections icon
 - `contentCarousel` - Content carousel icon
+- `contentLocked` - Content locked icon
 - `contentLoop` - Content loop icon
 - `corrections` - Corrections icon
 - `countdown` - Countdown icon
@@ -66,6 +67,7 @@ This package includes 47 custom icons:
 - `emailAd` - Email advertisement icon
 - `emailCheck` - Email check icon
 - `emailError` - Email error icon
+- `emailPremium` - Email premium icon
 - `emailSend` - Email send icon
 - `gift` - Gift icon
 - `hand` - Hand icon

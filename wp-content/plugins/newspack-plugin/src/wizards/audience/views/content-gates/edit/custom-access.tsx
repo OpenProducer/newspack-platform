@@ -1,27 +1,24 @@
 /**
  * WordPress dependencies.
  */
-import { __ } from '@wordpress/i18n';
 import { CardBody, CardDivider } from '@wordpress/components';
 import { useCallback } from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
-import { Button } from '../../../../../../packages/components/src';
-import { getEditGateLayoutUrl } from '../utils';
 import Metering from './metering';
 import AccessRules from './access-rules';
 
 interface CustomAccessProps {
-	gateId?: number;
 	customAccess: CustomAccess;
 	onChange: ( customAccess: Partial< CustomAccess > ) => void;
+	isNewsletter?: boolean;
 }
 
-export default function CustomAccess( { gateId, customAccess, onChange }: CustomAccessProps ) {
-	// Get the first group of rules (UI currently only supports a single group).
-	const currentRules = customAccess.access_rules[ 0 ] || [];
+export default function CustomAccess( { customAccess, onChange, isNewsletter = false }: CustomAccessProps ) {
+	// Flatten grouped rules for display (each group has one rule in OR mode).
+	const currentRules = customAccess.access_rules.map( group => group[ 0 ] ).filter( Boolean );
 
 	const handleChange = useCallback(
 		( value: Partial< CustomAccess > ) => {
@@ -37,29 +34,23 @@ export default function CustomAccess( { gateId, customAccess, onChange }: Custom
 
 	const handleRulesChange = useCallback(
 		( rules: GateAccessRule[] ) => {
-			// Wrap rules in a single group to maintain grouped format.
-			// If no rules, set empty array to avoid [ [] ] which would pass readiness checks.
-			handleChange( { access_rules: rules.length ? [ rules ] : [] } );
+			// Each rule is its own group for OR logic: [ [rule1], [rule2] ].
+			handleChange( { access_rules: rules.map( rule => [ rule ] ) } );
 		},
 		[ handleChange ]
 	);
 
 	return (
 		<>
-			{ gateId ? (
+			{ ! isNewsletter && (
 				<>
 					<CardBody size="small">
-						<Button variant="secondary" href={ getEditGateLayoutUrl( gateId, 'custom_access' ) }>
-							{ __( 'Edit Layout', 'newspack-plugin' ) }
-						</Button>
+						<Metering metering={ customAccess.metering } onChange={ ( metering: Metering ) => handleChange( { metering } ) } />
 					</CardBody>
 					<CardDivider />
 				</>
-			) : null }
+			) }
 			<AccessRules rules={ currentRules } onChange={ handleRulesChange } />
-			<CardBody size="small">
-				<Metering metering={ customAccess.metering } onChange={ ( metering: Metering ) => handleChange( { metering } ) } />
-			</CardBody>
 		</>
 	);
 }

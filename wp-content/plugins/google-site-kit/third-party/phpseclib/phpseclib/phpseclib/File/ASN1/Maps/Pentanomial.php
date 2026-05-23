@@ -20,11 +20,11 @@ use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1;
  */
 abstract class Pentanomial
 {
-    const MAP = ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_SEQUENCE, 'children' => [
-        'k1' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_INTEGER],
+    const MAP = ['type' => ASN1::TYPE_SEQUENCE, 'children' => [
+        'k1' => ['type' => ASN1::TYPE_INTEGER],
         // k1 > 0
-        'k2' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_INTEGER],
+        'k2' => ['type' => ASN1::TYPE_INTEGER],
         // k2 > k1
-        'k3' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_INTEGER],
+        'k3' => ['type' => ASN1::TYPE_INTEGER],
     ]];
 }

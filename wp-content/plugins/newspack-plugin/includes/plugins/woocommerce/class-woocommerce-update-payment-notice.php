@@ -85,6 +85,11 @@ class WooCommerce_Update_Payment_Notice {
 			return;
 		}
 
+		// Don't show in modal checkout frame.
+		if ( method_exists( 'Newspack_Blocks\Modal_Checkout', 'is_modal_checkout' ) && \Newspack_Blocks\Modal_Checkout::is_modal_checkout() ) {
+			return;
+		}
+
 		$notices = self::get_notices();
 		if ( empty( $notices ) ) {
 			return;
@@ -139,8 +144,12 @@ class WooCommerce_Update_Payment_Notice {
 				continue;
 			}
 
-			$line_item = reset( $subscription->get_items() );
-			$product   = wc_get_product( $line_item->get_product_id() );
+			$line_items = $subscription->get_items();
+			if ( empty( $line_items ) ) {
+				continue;
+			}
+			$line_item  = reset( $line_items );
+			$product    = wc_get_product( $line_item->get_product_id() );
 			// If the product has a parent, use the parent product.
 			if ( $product->get_parent_id() ) {
 				$product = wc_get_product( $product->get_parent_id() );
@@ -174,7 +183,7 @@ class WooCommerce_Update_Payment_Notice {
 				];
 			}
 
-			$notices[] = self::get_message( $subscription ) . ' ' . sprintf(
+			$notice = self::get_message( $subscription ) . ' ' . sprintf(
 					/* translators: %1$s: action URL, %2$s: link attributes */
 				__( 'Please <a href="%1$s" %2$s>update your payment method</a>.', 'newspack-plugin' ),
 				esc_url( $url ),
@@ -188,6 +197,18 @@ class WooCommerce_Update_Payment_Notice {
 						array_values( $link_attrs )
 					)
 				)
+			);
+			$notices[] = $notice;
+			add_filter(
+				'newspack_ui_notice_is_urgent',
+				function( $is_urgent, $printed_notice ) use ( $notice ) {
+					if ( $printed_notice === $notice ) {
+						$is_urgent = true;
+					}
+					return $is_urgent;
+				},
+				10,
+				2
 			);
 		}
 

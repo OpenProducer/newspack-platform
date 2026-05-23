@@ -30,7 +30,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Math\PrimeField\Integer as PrimeInte
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-class Prime extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseCurves\Base
+class Prime extends Base
 {
     /**
      * Prime Field Integer factory
@@ -101,21 +101,21 @@ class Prime extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseCurves
     /**
      * Sets the modulo
      */
-    public function setModulo(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $modulo)
+    public function setModulo(BigInteger $modulo)
     {
         $this->modulo = $modulo;
-        $this->factory = new \Google\Site_Kit_Dependencies\phpseclib3\Math\PrimeField($modulo);
-        $this->two = $this->factory->newInteger(new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(2));
-        $this->three = $this->factory->newInteger(new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(3));
+        $this->factory = new PrimeField($modulo);
+        $this->two = $this->factory->newInteger(new BigInteger(2));
+        $this->three = $this->factory->newInteger(new BigInteger(3));
         // used by jacobian coordinates
-        $this->one = $this->factory->newInteger(new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(1));
-        $this->four = $this->factory->newInteger(new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(4));
-        $this->eight = $this->factory->newInteger(new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(8));
+        $this->one = $this->factory->newInteger(new BigInteger(1));
+        $this->four = $this->factory->newInteger(new BigInteger(4));
+        $this->eight = $this->factory->newInteger(new BigInteger(8));
     }
     /**
      * Set coefficients a and b
      */
-    public function setCoefficients(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $a, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger $b)
+    public function setCoefficients(BigInteger $a, BigInteger $b)
     {
         if (!isset($this->factory)) {
             throw new \RuntimeException('setModulo needs to be called before this method');
@@ -133,15 +133,15 @@ class Prime extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseCurves
     public function setBasePoint($x, $y)
     {
         switch (\true) {
-            case !$x instanceof \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger && !$x instanceof \Google\Site_Kit_Dependencies\phpseclib3\Math\PrimeField\Integer:
-                throw new \UnexpectedValueException('Google\\Site_Kit_Dependencies\\Argument 1 passed to Prime::setBasePoint() must be an instance of either BigInteger or PrimeField\\Integer');
-            case !$y instanceof \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger && !$y instanceof \Google\Site_Kit_Dependencies\phpseclib3\Math\PrimeField\Integer:
-                throw new \UnexpectedValueException('Google\\Site_Kit_Dependencies\\Argument 2 passed to Prime::setBasePoint() must be an instance of either BigInteger or PrimeField\\Integer');
+            case !$x instanceof BigInteger && !$x instanceof PrimeInteger:
+                throw new \UnexpectedValueException('Argument 1 passed to Prime::setBasePoint() must be an instance of either BigInteger or PrimeField\Integer');
+            case !$y instanceof BigInteger && !$y instanceof PrimeInteger:
+                throw new \UnexpectedValueException('Argument 2 passed to Prime::setBasePoint() must be an instance of either BigInteger or PrimeField\Integer');
         }
         if (!isset($this->factory)) {
             throw new \RuntimeException('setModulo needs to be called before this method');
         }
-        $this->p = [$x instanceof \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger ? $this->factory->newInteger($x) : $x, $y instanceof \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger ? $this->factory->newInteger($y) : $y];
+        $this->p = [$x instanceof BigInteger ? $this->factory->newInteger($x) : $x, $y instanceof BigInteger ? $this->factory->newInteger($y) : $y];
     }
     /**
      * Retrieve the base point as an array
@@ -258,11 +258,11 @@ class Prime extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseCurves
         if (!isset($this->factory)) {
             throw new \RuntimeException('setModulo needs to be called before this method');
         }
-        if (!\count($p) || !\count($q)) {
-            if (\count($q)) {
+        if (!count($p) || !count($q)) {
+            if (count($q)) {
                 return $q;
             }
-            if (\count($p)) {
+            if (count($p)) {
                 return $p;
             }
             return [];
@@ -358,7 +358,7 @@ class Prime extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseCurves
         if (!isset($this->factory)) {
             throw new \RuntimeException('setModulo needs to be called before this method');
         }
-        if (!\count($p)) {
+        if (!count($p)) {
             return [];
         }
         // use jacobian coordinates
@@ -381,8 +381,8 @@ class Prime extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseCurves
      */
     public function derivePoint($m)
     {
-        $y = \ord(\Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings::shift($m));
-        $x = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger($m, 256);
+        $y = ord(Strings::shift($m));
+        $x = new BigInteger($m, 256);
         $xp = $this->convertInteger($x);
         switch ($y) {
             case 2:
@@ -456,7 +456,7 @@ class Prime extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseCurves
      */
     public function multiplyAddPoints(array $points, array $scalars)
     {
-        $length = \count($points);
+        $length = count($points);
         foreach ($points as &$point) {
             $point = $this->convertToInternal($point);
         }
@@ -475,7 +475,7 @@ class Prime extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseCurves
             if ($wndWidth[$a] != 1 || $wndWidth[$b] != 1) {
                 $naf[$a] = $scalars[$a]->getNAF($wndWidth[$a]);
                 $naf[$b] = $scalars[$b]->getNAF($wndWidth[$b]);
-                $max = \max(\count($naf[$a]), \count($naf[$b]), $max);
+                $max = max(count($naf[$a]), count($naf[$b]), $max);
                 continue;
             }
             $comb = [
@@ -509,10 +509,10 @@ class Prime extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseCurves
                 3,
             ];
             $jsf = self::getJSFPoints($scalars[$a], $scalars[$b]);
-            $max = \max(\count($jsf[0]), $max);
+            $max = max(count($jsf[0]), $max);
             if ($max > 0) {
-                $naf[$a] = \array_fill(0, $max, 0);
-                $naf[$b] = \array_fill(0, $max, 0);
+                $naf[$a] = array_fill(0, $max, 0);
+                $naf[$b] = array_fill(0, $max, 0);
             } else {
                 $naf[$a] = [];
                 $naf[$b] = [];
@@ -604,18 +604,18 @@ class Prime extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseCurves
      *
      * @return int[]
      */
-    private static function getJSFPoints(\Google\Site_Kit_Dependencies\phpseclib3\Math\Common\FiniteField\Integer $k1, \Google\Site_Kit_Dependencies\phpseclib3\Math\Common\FiniteField\Integer $k2)
+    private static function getJSFPoints(Integer $k1, Integer $k2)
     {
         static $three;
         if (!isset($three)) {
-            $three = new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(3);
+            $three = new BigInteger(3);
         }
         $jsf = [[], []];
         $k1 = $k1->toBigInteger();
         $k2 = $k2->toBigInteger();
         $d1 = 0;
         $d2 = 0;
-        while ($k1->compare(new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(-$d1)) > 0 || $k2->compare(new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger(-$d2)) > 0) {
+        while ($k1->compare(new BigInteger(-$d1)) > 0 || $k2->compare(new BigInteger(-$d2)) > 0) {
             // first phase
             $m14 = $k1->testBit(0) + 2 * $k1->testBit(1);
             $m14 += $d1;
@@ -666,7 +666,7 @@ class Prime extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseCurves
      * To convert a Jacobian Coordinate to an Affine Point
      * you do (x / z^2, y / z^3)
      *
-     * @return \phpseclib3\Math\PrimeField\Integer[]
+     * @return PrimeInteger[]
      */
     public function convertToAffine(array $p)
     {
@@ -681,7 +681,7 @@ class Prime extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\BaseCurves
     /**
      * Converts an affine point to a jacobian coordinate
      *
-     * @return \phpseclib3\Math\PrimeField\Integer[]
+     * @return PrimeInteger[]
      */
     public function convertToInternal(array $p)
     {

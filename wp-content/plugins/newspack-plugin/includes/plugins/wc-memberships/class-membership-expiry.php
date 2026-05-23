@@ -36,8 +36,14 @@ class Membership_Expiry {
 			return $cancel_membership;
 		}
 		$membership_product_id = $user_membership->get_product_id();
+		$cancelling_subscription_id = $user_membership->get_subscription_id();
 		$active_subscription_ids = WooCommerce_Connection::get_active_subscriptions_for_user( $user_membership->get_user_id() );
 		foreach ( $active_subscription_ids as $subscription_id ) {
+			// Skip the subscription that is being cancelled — it may still appear as "active"
+			// (e.g. in `pending-cancel` status) when this filter runs.
+			if ( $subscription_id == $cancelling_subscription_id ) {
+				continue;
+			}
 			$subscription = \wcs_get_subscription( $subscription_id );
 			foreach ( $subscription->get_items() as $item ) {
 				if ( $item->get_product()->get_id() == $membership_product_id ) {

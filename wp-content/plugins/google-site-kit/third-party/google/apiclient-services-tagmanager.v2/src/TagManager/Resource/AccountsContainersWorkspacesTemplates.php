@@ -39,11 +39,11 @@ class AccountsContainersWorkspacesTemplates extends \Google\Site_Kit_Dependencie
      * @return CustomTemplate
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\TagManager\CustomTemplate $postBody, $optParams = [])
+    public function create($parent, CustomTemplate $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\CustomTemplate::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], CustomTemplate::class);
     }
     /**
      * Deletes a GTM Template. (templates.delete)
@@ -55,7 +55,7 @@ class AccountsContainersWorkspacesTemplates extends \Google\Site_Kit_Dependencie
     public function delete($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('delete', [$params]);
     }
     /**
@@ -69,8 +69,8 @@ class AccountsContainersWorkspacesTemplates extends \Google\Site_Kit_Dependencie
     public function get($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\CustomTemplate::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], CustomTemplate::class);
     }
     /**
      * Imports a GTM Custom Template from Gallery. (templates.import_from_gallery)
@@ -92,8 +92,8 @@ class AccountsContainersWorkspacesTemplates extends \Google\Site_Kit_Dependencie
     public function import_from_gallery($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('import_from_gallery', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\CustomTemplate::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('import_from_gallery', [$params], CustomTemplate::class);
     }
     /**
      * Lists all GTM Templates of a GTM container workspace.
@@ -110,8 +110,8 @@ class AccountsContainersWorkspacesTemplates extends \Google\Site_Kit_Dependencie
     public function listAccountsContainersWorkspacesTemplates($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\ListTemplatesResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListTemplatesResponse::class);
     }
     /**
      * Reverts changes to a GTM Template in a GTM Workspace. (templates.revert)
@@ -127,8 +127,8 @@ class AccountsContainersWorkspacesTemplates extends \Google\Site_Kit_Dependencie
     public function revert($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('revert', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\RevertTemplateResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('revert', [$params], RevertTemplateResponse::class);
     }
     /**
      * Updates a GTM Template. (templates.update)
@@ -142,12 +142,12 @@ class AccountsContainersWorkspacesTemplates extends \Google\Site_Kit_Dependencie
      * @return CustomTemplate
      * @throws \Google\Service\Exception
      */
-    public function update($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\CustomTemplate $postBody, $optParams = [])
+    public function update($path, CustomTemplate $postBody, $optParams = [])
     {
         $params = ['path' => $path, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('update', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\CustomTemplate::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('update', [$params], CustomTemplate::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Resource\AccountsContainersWorkspacesTemplates::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Resource_AccountsContainersWorkspacesTemplates');
+class_alias(AccountsContainersWorkspacesTemplates::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Resource_AccountsContainersWorkspacesTemplates');

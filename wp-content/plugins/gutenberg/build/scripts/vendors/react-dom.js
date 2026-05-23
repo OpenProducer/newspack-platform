@@ -1,4 +1,3 @@
-"use strict";
 var ReactDOM = (() => {
   var __getOwnPropNames = Object.getOwnPropertyNames;
   var __commonJS = (cb, mod) => function __require() {
@@ -21641,6 +21640,7 @@ var ReactDOM = (() => {
   // node_modules/react-dom/index.js
   var require_react_dom = __commonJS({
     "node_modules/react-dom/index.js"(exports, module) {
+      "use strict";
       if (false) {
         checkDCE();
         module.exports = null;
@@ -21649,7 +21649,48 @@ var ReactDOM = (() => {
       }
     }
   });
-  return require_react_dom();
+
+  // node_modules/react-dom/client.js
+  var require_client = __commonJS({
+    "node_modules/react-dom/client.js"(exports) {
+      "use strict";
+      var m = require_react_dom();
+      if (false) {
+        exports.createRoot = m.createRoot;
+        exports.hydrateRoot = m.hydrateRoot;
+      } else {
+        i = m.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+        exports.createRoot = function(c, o) {
+          i.usingClientEntryPoint = true;
+          try {
+            return m.createRoot(c, o);
+          } finally {
+            i.usingClientEntryPoint = false;
+          }
+        };
+        exports.hydrateRoot = function(c, h, o) {
+          i.usingClientEntryPoint = true;
+          try {
+            return m.hydrateRoot(c, h, o);
+          } finally {
+            i.usingClientEntryPoint = false;
+          }
+        };
+      }
+      var i;
+    }
+  });
+
+  // <stdin>
+  var require_stdin = __commonJS({
+    "<stdin>"(exports, module) {
+      module.exports = {
+        ...require_react_dom(),
+        ...require_client()
+      };
+    }
+  });
+  return require_stdin();
 })();
 /*! Bundled license information:
 

@@ -631,6 +631,13 @@ p.has-background {
 	}
 }
 
+// Override Gutenberg's default pullquote border color for themes that don't have a pullquote border defined.
+body:not(.wp-child-theme-newspack-joseph):not(.wp-child-theme-newspack-nelson) .wp-block-pullquote {
+	&.wp-block-pullquote:not([style*='border']) {
+		border-color: transparent !important;
+	}
+}
+
 //! Latest Comments
 .wp-block-latest-comments {
 	padding-left: 0;
@@ -925,12 +932,9 @@ p.has-background {
 
 //! Blockquote
 .wp-block-quote {
-	&:not(.is-large),
-	&:not(.is-style-large) {
-		border-width: 2px;
-		border-color: var(--newspack-theme-color-link);
-		padding-top: 0;
-		padding-bottom: 0;
+	&:not(.is-large):not(.is-style-large):not(.is-style-plain) {
+		border-left: 2px solid var(--newspack-theme-color-link);
+		padding: 0 0 0 1em;
 	}
 
 	p {
@@ -1018,6 +1022,27 @@ p.has-background {
 	}
 }
 
+.wp-lightbox-navigation-button,
+.wp-lightbox-close-button {
+	&,
+	&:hover,
+	&:focus,
+	&:active {
+		color: unset !important
+	}
+}
+
+//! Icon
+.wp-block-icon {
+	&.alignleft,
+	&.alignright {
+		svg {
+			height: auto;
+			max-width: 100%;
+		}
+	}
+}
+
 //! Separator
 .wp-block-separator,
 hr {
@@ -1072,6 +1097,7 @@ hr {
 
 //! Table
 .wp-block-table {
+	box-sizing: border-box;
 	&.is-style-stripes td,
 	&.is-style-stripes th {
 		border-color: var(--newspack-theme-color-text-light);
@@ -1197,6 +1223,10 @@ hr {
 		&:last-child {
 			margin-bottom: 0;
 		}
+	}
+
+	&.has-background {
+		padding: 1.25em 2.375em;
 	}
 
 	@include utilities.media( mobile ) {

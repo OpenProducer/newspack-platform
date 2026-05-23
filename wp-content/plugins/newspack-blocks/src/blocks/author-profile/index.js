@@ -6,13 +6,15 @@ import colors from 'newspack-colors';
 /**
  * WordPress dependencies
  */
-import { __, _x } from '@wordpress/i18n';
+import { InnerBlocks } from '@wordpress/block-editor';
+import { __ } from '@wordpress/i18n';
 import { postAuthor } from '@wordpress/icons';
 
 /**
  * Internal dependencies
  */
 import edit from './edit';
+import variations from './variations';
 
 /**
  * Style dependencies - will load in editor
@@ -20,7 +22,7 @@ import edit from './edit';
 import './editor.scss';
 import './view.scss';
 import metadata from './block.json';
-const { name, attributes, category } = metadata;
+const { name, attributes, apiVersion, category } = metadata;
 
 // Name must be exported separately.
 export { name };
@@ -37,23 +39,28 @@ authorCustomFields.forEach( field => {
 } );
 
 export const settings = {
+	apiVersion,
 	title,
 	icon: {
 		src: postAuthor,
 		foreground: colors[ 'primary-400' ],
 	},
-	keywords: [ __( 'author', 'newspack-blocks' ), __( 'profile', 'newspack-blocks' ) ],
-	description: __( 'Display an author profile card.', 'newspack-blocks' ),
-	styles: [
-		{ name: 'default', label: _x( 'Default', 'block style', 'newspack-blocks' ), isDefault: true },
-		{ name: 'center', label: _x( 'Centered', 'block style', 'newspack-blocks' ) },
-	],
 	attributes,
 	category,
+	keywords: [ __( 'author', 'newspack-blocks' ), __( 'profile', 'newspack-blocks' ) ],
+	description: __( 'Display an author profile card.', 'newspack-blocks' ),
 	supports: {
 		html: false,
 		default: '',
 	},
 	edit,
-	save: () => null, // to use view.php
+	variations,
+	// Save inner blocks for nested mode (layoutVersion 2).
+	// For flat mode (layoutVersion 1), return null to use server-side rendering only.
+	save: props => {
+		if ( props.attributes.layoutVersion === 2 ) {
+			return <InnerBlocks.Content />;
+		}
+		return null;
+	},
 };

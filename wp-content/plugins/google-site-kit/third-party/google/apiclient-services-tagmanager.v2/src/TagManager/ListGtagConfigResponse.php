@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 class ListGtagConfigResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'gtagConfig';
-    protected $gtagConfigType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\GtagConfig::class;
+    protected $gtagConfigType = GtagConfig::class;
     protected $gtagConfigDataType = 'array';
     /**
      * Continuation token for fetching the next page of results.
@@ -62,4 +62,4 @@ class ListGtagConfigResponse extends \Google\Site_Kit_Dependencies\Google\Collec
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ListGtagConfigResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_ListGtagConfigResponse');
+class_alias(ListGtagConfigResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_ListGtagConfigResponse');

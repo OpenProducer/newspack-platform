@@ -67,7 +67,7 @@ class MediaFileUpload
      * @param int $chunkSize File will be uploaded in chunks of this many bytes.
      * only used if resumable=True
      */
-    public function __construct(\Google\Site_Kit_Dependencies\Google\Client $client, \Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request, $mimeType, $data, $resumable = \false, $chunkSize = 0)
+    public function __construct(Client $client, RequestInterface $request, $mimeType, $data, $resumable = \false, $chunkSize = 0)
     {
         $this->client = $client;
         $this->request = $request;
@@ -103,11 +103,11 @@ class MediaFileUpload
     {
         $resumeUri = $this->getResumeUri();
         if (\false == $chunk) {
-            $chunk = \substr($this->data, $this->progress, $this->chunkSize);
+            $chunk = substr($this->data, $this->progress, $this->chunkSize);
         }
-        $lastBytePos = $this->progress + \strlen($chunk) - 1;
-        $headers = ['content-range' => "bytes {$this->progress}-{$lastBytePos}/{$this->size}", 'content-length' => (string) \strlen($chunk), 'expect' => ''];
-        $request = new \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Request('PUT', $resumeUri, $headers, \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::streamFor($chunk));
+        $lastBytePos = $this->progress + strlen($chunk) - 1;
+        $headers = ['content-range' => "bytes {$this->progress}-{$lastBytePos}/{$this->size}", 'content-length' => (string) strlen($chunk), 'expect' => ''];
+        $request = new Request('PUT', $resumeUri, $headers, Psr7\Utils::streamFor($chunk));
         return $this->makePutRequest($request);
     }
     /**
@@ -127,7 +127,7 @@ class MediaFileUpload
      * @return false|mixed false when the upload is unfinished or the decoded http response
      *
      */
-    private function makePutRequest(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request)
+    private function makePutRequest(RequestInterface $request)
     {
         $response = $this->client->execute($request);
         $this->httpResultCode = $response->getStatusCode();
@@ -135,7 +135,7 @@ class MediaFileUpload
             // Track the amount uploaded.
             $range = $response->getHeaderLine('range');
             if ($range) {
-                $range_array = \explode('-', $range);
+                $range_array = explode('-', $range);
                 $this->progress = (int) $range_array[1] + 1;
             }
             // Allow for changing upload URLs.
@@ -146,7 +146,7 @@ class MediaFileUpload
             // No problems, but upload not complete.
             return \false;
         }
-        return \Google\Site_Kit_Dependencies\Google\Http\REST::decodeHttpResponse($response, $this->request);
+        return REST::decodeHttpResponse($response, $this->request);
     }
     /**
      * Resume a previously unfinished upload
@@ -156,7 +156,7 @@ class MediaFileUpload
     {
         $this->resumeUri = $resumeUri;
         $headers = ['content-range' => "bytes */{$this->size}", 'content-length' => '0'];
-        $httpRequest = new \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Request('PUT', $this->resumeUri, $headers);
+        $httpRequest = new Request('PUT', $this->resumeUri, $headers);
         return $this->makePutRequest($httpRequest);
     }
     /**
@@ -169,32 +169,32 @@ class MediaFileUpload
         $request = $this->request;
         $postBody = '';
         $contentType = \false;
-        $meta = \json_decode((string) $request->getBody(), \true);
+        $meta = json_decode((string) $request->getBody(), \true);
         $uploadType = $this->getUploadType($meta);
-        $request = $request->withUri(\Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Uri::withQueryValue($request->getUri(), 'uploadType', $uploadType));
+        $request = $request->withUri(Uri::withQueryValue($request->getUri(), 'uploadType', $uploadType));
         $mimeType = $this->mimeType ?: $request->getHeaderLine('content-type');
         if (self::UPLOAD_RESUMABLE_TYPE == $uploadType) {
             $contentType = $mimeType;
-            $postBody = \is_string($meta) ? $meta : \json_encode($meta);
+            $postBody = is_string($meta) ? $meta : json_encode($meta);
         } elseif (self::UPLOAD_MEDIA_TYPE == $uploadType) {
             $contentType = $mimeType;
             $postBody = $this->data;
         } elseif (self::UPLOAD_MULTIPART_TYPE == $uploadType) {
             // This is a multipart/related upload.
-            $boundary = $this->boundary ?: \mt_rand();
-            $boundary = \str_replace('"', '', $boundary);
+            $boundary = $this->boundary ?: mt_rand();
+            $boundary = str_replace('"', '', $boundary);
             $contentType = 'multipart/related; boundary=' . $boundary;
             $related = "--{$boundary}\r\n";
             $related .= "Content-Type: application/json; charset=UTF-8\r\n";
-            $related .= "\r\n" . \json_encode($meta) . "\r\n";
+            $related .= "\r\n" . json_encode($meta) . "\r\n";
             $related .= "--{$boundary}\r\n";
             $related .= "Content-Type: {$mimeType}\r\n";
             $related .= "Content-Transfer-Encoding: base64\r\n";
-            $related .= "\r\n" . \base64_encode($this->data) . "\r\n";
+            $related .= "\r\n" . base64_encode($this->data) . "\r\n";
             $related .= "--{$boundary}--";
             $postBody = $related;
         }
-        $request = $request->withBody(\Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::streamFor($postBody));
+        $request = $request->withBody(Psr7\Utils::streamFor($postBody));
         if ($contentType) {
             $request = $request->withHeader('content-type', $contentType);
         }
@@ -240,26 +240,26 @@ class MediaFileUpload
             return $location;
         }
         $message = $code;
-        $body = \json_decode((string) $this->request->getBody(), \true);
+        $body = json_decode((string) $this->request->getBody(), \true);
         if (isset($body['error']['errors'])) {
             $message .= ': ';
             foreach ($body['error']['errors'] as $error) {
                 $message .= "{$error['domain']}, {$error['message']};";
             }
-            $message = \rtrim($message, ';');
+            $message = rtrim($message, ';');
         }
         $error = "Failed to start the resumable upload (HTTP {$message})";
         $this->client->getLogger()->error($error);
-        throw new \Google\Site_Kit_Dependencies\Google\Exception($error);
+        throw new GoogleException($error);
     }
     private function transformToUploadUrl()
     {
-        $parts = \parse_url((string) $this->request->getUri());
+        $parts = parse_url((string) $this->request->getUri());
         if (!isset($parts['path'])) {
             $parts['path'] = '';
         }
         $parts['path'] = '/upload' . $parts['path'];
-        $uri = \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Uri::fromParts($parts);
+        $uri = Uri::fromParts($parts);
         $this->request = $this->request->withUri($uri);
     }
     public function setChunkSize($chunkSize)

@@ -27,7 +27,7 @@ class GoogleAnalyticsAdminV1alphaListSearchAds360LinksResponse extends \Google\S
      * @var string
      */
     public $nextPageToken;
-    protected $searchAds360LinksType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSearchAds360Link::class;
+    protected $searchAds360LinksType = GoogleAnalyticsAdminV1alphaSearchAds360Link::class;
     protected $searchAds360LinksDataType = 'array';
     /**
      * A token, which can be sent as `page_token` to retrieve the next page. If
@@ -64,4 +64,4 @@ class GoogleAnalyticsAdminV1alphaListSearchAds360LinksResponse extends \Google\S
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListSearchAds360LinksResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListSearchAds360LinksResponse');
+class_alias(GoogleAnalyticsAdminV1alphaListSearchAds360LinksResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaListSearchAds360LinksResponse');

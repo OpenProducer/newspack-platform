@@ -124,4 +124,4 @@ class GoogleAnalyticsAdminV1alphaGoogleSignalsSettings extends \Google\Site_Kit_
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaGoogleSignalsSettings::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaGoogleSignalsSettings');
+class_alias(GoogleAnalyticsAdminV1alphaGoogleSignalsSettings::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaGoogleSignalsSettings');

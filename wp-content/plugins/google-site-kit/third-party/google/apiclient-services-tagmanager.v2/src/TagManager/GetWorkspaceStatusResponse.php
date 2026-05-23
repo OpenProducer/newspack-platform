@@ -20,9 +20,9 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 class GetWorkspaceStatusResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'workspaceChange';
-    protected $mergeConflictType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\MergeConflict::class;
+    protected $mergeConflictType = MergeConflict::class;
     protected $mergeConflictDataType = 'array';
-    protected $workspaceChangeType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Entity::class;
+    protected $workspaceChangeType = Entity::class;
     protected $workspaceChangeDataType = 'array';
     /**
      * The merge conflict after sync.
@@ -58,4 +58,4 @@ class GetWorkspaceStatusResponse extends \Google\Site_Kit_Dependencies\Google\Co
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\GetWorkspaceStatusResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_GetWorkspaceStatusResponse');
+class_alias(GetWorkspaceStatusResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_GetWorkspaceStatusResponse');

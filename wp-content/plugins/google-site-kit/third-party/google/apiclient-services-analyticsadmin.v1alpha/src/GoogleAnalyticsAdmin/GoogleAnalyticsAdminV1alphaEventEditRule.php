@@ -27,7 +27,7 @@ class GoogleAnalyticsAdminV1alphaEventEditRule extends \Google\Site_Kit_Dependen
      * @var string
      */
     public $displayName;
-    protected $eventConditionsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaMatchingCondition::class;
+    protected $eventConditionsType = GoogleAnalyticsAdminV1alphaMatchingCondition::class;
     protected $eventConditionsDataType = 'array';
     /**
      * Identifier. Resource name for this EventEditRule resource. Format: properti
@@ -36,7 +36,7 @@ class GoogleAnalyticsAdminV1alphaEventEditRule extends \Google\Site_Kit_Dependen
      * @var string
      */
     public $name;
-    protected $parameterMutationsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaParameterMutation::class;
+    protected $parameterMutationsType = GoogleAnalyticsAdminV1alphaParameterMutation::class;
     protected $parameterMutationsDataType = 'array';
     /**
      * Output only. The order for which this rule will be processed. Rules with an
@@ -138,4 +138,4 @@ class GoogleAnalyticsAdminV1alphaEventEditRule extends \Google\Site_Kit_Dependen
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaEventEditRule::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaEventEditRule');
+class_alias(GoogleAnalyticsAdminV1alphaEventEditRule::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaEventEditRule');

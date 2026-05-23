@@ -48,6 +48,7 @@ class Memberships {
 
 		// WC Memberships hooks.
 		add_filter( 'wc_memberships_notice_html', [ __CLASS__, 'wc_memberships_notice_html' ], 100, 4 );
+		add_filter( 'wc_memberships_restricted_message', [ __CLASS__, 'wc_memberships_restricted_message' ], 100, 4 );
 		add_filter( 'wc_memberships_restricted_content_excerpt', [ __CLASS__, 'wc_memberships_excerpt' ], 100, 3 );
 		add_filter( 'wc_memberships_message_excerpt_apply_the_content_filter', '__return_false' );
 		add_filter( 'wc_memberships_admin_screen_ids', [ __CLASS__, 'admin_screens' ] );
@@ -79,7 +80,7 @@ class Memberships {
 	 * Register post type for custom gate.
 	 */
 	public static function register_post_type() {
-		self::register_layout_post_type( self::GATE_CPT, __( 'Memberships Gate', 'newspack' ) );
+		self::register_layout_post_type( self::GATE_CPT, __( 'Memberships Gate', 'newspack-plugin' ) );
 	}
 
 	/**
@@ -131,7 +132,7 @@ class Memberships {
 			$gate_post_id = absint( $_GET['gate_post_id'] );
 			$is_primary   = false;
 			if ( ! $gate_post_id || ! get_post( $gate_post_id ) ) {
-				\wp_die( esc_html( __( 'Invalid gate post ID.', 'newspack' ) ) );
+				\wp_die( esc_html( __( 'Invalid gate post ID.', 'newspack-plugin' ) ) );
 			}
 		}
 
@@ -145,7 +146,7 @@ class Memberships {
 			exit;
 		} else {
 			// Gate not found, create it.
-			$post_title   = __( 'Content Gate', 'newspack' );
+			$post_title   = __( 'Content Gate', 'newspack-plugin' );
 			$gate_post_id = Content_Gate::create_gate( [ 'title' => $post_title ], self::GATE_CPT );
 			if ( is_wp_error( $gate_post_id ) ) {
 				\wp_die( esc_html( $gate_post_id->get_error_message() ) );
@@ -258,7 +259,7 @@ class Memberships {
 
 		$plan_id = isset( $_GET['plan_id'] ) ? \absint( $_GET['plan_id'] ) : false;
 		if ( ! $plan_id ) {
-			\wp_die( esc_html( __( 'Plan ID is required.', 'newspack' ) ) );
+			\wp_die( esc_html( __( 'Plan ID is required.', 'newspack-plugin' ) ) );
 		}
 
 		$gate_post_id = self::get_plan_gate_id( $plan_id );
@@ -275,11 +276,11 @@ class Memberships {
 			// Gate not found, create it.
 			$plan = \wc_memberships_get_membership_plan( $plan_id );
 			if ( ! $plan ) {
-				\wp_die( esc_html( __( 'Plan not found.', 'newspack' ) ) );
+				\wp_die( esc_html( __( 'Plan not found.', 'newspack-plugin' ) ) );
 			}
 			$post_title = sprintf(
 				// Translators: %s is the plan name.
-				__( '%s Gate', 'newspack' ),
+				__( '%s Gate', 'newspack-plugin' ),
 				$plan->get_name()
 			);
 			$gate_post_id = Content_Gate::create_gate( [ 'title' => $post_title ], self::GATE_CPT );
@@ -532,6 +533,44 @@ class Memberships {
 		}
 		Content_Gate::mark_gate_as_rendered();
 		return Content_Gate::get_inline_gate_html();
+	}
+
+	/**
+	 * Filter WooCommerce Memberships' restricted message before it is rendered.
+	 *
+	 * When all WC Memberships message templates are set to empty strings, the
+	 * `get_message_html()` method skips `get_notice_html()` entirely — which
+	 * means `wc_memberships_notice_html` never fires and Newspack's gate is
+	 * never rendered.  We work around this by returning a non-empty placeholder
+	 * here so that `get_notice_html()` is always called when a Newspack gate is
+	 * configured for a content-restriction context.  The placeholder is then
+	 * replaced by the real gate HTML inside `wc_memberships_notice_html()`.
+	 *
+	 * @param string $message      Restriction message text (may be empty).
+	 * @param object $post         Post object.
+	 * @param string $message_code Message code (e.g. 'content_delayed', 'content_restricted').
+	 * @param array  $args         Additional arguments.
+	 *
+	 * @return string
+	 */
+	public static function wc_memberships_restricted_message( $message, $post, $message_code, $args ) {
+		// Only intervene when the message is empty — a non-empty message means
+		// the publisher configured their own copy and we should leave it alone.
+		if ( '' !== trim( $message ) ) {
+			return $message;
+		}
+		// Only replace for content-restriction contexts (not product discounts etc.).
+		if ( ! str_contains( $message_code, 'content_' ) ) {
+			return $message;
+		}
+		// Only replace when a Newspack gate is configured.
+		if ( ! Content_Gate::has_gate() ) {
+			return $message;
+		}
+		// Return a single non-breaking space so that get_message_html() proceeds
+		// to call get_notice_html() → wc_memberships_notice_html, where the
+		// real gate HTML will be substituted.
+		return '&nbsp;';
 	}
 
 	/**

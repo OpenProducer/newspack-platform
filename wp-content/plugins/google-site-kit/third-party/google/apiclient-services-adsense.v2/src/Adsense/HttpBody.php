@@ -90,4 +90,4 @@ class HttpBody extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\HttpBody::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_HttpBody');
+class_alias(HttpBody::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_HttpBody');

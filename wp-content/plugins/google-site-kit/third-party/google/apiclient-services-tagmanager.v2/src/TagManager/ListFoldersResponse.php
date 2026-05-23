@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 class ListFoldersResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'folder';
-    protected $folderType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Folder::class;
+    protected $folderType = Folder::class;
     protected $folderDataType = 'array';
     /**
      * Continuation token for fetching the next page of results.
@@ -62,4 +62,4 @@ class ListFoldersResponse extends \Google\Site_Kit_Dependencies\Google\Collectio
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ListFoldersResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_ListFoldersResponse');
+class_alias(ListFoldersResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_ListFoldersResponse');

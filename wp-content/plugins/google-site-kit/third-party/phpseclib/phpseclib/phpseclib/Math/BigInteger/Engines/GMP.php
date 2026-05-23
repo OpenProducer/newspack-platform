@@ -18,7 +18,7 @@ use Google\Site_Kit_Dependencies\phpseclib3\Exception\BadConfigurationException;
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
-class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\Engine
+class GMP extends Engine
 {
     /**
      * Can Bitwise operations be done fast?
@@ -41,7 +41,7 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      */
     public static function isValidEngine()
     {
-        return \extension_loaded('gmp');
+        return extension_loaded('gmp');
     }
     /**
      * Default constructor
@@ -56,13 +56,13 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
             static::$isValidEngine[static::class] = self::isValidEngine();
         }
         if (!static::$isValidEngine[static::class]) {
-            throw new \Google\Site_Kit_Dependencies\phpseclib3\Exception\BadConfigurationException('GMP is not setup correctly on this system');
+            throw new BadConfigurationException('GMP is not setup correctly on this system');
         }
         if ($x instanceof \GMP) {
             $this->value = $x;
             return;
         }
-        $this->value = \gmp_init(0);
+        $this->value = gmp_init(0);
         parent::__construct($x, $base);
     }
     /**
@@ -73,19 +73,19 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      */
     protected function initialize($base)
     {
-        switch (\abs($base)) {
+        switch (abs($base)) {
             case 256:
-                $this->value = \gmp_import($this->value);
+                $this->value = gmp_import($this->value);
                 if ($this->is_negative) {
                     $this->value = -$this->value;
                 }
                 break;
             case 16:
                 $temp = $this->is_negative ? '-0x' . $this->value : '0x' . $this->value;
-                $this->value = \gmp_init($temp);
+                $this->value = gmp_init($temp);
                 break;
             case 10:
-                $this->value = \gmp_init(isset($this->value) ? $this->value : '0');
+                $this->value = gmp_init(isset($this->value) ? $this->value : '0');
         }
     }
     /**
@@ -109,9 +109,9 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
     public function toBits($twos_compliment = \false)
     {
         $hex = $this->toHex($twos_compliment);
-        $bits = \gmp_strval(\gmp_init($hex, 16), 2);
+        $bits = gmp_strval(gmp_init($hex, 16), 2);
         if ($this->precision > 0) {
-            $bits = \substr($bits, -$this->precision);
+            $bits = substr($bits, -$this->precision);
         }
         if ($twos_compliment && $this->compare(new static()) > 0 && $this->precision <= 0) {
             return '0' . $bits;
@@ -129,11 +129,11 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
         if ($twos_compliment) {
             return $this->toBytesHelper();
         }
-        if (\gmp_cmp($this->value, \gmp_init(0)) == 0) {
-            return $this->precision > 0 ? \str_repeat(\chr(0), $this->precision + 1 >> 3) : '';
+        if (gmp_cmp($this->value, gmp_init(0)) == 0) {
+            return $this->precision > 0 ? str_repeat(chr(0), $this->precision + 1 >> 3) : '';
         }
-        $temp = \gmp_export($this->value);
-        return $this->precision > 0 ? \substr(\str_pad($temp, $this->precision >> 3, \chr(0), \STR_PAD_LEFT), -($this->precision >> 3)) : \ltrim($temp, \chr(0));
+        $temp = gmp_export($this->value);
+        return $this->precision > 0 ? substr(str_pad($temp, $this->precision >> 3, chr(0), \STR_PAD_LEFT), -($this->precision >> 3)) : ltrim($temp, chr(0));
     }
     /**
      * Adds two BigIntegers.
@@ -141,7 +141,7 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      * @param GMP $y
      * @return GMP
      */
-    public function add(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $y)
+    public function add(GMP $y)
     {
         $temp = new self();
         $temp->value = $this->value + $y->value;
@@ -153,7 +153,7 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      * @param GMP $y
      * @return GMP
      */
-    public function subtract(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $y)
+    public function subtract(GMP $y)
     {
         $temp = new self();
         $temp->value = $this->value - $y->value;
@@ -165,7 +165,7 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      * @param GMP $x
      * @return GMP
      */
-    public function multiply(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $x)
+    public function multiply(GMP $x)
     {
         $temp = new self();
         $temp->value = $this->value * $x->value;
@@ -182,13 +182,13 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      * @param GMP $y
      * @return array{GMP, GMP}
      */
-    public function divide(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $y)
+    public function divide(GMP $y)
     {
         $quotient = new self();
         $remainder = new self();
-        list($quotient->value, $remainder->value) = \gmp_div_qr($this->value, $y->value);
-        if (\gmp_sign($remainder->value) < 0) {
-            $remainder->value = $remainder->value + \gmp_abs($y->value);
+        list($quotient->value, $remainder->value) = gmp_div_qr($this->value, $y->value);
+        if (gmp_sign($remainder->value) < 0) {
+            $remainder->value = $remainder->value + gmp_abs($y->value);
         }
         return [$this->normalize($quotient), $this->normalize($remainder)];
     }
@@ -210,9 +210,9 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      * @return int in case < 0 if $this is less than $y; > 0 if $this is greater than $y, and 0 if they are equal.
      * @see self::equals()
      */
-    public function compare(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $y)
+    public function compare(GMP $y)
     {
-        $r = \gmp_cmp($this->value, $y->value);
+        $r = gmp_cmp($this->value, $y->value);
         if ($r < -1) {
             $r = -1;
         }
@@ -229,7 +229,7 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      * @param GMP $x
      * @return bool
      */
-    public function equals(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $x)
+    public function equals(GMP $x)
     {
         return $this->value == $x->value;
     }
@@ -241,10 +241,10 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      * @param GMP $n
      * @return false|GMP
      */
-    public function modInverse(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $n)
+    public function modInverse(GMP $n)
     {
         $temp = new self();
-        $temp->value = \gmp_invert($this->value, $n->value);
+        $temp->value = gmp_invert($this->value, $n->value);
         return $temp->value === \false ? \false : $this->normalize($temp);
     }
     /**
@@ -258,9 +258,12 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      * @param GMP $n
      * @return GMP[]
      */
-    public function extendedGCD(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $n)
+    public function extendedGCD(GMP $n)
     {
-        \extract(\gmp_gcdext($this->value, $n->value));
+        $extended = gmp_gcdext($this->value, $n->value);
+        $g = $extended['g'];
+        $s = $extended['s'];
+        $t = $extended['t'];
         return ['gcd' => $this->normalize(new self($g)), 'x' => $this->normalize(new self($s)), 'y' => $this->normalize(new self($t))];
     }
     /**
@@ -271,9 +274,9 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      * @param GMP $n
      * @return GMP
      */
-    public function gcd(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $n)
+    public function gcd(GMP $n)
     {
-        $r = \gmp_gcd($this->value, $n->value);
+        $r = gmp_gcd($this->value, $n->value);
         return $this->normalize(new self($r));
     }
     /**
@@ -284,7 +287,7 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
     public function abs()
     {
         $temp = new self();
-        $temp->value = \gmp_abs($this->value);
+        $temp->value = gmp_abs($this->value);
         return $temp;
     }
     /**
@@ -293,7 +296,7 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      * @param GMP $x
      * @return GMP
      */
-    public function bitwise_and(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $x)
+    public function bitwise_and(GMP $x)
     {
         $temp = new self();
         $temp->value = $this->value & $x->value;
@@ -305,7 +308,7 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      * @param GMP $x
      * @return GMP
      */
-    public function bitwise_or(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $x)
+    public function bitwise_or(GMP $x)
     {
         $temp = new self();
         $temp->value = $this->value | $x->value;
@@ -317,7 +320,7 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      * @param GMP $x
      * @return GMP
      */
-    public function bitwise_xor(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $x)
+    public function bitwise_xor(GMP $x)
     {
         $temp = new self();
         $temp->value = $this->value ^ $x->value;
@@ -360,7 +363,7 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      * @param GMP $n
      * @return GMP
      */
-    public function modPow(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $e, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $n)
+    public function modPow(GMP $e, GMP $n)
     {
         return $this->powModOuter($e, $n);
     }
@@ -373,7 +376,7 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      * @param GMP $n
      * @return GMP
      */
-    public function powMod(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $e, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $n)
+    public function powMod(GMP $e, GMP $n)
     {
         return $this->powModOuter($e, $n);
     }
@@ -384,7 +387,7 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      * @param GMP $n
      * @return GMP
      */
-    protected function powModInner(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $e, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $n)
+    protected function powModInner(GMP $e, GMP $n)
     {
         $class = static::$modexpEngine[static::class];
         return $class::powModHelper($this, $e, $n);
@@ -397,7 +400,7 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      * @param GMP $result
      * @return GMP
      */
-    protected function normalize(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $result)
+    protected function normalize(GMP $result)
     {
         $result->precision = $this->precision;
         $result->bitmask = $this->bitmask;
@@ -421,9 +424,9 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      * @param Engine $max
      * @return GMP
      */
-    protected static function randomRangePrimeInner(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\Engine $x, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\Engine $min, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\Engine $max)
+    protected static function randomRangePrimeInner(Engine $x, Engine $min, Engine $max)
     {
-        $p = \gmp_nextprime($x->value);
+        $p = gmp_nextprime($x->value);
         if ($p <= $max->value) {
             return new self($p);
         }
@@ -441,7 +444,7 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      * @param GMP $max
      * @return false|GMP
      */
-    public static function randomRangePrime(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $min, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $max)
+    public static function randomRangePrime(GMP $min, GMP $max)
     {
         return self::randomRangePrimeOuter($min, $max);
     }
@@ -458,7 +461,7 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      * @param GMP $max
      * @return GMP
      */
-    public static function randomRange(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $min, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $max)
+    public static function randomRange(GMP $min, GMP $max)
     {
         return self::randomRangeHelper($min, $max);
     }
@@ -471,7 +474,7 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      */
     protected function make_odd()
     {
-        \gmp_setbit($this->value, 0);
+        gmp_setbit($this->value, 0);
     }
     /**
      * Tests Primality
@@ -481,7 +484,7 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      */
     protected function testPrimality($t)
     {
-        return \gmp_prob_prime($this->value, $t) != 0;
+        return gmp_prob_prime($this->value, $t) != 0;
     }
     /**
      * Calculates the nth root of a biginteger.
@@ -494,7 +497,7 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
     protected function rootInner($n)
     {
         $root = new self();
-        $root->value = \gmp_root($this->value, $n);
+        $root->value = gmp_root($this->value, $n);
         return $this->normalize($root);
     }
     /**
@@ -503,7 +506,7 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      * @param GMP $n
      * @return GMP
      */
-    public function pow(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $n)
+    public function pow(GMP $n)
     {
         $temp = new self();
         $temp->value = $this->value ** $n->value;
@@ -515,7 +518,7 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      * @param GMP ...$nums
      * @return GMP
      */
-    public static function min(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP ...$nums)
+    public static function min(GMP ...$nums)
     {
         return self::minHelper($nums);
     }
@@ -525,7 +528,7 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      * @param GMP ...$nums
      * @return GMP
      */
-    public static function max(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP ...$nums)
+    public static function max(GMP ...$nums)
     {
         return self::maxHelper($nums);
     }
@@ -536,7 +539,7 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      * @param GMP $max
      * @return bool
      */
-    public function between(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $min, \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $max)
+    public function between(GMP $min, GMP $max)
     {
         return $this->compare($min) >= 0 && $this->compare($max) <= 0;
     }
@@ -551,8 +554,8 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
     public function createRecurringModuloFunction()
     {
         $temp = $this->value;
-        return function (\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $x) use($temp) {
-            return new \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP($x->value % $temp);
+        return function (GMP $x) use ($temp) {
+            return new GMP($x->value % $temp);
         };
     }
     /**
@@ -563,9 +566,9 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      * @param GMP $r
      * @return int
      */
-    public static function scan1divide(\Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engines\GMP $r)
+    public static function scan1divide(GMP $r)
     {
-        $s = \gmp_scan1($r->value, 0);
+        $s = gmp_scan1($r->value, 0);
         $r->value >>= $s;
         return $s;
     }
@@ -576,7 +579,7 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      */
     public function isOdd()
     {
-        return \gmp_testbit($this->value, 0);
+        return gmp_testbit($this->value, 0);
     }
     /**
      * Tests if a bit is set
@@ -585,7 +588,7 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      */
     public function testBit($x)
     {
-        return \gmp_testbit($this->value, $x);
+        return gmp_testbit($this->value, $x);
     }
     /**
      * Is Negative?
@@ -594,7 +597,7 @@ class GMP extends \Google\Site_Kit_Dependencies\phpseclib3\Math\BigInteger\Engin
      */
     public function isNegative()
     {
-        return \gmp_sign($this->value) == -1;
+        return gmp_sign($this->value) == -1;
     }
     /**
      * Negate

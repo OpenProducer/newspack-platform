@@ -279,7 +279,7 @@ export default function withWizard( WrappedComponent, requiredPlugins ) {
 			return (
 				message &&
 				callback && (
-					<Modal isNarrow hideTitle={ ! title } title={ title } onRequestClose={ () => this.setState( { confirmation: null } ) }>
+					<Modal size="small" hideTitle={ ! title } title={ title } onRequestClose={ () => this.setState( { confirmation: null } ) }>
 						<p>{ message }</p>
 						<Card buttonsCard noBorder className="justify-end">
 							<Button variant="secondary" onClick={ () => this.setState( { confirmation: null } ) }>

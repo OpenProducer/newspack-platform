@@ -49,8 +49,8 @@ class AccountsContainers extends \Google\Site_Kit_Dependencies\Google\Service\Re
     public function combine($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('combine', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Container::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('combine', [$params], Container::class);
     }
     /**
      * Creates a Container. (containers.create)
@@ -61,11 +61,11 @@ class AccountsContainers extends \Google\Site_Kit_Dependencies\Google\Service\Re
      * @return Container
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Container $postBody, $optParams = [])
+    public function create($parent, Container $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Container::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], Container::class);
     }
     /**
      * Deletes a Container. (containers.delete)
@@ -77,7 +77,7 @@ class AccountsContainers extends \Google\Site_Kit_Dependencies\Google\Service\Re
     public function delete($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('delete', [$params]);
     }
     /**
@@ -91,8 +91,8 @@ class AccountsContainers extends \Google\Site_Kit_Dependencies\Google\Service\Re
     public function get($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Container::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], Container::class);
     }
     /**
      * Lists all Containers that belongs to a GTM Account.
@@ -109,8 +109,8 @@ class AccountsContainers extends \Google\Site_Kit_Dependencies\Google\Service\Re
     public function listAccountsContainers($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\ListContainersResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListContainersResponse::class);
     }
     /**
      * Looks up a Container by destination ID or tag ID. (containers.lookup)
@@ -127,8 +127,8 @@ class AccountsContainers extends \Google\Site_Kit_Dependencies\Google\Service\Re
     public function lookup($optParams = [])
     {
         $params = [];
-        $params = \array_merge($params, $optParams);
-        return $this->call('lookup', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Container::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('lookup', [$params], Container::class);
     }
     /**
      * Move Tag ID out of a Container. (containers.move_tag_id)
@@ -154,8 +154,8 @@ class AccountsContainers extends \Google\Site_Kit_Dependencies\Google\Service\Re
     public function move_tag_id($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('move_tag_id', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Container::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('move_tag_id', [$params], Container::class);
     }
     /**
      * Gets the tagging snippet for a Container. (containers.snippet)
@@ -168,8 +168,8 @@ class AccountsContainers extends \Google\Site_Kit_Dependencies\Google\Service\Re
     public function snippet($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('snippet', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\GetContainerSnippetResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('snippet', [$params], GetContainerSnippetResponse::class);
     }
     /**
      * Updates a Container. (containers.update)
@@ -183,12 +183,12 @@ class AccountsContainers extends \Google\Site_Kit_Dependencies\Google\Service\Re
      * @return Container
      * @throws \Google\Service\Exception
      */
-    public function update($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Container $postBody, $optParams = [])
+    public function update($path, Container $postBody, $optParams = [])
     {
         $params = ['path' => $path, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('update', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\Container::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('update', [$params], Container::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Resource\AccountsContainers::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Resource_AccountsContainers');
+class_alias(AccountsContainers::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Resource_AccountsContainers');

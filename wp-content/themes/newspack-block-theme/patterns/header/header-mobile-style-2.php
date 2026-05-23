@@ -18,7 +18,12 @@
 
 		<!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|30"}},"layout":{"type":"flex","flexWrap":"nowrap"}} -->
 		<div class="wp-block-group">
-			<!-- wp:template-part {"slug":"mobile-menu","theme":"newspack-block-theme","tagName":"div","lock":{"move":false,"remove":true},"className":"mobile-menu"} /-->
+			<!-- wp:newspack/overlay-menu {"instanceId":"1a382fccbd5d"} -->
+			<div class="wp-block-newspack-overlay-menu"><!-- wp:newspack/overlay-menu-trigger {"className":"is-style-icon-only","style":{"color":{"background":"#ffffff00"},"elements":{"link":{"color":{"text":"var:preset|color|contrast"}}},"spacing":{"padding":{"right":"0","left":"0"}}},"textColor":"contrast"} /-->
+				<!-- wp:newspack/overlay-menu-panel -->
+				<div class="wp-block-newspack-overlay-menu-panel"><!-- wp:navigation {"className":"is-style-flatten","layout":{"type":"flex","setCascadingProperties":true,"orientation":"vertical"}} /--></div>
+				<!-- /wp:newspack/overlay-menu-panel --></div>
+			<!-- /wp:newspack/overlay-menu -->
 
 			<!-- wp:site-logo {"width":256,"lock":{"move":false,"remove":true}} /-->
 		</div>

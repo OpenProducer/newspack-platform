@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsData;
 class V1betaAudienceRow extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'dimensionValues';
-    protected $dimensionValuesType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\V1betaAudienceDimensionValue::class;
+    protected $dimensionValuesType = V1betaAudienceDimensionValue::class;
     protected $dimensionValuesDataType = 'array';
     /**
      * Each dimension value attribute for an audience user. One dimension value
@@ -41,4 +41,4 @@ class V1betaAudienceRow extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\V1betaAudienceRow::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_V1betaAudienceRow');
+class_alias(V1betaAudienceRow::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_V1betaAudienceRow');

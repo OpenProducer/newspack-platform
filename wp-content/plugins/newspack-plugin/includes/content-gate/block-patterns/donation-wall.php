@@ -22,20 +22,16 @@ $donate_settings = [
 	'layoutOption'        => 'tiers',
 ];
 ?>
-<!-- wp:separator {"className":"is-style-dots"} -->
-<hr class="wp-block-separator has-alpha-channel-opacity is-style-dots"/>
-<!-- /wp:separator -->
+<!-- wp:group {"metadata":{"name":"<?php esc_html_e( 'Donation', 'newspack-plugin' ); ?>"},"align":"wide","style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80","left":"var:preset|spacing|80","right":"var:preset|spacing|80"}},"border":{"radius":"8px","width":"1px"}},"borderColor":"base-3","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignwide has-border-color has-base-3-border-color" style="border-width:1px;border-radius:8px;padding-top:var(--wp--preset--spacing--80);padding-right:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80);padding-left:var(--wp--preset--spacing--80)">
 
-<!-- wp:group {"metadata":{"name":"<?php esc_html_e( 'Wall', 'newspack' ); ?>"},"align":"wide","style":{"spacing":{"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80","left":"var:preset|spacing|80","right":"var:preset|spacing|80"}},"border":{"radius":"6px","width":"1px"}},"borderColor":"base-3","layout":{"type":"constrained"}} -->
-<div class="wp-block-group alignwide has-border-color has-base-3-border-color" style="border-width:1px;border-radius:6px;padding-top:var(--wp--preset--spacing--80);padding-right:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80);padding-left:var(--wp--preset--spacing--80)">
-
-	<!-- wp:heading {"textAlign":"center","level":3} -->
+	<!-- wp:heading {"textAlign":"center","level":3,"metadata":{"name":"<?php esc_html_e( 'Title', 'newspack-plugin' ); ?>"}} -->
 	<h3 class="wp-block-heading has-text-align-center">
-		<?php esc_html_e( 'Choose an option to continue reading', 'newspack' ); ?>
+		<?php esc_html_e( 'Choose an option to continue reading', 'newspack-plugin' ); ?>
 	</h3>
 	<!-- /wp:heading -->
 
-	<!-- wp:group {"metadata":{"name":"<?php esc_html_e( 'Donation', 'newspack' ); ?>"},"align":"wide","layout":{"type":"constrained","contentSize":"964px"}} -->
+	<!-- wp:group {"metadata":{"name":"<?php esc_html_e( 'Donation', 'newspack-plugin' ); ?>"},"align":"wide","layout":{"type":"constrained","contentSize":"964px"}} -->
 	<div class="wp-block-group alignwide">
 		<!-- wp:newspack-blocks/donate <?php echo wp_json_encode( $donate_settings ); ?> /-->
 	</div>
@@ -46,7 +42,7 @@ $donate_settings = [
 		<!-- wp:button {"backgroundColor":"base","textColor":"contrast","style":{"elements":{"link":{"color":{"text":"var:preset|color|contrast"}}}},"fontSize":"small"} -->
 		<div class="wp-block-button has-custom-font-size has-small-font-size">
 			<a class="wp-block-button__link has-contrast-color has-base-background-color has-text-color has-background has-link-color wp-element-button" href="#signin_modal">
-				<?php esc_html_e( 'Sign in to an existing account', 'newspack' ); ?>
+				<?php esc_html_e( 'Sign in to an existing account', 'newspack-plugin' ); ?>
 			</a>
 		</div>
 		<!-- /wp:button -->

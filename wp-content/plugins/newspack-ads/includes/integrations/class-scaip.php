@@ -49,6 +49,9 @@ final class SCAIP {
 		// Block filtering hooks.
 		add_filter( 'scaip_allowing_insertion_blocks', [ __CLASS__, 'filter_allowed_blocks' ] );
 
+		// Hide SCAIP's per-post toggle panel.
+		add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'dequeue_scaip_document_panel' ], 100 );
+
 		// Setup Newspack Ads defaults on activation.
 		add_action( 'newspack_ads_activation_hook', array( __CLASS__, 'register_defaults' ) );
 
@@ -276,6 +279,28 @@ final class SCAIP {
 		}
 
 		return $allowed_blocks;
+	}
+
+	/**
+	 * Dequeue SCAIP's document settings panel script in the block editor.
+	 *
+	 * SCAIP ships a per-post "Prevent automatic addition of ads" toggle as a
+	 * PluginDocumentSettingPanel. When Newspack Ads is active, the Suppress
+	 * Ads panel covers the same use case via this integration's placements,
+	 * so SCAIP's panel would be a duplicate UI. The post meta itself stays
+	 * registered, so any value already saved is still respected.
+	 */
+	public static function dequeue_scaip_document_panel() {
+		if ( ! defined( 'SCAIP_PLUGIN_FILE' ) ) {
+			return;
+		}
+		if (
+			wp_script_is( 'scaip-document-panel', 'registered' ) ||
+			wp_script_is( 'scaip-document-panel', 'enqueued' )
+		) {
+			wp_dequeue_script( 'scaip-document-panel' );
+			wp_deregister_script( 'scaip-document-panel' );
+		}
 	}
 }
 SCAIP::init();

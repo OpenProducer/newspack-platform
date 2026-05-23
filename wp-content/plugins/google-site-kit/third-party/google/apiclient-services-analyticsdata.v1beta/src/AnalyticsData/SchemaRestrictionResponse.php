@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsData;
 class SchemaRestrictionResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'activeMetricRestrictions';
-    protected $activeMetricRestrictionsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\ActiveMetricRestriction::class;
+    protected $activeMetricRestrictionsType = ActiveMetricRestriction::class;
     protected $activeMetricRestrictionsDataType = 'array';
     /**
      * All restrictions actively enforced in creating the report. For example,
@@ -43,4 +43,4 @@ class SchemaRestrictionResponse extends \Google\Site_Kit_Dependencies\Google\Col
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\SchemaRestrictionResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_SchemaRestrictionResponse');
+class_alias(SchemaRestrictionResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_SchemaRestrictionResponse');

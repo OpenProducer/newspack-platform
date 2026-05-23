@@ -17,7 +17,7 @@ function jetpack_get_module_i18n( $key ) {
 	if ( ! isset( $modules ) ) {
 		$modules = array(
 			'account-protection' => array(
-				'name' => _x( 'Account protection', 'Module Name', 'jetpack' ),
+				'name' => _x( 'Account Protection', 'Module Name', 'jetpack' ),
 				'description' => _x( 'Shield your login page with rate‑limiting and secure authentication safeguards.', 'Module Description', 'jetpack' ),
 			),
 
@@ -62,13 +62,13 @@ function jetpack_get_module_i18n( $key ) {
 			),
 
 			'custom-content-types' => array(
-				'name' => _x( 'Custom content types', 'Module Name', 'jetpack' ),
+				'name' => _x( 'Custom Content Types', 'Module Name', 'jetpack' ),
 				'description' => _x( 'Display different types of content on your site with custom content types.', 'Module Description', 'jetpack' ),
 			),
 
 			'google-fonts' => array(
 				'name' => _x( 'Google Fonts (Beta)', 'Module Name', 'jetpack' ),
-				'description' => _x( 'Customize your site\'s typography with a selection of Google Fonts.', 'Module Description', 'jetpack' ),
+				'description' => _x( 'This feature is now supported natively in WordPress when using any block theme. To use Google Fonts, refer to the WordPress.org Font Library documentation.', 'Module Description', 'jetpack' ),
 			),
 
 			'gravatar-hovercards' => array(
@@ -122,7 +122,7 @@ function jetpack_get_module_i18n( $key ) {
 			),
 
 			'post-by-email' => array(
-				'name' => _x( 'Post by email', 'Module Name', 'jetpack' ),
+				'name' => _x( 'Post by Email', 'Module Name', 'jetpack' ),
 				'description' => _x( 'Publish blog posts simply by sending an email to a custom address.', 'Module Description', 'jetpack' ),
 			),
 
@@ -132,7 +132,7 @@ function jetpack_get_module_i18n( $key ) {
 			),
 
 			'protect' => array(
-				'name' => _x( 'Brute force protection', 'Module Name', 'jetpack' ),
+				'name' => _x( 'Brute Force Protection', 'Module Name', 'jetpack' ),
 				'description' => _x( 'Block malicious login attempts automatically and keep hackers out.', 'Module Description', 'jetpack' ),
 			),
 
@@ -142,7 +142,7 @@ function jetpack_get_module_i18n( $key ) {
 			),
 
 			'related-posts' => array(
-				'name' => _x( 'Related posts', 'Module Name', 'jetpack' ),
+				'name' => _x( 'Related Posts', 'Module Name', 'jetpack' ),
 				'description' => _x( 'Automatically display related articles to keep visitors reading longer.', 'Module Description', 'jetpack' ),
 			),
 
@@ -202,7 +202,7 @@ function jetpack_get_module_i18n( $key ) {
 			),
 
 			'verification-tools' => array(
-				'name' => _x( 'Site verification', 'Module Name', 'jetpack' ),
+				'name' => _x( 'Site Verification', 'Module Name', 'jetpack' ),
 				'description' => _x( 'Verify your site with search engines and social platforms in a couple of clicks.', 'Module Description', 'jetpack' ),
 			),
 
@@ -382,7 +382,7 @@ function jetpack_get_module_info( $key ) {
 	static $module_info = array (
 	  'account-protection' => 
 	  array (
-	    'name' => 'Account protection',
+	    'name' => 'Account Protection',
 	    'description' => 'Shield your login page with rate‑limiting and secure authentication safeguards.',
 	    'sort' => '4',
 	    'recommendation_order' => '',
@@ -544,7 +544,7 @@ function jetpack_get_module_info( $key ) {
 	  ),
 	  'custom-content-types' => 
 	  array (
-	    'name' => 'Custom content types',
+	    'name' => 'Custom Content Types',
 	    'description' => 'Display different types of content on your site with custom content types.',
 	    'sort' => '34',
 	    'recommendation_order' => '',
@@ -563,7 +563,7 @@ function jetpack_get_module_info( $key ) {
 	  'google-fonts' => 
 	  array (
 	    'name' => 'Google Fonts (Beta)',
-	    'description' => 'Customize your site\'s typography with a selection of Google Fonts.',
+	    'description' => 'This feature is now supported natively in WordPress when using any block theme. To use Google Fonts, refer to the WordPress.org Font Library documentation.',
 	    'sort' => '1',
 	    'recommendation_order' => '2',
 	    'introduced' => '10.8.0',
@@ -760,7 +760,7 @@ function jetpack_get_module_info( $key ) {
 	  ),
 	  'post-by-email' => 
 	  array (
-	    'name' => 'Post by email',
+	    'name' => 'Post by Email',
 	    'description' => 'Publish blog posts simply by sending an email to a custom address.',
 	    'sort' => '14',
 	    'recommendation_order' => '',
@@ -796,7 +796,7 @@ function jetpack_get_module_info( $key ) {
 	  ),
 	  'protect' => 
 	  array (
-	    'name' => 'Brute force protection',
+	    'name' => 'Brute Force Protection',
 	    'description' => 'Block malicious login attempts automatically and keep hackers out.',
 	    'sort' => '1',
 	    'recommendation_order' => '4',
@@ -832,7 +832,7 @@ function jetpack_get_module_info( $key ) {
 	  ),
 	  'related-posts' => 
 	  array (
-	    'name' => 'Related posts',
+	    'name' => 'Related Posts',
 	    'description' => 'Automatically display related articles to keep visitors reading longer.',
 	    'sort' => '29',
 	    'recommendation_order' => '9',
@@ -1048,7 +1048,7 @@ function jetpack_get_module_info( $key ) {
 	  ),
 	  'verification-tools' => 
 	  array (
-	    'name' => 'Site verification',
+	    'name' => 'Site Verification',
 	    'description' => 'Verify your site with search engines and social platforms in a couple of clicks.',
 	    'sort' => '33',
 	    'recommendation_order' => '',

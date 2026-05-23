@@ -42,11 +42,11 @@ class PropertiesRollupPropertySourceLinks extends \Google\Site_Kit_Dependencies\
      * @return GoogleAnalyticsAdminV1alphaRollupPropertySourceLink
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaRollupPropertySourceLink $postBody, $optParams = [])
+    public function create($parent, GoogleAnalyticsAdminV1alphaRollupPropertySourceLink $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaRollupPropertySourceLink::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], GoogleAnalyticsAdminV1alphaRollupPropertySourceLink::class);
     }
     /**
      * Deletes a roll-up property source link. Only roll-up properties can have
@@ -63,8 +63,8 @@ class PropertiesRollupPropertySourceLinks extends \Google\Site_Kit_Dependencies\
     public function delete($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('delete', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleProtobufEmpty::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('delete', [$params], GoogleProtobufEmpty::class);
     }
     /**
      * Lookup for a single roll-up property source Link. Only roll-up properties can
@@ -81,8 +81,8 @@ class PropertiesRollupPropertySourceLinks extends \Google\Site_Kit_Dependencies\
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaRollupPropertySourceLink::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], GoogleAnalyticsAdminV1alphaRollupPropertySourceLink::class);
     }
     /**
      * Lists roll-up property source Links on a property. Only roll-up properties
@@ -110,9 +110,9 @@ class PropertiesRollupPropertySourceLinks extends \Google\Site_Kit_Dependencies\
     public function listPropertiesRollupPropertySourceLinks($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaListRollupPropertySourceLinksResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], GoogleAnalyticsAdminV1alphaListRollupPropertySourceLinksResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\Resource\PropertiesRollupPropertySourceLinks::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesRollupPropertySourceLinks');
+class_alias(PropertiesRollupPropertySourceLinks::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_Resource_PropertiesRollupPropertySourceLinks');

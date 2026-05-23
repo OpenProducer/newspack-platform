@@ -442,6 +442,18 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 		if ( \is_wp_error( $result ) ) {
 			$this->add_send_error( $post_id, $result );
 
+			/**
+			 * Disables the email notification sent to site administrators when
+			 * a newsletter campaign fails to send. Useful for sites that use
+			 * alternative monitoring systems.
+			 *
+			 * @constant NEWSPACK_NEWSLETTERS_DISABLE_SEND_FAILURE_EMAIL
+			 * @type     bool
+			 * @default  Failure emails enabled
+			 * @status   draft
+			 *
+			 * @example define( 'NEWSPACK_NEWSLETTERS_DISABLE_SEND_FAILURE_EMAIL', true );
+			 */
 			$email_sending_disabled = defined( 'NEWSPACK_NEWSLETTERS_DISABLE_SEND_FAILURE_EMAIL' ) && NEWSPACK_NEWSLETTERS_DISABLE_SEND_FAILURE_EMAIL;
 
 			$is_scheduled  = get_post_meta( $post->ID, 'sending_scheduled', true );
@@ -909,6 +921,15 @@ Error message(s) received:
 	}
 
 	/**
+	 * Test the provider's API connection.
+	 *
+	 * @return true|WP_Error True if the connection is successful, WP_Error otherwise.
+	 */
+	public function test_connection() {
+		return true;
+	}
+
+	/**
 	 * Get transient name for async error messages.
 	 *
 	 * @param int $post_id The post ID.
@@ -917,5 +938,34 @@ Error message(s) received:
 	 */
 	public function get_transient_name( $post_id ) {
 		return sprintf( 'newspack_newsletters_error_%s_%s', $post_id, get_current_user_id() );
+	}
+
+	/**
+	 * Get contact fields for Newspack integrations.
+	 *
+	 * By default, this method returns an empty array. Providers should override it to return the fields
+	 * available in the ESP in a shape that can be consumed by the Newspack ESP integration to configure
+	 * Reader Activation incoming fields (content gate access rules and popups segmentation criteria).
+	 *
+	 * Each returned entry is an associative array with the following keys. All keys except 'key' are
+	 * optional — defaults kick in from the Incoming_Field class when a key is missing.
+	 *
+	 *   - key (string, required): Machine key for the field. Used as the Incoming_Field key.
+	 *   - name (string): Human-readable label. Defaults to the key.
+	 *   - value_type (string): Defaults to 'string'. The Incoming_Field setter accepts other values
+	 *       (e.g. 'boolean'); current providers only emit 'string'.
+	 *   - matching_function (string): Defaults to 'default' (strict equality). Use 'list__in' for
+	 *       multi-select fields whose stored value is a delimited list. The consumer also
+	 *       recognizes 'list__not_in' and 'range', though no current provider emits them.
+	 *   - options (array): List of [ 'value' => ..., 'label' => ... ] pairs for enumerated fields.
+	 *   - description (string): Optional help text surfaced in the admin UI.
+	 *   - is_access_rule (bool): Whether the field is eligible as a content-gate access rule by default.
+	 *   - is_segment_criteria (bool): Whether the field is eligible as a popups segmentation criterion by default.
+	 *
+	 * @param string|null $list_id The List ID. Optional, as some providers might not have different fields per list.
+	 * @return array|WP_Error The contact fields for the list, or WP_Error if the request failed.
+	 */
+	public function get_contact_fields_for_integrations( $list_id = null ) {
+		return [];
 	}
 }

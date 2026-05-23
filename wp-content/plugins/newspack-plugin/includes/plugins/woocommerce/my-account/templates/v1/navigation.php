@@ -7,6 +7,7 @@
  * @package  Newspack
  */
 
+use Newspack\My_Account_UI_V1;
 use Newspack\Newspack_UI_Icons;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -84,17 +85,10 @@ if ( function_exists( 'wc_memberships_for_teams' ) ) {
 				<?php _e( 'Back to Homepage', 'newspack-plugin' ); ?>
 			</a>
 			<ul>
-				<?php
-				// Check if viewing a single subscription page.
-				$is_viewing_single_subscription = false;
-				if ( function_exists( 'is_wc_endpoint_url' ) && is_wc_endpoint_url( 'view-subscription' ) ) {
-					$is_viewing_single_subscription = true;
-				}
-				?>
 				<?php foreach ( $account_menu_items as $endpoint => $label ) : ?>
 					<?php
 					// Highlight subscriptions menu item if viewing a single subscription.
-					$is_current_item = wc_is_current_account_menu_item( $endpoint ) || ( $is_viewing_single_subscription && 'subscriptions' === $endpoint );
+					$is_current_item = wc_is_current_account_menu_item( $endpoint ) || My_Account_UI_V1::is_subscription_page( $endpoint );
 					?>
 					<li class="<?php echo esc_attr( wc_get_account_menu_item_classes( $endpoint ) ); ?>">
 						<a href="<?php echo esc_url( wc_get_account_endpoint_url( $endpoint ) ); ?>" <?php echo $is_current_item ? 'aria-current="page"' : ''; ?> class="newspack-ui__button newspack-ui__button--small <?php echo $is_current_item ? 'newspack-ui__button--accent' : 'newspack-ui__button--ghost'; ?>">

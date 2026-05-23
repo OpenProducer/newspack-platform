@@ -11,5 +11,5 @@ interface PromisorInterface
     /**
      * Returns a promise.
      */
-    public function promise() : \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface;
+    public function promise(): PromiseInterface;
 }

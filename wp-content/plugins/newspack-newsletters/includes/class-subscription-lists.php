@@ -454,11 +454,18 @@ class Subscription_Lists {
 	 * @return Subscription_List[]
 	 */
 	public static function get_configured_for_current_provider() {
-		return self::get_filtered(
+		$lists = self::get_filtered(
 			function ( $list ) {
 				return $list->is_configured_for_current_provider();
 			}
 		);
+
+		/**
+		 * Filters the available lists for the current provider.
+		 *
+		 * @param Subscription_List[] $lists The lists that are available for the current provider.
+		 */
+		return apply_filters( 'newspack_newsletters_subscription_lists', $lists );
 	}
 
 	/**

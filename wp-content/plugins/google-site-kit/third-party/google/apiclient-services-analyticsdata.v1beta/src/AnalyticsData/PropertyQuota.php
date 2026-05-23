@@ -19,17 +19,17 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsData;
 
 class PropertyQuota extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $concurrentRequestsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\QuotaStatus::class;
+    protected $concurrentRequestsType = QuotaStatus::class;
     protected $concurrentRequestsDataType = '';
-    protected $potentiallyThresholdedRequestsPerHourType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\QuotaStatus::class;
+    protected $potentiallyThresholdedRequestsPerHourType = QuotaStatus::class;
     protected $potentiallyThresholdedRequestsPerHourDataType = '';
-    protected $serverErrorsPerProjectPerHourType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\QuotaStatus::class;
+    protected $serverErrorsPerProjectPerHourType = QuotaStatus::class;
     protected $serverErrorsPerProjectPerHourDataType = '';
-    protected $tokensPerDayType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\QuotaStatus::class;
+    protected $tokensPerDayType = QuotaStatus::class;
     protected $tokensPerDayDataType = '';
-    protected $tokensPerHourType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\QuotaStatus::class;
+    protected $tokensPerHourType = QuotaStatus::class;
     protected $tokensPerHourDataType = '';
-    protected $tokensPerProjectPerHourType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\QuotaStatus::class;
+    protected $tokensPerProjectPerHourType = QuotaStatus::class;
     protected $tokensPerProjectPerHourDataType = '';
     /**
      * Standard Analytics Properties can send up to 10 concurrent requests;
@@ -37,7 +37,7 @@ class PropertyQuota extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param QuotaStatus $concurrentRequests
      */
-    public function setConcurrentRequests(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\QuotaStatus $concurrentRequests)
+    public function setConcurrentRequests(QuotaStatus $concurrentRequests)
     {
         $this->concurrentRequests = $concurrentRequests;
     }
@@ -56,7 +56,7 @@ class PropertyQuota extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param QuotaStatus $potentiallyThresholdedRequestsPerHour
      */
-    public function setPotentiallyThresholdedRequestsPerHour(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\QuotaStatus $potentiallyThresholdedRequestsPerHour)
+    public function setPotentiallyThresholdedRequestsPerHour(QuotaStatus $potentiallyThresholdedRequestsPerHour)
     {
         $this->potentiallyThresholdedRequestsPerHour = $potentiallyThresholdedRequestsPerHour;
     }
@@ -74,7 +74,7 @@ class PropertyQuota extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param QuotaStatus $serverErrorsPerProjectPerHour
      */
-    public function setServerErrorsPerProjectPerHour(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\QuotaStatus $serverErrorsPerProjectPerHour)
+    public function setServerErrorsPerProjectPerHour(QuotaStatus $serverErrorsPerProjectPerHour)
     {
         $this->serverErrorsPerProjectPerHour = $serverErrorsPerProjectPerHour;
     }
@@ -92,7 +92,7 @@ class PropertyQuota extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param QuotaStatus $tokensPerDay
      */
-    public function setTokensPerDay(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\QuotaStatus $tokensPerDay)
+    public function setTokensPerDay(QuotaStatus $tokensPerDay)
     {
         $this->tokensPerDay = $tokensPerDay;
     }
@@ -111,7 +111,7 @@ class PropertyQuota extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param QuotaStatus $tokensPerHour
      */
-    public function setTokensPerHour(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\QuotaStatus $tokensPerHour)
+    public function setTokensPerHour(QuotaStatus $tokensPerHour)
     {
         $this->tokensPerHour = $tokensPerHour;
     }
@@ -132,7 +132,7 @@ class PropertyQuota extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param QuotaStatus $tokensPerProjectPerHour
      */
-    public function setTokensPerProjectPerHour(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\QuotaStatus $tokensPerProjectPerHour)
+    public function setTokensPerProjectPerHour(QuotaStatus $tokensPerProjectPerHour)
     {
         $this->tokensPerProjectPerHour = $tokensPerProjectPerHour;
     }
@@ -145,4 +145,4 @@ class PropertyQuota extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\PropertyQuota::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_PropertyQuota');
+class_alias(PropertyQuota::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_PropertyQuota');

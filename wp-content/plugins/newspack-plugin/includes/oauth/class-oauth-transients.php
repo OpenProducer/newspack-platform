@@ -35,6 +35,17 @@ class OAuth_Transients {
 	public static function cron_init() {
 		\register_deactivation_hook( NEWSPACK_PLUGIN_FILE, [ __CLASS__, 'cron_deactivate' ] );
 
+		/**
+		 * Array of cron hook names to disable. Use this to selectively
+		 * disable Newspack cron jobs on specific environments.
+		 *
+		 * @constant NEWSPACK_CRON_DISABLE
+		 * @type     array
+		 * @default  All cron jobs enabled
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_CRON_DISABLE', [ 'newspack_oauth_transients_cleanup' ] );
+		 */
 		if ( defined( 'NEWSPACK_CRON_DISABLE' ) && is_array( NEWSPACK_CRON_DISABLE ) && in_array( self::CRON_HOOK, NEWSPACK_CRON_DISABLE, true ) ) {
 			self::cron_deactivate();
 		} elseif ( ! \wp_next_scheduled( self::CRON_HOOK ) ) {
@@ -128,7 +139,17 @@ class OAuth_Transients {
 			)
 		);
 
-		// Burn after reading.
+		/**
+		 * Prevents OAuth transients from being deleted after reading.
+		 * Useful for debugging OAuth flows. Do not enable in production.
+		 *
+		 * @constant NEWSPACK_OAUTH_TRANSIENTS_DEBUG
+		 * @type     bool
+		 * @default  Transients deleted after reading
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_OAUTH_TRANSIENTS_DEBUG', true );
+		 */
 		if ( $delete && ! empty( $value ) && ( ! defined( 'NEWSPACK_OAUTH_TRANSIENTS_DEBUG' ) || ! NEWSPACK_OAUTH_TRANSIENTS_DEBUG ) ) {
 			self::delete( $id, $scope );
 		}

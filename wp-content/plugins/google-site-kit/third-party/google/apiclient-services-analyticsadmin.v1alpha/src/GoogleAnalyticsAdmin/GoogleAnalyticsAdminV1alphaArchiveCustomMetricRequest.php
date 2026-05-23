@@ -21,4 +21,4 @@ class GoogleAnalyticsAdminV1alphaArchiveCustomMetricRequest extends \Google\Site
 {
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaArchiveCustomMetricRequest::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaArchiveCustomMetricRequest');
+class_alias(GoogleAnalyticsAdminV1alphaArchiveCustomMetricRequest::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaArchiveCustomMetricRequest');

@@ -2,6 +2,7 @@
  * WordPress dependencies.
  */
 import apiFetch from '@wordpress/api-fetch';
+import { useBlockProps } from '@wordpress/block-editor';
 import { __, sprintf } from '@wordpress/i18n';
 import { ExternalLink, Notice, Placeholder, SelectControl, Spinner } from '@wordpress/components';
 import { Fragment, useEffect, useState } from '@wordpress/element';
@@ -26,6 +27,7 @@ export const CustomPlacementEditor = ( { attributes, setAttributes } ) => {
 			label: customPlacements[ key ],
 		} ) )
 	);
+	const blockProps = useBlockProps();
 
 	const getPrompts = async () => {
 		setError( null );
@@ -75,89 +77,91 @@ export const CustomPlacementEditor = ( { attributes, setAttributes } ) => {
 	}
 
 	return (
-		<Placeholder
-			className="newspack-popups__custom-placement-placeholder"
-			label={ __( 'Custom Placement', 'newspack-popups' ) }
-			icon={ megaphone }
-		>
-			<SelectControl
-				id="newspack-popups__custom-placement-select"
-				onChange={ _customPlacement => setAttributes( { customPlacement: _customPlacement } ) }
-				value={ -1 < Object.keys( customPlacements ).indexOf( customPlacement ) ? customPlacement : '' }
-				options={ customPlacementOptions }
-			/>
+		<div { ...blockProps }>
+			<Placeholder
+				className="newspack-popups__custom-placement-placeholder"
+				label={ __( 'Custom Placement', 'newspack-popups' ) }
+				icon={ megaphone }
+			>
+				<SelectControl
+					id="newspack-popups__custom-placement-select"
+					onChange={ _customPlacement => setAttributes( { customPlacement: _customPlacement } ) }
+					value={ -1 < Object.keys( customPlacements ).indexOf( customPlacement ) ? customPlacement : '' }
+					options={ customPlacementOptions }
+				/>
 
-			{ loading && <Spinner /> }
+				{ loading && <Spinner /> }
 
-			{ error && (
-				<div className="newspack-popups__custom-placement-prompts">
-					<Notice status="error" isDismissible={ false }>
-						{ error }
-					</Notice>
-				</div>
-			) }
-
-			{ ! loading && ! error && Array.isArray( prompts ) && (
-				<div className="newspack-popups__custom-placement-prompts">
-					{ 0 === prompts.length && (
-						<Notice status="warning" isDismissible={ false }>
-							{ __( 'No active prompts found for this custom placement.', 'newspack-popups' ) }
+				{ error && (
+					<div className="newspack-popups__custom-placement-prompts">
+						<Notice status="error" isDismissible={ false }>
+							{ error }
 						</Notice>
-					) }
-					{ 0 < prompts.length && (
-						<>
-							<p>
-								{ sprintf(
-									// translators: %1$s: max number of popups displayed. %2$s: plural modifier.
-									__(
-										'This custom placement will display at most %1$sthe following active prompt%2$s, depending on the reader’s top-priority segment:',
-										'newspack-popups'
-									),
-									1 < prompts.length ? 'one of ' : '',
-									1 < prompts.length ? 's' : ''
-								) }
-							</p>
-							{ Object.keys( segments ).map( segmentName => {
-								const segmentId = segments[ segmentName ].id;
-								return (
-									<Fragment key={ segmentId }>
-										<strong>
-											{ segmentId ? (
-												<ExternalLink
-													href={ `/wp-admin/admin.php?page=newspack-audience-campaigns#/campaigns/${ segmentId }` }
-												>
-													{ sprintf(
-														// translators: %s: segment name.
-														__( 'Segment: %s', 'newspack-popups' ),
-														segmentName
-													) }
-												</ExternalLink>
-											) : (
-												[
-													'Everyone' !== segmentName ? __( 'Segment:', 'newspack-popups' ) : '',
-													segmentName || '',
-													'Everyone' === segmentName && 1 < Object.keys( segments ).length
-														? __( 'else', 'newspack-popups' )
-														: '',
-												]
-											) }
-										</strong>
-										<ul>
-											{ segments[ segmentName ].prompts.map( prompt => (
-												<li key={ prompt.id }>
-													<ExternalLink href={ `/wp-admin/post.php?post=${ prompt.id }&action=edit` }>
-														{ prompt.title }
+					</div>
+				) }
+
+				{ ! loading && ! error && Array.isArray( prompts ) && (
+					<div className="newspack-popups__custom-placement-prompts">
+						{ 0 === prompts.length && (
+							<Notice status="warning" isDismissible={ false }>
+								{ __( 'No active prompts found for this custom placement.', 'newspack-popups' ) }
+							</Notice>
+						) }
+						{ 0 < prompts.length && (
+							<>
+								<p>
+									{ sprintf(
+										// translators: %1$s: max number of popups displayed. %2$s: plural modifier.
+										__(
+											'This custom placement will display at most %1$sthe following active prompt%2$s, depending on the reader’s top-priority segment:',
+											'newspack-popups'
+										),
+										1 < prompts.length ? 'one of ' : '',
+										1 < prompts.length ? 's' : ''
+									) }
+								</p>
+								{ Object.keys( segments ).map( segmentName => {
+									const segmentId = segments[ segmentName ].id;
+									return (
+										<Fragment key={ segmentId }>
+											<strong>
+												{ segmentId ? (
+													<ExternalLink
+														href={ `/wp-admin/admin.php?page=newspack-audience-campaigns#/campaigns/${ segmentId }` }
+													>
+														{ sprintf(
+															// translators: %s: segment name.
+															__( 'Segment: %s', 'newspack-popups' ),
+															segmentName
+														) }
 													</ExternalLink>
-												</li>
-											) ) }
-										</ul>
-									</Fragment>
-								);
-							} ) }
-						</>
-					) }
-				</div>
-			) }
-		</Placeholder>
+												) : (
+													[
+														'Everyone' !== segmentName ? __( 'Segment:', 'newspack-popups' ) : '',
+														segmentName || '',
+														'Everyone' === segmentName && 1 < Object.keys( segments ).length
+															? __( 'else', 'newspack-popups' )
+															: '',
+													]
+												) }
+											</strong>
+											<ul>
+												{ segments[ segmentName ].prompts.map( prompt => (
+													<li key={ prompt.id }>
+														<ExternalLink href={ `/wp-admin/post.php?post=${ prompt.id }&action=edit` }>
+															{ prompt.title }
+														</ExternalLink>
+													</li>
+												) ) }
+											</ul>
+										</Fragment>
+									);
+								} ) }
+							</>
+						) }
+					</div>
+				) }
+			</Placeholder>
+		</div>
 	);
 };

@@ -40,7 +40,7 @@ class DimensionCompatibility extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $compatibility;
-    protected $dimensionMetadataType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\DimensionMetadata::class;
+    protected $dimensionMetadataType = DimensionMetadata::class;
     protected $dimensionMetadataDataType = '';
     /**
      * The compatibility of this dimension. If the compatibility is COMPATIBLE,
@@ -68,7 +68,7 @@ class DimensionCompatibility extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param DimensionMetadata $dimensionMetadata
      */
-    public function setDimensionMetadata(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\DimensionMetadata $dimensionMetadata)
+    public function setDimensionMetadata(DimensionMetadata $dimensionMetadata)
     {
         $this->dimensionMetadata = $dimensionMetadata;
     }
@@ -81,4 +81,4 @@ class DimensionCompatibility extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\DimensionCompatibility::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_DimensionCompatibility');
+class_alias(DimensionCompatibility::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_DimensionCompatibility');

@@ -49,7 +49,7 @@ class Order extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $orderId;
-    protected $paymentAddressType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\PaymentAddress::class;
+    protected $paymentAddressType = PaymentAddress::class;
     protected $paymentAddressDataType = '';
     /**
      * The product title associated with the offer. Each subscription/plan title
@@ -65,9 +65,9 @@ class Order extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string[]
      */
     public $productIds;
-    protected $recurrenceDetailsType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\RecurrenceDetails::class;
+    protected $recurrenceDetailsType = RecurrenceDetails::class;
     protected $recurrenceDetailsDataType = '';
-    protected $stateDetailsType = \Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\StateDetails::class;
+    protected $stateDetailsType = StateDetails::class;
     protected $stateDetailsDataType = 'array';
     /**
      * Output only. The last time the order was updated.
@@ -149,7 +149,7 @@ class Order extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param PaymentAddress $paymentAddress
      */
-    public function setPaymentAddress(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\PaymentAddress $paymentAddress)
+    public function setPaymentAddress(PaymentAddress $paymentAddress)
     {
         $this->paymentAddress = $paymentAddress;
     }
@@ -199,7 +199,7 @@ class Order extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param RecurrenceDetails $recurrenceDetails
      */
-    public function setRecurrenceDetails(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\RecurrenceDetails $recurrenceDetails)
+    public function setRecurrenceDetails(RecurrenceDetails $recurrenceDetails)
     {
         $this->recurrenceDetails = $recurrenceDetails;
     }
@@ -245,4 +245,4 @@ class Order extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle\Order::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SubscribewithGoogle_Order');
+class_alias(Order::class, 'Google\Site_Kit_Dependencies\Google_Service_SubscribewithGoogle_Order');

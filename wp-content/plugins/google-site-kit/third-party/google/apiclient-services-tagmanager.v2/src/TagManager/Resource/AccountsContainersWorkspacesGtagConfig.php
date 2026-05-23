@@ -38,11 +38,11 @@ class AccountsContainersWorkspacesGtagConfig extends \Google\Site_Kit_Dependenci
      * @return GtagConfig
      * @throws \Google\Service\Exception
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\TagManager\GtagConfig $postBody, $optParams = [])
+    public function create($parent, GtagConfig $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\GtagConfig::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('create', [$params], GtagConfig::class);
     }
     /**
      * Deletes a Google tag config. (gtag_config.delete)
@@ -54,7 +54,7 @@ class AccountsContainersWorkspacesGtagConfig extends \Google\Site_Kit_Dependenci
     public function delete($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('delete', [$params]);
     }
     /**
@@ -68,8 +68,8 @@ class AccountsContainersWorkspacesGtagConfig extends \Google\Site_Kit_Dependenci
     public function get($path, $optParams = [])
     {
         $params = ['path' => $path];
-        $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\GtagConfig::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('get', [$params], GtagConfig::class);
     }
     /**
      * Lists all Google tag configs in a Container.
@@ -86,8 +86,8 @@ class AccountsContainersWorkspacesGtagConfig extends \Google\Site_Kit_Dependenci
     public function listAccountsContainersWorkspacesGtagConfig($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\ListGtagConfigResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListGtagConfigResponse::class);
     }
     /**
      * Updates a Google tag config. (gtag_config.update)
@@ -101,12 +101,12 @@ class AccountsContainersWorkspacesGtagConfig extends \Google\Site_Kit_Dependenci
      * @return GtagConfig
      * @throws \Google\Service\Exception
      */
-    public function update($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\GtagConfig $postBody, $optParams = [])
+    public function update($path, GtagConfig $postBody, $optParams = [])
     {
         $params = ['path' => $path, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('update', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\GtagConfig::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('update', [$params], GtagConfig::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Resource\AccountsContainersWorkspacesGtagConfig::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Resource_AccountsContainersWorkspacesGtagConfig');
+class_alias(AccountsContainersWorkspacesGtagConfig::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Resource_AccountsContainersWorkspacesGtagConfig');

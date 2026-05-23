@@ -12,7 +12,7 @@ import { CardBody, ToggleControl } from '@wordpress/components';
  */
 import AccessRuleControl from './access-rule-control';
 
-export default function AccessRule( { config, enabled, onToggle = () => {}, rule, slug, onChange }: GateRuleProps ) {
+export default function AccessRule( { config, enabled, onToggle = () => {}, rule, slug, onChange }: GateAccessRuleProps ) {
 	return (
 		<CardBody size="small">
 			<ToggleControl label={ config.name } help={ config.description } checked={ enabled } onChange={ () => onToggle( slug ) } />

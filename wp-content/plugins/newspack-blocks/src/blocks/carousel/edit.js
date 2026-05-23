@@ -10,10 +10,10 @@ import classnames from 'classnames';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { InspectorControls } from '@wordpress/block-editor';
+import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 // eslint-disable-next-line @wordpress/no-unsafe-wp-apis
 import { dateI18n, __experimentalGetSettings } from '@wordpress/date';
-import { Component, createRef, Fragment, RawHTML } from '@wordpress/element';
+import { Component, createRef, Fragment, RawHTML, useRef } from '@wordpress/element';
 import {
 	PanelBody,
 	Placeholder,
@@ -50,7 +50,6 @@ class Edit extends Component {
 		this.btnPauseRef = createRef();
 		this.btnNextRef = createRef();
 		this.btnPrevRef = createRef();
-		this.carouselRef = createRef();
 		this.paginationRef = createRef();
 
 		this.state = {
@@ -64,7 +63,7 @@ class Edit extends Component {
 	}
 
 	componentDidUpdate( prevProps ) {
-		const isVisible = 0 < this.carouselRef.current.offsetWidth && 0 < this.carouselRef.current.offsetHeight;
+		const isVisible = 0 < this.props.carouselRef.current.offsetWidth && 0 < this.props.carouselRef.current.offsetHeight;
 
 		// Bail early if the component is hidden.
 		if ( ! isVisible ) {
@@ -108,8 +107,8 @@ class Edit extends Component {
 			const { aspectRatio, autoplay, delay, slidesPerView } = this.props.attributes;
 			const swiperInstance = createSwiper(
 				{
-					block: this.carouselRef.current, // Editor uses the same wrapper for block and swiper container.
-					container: this.carouselRef.current,
+					block: this.props.carouselRef.current, // Editor uses the same wrapper for block and swiper container.
+					container: this.props.carouselRef.current,
 					next: this.btnNextRef.current,
 					prev: this.btnPrevRef.current,
 					play: this.btnPlayRef.current,
@@ -134,7 +133,7 @@ class Edit extends Component {
 	}
 
 	render() {
-		const { attributes, className, setAttributes, latestPosts, isUIDisabled } = this.props;
+		const { attributes, setAttributes, latestPosts, isUIDisabled, blockProps } = this.props;
 		const {
 			aspectRatio,
 			authors,
@@ -161,8 +160,7 @@ class Edit extends Component {
 			tags,
 		} = attributes;
 		const classes = classnames(
-			className,
-			'wp-block-newspack-blocks-carousel', // Default to make styles work for third-party consumers.
+			blockProps.className,
 			'wpnbpc', // Shortened version of the default classname.
 			'slides-per-view-' + slidesPerView,
 			'swiper',
@@ -206,113 +204,6 @@ class Edit extends Component {
 
 		return (
 			<Fragment>
-				<div className={ classes } ref={ this.carouselRef }>
-					{ hasNoPosts && (
-						<Placeholder className="component-placeholder__align-center">
-							<div style={ { margin: 'auto' } }>{ __( 'Sorry, no posts were found.' ) }</div>
-						</Placeholder>
-					) }
-					{ ( ! this.state.swiperInitialized || ! latestPosts ) && (
-						<Placeholder icon={ <Spinner /> } className="component-placeholder__align-center" />
-					) }
-					{ latestPosts && (
-						<Fragment>
-							{ autoplay && (
-								<Fragment>
-									<button className="swiper-button swiper-button-pause" ref={ this.btnPauseRef } />
-									<button className="swiper-button swiper-button-play" ref={ this.btnPlayRef } />
-								</Fragment>
-							) }
-							<div className="swiper-wrapper">
-								{ latestPosts.map( post => (
-									<article
-										className={ `post-has-image swiper-slide ${ post.post_type } ${ post.newspack_article_classes || '' }` }
-										key={ post.id }
-									>
-										{ getPostStatusLabel( post ) }
-										<figure className="post-thumbnail">
-											<a href="#" rel="bookmark">
-												{ post.newspack_featured_image_src ? (
-													<img
-														className={ `image-fit-${ imageFit }` }
-														src={ post.newspack_featured_image_src.large }
-														alt=""
-													/>
-												) : (
-													<div className="wp-block-newspack-blocks-carousel__placeholder" />
-												) }
-											</a>
-										</figure>
-										{ ( post.newspack_post_sponsors ||
-											showCategory ||
-											showTitle ||
-											showAuthor ||
-											showDate ||
-											showCaption ||
-											showCredit ) && (
-											<div className="entry-wrapper">
-												{ ( post.newspack_post_sponsors || ( showCategory && 0 < post.newspack_category_info.length ) ) && (
-													<div className={ 'cat-links' + ( post.newspack_post_sponsors ? ' sponsor-label' : '' ) }>
-														{ post.newspack_post_sponsors && (
-															<span className="flag">{ post.newspack_post_sponsors[ 0 ].flag }</span>
-														) }
-														{ showCategory &&
-															( ! post.newspack_post_sponsors || post.newspack_sponsors_show_categories ) && (
-																<RawHTML>{ decodeEntities( post.newspack_category_info ) }</RawHTML>
-															) }
-													</div>
-												) }
-												{ showTitle && (
-													<h3 className="entry-title">
-														<a href="#">{ decodeEntities( post.title.rendered.trim() ) }</a>
-													</h3>
-												) }
-												<div className="entry-meta">
-													{ post.newspack_post_sponsors && (
-														<span
-															className={ `entry-sponsors ${
-																post.newspack_sponsors_show_author ? 'plus-author' : ''
-															}` }
-														>
-															{ formatSponsorLogos( post.newspack_post_sponsors ) }
-															{ formatSponsorByline( post.newspack_post_sponsors ) }
-														</span>
-													) }
-													{ showAuthor &&
-														! post.newspack_listings_hide_author &&
-														( ! post.newspack_post_sponsors || post.newspack_sponsors_show_author ) && (
-															<RawHTML className="byline-container">{ getBylineHTML( post, showAvatar ) }</RawHTML>
-														) }
-													{ showDate && (
-														<time className="entry-date published" key="pub-date">
-															{ dateI18n( dateFormat, post.date ) }
-														</time>
-													) }
-													{ ( showCaption || showCredit ) && post.newspack_featured_image_caption && (
-														<div
-															className="entry-caption"
-															dangerouslySetInnerHTML={ {
-																__html: post.newspack_featured_image_caption,
-															} }
-														/>
-													) }
-												</div>
-											</div>
-										) }
-									</article>
-								) ) }
-							</div>
-							{ ! hasNoPosts && ! hasOnePost && (
-								<>
-									<button className="swiper-button swiper-button-prev" ref={ this.btnPrevRef } />
-									<button className="swiper-button swiper-button-next" ref={ this.btnNextRef } />
-									<div className="swiper-pagination swiper-pagination-bullets" ref={ this.paginationRef } />
-								</>
-							) }
-						</Fragment>
-					) }
-				</div>
-
 				<InspectorControls>
 					<PanelBody title={ __( 'Settings', 'newspack-blocks' ) } className="newspack-block__panel is-content">
 						{ postsToShow && (
@@ -337,6 +228,8 @@ class Edit extends Component {
 								specificPosts={ specificPosts }
 								onSpecificPostsChange={ _specificPosts => setAttributes( { specificPosts: _specificPosts } ) }
 								postType={ postType }
+								allowDedupeCurrentValue={ ! attributes.deduplicate }
+								onAllowDedupeChange={ value => setAttributes( { deduplicate: ! value } ) }
 							/>
 						) }
 					</PanelBody>
@@ -456,9 +349,121 @@ class Edit extends Component {
 					<PostTypesPanel attributes={ attributes } setAttributes={ setAttributes } />
 					<PostStatusesPanel attributes={ attributes } setAttributes={ setAttributes } />
 				</InspectorControls>
+				<div { ...blockProps } className={ classes }>
+					{ hasNoPosts && (
+						<Placeholder className="component-placeholder__align-center">
+							<div style={ { margin: 'auto' } }>{ __( 'Sorry, no posts were found.' ) }</div>
+						</Placeholder>
+					) }
+					{ ( ! this.state.swiperInitialized || ! latestPosts ) && (
+						<Placeholder icon={ <Spinner /> } className="component-placeholder__align-center" />
+					) }
+					{ latestPosts && (
+						<Fragment>
+							{ autoplay && (
+								<Fragment>
+									<button className="swiper-button swiper-button-pause" ref={ this.btnPauseRef } />
+									<button className="swiper-button swiper-button-play" ref={ this.btnPlayRef } />
+								</Fragment>
+							) }
+							<div className="swiper-wrapper">
+								{ latestPosts.map( post => (
+									<article
+										className={ `post-has-image swiper-slide ${ post.post_type } ${ post.newspack_article_classes || '' }` }
+										key={ post.id }
+									>
+										{ getPostStatusLabel( post ) }
+										<figure className="post-thumbnail">
+											<a href="#" rel="bookmark">
+												{ post.newspack_featured_image_src ? (
+													<img
+														className={ `image-fit-${ imageFit }` }
+														src={ post.newspack_featured_image_src.large }
+														alt=""
+													/>
+												) : (
+													<div className="wp-block-newspack-blocks-carousel__placeholder" />
+												) }
+											</a>
+										</figure>
+										{ ( post.newspack_post_sponsors ||
+											showCategory ||
+											showTitle ||
+											showAuthor ||
+											showDate ||
+											showCaption ||
+											showCredit ) && (
+											<div className="entry-wrapper">
+												{ ( post.newspack_post_sponsors || ( showCategory && 0 < post.newspack_category_info.length ) ) && (
+													<div className={ 'cat-links' + ( post.newspack_post_sponsors ? ' sponsor-label' : '' ) }>
+														{ post.newspack_post_sponsors && (
+															<span className="flag">{ post.newspack_post_sponsors[ 0 ].flag }</span>
+														) }
+														{ showCategory &&
+															( ! post.newspack_post_sponsors || post.newspack_sponsors_show_categories ) && (
+																<RawHTML>{ decodeEntities( post.newspack_category_info ) }</RawHTML>
+															) }
+													</div>
+												) }
+												{ showTitle && (
+													<h3 className="entry-title">
+														<a href="#">{ decodeEntities( post.title.rendered.trim() ) }</a>
+													</h3>
+												) }
+												<div className="entry-meta">
+													{ post.newspack_post_sponsors && (
+														<span
+															className={ `entry-sponsors ${
+																post.newspack_sponsors_show_author ? 'plus-author' : ''
+															}` }
+														>
+															{ formatSponsorLogos( post.newspack_post_sponsors ) }
+															{ formatSponsorByline( post.newspack_post_sponsors ) }
+														</span>
+													) }
+													{ showAuthor &&
+														! post.newspack_listings_hide_author &&
+														( ! post.newspack_post_sponsors || post.newspack_sponsors_show_author ) && (
+															<RawHTML className="byline-container">{ getBylineHTML( post, showAvatar ) }</RawHTML>
+														) }
+													{ showDate && (
+														<time className="entry-date published" key="pub-date">
+															{ dateI18n( dateFormat, post.date ) }
+														</time>
+													) }
+													{ ( showCaption || showCredit ) && post.newspack_featured_image_caption && (
+														<div
+															className="entry-caption"
+															dangerouslySetInnerHTML={ {
+																__html: post.newspack_featured_image_caption,
+															} }
+														/>
+													) }
+												</div>
+											</div>
+										) }
+									</article>
+								) ) }
+							</div>
+							{ ! hasNoPosts && ! hasOnePost && (
+								<>
+									<button className="swiper-button swiper-button-prev" ref={ this.btnPrevRef } />
+									<button className="swiper-button swiper-button-next" ref={ this.btnNextRef } />
+									<div className="swiper-pagination swiper-pagination-bullets" ref={ this.paginationRef } />
+								</>
+							) }
+						</Fragment>
+					) }
+				</div>
 			</Fragment>
 		);
 	}
 }
 
-export default compose( [ withSelect( postsBlockSelector ), withDispatch( postsBlockDispatch ) ] )( Edit );
+const EditWithBlockProps = props => {
+	const carouselRef = useRef();
+	const blockProps = useBlockProps( { ref: carouselRef } );
+	return <Edit { ...props } blockProps={ blockProps } carouselRef={ carouselRef } />;
+};
+
+export default compose( [ withSelect( postsBlockSelector ), withDispatch( postsBlockDispatch ) ] )( EditWithBlockProps );

@@ -1,6 +1,6 @@
 <?php
 
-/* namespace Google\Site_Kit_Dependencies intentionally removed */
+namespace Google\Site_Kit_Dependencies;
 
 /*
  * This file is part of the Symfony package.
@@ -126,29 +126,29 @@ if (!\defined('IDNA_ERROR_CONTEXTJ')) {
     \define('IDNA_ERROR_CONTEXTJ', 4096);
 }
 if (\PHP_VERSION_ID < 70400) {
-    if (!\function_exists('idn_to_ascii')) {
+    if (!\function_exists('idn_to_ascii') && !\function_exists('Google\Site_Kit_Dependencies\idn_to_ascii')) {
         function idn_to_ascii($domain, $flags = 0, $variant = \INTL_IDNA_VARIANT_2003, &$idna_info = null)
         {
-            return \Google\Site_Kit_Dependencies\Symfony\Polyfill\Intl\Idn\Idn::idn_to_ascii($domain, $flags, $variant, $idna_info);
+            return p\Idn::idn_to_ascii($domain, $flags, $variant, $idna_info);
         }
     }
-    if (!\function_exists('idn_to_utf8')) {
+    if (!\function_exists('idn_to_utf8') && !\function_exists('Google\Site_Kit_Dependencies\idn_to_utf8')) {
         function idn_to_utf8($domain, $flags = 0, $variant = \INTL_IDNA_VARIANT_2003, &$idna_info = null)
         {
-            return \Google\Site_Kit_Dependencies\Symfony\Polyfill\Intl\Idn\Idn::idn_to_utf8($domain, $flags, $variant, $idna_info);
+            return p\Idn::idn_to_utf8($domain, $flags, $variant, $idna_info);
         }
     }
 } else {
-    if (!\function_exists('idn_to_ascii')) {
+    if (!\function_exists('idn_to_ascii') && !\function_exists('Google\Site_Kit_Dependencies\idn_to_ascii')) {
         function idn_to_ascii($domain, $flags = 0, $variant = \INTL_IDNA_VARIANT_UTS46, &$idna_info = null)
         {
-            return \Google\Site_Kit_Dependencies\Symfony\Polyfill\Intl\Idn\Idn::idn_to_ascii($domain, $flags, $variant, $idna_info);
+            return p\Idn::idn_to_ascii($domain, $flags, $variant, $idna_info);
         }
     }
-    if (!\function_exists('idn_to_utf8')) {
+    if (!\function_exists('idn_to_utf8') && !\function_exists('Google\Site_Kit_Dependencies\idn_to_utf8')) {
         function idn_to_utf8($domain, $flags = 0, $variant = \INTL_IDNA_VARIANT_UTS46, &$idna_info = null)
         {
-            return \Google\Site_Kit_Dependencies\Symfony\Polyfill\Intl\Idn\Idn::idn_to_utf8($domain, $flags, $variant, $idna_info);
+            return p\Idn::idn_to_utf8($domain, $flags, $variant, $idna_info);
         }
     }
 }

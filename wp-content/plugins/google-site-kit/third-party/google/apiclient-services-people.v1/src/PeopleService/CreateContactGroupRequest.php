@@ -19,7 +19,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 
 class CreateContactGroupRequest extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $contactGroupType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\ContactGroup::class;
+    protected $contactGroupType = ContactGroup::class;
     protected $contactGroupDataType = '';
     /**
      * Optional. A field mask to restrict which fields on the group are returned.
@@ -34,7 +34,7 @@ class CreateContactGroupRequest extends \Google\Site_Kit_Dependencies\Google\Mod
      *
      * @param ContactGroup $contactGroup
      */
-    public function setContactGroup(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\ContactGroup $contactGroup)
+    public function setContactGroup(ContactGroup $contactGroup)
     {
         $this->contactGroup = $contactGroup;
     }
@@ -65,4 +65,4 @@ class CreateContactGroupRequest extends \Google\Site_Kit_Dependencies\Google\Mod
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\CreateContactGroupRequest::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_CreateContactGroupRequest');
+class_alias(CreateContactGroupRequest::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_CreateContactGroupRequest');

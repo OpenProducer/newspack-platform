@@ -53,4 +53,4 @@ class GoogleAnalyticsAdminV1betaAcknowledgeUserDataCollectionRequest extends \Go
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAcknowledgeUserDataCollectionRequest::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaAcknowledgeUserDataCollectionRequest');
+class_alias(GoogleAnalyticsAdminV1betaAcknowledgeUserDataCollectionRequest::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaAcknowledgeUserDataCollectionRequest');

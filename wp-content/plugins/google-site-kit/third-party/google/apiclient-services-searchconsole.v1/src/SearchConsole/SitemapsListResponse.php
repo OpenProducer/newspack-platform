@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\SearchConsole;
 class SitemapsListResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'sitemap';
-    protected $sitemapType = \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\WmxSitemap::class;
+    protected $sitemapType = WmxSitemap::class;
     protected $sitemapDataType = 'array';
     /**
      * Contains detailed information about a specific URL submitted as a
@@ -41,4 +41,4 @@ class SitemapsListResponse extends \Google\Site_Kit_Dependencies\Google\Collecti
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\SitemapsListResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SearchConsole_SitemapsListResponse');
+class_alias(SitemapsListResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_SearchConsole_SitemapsListResponse');

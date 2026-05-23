@@ -18,6 +18,6 @@
 namespace Google\Site_Kit_Dependencies\Google\Task;
 
 use Google\Site_Kit_Dependencies\Google\Exception as GoogleException;
-class Exception extends \Google\Site_Kit_Dependencies\Google\Exception
+class Exception extends GoogleException
 {
 }

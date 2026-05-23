@@ -23,7 +23,7 @@ class PrepareBodyMiddleware
     {
         $this->nextHandler = $nextHandler;
     }
-    public function __invoke(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request, array $options) : \Google\Site_Kit_Dependencies\GuzzleHttp\Promise\PromiseInterface
+    public function __invoke(RequestInterface $request, array $options): PromiseInterface
     {
         $fn = $this->nextHandler;
         // Don't do anything if the request has no body.
@@ -34,7 +34,7 @@ class PrepareBodyMiddleware
         // Add a default content-type if possible.
         if (!$request->hasHeader('Content-Type')) {
             if ($uri = $request->getBody()->getMetadata('uri')) {
-                if (\is_string($uri) && ($type = \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\MimeType::fromFilename($uri))) {
+                if (is_string($uri) && $type = Psr7\MimeType::fromFilename($uri)) {
                     $modify['set_headers']['Content-Type'] = $type;
                 }
             }
@@ -50,12 +50,12 @@ class PrepareBodyMiddleware
         }
         // Add the expect header if needed.
         $this->addExpectHeader($request, $options, $modify);
-        return $fn(\Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::modifyRequest($request, $modify), $options);
+        return $fn(Psr7\Utils::modifyRequest($request, $modify), $options);
     }
     /**
      * Add expect header
      */
-    private function addExpectHeader(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request, array $options, array &$modify) : void
+    private function addExpectHeader(RequestInterface $request, array $options, array &$modify): void
     {
         // Determine if the Expect header should be used
         if ($request->hasHeader('Expect')) {

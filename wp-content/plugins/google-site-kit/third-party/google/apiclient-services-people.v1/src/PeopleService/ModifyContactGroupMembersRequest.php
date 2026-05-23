@@ -78,4 +78,4 @@ class ModifyContactGroupMembersRequest extends \Google\Site_Kit_Dependencies\Goo
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\ModifyContactGroupMembersRequest::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_ModifyContactGroupMembersRequest');
+class_alias(ModifyContactGroupMembersRequest::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_ModifyContactGroupMembersRequest');

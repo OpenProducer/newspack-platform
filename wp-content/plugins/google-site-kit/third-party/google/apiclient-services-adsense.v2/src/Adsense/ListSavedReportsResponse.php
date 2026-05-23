@@ -27,7 +27,7 @@ class ListSavedReportsResponse extends \Google\Site_Kit_Dependencies\Google\Coll
      * @var string
      */
     public $nextPageToken;
-    protected $savedReportsType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\SavedReport::class;
+    protected $savedReportsType = SavedReport::class;
     protected $savedReportsDataType = 'array';
     /**
      * Continuation token used to page through reports. To retrieve the next page
@@ -64,4 +64,4 @@ class ListSavedReportsResponse extends \Google\Site_Kit_Dependencies\Google\Coll
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\ListSavedReportsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_ListSavedReportsResponse');
+class_alias(ListSavedReportsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_ListSavedReportsResponse');

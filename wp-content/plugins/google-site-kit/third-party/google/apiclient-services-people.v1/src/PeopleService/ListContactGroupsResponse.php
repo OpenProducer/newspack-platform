@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 class ListContactGroupsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'contactGroups';
-    protected $contactGroupsType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\ContactGroup::class;
+    protected $contactGroupsType = ContactGroup::class;
     protected $contactGroupsDataType = 'array';
     /**
      * The token that can be used to retrieve the next page of results.
@@ -107,4 +107,4 @@ class ListContactGroupsResponse extends \Google\Site_Kit_Dependencies\Google\Col
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\ListContactGroupsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_ListContactGroupsResponse');
+class_alias(ListContactGroupsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_ListContactGroupsResponse');

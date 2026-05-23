@@ -35,13 +35,13 @@ class VariableFormatValue extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $caseConversionType;
-    protected $convertFalseToValueType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $convertFalseToValueType = Parameter::class;
     protected $convertFalseToValueDataType = '';
-    protected $convertNullToValueType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $convertNullToValueType = Parameter::class;
     protected $convertNullToValueDataType = '';
-    protected $convertTrueToValueType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $convertTrueToValueType = Parameter::class;
     protected $convertTrueToValueDataType = '';
-    protected $convertUndefinedToValueType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
+    protected $convertUndefinedToValueType = Parameter::class;
     protected $convertUndefinedToValueDataType = '';
     /**
      * The option to convert a string-type variable value to either lowercase or
@@ -67,7 +67,7 @@ class VariableFormatValue extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Parameter $convertFalseToValue
      */
-    public function setConvertFalseToValue(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter $convertFalseToValue)
+    public function setConvertFalseToValue(Parameter $convertFalseToValue)
     {
         $this->convertFalseToValue = $convertFalseToValue;
     }
@@ -83,7 +83,7 @@ class VariableFormatValue extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Parameter $convertNullToValue
      */
-    public function setConvertNullToValue(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter $convertNullToValue)
+    public function setConvertNullToValue(Parameter $convertNullToValue)
     {
         $this->convertNullToValue = $convertNullToValue;
     }
@@ -99,7 +99,7 @@ class VariableFormatValue extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Parameter $convertTrueToValue
      */
-    public function setConvertTrueToValue(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter $convertTrueToValue)
+    public function setConvertTrueToValue(Parameter $convertTrueToValue)
     {
         $this->convertTrueToValue = $convertTrueToValue;
     }
@@ -115,7 +115,7 @@ class VariableFormatValue extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Parameter $convertUndefinedToValue
      */
-    public function setConvertUndefinedToValue(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter $convertUndefinedToValue)
+    public function setConvertUndefinedToValue(Parameter $convertUndefinedToValue)
     {
         $this->convertUndefinedToValue = $convertUndefinedToValue;
     }
@@ -128,4 +128,4 @@ class VariableFormatValue extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\VariableFormatValue::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_VariableFormatValue');
+class_alias(VariableFormatValue::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_VariableFormatValue');

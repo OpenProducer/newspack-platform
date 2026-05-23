@@ -15,7 +15,7 @@ final class UriComparator
      * Determines if a modified URL should be considered cross-origin with
      * respect to an original URL.
      */
-    public static function isCrossOrigin(\Google\Site_Kit_Dependencies\Psr\Http\Message\UriInterface $original, \Google\Site_Kit_Dependencies\Psr\Http\Message\UriInterface $modified) : bool
+    public static function isCrossOrigin(UriInterface $original, UriInterface $modified): bool
     {
         if (\strcasecmp($original->getHost(), $modified->getHost()) !== 0) {
             return \true;
@@ -28,7 +28,7 @@ final class UriComparator
         }
         return \false;
     }
-    private static function computePort(\Google\Site_Kit_Dependencies\Psr\Http\Message\UriInterface $uri) : int
+    private static function computePort(UriInterface $uri): int
     {
         $port = $uri->getPort();
         if (null !== $port) {

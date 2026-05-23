@@ -27,7 +27,7 @@ use Google\Site_Kit_Dependencies\Monolog\Logger;
  *
  * @phpstan-import-type FormattedRecord from AbstractProcessingHandler
  */
-class RedisHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\AbstractProcessingHandler
+class RedisHandler extends AbstractProcessingHandler
 {
     /** @var \Predis\Client<\Predis\Client>|\Redis */
     private $redisClient;
@@ -40,10 +40,10 @@ class RedisHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstrac
      * @param string                $key     The key name to push records to
      * @param int                   $capSize Number of entries to limit list size to, 0 = unlimited
      */
-    public function __construct($redis, string $key, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG, bool $bubble = \true, int $capSize = 0)
+    public function __construct($redis, string $key, $level = Logger::DEBUG, bool $bubble = \true, int $capSize = 0)
     {
         if (!($redis instanceof \Google\Site_Kit_Dependencies\Predis\Client || $redis instanceof \Redis)) {
-            throw new \InvalidArgumentException('Predis\\Client or Redis instance required');
+            throw new \InvalidArgumentException('Predis\Client or Redis instance required');
         }
         $this->redisClient = $redis;
         $this->redisKey = $key;
@@ -53,7 +53,7 @@ class RedisHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstrac
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
         if ($this->capSize) {
             $this->writeCapped($record);
@@ -67,15 +67,15 @@ class RedisHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstrac
      *
      * @phpstan-param FormattedRecord $record
      */
-    protected function writeCapped(array $record) : void
+    protected function writeCapped(array $record): void
     {
         if ($this->redisClient instanceof \Redis) {
-            $mode = \defined('\\Redis::MULTI') ? \Redis::MULTI : 1;
+            $mode = defined('Google\Site_Kit_Dependencies\Redis::MULTI') ? \Redis::MULTI : 1;
             $this->redisClient->multi($mode)->rpush($this->redisKey, $record["formatted"])->ltrim($this->redisKey, -$this->capSize, -1)->exec();
         } else {
             $redisKey = $this->redisKey;
             $capSize = $this->capSize;
-            $this->redisClient->transaction(function ($tx) use($record, $redisKey, $capSize) {
+            $this->redisClient->transaction(function ($tx) use ($record, $redisKey, $capSize) {
                 $tx->rpush($redisKey, $record["formatted"]);
                 $tx->ltrim($redisKey, -$capSize, -1);
             });
@@ -84,8 +84,8 @@ class RedisHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstrac
     /**
      * {@inheritDoc}
      */
-    protected function getDefaultFormatter() : \Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface
+    protected function getDefaultFormatter(): FormatterInterface
     {
-        return new \Google\Site_Kit_Dependencies\Monolog\Formatter\LineFormatter();
+        return new LineFormatter();
     }
 }

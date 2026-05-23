@@ -40,7 +40,7 @@ class RichResultsInspectionResult extends \Google\Site_Kit_Dependencies\Google\C
      */
     public const VERDICT_NEUTRAL = 'NEUTRAL';
     protected $collection_key = 'detectedItems';
-    protected $detectedItemsType = \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\DetectedItems::class;
+    protected $detectedItemsType = DetectedItems::class;
     protected $detectedItemsDataType = 'array';
     /**
      * High-level rich results inspection result for this URL.
@@ -85,4 +85,4 @@ class RichResultsInspectionResult extends \Google\Site_Kit_Dependencies\Google\C
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\RichResultsInspectionResult::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SearchConsole_RichResultsInspectionResult');
+class_alias(RichResultsInspectionResult::class, 'Google\Site_Kit_Dependencies\Google_Service_SearchConsole_RichResultsInspectionResult');

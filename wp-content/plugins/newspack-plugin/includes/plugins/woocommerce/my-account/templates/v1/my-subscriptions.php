@@ -10,6 +10,8 @@
  * @package  Newspack
  */
 
+namespace Newspack;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
@@ -30,7 +32,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</thead>
 
 	<tbody>
-		<?php foreach ( $subscriptions as $subscription_id => $subscription ) : ?>
+		<?php
+		foreach ( $subscriptions as $subscription_id => $subscription ) :
+			$is_group_subscription        = Group_Subscription::is_group_subscription( $subscription );
+			$is_group_member_subscription = $is_group_subscription && Group_Subscription::user_is_member( get_current_user_id(), $subscription );
+			?>
 		<tr class="order woocommerce-orders-table__row woocommerce-orders-table__row--status-<?php echo esc_attr( $subscription->get_status() ); ?>">
 			<td class="subscription-product-name woocommerce-orders-table__cell woocommerce-orders-table__cell-subscription-product-name woocommerce-orders-table__cell-order-product-name" data-title="<?php esc_attr_e( 'Product', 'newspack-plugin' ); ?>">
 				<?php
@@ -39,14 +45,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$item = reset( $items );
 					echo esc_html( $item->get_name() );
 				}
-				?>
+				if ( $is_group_subscription ) :
+					?>
+					<span class="newspack-ui__badge newspack-ui__badge--secondary">
+						<?php esc_html_e( 'Group', 'newspack-plugin' ); ?>
+					</span>
+				<?php endif; ?>
 			</td>
 			<td class="subscription-status order-status woocommerce-orders-table__cell woocommerce-orders-table__cell-subscription-status woocommerce-orders-table__cell-order-status" data-title="<?php esc_attr_e( 'Status', 'newspack-plugin' ); ?>">
 				<?php echo esc_attr( wcs_get_subscription_status_name( $subscription->get_status() ) ); ?>
 			</td>
 			<td class="subscription-next-payment order-date woocommerce-orders-table__cell woocommerce-orders-table__cell-subscription-next-payment woocommerce-orders-table__cell-order-date" data-title="<?php echo esc_attr_x( 'Next Payment', 'table heading', 'newspack-plugin' ); ?>">
 				<?php echo esc_attr( $subscription->get_date_to_display( 'next_payment' ) ); ?>
-				<?php if ( ! $subscription->is_manual() && $subscription->has_status( 'active' ) && $subscription->get_time( 'next_payment' ) > 0 ) : ?>
+				<?php if ( ! $subscription->is_manual() && $subscription->has_status( 'active' ) && $subscription->get_time( 'next_payment' ) > 0 && ! $is_group_member_subscription ) : ?>
 				<br/><small><?php echo esc_html( $subscription->get_payment_method_to_display( 'customer' ) ); ?></small>
 				<?php endif; ?>
 			</td>

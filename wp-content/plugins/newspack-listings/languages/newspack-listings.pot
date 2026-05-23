@@ -1,15 +1,15 @@
-# Copyright (C) 2025 Automattic
+# Copyright (C) 2026 Automattic
 # This file is distributed under the same license as the Newspack Listings plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Newspack Listings 3.4.1\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/project\n"
+"Project-Id-Version: Newspack Listings 3.5.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/newspack-listings\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-11-03T18:29:51+00:00\n"
+"POT-Creation-Date: 2026-03-30T17:16:51+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: newspack-listings\n"
@@ -104,11 +104,11 @@ msgstr ""
 msgid "Classified Ad 2"
 msgstr ""
 
-#: includes/class-blocks.php:85
+#: includes/class-blocks.php:89
 msgid "USD"
 msgstr ""
 
-#: includes/class-blocks.php:86
+#: includes/class-blocks.php:90
 msgid "United States (US) dollar"
 msgstr ""
 
@@ -415,8 +415,8 @@ msgstr ""
 
 #: includes/class-core.php:453
 #: dist/editor.js:39
-#: src/blocks/price/edit.js:70
-#: src/blocks/price/index.js:17
+#: src/blocks/price/edit.js:71
+#: src/blocks/price/index.js:18
 msgid "Price"
 msgstr ""
 
@@ -480,57 +480,57 @@ msgstr ""
 msgid "When should the listing’s featured status expire?"
 msgstr ""
 
-#: includes/class-products.php:184
+#: includes/class-products.php:196
 msgid "Self-Serve Listings"
 msgstr ""
 
 #. translators: %s: Product name
-#: includes/class-products.php:198
+#: includes/class-products.php:210
 msgid "Single Listing"
 msgstr ""
 
 #. translators: %s: Product name
-#: includes/class-products.php:210
+#: includes/class-products.php:222
 msgid "“Featured” Listing Upgrade"
 msgstr ""
 
 #. translators: %s: Product name
-#: includes/class-products.php:222
+#: includes/class-products.php:234
 msgid "Listing Subscription"
 msgstr ""
 
 #. translators: %s: Product name
-#: includes/class-products.php:237
+#: includes/class-products.php:249
 msgid "Premium Subscription Upgrade"
 msgstr ""
 
-#: includes/class-products.php:390
+#: includes/class-products.php:402
 msgid "Missing or invalid self-serve listing parent product."
 msgstr ""
 
-#: includes/class-products.php:408
+#: includes/class-products.php:420
 msgid "Missing or invalid self-serve listing child products."
 msgstr ""
 
-#: includes/class-products.php:431
+#: includes/class-products.php:443
 msgid "Blank listing (start from scratch)"
 msgstr ""
 
-#: includes/class-products.php:435
+#: includes/class-products.php:447
 #: dist/editor.js:24
 #: src/components/sidebar-query-controls.js:173
 msgid "Event"
 msgstr ""
 
-#: includes/class-products.php:439
+#: includes/class-products.php:451
 msgid "Classified Ad"
 msgstr ""
 
-#: includes/class-products.php:443
+#: includes/class-products.php:455
 msgid "Job Listing"
 msgstr ""
 
-#: includes/class-products.php:447
+#: includes/class-products.php:459
 msgid "Real Estate Listing"
 msgstr ""
 
@@ -596,12 +596,12 @@ msgstr ""
 #: dist/editor.js:30
 #: dist/editor.js:39
 #: dist/editor.js:42
-#: src/blocks/curated-list/index.js:29
-#: src/blocks/event-dates/index.js:27
-#: src/blocks/list-container/index.js:31
-#: src/blocks/listing/index.js:31
-#: src/blocks/price/index.js:27
-#: src/blocks/self-serve-listings/index.js:25
+#: src/blocks/curated-list/index.js:30
+#: src/blocks/event-dates/index.js:28
+#: src/blocks/list-container/index.js:32
+#: src/blocks/listing/index.js:32
+#: src/blocks/price/index.js:28
+#: src/blocks/self-serve-listings/index.js:26
 msgid "listings"
 msgstr ""
 
@@ -615,7 +615,7 @@ msgstr ""
 
 #: includes/class-settings.php:121
 #: dist/editor.js:30
-#: src/blocks/event-dates/index.js:30
+#: src/blocks/event-dates/index.js:31
 msgid "events"
 msgstr ""
 
@@ -718,8 +718,8 @@ msgstr ""
 #: includes/importer/class-importer.php:517
 #: dist/editor.js:24
 #: dist/editor.js:27
-#: src/blocks/listing/edit.js:102
-#: src/blocks/listing/edit.js:120
+#: src/blocks/listing/edit.js:104
+#: src/blocks/listing/edit.js:122
 #: src/components/sidebar-query-controls.js:72
 #: src/components/sidebar-query-controls.js:87
 #: src/components/sidebar-query-controls.js:109
@@ -737,8 +737,8 @@ msgstr ""
 #: src/templates/self-serve-form.php:77
 #: src/templates/self-serve-form.php:153
 #: dist/editor.js:42
-#: src/blocks/self-serve-listings/edit.js:199
-#: src/blocks/self-serve-listings/edit.js:272
+#: src/blocks/self-serve-listings/edit.js:201
+#: src/blocks/self-serve-listings/edit.js:274
 msgid "Listing Details"
 msgstr ""
 
@@ -864,8 +864,8 @@ msgstr ""
 
 #: includes/products/class-products-ui.php:276
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:312
-#: src/blocks/listing/edit.js:169
+#: src/blocks/curated-list/edit.js:315
+#: src/blocks/listing/edit.js:171
 msgid "Edit this listing"
 msgstr ""
 
@@ -935,8 +935,8 @@ msgstr ""
 #: src/templates/self-serve-form.php:79
 #: src/templates/self-serve-form.php:155
 #: dist/editor.js:42
-#: src/blocks/self-serve-listings/edit.js:201
-#: src/blocks/self-serve-listings/edit.js:274
+#: src/blocks/self-serve-listings/edit.js:203
+#: src/blocks/self-serve-listings/edit.js:276
 msgid "Listing Title"
 msgstr ""
 
@@ -960,7 +960,7 @@ msgstr ""
 
 #: includes/products/class-products-ui.php:572
 #: dist/editor.js:30
-#: src/blocks/event-dates/index.js:29
+#: src/blocks/event-dates/index.js:30
 msgid "event"
 msgstr ""
 
@@ -972,15 +972,15 @@ msgstr ""
 msgid "$callback must be callable."
 msgstr ""
 
-#: src/blocks/curated-list/view.php:209
+#: src/blocks/curated-list/view.php:202
 msgid "Load more listings"
 msgstr ""
 
-#: src/blocks/curated-list/view.php:214
+#: src/blocks/curated-list/view.php:207
 msgid "Loading..."
 msgstr ""
 
-#: src/blocks/curated-list/view.php:217
+#: src/blocks/curated-list/view.php:210
 msgid "Something went wrong. Please refresh the page and/or try again."
 msgstr ""
 
@@ -1009,7 +1009,7 @@ msgstr ""
 #. Translators: user-facing explanation of expiration behavior.
 #: src/templates/self-serve-form.php:66
 #: dist/editor.js:42
-#: src/blocks/self-serve-listings/edit.js:190
+#: src/blocks/self-serve-listings/edit.js:192
 #, php-format,js-format
 msgid "Single-purchase listings expire %d days after the date of publication."
 msgstr ""
@@ -1018,7 +1018,7 @@ msgstr ""
 #: src/templates/sort-ui.php:107
 #: dist/editor.js:24
 #: dist/editor.js:42
-#: src/blocks/self-serve-listings/edit.js:211
+#: src/blocks/self-serve-listings/edit.js:213
 #: src/components/sidebar-query-controls.js:160
 #: src/components/sidebar-query-controls.js:168
 msgid "Listing Type"
@@ -1026,37 +1026,37 @@ msgstr ""
 
 #: src/templates/self-serve-form.php:114
 #: dist/editor.js:42
-#: src/blocks/self-serve-listings/edit.js:226
+#: src/blocks/self-serve-listings/edit.js:228
 msgid "Upgrade to a featured listing"
 msgstr ""
 
 #: src/templates/self-serve-form.php:119
 #: dist/editor.js:42
-#: src/blocks/self-serve-listings/edit.js:229
+#: src/blocks/self-serve-listings/edit.js:231
 msgid "Featured listings appear first in lists, directory pages and search results."
 msgstr ""
 
 #: src/templates/self-serve-form.php:150
 #: dist/editor.js:42
-#: src/blocks/self-serve-listings/edit.js:266
+#: src/blocks/self-serve-listings/edit.js:268
 msgid "Subscription listings remain live as long as the subscription is active."
 msgstr ""
 
 #: src/templates/self-serve-form.php:170
 #: dist/editor.js:42
-#: src/blocks/self-serve-listings/edit.js:289
+#: src/blocks/self-serve-listings/edit.js:291
 msgid "Upgrade to a premium subscription"
 msgstr ""
 
 #: src/templates/self-serve-form.php:175
 #: dist/editor.js:42
-#: src/blocks/self-serve-listings/edit.js:292
+#: src/blocks/self-serve-listings/edit.js:294
 msgid "A premium subscription upgrades your listing to \"featured\" status and lets you create up to 10 additional Marketplace or Event listings."
 msgstr ""
 
 #: src/templates/sort-ui.php:63
 #: dist/editor.js:27
-#: src/blocks/list-container/edit.js:34
+#: src/blocks/list-container/edit.js:38
 msgid "Sort by:"
 msgstr ""
 
@@ -1090,14 +1090,14 @@ msgstr ""
 
 #: src/templates/sort-ui.php:127
 #: dist/editor.js:27
-#: src/blocks/list-container/edit.js:49
+#: src/blocks/list-container/edit.js:53
 msgid "Sort order:"
 msgstr ""
 
 #: src/templates/sort-ui.php:140
 #: dist/editor.js:24
 #: dist/editor.js:27
-#: src/blocks/list-container/edit.js:61
+#: src/blocks/list-container/edit.js:65
 #: src/components/sidebar-query-controls.js:257
 msgid "Ascending"
 msgstr ""
@@ -1105,7 +1105,7 @@ msgstr ""
 #: src/templates/sort-ui.php:154
 #: dist/editor.js:24
 #: dist/editor.js:27
-#: src/blocks/list-container/edit.js:73
+#: src/blocks/list-container/edit.js:77
 #: src/components/sidebar-query-controls.js:258
 msgid "Descending"
 msgstr ""
@@ -1289,220 +1289,220 @@ msgstr ""
 
 #. translators: label for small size option
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:338
+#: src/blocks/curated-list/edit.js:341
 msgid "Small"
 msgstr ""
 
 #. translators: abbreviation for small size
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:339
+#: src/blocks/curated-list/edit.js:342
 msgid "S"
 msgstr ""
 
 #. translators: label for medium size option
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:343
+#: src/blocks/curated-list/edit.js:346
 msgid "Medium"
 msgstr ""
 
 #. translators: abbreviation for medium size
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:344
+#: src/blocks/curated-list/edit.js:347
 msgid "M"
 msgstr ""
 
 #. translators: label for large size option
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:348
+#: src/blocks/curated-list/edit.js:351
 msgid "Large"
 msgstr ""
 
 #. translators: abbreviation for large size
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:349
+#: src/blocks/curated-list/edit.js:352
 msgid "L"
 msgstr ""
 
 #. translators: label for extra large size option
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:353
+#: src/blocks/curated-list/edit.js:356
 msgid "Extra Large"
 msgstr ""
 
 #. translators: abbreviation for extra large size
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:354
+#: src/blocks/curated-list/edit.js:357
 msgid "XL"
 msgstr ""
 
 #: dist/editor.js:24
 #: dist/editor.js:42
-#: src/blocks/curated-list/edit.js:363
-#: src/blocks/curated-list/edit.js:375
-#: src/blocks/curated-list/index.js:19
+#: src/blocks/curated-list/edit.js:367
+#: src/blocks/curated-list/edit.js:381
+#: src/blocks/curated-list/index.js:20
 msgid "Curated List"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:392
+#: src/blocks/curated-list/edit.js:398
 msgid "Query"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:397
+#: src/blocks/curated-list/edit.js:403
 msgid "Specific Listings"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:410
+#: src/blocks/curated-list/edit.js:417
 msgid "Query Settings"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:421
+#: src/blocks/curated-list/edit.js:428
 msgid "List Settings"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:424
+#: src/blocks/curated-list/edit.js:431
 msgid "Show list item numbers"
 msgstr ""
 
 #: dist/editor.js:24
-#: src/blocks/curated-list/edit.js:433
+#: src/blocks/curated-list/edit.js:440
 msgid "Show map"
 msgstr ""
 
 #. translators: %d: maximum number of items to display on the map.
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:436
+#: src/blocks/curated-list/edit.js:443
 #, js-format
 msgid "The map will display locations for up to %d items in the list, regardless of the current number of items shown."
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:449
+#: src/blocks/curated-list/edit.js:456
 msgid "Show sort UI"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:455
+#: src/blocks/curated-list/edit.js:462
 msgid "Featured Image Settings"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:458
+#: src/blocks/curated-list/edit.js:465
 msgid "Show Featured Image"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:468
+#: src/blocks/curated-list/edit.js:475
 msgid "Show Featured Image Caption"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:474
+#: src/blocks/curated-list/edit.js:481
 msgid "Featured Image Position"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:478
+#: src/blocks/curated-list/edit.js:485
 msgid "Top"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:479
+#: src/blocks/curated-list/edit.js:486
 msgid "Left"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:480
+#: src/blocks/curated-list/edit.js:487
 msgid "Right"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:488
-#: src/blocks/curated-list/edit.js:490
+#: src/blocks/curated-list/edit.js:495
+#: src/blocks/curated-list/edit.js:497
 msgid "Featured Image Size"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:514
+#: src/blocks/curated-list/edit.js:521
 msgid "Minimum height"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:515
+#: src/blocks/curated-list/edit.js:522
 msgid "Sets a minimum height for the block, using a percentage of the screen's current height."
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:527
+#: src/blocks/curated-list/edit.js:534
 msgid "Post Control Settings"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:530
+#: src/blocks/curated-list/edit.js:537
 msgid "Show Excerpt"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:537
+#: src/blocks/curated-list/edit.js:544
 msgid "Type Scale"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:546
+#: src/blocks/curated-list/edit.js:553
 msgid "Color Settings"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:552
+#: src/blocks/curated-list/edit.js:559
 msgid "Text Color"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:557
+#: src/blocks/curated-list/edit.js:564
 msgid "Background Color"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:561
+#: src/blocks/curated-list/edit.js:568
 msgid "Meta Settings"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:564
+#: src/blocks/curated-list/edit.js:571
 msgid "Show Author"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:571
+#: src/blocks/curated-list/edit.js:578
 msgid "Show Category"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/curated-list/edit.js:578
+#: src/blocks/curated-list/edit.js:585
 msgid "Show Tags"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/list-container/edit.js:42
+#: src/blocks/list-container/edit.js:46
 msgid "Sort by"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/listing/edit.js:90
+#: src/blocks/listing/edit.js:92
 msgid "Search for a"
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/listing/edit.js:90
+#: src/blocks/listing/edit.js:92
 msgid "listing to display."
 msgstr ""
 
 #: dist/editor.js:27
-#: src/blocks/listing/edit.js:143
+#: src/blocks/listing/edit.js:145
 msgid "Cancel"
 msgstr ""
 
@@ -1552,25 +1552,15 @@ msgstr ""
 #: dist/editor.js:30
 #: dist/editor.js:36
 #: dist/editor.js:39
-#: src/blocks/event-dates/edit.js:81
-#: src/blocks/event-dates/edit.js:111
+#: src/blocks/event-dates/edit.js:82
+#: src/blocks/event-dates/edit.js:112
 #: src/editor/featured-listings/index.js:139
 msgid "Reset"
 msgstr ""
 
 #: dist/editor.js:30
-#: src/blocks/event-dates/index.js:17
+#: src/blocks/event-dates/index.js:18
 msgid "Event Dates"
-msgstr ""
-
-#: dist/editor.js:30
-#: dist/editor.js:39
-#: dist/editor.js:42
-#: src/blocks/curated-list/index.js:26
-#: src/blocks/event-dates/index.js:24
-#: src/blocks/list-container/index.js:28
-#: src/blocks/price/index.js:24
-msgid "curated"
 msgstr ""
 
 #: dist/editor.js:30
@@ -1580,8 +1570,7 @@ msgstr ""
 #: src/blocks/event-dates/index.js:25
 #: src/blocks/list-container/index.js:29
 #: src/blocks/price/index.js:25
-#: src/blocks/self-serve-listings/index.js:24
-msgid "list"
+msgid "curated"
 msgstr ""
 
 #: dist/editor.js:30
@@ -1590,30 +1579,41 @@ msgstr ""
 #: src/blocks/curated-list/index.js:28
 #: src/blocks/event-dates/index.js:26
 #: src/blocks/list-container/index.js:30
-#: src/blocks/listing/index.js:31
 #: src/blocks/price/index.js:26
+#: src/blocks/self-serve-listings/index.js:25
+msgid "list"
+msgstr ""
+
+#: dist/editor.js:30
+#: dist/editor.js:39
+#: dist/editor.js:42
+#: src/blocks/curated-list/index.js:29
+#: src/blocks/event-dates/index.js:27
+#: src/blocks/list-container/index.js:31
+#: src/blocks/listing/index.js:32
+#: src/blocks/price/index.js:27
 msgid "lists"
 msgstr ""
 
 #: dist/editor.js:30
 #: dist/editor.js:39
 #: dist/editor.js:42
-#: src/blocks/curated-list/index.js:30
-#: src/blocks/event-dates/index.js:28
-#: src/blocks/list-container/index.js:32
-#: src/blocks/listing/index.js:31
-#: src/blocks/price/index.js:28
+#: src/blocks/curated-list/index.js:31
+#: src/blocks/event-dates/index.js:29
+#: src/blocks/list-container/index.js:33
+#: src/blocks/listing/index.js:32
+#: src/blocks/price/index.js:29
 msgid "latest"
 msgstr ""
 
 #: dist/editor.js:30
-#: src/blocks/event-dates/edit.js:26
+#: src/blocks/event-dates/edit.js:27
 msgid "Show Times"
 msgstr ""
 
 #. translators: %s: end date/time label.
 #: dist/editor.js:33
-#: src/blocks/event-dates/edit.js:36
+#: src/blocks/event-dates/edit.js:37
 #, js-format
 msgid "Show End %s"
 msgstr ""
@@ -1621,161 +1621,161 @@ msgstr ""
 #: dist/editor.js:33
 #: dist/editor.js:36
 #: dist/editor.js:39
-#: src/blocks/event-dates/edit.js:37
-#: src/blocks/event-dates/edit.js:57
-#: src/blocks/event-dates/edit.js:91
+#: src/blocks/event-dates/edit.js:38
+#: src/blocks/event-dates/edit.js:58
+#: src/blocks/event-dates/edit.js:92
 msgid "Time"
 msgstr ""
 
 #: dist/editor.js:33
 #: dist/editor.js:36
 #: dist/editor.js:39
-#: src/blocks/event-dates/edit.js:37
-#: src/blocks/event-dates/edit.js:57
-#: src/blocks/event-dates/edit.js:91
+#: src/blocks/event-dates/edit.js:38
+#: src/blocks/event-dates/edit.js:58
+#: src/blocks/event-dates/edit.js:92
 msgid "Date"
 msgstr ""
 
 #. translators: %1$s: start date/time label, %2$s: start date/time label.
 #: dist/editor.js:36
-#: src/blocks/event-dates/edit.js:55
+#: src/blocks/event-dates/edit.js:56
 #, js-format
 msgid "Event %1$s %2$s"
 msgstr ""
 
 #: dist/editor.js:36
-#: src/blocks/event-dates/edit.js:56
+#: src/blocks/event-dates/edit.js:57
 msgid "Start"
 msgstr ""
 
 #: dist/editor.js:36
 #: dist/editor.js:39
-#: src/blocks/event-dates/edit.js:72
-#: src/blocks/event-dates/edit.js:102
+#: src/blocks/event-dates/edit.js:73
+#: src/blocks/event-dates/edit.js:103
 msgid "Event end must be after event start."
 msgstr ""
 
 #. translators: %s: end date/time label.
 #: dist/editor.js:39
-#: src/blocks/event-dates/edit.js:90
+#: src/blocks/event-dates/edit.js:91
 #, js-format
 msgid "Event End %s"
 msgstr ""
 
 #: dist/editor.js:39
-#: src/blocks/price/index.js:29
+#: src/blocks/price/index.js:30
 msgid "price"
 msgstr ""
 
 #: dist/editor.js:39
-#: src/blocks/price/edit.js:44
+#: src/blocks/price/edit.js:45
 msgid "Select currency"
 msgstr ""
 
 #: dist/editor.js:39
-#: src/blocks/price/edit.js:60
+#: src/blocks/price/edit.js:61
 msgid "Show decimals"
 msgstr ""
 
 #: dist/editor.js:39
-#: src/blocks/price/edit.js:61
+#: src/blocks/price/edit.js:62
 msgid "If disabled, the price shown will be rounded to the nearest integer."
 msgstr ""
 
 #. translators: %s: currency.
 #: dist/editor.js:42
-#: src/blocks/price/edit.js:74
+#: src/blocks/price/edit.js:75
 #, js-format
 msgid "Price in %s"
 msgstr ""
 
 #: dist/editor.js:42
-#: src/blocks/list-container/index.js:20
+#: src/blocks/list-container/index.js:21
 msgid "Container"
 msgstr ""
 
 #: dist/editor.js:42
-#: src/blocks/self-serve-listings/index.js:17
+#: src/blocks/self-serve-listings/index.js:18
 msgid "Listings: Self-Serve Form"
 msgstr ""
 
 #: dist/editor.js:42
-#: src/blocks/self-serve-listings/index.js:26
+#: src/blocks/self-serve-listings/index.js:27
 msgid "self"
 msgstr ""
 
 #: dist/editor.js:42
-#: src/blocks/self-serve-listings/index.js:27
+#: src/blocks/self-serve-listings/index.js:28
 msgid "serve"
 msgstr ""
 
 #: dist/editor.js:42
-#: src/blocks/self-serve-listings/edit.js:69
+#: src/blocks/self-serve-listings/edit.js:70
 msgid "Purchase Types Allowed"
 msgstr ""
 
 #: dist/editor.js:42
-#: src/blocks/self-serve-listings/edit.js:71
+#: src/blocks/self-serve-listings/edit.js:72
 #, js-format
 msgid "Allow readers to purchase %s."
 msgstr ""
 
 #: dist/editor.js:42
-#: src/blocks/self-serve-listings/edit.js:55
+#: src/blocks/self-serve-listings/edit.js:56
 msgid "both single listings and subscriptions"
 msgstr ""
 
 #: dist/editor.js:42
-#: src/blocks/self-serve-listings/edit.js:57
+#: src/blocks/self-serve-listings/edit.js:58
 msgid "single listings only"
 msgstr ""
 
 #: dist/editor.js:42
-#: src/blocks/self-serve-listings/edit.js:59
+#: src/blocks/self-serve-listings/edit.js:60
 msgid "subscription listings only"
 msgstr ""
 
 #: dist/editor.js:42
-#: src/blocks/self-serve-listings/edit.js:78
+#: src/blocks/self-serve-listings/edit.js:79
 msgid "Single listings and subscriptions"
 msgstr ""
 
 #: dist/editor.js:42
-#: src/blocks/self-serve-listings/edit.js:82
+#: src/blocks/self-serve-listings/edit.js:83
 msgid "Single listings only"
 msgstr ""
 
 #: dist/editor.js:42
-#: src/blocks/self-serve-listings/edit.js:86
+#: src/blocks/self-serve-listings/edit.js:87
 msgid "Subscriptions only"
 msgstr ""
 
 #: dist/editor.js:42
-#: src/blocks/self-serve-listings/edit.js:95
+#: src/blocks/self-serve-listings/edit.js:96
 msgid "Choose which listing types users are allowed to purchase."
 msgstr ""
 
 #: dist/editor.js:42
-#: src/blocks/self-serve-listings/edit.js:99
+#: src/blocks/self-serve-listings/edit.js:100
 msgid "Allowed Single Listing Types"
 msgstr ""
 
 #: dist/editor.js:42
-#: src/blocks/self-serve-listings/edit.js:131
+#: src/blocks/self-serve-listings/edit.js:132
 msgid "You must allow at least one listing type for purchase."
 msgstr ""
 
 #: dist/editor.js:42
-#: src/blocks/self-serve-listings/edit.js:180
+#: src/blocks/self-serve-listings/edit.js:182
 msgid "Description text for your single listing product…"
 msgstr ""
 
 #: dist/editor.js:42
-#: src/blocks/self-serve-listings/edit.js:258
+#: src/blocks/self-serve-listings/edit.js:260
 msgid "Description text for your subscription product…"
 msgstr ""
 
 #: dist/editor.js:42
-#: src/blocks/self-serve-listings/edit.js:304
+#: src/blocks/self-serve-listings/edit.js:306
 msgid "Button text…"
 msgstr ""

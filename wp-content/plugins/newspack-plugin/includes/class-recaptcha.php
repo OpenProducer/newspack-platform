@@ -115,6 +115,15 @@ final class Recaptcha {
 	 * Register the reCAPTCHA script.
 	 */
 	public static function register_scripts() {
+		// The Events Calendar Community Events loads its own reCAPTCHA api.js on its
+		// submission/edit pages. Two api.js loads with different site keys break
+		// reCAPTCHA, and Newspack's client does not protect TEC forms, so bail
+		// early rather than breaking TEC's own reCAPTCHA. Scoped here (not in
+		// can_use_captcha) so server-side verify_captcha() and Woo helpers still
+		// run for any embedded Newspack-protected forms on TEC pages.
+		if ( \function_exists( 'tribe_is_community_edit_event_page' ) && \tribe_is_community_edit_event_page() ) {
+			return;
+		}
 		if ( self::can_use_captcha() ) {
 			\wp_enqueue_style(
 				self::SCRIPT_HANDLE,

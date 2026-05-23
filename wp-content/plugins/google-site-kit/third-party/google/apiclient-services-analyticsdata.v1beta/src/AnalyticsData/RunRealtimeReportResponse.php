@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsData;
 class RunRealtimeReportResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'totals';
-    protected $dimensionHeadersType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\DimensionHeader::class;
+    protected $dimensionHeadersType = DimensionHeader::class;
     protected $dimensionHeadersDataType = 'array';
     /**
      * Identifies what kind of resource this message is. This `kind` is always the
@@ -30,13 +30,13 @@ class RunRealtimeReportResponse extends \Google\Site_Kit_Dependencies\Google\Col
      * @var string
      */
     public $kind;
-    protected $maximumsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Row::class;
+    protected $maximumsType = Row::class;
     protected $maximumsDataType = 'array';
-    protected $metricHeadersType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\MetricHeader::class;
+    protected $metricHeadersType = MetricHeader::class;
     protected $metricHeadersDataType = 'array';
-    protected $minimumsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Row::class;
+    protected $minimumsType = Row::class;
     protected $minimumsDataType = 'array';
-    protected $propertyQuotaType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\PropertyQuota::class;
+    protected $propertyQuotaType = PropertyQuota::class;
     protected $propertyQuotaDataType = '';
     /**
      * The total number of rows in the query result. `rowCount` is independent of
@@ -48,9 +48,9 @@ class RunRealtimeReportResponse extends \Google\Site_Kit_Dependencies\Google\Col
      * @var int
      */
     public $rowCount;
-    protected $rowsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Row::class;
+    protected $rowsType = Row::class;
     protected $rowsDataType = 'array';
-    protected $totalsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\Row::class;
+    protected $totalsType = Row::class;
     protected $totalsDataType = 'array';
     /**
      * Describes dimension columns. The number of DimensionHeaders and ordering of
@@ -142,7 +142,7 @@ class RunRealtimeReportResponse extends \Google\Site_Kit_Dependencies\Google\Col
      *
      * @param PropertyQuota $propertyQuota
      */
-    public function setPropertyQuota(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\PropertyQuota $propertyQuota)
+    public function setPropertyQuota(PropertyQuota $propertyQuota)
     {
         $this->propertyQuota = $propertyQuota;
     }
@@ -207,4 +207,4 @@ class RunRealtimeReportResponse extends \Google\Site_Kit_Dependencies\Google\Col
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\RunRealtimeReportResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_RunRealtimeReportResponse');
+class_alias(RunRealtimeReportResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_RunRealtimeReportResponse');

@@ -31,6 +31,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  * existing customer account.
  * phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
  */
+// When this template replaces global/form-login.php, $order is not provided by WooCommerce.
+// Retrieve it from the URL query vars, the same way WooCommerce does in the order-received endpoint.
+if ( ! isset( $order ) || ! $order ) {
+	$order_id = absint( \get_query_var( 'order-received' ) );
+	$order    = $order_id ? \wc_get_order( $order_id ) : false; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+}
+
 $key      = isset( $_GET['key'] ) ? \wc_clean( \sanitize_text_field( \wp_unslash( $_GET['key'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 $is_valid = $order && is_a( $order, 'WC_Order' ) && hash_equals( $order->get_order_key(), $key ); // Validate order key to prevent CSRF.
 

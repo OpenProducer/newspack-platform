@@ -20,5 +20,5 @@ use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1;
  */
 abstract class PolicyQualifierInfo
 {
-    const MAP = ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_SEQUENCE, 'children' => ['policyQualifierId' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\PolicyQualifierId::MAP, 'qualifier' => ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_ANY]]];
+    const MAP = ['type' => ASN1::TYPE_SEQUENCE, 'children' => ['policyQualifierId' => PolicyQualifierId::MAP, 'qualifier' => ['type' => ASN1::TYPE_ANY]]];
 }

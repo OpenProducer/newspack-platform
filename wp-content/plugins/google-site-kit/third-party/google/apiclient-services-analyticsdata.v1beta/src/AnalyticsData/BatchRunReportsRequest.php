@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsData;
 class BatchRunReportsRequest extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'requests';
-    protected $requestsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\RunReportRequest::class;
+    protected $requestsType = RunReportRequest::class;
     protected $requestsDataType = 'array';
     /**
      * Individual requests. Each request has a separate report response. Each
@@ -41,4 +41,4 @@ class BatchRunReportsRequest extends \Google\Site_Kit_Dependencies\Google\Collec
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\BatchRunReportsRequest::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_BatchRunReportsRequest');
+class_alias(BatchRunReportsRequest::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_BatchRunReportsRequest');

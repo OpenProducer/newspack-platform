@@ -93,7 +93,7 @@ class SearchAnalyticsQueryRequest extends \Google\Site_Kit_Dependencies\Google\C
      * @var string
      */
     public $dataState;
-    protected $dimensionFilterGroupsType = \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\ApiDimensionFilterGroup::class;
+    protected $dimensionFilterGroupsType = ApiDimensionFilterGroup::class;
     protected $dimensionFilterGroupsDataType = 'array';
     /**
      * [Optional] Zero or more dimensions to group results by. Dimensions are the
@@ -341,4 +341,4 @@ class SearchAnalyticsQueryRequest extends \Google\Site_Kit_Dependencies\Google\C
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\SearchAnalyticsQueryRequest::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SearchConsole_SearchAnalyticsQueryRequest');
+class_alias(SearchAnalyticsQueryRequest::class, 'Google\Site_Kit_Dependencies\Google_Service_SearchConsole_SearchAnalyticsQueryRequest');

@@ -43,4 +43,4 @@ class MetricOrderBy extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\MetricOrderBy::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_MetricOrderBy');
+class_alias(MetricOrderBy::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_MetricOrderBy');

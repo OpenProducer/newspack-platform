@@ -10,6 +10,7 @@ class ComposerStaticInitb14ae94f64fd3bf16461b5a11f36db02
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Newspack_Block_Theme\\Core' => __DIR__ . '/../..' . '/includes/class-core.php',
         'Newspack_Block_Theme\\Jetpack' => __DIR__ . '/../..' . '/includes/class-jetpack.php',
+        'Newspack_Block_Theme\\Newspack_Newsletters' => __DIR__ . '/../..' . '/includes/class-newspack-newsletters.php',
         'Newspack_Block_Theme\\Patterns' => __DIR__ . '/../..' . '/includes/class-patterns.php',
         'Newspack_Block_Theme\\Subtitle_Block' => __DIR__ . '/../..' . '/includes/blocks/subtitle-block/class-subtitle-block.php',
         'Newspack_Block_Theme\\WooCommerce' => __DIR__ . '/../..' . '/includes/class-woocommerce.php',

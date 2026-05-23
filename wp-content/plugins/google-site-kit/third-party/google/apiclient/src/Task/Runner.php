@@ -97,36 +97,36 @@ class Runner
     {
         if (isset($config['initial_delay'])) {
             if ($config['initial_delay'] < 0) {
-                throw new \Google\Site_Kit_Dependencies\Google\Task\Exception('Task configuration `initial_delay` must not be negative.');
+                throw new GoogleTaskException('Task configuration `initial_delay` must not be negative.');
             }
             $this->delay = $config['initial_delay'];
         }
         if (isset($config['max_delay'])) {
             if ($config['max_delay'] <= 0) {
-                throw new \Google\Site_Kit_Dependencies\Google\Task\Exception('Task configuration `max_delay` must be greater than 0.');
+                throw new GoogleTaskException('Task configuration `max_delay` must be greater than 0.');
             }
             $this->maxDelay = $config['max_delay'];
         }
         if (isset($config['factor'])) {
             if ($config['factor'] <= 0) {
-                throw new \Google\Site_Kit_Dependencies\Google\Task\Exception('Task configuration `factor` must be greater than 0.');
+                throw new GoogleTaskException('Task configuration `factor` must be greater than 0.');
             }
             $this->factor = $config['factor'];
         }
         if (isset($config['jitter'])) {
             if ($config['jitter'] <= 0) {
-                throw new \Google\Site_Kit_Dependencies\Google\Task\Exception('Task configuration `jitter` must be greater than 0.');
+                throw new GoogleTaskException('Task configuration `jitter` must be greater than 0.');
             }
             $this->jitter = $config['jitter'];
         }
         if (isset($config['retries'])) {
             if ($config['retries'] < 0) {
-                throw new \Google\Site_Kit_Dependencies\Google\Task\Exception('Task configuration `retries` must not be negative.');
+                throw new GoogleTaskException('Task configuration `retries` must not be negative.');
             }
             $this->maxAttempts += $config['retries'];
         }
-        if (!\is_callable($action)) {
-            throw new \Google\Site_Kit_Dependencies\Google\Task\Exception('Task argument `$action` must be a valid callable.');
+        if (!is_callable($action)) {
+            throw new GoogleTaskException('Task argument `$action` must be a valid callable.');
         }
         $this->action = $action;
         $this->arguments = $arguments;
@@ -150,14 +150,14 @@ class Runner
     {
         while ($this->attempt()) {
             try {
-                return \call_user_func_array($this->action, $this->arguments);
-            } catch (\Google\Site_Kit_Dependencies\Google\Service\Exception $exception) {
+                return call_user_func_array($this->action, $this->arguments);
+            } catch (GoogleServiceException $exception) {
                 $allowedRetries = $this->allowedRetries($exception->getCode(), $exception->getErrors());
                 if (!$this->canAttempt() || !$allowedRetries) {
                     throw $exception;
                 }
                 if ($allowedRetries > 0) {
-                    $this->maxAttempts = \min($this->maxAttempts, $this->attempts + $allowedRetries);
+                    $this->maxAttempts = min($this->maxAttempts, $this->attempts + $allowedRetries);
                 }
             }
         }
@@ -188,7 +188,7 @@ class Runner
     private function backOff()
     {
         $delay = $this->getDelay();
-        \usleep((int) ($delay * 1000000));
+        usleep((int) ($delay * 1000000));
     }
     /**
      * Gets the delay (in seconds) for the current backoff period.
@@ -198,8 +198,8 @@ class Runner
     private function getDelay()
     {
         $jitter = $this->getJitter();
-        $factor = $this->attempts > 1 ? $this->factor + $jitter : 1 + \abs($jitter);
-        return $this->delay = \min($this->maxDelay, $this->delay * $factor);
+        $factor = $this->attempts > 1 ? $this->factor + $jitter : 1 + abs($jitter);
+        return $this->delay = min($this->maxDelay, $this->delay * $factor);
     }
     /**
      * Gets the current jitter (random number between -$this->jitter and
@@ -209,7 +209,7 @@ class Runner
      */
     private function getJitter()
     {
-        return $this->jitter * 2 * \mt_rand() / \mt_getrandmax() - $this->jitter;
+        return $this->jitter * 2 * mt_rand() / mt_getrandmax() - $this->jitter;
     }
     /**
      * Gets the number of times the associated task can be retried.

@@ -25,7 +25,7 @@ class PublishContainerVersionResponse extends \Google\Site_Kit_Dependencies\Goog
      * @var bool
      */
     public $compilerError;
-    protected $containerVersionType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\ContainerVersion::class;
+    protected $containerVersionType = ContainerVersion::class;
     protected $containerVersionDataType = '';
     /**
      * Compiler errors or not.
@@ -48,7 +48,7 @@ class PublishContainerVersionResponse extends \Google\Site_Kit_Dependencies\Goog
      *
      * @param ContainerVersion $containerVersion
      */
-    public function setContainerVersion(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ContainerVersion $containerVersion)
+    public function setContainerVersion(ContainerVersion $containerVersion)
     {
         $this->containerVersion = $containerVersion;
     }
@@ -61,4 +61,4 @@ class PublishContainerVersionResponse extends \Google\Site_Kit_Dependencies\Goog
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\PublishContainerVersionResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_PublishContainerVersionResponse');
+class_alias(PublishContainerVersionResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_PublishContainerVersionResponse');

@@ -44,11 +44,11 @@ class OtherContacts extends \Google\Site_Kit_Dependencies\Google\Service\Resourc
      * @return Person
      * @throws \Google\Service\Exception
      */
-    public function copyOtherContactToMyContactsGroup($resourceName, \Google\Site_Kit_Dependencies\Google\Service\PeopleService\CopyOtherContactToMyContactsGroupRequest $postBody, $optParams = [])
+    public function copyOtherContactToMyContactsGroup($resourceName, CopyOtherContactToMyContactsGroupRequest $postBody, $optParams = [])
     {
         $params = ['resourceName' => $resourceName, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('copyOtherContactToMyContactsGroup', [$params], \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Person::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('copyOtherContactToMyContactsGroup', [$params], Person::class);
     }
     /**
      * List all "Other contacts", that is contacts that are not in a contact group.
@@ -111,8 +111,8 @@ class OtherContacts extends \Google\Site_Kit_Dependencies\Google\Service\Resourc
     public function listOtherContacts($optParams = [])
     {
         $params = [];
-        $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\PeopleService\ListOtherContactsResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('list', [$params], ListOtherContactsResponse::class);
     }
     /**
      * Provides a list of contacts in the authenticated user's other contacts that
@@ -142,9 +142,9 @@ class OtherContacts extends \Google\Site_Kit_Dependencies\Google\Service\Resourc
     public function search($optParams = [])
     {
         $params = [];
-        $params = \array_merge($params, $optParams);
-        return $this->call('search', [$params], \Google\Site_Kit_Dependencies\Google\Service\PeopleService\SearchResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('search', [$params], SearchResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\Resource\OtherContacts::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_Resource_OtherContacts');
+class_alias(OtherContacts::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_Resource_OtherContacts');

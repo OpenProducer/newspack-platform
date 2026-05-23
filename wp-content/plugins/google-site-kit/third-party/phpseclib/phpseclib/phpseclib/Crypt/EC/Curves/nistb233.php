@@ -12,6 +12,6 @@
  */
 namespace Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\Curves;
 
-final class nistb233 extends \Google\Site_Kit_Dependencies\phpseclib3\Crypt\EC\Curves\sect233r1
+final class nistb233 extends sect233r1
 {
 }

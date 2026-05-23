@@ -9,7 +9,7 @@ use Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface;
  *
  * Note that no response is present for a ConnectException
  */
-class ConnectException extends \Google\Site_Kit_Dependencies\GuzzleHttp\Exception\TransferException implements \Google\Site_Kit_Dependencies\Psr\Http\Client\NetworkExceptionInterface
+class ConnectException extends TransferException implements NetworkExceptionInterface
 {
     /**
      * @var RequestInterface
@@ -19,7 +19,7 @@ class ConnectException extends \Google\Site_Kit_Dependencies\GuzzleHttp\Exceptio
      * @var array
      */
     private $handlerContext;
-    public function __construct(string $message, \Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request, ?\Throwable $previous = null, array $handlerContext = [])
+    public function __construct(string $message, RequestInterface $request, ?\Throwable $previous = null, array $handlerContext = [])
     {
         parent::__construct($message, 0, $previous);
         $this->request = $request;
@@ -28,7 +28,7 @@ class ConnectException extends \Google\Site_Kit_Dependencies\GuzzleHttp\Exceptio
     /**
      * Get the request that caused the exception
      */
-    public function getRequest() : \Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface
+    public function getRequest(): RequestInterface
     {
         return $this->request;
     }
@@ -40,7 +40,7 @@ class ConnectException extends \Google\Site_Kit_Dependencies\GuzzleHttp\Exceptio
      * couple you to a specific handler, but can give more debug information
      * when needed.
      */
-    public function getHandlerContext() : array
+    public function getHandlerContext(): array
     {
         return $this->handlerContext;
     }

@@ -65,4 +65,4 @@ class GroupClientData extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\GroupClientData::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_GroupClientData');
+class_alias(GroupClientData::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_GroupClientData');

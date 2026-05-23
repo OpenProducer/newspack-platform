@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 class UserPermission extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'containerAccess';
-    protected $accountAccessType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\AccountAccess::class;
+    protected $accountAccessType = AccountAccess::class;
     protected $accountAccessDataType = '';
     /**
      * The Account ID uniquely identifies the GTM Account.
@@ -28,7 +28,7 @@ class UserPermission extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $accountId;
-    protected $containerAccessType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\ContainerAccess::class;
+    protected $containerAccessType = ContainerAccess::class;
     protected $containerAccessDataType = 'array';
     /**
      * User's email address.
@@ -47,7 +47,7 @@ class UserPermission extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param AccountAccess $accountAccess
      */
-    public function setAccountAccess(\Google\Site_Kit_Dependencies\Google\Service\TagManager\AccountAccess $accountAccess)
+    public function setAccountAccess(AccountAccess $accountAccess)
     {
         $this->accountAccess = $accountAccess;
     }
@@ -124,4 +124,4 @@ class UserPermission extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\UserPermission::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_UserPermission');
+class_alias(UserPermission::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_UserPermission');

@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import apiFetch from '@wordpress/api-fetch';
-import { BlockControls, InspectorControls } from '@wordpress/block-editor';
+import { BlockControls, InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import {
 	BaseControl,
 	CheckboxControl,
@@ -21,6 +21,8 @@ import {
 	__experimentalToggleGroupControl as ToggleGroupControl,
 	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
 	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+	__experimentalVStack as VStack,
 } from '@wordpress/components';
 import { Fragment, useEffect, useState } from '@wordpress/element';
 import { decodeEntities } from '@wordpress/html-entities';
@@ -46,8 +48,9 @@ const AuthorList = ( { attributes, clientId, setAttributes } ) => {
 	const [ error, setError ] = useState( null );
 	const [ isLoading, setIsLoading ] = useState( false );
 	const [ maxItemsToSuggest, setMaxItemsToSuggest ] = useState( 0 );
-	const canUseCAP = Boolean( window.newspack_blocks_data?.can_use_cap );
-	const editableRoles = window.newspack_blocks_data?.editable_roles;
+	const canUseCAP = Boolean( window?.newspack_blocks_data?.can_use_cap );
+	const editableRoles = window?.newspack_blocks_data?.editable_roles || [];
+
 	const separators = [];
 	const {
 		authorRoles,
@@ -70,6 +73,10 @@ const AuthorList = ( { attributes, clientId, setAttributes } ) => {
 	useEffect( () => {
 		getAuthors();
 	}, [ authorRoles, authorType, avatarHideDefault, exclude, excludeEmpty ] );
+
+	const blockProps = useBlockProps( {
+		className: classnames( attributes.className, 'wp-block-newspack-blocks-author-list' ),
+	} );
 
 	const getAuthors = async () => {
 		setError( null );
@@ -361,7 +368,7 @@ const AuthorList = ( { attributes, clientId, setAttributes } ) => {
 					/>
 				</BlockControls>
 			) }
-			<div className={ classnames( attributes.className, 'wp-block-newspack-blocks-author-list' ) }>
+			<div { ...blockProps }>
 				{ ! isLoading && ! error && authors && Array.isArray( authors ) && (
 					<>
 						{ isColumns && showSeparators && separatorSections ? (
@@ -434,10 +441,10 @@ const AuthorList = ( { attributes, clientId, setAttributes } ) => {
 							</Notice>
 						) }
 						{ isLoading && (
-							<div className="is-loading">
-								{ __( 'Fetching authors…', 'newspack-blocks' ) }
-								<Spinner />
-							</div>
+							<VStack alignment="center" style={ { width: '100%' } }>
+								<Spinner style={ { margin: '0' } } />
+								<span style={ { fontWeight: '500' } }>{ __( 'Fetching authors…', 'newspack-blocks' ) }</span>
+							</VStack>
 						) }
 					</Placeholder>
 				) }

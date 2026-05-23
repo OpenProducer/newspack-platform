@@ -22,7 +22,7 @@ use Google\Site_Kit_Dependencies\Psr\Http\Message\UriInterface;
  * implemented such that they retain the internal state of the current
  * message and return a new instance that contains the changed state.
  */
-class ServerRequest extends \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Request implements \Google\Site_Kit_Dependencies\Psr\Http\Message\ServerRequestInterface
+class ServerRequest extends Request implements ServerRequestInterface
 {
     /**
      * @var array
@@ -68,19 +68,19 @@ class ServerRequest extends \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Reques
      *
      * @throws InvalidArgumentException for unrecognized values
      */
-    public static function normalizeFiles(array $files) : array
+    public static function normalizeFiles(array $files): array
     {
         $normalized = [];
         foreach ($files as $key => $value) {
-            if ($value instanceof \Google\Site_Kit_Dependencies\Psr\Http\Message\UploadedFileInterface) {
+            if ($value instanceof UploadedFileInterface) {
                 $normalized[$key] = $value;
-            } elseif (\is_array($value) && isset($value['tmp_name'])) {
+            } elseif (is_array($value) && isset($value['tmp_name'])) {
                 $normalized[$key] = self::createUploadedFileFromSpec($value);
-            } elseif (\is_array($value)) {
+            } elseif (is_array($value)) {
                 $normalized[$key] = self::normalizeFiles($value);
                 continue;
             } else {
-                throw new \InvalidArgumentException('Invalid value in files specification');
+                throw new InvalidArgumentException('Invalid value in files specification');
             }
         }
         return $normalized;
@@ -97,10 +97,10 @@ class ServerRequest extends \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Reques
      */
     private static function createUploadedFileFromSpec(array $value)
     {
-        if (\is_array($value['tmp_name'])) {
+        if (is_array($value['tmp_name'])) {
             return self::normalizeNestedFileSpec($value);
         }
-        return new \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\UploadedFile($value['tmp_name'], (int) $value['size'], (int) $value['error'], $value['name'], $value['type']);
+        return new UploadedFile($value['tmp_name'], (int) $value['size'], (int) $value['error'], $value['name'], $value['type']);
     }
     /**
      * Normalize an array of file specifications.
@@ -110,10 +110,10 @@ class ServerRequest extends \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Reques
      *
      * @return UploadedFileInterface[]
      */
-    private static function normalizeNestedFileSpec(array $files = []) : array
+    private static function normalizeNestedFileSpec(array $files = []): array
     {
         $normalizedFiles = [];
-        foreach (\array_keys($files['tmp_name']) as $key) {
+        foreach (array_keys($files['tmp_name']) as $key) {
             $spec = ['tmp_name' => $files['tmp_name'][$key], 'size' => $files['size'][$key] ?? null, 'error' => $files['error'][$key] ?? null, 'name' => $files['name'][$key] ?? null, 'type' => $files['type'][$key] ?? null];
             $normalizedFiles[$key] = self::createUploadedFileFromSpec($spec);
         }
@@ -127,20 +127,20 @@ class ServerRequest extends \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Reques
      * $_FILES
      * $_SERVER
      */
-    public static function fromGlobals() : \Google\Site_Kit_Dependencies\Psr\Http\Message\ServerRequestInterface
+    public static function fromGlobals(): ServerRequestInterface
     {
         $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-        $headers = \getallheaders();
+        $headers = getallheaders();
         $uri = self::getUriFromGlobals();
-        $body = new \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\CachingStream(new \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\LazyOpenStream('php://input', 'r+'));
-        $protocol = isset($_SERVER['SERVER_PROTOCOL']) ? \str_replace('HTTP/', '', $_SERVER['SERVER_PROTOCOL']) : '1.1';
-        $serverRequest = new \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\ServerRequest($method, $uri, $headers, $body, $protocol, $_SERVER);
+        $body = new CachingStream(new LazyOpenStream('php://input', 'r+'));
+        $protocol = isset($_SERVER['SERVER_PROTOCOL']) ? str_replace('HTTP/', '', $_SERVER['SERVER_PROTOCOL']) : '1.1';
+        $serverRequest = new ServerRequest($method, $uri, $headers, $body, $protocol, $_SERVER);
         return $serverRequest->withCookieParams($_COOKIE)->withQueryParams($_GET)->withParsedBody($_POST)->withUploadedFiles(self::normalizeFiles($_FILES));
     }
-    private static function extractHostAndPortFromAuthority(string $authority) : array
+    private static function extractHostAndPortFromAuthority(string $authority): array
     {
         $uri = 'http://' . $authority;
-        $parts = \parse_url($uri);
+        $parts = parse_url($uri);
         if (\false === $parts) {
             return [null, null];
         }
@@ -151,9 +151,9 @@ class ServerRequest extends \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Reques
     /**
      * Get a Uri populated with values from $_SERVER.
      */
-    public static function getUriFromGlobals() : \Google\Site_Kit_Dependencies\Psr\Http\Message\UriInterface
+    public static function getUriFromGlobals(): UriInterface
     {
-        $uri = new \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Uri('');
+        $uri = new Uri('');
         $uri = $uri->withScheme(!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http');
         $hasPort = \false;
         if (isset($_SERVER['HTTP_HOST'])) {
@@ -175,7 +175,7 @@ class ServerRequest extends \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Reques
         }
         $hasQuery = \false;
         if (isset($_SERVER['REQUEST_URI'])) {
-            $requestUriParts = \explode('?', $_SERVER['REQUEST_URI'], 2);
+            $requestUriParts = explode('?', $_SERVER['REQUEST_URI'], 2);
             $uri = $uri->withPath($requestUriParts[0]);
             if (isset($requestUriParts[1])) {
                 $hasQuery = \true;
@@ -187,35 +187,35 @@ class ServerRequest extends \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Reques
         }
         return $uri;
     }
-    public function getServerParams() : array
+    public function getServerParams(): array
     {
         return $this->serverParams;
     }
-    public function getUploadedFiles() : array
+    public function getUploadedFiles(): array
     {
         return $this->uploadedFiles;
     }
-    public function withUploadedFiles(array $uploadedFiles) : \Google\Site_Kit_Dependencies\Psr\Http\Message\ServerRequestInterface
+    public function withUploadedFiles(array $uploadedFiles): ServerRequestInterface
     {
         $new = clone $this;
         $new->uploadedFiles = $uploadedFiles;
         return $new;
     }
-    public function getCookieParams() : array
+    public function getCookieParams(): array
     {
         return $this->cookieParams;
     }
-    public function withCookieParams(array $cookies) : \Google\Site_Kit_Dependencies\Psr\Http\Message\ServerRequestInterface
+    public function withCookieParams(array $cookies): ServerRequestInterface
     {
         $new = clone $this;
         $new->cookieParams = $cookies;
         return $new;
     }
-    public function getQueryParams() : array
+    public function getQueryParams(): array
     {
         return $this->queryParams;
     }
-    public function withQueryParams(array $query) : \Google\Site_Kit_Dependencies\Psr\Http\Message\ServerRequestInterface
+    public function withQueryParams(array $query): ServerRequestInterface
     {
         $new = clone $this;
         $new->queryParams = $query;
@@ -228,13 +228,13 @@ class ServerRequest extends \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Reques
     {
         return $this->parsedBody;
     }
-    public function withParsedBody($data) : \Google\Site_Kit_Dependencies\Psr\Http\Message\ServerRequestInterface
+    public function withParsedBody($data): ServerRequestInterface
     {
         $new = clone $this;
         $new->parsedBody = $data;
         return $new;
     }
-    public function getAttributes() : array
+    public function getAttributes(): array
     {
         return $this->attributes;
     }
@@ -243,20 +243,20 @@ class ServerRequest extends \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Reques
      */
     public function getAttribute($attribute, $default = null)
     {
-        if (\false === \array_key_exists($attribute, $this->attributes)) {
+        if (\false === array_key_exists($attribute, $this->attributes)) {
             return $default;
         }
         return $this->attributes[$attribute];
     }
-    public function withAttribute($attribute, $value) : \Google\Site_Kit_Dependencies\Psr\Http\Message\ServerRequestInterface
+    public function withAttribute($attribute, $value): ServerRequestInterface
     {
         $new = clone $this;
         $new->attributes[$attribute] = $value;
         return $new;
     }
-    public function withoutAttribute($attribute) : \Google\Site_Kit_Dependencies\Psr\Http\Message\ServerRequestInterface
+    public function withoutAttribute($attribute): ServerRequestInterface
     {
-        if (\false === \array_key_exists($attribute, $this->attributes)) {
+        if (\false === array_key_exists($attribute, $this->attributes)) {
             return $this;
         }
         $new = clone $this;

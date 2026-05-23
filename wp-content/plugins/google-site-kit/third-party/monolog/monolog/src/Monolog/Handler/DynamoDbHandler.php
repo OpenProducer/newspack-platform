@@ -23,9 +23,9 @@ use Google\Site_Kit_Dependencies\Monolog\Logger;
  * @link https://github.com/aws/aws-sdk-php/
  * @author Andrew Lawson <adlawson@gmail.com>
  */
-class DynamoDbHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\AbstractProcessingHandler
+class DynamoDbHandler extends AbstractProcessingHandler
 {
-    public const DATE_FORMAT = 'Y-m-d\\TH:i:s.uO';
+    public const DATE_FORMAT = 'Y-m-d\TH:i:s.uO';
     /**
      * @var DynamoDbClient
      */
@@ -42,12 +42,12 @@ class DynamoDbHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abst
      * @var Marshaler
      */
     protected $marshaler;
-    public function __construct(\Google\Site_Kit_Dependencies\Aws\DynamoDb\DynamoDbClient $client, string $table, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG, bool $bubble = \true)
+    public function __construct(DynamoDbClient $client, string $table, $level = Logger::DEBUG, bool $bubble = \true)
     {
         /** @phpstan-ignore-next-line */
-        if (\defined('Aws\\Sdk::VERSION') && \version_compare(\Google\Site_Kit_Dependencies\Aws\Sdk::VERSION, '3.0', '>=')) {
+        if (defined('Google\Site_Kit_Dependencies\Aws\Sdk::VERSION') && version_compare(Sdk::VERSION, '3.0', '>=')) {
             $this->version = 3;
-            $this->marshaler = new \Google\Site_Kit_Dependencies\Aws\DynamoDb\Marshaler();
+            $this->marshaler = new Marshaler();
         } else {
             $this->version = 2;
         }
@@ -58,7 +58,7 @@ class DynamoDbHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abst
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
         $filtered = $this->filterEmptyFields($record['formatted']);
         if ($this->version === 3) {
@@ -73,17 +73,17 @@ class DynamoDbHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abst
      * @param  mixed[] $record
      * @return mixed[]
      */
-    protected function filterEmptyFields(array $record) : array
+    protected function filterEmptyFields(array $record): array
     {
-        return \array_filter($record, function ($value) {
+        return array_filter($record, function ($value) {
             return !empty($value) || \false === $value || 0 === $value;
         });
     }
     /**
      * {@inheritDoc}
      */
-    protected function getDefaultFormatter() : \Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface
+    protected function getDefaultFormatter(): FormatterInterface
     {
-        return new \Google\Site_Kit_Dependencies\Monolog\Formatter\ScalarFormatter(self::DATE_FORMAT);
+        return new ScalarFormatter(self::DATE_FORMAT);
     }
 }

@@ -65,6 +65,18 @@ class Newspack_Newsletters_Configuration_Manager extends Configuration_Manager {
 	}
 
 	/**
+	 * Get the URL of the Newspack Newsletters settings page.
+	 *
+	 * Centralizes the page-slug knowledge for this plugin so callers don't
+	 * silently break if the slug ever moves.
+	 *
+	 * @return string Admin URL of the Newsletters settings page.
+	 */
+	public function get_settings_url() {
+		return admin_url( 'edit.php?post_type=newspack_nl_cpt&page=newspack-newsletters' );
+	}
+
+	/**
 	 * Get configured ESP's lists.
 	 *
 	 * @return array Lists.

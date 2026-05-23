@@ -27,7 +27,7 @@ use Google\Site_Kit_Dependencies\Psr\Log\LogLevel;
  * @phpstan-import-type Level from \Monolog\Logger
  * @phpstan-import-type LevelName from \Monolog\Logger
  */
-class IntrospectionProcessor implements \Google\Site_Kit_Dependencies\Monolog\Processor\ProcessorInterface
+class IntrospectionProcessor implements ProcessorInterface
 {
     /** @var int */
     private $level;
@@ -43,36 +43,36 @@ class IntrospectionProcessor implements \Google\Site_Kit_Dependencies\Monolog\Pr
      *
      * @phpstan-param Level|LevelName|LogLevel::* $level
      */
-    public function __construct($level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG, array $skipClassesPartials = [], int $skipStackFramesCount = 0)
+    public function __construct($level = Logger::DEBUG, array $skipClassesPartials = [], int $skipStackFramesCount = 0)
     {
-        $this->level = \Google\Site_Kit_Dependencies\Monolog\Logger::toMonologLevel($level);
-        $this->skipClassesPartials = \array_merge(['Monolog\\'], $skipClassesPartials);
+        $this->level = Logger::toMonologLevel($level);
+        $this->skipClassesPartials = array_merge(['Monolog\\'], $skipClassesPartials);
         $this->skipStackFramesCount = $skipStackFramesCount;
     }
     /**
      * {@inheritDoc}
      */
-    public function __invoke(array $record) : array
+    public function __invoke(array $record): array
     {
         // return if the level is not high enough
         if ($record['level'] < $this->level) {
             return $record;
         }
-        $trace = \debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS);
+        $trace = debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS);
         // skip first since it's always the current method
-        \array_shift($trace);
+        array_shift($trace);
         // the call_user_func call is also skipped
-        \array_shift($trace);
+        array_shift($trace);
         $i = 0;
         while ($this->isTraceClassOrSkippedFunction($trace, $i)) {
             if (isset($trace[$i]['class'])) {
                 foreach ($this->skipClassesPartials as $part) {
-                    if (\strpos($trace[$i]['class'], $part) !== \false) {
+                    if (strpos($trace[$i]['class'], $part) !== \false) {
                         $i++;
                         continue 2;
                     }
                 }
-            } elseif (\in_array($trace[$i]['function'], $this->skipFunctions)) {
+            } elseif (in_array($trace[$i]['function'], $this->skipFunctions)) {
                 $i++;
                 continue;
             }
@@ -80,17 +80,17 @@ class IntrospectionProcessor implements \Google\Site_Kit_Dependencies\Monolog\Pr
         }
         $i += $this->skipStackFramesCount;
         // we should have the call source now
-        $record['extra'] = \array_merge($record['extra'], ['file' => isset($trace[$i - 1]['file']) ? $trace[$i - 1]['file'] : null, 'line' => isset($trace[$i - 1]['line']) ? $trace[$i - 1]['line'] : null, 'class' => isset($trace[$i]['class']) ? $trace[$i]['class'] : null, 'callType' => isset($trace[$i]['type']) ? $trace[$i]['type'] : null, 'function' => isset($trace[$i]['function']) ? $trace[$i]['function'] : null]);
+        $record['extra'] = array_merge($record['extra'], ['file' => isset($trace[$i - 1]['file']) ? $trace[$i - 1]['file'] : null, 'line' => isset($trace[$i - 1]['line']) ? $trace[$i - 1]['line'] : null, 'class' => isset($trace[$i]['class']) ? $trace[$i]['class'] : null, 'callType' => isset($trace[$i]['type']) ? $trace[$i]['type'] : null, 'function' => isset($trace[$i]['function']) ? $trace[$i]['function'] : null]);
         return $record;
     }
     /**
      * @param array[] $trace
      */
-    private function isTraceClassOrSkippedFunction(array $trace, int $index) : bool
+    private function isTraceClassOrSkippedFunction(array $trace, int $index): bool
     {
         if (!isset($trace[$index])) {
             return \false;
         }
-        return isset($trace[$index]['class']) || \in_array($trace[$index]['function'], $this->skipFunctions);
+        return isset($trace[$index]['class']) || in_array($trace[$index]['function'], $this->skipFunctions);
     }
 }

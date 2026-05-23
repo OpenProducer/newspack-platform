@@ -111,6 +111,7 @@ declare global {
 			};
 			'advanced-settings': WizardTab;
 			collections: WizardTab;
+			privacy: WizardTab;
 		};
 		newspack_aux_data: {
 			is_debug_mode: boolean;

@@ -27,10 +27,10 @@ use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1;
 abstract class RDNSequence
 {
     const MAP = [
-        'type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_SEQUENCE,
+        'type' => ASN1::TYPE_SEQUENCE,
         // RDNSequence does not define a min or a max, which means it doesn't have one
         'min' => 0,
         'max' => -1,
-        'children' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\RelativeDistinguishedName::MAP,
+        'children' => RelativeDistinguishedName::MAP,
     ];
 }

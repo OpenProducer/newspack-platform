@@ -45,7 +45,7 @@ class GoogleAnalyticsAdminV1alphaAudienceSequenceFilterAudienceSequenceStep exte
      * @var string
      */
     public $constraintDuration;
-    protected $filterExpressionType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceFilterExpression::class;
+    protected $filterExpressionType = GoogleAnalyticsAdminV1alphaAudienceFilterExpression::class;
     protected $filterExpressionDataType = '';
     /**
      * Optional. If true, the event satisfying this step must be the very next
@@ -87,7 +87,7 @@ class GoogleAnalyticsAdminV1alphaAudienceSequenceFilterAudienceSequenceStep exte
      *
      * @param GoogleAnalyticsAdminV1alphaAudienceFilterExpression $filterExpression
      */
-    public function setFilterExpression(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceFilterExpression $filterExpression)
+    public function setFilterExpression(GoogleAnalyticsAdminV1alphaAudienceFilterExpression $filterExpression)
     {
         $this->filterExpression = $filterExpression;
     }
@@ -140,4 +140,4 @@ class GoogleAnalyticsAdminV1alphaAudienceSequenceFilterAudienceSequenceStep exte
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceSequenceFilterAudienceSequenceStep::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAudienceSequenceFilterAudienceSequenceStep');
+class_alias(GoogleAnalyticsAdminV1alphaAudienceSequenceFilterAudienceSequenceStep::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAudienceSequenceFilterAudienceSequenceStep');

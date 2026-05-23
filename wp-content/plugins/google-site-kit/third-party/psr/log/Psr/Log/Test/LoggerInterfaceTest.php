@@ -11,12 +11,12 @@ use Google\Site_Kit_Dependencies\PHPUnit\Framework\TestCase;
  * Implementors can extend the class and implement abstract methods to run this
  * as part of their test suite.
  */
-abstract class LoggerInterfaceTest extends \Google\Site_Kit_Dependencies\PHPUnit\Framework\TestCase
+abstract class LoggerInterfaceTest extends TestCase
 {
     /**
      * @return LoggerInterface
      */
-    public abstract function getLogger();
+    abstract public function getLogger();
     /**
      * This must return the log messages in order.
      *
@@ -26,10 +26,10 @@ abstract class LoggerInterfaceTest extends \Google\Site_Kit_Dependencies\PHPUnit
      *
      * @return string[]
      */
-    public abstract function getLogs();
+    abstract public function getLogs();
     public function testImplements()
     {
-        $this->assertInstanceOf('Google\\Site_Kit_Dependencies\\Psr\\Log\\LoggerInterface', $this->getLogger());
+        $this->assertInstanceOf('Google\Site_Kit_Dependencies\Psr\Log\LoggerInterface', $this->getLogger());
     }
     /**
      * @dataProvider provideLevelsAndMessages
@@ -44,7 +44,7 @@ abstract class LoggerInterfaceTest extends \Google\Site_Kit_Dependencies\PHPUnit
     }
     public function provideLevelsAndMessages()
     {
-        return array(\Google\Site_Kit_Dependencies\Psr\Log\LogLevel::EMERGENCY => array(\Google\Site_Kit_Dependencies\Psr\Log\LogLevel::EMERGENCY, 'message of level emergency with context: {user}'), \Google\Site_Kit_Dependencies\Psr\Log\LogLevel::ALERT => array(\Google\Site_Kit_Dependencies\Psr\Log\LogLevel::ALERT, 'message of level alert with context: {user}'), \Google\Site_Kit_Dependencies\Psr\Log\LogLevel::CRITICAL => array(\Google\Site_Kit_Dependencies\Psr\Log\LogLevel::CRITICAL, 'message of level critical with context: {user}'), \Google\Site_Kit_Dependencies\Psr\Log\LogLevel::ERROR => array(\Google\Site_Kit_Dependencies\Psr\Log\LogLevel::ERROR, 'message of level error with context: {user}'), \Google\Site_Kit_Dependencies\Psr\Log\LogLevel::WARNING => array(\Google\Site_Kit_Dependencies\Psr\Log\LogLevel::WARNING, 'message of level warning with context: {user}'), \Google\Site_Kit_Dependencies\Psr\Log\LogLevel::NOTICE => array(\Google\Site_Kit_Dependencies\Psr\Log\LogLevel::NOTICE, 'message of level notice with context: {user}'), \Google\Site_Kit_Dependencies\Psr\Log\LogLevel::INFO => array(\Google\Site_Kit_Dependencies\Psr\Log\LogLevel::INFO, 'message of level info with context: {user}'), \Google\Site_Kit_Dependencies\Psr\Log\LogLevel::DEBUG => array(\Google\Site_Kit_Dependencies\Psr\Log\LogLevel::DEBUG, 'message of level debug with context: {user}'));
+        return array(LogLevel::EMERGENCY => array(LogLevel::EMERGENCY, 'message of level emergency with context: {user}'), LogLevel::ALERT => array(LogLevel::ALERT, 'message of level alert with context: {user}'), LogLevel::CRITICAL => array(LogLevel::CRITICAL, 'message of level critical with context: {user}'), LogLevel::ERROR => array(LogLevel::ERROR, 'message of level error with context: {user}'), LogLevel::WARNING => array(LogLevel::WARNING, 'message of level warning with context: {user}'), LogLevel::NOTICE => array(LogLevel::NOTICE, 'message of level notice with context: {user}'), LogLevel::INFO => array(LogLevel::INFO, 'message of level info with context: {user}'), LogLevel::DEBUG => array(LogLevel::DEBUG, 'message of level debug with context: {user}'));
     }
     /**
      * @expectedException \Psr\Log\InvalidArgumentException
@@ -63,10 +63,10 @@ abstract class LoggerInterfaceTest extends \Google\Site_Kit_Dependencies\PHPUnit
     }
     public function testObjectCastToString()
     {
-        if (\method_exists($this, 'createPartialMock')) {
-            $dummy = $this->createPartialMock('Google\\Site_Kit_Dependencies\\Psr\\Log\\Test\\DummyTest', array('__toString'));
+        if (method_exists($this, 'createPartialMock')) {
+            $dummy = $this->createPartialMock('Google\Site_Kit_Dependencies\Psr\Log\Test\DummyTest', array('__toString'));
         } else {
-            $dummy = $this->getMock('Google\\Site_Kit_Dependencies\\Psr\\Log\\Test\\DummyTest', array('__toString'));
+            $dummy = $this->getMock('Google\Site_Kit_Dependencies\Psr\Log\Test\DummyTest', array('__toString'));
         }
         $dummy->expects($this->once())->method('__toString')->will($this->returnValue('DUMMY'));
         $this->getLogger()->warning($dummy);
@@ -75,9 +75,9 @@ abstract class LoggerInterfaceTest extends \Google\Site_Kit_Dependencies\PHPUnit
     }
     public function testContextCanContainAnything()
     {
-        $closed = \fopen('php://memory', 'r');
-        \fclose($closed);
-        $context = array('bool' => \true, 'null' => null, 'string' => 'Foo', 'int' => 0, 'float' => 0.5, 'nested' => array('with object' => new \Google\Site_Kit_Dependencies\Psr\Log\Test\DummyTest()), 'object' => new \DateTime(), 'resource' => \fopen('php://memory', 'r'), 'closed' => $closed);
+        $closed = fopen('php://memory', 'r');
+        fclose($closed);
+        $context = array('bool' => \true, 'null' => null, 'string' => 'Foo', 'int' => 0, 'float' => 0.5, 'nested' => array('with object' => new DummyTest()), 'object' => new \DateTime(), 'resource' => fopen('php://memory', 'r'), 'closed' => $closed);
         $this->getLogger()->warning('Crazy context data', $context);
         $expected = array('warning Crazy context data');
         $this->assertEquals($expected, $this->getLogs());

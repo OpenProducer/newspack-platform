@@ -9,45 +9,23 @@ import { compose } from '@wordpress/compose';
 import { __ } from '@wordpress/i18n';
 
 /**
- * Hide updated date
+ * Post meta toggle controls.
  */
 const PostStatusExtensions = ( { meta, postType, updateMetaValue } ) => {
 	if ( ! meta ) {
 		return null;
 	}
-	const { newspack_hide_page_title, newspack_hide_updated_date, newspack_show_updated_date, newspack_show_share_buttons } = meta;
-	const { hide_date = [], show_date = [], hide_title = [], show_share_buttons = [] } = window.newspack_post_meta_post_types;
-	const hideDate = 0 <= hide_date.indexOf( postType );
-	const showDate = 0 <= show_date.indexOf( postType );
+	const { newspack_hide_page_title, newspack_show_share_buttons } = meta;
+	const { hide_title = [], show_share_buttons = [] } = window.newspack_post_meta_post_types;
 	const hideTitle = 0 <= hide_title.indexOf( postType );
 	const showShareButtons = 0 <= show_share_buttons.indexOf( postType );
 
-	if ( ! hideDate && ! showDate && ! hideTitle && ! showShareButtons ) {
+	if ( ! hideTitle && ! showShareButtons ) {
 		return null;
 	}
 
 	return (
 		<PluginPostStatusInfo className="newspack__post-meta-toggles">
-			{ hideDate && (
-				<div>
-					<label htmlFor="hide_updated_date">{ __( 'Hide last updated date', 'newspack-theme' ) }</label>
-					<FormToggle
-						checked={ newspack_hide_updated_date }
-						onChange={ () => updateMetaValue( 'newspack_hide_updated_date', ! newspack_hide_updated_date ) }
-						id="hide_updated_date"
-					/>
-				</div>
-			) }
-			{ showDate && (
-				<div>
-					<label htmlFor="show_updated_date">{ __( 'Show last updated date', 'newspack-theme' ) }</label>
-					<FormToggle
-						checked={ newspack_show_updated_date }
-						onChange={ () => updateMetaValue( 'newspack_show_updated_date', ! newspack_show_updated_date ) }
-						id="show_updated_date"
-					/>
-				</div>
-			) }
 			{ hideTitle && 'page' === postType && (
 				<div>
 					<label htmlFor="hide_page_title">{ __( 'Hide page title', 'newspack-theme' ) }</label>

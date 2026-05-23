@@ -19,7 +19,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 
 class RevertZoneResponse extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $zoneType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Zone::class;
+    protected $zoneType = Zone::class;
     protected $zoneDataType = '';
     /**
      * Zone as it appears in the latest container version since the last workspace
@@ -28,7 +28,7 @@ class RevertZoneResponse extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Zone $zone
      */
-    public function setZone(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Zone $zone)
+    public function setZone(Zone $zone)
     {
         $this->zone = $zone;
     }
@@ -41,4 +41,4 @@ class RevertZoneResponse extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\RevertZoneResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_RevertZoneResponse');
+class_alias(RevertZoneResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_RevertZoneResponse');

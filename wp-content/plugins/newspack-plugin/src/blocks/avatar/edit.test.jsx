@@ -13,6 +13,7 @@ import { useCustomByline } from '../../shared/hooks/use-custom-byline';
 jest.mock( './hooks', () => ( {
 	useUserAvatar: jest.fn(),
 	usePostAuthors: jest.fn(),
+	useDefaultAvatar: jest.fn( () => '' ),
 } ) );
 
 jest.mock( '../../shared/hooks/use-custom-byline', () => ( {
@@ -98,6 +99,6 @@ describe( 'Avatar Edit', () => {
 		render( <Edit { ...defaultProps } /> );
 
 		expect( screen.getByRole( 'img' ) ).toBeInTheDocument();
-		expect( screen.getByRole( 'img' ) ).toBeInTheDocument();
+		expect( screen.queryByRole( 'img', { name: 'No avatar available' } ) ).not.toBeInTheDocument();
 	} );
 } );

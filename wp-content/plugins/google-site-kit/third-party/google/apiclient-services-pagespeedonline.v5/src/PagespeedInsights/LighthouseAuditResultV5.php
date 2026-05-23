@@ -55,7 +55,7 @@ class LighthouseAuditResultV5 extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $id;
-    protected $metricSavingsType = \Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\MetricSavings::class;
+    protected $metricSavingsType = MetricSavings::class;
     protected $metricSavingsDataType = '';
     /**
      * The unit of the numeric_value field. Used to format the numeric value for
@@ -197,7 +197,7 @@ class LighthouseAuditResultV5 extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param MetricSavings $metricSavings
      */
-    public function setMetricSavings(\Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\MetricSavings $metricSavings)
+    public function setMetricSavings(MetricSavings $metricSavings)
     {
         $this->metricSavings = $metricSavings;
     }
@@ -299,4 +299,4 @@ class LighthouseAuditResultV5 extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\LighthouseAuditResultV5::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PagespeedInsights_LighthouseAuditResultV5');
+class_alias(LighthouseAuditResultV5::class, 'Google\Site_Kit_Dependencies\Google_Service_PagespeedInsights_LighthouseAuditResultV5');

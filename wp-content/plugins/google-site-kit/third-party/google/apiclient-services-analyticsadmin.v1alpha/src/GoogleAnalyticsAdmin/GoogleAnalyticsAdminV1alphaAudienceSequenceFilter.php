@@ -49,7 +49,7 @@ class GoogleAnalyticsAdminV1alphaAudienceSequenceFilter extends \Google\Site_Kit
      * @var string
      */
     public $sequenceMaximumDuration;
-    protected $sequenceStepsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceSequenceFilterAudienceSequenceStep::class;
+    protected $sequenceStepsType = GoogleAnalyticsAdminV1alphaAudienceSequenceFilterAudienceSequenceStep::class;
     protected $sequenceStepsDataType = 'array';
     /**
      * Required. Immutable. Specifies the scope for this filter.
@@ -107,4 +107,4 @@ class GoogleAnalyticsAdminV1alphaAudienceSequenceFilter extends \Google\Site_Kit
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudienceSequenceFilter::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAudienceSequenceFilter');
+class_alias(GoogleAnalyticsAdminV1alphaAudienceSequenceFilter::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaAudienceSequenceFilter');

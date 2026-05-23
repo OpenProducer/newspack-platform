@@ -9,8 +9,8 @@
 	display: none;
 }
 
-.show-updated .entry-header .updated:not(.published) {
-	display: inline-block;
+.show-updated .entry-header .updated-label + .updated:not(.published) {
+	display: inline;
 }
 
 .page-links {

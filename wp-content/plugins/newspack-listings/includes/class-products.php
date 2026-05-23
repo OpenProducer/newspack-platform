@@ -104,6 +104,18 @@ class Products {
 	 * and the `NEWSPACK_LISTINGS_SELF_SERVE_ENABLED` environment constant.
 	 */
 	public static function is_active() {
+		/**
+		 * Enables self-serve listings functionality, allowing readers to purchase
+		 * and create their own listings. Requires WooCommerce and WooCommerce
+		 * Subscriptions plugins to be active.
+		 *
+		 * @constant NEWSPACK_LISTINGS_SELF_SERVE_ENABLED
+		 * @type     bool
+		 * @default  Self-serve listings disabled
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_LISTINGS_SELF_SERVE_ENABLED', true );
+		 */
 		return class_exists( 'WooCommerce' ) && class_exists( 'WC_Subscriptions_Product' ) && defined( 'NEWSPACK_LISTINGS_SELF_SERVE_ENABLED' ) && NEWSPACK_LISTINGS_SELF_SERVE_ENABLED;
 	}
 

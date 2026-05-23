@@ -31,7 +31,7 @@ use Google\Site_Kit_Dependencies\Google\Auth\OAuth2;
  *
  * @see [Application Default Credentials](http://goo.gl/mkAHpZ)
  */
-class UserRefreshCredentials extends \Google\Site_Kit_Dependencies\Google\Auth\CredentialsLoader implements \Google\Site_Kit_Dependencies\Google\Auth\GetQuotaProjectInterface
+class UserRefreshCredentials extends CredentialsLoader implements GetQuotaProjectInterface
 {
     /**
      * The OAuth2 instance used to conduct authorization.
@@ -55,26 +55,26 @@ class UserRefreshCredentials extends \Google\Site_Kit_Dependencies\Google\Auth\C
      */
     public function __construct($scope, $jsonKey)
     {
-        if (\is_string($jsonKey)) {
-            if (!\file_exists($jsonKey)) {
+        if (is_string($jsonKey)) {
+            if (!file_exists($jsonKey)) {
                 throw new \InvalidArgumentException('file does not exist');
             }
-            $json = \file_get_contents($jsonKey);
-            if (!($jsonKey = \json_decode((string) $json, \true))) {
+            $json = file_get_contents($jsonKey);
+            if (!$jsonKey = json_decode((string) $json, \true)) {
                 throw new \LogicException('invalid json for auth config');
             }
         }
-        if (!\array_key_exists('client_id', $jsonKey)) {
+        if (!array_key_exists('client_id', $jsonKey)) {
             throw new \InvalidArgumentException('json key is missing the client_id field');
         }
-        if (!\array_key_exists('client_secret', $jsonKey)) {
+        if (!array_key_exists('client_secret', $jsonKey)) {
             throw new \InvalidArgumentException('json key is missing the client_secret field');
         }
-        if (!\array_key_exists('refresh_token', $jsonKey)) {
+        if (!array_key_exists('refresh_token', $jsonKey)) {
             throw new \InvalidArgumentException('json key is missing the refresh_token field');
         }
-        $this->auth = new \Google\Site_Kit_Dependencies\Google\Auth\OAuth2(['clientId' => $jsonKey['client_id'], 'clientSecret' => $jsonKey['client_secret'], 'refresh_token' => $jsonKey['refresh_token'], 'scope' => $scope, 'tokenCredentialUri' => self::TOKEN_CREDENTIAL_URI]);
-        if (\array_key_exists('quota_project_id', $jsonKey)) {
+        $this->auth = new OAuth2(['clientId' => $jsonKey['client_id'], 'clientSecret' => $jsonKey['client_secret'], 'refresh_token' => $jsonKey['refresh_token'], 'scope' => $scope, 'tokenCredentialUri' => self::TOKEN_CREDENTIAL_URI]);
+        if (array_key_exists('quota_project_id', $jsonKey)) {
             $this->quotaProject = (string) $jsonKey['quota_project_id'];
         }
     }

@@ -7,8 +7,9 @@
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { createRoot, lazy, Suspense } from '@wordpress/element';
+import { __experimentalVStack as VStack } from '@wordpress/components'; // eslint-disable-line @wordpress/no-unsafe-wp-apis
 
 /**
  * Internal dependencies
@@ -44,7 +45,7 @@ const components: Record< string, any > = {
 		component: lazy( () => import( /* webpackChunkName: "audience-wizards" */ './audience/views/campaigns' ) ),
 	},
 	'newspack-audience-access-control': {
-		label: __( 'Access Control', 'newspack-plugin' ),
+		label: __( 'Access control', 'newspack-plugin' ),
 		component: lazy( () => import( /* webpackChunkName: "audience-wizards" */ './audience/views/content-gates' ) ),
 	},
 	'newspack-audience-donations': {
@@ -55,23 +56,32 @@ const components: Record< string, any > = {
 		label: __( 'Audience Subscriptions', 'newspack-plugin' ),
 		component: lazy( () => import( /* webpackChunkName: "audience-wizards" */ './audience/views/subscriptions' ) ),
 	},
+	'newspack-premium-newsletters': {
+		label: __( 'Premium newsletters', 'newspack-plugin' ),
+		component: lazy( () => import( /* webpackChunkName: "newsletters-wizards" */ './newsletters/views/premium-newsletters' ) ),
+	},
 } as const;
+
+// Conditionally add the Audience Integrations page if the feature is enabled.
+if ( window.newspackAudienceIntegrations?.integrations_settings_enabled ) {
+	components[ 'newspack-audience-integrations' ] = {
+		label: __( 'Audience Integrations', 'newspack-plugin' ),
+		component: lazy( () => import( /* webpackChunkName: "audience-wizards" */ './audience/views/integrations' ) ),
+	};
+}
 
 const AdminPageLoader = ( { label }: { label: string } ) => {
 	return (
 		<div className="newspack-wizard__loader">
-			<div>
-				<Components.Waiting
-					style={ {
-						height: '50px',
-						width: '50px',
-					} }
-					isCenter
-				/>
-				<span>
-					{ label } { __( 'loading', 'newspack-plugin' ) }…
-				</span>
-			</div>
+			<VStack alignment="center" spacing={ 2 }>
+				<Components.Waiting noMargin />
+				<strong>
+					{
+						/* translators: %s is the label of the page */
+						sprintf( __( '%s loading…', 'newspack-plugin' ), label )
+					}
+				</strong>
+			</VStack>
 		</div>
 	);
 };

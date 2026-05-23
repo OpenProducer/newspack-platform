@@ -69,4 +69,4 @@ class GoogleAnalyticsAdminV1betaDataStreamAndroidAppStreamData extends \Google\S
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataStreamAndroidAppStreamData::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaDataStreamAndroidAppStreamData');
+class_alias(GoogleAnalyticsAdminV1betaDataStreamAndroidAppStreamData::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1betaDataStreamAndroidAppStreamData');

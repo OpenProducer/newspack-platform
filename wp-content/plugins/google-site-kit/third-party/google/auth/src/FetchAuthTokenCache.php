@@ -22,7 +22,7 @@ use Google\Site_Kit_Dependencies\Psr\Cache\CacheItemPoolInterface;
  * A class to implement caching for any object implementing
  * FetchAuthTokenInterface
  */
-class FetchAuthTokenCache implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthTokenInterface, \Google\Site_Kit_Dependencies\Google\Auth\GetQuotaProjectInterface, \Google\Site_Kit_Dependencies\Google\Auth\GetUniverseDomainInterface, \Google\Site_Kit_Dependencies\Google\Auth\SignBlobInterface, \Google\Site_Kit_Dependencies\Google\Auth\ProjectIdProviderInterface, \Google\Site_Kit_Dependencies\Google\Auth\UpdateMetadataInterface
+class FetchAuthTokenCache implements FetchAuthTokenInterface, GetQuotaProjectInterface, GetUniverseDomainInterface, SignBlobInterface, ProjectIdProviderInterface, UpdateMetadataInterface
 {
     use CacheTrait;
     /**
@@ -38,11 +38,11 @@ class FetchAuthTokenCache implements \Google\Site_Kit_Dependencies\Google\Auth\F
      * @param array<mixed> $cacheConfig Configuration for the cache
      * @param CacheItemPoolInterface $cache
      */
-    public function __construct(\Google\Site_Kit_Dependencies\Google\Auth\FetchAuthTokenInterface $fetcher, ?array $cacheConfig = null, ?\Google\Site_Kit_Dependencies\Psr\Cache\CacheItemPoolInterface $cache = null)
+    public function __construct(FetchAuthTokenInterface $fetcher, ?array $cacheConfig = null, ?CacheItemPoolInterface $cache = null)
     {
         $this->fetcher = $fetcher;
         $this->cache = $cache;
-        $this->cacheConfig = \array_merge(['lifetime' => 1500, 'prefix' => '', 'cacheUniverseDomain' => $fetcher instanceof \Google\Site_Kit_Dependencies\Google\Auth\Credentials\GCECredentials], (array) $cacheConfig);
+        $this->cacheConfig = array_merge(['lifetime' => 1500, 'prefix' => '', 'cacheUniverseDomain' => $fetcher instanceof Credentials\GCECredentials], (array) $cacheConfig);
     }
     /**
      * @return FetchAuthTokenInterface
@@ -92,8 +92,8 @@ class FetchAuthTokenCache implements \Google\Site_Kit_Dependencies\Google\Auth\F
      */
     public function getClientName(?callable $httpHandler = null)
     {
-        if (!$this->fetcher instanceof \Google\Site_Kit_Dependencies\Google\Auth\SignBlobInterface) {
-            throw new \RuntimeException('Credentials fetcher does not implement ' . 'Google\\Auth\\SignBlobInterface');
+        if (!$this->fetcher instanceof SignBlobInterface) {
+            throw new \RuntimeException('Credentials fetcher does not implement ' . 'Google\Auth\SignBlobInterface');
         }
         return $this->fetcher->getClientName($httpHandler);
     }
@@ -110,13 +110,13 @@ class FetchAuthTokenCache implements \Google\Site_Kit_Dependencies\Google\Auth\F
      */
     public function signBlob($stringToSign, $forceOpenSsl = \false)
     {
-        if (!$this->fetcher instanceof \Google\Site_Kit_Dependencies\Google\Auth\SignBlobInterface) {
-            throw new \RuntimeException('Credentials fetcher does not implement ' . 'Google\\Auth\\SignBlobInterface');
+        if (!$this->fetcher instanceof SignBlobInterface) {
+            throw new \RuntimeException('Credentials fetcher does not implement ' . 'Google\Auth\SignBlobInterface');
         }
         // Pass the access token from cache for credentials that sign blobs
         // using the IAM API. This saves a call to fetch an access token when a
         // cached token exists.
-        if ($this->fetcher instanceof \Google\Site_Kit_Dependencies\Google\Auth\Credentials\GCECredentials || $this->fetcher instanceof \Google\Site_Kit_Dependencies\Google\Auth\Credentials\ImpersonatedServiceAccountCredentials) {
+        if ($this->fetcher instanceof Credentials\GCECredentials || $this->fetcher instanceof Credentials\ImpersonatedServiceAccountCredentials) {
             $cached = $this->fetchAuthTokenFromCache();
             $accessToken = $cached['access_token'] ?? null;
             return $this->fetcher->signBlob($stringToSign, $forceOpenSsl, $accessToken);
@@ -131,7 +131,7 @@ class FetchAuthTokenCache implements \Google\Site_Kit_Dependencies\Google\Auth\F
      */
     public function getQuotaProject()
     {
-        if ($this->fetcher instanceof \Google\Site_Kit_Dependencies\Google\Auth\GetQuotaProjectInterface) {
+        if ($this->fetcher instanceof GetQuotaProjectInterface) {
             return $this->fetcher->getQuotaProject();
         }
         return null;
@@ -146,13 +146,13 @@ class FetchAuthTokenCache implements \Google\Site_Kit_Dependencies\Google\Auth\F
      */
     public function getProjectId(?callable $httpHandler = null)
     {
-        if (!$this->fetcher instanceof \Google\Site_Kit_Dependencies\Google\Auth\ProjectIdProviderInterface) {
-            throw new \RuntimeException('Credentials fetcher does not implement ' . 'Google\\Auth\\ProvidesProjectIdInterface');
+        if (!$this->fetcher instanceof ProjectIdProviderInterface) {
+            throw new \RuntimeException('Credentials fetcher does not implement ' . 'Google\Auth\ProvidesProjectIdInterface');
         }
         // Pass the access token from cache for credentials that require an
         // access token to fetch the project ID. This saves a call to fetch an
         // access token when a cached token exists.
-        if ($this->fetcher instanceof \Google\Site_Kit_Dependencies\Google\Auth\Credentials\ExternalAccountCredentials) {
+        if ($this->fetcher instanceof Credentials\ExternalAccountCredentials) {
             $cached = $this->fetchAuthTokenFromCache();
             $accessToken = $cached['access_token'] ?? null;
             return $this->fetcher->getProjectId($httpHandler, $accessToken);
@@ -164,15 +164,15 @@ class FetchAuthTokenCache implements \Google\Site_Kit_Dependencies\Google\Auth\F
      *
      * @return string
      */
-    public function getUniverseDomain() : string
+    public function getUniverseDomain(): string
     {
-        if ($this->fetcher instanceof \Google\Site_Kit_Dependencies\Google\Auth\GetUniverseDomainInterface) {
+        if ($this->fetcher instanceof GetUniverseDomainInterface) {
             if ($this->cacheConfig['cacheUniverseDomain']) {
                 return $this->getCachedUniverseDomain($this->fetcher);
             }
             return $this->fetcher->getUniverseDomain();
         }
-        return \Google\Site_Kit_Dependencies\Google\Auth\GetUniverseDomainInterface::DEFAULT_UNIVERSE_DOMAIN;
+        return GetUniverseDomainInterface::DEFAULT_UNIVERSE_DOMAIN;
     }
     /**
      * Updates metadata with the authorization token.
@@ -186,8 +186,8 @@ class FetchAuthTokenCache implements \Google\Site_Kit_Dependencies\Google\Auth\F
      */
     public function updateMetadata($metadata, $authUri = null, ?callable $httpHandler = null)
     {
-        if (!$this->fetcher instanceof \Google\Site_Kit_Dependencies\Google\Auth\UpdateMetadataInterface) {
-            throw new \RuntimeException('Credentials fetcher does not implement ' . 'Google\\Auth\\UpdateMetadataInterface');
+        if (!$this->fetcher instanceof UpdateMetadataInterface) {
+            throw new \RuntimeException('Credentials fetcher does not implement ' . 'Google\Auth\UpdateMetadataInterface');
         }
         $cached = $this->fetchAuthTokenFromCache($authUri);
         if ($cached) {
@@ -201,7 +201,7 @@ class FetchAuthTokenCache implements \Google\Site_Kit_Dependencies\Google\Auth\F
             }
         }
         $newMetadata = $this->fetcher->updateMetadata($metadata, $authUri, $httpHandler);
-        if (!$cached && ($token = $this->fetcher->getLastReceivedToken())) {
+        if (!$cached && $token = $this->fetcher->getLastReceivedToken()) {
             $this->saveAuthTokenInCache($token, $authUri);
         }
         return $newMetadata;
@@ -221,13 +221,13 @@ class FetchAuthTokenCache implements \Google\Site_Kit_Dependencies\Google\Auth\F
         // if $authUri is set, use it as the cache key
         $cacheKey = $authUri ? $this->getFullCacheKey($authUri) : $this->fetcher->getCacheKey();
         $cached = $this->getCachedValue($cacheKey);
-        if (\is_array($cached)) {
+        if (is_array($cached)) {
             if (empty($cached['expires_at'])) {
                 // If there is no expiration data, assume token is not expired.
                 // (for JwtAccess and ID tokens)
                 return $cached;
             }
-            if (\time() + $this->eagerRefreshThresholdSeconds < $cached['expires_at']) {
+            if (time() + $this->eagerRefreshThresholdSeconds < $cached['expires_at']) {
                 // access token is not expired
                 return $cached;
             }
@@ -247,7 +247,7 @@ class FetchAuthTokenCache implements \Google\Site_Kit_Dependencies\Google\Auth\F
             $this->setCachedValue($cacheKey, $authToken);
         }
     }
-    private function getCachedUniverseDomain(\Google\Site_Kit_Dependencies\Google\Auth\GetUniverseDomainInterface $fetcher) : string
+    private function getCachedUniverseDomain(GetUniverseDomainInterface $fetcher): string
     {
         $cacheKey = $this->getFullCacheKey($fetcher->getCacheKey() . 'universe_domain');
         // @phpstan-ignore-line

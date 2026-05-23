@@ -49,7 +49,7 @@ class NumericFilter extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $operation;
-    protected $valueType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\NumericValue::class;
+    protected $valueType = NumericValue::class;
     protected $valueDataType = '';
     /**
      * The operation type for this filter.
@@ -75,7 +75,7 @@ class NumericFilter extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param NumericValue $value
      */
-    public function setValue(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\NumericValue $value)
+    public function setValue(NumericValue $value)
     {
         $this->value = $value;
     }
@@ -88,4 +88,4 @@ class NumericFilter extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\NumericFilter::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_NumericFilter');
+class_alias(NumericFilter::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_NumericFilter');

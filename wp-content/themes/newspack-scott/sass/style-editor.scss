@@ -56,6 +56,7 @@ Newspack Scott Editor Styles
 	border-width: 0;
 	font-weight: bold;
 	padding-top: #{3 * structure.$size__spacing-unit};
+	padding-bottom: 0;
 	position: relative;
 	text-align: center;
 
@@ -220,7 +221,7 @@ Newspack Scott Editor Styles
 		}
 	}
 
-	&[style*="border-width"] {
+	&[style*="border-"] {
 		blockquote {
 			margin-top: 0;
 		}

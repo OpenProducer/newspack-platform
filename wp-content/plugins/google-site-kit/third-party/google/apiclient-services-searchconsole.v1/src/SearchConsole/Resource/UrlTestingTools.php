@@ -29,4 +29,4 @@ class UrlTestingTools extends \Google\Site_Kit_Dependencies\Google\Service\Resou
 {
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\Resource\UrlTestingTools::class, 'Google\\Site_Kit_Dependencies\\Google_Service_SearchConsole_Resource_UrlTestingTools');
+class_alias(UrlTestingTools::class, 'Google\Site_Kit_Dependencies\Google_Service_SearchConsole_Resource_UrlTestingTools');

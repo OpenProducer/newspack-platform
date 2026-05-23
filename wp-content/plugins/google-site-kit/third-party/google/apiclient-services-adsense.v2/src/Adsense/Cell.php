@@ -45,4 +45,4 @@ class Cell extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\Cell::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_Cell');
+class_alias(Cell::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_Cell');

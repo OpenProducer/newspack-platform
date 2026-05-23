@@ -27,7 +27,7 @@ class ListUrlChannelsResponse extends \Google\Site_Kit_Dependencies\Google\Colle
      * @var string
      */
     public $nextPageToken;
-    protected $urlChannelsType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\UrlChannel::class;
+    protected $urlChannelsType = UrlChannel::class;
     protected $urlChannelsDataType = 'array';
     /**
      * Continuation token used to page through url channels. To retrieve the next
@@ -64,4 +64,4 @@ class ListUrlChannelsResponse extends \Google\Site_Kit_Dependencies\Google\Colle
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\ListUrlChannelsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_ListUrlChannelsResponse');
+class_alias(ListUrlChannelsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_ListUrlChannelsResponse');

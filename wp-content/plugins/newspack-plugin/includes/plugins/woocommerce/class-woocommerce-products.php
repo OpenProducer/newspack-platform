@@ -284,9 +284,19 @@ class WooCommerce_Products {
 			return;
 		}
 
+		// Both this handler and WC core's WC_Meta_Box_Product_Data::save are
+		// hooked on `woocommerce_process_product_meta` at priority 10, so the
+		// order depends on registration timing. Newspack typically registers
+		// first, which means when saving a brand-new product whose type is
+		// changing via the dropdown, $product->get_type() still returns the
+		// auto-draft default ("simple") at this point. Read the POSTed
+		// product-type as the source of truth, matching WC core's own pattern
+		// in WC_Meta_Box_Product_Data::save().
+		$product_type = ! empty( $_POST['product-type'] ) ? sanitize_title( wp_unslash( $_POST['product-type'] ) ) : $product->get_type(); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+
 		$custom_options = array_merge( self::get_custom_options(), self::get_custom_product_pricing_options() );
 		foreach ( $custom_options as $option_key => $option_config ) {
-			if ( isset( $option_config['product_types'] ) && ! in_array( $product->get_type(), $option_config['product_types'], true ) ) {
+			if ( isset( $option_config['product_types'] ) && ! in_array( $product_type, $option_config['product_types'], true ) ) {
 				continue;
 			}
 			$meta_key   = $option_config['id'];

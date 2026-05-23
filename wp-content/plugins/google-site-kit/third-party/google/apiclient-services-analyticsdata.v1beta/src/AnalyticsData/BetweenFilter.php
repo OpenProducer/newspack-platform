@@ -19,16 +19,16 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsData;
 
 class BetweenFilter extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $fromValueType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\NumericValue::class;
+    protected $fromValueType = NumericValue::class;
     protected $fromValueDataType = '';
-    protected $toValueType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\NumericValue::class;
+    protected $toValueType = NumericValue::class;
     protected $toValueDataType = '';
     /**
      * Begins with this number.
      *
      * @param NumericValue $fromValue
      */
-    public function setFromValue(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\NumericValue $fromValue)
+    public function setFromValue(NumericValue $fromValue)
     {
         $this->fromValue = $fromValue;
     }
@@ -44,7 +44,7 @@ class BetweenFilter extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param NumericValue $toValue
      */
-    public function setToValue(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\NumericValue $toValue)
+    public function setToValue(NumericValue $toValue)
     {
         $this->toValue = $toValue;
     }
@@ -57,4 +57,4 @@ class BetweenFilter extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\BetweenFilter::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_BetweenFilter');
+class_alias(BetweenFilter::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_BetweenFilter');

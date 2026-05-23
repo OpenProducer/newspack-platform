@@ -1,6 +1,6 @@
 <?php
 
-/* namespace Google\Site_Kit_Dependencies intentionally removed */
+namespace Google\Site_Kit_Dependencies;
 
 /*
  * This file is part of the Symfony package.
@@ -14,15 +14,15 @@ use Google\Site_Kit_Dependencies\Symfony\Polyfill\Intl\Normalizer as p;
 if (\PHP_VERSION_ID >= 80000) {
     return require __DIR__ . '/bootstrap80.php';
 }
-if (!\function_exists('normalizer_is_normalized')) {
-    function normalizer_is_normalized($string, $form = \Google\Site_Kit_Dependencies\Symfony\Polyfill\Intl\Normalizer\Normalizer::FORM_C)
+if (!\function_exists('normalizer_is_normalized') && !\function_exists('Google\Site_Kit_Dependencies\normalizer_is_normalized')) {
+    function normalizer_is_normalized($string, $form = p\Normalizer::FORM_C)
     {
-        return \Google\Site_Kit_Dependencies\Symfony\Polyfill\Intl\Normalizer\Normalizer::isNormalized($string, $form);
+        return p\Normalizer::isNormalized($string, $form);
     }
 }
-if (!\function_exists('normalizer_normalize')) {
-    function normalizer_normalize($string, $form = \Google\Site_Kit_Dependencies\Symfony\Polyfill\Intl\Normalizer\Normalizer::FORM_C)
+if (!\function_exists('normalizer_normalize') && !\function_exists('Google\Site_Kit_Dependencies\normalizer_normalize')) {
+    function normalizer_normalize($string, $form = p\Normalizer::FORM_C)
     {
-        return \Google\Site_Kit_Dependencies\Symfony\Polyfill\Intl\Normalizer\Normalizer::normalize($string, $form);
+        return p\Normalizer::normalize($string, $form);
     }
 }

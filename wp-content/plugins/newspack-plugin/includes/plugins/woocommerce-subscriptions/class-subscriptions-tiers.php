@@ -420,6 +420,17 @@ class Subscriptions_Tiers {
 			$price = $product->get_price_html();
 		}
 
+		/**
+		 * Hides product descriptions in subscription tier displays.
+		 * Useful for cleaner checkout experiences.
+		 *
+		 * @constant NEWSPACK_DISABLE_SUBSCRIPTION_DESCRIPTION
+		 * @type     bool
+		 * @default  Subscription descriptions shown
+		 * @status   draft
+		 *
+		 * @example define( 'NEWSPACK_DISABLE_SUBSCRIPTION_DESCRIPTION', true );
+		 */
 		$should_render_description = ! defined( 'NEWSPACK_DISABLE_SUBSCRIPTION_DESCRIPTION' ) || ! NEWSPACK_DISABLE_SUBSCRIPTION_DESCRIPTION;
 		$description               = $product->get_description();
 

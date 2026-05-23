@@ -19,9 +19,9 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 
 class Birthday extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $dateType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Date::class;
+    protected $dateType = Date::class;
     protected $dateDataType = '';
-    protected $metadataType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata::class;
+    protected $metadataType = FieldMetadata::class;
     protected $metadataDataType = '';
     /**
      * Prefer to use the `date` field if set. A free-form string representing the
@@ -36,7 +36,7 @@ class Birthday extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param Date $date
      */
-    public function setDate(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\Date $date)
+    public function setDate(Date $date)
     {
         $this->date = $date;
     }
@@ -52,7 +52,7 @@ class Birthday extends \Google\Site_Kit_Dependencies\Google\Model
      *
      * @param FieldMetadata $metadata
      */
-    public function setMetadata(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata $metadata)
+    public function setMetadata(FieldMetadata $metadata)
     {
         $this->metadata = $metadata;
     }
@@ -84,4 +84,4 @@ class Birthday extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\Birthday::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_Birthday');
+class_alias(Birthday::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_Birthday');

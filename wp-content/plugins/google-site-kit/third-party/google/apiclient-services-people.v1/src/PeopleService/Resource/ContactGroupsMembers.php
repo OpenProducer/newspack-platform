@@ -42,12 +42,12 @@ class ContactGroupsMembers extends \Google\Site_Kit_Dependencies\Google\Service\
      * @return ModifyContactGroupMembersResponse
      * @throws \Google\Service\Exception
      */
-    public function modify($resourceName, \Google\Site_Kit_Dependencies\Google\Service\PeopleService\ModifyContactGroupMembersRequest $postBody, $optParams = [])
+    public function modify($resourceName, ModifyContactGroupMembersRequest $postBody, $optParams = [])
     {
         $params = ['resourceName' => $resourceName, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
-        return $this->call('modify', [$params], \Google\Site_Kit_Dependencies\Google\Service\PeopleService\ModifyContactGroupMembersResponse::class);
+        $params = array_merge($params, $optParams);
+        return $this->call('modify', [$params], ModifyContactGroupMembersResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\PeopleService\Resource\ContactGroupsMembers::class, 'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_Resource_ContactGroupsMembers');
+class_alias(ContactGroupsMembers::class, 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_Resource_ContactGroupsMembers');

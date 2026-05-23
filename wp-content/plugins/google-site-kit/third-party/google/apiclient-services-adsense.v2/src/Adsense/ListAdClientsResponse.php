@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\Adsense;
 class ListAdClientsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'adClients';
-    protected $adClientsType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\AdClient::class;
+    protected $adClientsType = AdClient::class;
     protected $adClientsDataType = 'array';
     /**
      * Continuation token used to page through ad clients. To retrieve the next
@@ -64,4 +64,4 @@ class ListAdClientsResponse extends \Google\Site_Kit_Dependencies\Google\Collect
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\ListAdClientsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_ListAdClientsResponse');
+class_alias(ListAdClientsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_ListAdClientsResponse');

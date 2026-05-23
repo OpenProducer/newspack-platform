@@ -20,5 +20,5 @@ use Google\Site_Kit_Dependencies\phpseclib3\File\ASN1;
  */
 abstract class Validity
 {
-    const MAP = ['type' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1::TYPE_SEQUENCE, 'children' => ['notBefore' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\Time::MAP, 'notAfter' => \Google\Site_Kit_Dependencies\phpseclib3\File\ASN1\Maps\Time::MAP]];
+    const MAP = ['type' => ASN1::TYPE_SEQUENCE, 'children' => ['notBefore' => Time::MAP, 'notAfter' => Time::MAP]];
 }

@@ -199,4 +199,4 @@ class Destination extends \Google\Site_Kit_Dependencies\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\Destination::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_Destination');
+class_alias(Destination::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Destination');

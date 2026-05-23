@@ -19,70 +19,70 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 
 class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extends \Google\Site_Kit_Dependencies\Google\Model
 {
-    protected $accountType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccount::class;
+    protected $accountType = GoogleAnalyticsAdminV1alphaAccount::class;
     protected $accountDataType = '';
-    protected $adsenseLinkType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAdSenseLink::class;
+    protected $adsenseLinkType = GoogleAnalyticsAdminV1alphaAdSenseLink::class;
     protected $adsenseLinkDataType = '';
-    protected $attributionSettingsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAttributionSettings::class;
+    protected $attributionSettingsType = GoogleAnalyticsAdminV1alphaAttributionSettings::class;
     protected $attributionSettingsDataType = '';
-    protected $audienceType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudience::class;
+    protected $audienceType = GoogleAnalyticsAdminV1alphaAudience::class;
     protected $audienceDataType = '';
-    protected $bigqueryLinkType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaBigQueryLink::class;
+    protected $bigqueryLinkType = GoogleAnalyticsAdminV1alphaBigQueryLink::class;
     protected $bigqueryLinkDataType = '';
-    protected $calculatedMetricType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaCalculatedMetric::class;
+    protected $calculatedMetricType = GoogleAnalyticsAdminV1alphaCalculatedMetric::class;
     protected $calculatedMetricDataType = '';
-    protected $channelGroupType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaChannelGroup::class;
+    protected $channelGroupType = GoogleAnalyticsAdminV1alphaChannelGroup::class;
     protected $channelGroupDataType = '';
-    protected $conversionEventType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaConversionEvent::class;
+    protected $conversionEventType = GoogleAnalyticsAdminV1alphaConversionEvent::class;
     protected $conversionEventDataType = '';
-    protected $customDimensionType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaCustomDimension::class;
+    protected $customDimensionType = GoogleAnalyticsAdminV1alphaCustomDimension::class;
     protected $customDimensionDataType = '';
-    protected $customMetricType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaCustomMetric::class;
+    protected $customMetricType = GoogleAnalyticsAdminV1alphaCustomMetric::class;
     protected $customMetricDataType = '';
-    protected $dataRedactionSettingsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDataRedactionSettings::class;
+    protected $dataRedactionSettingsType = GoogleAnalyticsAdminV1alphaDataRedactionSettings::class;
     protected $dataRedactionSettingsDataType = '';
-    protected $dataRetentionSettingsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDataRetentionSettings::class;
+    protected $dataRetentionSettingsType = GoogleAnalyticsAdminV1alphaDataRetentionSettings::class;
     protected $dataRetentionSettingsDataType = '';
-    protected $dataStreamType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDataStream::class;
+    protected $dataStreamType = GoogleAnalyticsAdminV1alphaDataStream::class;
     protected $dataStreamDataType = '';
-    protected $displayVideo360AdvertiserLinkType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink::class;
+    protected $displayVideo360AdvertiserLinkType = GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink::class;
     protected $displayVideo360AdvertiserLinkDataType = '';
-    protected $displayVideo360AdvertiserLinkProposalType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal::class;
+    protected $displayVideo360AdvertiserLinkProposalType = GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal::class;
     protected $displayVideo360AdvertiserLinkProposalDataType = '';
-    protected $enhancedMeasurementSettingsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaEnhancedMeasurementSettings::class;
+    protected $enhancedMeasurementSettingsType = GoogleAnalyticsAdminV1alphaEnhancedMeasurementSettings::class;
     protected $enhancedMeasurementSettingsDataType = '';
-    protected $eventCreateRuleType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaEventCreateRule::class;
+    protected $eventCreateRuleType = GoogleAnalyticsAdminV1alphaEventCreateRule::class;
     protected $eventCreateRuleDataType = '';
-    protected $expandedDataSetType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaExpandedDataSet::class;
+    protected $expandedDataSetType = GoogleAnalyticsAdminV1alphaExpandedDataSet::class;
     protected $expandedDataSetDataType = '';
-    protected $firebaseLinkType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaFirebaseLink::class;
+    protected $firebaseLinkType = GoogleAnalyticsAdminV1alphaFirebaseLink::class;
     protected $firebaseLinkDataType = '';
-    protected $googleAdsLinkType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaGoogleAdsLink::class;
+    protected $googleAdsLinkType = GoogleAnalyticsAdminV1alphaGoogleAdsLink::class;
     protected $googleAdsLinkDataType = '';
-    protected $googleSignalsSettingsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaGoogleSignalsSettings::class;
+    protected $googleSignalsSettingsType = GoogleAnalyticsAdminV1alphaGoogleSignalsSettings::class;
     protected $googleSignalsSettingsDataType = '';
-    protected $keyEventType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaKeyEvent::class;
+    protected $keyEventType = GoogleAnalyticsAdminV1alphaKeyEvent::class;
     protected $keyEventDataType = '';
-    protected $measurementProtocolSecretType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret::class;
+    protected $measurementProtocolSecretType = GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret::class;
     protected $measurementProtocolSecretDataType = '';
-    protected $propertyType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaProperty::class;
+    protected $propertyType = GoogleAnalyticsAdminV1alphaProperty::class;
     protected $propertyDataType = '';
-    protected $reportingDataAnnotationType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaReportingDataAnnotation::class;
+    protected $reportingDataAnnotationType = GoogleAnalyticsAdminV1alphaReportingDataAnnotation::class;
     protected $reportingDataAnnotationDataType = '';
-    protected $reportingIdentitySettingsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaReportingIdentitySettings::class;
+    protected $reportingIdentitySettingsType = GoogleAnalyticsAdminV1alphaReportingIdentitySettings::class;
     protected $reportingIdentitySettingsDataType = '';
-    protected $searchAds360LinkType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSearchAds360Link::class;
+    protected $searchAds360LinkType = GoogleAnalyticsAdminV1alphaSearchAds360Link::class;
     protected $searchAds360LinkDataType = '';
-    protected $skadnetworkConversionValueSchemaType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema::class;
+    protected $skadnetworkConversionValueSchemaType = GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema::class;
     protected $skadnetworkConversionValueSchemaDataType = '';
-    protected $subpropertySyncConfigType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertySyncConfig::class;
+    protected $subpropertySyncConfigType = GoogleAnalyticsAdminV1alphaSubpropertySyncConfig::class;
     protected $subpropertySyncConfigDataType = '';
     /**
      * A snapshot of an Account resource in change history.
      *
      * @param GoogleAnalyticsAdminV1alphaAccount $account
      */
-    public function setAccount(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAccount $account)
+    public function setAccount(GoogleAnalyticsAdminV1alphaAccount $account)
     {
         $this->account = $account;
     }
@@ -98,7 +98,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaAdSenseLink $adsenseLink
      */
-    public function setAdsenseLink(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAdSenseLink $adsenseLink)
+    public function setAdsenseLink(GoogleAnalyticsAdminV1alphaAdSenseLink $adsenseLink)
     {
         $this->adsenseLink = $adsenseLink;
     }
@@ -114,7 +114,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaAttributionSettings $attributionSettings
      */
-    public function setAttributionSettings(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAttributionSettings $attributionSettings)
+    public function setAttributionSettings(GoogleAnalyticsAdminV1alphaAttributionSettings $attributionSettings)
     {
         $this->attributionSettings = $attributionSettings;
     }
@@ -130,7 +130,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaAudience $audience
      */
-    public function setAudience(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaAudience $audience)
+    public function setAudience(GoogleAnalyticsAdminV1alphaAudience $audience)
     {
         $this->audience = $audience;
     }
@@ -146,7 +146,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaBigQueryLink $bigqueryLink
      */
-    public function setBigqueryLink(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaBigQueryLink $bigqueryLink)
+    public function setBigqueryLink(GoogleAnalyticsAdminV1alphaBigQueryLink $bigqueryLink)
     {
         $this->bigqueryLink = $bigqueryLink;
     }
@@ -162,7 +162,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaCalculatedMetric $calculatedMetric
      */
-    public function setCalculatedMetric(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaCalculatedMetric $calculatedMetric)
+    public function setCalculatedMetric(GoogleAnalyticsAdminV1alphaCalculatedMetric $calculatedMetric)
     {
         $this->calculatedMetric = $calculatedMetric;
     }
@@ -178,7 +178,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaChannelGroup $channelGroup
      */
-    public function setChannelGroup(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaChannelGroup $channelGroup)
+    public function setChannelGroup(GoogleAnalyticsAdminV1alphaChannelGroup $channelGroup)
     {
         $this->channelGroup = $channelGroup;
     }
@@ -194,7 +194,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaConversionEvent $conversionEvent
      */
-    public function setConversionEvent(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaConversionEvent $conversionEvent)
+    public function setConversionEvent(GoogleAnalyticsAdminV1alphaConversionEvent $conversionEvent)
     {
         $this->conversionEvent = $conversionEvent;
     }
@@ -210,7 +210,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaCustomDimension $customDimension
      */
-    public function setCustomDimension(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaCustomDimension $customDimension)
+    public function setCustomDimension(GoogleAnalyticsAdminV1alphaCustomDimension $customDimension)
     {
         $this->customDimension = $customDimension;
     }
@@ -226,7 +226,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaCustomMetric $customMetric
      */
-    public function setCustomMetric(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaCustomMetric $customMetric)
+    public function setCustomMetric(GoogleAnalyticsAdminV1alphaCustomMetric $customMetric)
     {
         $this->customMetric = $customMetric;
     }
@@ -242,7 +242,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaDataRedactionSettings $dataRedactionSettings
      */
-    public function setDataRedactionSettings(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDataRedactionSettings $dataRedactionSettings)
+    public function setDataRedactionSettings(GoogleAnalyticsAdminV1alphaDataRedactionSettings $dataRedactionSettings)
     {
         $this->dataRedactionSettings = $dataRedactionSettings;
     }
@@ -258,7 +258,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaDataRetentionSettings $dataRetentionSettings
      */
-    public function setDataRetentionSettings(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDataRetentionSettings $dataRetentionSettings)
+    public function setDataRetentionSettings(GoogleAnalyticsAdminV1alphaDataRetentionSettings $dataRetentionSettings)
     {
         $this->dataRetentionSettings = $dataRetentionSettings;
     }
@@ -274,7 +274,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaDataStream $dataStream
      */
-    public function setDataStream(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDataStream $dataStream)
+    public function setDataStream(GoogleAnalyticsAdminV1alphaDataStream $dataStream)
     {
         $this->dataStream = $dataStream;
     }
@@ -290,7 +290,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink $displayVideo360AdvertiserLink
      */
-    public function setDisplayVideo360AdvertiserLink(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink $displayVideo360AdvertiserLink)
+    public function setDisplayVideo360AdvertiserLink(GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink $displayVideo360AdvertiserLink)
     {
         $this->displayVideo360AdvertiserLink = $displayVideo360AdvertiserLink;
     }
@@ -307,7 +307,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal $displayVideo360AdvertiserLinkProposal
      */
-    public function setDisplayVideo360AdvertiserLinkProposal(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal $displayVideo360AdvertiserLinkProposal)
+    public function setDisplayVideo360AdvertiserLinkProposal(GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal $displayVideo360AdvertiserLinkProposal)
     {
         $this->displayVideo360AdvertiserLinkProposal = $displayVideo360AdvertiserLinkProposal;
     }
@@ -323,7 +323,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaEnhancedMeasurementSettings $enhancedMeasurementSettings
      */
-    public function setEnhancedMeasurementSettings(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaEnhancedMeasurementSettings $enhancedMeasurementSettings)
+    public function setEnhancedMeasurementSettings(GoogleAnalyticsAdminV1alphaEnhancedMeasurementSettings $enhancedMeasurementSettings)
     {
         $this->enhancedMeasurementSettings = $enhancedMeasurementSettings;
     }
@@ -339,7 +339,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaEventCreateRule $eventCreateRule
      */
-    public function setEventCreateRule(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaEventCreateRule $eventCreateRule)
+    public function setEventCreateRule(GoogleAnalyticsAdminV1alphaEventCreateRule $eventCreateRule)
     {
         $this->eventCreateRule = $eventCreateRule;
     }
@@ -355,7 +355,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaExpandedDataSet $expandedDataSet
      */
-    public function setExpandedDataSet(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaExpandedDataSet $expandedDataSet)
+    public function setExpandedDataSet(GoogleAnalyticsAdminV1alphaExpandedDataSet $expandedDataSet)
     {
         $this->expandedDataSet = $expandedDataSet;
     }
@@ -371,7 +371,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaFirebaseLink $firebaseLink
      */
-    public function setFirebaseLink(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaFirebaseLink $firebaseLink)
+    public function setFirebaseLink(GoogleAnalyticsAdminV1alphaFirebaseLink $firebaseLink)
     {
         $this->firebaseLink = $firebaseLink;
     }
@@ -387,7 +387,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaGoogleAdsLink $googleAdsLink
      */
-    public function setGoogleAdsLink(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaGoogleAdsLink $googleAdsLink)
+    public function setGoogleAdsLink(GoogleAnalyticsAdminV1alphaGoogleAdsLink $googleAdsLink)
     {
         $this->googleAdsLink = $googleAdsLink;
     }
@@ -403,7 +403,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaGoogleSignalsSettings $googleSignalsSettings
      */
-    public function setGoogleSignalsSettings(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaGoogleSignalsSettings $googleSignalsSettings)
+    public function setGoogleSignalsSettings(GoogleAnalyticsAdminV1alphaGoogleSignalsSettings $googleSignalsSettings)
     {
         $this->googleSignalsSettings = $googleSignalsSettings;
     }
@@ -419,7 +419,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaKeyEvent $keyEvent
      */
-    public function setKeyEvent(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaKeyEvent $keyEvent)
+    public function setKeyEvent(GoogleAnalyticsAdminV1alphaKeyEvent $keyEvent)
     {
         $this->keyEvent = $keyEvent;
     }
@@ -435,7 +435,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret $measurementProtocolSecret
      */
-    public function setMeasurementProtocolSecret(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret $measurementProtocolSecret)
+    public function setMeasurementProtocolSecret(GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret $measurementProtocolSecret)
     {
         $this->measurementProtocolSecret = $measurementProtocolSecret;
     }
@@ -451,7 +451,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaProperty $property
      */
-    public function setProperty(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaProperty $property)
+    public function setProperty(GoogleAnalyticsAdminV1alphaProperty $property)
     {
         $this->property = $property;
     }
@@ -467,7 +467,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaReportingDataAnnotation $reportingDataAnnotation
      */
-    public function setReportingDataAnnotation(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaReportingDataAnnotation $reportingDataAnnotation)
+    public function setReportingDataAnnotation(GoogleAnalyticsAdminV1alphaReportingDataAnnotation $reportingDataAnnotation)
     {
         $this->reportingDataAnnotation = $reportingDataAnnotation;
     }
@@ -483,7 +483,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaReportingIdentitySettings $reportingIdentitySettings
      */
-    public function setReportingIdentitySettings(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaReportingIdentitySettings $reportingIdentitySettings)
+    public function setReportingIdentitySettings(GoogleAnalyticsAdminV1alphaReportingIdentitySettings $reportingIdentitySettings)
     {
         $this->reportingIdentitySettings = $reportingIdentitySettings;
     }
@@ -499,7 +499,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaSearchAds360Link $searchAds360Link
      */
-    public function setSearchAds360Link(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSearchAds360Link $searchAds360Link)
+    public function setSearchAds360Link(GoogleAnalyticsAdminV1alphaSearchAds360Link $searchAds360Link)
     {
         $this->searchAds360Link = $searchAds360Link;
     }
@@ -515,7 +515,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema $skadnetworkConversionValueSchema
      */
-    public function setSkadnetworkConversionValueSchema(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema $skadnetworkConversionValueSchema)
+    public function setSkadnetworkConversionValueSchema(GoogleAnalyticsAdminV1alphaSKAdNetworkConversionValueSchema $skadnetworkConversionValueSchema)
     {
         $this->skadnetworkConversionValueSchema = $skadnetworkConversionValueSchema;
     }
@@ -531,7 +531,7 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
      *
      * @param GoogleAnalyticsAdminV1alphaSubpropertySyncConfig $subpropertySyncConfig
      */
-    public function setSubpropertySyncConfig(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaSubpropertySyncConfig $subpropertySyncConfig)
+    public function setSubpropertySyncConfig(GoogleAnalyticsAdminV1alphaSubpropertySyncConfig $subpropertySyncConfig)
     {
         $this->subpropertySyncConfig = $subpropertySyncConfig;
     }
@@ -544,4 +544,4 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource');
+class_alias(GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource');

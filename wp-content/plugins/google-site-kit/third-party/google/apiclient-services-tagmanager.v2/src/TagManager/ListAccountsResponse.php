@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 class ListAccountsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'account';
-    protected $accountType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Account::class;
+    protected $accountType = Account::class;
     protected $accountDataType = 'array';
     /**
      * Continuation token for fetching the next page of results.
@@ -62,4 +62,4 @@ class ListAccountsResponse extends \Google\Site_Kit_Dependencies\Google\Collecti
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ListAccountsResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_TagManager_ListAccountsResponse');
+class_alias(ListAccountsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_TagManager_ListAccountsResponse');

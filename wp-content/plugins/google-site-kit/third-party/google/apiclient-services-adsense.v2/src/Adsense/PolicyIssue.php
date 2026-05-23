@@ -97,9 +97,9 @@ class PolicyIssue extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $entityType;
-    protected $firstDetectedDateType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\Date::class;
+    protected $firstDetectedDateType = Date::class;
     protected $firstDetectedDateDataType = '';
-    protected $lastDetectedDateType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\Date::class;
+    protected $lastDetectedDateType = Date::class;
     protected $lastDetectedDateDataType = '';
     /**
      * Required. Resource name of the entity with policy issues. Format:
@@ -108,7 +108,7 @@ class PolicyIssue extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $name;
-    protected $policyTopicsType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\PolicyTopic::class;
+    protected $policyTopicsType = PolicyTopic::class;
     protected $policyTopicsDataType = 'array';
     /**
      * Required. Hostname/domain of the entity (for example "foo.com" or
@@ -134,7 +134,7 @@ class PolicyIssue extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $uri;
-    protected $warningEscalationDateType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\Date::class;
+    protected $warningEscalationDateType = Date::class;
     protected $warningEscalationDateDataType = '';
     /**
      * Required. The most severe action taken on the entity over the past seven
@@ -218,7 +218,7 @@ class PolicyIssue extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Date $firstDetectedDate
      */
-    public function setFirstDetectedDate(\Google\Site_Kit_Dependencies\Google\Service\Adsense\Date $firstDetectedDate)
+    public function setFirstDetectedDate(Date $firstDetectedDate)
     {
         $this->firstDetectedDate = $firstDetectedDate;
     }
@@ -235,7 +235,7 @@ class PolicyIssue extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Date $lastDetectedDate
      */
-    public function setLastDetectedDate(\Google\Site_Kit_Dependencies\Google\Service\Adsense\Date $lastDetectedDate)
+    public function setLastDetectedDate(Date $lastDetectedDate)
     {
         $this->lastDetectedDate = $lastDetectedDate;
     }
@@ -342,7 +342,7 @@ class PolicyIssue extends \Google\Site_Kit_Dependencies\Google\Collection
      *
      * @param Date $warningEscalationDate
      */
-    public function setWarningEscalationDate(\Google\Site_Kit_Dependencies\Google\Service\Adsense\Date $warningEscalationDate)
+    public function setWarningEscalationDate(Date $warningEscalationDate)
     {
         $this->warningEscalationDate = $warningEscalationDate;
     }
@@ -355,4 +355,4 @@ class PolicyIssue extends \Google\Site_Kit_Dependencies\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\Adsense\PolicyIssue::class, 'Google\\Site_Kit_Dependencies\\Google_Service_Adsense_PolicyIssue');
+class_alias(PolicyIssue::class, 'Google\Site_Kit_Dependencies\Google_Service_Adsense_PolicyIssue');

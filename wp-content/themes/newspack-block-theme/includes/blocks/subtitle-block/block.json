@@ -1,7 +1,10 @@
 {
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
 	"name": "newspack-block-theme/article-subtitle",
 	"title": "Article Subtitle",
 	"category": "newspack",
+	"usesContext": [ "postId", "postType" ],
 	"attributes": {},
 	"supports": {
 		"html": false,

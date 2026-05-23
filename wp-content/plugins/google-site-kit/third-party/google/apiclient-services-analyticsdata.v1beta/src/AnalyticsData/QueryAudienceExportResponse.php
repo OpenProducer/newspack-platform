@@ -20,9 +20,9 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsData;
 class QueryAudienceExportResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'audienceRows';
-    protected $audienceExportType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\AudienceExport::class;
+    protected $audienceExportType = AudienceExport::class;
     protected $audienceExportDataType = '';
-    protected $audienceRowsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\V1betaAudienceRow::class;
+    protected $audienceRowsType = V1betaAudienceRow::class;
     protected $audienceRowsDataType = 'array';
     /**
      * The total number of rows in the AudienceExport result. `rowCount` is
@@ -43,7 +43,7 @@ class QueryAudienceExportResponse extends \Google\Site_Kit_Dependencies\Google\C
      *
      * @param AudienceExport $audienceExport
      */
-    public function setAudienceExport(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\AudienceExport $audienceExport)
+    public function setAudienceExport(AudienceExport $audienceExport)
     {
         $this->audienceExport = $audienceExport;
     }
@@ -95,4 +95,4 @@ class QueryAudienceExportResponse extends \Google\Site_Kit_Dependencies\Google\C
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\QueryAudienceExportResponse::class, 'Google\\Site_Kit_Dependencies\\Google_Service_AnalyticsData_QueryAudienceExportResponse');
+class_alias(QueryAudienceExportResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsData_QueryAudienceExportResponse');

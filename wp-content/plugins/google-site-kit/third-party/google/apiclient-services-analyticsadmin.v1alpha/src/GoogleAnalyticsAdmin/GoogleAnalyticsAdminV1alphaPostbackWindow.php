@@ -20,7 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alph
 class GoogleAnalyticsAdminV1alphaPostbackWindow extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'conversionValues';
-    protected $conversionValuesType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaConversionValues::class;
+    protected $conversionValuesType = GoogleAnalyticsAdminV1alphaConversionValues::class;
     protected $conversionValuesDataType = 'array';
     /**
      * If enable_postback_window_settings is true, conversion_values must be
@@ -76,4 +76,4 @@ class GoogleAnalyticsAdminV1alphaPostbackWindow extends \Google\Site_Kit_Depende
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdminV1alpha\GoogleAnalyticsAdminV1alphaPostbackWindow::class, 'Google\\Site_Kit_Dependencies\\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaPostbackWindow');
+class_alias(GoogleAnalyticsAdminV1alphaPostbackWindow::class, 'Google\Site_Kit_Dependencies\Google_Service_GoogleAnalyticsAdminV1alpha_GoogleAnalyticsAdminV1alphaPostbackWindow');

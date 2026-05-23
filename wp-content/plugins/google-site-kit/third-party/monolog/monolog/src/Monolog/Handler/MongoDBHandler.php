@@ -11,12 +11,13 @@ declare (strict_types=1);
  */
 namespace Google\Site_Kit_Dependencies\Monolog\Handler;
 
+use Google\Site_Kit_Dependencies\MongoDB\Client;
+use Google\Site_Kit_Dependencies\MongoDB\Collection;
 use MongoDB\Driver\BulkWrite;
 use MongoDB\Driver\Manager;
-use Google\Site_Kit_Dependencies\MongoDB\Client;
-use Google\Site_Kit_Dependencies\Monolog\Logger;
 use Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface;
 use Google\Site_Kit_Dependencies\Monolog\Formatter\MongoDBFormatter;
+use Google\Site_Kit_Dependencies\Monolog\Logger;
 /**
  * Logs to a MongoDB database.
  *
@@ -30,14 +31,14 @@ use Google\Site_Kit_Dependencies\Monolog\Formatter\MongoDBFormatter;
  * The above examples uses the MongoDB PHP library's client class; however, the
  * MongoDB\Driver\Manager class from ext-mongodb is also supported.
  */
-class MongoDBHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\AbstractProcessingHandler
+class MongoDBHandler extends AbstractProcessingHandler
 {
-    /** @var \MongoDB\Collection */
+    /** @var Collection */
     private $collection;
     /** @var Client|Manager */
     private $manager;
-    /** @var string */
-    private $namespace;
+    /** @var string|null */
+    private $namespace = null;
     /**
      * Constructor.
      *
@@ -45,26 +46,26 @@ class MongoDBHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstr
      * @param string         $database   Database name
      * @param string         $collection Collection name
      */
-    public function __construct($mongodb, string $database, string $collection, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG, bool $bubble = \true)
+    public function __construct($mongodb, string $database, string $collection, $level = Logger::DEBUG, bool $bubble = \true)
     {
-        if (!($mongodb instanceof \Google\Site_Kit_Dependencies\MongoDB\Client || $mongodb instanceof \MongoDB\Driver\Manager)) {
-            throw new \InvalidArgumentException('MongoDB\\Client or MongoDB\\Driver\\Manager instance required');
+        if (!($mongodb instanceof Client || $mongodb instanceof Manager)) {
+            throw new \InvalidArgumentException('MongoDB\Client or MongoDB\Driver\Manager instance required');
         }
-        if ($mongodb instanceof \Google\Site_Kit_Dependencies\MongoDB\Client) {
-            $this->collection = $mongodb->selectCollection($database, $collection);
+        if ($mongodb instanceof Client) {
+            $this->collection = method_exists($mongodb, 'getCollection') ? $mongodb->getCollection($database, $collection) : $mongodb->selectCollection($database, $collection);
         } else {
             $this->manager = $mongodb;
             $this->namespace = $database . '.' . $collection;
         }
         parent::__construct($level, $bubble);
     }
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
         if (isset($this->collection)) {
             $this->collection->insertOne($record['formatted']);
         }
         if (isset($this->manager, $this->namespace)) {
-            $bulk = new \MongoDB\Driver\BulkWrite();
+            $bulk = new BulkWrite();
             $bulk->insert($record["formatted"]);
             $this->manager->executeBulkWrite($this->namespace, $bulk);
         }
@@ -72,8 +73,8 @@ class MongoDBHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstr
     /**
      * {@inheritDoc}
      */
-    protected function getDefaultFormatter() : \Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface
+    protected function getDefaultFormatter(): FormatterInterface
     {
-        return new \Google\Site_Kit_Dependencies\Monolog\Formatter\MongoDBFormatter();
+        return new MongoDBFormatter();
     }
 }
