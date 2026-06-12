@@ -2,14 +2,14 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Newspack Newsletters 3.32.0\n"
+"Project-Id-Version: Newspack Newsletters 3.33.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/newspack-newsletters\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-06T23:06:12+00:00\n"
+"POT-Creation-Date: 2026-05-19T14:09:48+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: newspack-newsletters\n"
@@ -972,8 +972,8 @@ msgstr ""
 
 #: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1070
 #: includes/service-providers/campaign_monitor/class-newspack-newsletters-campaign-monitor.php:572
-#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:824
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1141
+#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:861
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1188
 msgid "The newsletter subject cannot be empty."
 msgstr ""
 
@@ -989,53 +989,63 @@ msgstr ""
 msgid "ActiveCampaign sync error: "
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1175
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1176
 msgid "Error creating campaign: Message HTML is missing. Campaign not sent."
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1239
+#. Translators: %s is the upstream error message from ActiveCampaign.
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1214
+#, php-format
+msgid "Could not verify the selected segment with ActiveCampaign (%s). Sending was aborted to avoid sending to the entire audience."
+msgstr ""
+
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1222
+msgid "The selected segment could not be found in ActiveCampaign. Sending was aborted to avoid sending to the entire audience. Please re-select a segment and try again."
+msgstr ""
+
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1282
 msgid "Campaign is not deletable."
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1731
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1774
 msgid "Active Campaign List"
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1732
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1775
 msgid "Active Campaign Tag"
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1733
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1776
 #: includes/service-providers/class-newspack-newsletters-service-provider.php:539
 #: src/newsletter-editor/sidebar/send-to.js:40
 msgid "list"
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1734
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1777
 #: includes/service-providers/class-newspack-newsletters-service-provider.php:540
 msgid "lists"
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1735
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1778
 msgid "segment"
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1736
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1779
 #: includes/service-providers/class-newspack-newsletters-service-provider.php:542
 msgid "List"
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1737
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1780
 #: includes/service-providers/class-newspack-newsletters-service-provider.php:543
 msgid "Lists"
 msgstr ""
 
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1738
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1781
 msgid "Segments"
 msgstr ""
 
 #. translators: %1$s and %2$s are opening and closing link tag to Active Campaign documentation.
-#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1757
+#: includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php:1800
 #, php-format
 msgid "Note for Active Campaign: You need to manually create a segment using the above tag to be able to send campaigns to this list. %1$sLearn more%2$s"
 msgstr ""
@@ -1119,22 +1129,22 @@ msgid "Campaign Monitor error: Must select a segment if sending in segment mode.
 msgstr ""
 
 #: includes/service-providers/campaign_monitor/class-newspack-newsletters-campaign-monitor.php:874
-#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:1321
+#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:1358
 msgid "list or segment"
 msgstr ""
 
 #: includes/service-providers/campaign_monitor/class-newspack-newsletters-campaign-monitor.php:875
-#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:1322
+#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:1359
 msgid "lists or segments"
 msgstr ""
 
 #: includes/service-providers/campaign_monitor/class-newspack-newsletters-campaign-monitor.php:876
-#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:1323
+#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:1360
 msgid "List or Segment"
 msgstr ""
 
 #: includes/service-providers/campaign_monitor/class-newspack-newsletters-campaign-monitor.php:877
-#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:1324
+#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:1361
 msgid "Lists or Segments"
 msgstr ""
 
@@ -1244,32 +1254,48 @@ msgstr ""
 msgid "Sender Name"
 msgstr ""
 
-#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:819
+#. Translators: %s is the upstream error message from Constant Contact.
+#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:806
+#, php-format
+msgid "Could not verify the selected list or segment with Constant Contact (%s). Sending was aborted; please re-select a list or segment and try again."
+msgstr ""
+
+#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:814
+msgid "The selected list or segment could not be found in Constant Contact. Sending was aborted; please re-select a list or segment and try again."
+msgstr ""
+
+#. Translators: %s is the unrecognized recipient entity type.
+#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:828
+#, php-format
+msgid "Unrecognized Constant Contact recipient type \"%s\". Sending was aborted; please re-select a list or segment and try again."
+msgstr ""
+
+#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:856
 msgid "No Constant Contact API key available."
 msgstr ""
 
-#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:862
+#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:899
 msgid "The newsletter campaign must have a DRAFT or SENT status."
 msgstr ""
 
-#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:935
+#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:972
 msgid "Unable to synchronize with Constant Contact."
 msgstr ""
 
-#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:943
-#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:1006
+#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:980
+#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:1043
 msgid "Constant Contact campaign ID not found."
 msgstr ""
 
-#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:1235
+#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:1272
 msgid "Contact not found."
 msgstr ""
 
-#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:1319
+#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:1356
 msgid "Constant Contact List"
 msgstr ""
 
-#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:1320
+#: includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php:1357
 msgid "Constant Contact Tag"
 msgstr ""
 
@@ -1320,13 +1346,13 @@ msgstr ""
 #: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:379
 #: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:419
 #: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:981
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1275
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1358
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1325
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1408
 msgid "Mailchimp campaign ID not found."
 msgstr ""
 
 #: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:542
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1138
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1185
 msgid "Missing or invalid Mailchimp credentials."
 msgstr ""
 
@@ -1346,143 +1372,171 @@ msgstr ""
 msgid "Mailchimp test sent successfully to %s."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1103
-msgid "Could not fetch segment criteria for segment "
+#. Translators: %s is the upstream error message from Mailchimp.
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1088
+#, php-format
+msgid "Could not verify the selected sublist with Mailchimp (%s). Sending was aborted to avoid sending to the entire audience."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1267
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1096
+msgid "The selected sublist could not be found in Mailchimp. Sending was aborted to avoid sending to the entire audience. Please re-select a sublist and try again."
+msgstr ""
+
+#. Translators: %s is the name of the Mailchimp segment.
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1139
+#, php-format
+msgid "Could not fetch segment criteria for segment %s."
+msgstr ""
+
+#. Translators: %s is the unrecognized sublist entity type.
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1150
+#, php-format
+msgid "Unrecognized Mailchimp sublist type \"%s\". Sending was aborted to avoid sending to the entire audience."
+msgstr ""
+
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1317
 msgid "Unable to synchronize with Mailchimp."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1365
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1415
 msgid "Invalid Mailchimp Interest."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1380
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1430
 msgid "Mailchimp list ID not found."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1460
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1457
+msgid "The selected segment could not be found in Mailchimp. The audience was not updated to avoid sending to the entire list."
+msgstr ""
+
+#. Translators: %s is the unrecognized segment type returned by Mailchimp.
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1481
+#, php-format
+msgid "Unrecognized Mailchimp segment type \"%s\". The audience was not updated to avoid sending to the entire list."
+msgstr ""
+
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1529
 msgid "We'll need to subscribe this email address manually. Please contact our support team."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1474
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1543
 msgid "An unknown Mailchimp error occurred."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1640
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1709
 msgid "Response returned no merge_fields"
 msgstr ""
 
 #. Translators: %1$s is the merge field key, %2$s is the error message.
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1718
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1787
 #, php-format
 msgid "Failed to create merge field %1$s. Error response: %2$s"
 msgstr ""
 
 #. Translators: %1$s is the merge field key, %2$s is the merge field tag.
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1725
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1794
 #, php-format
 msgid "Created merge field %1$s with tag %2$s."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1901
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1970
 msgid "Error upserting contact to Mailchimp."
 msgstr ""
 
 #. Translators: 1 is a hash value representing the contact's new ID. 2 is the contact's new email address.
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1911
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1980
 #, php-format
 msgid "Contact requested email change. Migrated to %1$s (%2$s)."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1917
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1986
 msgid "Error adding migration note to existing contact."
 msgstr ""
 
 #. Translators: 1 is a hash value representing the contact's previous ID. 2 is the contact's previous email address.
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1925
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1994
 #, php-format
 msgid "Contact requested email change. Migrated from %1$s (%2$s)."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1931
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2000
 msgid "Error adding migration note to new contact."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:1935
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2004
 msgid "Error deleting existing contact."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2092
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2161
 msgid "Error reaching to search-members endpoint"
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2097
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2166
 msgid "Contact not found"
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2206
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2275
 msgid "audience"
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2207
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2276
 msgid "audiences"
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2208
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2277
 msgid "group, segment, or tag"
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2209
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2278
 msgid "Audience"
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2210
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2279
 msgid "Audiences"
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2211
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2280
 msgid "Group, Segment, or Tag"
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2212
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2281
 msgid "Mailchimp Audience"
 msgstr ""
 
 #. translators: %s is the name of the group category. "Newspack newsletters" by default.
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2214
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2283
 #, php-format
 msgid "Mailchimp Group under the %s category"
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2216
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2285
 msgid "Once this list is saved, a Group will be created for it."
 msgstr ""
 
 #. translators: %s is the name of the group category. "Newspack newsletters" by default.
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2218
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2287
 #, php-format
 msgid "Group created for this list under %s:"
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2221
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2290
 msgid "Mailchimp Group"
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2224
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2293
 msgid "Mailchimp Tag"
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2240
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2309
 msgid "Note for Mailchimp: The group is a subset of the Audience selected above. When a reader subscribes to this List, they will also be subscribed to the selected Audience."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2255
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2324
 msgid "Error sending test email. Please enter a name and email in the \"FROM\" section."
 msgstr ""
 
-#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2277
+#: includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php:2346
 msgid "List ID is required."
 msgstr ""
 

@@ -34,7 +34,9 @@ final class Provider extends Abstract_Provider {
 
 		$this->container->singleton( Catalog_Repository::class );
 		$this->container->singleton( Herald_Url_Builder::class );
-		$this->container->singleton( Download_Url_Builder::class, Herald_Url_Builder::class );
+		$this->container->singleton( Herald_Legacy_Url_Builder::class );
+		$this->container->singleton( Herald_Routing_Url_Builder::class );
+		$this->container->singleton( Download_Url_Builder::class, Herald_Routing_Url_Builder::class );
 
 		add_action(
 			'lw-harbor/unified_license_key_changed',

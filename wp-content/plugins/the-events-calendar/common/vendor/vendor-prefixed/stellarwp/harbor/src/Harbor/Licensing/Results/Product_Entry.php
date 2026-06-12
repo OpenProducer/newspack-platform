@@ -101,10 +101,10 @@ final class Product_Entry {
 	 * @return self
 	 */
 	public static function from_array( array $data ): self {
-		$activations        = isset( $data['activations'] ) && is_array( $data['activations'] ) ? $data['activations'] : [];
-		$raw_caps           = isset( $data['capabilities'] ) && is_array( $data['capabilities'] ) ? $data['capabilities'] : [];
-		$capabilities       = array_values( array_filter( array_map( [ Cast::class, 'to_string' ], $raw_caps ) ) );
-		$raw_domains = isset( $activations['domains'] ) && is_array( $activations['domains'] ) ? $activations['domains'] : [];
+		$activations  = isset( $data['activations'] ) && is_array( $data['activations'] ) ? $data['activations'] : [];
+		$raw_caps     = isset( $data['capabilities'] ) && is_array( $data['capabilities'] ) ? $data['capabilities'] : [];
+		$capabilities = array_values( array_filter( array_map( [ Cast::class, 'to_string' ], $raw_caps ) ) );
+		$raw_domains  = isset( $activations['domains'] ) && is_array( $activations['domains'] ) ? $activations['domains'] : [];
 		if ( ! empty( $raw_domains ) && is_array( reset( $raw_domains ) ) ) {
 			$activation_domains = array_keys( $raw_domains );
 		} else {

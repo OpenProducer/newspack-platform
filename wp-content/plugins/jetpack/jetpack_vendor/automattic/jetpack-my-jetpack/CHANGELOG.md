@@ -5,6 +5,69 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.38.2] - 2026-06-08
+### Changed
+- Update dependencies. [#46951]
+
+## [5.38.1] - 2026-06-08
+### Changed
+- Internal updates.
+
+## [5.38.0] - 2026-06-05
+### Added
+- My Jetpack: Move the jetpack-ai-jwt REST endpoint to the Agents Manager package. [#49415]
+
+### Changed
+- Update package dependencies. [#49379]
+
+## [5.37.6] - 2026-06-01
+### Changed
+- My Jetpack: migrate the product card main CTA to @wordpress/ui Button and surface a spinner while an action is in progress. [#49239]
+
+## [5.37.5] - 2026-06-01
+### Changed
+- My Jetpack: Migrate link-variant Buttons in Plans section and product interstitial modal to @wordpress/ui Link. [#49109]
+- Update package dependencies. [#48404]
+
+### Fixed
+- Connection: Allow admins to access the disconnect dialog without connecting their account first. [#49162]
+- My Jetpack: Render the Overview and Help footers full-width and remove the gray gap below them. [#49278]
+- My Jetpack: Use @wordpress/ui Link and Text components in the Help tab footer for consistent typography. [#49238]
+
+## [5.37.4] - 2026-05-25
+### Changed
+- Internal updates.
+
+## [5.37.3] - 2026-05-21
+### Changed
+- Update package dependencies. [#48405]
+- Update package dependencies. [#49012]
+
+### Fixed
+- Phan: Address PhanPluginDuplicateConditionalNullCoalescing violations. [#48887]
+
+## [5.37.2] - 2026-05-19
+### Changed
+- Update package dependencies. [#48910]
+
+## [5.37.1] - 2026-05-14
+### Changed
+- Update package dependencies. [#48696]
+
+### Fixed
+- Prevent PHP deprecated notice when retrieving tier-based descriptions. [#48524]
+
+## [5.37.0] - 2026-05-11
+### Changed
+- Components: Replace Gridicon with Icon and named icon exports from `@wordpress/icons`. [#48537]
+- Components: Use Link from `@wordpress/ui` instead of ExternalLink. [#48529]
+- My Jetpack: Adopt the shared `jetpack-admin-page-layout` mixin on the main dashboard page so its layout matches the rest of the Jetpack admin pages. [#48503]
+- My Jetpack: Migrate interstitial Buttons from `@automattic/jetpack-components` and `@wordpress/components` to `@wordpress/ui`. [#48489]
+
+### Fixed
+- My Jetpack: Drop `overflow-x: hidden` on the `<AdminPage>` root so the page no longer becomes its own scroll container. [#48578]
+- My Jetpack: Fix `.jetpack-admin-full-screen` interstitial pages being constrained by the shared admin-page-layout mixin. [#48536]
+
 ## [5.36.0] - 2026-05-04
 ### Added
 - My Jetpack: Add Modules link to the footer for admins on connected sites running the main Jetpack plugin. [#48304]
@@ -2642,6 +2705,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Created package
 
+[5.38.2]: https://github.com/Automattic/jetpack-my-jetpack/compare/5.38.1...5.38.2
+[5.38.1]: https://github.com/Automattic/jetpack-my-jetpack/compare/5.38.0...5.38.1
+[5.38.0]: https://github.com/Automattic/jetpack-my-jetpack/compare/5.37.6...5.38.0
+[5.37.6]: https://github.com/Automattic/jetpack-my-jetpack/compare/5.37.5...5.37.6
+[5.37.5]: https://github.com/Automattic/jetpack-my-jetpack/compare/5.37.4...5.37.5
+[5.37.4]: https://github.com/Automattic/jetpack-my-jetpack/compare/5.37.3...5.37.4
+[5.37.3]: https://github.com/Automattic/jetpack-my-jetpack/compare/5.37.2...5.37.3
+[5.37.2]: https://github.com/Automattic/jetpack-my-jetpack/compare/5.37.1...5.37.2
+[5.37.1]: https://github.com/Automattic/jetpack-my-jetpack/compare/5.37.0...5.37.1
+[5.37.0]: https://github.com/Automattic/jetpack-my-jetpack/compare/5.36.0...5.37.0
 [5.36.0]: https://github.com/Automattic/jetpack-my-jetpack/compare/5.35.0...5.36.0
 [5.35.0]: https://github.com/Automattic/jetpack-my-jetpack/compare/5.34.4...5.35.0
 [5.34.4]: https://github.com/Automattic/jetpack-my-jetpack/compare/5.34.3...5.34.4

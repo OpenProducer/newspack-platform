@@ -8,6 +8,7 @@ use TEC\Common\LiquidWeb\Harbor\Harbor;
 use TEC\Common\LiquidWeb\Harbor\Licensing\License_Manager;
 use TEC\Common\LiquidWeb\Harbor\Portal\Catalog_Repository;
 use TEC\Common\LiquidWeb\Harbor\Site\Data;
+use TEC\Common\LiquidWeb\Harbor\Utils\License_Key;
 use TEC\Common\LiquidWeb\Harbor\Utils\Version;
 /**
  * Manages the unified feature manager admin page.
@@ -112,12 +113,13 @@ class Feature_Manager_Page
      * the React bundle is loaded only on this specific admin page.
      *
      * @since 1.0.0
+     * @since 1.4.0 Dropped string type-hint for $hook_suffix.
      *
      * @param string $hook_suffix Current admin page hook suffix.
      *
      * @return void
      */
-    public function maybe_enqueue_assets(string $hook_suffix): void
+    public function maybe_enqueue_assets($hook_suffix): void
     {
         if ($hook_suffix !== $this->page_hook) {
             return;
@@ -136,6 +138,7 @@ class Feature_Manager_Page
      *   dirname(dirname(__DIR__))             → src
      *   dirname(dirname(dirname(__DIR__)))    → plugin root (harbor/)
      *
+     * @since 1.3.0   Expose License_Key::PREFIX to the React app via the localized payload.
      * @since 1.0.0
      *
      * @return void
@@ -151,7 +154,7 @@ class Feature_Manager_Page
         /** @var array{dependencies: array<string>, version: string} $asset_data */
         $asset_data = file_exists($asset_file) ? require $asset_file : ['dependencies' => [], 'version' => null];
         wp_register_script($handle, $plugin_root_url . $build_dir . '/index.js', $asset_data['dependencies'], $asset_data['version'], ['in_footer' => true]);
-        wp_localize_script($handle, 'harborData', ['restUrl' => rest_url('liquidweb/harbor/v1/'), 'nonce' => wp_create_nonce('wp_rest'), 'pluginsUrl' => admin_url('plugins.php'), 'activationUrl' => Config::get_portal_base_url() . '/subscriptions/?' . http_build_query(['portal-referral' => 'plugin', 'redirect_url' => admin_url('admin.php?page=' . self::PAGE_SLUG . '&refresh=auto'), 'domain' => $this->site_data->get_domain()], '', '&', PHP_QUERY_RFC3986), 'subscriptionsUrl' => Config::get_portal_base_url() . '/subscriptions/', 'domain' => $this->site_data->get_domain(), 'version' => Harbor::VERSION]);
+        wp_localize_script($handle, 'harborData', ['restUrl' => rest_url('liquidweb/harbor/v1/'), 'nonce' => wp_create_nonce('wp_rest'), 'pluginsUrl' => admin_url('plugins.php'), 'activationUrl' => Config::get_portal_base_url() . '/subscriptions/?' . http_build_query(['portal-referral' => 'plugin', 'redirect_url' => admin_url('admin.php?page=' . self::PAGE_SLUG . '&refresh=auto'), 'domain' => $this->site_data->get_domain()], '', '&', PHP_QUERY_RFC3986), 'subscriptionsUrl' => Config::get_portal_base_url() . '/subscriptions/', 'domain' => $this->site_data->get_domain(), 'version' => Harbor::VERSION, 'licenseKeyPrefix' => License_Key::PREFIX]);
         wp_register_style($handle, $plugin_root_url . $build_dir . '/index.css', [], null);
         wp_set_script_translations($handle, 'tribe-common');
         wp_enqueue_script($handle);

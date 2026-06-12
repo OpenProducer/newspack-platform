@@ -4,7 +4,7 @@
 
 namespace TEC\Common\Composer\Autoload;
 
-class ComposerStaticInit6b62074a15431436ce322fb8b055d2b5
+class ComposerStaticInit330e245d984990a95dc20e26e35f0fff
 {
     public static $prefixLengthsPsr4 = array (
         'T' => 
@@ -268,6 +268,8 @@ class ComposerStaticInit6b62074a15431436ce322fb8b055d2b5
         'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Clients\\Portal_Client' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Portal/Clients/Portal_Client.php',
         'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Contracts\\Download_Url_Builder' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Portal/Contracts/Download_Url_Builder.php',
         'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Error_Code' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Portal/Error_Code.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Herald_Legacy_Url_Builder' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Portal/Herald_Legacy_Url_Builder.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Herald_Routing_Url_Builder' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Portal/Herald_Routing_Url_Builder.php',
         'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Herald_Url_Builder' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Portal/Herald_Url_Builder.php',
         'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Provider' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Portal/Provider.php',
         'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Results\\Catalog_Feature' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Portal/Results/Catalog_Feature.php',
@@ -878,9 +880,9 @@ class ComposerStaticInit6b62074a15431436ce322fb8b055d2b5
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit6b62074a15431436ce322fb8b055d2b5::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit6b62074a15431436ce322fb8b055d2b5::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit6b62074a15431436ce322fb8b055d2b5::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit330e245d984990a95dc20e26e35f0fff::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit330e245d984990a95dc20e26e35f0fff::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit330e245d984990a95dc20e26e35f0fff::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -5,6 +5,69 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.81.3] - 2026-06-08
+### Removed
+- Revert the Jetpack-side changes that re-enabled X (Twitter) sharing in Jetpack Social. [#49309]
+
+### Fixed
+- Include the routes directory in the TypeScript config so route files type-check correctly. [#49368]
+- Request a full width and height size for attached media images so WordPress core no longer reads an undefined array index, removing PHP "Undefined array key 1" warnings on posts shared with the no link option. [#49372]
+- Social: Refine connection card spacing and accessibility, add breathing room to the connection confirmation modal, and rename the Social Notes settings card. [#49313]
+- Social Image Generator: Pre-warm the generated image cache after publish so freshly published posts shared on X get a preview thumbnail without waiting on a cold render. [#49390]
+
+## [0.81.2] - 2026-06-01
+### Added
+- Settings tab on the modernized chassis with WPDS cards for the default share message, Social Notes, image generation, and link UTM parameters; gated behind the modernization flag. [#48860]
+- Track Overview/Settings tab switches on the Social dashboard via a `jetpack_social_tab_view` Tracks event. [#49240]
+
+### Changed
+- Social: Render connection and pricing gating inside the modernized dashboard (behind the rsm_jetpack_ui_modernization_social flag), so it no longer falls back to the legacy UI. [#49260]
+- Update package dependencies. [#48404] [#49152] [#49153]
+
+### Fixed
+- Publicize: Avoid flagging a non-post for publicize. [#49291]
+- Social: Surface an error notice when saving dashboard settings fails, and show the "first year" caveat on the upgrade screen's intro-offer price. [#49279]
+
+## [0.81.1] - 2026-05-25
+### Changed
+- Replace internal `ContextualUpgradeTrigger` upgrade prompts with `@wordpress/ui` `Notice` composition. [#48909]
+- Update package dependencies. [#48405] [#49012]
+
+### Fixed
+- Phan: Address `PhanPluginDuplicateConditionalNullCoalescing` violations. [#48887]
+- SIG: Prevent PHP warning when setting key doesn't exist. [#48873]
+
+## [0.81.0] - 2026-05-19
+### Added
+- Social: Expose the canonical message-template placeholder catalog via a REST endpoint. [#48769]
+
+### Changed
+- Social: Simplify preview render API by using the connection id as the source of truth. [#48827]
+- Update package dependencies. [#48695] [#48696] [#48910]
+
+### Fixed
+- Social Previews: Update template placeholders when editing the post title or content. [#48635]
+- Social: Avoid disabling connection rows while saving per-connection message templates. [#48641]
+- Social: Enable per-network customization by default when a custom connection template exists. [#48785]
+
+## [0.80.0] - 2026-05-11
+### Added
+- Social: Add a global message template editor to the Social admin page. [#48560]
+- Social: Add a per-connection message template editor in the connections list and the connection-confirmation modal. [#48564]
+- Social: Add support for global and per-connection message templates via REST API. [#48522]
+
+### Changed
+- Components: Use Link from `@wordpress/ui` instead of ExternalLink. [#48529]
+- Internal: Extract PlaceholdersHelp to a shared location and add a MessageTemplateEditor scaffold consumed by the upcoming template editor surfaces. [#48560]
+- Per-Network Customization: Replace forced attachment toggle with a Default media option that lets the post-level link preview decide. [#48573]
+- Social: Show a preview skeleton while message templates render. [#48576]
+- Social: Show per-connection template fallback help and prefill per-network editor messages from connection templates. [#48568]
+
+### Fixed
+- Social: Default the share-message post meta and per-connection message to the saved template on the server side. [#48634]
+- Social: Fall back to the site-wide social message template when no per-post share message is set, so the editor preview and customization field reflect the template configured on the Social admin page. [#48606]
+- Social: Honor per-connection message templates in the per-network preview pipeline and stop overwriting them when toggling per-network mode. [#48603]
+
 ## [0.79.0] - 2026-05-04
 ### Added
 - Custom message field: Surface available placeholders for Message Templates feature. [#48480]
@@ -1420,6 +1483,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated package dependencies.
 - Update package.json metadata.
 
+[0.81.3]: https://github.com/Automattic/jetpack-publicize/compare/v0.81.2...v0.81.3
+[0.81.2]: https://github.com/Automattic/jetpack-publicize/compare/v0.81.1...v0.81.2
+[0.81.1]: https://github.com/Automattic/jetpack-publicize/compare/v0.81.0...v0.81.1
+[0.81.0]: https://github.com/Automattic/jetpack-publicize/compare/v0.80.0...v0.81.0
+[0.80.0]: https://github.com/Automattic/jetpack-publicize/compare/v0.79.0...v0.80.0
 [0.79.0]: https://github.com/Automattic/jetpack-publicize/compare/v0.78.2...v0.79.0
 [0.78.2]: https://github.com/Automattic/jetpack-publicize/compare/v0.78.1...v0.78.2
 [0.78.1]: https://github.com/Automattic/jetpack-publicize/compare/v0.78.0...v0.78.1

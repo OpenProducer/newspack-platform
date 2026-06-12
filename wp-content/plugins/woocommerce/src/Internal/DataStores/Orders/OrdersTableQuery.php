@@ -698,8 +698,10 @@ class OrdersTableQuery {
 		}
 
 		if ( empty( $this->args['status'] ) || in_array( 'any', $this->args['status'], true ) ) {
-			// Querying for 'any' status or empty status, filter to valid statuses from wc_get_order_statuses().
-			$this->args['status'] = $valid_statuses;
+			// Querying for 'any' status or empty status, filter to valid statuses from wc_get_order_statuses(),
+			// excluding statuses marked as exclude_from_search (e.g. checkout-draft) to match WP_Query behavior.
+			$exclude              = get_post_stati( array( 'exclude_from_search' => true ) );
+			$this->args['status'] = array_diff( $valid_statuses, $exclude );
 		} elseif ( in_array( 'all', $this->args['status'], true ) ) {
 			// Querying for 'all' status does not filter by status at all.
 			$this->args['status'] = array();
@@ -1131,6 +1133,11 @@ class OrdersTableQuery {
 
 		foreach ( $fields as $arg_key ) {
 			$this->where[] = $this->where( $this->tables['orders'], $arg_key, '=', $this->args[ $arg_key ], $this->mappings['orders'][ $arg_key ]['type'] );
+		}
+
+		// customer_note allows empty string to match orders with no note, so it cannot use arg_isset (which skips '').
+		if ( isset( $this->args['customer_note'] ) ) {
+			$this->where[] = $this->where( $this->tables['orders'], 'customer_note', '=', $this->args['customer_note'], $this->mappings['orders']['customer_note']['type'] );
 		}
 
 		if ( $this->arg_isset( 'parent_exclude' ) ) {

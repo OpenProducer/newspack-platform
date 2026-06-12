@@ -3023,7 +3023,7 @@ var import_components10 = __toESM(require_components(), 1);
 var import_i18n6 = __toESM(require_i18n(), 1);
 var import_block_editor2 = __toESM(require_block_editor(), 1);
 var import_jsx_runtime19 = __toESM(require_jsx_runtime(), 1);
-var { StateControl } = unlock(import_block_editor2.privateApis);
+var { StateControl, StateControlBadges } = unlock(import_block_editor2.privateApis);
 
 // packages/global-styles-ui/build-module/screen-block-list.mjs
 var import_jsx_runtime20 = __toESM(require_jsx_runtime(), 1);
@@ -4346,7 +4346,7 @@ function InstalledFonts() {
     ).length;
     return (0, import_i18n14.sprintf)(
       /* translators: 1: Active font variants, 2: Total font variants. */
-      (0, import_i18n14.__)("%1$d/%2$d variants active"),
+      (0, import_i18n14.__)("%1$d of %2$d active"),
       variantsActive,
       variantsInstalled
     );
