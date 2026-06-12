@@ -3,9 +3,9 @@ Contributors: sonaar, eduplessis
 Tags: MP3, music player, podcast player, audio player, woocommerce
 Donate link: https://sonaar.io
 Requires at least: 4.7
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 5.6
-Stable tag: 5.10
+Stable tag: 5.12
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -342,6 +342,27 @@ Yes, with the pro version, you can click on the 'Add to Favorite' icon to store 
 10. Shortcode Builder: Create, Import and Customize audio players using shortcodes in real-time
 
 == Changelog ==
+= 5.12 =
+- Fix: Resolved a SSRF security vulnerability
+- Fix: PHP warning in wp-admin caused by accessing array offset on null playlist
+- Fix: PHP warning regarding undefined array key "track_pos"
+- Fix: MiniPlayer not loading with pagination ON, shuffle ON, and lazy load OFF
+- Fix: Sticky Icecast metadata not updating when widget player is not selected
+- Fix: Filter init when search and field columns are disabled
+- Fix: Lyrics | Karaoke Mode issue
+- Tweak: Icecast support for Airtime Pro JSON
+
+= 5.11 =
+- Fix: Waveform width issue caused by css from third party themes or plugins
+- Fix: PHP error with RSS feed as source in some condition
+- Fix: Add to cart button on mobile
+- Fix: Tracklist Note button issue when reverse tracklist option is enable from post option
+- Fix: Icecasts - Convert the feed to json format. Some feed was received as string
+- Fix: PHP error with the license pdf generator
+- Fix: Bulk importer - Set the audio file(s) as the purchased file(s) option to prevent manual work
+- Tweak: License Contract - Removed unused LICENSE_TYPE variable type
+- Fix: Resolved a security vulnerability
+
 = 5.10 =
 - New: WooCommerce – Added option to set separate Preview and Purchased audio files. After buying a track, customers can instantly download and listen to their purchased version on the frontend, and the Add to Cart button can automatically adjust based on purchase status. All new settings are available under MP3 Player > Settings > WooCommerce
 - New: WooCommerce - Create a player widget which contains all tracks purchased by the user

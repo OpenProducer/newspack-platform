@@ -8221,7 +8221,7 @@ class Sonaar_Music_Admin {
                     'default'           => sprintf(
                          /* translators: %1$s: company name, %2$s: section spacing, %3$s: effective date, %4$s: producer name, %5$s: licensee name, %6$s: licensee address, %7$s: beat title, %8$s: payment type, %9$s: section break, %10$s: may or may not (conditional text), %11$s: number of radio stations, %12$s: number or name of an audiovisual work, %13$s: number of allowed downloads, %14$s: number of allowed monetized streams, %15$s: number of allowed monetized video streams, %16$s: number of allowed free downloads, %19$s: section header, %20$s: colon after section header, */
                          esc_html__('%1$s
-%2$sThis License Agreement (the “Agreement”), having been made on and effective as of %3$s (the “Effective Date”) by and between %4$s (the “Producer” or “Licensor”); and you, %5$s (“You” or “Licensee”), residing at %6$s, sets forth the terms and conditions of the Licensee’s use, and the rights granted in, the Producer’s instrumental music file entitled %7$s (the “Beat”) in consideration for Licensee’s payment, on a so-called “%8$s” basis.%9$s
+%2$sThis License Agreement (the “Agreement”), having been made on and effective as of %3$s (the “Effective Date”) by and between %4$s (the “Producer” or “Licensor”); and you, %5$s (“You” or “Licensee”), residing at %6$s, sets forth the terms and conditions of the Licensee’s use, and the rights granted in, the Producer’s instrumental music file entitled %7$s (the “Beat”) in consideration for Licensee’s payment.%9$s
 
 %2$sThis Agreement is issued solely in connection with and for Licensee use of the Beat pursuant and subject to all terms and conditions set forth herein.%9$s
 

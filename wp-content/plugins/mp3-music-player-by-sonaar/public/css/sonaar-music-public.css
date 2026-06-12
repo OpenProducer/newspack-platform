@@ -5257,7 +5257,7 @@ article div.iron-audioplayer ol li {
       image-rendering: pixelated;
       image-rendering: crisp-edges;*/ }
 
-.iron-audioplayer .player canvas,
+.iron-audioplayer canvas,
 #sonaar-player .player canvas {
   max-width: initial !important; }
 
