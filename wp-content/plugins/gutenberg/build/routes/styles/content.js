@@ -1139,10 +1139,10 @@ var import_element4 = __toESM(require_element());
 import { useEditorSettings } from "@wordpress/lazy-editor";
 
 // routes/styles/style.scss
-if (typeof document !== "undefined" && true && !document.head.querySelector("style[data-wp-hash='486e4a323c']")) {
+if (typeof document !== "undefined" && true && !document.head.querySelector("style[data-wp-hash='1153641d9c']")) {
   const style = document.createElement("style");
-  style.setAttribute("data-wp-hash", "486e4a323c");
-  style.appendChild(document.createTextNode(".routes-styles__page .global-styles-ui-screen-root{box-shadow:none}.routes-styles__page .global-styles-ui-screen-root>div>hr{display:none}.routes-styles__page .global-styles-ui-sidebar__navigator-provider .components-tools-panel{border-top:none}.routes-styles__page .global-styles-ui-sidebar__navigator-provider{overflow-y:auto;padding-left:0;padding-right:0}"));
+  style.setAttribute("data-wp-hash", "1153641d9c");
+  style.appendChild(document.createTextNode(".routes-styles__page .global-styles-ui-screen-root{box-shadow:none}.routes-styles__page .global-styles-ui-screen-root>div>hr{display:none}.routes-styles__page .global-styles-ui-sidebar__navigator-provider .components-tools-panel{border-top:none}.routes-styles__page .global-styles-ui-sidebar__navigator-provider{overflow-y:auto;padding-inline:0}"));
   document.head.appendChild(style);
 }
 

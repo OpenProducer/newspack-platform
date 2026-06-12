@@ -1,0 +1,46 @@
+{
+	"name": "woocommerce/customer-account",
+	"title": "Customer account",
+	"description": "A block that allows your customers to log in and out of their accounts in your store.",
+	"category": "woocommerce",
+	"keywords": [ "WooCommerce", "My Account" ],
+	"supports": {
+		"align": true,
+		"color": {
+			"text": true
+		},
+		"interactivity": true,
+		"typography": {
+			"fontSize": true,
+			"__experimentalFontFamily": true
+		},
+		"spacing": {
+			"margin": true,
+			"padding": true
+		}
+	},
+	"attributes": {
+		"displayStyle": {
+			"type": "string",
+			"default": "icon_and_text"
+		},
+		"hasDropdownNavigation": {
+			"type": "boolean",
+			"default": false
+		},
+		"iconStyle": {
+			"type": "string",
+			"default": "default"
+		},
+		"iconClass": {
+			"type": "string",
+			"default": "icon"
+		}
+	},
+	"viewScriptModule": "woocommerce/customer-account",
+	"style": "file:../woocommerce/customer-account-style.css",
+	"editorStyle": "file:../woocommerce/customer-account-editor.css",
+	"textdomain": "woocommerce",
+	"apiVersion": 3,
+	"$schema": "https://schemas.wp.org/trunk/block.json"
+}

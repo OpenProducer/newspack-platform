@@ -9736,11 +9736,16 @@ var wp;
           if (objValue === "*" || srcValue === "*") {
             return "*";
           }
-          return { ...objValue, ...srcValue };
+          return mergeSchemas(
+            { ...objValue || {} },
+            srcValue || {}
+          );
         }
         case "attributes":
         case "require": {
-          return [...objValue || [], ...srcValue || []];
+          return Array.from(
+            /* @__PURE__ */ new Set([...objValue || [], ...srcValue || []])
+          );
         }
         case "isMatch": {
           if (!objValue || !srcValue) {
@@ -9750,17 +9755,45 @@ var wp;
             return objValue(...args) || srcValue(...args);
           };
         }
+        case "classes": {
+          if ((objValue || []).includes("*") || (srcValue || []).includes("*")) {
+            return ["*"];
+          }
+          return [...objValue || [], ...srcValue || []];
+        }
       }
     }
     function mergeTagNameSchemas(a2, b2) {
+      if (a2 === b2) {
+        return a2;
+      }
       for (const key in b2) {
-        a2[key] = a2[key] ? mergeTagNameSchemaProperties(a2[key], b2[key], key) : { ...b2[key] };
+        if (a2[key]) {
+          a2[key] = mergeTagNameSchemaProperties(
+            a2[key],
+            b2[key],
+            key
+          );
+        } else if (Array.isArray(b2[key])) {
+          a2[key] = b2[key].slice();
+        } else {
+          a2[key] = { ...b2[key] };
+        }
       }
       return a2;
     }
     function mergeSchemas(a2, b2) {
+      if (a2 === b2) {
+        return a2;
+      }
       for (const key in b2) {
-        a2[key] = a2[key] ? mergeTagNameSchemas(a2[key], b2[key]) : { ...b2[key] };
+        if (a2[key]) {
+          a2[key] = mergeTagNameSchemas(a2[key], b2[key]);
+        } else if (Array.isArray(b2[key])) {
+          a2[key] = b2[key].slice();
+        } else {
+          a2[key] = { ...b2[key] };
+        }
       }
       return a2;
     }

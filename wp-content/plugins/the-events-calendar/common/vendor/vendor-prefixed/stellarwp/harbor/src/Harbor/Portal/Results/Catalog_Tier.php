@@ -32,14 +32,14 @@ final class Catalog_Tier {
 	 * @var TierAttributes
 	 */
 	protected array $attributes = [
-		'tier_slug'     => '',
-		'name'          => '',
-		'rank'          => 0,
-		'price'         => 0,
-		'currency'      => '',
-		'herald_slugs'  => [],
-		'purchase_url'  => '',
-		'upgrade_url'   => '',
+		'tier_slug'    => '',
+		'name'         => '',
+		'rank'         => 0,
+		'price'        => 0,
+		'currency'     => '',
+		'herald_slugs' => [],
+		'purchase_url' => '',
+		'upgrade_url'  => '',
 	];
 
 	/**

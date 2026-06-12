@@ -10,6 +10,8 @@ use TEC\Common\LiquidWeb\Harbor\Features\Types\Feature;
 use TEC\Common\LiquidWeb\Harbor\Features\Types\Plugin;
 use TEC\Common\LiquidWeb\Harbor\Features\Types\Service;
 use TEC\Common\LiquidWeb\Harbor\Features\Types\Theme;
+use TEC\Common\LiquidWeb\Harbor\Legacy\Legacy_License;
+use TEC\Common\LiquidWeb\Harbor\Legacy\License_Repository as Legacy_License_Repository;
 use TEC\Common\LiquidWeb\Harbor\Licensing\Enums\Validation_Status;
 use TEC\Common\LiquidWeb\Harbor\Licensing\Error_Code as Licensing_Error_Code;
 use TEC\Common\LiquidWeb\Harbor\Licensing\License_Manager;
@@ -24,6 +26,10 @@ use WP_Error;
  * For each catalog feature, computes is_available and in_catalog_tier by checking
  * the product entry's capabilities array and the user's licensed tier rank.
  * dot.org and free-tier (rank 0) features are unconditionally available regardless of capabilities.
+ * A legacy license whose slug matches the catalog feature also grants availability (and counts
+ * as in-tier) when it is active, has a non-empty key, and has opted in via `use_for_updates`.
+ * The opt-in prevents Harbor from advertising updates for legacy keys whose backend is not
+ * compatible with Herald's `/legacy/download` endpoint.
  *
  * @since 1.0.0
  */
@@ -59,6 +65,15 @@ class Resolve_Feature_Collection {
 	private Data $site_data;
 
 	/**
+	 * The legacy license repository.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @var Legacy_License_Repository
+	 */
+	private Legacy_License_Repository $legacy_repository;
+
+	/**
 	 * Map of catalog type strings to Feature subclass names.
 	 *
 	 * @since 1.0.0
@@ -76,18 +91,21 @@ class Resolve_Feature_Collection {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param Catalog_Repository $catalog   The catalog repository.
-	 * @param License_Manager    $licensing The license manager.
-	 * @param Data               $site_data The site data provider.
+	 * @param Catalog_Repository             $catalog           The catalog repository.
+	 * @param License_Manager                $licensing         The license manager.
+	 * @param Data                           $site_data         The site data provider.
+	 * @param Legacy_License_Repository|null $legacy_repository The legacy license repository. Default null, which creates a new instance for backwards compatibility.
 	 */
 	public function __construct(
 		Catalog_Repository $catalog,
 		License_Manager $licensing,
-		Data $site_data
+		Data $site_data,
+		?Legacy_License_Repository $legacy_repository = null
 	) {
-		$this->catalog   = $catalog;
-		$this->licensing = $licensing;
-		$this->site_data = $site_data;
+		$this->catalog           = $catalog;
+		$this->licensing         = $licensing;
+		$this->site_data         = $site_data;
+		$this->legacy_repository = $legacy_repository ?? new Legacy_License_Repository();
 	}
 
 	/**
@@ -141,7 +159,8 @@ class Resolve_Feature_Collection {
 			}
 		}
 
-		$collection = new Feature_Collection();
+		$collection      = new Feature_Collection();
+		$legacy_licenses = $this->build_legacy_license_map();
 
 		foreach ( $catalog as $product ) {
 			if ( ! $product instanceof Product_Catalog ) {
@@ -152,7 +171,8 @@ class Resolve_Feature_Collection {
 			$license_tier_rank = $this->resolve_license_tier_rank( $product, $products );
 
 			foreach ( $product->get_features() as $catalog_feature ) {
-				$feature = $this->hydrate_feature( $catalog_feature, $product, $capabilities, $license_tier_rank );
+				$legacy_license = $legacy_licenses[ $catalog_feature->get_slug() ] ?? null;
+				$feature        = $this->hydrate_feature( $catalog_feature, $product, $capabilities, $license_tier_rank, $legacy_license );
 
 				if ( is_wp_error( $feature ) ) {
 					static::debug_log( $feature->get_error_message() );
@@ -164,6 +184,28 @@ class Resolve_Feature_Collection {
 		}
 
 		return $collection;
+	}
+
+	/**
+	 * Builds a `slug => Legacy_License` map from the legacy repository.
+	 *
+	 * Resolved once per `__invoke()` call so the `lw-harbor/legacy_licenses`
+	 * filter dispatches once per resolution rather than once per catalog
+	 * feature. This also narrows the surface for filter re-entry: only one
+	 * dispatch can be in-flight while hydrate_feature() iterates.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @return array<string, Legacy_License>
+	 */
+	private function build_legacy_license_map(): array {
+		$map = [];
+
+		foreach ( $this->legacy_repository->all() as $license ) {
+			$map[ $license->slug ] = $license;
+		}
+
+		return $map;
 	}
 
 	/**
@@ -248,14 +290,17 @@ class Resolve_Feature_Collection {
 	 * and computes is_available and in_catalog_tier.
 	 *
 	 * dot.org and free-tier (rank 0) features are unconditionally available regardless of capabilities.
-	 * When capabilities is null (no license), all paid-tier features are unavailable and not in tier.
+	 * A legacy license whose slug matches the catalog feature also grants availability and counts as
+	 * in-tier, regardless of Unified capabilities or tier rank, when the entry is active, has a
+	 * non-empty key, and has opted in via `use_for_updates`.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param Catalog_Feature $catalog_feature   The catalog feature entry.
-	 * @param Product_Catalog $product           The parent catalog product.
-	 * @param string[]|null   $capabilities      The license capabilities, or null if unlicensed.
-	 * @param int             $license_tier_rank The user's licensed tier rank, or -1 if unlicensed.
+	 * @param Catalog_Feature     $catalog_feature   The catalog feature entry.
+	 * @param Product_Catalog     $product           The parent catalog product.
+	 * @param string[]|null       $capabilities      The license capabilities, or null if unlicensed.
+	 * @param int                 $license_tier_rank The user's licensed tier rank, or -1 if unlicensed.
+	 * @param Legacy_License|null $legacy_license    The legacy license entry whose slug matches this feature, or null if none.
 	 *
 	 * @return Feature|WP_Error The hydrated feature, or WP_Error for unknown types.
 	 */
@@ -263,7 +308,8 @@ class Resolve_Feature_Collection {
 		Catalog_Feature $catalog_feature,
 		Product_Catalog $product,
 		?array $capabilities,
-		int $license_tier_rank
+		int $license_tier_rank,
+		?Legacy_License $legacy_license
 	) {
 		$catalog_kind = $catalog_feature->get_kind();
 		$class        = $this->type_map[ $catalog_kind ] ?? null;
@@ -282,17 +328,18 @@ class Resolve_Feature_Collection {
 		$minimum_tier = $product->get_tier_by_slug( $catalog_feature->get_minimum_tier() );
 		$minimum_rank = $minimum_tier !== null ? $minimum_tier->get_rank() : PHP_INT_MAX;
 
-		if ( $catalog_feature->is_wporg() || $minimum_rank === 0 ) {
-			// WordPress.org and free-tier features are unconditionally available — capabilities and tier are irrelevant.
+		$has_legacy_grant = $legacy_license !== null
+			&& $legacy_license->is_active
+			&& $legacy_license->key !== ''
+			&& $legacy_license->use_for_updates;
+
+		if ( $has_legacy_grant || $catalog_feature->is_wporg() || $minimum_rank === 0 ) {
+			// An active legacy grant, WordPress.org, and free-tier features are all unconditionally available.
 			$is_available    = true;
 			$in_catalog_tier = true;
-		} elseif ( $capabilities === null ) {
-			// No license: paid-tier features are neither available nor in tier.
-			$is_available    = false;
-			$in_catalog_tier = false;
 		} else {
-			$is_available    = in_array( $catalog_feature->get_slug(), $capabilities, true );
-			$in_catalog_tier = ( $license_tier_rank >= $minimum_rank );
+			$is_available    = $capabilities !== null && in_array( $catalog_feature->get_slug(), $capabilities, true );
+			$in_catalog_tier = $capabilities !== null && $license_tier_rank >= $minimum_rank;
 		}
 
 		$data = [

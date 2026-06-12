@@ -782,16 +782,53 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 		}
 
 		// Sync send-to selections.
-		$send_lists = $this->get_send_lists( [ 'ids' => get_post_meta( $post->ID, 'send_list_id', true ) ] );
-		if ( is_wp_error( $send_lists ) ) {
-			return $send_lists;
-		}
-		if ( ! empty( $send_lists[0] ) ) {
-			$send_list = $send_lists[0];
-			if ( 'list' === $send_list->get_entity_type() ) {
+		$send_list_id = get_post_meta( $post->ID, 'send_list_id', true );
+		// Only an explicitly unset send_list_id (null or '' — no list/segment
+		// ever picked) is treated as "no recipient configured" and left for
+		// CC's API to reject downstream. Any other value, including a literal
+		// "0", is treated as configured-and-must-resolve so a garbage value
+		// can't quietly produce an upstream error that's harder to debug than
+		// a clear, local abort.
+		if ( null !== $send_list_id && '' !== $send_list_id ) {
+			$send_lists = $this->get_send_lists( [ 'ids' => $send_list_id ] );
+			// CC's recipient selector requires a non-empty `contact_list_ids`
+			// or `segment_ids` array; if neither is set, the upstream
+			// `create_campaign` call rejects the payload. So the silent
+			// whole-list failure mode that hit AC and MC does not apply here.
+			// This guard exists for parity with the other providers — it
+			// converts an opaque upstream rejection into a clear, local
+			// abort that names the actual cause.
+			if ( is_wp_error( $send_lists ) ) {
+				return new WP_Error(
+					'newspack_newsletters_constant_contact_send_list_lookup_failed',
+					sprintf(
+						// Translators: %s is the upstream error message from Constant Contact.
+						__( 'Could not verify the selected list or segment with Constant Contact (%s). Sending was aborted; please re-select a list or segment and try again.', 'newspack-newsletters' ),
+						$send_lists->get_error_message()
+					)
+				);
+			}
+			if ( empty( $send_lists[0] ) ) {
+				return new WP_Error(
+					'newspack_newsletters_constant_contact_send_list_not_found',
+					__( 'The selected list or segment could not be found in Constant Contact. Sending was aborted; please re-select a list or segment and try again.', 'newspack-newsletters' )
+				);
+			}
+			$send_list   = $send_lists[0];
+			$entity_type = $send_list->get_entity_type();
+			if ( 'list' === $entity_type ) {
 				$payload['contact_list_ids'] = [ $send_list->get_id() ];
-			} elseif ( 'segment' === $send_list->get_entity_type() ) {
+			} elseif ( 'segment' === $entity_type ) {
 				$payload['segment_ids'] = [ $send_list->get_id() ];
+			} else {
+				return new WP_Error(
+					'newspack_newsletters_constant_contact_send_list_unknown_type',
+					sprintf(
+						// Translators: %s is the unrecognized recipient entity type.
+						__( 'Unrecognized Constant Contact recipient type "%s". Sending was aborted; please re-select a list or segment and try again.', 'newspack-newsletters' ),
+						$entity_type
+					)
+				);
 			}
 		}
 

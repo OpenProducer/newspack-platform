@@ -1,3 +1,31 @@
+## [6.42.2](https://github.com/Automattic/newspack-plugin/compare/v6.42.1...v6.42.2) (2026-06-10)
+
+
+### Bug Fixes
+
+* **web-preview:** right-align toolbar close button ([589248d](https://github.com/Automattic/newspack-plugin/commit/589248d49eb2731f2551f86bf806626774698655))
+
+## [6.42.1](https://github.com/Automattic/newspack-plugin/compare/v6.42.0...v6.42.1) (2026-06-02)
+
+
+### Bug Fixes
+
+* prevent content-gate editor.scss styles from getting chunked into the common.css file ([#4716](https://github.com/Automattic/newspack-plugin/issues/4716)) ([4d4c557](https://github.com/Automattic/newspack-plugin/commit/4d4c5572fb32a73b54c76e916273acc695f00163))
+
+# [6.42.0](https://github.com/Automattic/newspack-plugin/compare/v6.41.3...v6.42.0) (2026-06-01)
+
+
+### Features
+
+* **wc-subscriptions:** recover switch proration when no amount paid ([#4745](https://github.com/Automattic/newspack-plugin/issues/4745)) ([c21009d](https://github.com/Automattic/newspack-plugin/commit/c21009d310a6385800c0ac44514565d048abf87c))
+
+## [6.41.3](https://github.com/Automattic/newspack-plugin/compare/v6.41.2...v6.41.3) (2026-05-25)
+
+
+### Bug Fixes
+
+* **editor:** exclude Customizer Additional CSS from iframed editor ([#4750](https://github.com/Automattic/newspack-plugin/issues/4750)) ([3aaf8f6](https://github.com/Automattic/newspack-plugin/commit/3aaf8f627974a282b7c74ef29d65b94af005d1e2))
+
 ## [6.41.2](https://github.com/Automattic/newspack-plugin/compare/v6.41.1...v6.41.2) (2026-05-21)
 
 

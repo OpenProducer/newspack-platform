@@ -13,4 +13,5 @@ return array(
     '9ce98895d0a470c71998c4b530020d26' => $baseDir . '/src/StoreApi/functions.php',
     'c379ea42c3f5964a973a7106b08c5ef0' => $baseDir . '/src/Blocks/Domain/Services/functions.php',
     'cd726a73edeabe4da44e314a8eebc9bb' => $baseDir . '/src/Deprecated.php',
+    '5faa4bf87f7a087750aedbe9b28cd338' => $baseDir . '/src/Internal/Api/Schema/aliases.php',
 );

@@ -129,6 +129,7 @@ Strauss rewrites class references at parse time. `License_Repository::class` ins
 | `lw_harbor_register_submenu( $parent_slug )`                         | Appends a Licensing submenu item under a plugin's top-level admin menu                        |
 | `lw_harbor_display_legacy_license_page_notice( $product_name = '' )` | Renders an info notice on a plugin's legacy license page pointing users to the unified system |
 | `lw_harbor_has_consent()`                                            | Whether the site owner has opted in to external Liquid Web API communications                 |
+| `lw_harbor_refresh_catalog()`                                        | Force a synchronous re-fetch of the product catalog from the Commerce Portal API              |
 
 Each function looks up the registered callback and delegates, returning `false` if no callback is registered yet:
 

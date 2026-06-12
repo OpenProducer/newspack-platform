@@ -1226,12 +1226,12 @@
         },
         {
             "name": "woocommerce/email-editor",
-            "version": "2.10.0",
-            "version_normalized": "2.10.0.0",
+            "version": "2.12.0",
+            "version_normalized": "2.12.0.0",
             "dist": {
                 "type": "path",
                 "url": "../../packages/php/email-editor",
-                "reference": "4e01d8f7f968089147984e823eaa1d0da0174b11"
+                "reference": "cb255266fec1c3ac8c2841ab36ac08d19aa12412"
             },
             "require": {
                 "php": ">=7.4"
