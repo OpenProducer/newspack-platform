@@ -87,6 +87,8 @@ return array(
     'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Clients\\Portal_Client' => $vendorDir . '/stellarwp/harbor/src/Harbor/Portal/Clients/Portal_Client.php',
     'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Contracts\\Download_Url_Builder' => $vendorDir . '/stellarwp/harbor/src/Harbor/Portal/Contracts/Download_Url_Builder.php',
     'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Error_Code' => $vendorDir . '/stellarwp/harbor/src/Harbor/Portal/Error_Code.php',
+    'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Herald_Legacy_Url_Builder' => $vendorDir . '/stellarwp/harbor/src/Harbor/Portal/Herald_Legacy_Url_Builder.php',
+    'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Herald_Routing_Url_Builder' => $vendorDir . '/stellarwp/harbor/src/Harbor/Portal/Herald_Routing_Url_Builder.php',
     'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Herald_Url_Builder' => $vendorDir . '/stellarwp/harbor/src/Harbor/Portal/Herald_Url_Builder.php',
     'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Provider' => $vendorDir . '/stellarwp/harbor/src/Harbor/Portal/Provider.php',
     'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Results\\Catalog_Feature' => $vendorDir . '/stellarwp/harbor/src/Harbor/Portal/Results/Catalog_Feature.php',

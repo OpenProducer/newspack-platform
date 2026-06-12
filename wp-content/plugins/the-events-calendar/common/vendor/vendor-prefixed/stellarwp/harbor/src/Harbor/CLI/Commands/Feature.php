@@ -395,7 +395,7 @@ class Feature extends WP_CLI_Command {
 
 		$item['is_available'] = Display::bool( ! empty( $item['is_available'] ) );
 		$item['is_enabled']   = Display::bool( ! empty( $item['is_enabled'] ) );
-		$item['wporg_slug']   ??= '';
+		$item['wporg_slug'] ??= '';
 
 		foreach ( $item as $key => $value ) {
 			if ( is_array( $value ) ) {

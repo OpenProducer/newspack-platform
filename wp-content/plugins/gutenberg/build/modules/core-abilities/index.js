@@ -117,12 +117,17 @@ async function initializeAbilities() {
     console.error("Failed to fetch abilities:", error);
   }
 }
-async function initialize() {
-  await initializeCategories();
-  await initializeAbilities();
+var initializePromise = null;
+function initialize() {
+  if (!initializePromise) {
+    initializePromise = (async () => {
+      await initializeCategories();
+      await initializeAbilities();
+    })();
+  }
+  return initializePromise;
 }
-var ready = initialize();
 export {
-  ready
+  initialize
 };
 //# sourceMappingURL=index.js.map

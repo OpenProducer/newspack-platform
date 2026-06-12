@@ -112,10 +112,10 @@ class Config {
 	 * @return void
 	 */
 	public static function reset(): void {
-		static::$licensing_base_url    = self::DEFAULT_LICENSING_BASE_URL;
-		static::$portal_base_url       = self::DEFAULT_PORTAL_BASE_URL;
-		static::$herald_base_url       = self::DEFAULT_HERALD_BASE_URL;
-		static::$plugin_basename       = null;
+		static::$licensing_base_url = self::DEFAULT_LICENSING_BASE_URL;
+		static::$portal_base_url    = self::DEFAULT_PORTAL_BASE_URL;
+		static::$herald_base_url    = self::DEFAULT_HERALD_BASE_URL;
+		static::$plugin_basename    = null;
 	}
 
 	/**

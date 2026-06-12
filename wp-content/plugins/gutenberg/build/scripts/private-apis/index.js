@@ -28,12 +28,14 @@ var wp;
   // packages/private-apis/build-module/implementation.mjs
   var CORE_MODULES_USING_PRIVATE_APIS = [
     "@wordpress/admin-ui",
+    "@wordpress/api-fetch",
     "@wordpress/block-directory",
     "@wordpress/block-editor",
     "@wordpress/block-library",
     "@wordpress/blocks",
     "@wordpress/boot",
     "@wordpress/commands",
+    "@wordpress/compose",
     "@wordpress/connectors",
     "@wordpress/workflows",
     "@wordpress/components",
