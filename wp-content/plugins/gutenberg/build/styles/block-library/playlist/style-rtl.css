@@ -375,6 +375,9 @@
 .wp-block-playlist .wp-block-playlist__tracklist.wp-block-playlist__tracklist-artist-is-hidden .wp-block-playlist-track__artist {
   display: none;
 }
+.wp-block-playlist .wp-block-playlist__tracklist.wp-block-playlist__tracklist-length-is-hidden .wp-block-playlist-track__length {
+  display: none;
+}
 .wp-block-playlist .wp-block-playlist__tracklist.wp-block-playlist__tracklist-show-numbers {
   counter-reset: playlist-track;
 }

@@ -5129,6 +5129,10 @@ return array(
 				'type' => 'boolean',
 				'default' => true
 			),
+			'showTrackLength' => array(
+				'type' => 'boolean',
+				'default' => true
+			),
 			'caption' => array(
 				'type' => 'string'
 			)
@@ -5164,6 +5168,33 @@ return array(
 			'spacing' => array(
 				'margin' => true,
 				'padding' => true
+			)
+		),
+		'styles' => array(
+			array(
+				'name' => 'bars',
+				'label' => 'Bars',
+				'isDefault' => true
+			),
+			array(
+				'name' => 'mirror',
+				'label' => 'Mirror'
+			),
+			array(
+				'name' => 'line',
+				'label' => 'Line'
+			),
+			array(
+				'name' => 'blocks',
+				'label' => 'Blocks'
+			),
+			array(
+				'name' => 'dots',
+				'label' => 'Dots'
+			),
+			array(
+				'name' => 'seekbar',
+				'label' => 'Seekbar'
 			)
 		),
 		'editorStyle' => 'wp-block-playlist-editor',

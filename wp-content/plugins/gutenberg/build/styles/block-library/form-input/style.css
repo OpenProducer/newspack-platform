@@ -15,6 +15,7 @@
 }
 .wp-block-form-input__label:has(input[type=checkbox]) {
   flex-direction: row;
+  width: -moz-fit-content;
   width: fit-content;
 }
 .wp-block-form-input__label:has(input[type=checkbox]) .wp-block-form-input__label-content {
@@ -26,6 +27,7 @@
 }
 
 .wp-block-form-input__label-content {
+  width: -moz-fit-content;
   width: fit-content;
 }
 
