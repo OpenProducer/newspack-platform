@@ -134,7 +134,9 @@ function gutenberg_media_editor_render_page() {
 		wp_dequeue_style( $style );
 	}
 
-	// Fire init action for extensions to register routes and menu items
+	/**
+	 * Fires when the media-editor page is initialized so extensions can register routes and menu items.
+	 */
 	do_action( 'media-editor_init' );
 
 	// Enqueue command palette assets for boot-based pages
@@ -160,7 +162,7 @@ function gutenberg_media_editor_render_page() {
 		wp_register_script( 'media-editor-prerequisites', '', $asset['dependencies'], $asset['version'], true );
 
 		// Add inline script to initialize the app
-		$init_modules = [];
+		$init_modules = ["@wordpress/edit-site-init"];
 		wp_add_inline_script(
 			'media-editor-prerequisites',
 			sprintf(
@@ -191,7 +193,7 @@ function gutenberg_media_editor_render_page() {
 		);
 
 		// Add init modules as static dependencies
-			// No init modules configured
+			$boot_dependencies[] = array( 'import' => 'static', 'id' => '@wordpress/edit-site-init' );
 
 		// Add all registered routes as dependencies
 		foreach ( $routes as $route ) {
@@ -267,18 +269,10 @@ function gutenberg_media_editor_render_page() {
 	print_admin_styles();
 	print_head_scripts();
 
-	/**
-	 * Fires in head section for a specific admin page.
-	 *
-	 * @since 2.1.0
-	 */
+	/** This action is documented in wp-admin/admin-header.php */
 	do_action( "admin_head-{$hook_suffix}" ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
-	/**
-	 * Fires in head section for all admin pages.
-	 *
-	 * @since 2.1.0
-	 */
+	/** This action is documented in wp-admin/admin-header.php */
 	do_action( 'admin_head' );
 	// END see wp-admin/admin-header.php
 	?>
@@ -288,11 +282,7 @@ function gutenberg_media_editor_render_page() {
 	<?php
 	// BEGIN see wp-admin/admin-footer.php
 
-	/**
-	 * Prints scripts or data before the default footer scripts.
-	 *
-	 * @since 1.2.0
-	 */
+	/** This action is documented in wp-admin/admin-footer.php */
 	do_action( 'admin_footer', '' );
 
 	// Print import map first so it's available for inline scripts
@@ -302,11 +292,7 @@ function gutenberg_media_editor_render_page() {
 	wp_script_modules()->print_script_module_preloads();
 	wp_script_modules()->print_script_module_data();
 
-	/**
-	 * Prints scripts or data after the default footer scripts.
-	 *
-	 * @since 2.8.0
-	 */
+	/** This action is documented in wp-admin/admin-footer.php */
 	do_action( "admin_footer-{$hook_suffix}" ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 	// END see wp-admin/admin-footer.php
 	?>

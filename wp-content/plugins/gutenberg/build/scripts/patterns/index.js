@@ -928,7 +928,6 @@ var wp;
           },
           onClose: () => {
             setIsModalOpen(false);
-            closeBlockSettingsMenu();
           }
         }
       )

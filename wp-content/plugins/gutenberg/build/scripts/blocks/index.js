@@ -6823,6 +6823,7 @@ var wp;
 
   // packages/blocks/build-module/api/factory.mjs
   var import_hooks2 = __toESM(require_hooks(), 1);
+  var getBlockTypeWithTransformMetadata = (blockType, transform) => transform.variationName ? { ...blockType, variationName: transform.variationName } : blockType;
   function createBlock(name, attributes = {}, innerBlocks = []) {
     if (!isBlockRegistered(name)) {
       return createBlock("core/missing", {
@@ -6931,16 +6932,14 @@ var wp;
       return [];
     }
     const allBlockTypes = getBlockTypes();
-    const blockTypesWithPossibleFromTransforms = allBlockTypes.filter(
+    const blockTypesWithPossibleFromTransforms = allBlockTypes.flatMap(
       (blockType) => {
         const fromTransforms = getBlockTransforms("from", blockType.name);
-        return !!findTransform(fromTransforms, (transform) => {
-          return isPossibleTransformForSource(
-            transform,
-            "from",
-            blocks
-          );
-        });
+        return fromTransforms.filter(
+          (transform) => isPossibleTransformForSource(transform, "from", blocks)
+        ).map(
+          (transform) => getBlockTypeWithTransformMetadata(blockType, transform)
+        );
       }
     );
     return blockTypesWithPossibleFromTransforms;
@@ -6955,8 +6954,15 @@ var wp;
     const possibleTransforms = transformsTo.filter((transform) => {
       return transform && isPossibleTransformForSource(transform, "to", blocks);
     });
-    const blockNames = possibleTransforms.map((transformation) => transformation.blocks).flat();
-    return blockNames.filter((name) => !!name).map(getBlockType).filter((bt) => !!bt);
+    return possibleTransforms.flatMap((transformation) => {
+      return (transformation.blocks || []).map((name) => {
+        const transformedBlockType = getBlockType(name);
+        return transformedBlockType ? getBlockTypeWithTransformMetadata(
+          transformedBlockType,
+          transformation
+        ) : void 0;
+      });
+    }).filter((bt) => !!bt);
   };
   var isWildcardBlockTransform = (t3) => !!t3 && t3.type === "block" && Array.isArray(t3.blocks) && t3.blocks.includes("*");
   var isContainerGroupBlock = (name) => name === getGroupingBlockName();
@@ -6966,12 +6972,17 @@ var wp;
     }
     const blockTypesForFromTransforms = getBlockTypesForPossibleFromTransforms(blocks);
     const blockTypesForToTransforms = getBlockTypesForPossibleToTransforms(blocks);
-    return [
-      .../* @__PURE__ */ new Set([
-        ...blockTypesForFromTransforms,
-        ...blockTypesForToTransforms
-      ])
-    ];
+    const blockTypesByNameAndVariation = /* @__PURE__ */ new Map();
+    for (const blockType of [
+      ...blockTypesForFromTransforms,
+      ...blockTypesForToTransforms
+    ]) {
+      const key = blockType.variationName ? `${blockType.name}/${blockType.variationName}` : blockType.name;
+      if (!blockTypesByNameAndVariation.has(key)) {
+        blockTypesByNameAndVariation.set(key, blockType);
+      }
+    }
+    return [...blockTypesByNameAndVariation.values()];
   }
   function findTransform(transforms, predicate) {
     const hooks = (0, import_hooks2.createHooks)();
@@ -7033,19 +7044,20 @@ var wp;
     const block = transform.isMultiBlock ? blocks : sourceBlock;
     return transform.isMatch(attributes, block);
   }
-  function switchToBlockType(blocks, name) {
+  function switchToBlockType(blocks, name, variationName) {
     const blocksArray = Array.isArray(blocks) ? blocks : [blocks];
     const isMultiBlock = blocksArray.length > 1;
     const firstBlock = blocksArray[0];
     const sourceName = firstBlock.name;
     const transformationsFrom = getBlockTransforms("from", name);
     const transformationsTo = getBlockTransforms("to", sourceName);
+    const isMatchingVariation = (t3) => variationName ? t3.variationName === variationName : !t3.variationName;
     const transformation = findTransform(
       transformationsTo,
-      (t3) => t3.type === "block" && (isWildcardBlockTransform(t3) || t3.blocks.indexOf(name) !== -1) && (!isMultiBlock || !!t3.isMultiBlock) && maybeCheckTransformIsMatch(t3, blocksArray)
+      (t3) => t3.type === "block" && isMatchingVariation(t3) && (isWildcardBlockTransform(t3) || t3.blocks.indexOf(name) !== -1) && (!isMultiBlock || !!t3.isMultiBlock) && maybeCheckTransformIsMatch(t3, blocksArray)
     ) || findTransform(
       transformationsFrom,
-      (t3) => t3.type === "block" && (isWildcardBlockTransform(t3) || t3.blocks.indexOf(sourceName) !== -1) && (!isMultiBlock || !!t3.isMultiBlock) && maybeCheckTransformIsMatch(t3, blocksArray)
+      (t3) => t3.type === "block" && isMatchingVariation(t3) && (isWildcardBlockTransform(t3) || t3.blocks.indexOf(sourceName) !== -1) && (!isMultiBlock || !!t3.isMultiBlock) && maybeCheckTransformIsMatch(t3, blocksArray)
     );
     if (!transformation) {
       return null;
@@ -9342,9 +9354,6 @@ var wp;
   var import_deprecated10 = __toESM(require_deprecated(), 1);
   var import_dom12 = __toESM(require_dom(), 1);
 
-  // packages/blocks/build-module/api/raw-handling/html-to-blocks.mjs
-  var import_element4 = __toESM(require_element(), 1);
-
   // packages/blocks/build-module/api/raw-handling/get-raw-transforms.mjs
   function getRawTransforms() {
     return getBlockTransforms("from").filter(({ type }) => type === "raw").map((transform) => {
@@ -9369,11 +9378,6 @@ var wp;
         })
       );
       if (!rawTransform) {
-        if (import_element4.Platform.isNative) {
-          return parse2(
-            `<!-- wp:html -->${node.outerHTML}<!-- /wp:html -->`
-          );
-        }
         return createBlock(
           // Should not be hardcoded.
           "core/html",
@@ -10433,7 +10437,7 @@ ${p3}`
   }
 
   // packages/blocks/build-module/api/templates.mjs
-  var import_element5 = __toESM(require_element(), 1);
+  var import_element4 = __toESM(require_element(), 1);
   function doBlocksMatchTemplate(blocks = [], template = []) {
     return blocks.length === template.length && template.every(([name, , innerBlocksTemplate], index) => {
       const block = blocks[index];
@@ -10455,7 +10459,7 @@ ${p3}`
   }
   function normalizeAttribute(definition, value) {
     if (isHTMLAttribute(definition) && Array.isArray(value)) {
-      return (0, import_element5.renderToString)(value);
+      return (0, import_element4.renderToString)(value);
     }
     if (isQueryAttribute(definition) && value) {
       return value.map(

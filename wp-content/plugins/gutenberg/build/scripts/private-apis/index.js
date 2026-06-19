@@ -57,6 +57,7 @@ var wp;
     "@wordpress/route",
     "@wordpress/router",
     "@wordpress/routes",
+    "@wordpress/storybook",
     "@wordpress/sync",
     "@wordpress/theme",
     "@wordpress/dataviews",
