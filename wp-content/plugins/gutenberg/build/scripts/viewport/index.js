@@ -173,14 +173,13 @@ var wp;
     );
     return (0, import_compose2.createHigherOrderComponent)(
       (WrappedComponent) => {
-        const WrappedWithViewport = (props) => {
+        return function WithViewportMatch(props) {
           const queriesResult = useViewPortQueriesResult();
           return (0, import_element.createElement)(WrappedComponent, {
             ...props,
             ...queriesResult
           });
         };
-        return (0, import_compose2.pure)(WrappedWithViewport);
       },
       "withViewportMatch"
     );

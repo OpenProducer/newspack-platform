@@ -23,6 +23,9 @@ use Google\Site_Kit\Core\Assets\Script;
  */
 abstract class Conversion_Events_Provider {
 
+	const CATEGORY_LEAD      = 'lead';
+	const CATEGORY_ECOMMERCE = 'ecommerce';
+
 	/**
 	 * Plugin context.
 	 *
@@ -63,6 +66,15 @@ abstract class Conversion_Events_Provider {
 	public function get_debug_data() {
 		return implode( ', ', $this->get_event_names() );
 	}
+
+	/**
+	 * Gets the provider category.
+	 *
+	 * @since 1.181.0
+	 *
+	 * @return string Provider category, one of CATEGORY_LEAD or CATEGORY_ECOMMERCE.
+	 */
+	abstract public function get_category();
 
 	/**
 	 * Gets the event names.
