@@ -14,7 +14,7 @@ use TEC\Common\LiquidWeb\LicensingApiClient\Exceptions\UnexpectedResponseExcepti
 use TEC\Common\LiquidWeb\LicensingApiClient\Exceptions\ValidationException;
 use TEC\Common\LiquidWeb\LicensingApiClient\Http\JsonDecoder;
 use TEC\Common\LiquidWeb\LicensingApiClient\Responses\ErrorResponse;
-use TEC\Common\Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Creates typed API response exceptions from failed HTTP responses.

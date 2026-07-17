@@ -47,6 +47,10 @@ class Pool implements \YoastSEO_Vendor\GuzzleHttp\Promise\PromisorInterface
         } else {
             $opts = [];
         }
+        if (!\is_iterable($requests)) {
+            \YoastSEO_Vendor\trigger_deprecation('guzzlehttp/guzzle', '7.11', 'Passing a non-iterable request collection to %s::__construct() or %s::batch() is deprecated; guzzlehttp/guzzle 8.0 will require an iterable.', __CLASS__, __CLASS__);
+            $requests = [$requests];
+        }
         $iterable = \YoastSEO_Vendor\GuzzleHttp\Promise\Create::iterFor($requests);
         $requests = static function () use($iterable, $client, $opts) {
             foreach ($iterable as $key => $rfn) {

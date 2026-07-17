@@ -28,7 +28,6 @@ return array(
     'TEC\\Common\\StellarWP\\Arrays\\' => array($vendorDir . '/stellarwp/arrays/src/Arrays'),
     'TEC\\Common\\StellarWP\\AdminNotices\\' => array($vendorDir . '/stellarwp/admin-notices/src'),
     'TEC\\Common\\Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
-    'TEC\\Common\\Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-factory/src', $vendorDir . '/psr/http-message/src'),
     'TEC\\Common\\Psr\\Http\\Client\\' => array($vendorDir . '/psr/http-client/src'),
     'TEC\\Common\\Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
     'TEC\\Common\\Nyholm\\Psr7\\' => array($vendorDir . '/nyholm/psr7/src'),
@@ -40,4 +39,5 @@ return array(
     'TEC\\Common\\LiquidWeb\\Harbor\\Build_Dev_Dir\\' => array($vendorDir . '/stellarwp/harbor/build-dev'),
     'TEC\\Common\\LiquidWeb\\Harbor\\' => array($vendorDir . '/stellarwp/harbor/src/Harbor'),
     'TEC\\Common\\Firebase\\JWT\\' => array($vendorDir . '/firebase/php-jwt/src'),
+    'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-factory/src', $vendorDir . '/psr/http-message/src'),
 );

@@ -3,7 +3,7 @@
 namespace TEC\Common\LiquidWeb\LicensingApiClient\Exceptions;
 
 use TEC\Common\LiquidWeb\LicensingApiClient\Exceptions\Contracts\ApiErrorExceptionInterface;
-use TEC\Common\Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
 
 /**

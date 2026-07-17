@@ -6,6 +6,7 @@ use Closure;
 use YoastSEO_Vendor\GuzzleHttp\Promise as P;
 use YoastSEO_Vendor\GuzzleHttp\Promise\Promise;
 use YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface;
+use YoastSEO_Vendor\GuzzleHttp\TransportSharing;
 use YoastSEO_Vendor\GuzzleHttp\Utils;
 use YoastSEO_Vendor\Psr\Http\Message\RequestInterface;
 /**
@@ -23,6 +24,10 @@ class CurlMultiHandler
      * @var CurlFactoryInterface
      */
     private $factory;
+    /**
+     * @var CurlShareHandleState|null
+     */
+    private $shareHandleState;
     /**
      * @var int
      */
@@ -50,9 +55,18 @@ class CurlMultiHandler
     /** @var resource|\CurlMultiHandle */
     private $_mh;
     /**
+     * @var bool
+     */
+    private $executingMulti = \false;
+    /**
+     * @var array<int, EasyHandle>
+     */
+    private $deferredCancels = [];
+    /**
      * This handler accepts the following options:
      *
      * - handle_factory: An optional factory  used to create curl handles
+     * - transport_sharing: Optional transport sharing mode.
      * - select_timeout: Optional timeout (in seconds) to block before timing
      *   out while selecting curl handles. Defaults to 1 second.
      * - options: An associative array of CURLMOPT_* options and
@@ -60,11 +74,20 @@ class CurlMultiHandler
      */
     public function __construct(array $options = [])
     {
-        $this->factory = $options['handle_factory'] ?? new \YoastSEO_Vendor\GuzzleHttp\Handler\CurlFactory(50);
+        \YoastSEO_Vendor\GuzzleHttp\Handler\CurlShareHandleState::assertNoRequiredSharingCustomFactoryConflict($options, 'CurlMultiHandler');
+        $transportSharing = $options['transport_sharing'] ?? null;
+        $sharingMode = \YoastSEO_Vendor\GuzzleHttp\Handler\CurlShareHandleState::normalizeMode($transportSharing, 'transport_sharing');
+        if (\array_key_exists('handle_factory', $options) && $options['handle_factory'] !== null) {
+            $this->shareHandleState = null;
+            $this->factory = $options['handle_factory'];
+        } else {
+            $this->shareHandleState = $sharingMode !== \YoastSEO_Vendor\GuzzleHttp\TransportSharing::NONE ? \YoastSEO_Vendor\GuzzleHttp\Handler\CurlShareHandleState::fromOption($transportSharing) : null;
+            $this->factory = $this->shareHandleState !== null ? new \YoastSEO_Vendor\GuzzleHttp\Handler\CurlFactory(50, $this->shareHandleState->mode, $this->shareHandleState->handle) : new \YoastSEO_Vendor\GuzzleHttp\Handler\CurlFactory(50);
+        }
         if (isset($options['select_timeout'])) {
             $this->selectTimeout = $options['select_timeout'];
         } elseif ($selectTimeout = \YoastSEO_Vendor\GuzzleHttp\Utils::getenv('GUZZLE_CURL_SELECT_TIMEOUT')) {
-            @\trigger_error('Since guzzlehttp/guzzle 7.2.0: Using environment variable GUZZLE_CURL_SELECT_TIMEOUT is deprecated. Use option "select_timeout" instead.', \E_USER_DEPRECATED);
+            \YoastSEO_Vendor\trigger_deprecation('guzzlehttp/guzzle', '7.2', 'The GUZZLE_CURL_SELECT_TIMEOUT environment variable is deprecated; use the "select_timeout" option instead.');
             $this->selectTimeout = (int) $selectTimeout;
         } else {
             $this->selectTimeout = 1;
@@ -101,8 +124,13 @@ class CurlMultiHandler
     public function __destruct()
     {
         if (isset($this->_mh)) {
-            \curl_multi_close($this->_mh);
-            unset($this->_mh);
+            try {
+                \curl_multi_close($this->_mh);
+            } catch (\Throwable $e) {
+                // Destructors must not throw.
+            } finally {
+                unset($this->_mh);
+            }
         }
     }
     public function __invoke(\YoastSEO_Vendor\Psr\Http\Message\RequestInterface $request, array $options) : \YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface
@@ -139,10 +167,19 @@ class CurlMultiHandler
             // See: https://bugs.php.net/bug.php?id=61141
             \usleep(250);
         }
-        while (\curl_multi_exec($this->_mh, $this->active) === \CURLM_CALL_MULTI_PERFORM) {
+        do {
+            $this->executingMulti = \true;
+            try {
+                $exec = \curl_multi_exec($this->_mh, $this->active);
+            } finally {
+                $this->executingMulti = \false;
+                $this->cleanupDeferredCancels();
+            }
             // Prevent busy looping for slow HTTP requests.
-            \curl_multi_select($this->_mh, $this->selectTimeout);
-        }
+            if ($exec === \CURLM_CALL_MULTI_PERFORM) {
+                \curl_multi_select($this->_mh, $this->selectTimeout);
+            }
+        } while ($exec === \CURLM_CALL_MULTI_PERFORM);
         $this->processMessages();
     }
     /**
@@ -150,7 +187,14 @@ class CurlMultiHandler
      */
     private function tickInQueue() : void
     {
-        if (\curl_multi_exec($this->_mh, $this->active) === \CURLM_CALL_MULTI_PERFORM) {
+        $this->executingMulti = \true;
+        try {
+            $exec = \curl_multi_exec($this->_mh, $this->active);
+        } finally {
+            $this->executingMulti = \false;
+            $this->cleanupDeferredCancels();
+        }
+        if ($exec === \CURLM_CALL_MULTI_PERFORM) {
             \curl_multi_select($this->_mh, 0);
             \YoastSEO_Vendor\GuzzleHttp\Promise\Utils::queue()->add(\Closure::fromCallable([$this, 'tickInQueue']));
         }
@@ -190,25 +234,51 @@ class CurlMultiHandler
     private function cancel($id) : bool
     {
         if (!\is_int($id)) {
-            trigger_deprecation('guzzlehttp/guzzle', '7.4', 'Not passing an integer to %s::%s() is deprecated and will cause an error in 8.0.', __CLASS__, __FUNCTION__);
+            \YoastSEO_Vendor\trigger_deprecation('guzzlehttp/guzzle', '7.4', 'Not passing an int to %s::%s() is deprecated and will cause an error in 8.0.', __CLASS__, __FUNCTION__);
         }
         // Cannot cancel if it has been processed.
         if (!isset($this->handles[$id])) {
             return \false;
         }
-        $handle = $this->handles[$id]['easy']->handle;
+        $easy = $this->handles[$id]['easy'];
         unset($this->delays[$id], $this->handles[$id]);
+        if ($this->executingMulti) {
+            $this->deferredCancels[$id] = $easy;
+            return \true;
+        }
+        $this->cleanupCancelledHandle($easy);
+        return \true;
+    }
+    private function cleanupDeferredCancels() : void
+    {
+        if ($this->deferredCancels === []) {
+            return;
+        }
+        $entries = $this->deferredCancels;
+        $this->deferredCancels = [];
+        foreach ($entries as $easy) {
+            $this->cleanupCancelledHandle($easy);
+        }
+    }
+    private function cleanupCancelledHandle(\YoastSEO_Vendor\GuzzleHttp\Handler\EasyHandle $easy) : void
+    {
+        $handle = $easy->handle;
         \curl_multi_remove_handle($this->_mh, $handle);
         if (\PHP_VERSION_ID < 80000) {
             \curl_close($handle);
         }
-        return \true;
     }
     private function processMessages() : void
     {
         while ($done = \curl_multi_info_read($this->_mh)) {
             if ($done['msg'] !== \CURLMSG_DONE) {
                 // if it's not done, then it would be premature to remove the handle. ref https://github.com/guzzle/guzzle/pull/2892#issuecomment-945150216
+                continue;
+            }
+            if (!isset($done['handle'])) {
+                // Work around a PHP issue where cancelled transfers may omit the handle.
+                // Remove this once we no longer support PHP versions before the fix in
+                // https://github.com/php/php-src/pull/16302.
                 continue;
             }
             $id = (int) $done['handle'];
@@ -220,7 +290,13 @@ class CurlMultiHandler
             $entry = $this->handles[$id];
             unset($this->handles[$id], $this->delays[$id]);
             $entry['easy']->errno = $done['result'];
-            $entry['deferred']->resolve(\YoastSEO_Vendor\GuzzleHttp\Handler\CurlFactory::finish($this, $entry['easy'], $this->factory));
+            try {
+                $result = \YoastSEO_Vendor\GuzzleHttp\Handler\CurlFactory::finish($this, $entry['easy'], $this->factory);
+            } catch (\Throwable $e) {
+                $entry['deferred']->reject($e);
+                continue;
+            }
+            $entry['deferred']->resolve($result);
         }
     }
     private function timeToNext() : int

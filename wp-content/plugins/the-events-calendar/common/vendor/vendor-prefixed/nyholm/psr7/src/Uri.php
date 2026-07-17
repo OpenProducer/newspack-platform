@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace TEC\Common\Nyholm\Psr7;
 
-use TEC\Common\Psr\Http\Message\UriInterface;
+use Psr\Http\Message\UriInterface;
 
 /**
  * PSR-7 URI implementation.

@@ -686,6 +686,7 @@ _::-webkit-full-page-media, _:future, :root [data-has-multi-selection=true] .blo
 }
 .block-editor-default-block-appender .block-editor-default-block-appender__content {
   opacity: 0.62;
+  text-shadow: none;
   margin-block-start: 0;
   margin-block-end: 0;
 }
@@ -877,6 +878,7 @@ _::-webkit-full-page-media, _:future, :root [data-has-multi-selection=true] .blo
 .rich-text [data-rich-text-placeholder]::after {
   content: attr(data-rich-text-placeholder);
   opacity: 0.62;
+  text-shadow: none;
 }
 .rich-text:focus {
   outline: none;

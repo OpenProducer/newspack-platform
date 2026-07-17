@@ -8,7 +8,7 @@ use OutOfBoundsException;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use TEC\Common\Psr\Http\Client\ClientInterface;
-use TEC\Common\Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\RequestFactoryInterface;
 use RuntimeException;
 
 /**

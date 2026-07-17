@@ -6,8 +6,6 @@ use YoastSEO_Vendor\Psr\Http\Client\NetworkExceptionInterface;
 use YoastSEO_Vendor\Psr\Http\Message\RequestInterface;
 /**
  * Exception thrown when a connection cannot be established.
- *
- * Note that no response is present for a ConnectException
  */
 class ConnectException extends \YoastSEO_Vendor\GuzzleHttp\Exception\TransferException implements \YoastSEO_Vendor\Psr\Http\Client\NetworkExceptionInterface
 {

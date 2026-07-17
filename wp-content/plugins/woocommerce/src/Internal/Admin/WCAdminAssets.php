@@ -9,7 +9,9 @@ use _WP_Dependency;
 use Automattic\WooCommerce\Admin\Features\Features;
 use Automattic\WooCommerce\Admin\PageController;
 use Automattic\WooCommerce\Internal\Admin\Loader;
+use Automattic\WooCommerce\Internal\Admin\Settings\SettingsUIRequestContext;
 use Automattic\WooCommerce\Utilities\FeaturesUtil;
+
 /**
  * WCAdminAssets Class.
  */
@@ -59,7 +61,7 @@ class WCAdminAssets {
 	 * @return string Folder path of asset.
 	 */
 	public static function get_path( $ext ) {
-		return ( $ext === 'css' ) ? WC_ADMIN_DIST_CSS_FOLDER : WC_ADMIN_DIST_JS_FOLDER;
+		return ( 'css' === $ext ) ? WC_ADMIN_DIST_CSS_FOLDER : WC_ADMIN_DIST_JS_FOLDER;
 	}
 
 	/**
@@ -89,7 +91,7 @@ class WCAdminAssets {
 		$suffix = '';
 
 		// Potentially enqueue minified JavaScript.
-		if ( $ext === 'js' ) {
+		if ( 'js' === $ext ) {
 			$script_debug = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG;
 			$suffix       = self::should_use_minified_js_file( $script_debug ) ? '.min' : '';
 		}
@@ -140,7 +142,7 @@ class WCAdminAssets {
 			return $script_nonmin_filename;
 		} else {
 			// could not find an asset file, throw an error.
-			throw new \Exception( 'Could not find asset registry for ' . $script_path_name );
+			throw new \Exception( 'Could not find asset registry for ' . esc_html( $script_path_name ) );
 		}
 	}
 
@@ -243,16 +245,14 @@ class WCAdminAssets {
 			return;
 		}
 
-		if ( ! PageController::is_modern_settings_page() ) {
-			wp_enqueue_script( WC_ADMIN_APP );
-			wp_enqueue_style( WC_ADMIN_APP );
-		}
+		wp_enqueue_script( WC_ADMIN_APP );
+		wp_enqueue_style( WC_ADMIN_APP );
 
 		wp_enqueue_style( 'wc-material-icons' );
 		wp_enqueue_style( 'wc-onboarding' );
 
 		if ( PageController::is_settings_page() ) {
-			$this->register_script( 'wp-admin-scripts', 'settings-embed', true );
+			$this->register_script( 'wp-admin-scripts', 'settings-embed', true, $this->get_settings_ui_script_dependencies() );
 			$this->register_style( 'settings-embed', 'style', array( 'wp-components' ) );
 		}
 
@@ -268,6 +268,13 @@ class WCAdminAssets {
 	 * @return array Modified dependencies.
 	 */
 	private function modify_script_dependencies( $dependencies, $script ) {
+		$dependencies = array_map(
+			static function ( $dependency ) {
+				return 'wp-route' === $dependency ? 'wp-router' : $dependency;
+			},
+			$dependencies
+		);
+
 		switch ( $script ) {
 			case WC_ADMIN_APP:
 				// Remove wp-editor dependency if we're not on a customize store page since we don't use wp-editor in other pages.
@@ -324,7 +331,7 @@ class WCAdminAssets {
 			'wc-block-templates',
 			'wc-experimental-products-app',
 			'wc-product-editor',
-			'wc-settings-editor',
+			'wc-settings-ui',
 			'wc-remote-logging',
 			'wc-sanitize',
 		);
@@ -344,6 +351,7 @@ class WCAdminAssets {
 			'wc-experimental',
 			'wc-navigation',
 			'wc-product-editor',
+			'wc-settings-ui',
 			WC_ADMIN_APP,
 		);
 
@@ -403,9 +411,6 @@ class WCAdminAssets {
 				'handle' => 'wc-product-editor',
 			),
 			array(
-				'handle' => 'wc-settings-editor',
-			),
-			array(
 				'handle' => 'wc-customer-effort-score',
 			),
 			array(
@@ -443,6 +448,34 @@ class WCAdminAssets {
 			);
 			wp_style_add_data( $handle, 'rtl', 'replace' );
 		}
+	}
+
+	/**
+	 * Get extension script handles that must load before the settings embed app mounts.
+	 *
+	 * @return array
+	 */
+	private function get_settings_ui_script_dependencies(): array {
+		try {
+			if ( ! class_exists( SettingsUIRequestContext::class ) ) {
+				return array();
+			}
+
+			$context = SettingsUIRequestContext::get_current();
+		} catch ( \Throwable $e ) {
+			return array();
+		}
+
+		if ( ! $context ) {
+			return array();
+		}
+
+		$dependencies = array_merge(
+			array( 'wc-settings-ui' ),
+			$context->get_script_handles()
+		);
+
+		return array_values( array_unique( $dependencies ) );
 	}
 
 	/**

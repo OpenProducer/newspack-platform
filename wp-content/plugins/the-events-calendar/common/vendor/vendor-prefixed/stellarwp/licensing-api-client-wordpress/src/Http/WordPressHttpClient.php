@@ -5,8 +5,8 @@ namespace TEC\Common\LiquidWeb\LicensingApiClientWordPress\Http;
 use TEC\Common\LiquidWeb\LicensingApiClientWordPress\Exceptions\WordPressHttpClientException;
 use TEC\Common\Nyholm\Psr7\Response;
 use TEC\Common\Psr\Http\Client\ClientInterface;
-use TEC\Common\Psr\Http\Message\RequestInterface;
-use TEC\Common\Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Traversable;
 use WP_Error;
 

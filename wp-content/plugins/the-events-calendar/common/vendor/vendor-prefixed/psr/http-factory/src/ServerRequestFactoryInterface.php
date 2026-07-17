@@ -1,6 +1,6 @@
 <?php
 
-namespace TEC\Common\Psr\Http\Message;
+namespace Psr\Http\Message;
 
 interface ServerRequestFactoryInterface
 {

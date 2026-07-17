@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace TEC\Common\Nyholm\Psr7;
 
-use TEC\Common\Psr\Http\Message\{ResponseInterface, StreamInterface};
+use Psr\Http\Message\{ResponseInterface, StreamInterface};
 
 /**
  * @author Michael Dowling and contributors to guzzlehttp/psr7

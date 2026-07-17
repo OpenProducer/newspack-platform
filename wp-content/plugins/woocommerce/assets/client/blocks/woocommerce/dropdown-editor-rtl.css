@@ -1,0 +1,1 @@
+@keyframes wc-skeleton-shimmer{to{transform:translateX(-100%)}}.wc-block-dropdown__skeleton-option{animation:wc-block-dropdown-pulse 1.2s ease-in-out infinite alternate;background:color-mix(in srgb,currentColor 8%,transparent);border-radius:2px;height:1.75em}@keyframes wc-block-dropdown-pulse{0%{opacity:.55}to{opacity:1}}

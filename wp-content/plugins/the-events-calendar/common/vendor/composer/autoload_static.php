@@ -4,47 +4,13 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit72cacbba0c0d39d72ae81a71338a136a
+class ComposerStaticInit3af55c29ec587b9a48fe41ecbcf19dbe
 {
     public static $prefixLengthsPsr4 = array (
         'T' =>
         array (
             'Tribe\\' => 6,
             'TEC\\Event_Automator\\' => 20,
-            'TEC\\Common\\lucatume\\DI52\\' => 25,
-            'TEC\\Common\\TrustedLogin\\' => 24,
-            'TEC\\Common\\StellarWP\\Uplink\\Views\\' => 34,
-            'TEC\\Common\\StellarWP\\Uplink\\Assets_Dir\\' => 39,
-            'TEC\\Common\\StellarWP\\Uplink\\Admin_Views\\' => 40,
-            'TEC\\Common\\StellarWP\\Uplink\\' => 28,
-            'TEC\\Common\\StellarWP\\Telemetry\\Views_Dir\\' => 41,
-            'TEC\\Common\\StellarWP\\Telemetry\\Assets_Dir\\' => 42,
-            'TEC\\Common\\StellarWP\\Telemetry\\' => 31,
-            'TEC\\Common\\StellarWP\\Shepherd\\' => 30,
-            'TEC\\Common\\StellarWP\\Schema\\' => 28,
-            'TEC\\Common\\StellarWP\\SchemaModels\\' => 34,
-            'TEC\\Common\\StellarWP\\Models\\' => 28,
-            'TEC\\Common\\StellarWP\\Installer\\Assets_JS\\' => 41,
-            'TEC\\Common\\StellarWP\\Installer\\Admin_Views\\' => 43,
-            'TEC\\Common\\StellarWP\\Installer\\' => 31,
-            'TEC\\Common\\StellarWP\\DB\\' => 24,
-            'TEC\\Common\\StellarWP\\ContainerContract\\' => 39,
-            'TEC\\Common\\StellarWP\\Assets\\' => 28,
-            'TEC\\Common\\StellarWP\\Arrays\\' => 28,
-            'TEC\\Common\\StellarWP\\AdminNotices\\' => 34,
-            'TEC\\Common\\Psr\\Log\\' => 19,
-            'TEC\\Common\\Psr\\Http\\Message\\' => 28,
-            'TEC\\Common\\Psr\\Http\\Client\\' => 27,
-            'TEC\\Common\\Psr\\Container\\' => 25,
-            'TEC\\Common\\Nyholm\\Psr7\\' => 23,
-            'TEC\\Common\\Monolog\\' => 19,
-            'TEC\\Common\\LiquidWeb\\LicensingApiClient\\' => 40,
-            'TEC\\Common\\LiquidWeb\\LicensingApiClientWordPress\\' => 49,
-            'TEC\\Common\\LiquidWeb\\Harbor\\Views\\' => 34,
-            'TEC\\Common\\LiquidWeb\\Harbor\\Build_Dir\\' => 38,
-            'TEC\\Common\\LiquidWeb\\Harbor\\Build_Dev_Dir\\' => 42,
-            'TEC\\Common\\LiquidWeb\\Harbor\\' => 28,
-            'TEC\\Common\\Firebase\\JWT\\' => 24,
             'TEC\\Common\\' => 11,
         ),
     );
@@ -57,143 +23,6 @@ class ComposerStaticInit72cacbba0c0d39d72ae81a71338a136a
         'TEC\\Event_Automator\\' =>
         array (
             0 => __DIR__ . '/../..' . '/src/Common/Event_Automator',
-        ),
-        'TEC\\Common\\lucatume\\DI52\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/lucatume/di52/src',
-        ),
-        'TEC\\Common\\TrustedLogin\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/trustedlogin/client/src',
-        ),
-        'TEC\\Common\\StellarWP\\Uplink\\Views\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/stellarwp/uplink/src/views',
-        ),
-        'TEC\\Common\\StellarWP\\Uplink\\Assets_Dir\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/stellarwp/uplink/src/assets',
-        ),
-        'TEC\\Common\\StellarWP\\Uplink\\Admin_Views\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/stellarwp/uplink/src/admin-views',
-        ),
-        'TEC\\Common\\StellarWP\\Uplink\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/stellarwp/uplink/src/Uplink',
-        ),
-        'TEC\\Common\\StellarWP\\Telemetry\\Views_Dir\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/stellarwp/telemetry/src/views',
-        ),
-        'TEC\\Common\\StellarWP\\Telemetry\\Assets_Dir\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/stellarwp/telemetry/src/resources',
-        ),
-        'TEC\\Common\\StellarWP\\Telemetry\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/stellarwp/telemetry/src/Telemetry',
-        ),
-        'TEC\\Common\\StellarWP\\Shepherd\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/stellarwp/shepherd/src',
-        ),
-        'TEC\\Common\\StellarWP\\Schema\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/stellarwp/schema/src/Schema',
-        ),
-        'TEC\\Common\\StellarWP\\SchemaModels\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/stellarwp/schema-models/src',
-        ),
-        'TEC\\Common\\StellarWP\\Models\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/stellarwp/models/src/Models',
-        ),
-        'TEC\\Common\\StellarWP\\Installer\\Assets_JS\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/stellarwp/installer/src/assets/js',
-        ),
-        'TEC\\Common\\StellarWP\\Installer\\Admin_Views\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/stellarwp/installer/src/admin-views',
-        ),
-        'TEC\\Common\\StellarWP\\Installer\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/stellarwp/installer/src/Installer',
-        ),
-        'TEC\\Common\\StellarWP\\DB\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/stellarwp/db/src/DB',
-        ),
-        'TEC\\Common\\StellarWP\\ContainerContract\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/stellarwp/container-contract/src',
-        ),
-        'TEC\\Common\\StellarWP\\Assets\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/stellarwp/assets/src/Assets',
-        ),
-        'TEC\\Common\\StellarWP\\Arrays\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/stellarwp/arrays/src/Arrays',
-        ),
-        'TEC\\Common\\StellarWP\\AdminNotices\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/stellarwp/admin-notices/src',
-        ),
-        'TEC\\Common\\Psr\\Log\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
-        ),
-        'TEC\\Common\\Psr\\Http\\Message\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/psr/http-factory/src',
-            1 => __DIR__ . '/..' . '/psr/http-message/src',
-        ),
-        'TEC\\Common\\Psr\\Http\\Client\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/psr/http-client/src',
-        ),
-        'TEC\\Common\\Psr\\Container\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/psr/container/src',
-        ),
-        'TEC\\Common\\Nyholm\\Psr7\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/nyholm/psr7/src',
-        ),
-        'TEC\\Common\\Monolog\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
-        ),
-        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src',
-        ),
-        'TEC\\Common\\LiquidWeb\\LicensingApiClientWordPress\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/stellarwp/licensing-api-client-wordpress/src',
-        ),
-        'TEC\\Common\\LiquidWeb\\Harbor\\Views\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/stellarwp/harbor/src/views',
-        ),
-        'TEC\\Common\\LiquidWeb\\Harbor\\Build_Dir\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/stellarwp/harbor/build',
-        ),
-        'TEC\\Common\\LiquidWeb\\Harbor\\Build_Dev_Dir\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/stellarwp/harbor/build-dev',
-        ),
-        'TEC\\Common\\LiquidWeb\\Harbor\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor',
-        ),
-        'TEC\\Common\\Firebase\\JWT\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
         ),
         'TEC\\Common\\' =>
         array (
@@ -208,9 +37,9 @@ class ComposerStaticInit72cacbba0c0d39d72ae81a71338a136a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit72cacbba0c0d39d72ae81a71338a136a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit72cacbba0c0d39d72ae81a71338a136a::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit72cacbba0c0d39d72ae81a71338a136a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit3af55c29ec587b9a48fe41ecbcf19dbe::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit3af55c29ec587b9a48fe41ecbcf19dbe::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit3af55c29ec587b9a48fe41ecbcf19dbe::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -5,8 +5,8 @@ namespace TEC\Common\LiquidWeb\Harbor\Http;
 use TEC\Common\LiquidWeb\LicensingApiClientWordPress\Http\WordPressHttpClient;
 use TEC\Common\Nyholm\Psr7\Factory\Psr17Factory;
 use TEC\Common\Psr\Http\Client\ClientInterface;
-use TEC\Common\Psr\Http\Message\RequestFactoryInterface;
-use TEC\Common\Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 use TEC\Common\LiquidWeb\Harbor\Contracts\Abstract_Provider;
 
 /**
