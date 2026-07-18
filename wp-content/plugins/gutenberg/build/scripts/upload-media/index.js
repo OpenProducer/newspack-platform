@@ -97,10 +97,12 @@ var wp;
   // packages/upload-media/build-module/index.mjs
   var index_exports = {};
   __export(index_exports, {
+    ErrorCode: () => ErrorCode,
     MediaUploadProvider: () => provider_default,
     UploadError: () => UploadError,
     clearFeatureDetectionCache: () => clearFeatureDetectionCache,
     detectClientSideMediaSupport: () => detectClientSideMediaSupport,
+    getErrorMessage: () => getErrorMessage,
     isClientSideMediaSupported: () => isClientSideMediaSupported,
     isHeicCanvasSupported: () => isHeicCanvasSupported,
     store: () => store
@@ -755,7 +757,61 @@ var wp;
     }
   }
 
+  // packages/upload-media/build-module/store/utils/debug-logger.mjs
+  function isDebugEnabled() {
+    return true;
+  }
+  function debug(message, ...args) {
+    if (!isDebugEnabled()) {
+      return;
+    }
+    console.debug(`[upload-media] ${message}`, ...args);
+  }
+  function measure(options) {
+    if (!isDebugEnabled()) {
+      return;
+    }
+    const {
+      measureName,
+      startTime,
+      endTime = performance.now(),
+      tooltipText,
+      properties
+    } = options;
+    const detail = {
+      devtools: {
+        dataType: "track-entry",
+        track: "Upload Media",
+        tooltipText,
+        properties: properties?.map(([key, value]) => ({
+          key,
+          value
+        }))
+      }
+    };
+    try {
+      performance.measure(measureName, {
+        start: startTime,
+        end: endTime,
+        detail
+      });
+    } catch {
+    }
+  }
+
   // packages/upload-media/build-module/upload-error.mjs
+  var ErrorCode = /* @__PURE__ */ ((ErrorCode2) => {
+    ErrorCode2["EMPTY_FILE"] = "EMPTY_FILE";
+    ErrorCode2["SIZE_ABOVE_LIMIT"] = "SIZE_ABOVE_LIMIT";
+    ErrorCode2["MIME_TYPE_NOT_SUPPORTED"] = "MIME_TYPE_NOT_SUPPORTED";
+    ErrorCode2["MIME_TYPE_NOT_ALLOWED_FOR_USER"] = "MIME_TYPE_NOT_ALLOWED_FOR_USER";
+    ErrorCode2["HEIC_DECODE_ERROR"] = "HEIC_DECODE_ERROR";
+    ErrorCode2["IMAGE_TRANSCODING_ERROR"] = "IMAGE_TRANSCODING_ERROR";
+    ErrorCode2["IMAGE_ROTATION_ERROR"] = "IMAGE_ROTATION_ERROR";
+    ErrorCode2["MEDIA_TRANSCODING_ERROR"] = "MEDIA_TRANSCODING_ERROR";
+    ErrorCode2["GENERAL"] = "GENERAL";
+    return ErrorCode2;
+  })(ErrorCode || {});
   var UploadError = class extends Error {
     code;
     file;
@@ -781,7 +837,7 @@ var wp;
     });
     if (file.type && !isAllowedType) {
       throw new UploadError({
-        code: "MIME_TYPE_NOT_SUPPORTED",
+        code: ErrorCode.MIME_TYPE_NOT_SUPPORTED,
         message: (0, import_i18n2.sprintf)(
           // translators: %s: file name.
           (0, import_i18n2.__)("%s: Sorry, this file type is not supported here."),
@@ -825,7 +881,7 @@ var wp;
     );
     if (file.type && !isAllowedMimeTypeForUser) {
       throw new UploadError({
-        code: "MIME_TYPE_NOT_ALLOWED_FOR_USER",
+        code: ErrorCode.MIME_TYPE_NOT_ALLOWED_FOR_USER,
         message: (0, import_i18n3.sprintf)(
           // translators: %s: file name.
           (0, import_i18n3.__)(
@@ -843,7 +899,7 @@ var wp;
   function validateFileSize(file, maxUploadFileSize) {
     if (file.size <= 0) {
       throw new UploadError({
-        code: "EMPTY_FILE",
+        code: ErrorCode.EMPTY_FILE,
         message: (0, import_i18n4.sprintf)(
           // translators: %s: file name.
           (0, import_i18n4.__)("%s: This file is empty."),
@@ -854,7 +910,7 @@ var wp;
     }
     if (maxUploadFileSize && file.size > maxUploadFileSize) {
       throw new UploadError({
-        code: "SIZE_ABOVE_LIMIT",
+        code: ErrorCode.SIZE_ABOVE_LIMIT,
         message: (0, import_i18n4.sprintf)(
           // translators: %s: file name.
           (0, import_i18n4.__)(
@@ -938,6 +994,10 @@ var wp;
         if (!onError && error && !item.parentId) {
           console.error("Upload cancelled", error);
         }
+      } else {
+        debug(
+          `Item cancelled: ${item.file.name} (item ${id}): ${error instanceof Error ? error.message : error}`
+        );
       }
       const { currentOperation, parentId, batchId } = item;
       dispatch({
@@ -981,7 +1041,7 @@ var wp;
             dispatch.cancelItem(
               parentId,
               new UploadError({
-                code: error instanceof UploadError && error.code || "UPLOAD_ERROR",
+                code: error instanceof UploadError && error.code || ErrorCode.GENERAL,
                 message: error?.message || (0, import_i18n5.__)("The image could not be uploaded."),
                 file: parentItem.file,
                 cause: error instanceof Error ? error : void 0
@@ -991,6 +1051,7 @@ var wp;
         }
       }
       if (batchId && select2.isBatchUploaded(batchId)) {
+        debug(`Batch completed: ${batchId}`);
         item.onBatchSuccess?.();
       }
     };
@@ -2282,7 +2343,7 @@ var wp;
           dispatch.cancelItem(
             id,
             new UploadError({
-              code: "HEIC_DECODE_ERROR",
+              code: ErrorCode.HEIC_DECODE_ERROR,
               message: "This browser cannot decode HEIC images and the server does not support them either. Please convert to JPEG before uploading.",
               file
             })
@@ -2358,21 +2419,35 @@ var wp;
       if (!item) {
         return;
       }
+      const startTime = performance.now();
+      let finished = false;
+      const finishUpload = (attachment) => {
+        if (finished) {
+          return;
+        }
+        finished = true;
+        measure({
+          measureName: `Upload ${item.file.name}`,
+          startTime,
+          tooltipText: item.file.name,
+          properties: [
+            ["Item ID", item.id],
+            ["File name", item.file.name]
+          ]
+        });
+        dispatch.finishOperation(id, { attachment });
+      };
       select2.getSettings().mediaUpload({
         filesList: [item.file],
         additionalData: item.additionalData,
         signal: item.abortController?.signal,
         onFileChange: ([attachment]) => {
           if (attachment && !(0, import_blob.isBlobURL)(attachment.url)) {
-            dispatch.finishOperation(id, {
-              attachment
-            });
+            finishUpload(attachment);
           }
         },
         onSuccess: ([attachment]) => {
-          dispatch.finishOperation(id, {
-            attachment
-          });
+          finishUpload(attachment);
         },
         onError: (error) => {
           dispatch.cancelItem(id, error);
@@ -2392,12 +2467,22 @@ var wp;
         dispatch.finishOperation(id, {});
         return;
       }
+      const startTime = performance.now();
       mediaSideload({
         file: item.file,
         attachmentId: post,
         additionalData,
         signal: item.abortController?.signal,
         onSuccess: (subSize) => {
+          measure({
+            measureName: `Sideload ${item.file.name}`,
+            startTime,
+            tooltipText: item.file.name,
+            properties: [
+              ["Item ID", item.id],
+              ["File name", item.file.name]
+            ]
+          });
           if (item.parentId) {
             dispatch({
               type: Type.AccumulateSubSize,
@@ -2425,6 +2510,7 @@ var wp;
         });
         return;
       }
+      const startTime = performance.now();
       const addSuffix = Boolean(item.parentId);
       const scaledSuffix = Boolean(args.isThresholdResize);
       try {
@@ -2438,6 +2524,15 @@ var wp;
           item.abortController?.signal,
           scaledSuffix
         );
+        measure({
+          measureName: `ResizeCrop ${item.file.name}`,
+          startTime,
+          tooltipText: item.file.name,
+          properties: [
+            ["Item ID", item.id],
+            ["File name", item.file.name]
+          ]
+        });
         const blobUrl = (0, import_blob.createBlobURL)(file);
         dispatch({
           type: Type.CacheBlobUrl,
@@ -2454,7 +2549,7 @@ var wp;
         dispatch.cancelItem(
           id,
           new UploadError({
-            code: "IMAGE_TRANSCODING_ERROR",
+            code: ErrorCode.IMAGE_TRANSCODING_ERROR,
             message: (0, import_i18n6.__)(
               "The web server cannot generate responsive image sizes for this image. Convert it to JPEG or PNG before uploading."
             ),
@@ -2477,6 +2572,7 @@ var wp;
         });
         return;
       }
+      const startTime = performance.now();
       try {
         const file = await vipsRotateImage(
           item.id,
@@ -2484,6 +2580,15 @@ var wp;
           args.orientation,
           item.abortController?.signal
         );
+        measure({
+          measureName: `Rotate ${item.file.name}`,
+          startTime,
+          tooltipText: item.file.name,
+          properties: [
+            ["Item ID", item.id],
+            ["File name", item.file.name]
+          ]
+        });
         const blobUrl = (0, import_blob.createBlobURL)(file);
         dispatch({
           type: Type.CacheBlobUrl,
@@ -2500,7 +2605,7 @@ var wp;
         dispatch.cancelItem(
           id,
           new UploadError({
-            code: "IMAGE_ROTATION_ERROR",
+            code: ErrorCode.IMAGE_ROTATION_ERROR,
             message: (0, import_i18n6.__)(
               "The web server cannot generate responsive image sizes for this image. Convert it to JPEG or PNG before uploading."
             ),
@@ -2523,6 +2628,7 @@ var wp;
         });
         return;
       }
+      const startTime = performance.now();
       const outputMimeType = `image/${args.outputFormat}`;
       const quality = args.outputQuality ?? DEFAULT_OUTPUT_QUALITY;
       const interlaced = args.interlaced ?? false;
@@ -2534,6 +2640,15 @@ var wp;
           quality,
           interlaced
         );
+        measure({
+          measureName: `Transcode ${item.file.name}`,
+          startTime,
+          tooltipText: item.file.name,
+          properties: [
+            ["Item ID", item.id],
+            ["File name", item.file.name]
+          ]
+        });
         const blobUrl = (0, import_blob.createBlobURL)(file);
         dispatch({
           type: Type.CacheBlobUrl,
@@ -2550,7 +2665,7 @@ var wp;
         dispatch.cancelItem(
           id,
           new UploadError({
-            code: "MEDIA_TRANSCODING_ERROR",
+            code: ErrorCode.MEDIA_TRANSCODING_ERROR,
             message: "Image could not be transcoded to the target format",
             file: item.file,
             cause: error instanceof Error ? error : void 0
@@ -2841,6 +2956,103 @@ var wp;
     return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_jsx_runtime2.Fragment, { children });
   });
   var provider_default = MediaUploadProvider;
+
+  // packages/upload-media/build-module/error-messages.mjs
+  var import_i18n7 = __toESM(require_i18n(), 1);
+  function getErrorMessage(code, fileName) {
+    const messages = {
+      [ErrorCode.EMPTY_FILE]: {
+        title: (0, import_i18n7.__)("Empty file"),
+        description: (0, import_i18n7.sprintf)(
+          /* translators: %s: file name */
+          (0, import_i18n7.__)('"%s" is empty.'),
+          fileName
+        ),
+        action: (0, import_i18n7.__)("Please choose a different file.")
+      },
+      [ErrorCode.SIZE_ABOVE_LIMIT]: {
+        title: (0, import_i18n7.__)("File too large"),
+        description: (0, import_i18n7.sprintf)(
+          /* translators: %s: file name */
+          (0, import_i18n7.__)('"%s" exceeds the maximum upload size.'),
+          fileName
+        ),
+        action: (0, import_i18n7.__)("Please reduce the file size and try again.")
+      },
+      [ErrorCode.MIME_TYPE_NOT_SUPPORTED]: {
+        title: (0, import_i18n7.__)("Unsupported file type"),
+        description: (0, import_i18n7.sprintf)(
+          /* translators: %s: file name */
+          (0, import_i18n7.__)('"%s" is not a supported file type.'),
+          fileName
+        ),
+        action: (0, import_i18n7.__)("Please upload a different file format.")
+      },
+      [ErrorCode.MIME_TYPE_NOT_ALLOWED_FOR_USER]: {
+        title: (0, import_i18n7.__)("File type not allowed"),
+        description: (0, import_i18n7.sprintf)(
+          /* translators: %s: file name */
+          (0, import_i18n7.__)('You are not allowed to upload "%s".'),
+          fileName
+        ),
+        action: (0, import_i18n7.__)("Please contact your site administrator.")
+      },
+      [ErrorCode.HEIC_DECODE_ERROR]: {
+        title: (0, import_i18n7.__)("HEIC decode failed"),
+        description: (0, import_i18n7.sprintf)(
+          /* translators: %s: file name */
+          (0, import_i18n7.__)('Failed to decode HEIC file "%s".'),
+          fileName
+        ),
+        action: (0, import_i18n7.__)("Try converting the image to JPEG or PNG first.")
+      },
+      [ErrorCode.IMAGE_TRANSCODING_ERROR]: {
+        title: (0, import_i18n7.__)("Image processing failed"),
+        description: (0, import_i18n7.sprintf)(
+          /* translators: %s: file name */
+          (0, import_i18n7.__)('Failed to process "%s".'),
+          fileName
+        ),
+        action: (0, import_i18n7.__)("The image may be corrupted. Try a different file.")
+      },
+      [ErrorCode.IMAGE_ROTATION_ERROR]: {
+        title: (0, import_i18n7.__)("Image rotation failed"),
+        description: (0, import_i18n7.sprintf)(
+          /* translators: %s: file name */
+          (0, import_i18n7.__)('Failed to rotate "%s".'),
+          fileName
+        ),
+        action: (0, import_i18n7.__)("The image may be corrupted. Try a different file.")
+      },
+      [ErrorCode.MEDIA_TRANSCODING_ERROR]: {
+        title: (0, import_i18n7.__)("Media processing failed"),
+        description: (0, import_i18n7.sprintf)(
+          /* translators: %s: file name */
+          (0, import_i18n7.__)('Failed to convert "%s" to the target format.'),
+          fileName
+        ),
+        action: (0, import_i18n7.__)("The file may be corrupted. Try a different file.")
+      },
+      [ErrorCode.GENERAL]: {
+        title: (0, import_i18n7.__)("Upload failed"),
+        description: (0, import_i18n7.sprintf)(
+          /* translators: %s: file name */
+          (0, import_i18n7.__)('Failed to upload "%s".'),
+          fileName
+        ),
+        action: (0, import_i18n7.__)("Please try again.")
+      }
+    };
+    return messages[code] || {
+      title: (0, import_i18n7.__)("Upload failed"),
+      description: (0, import_i18n7.sprintf)(
+        /* translators: %s: file name */
+        (0, import_i18n7.__)('Failed to upload "%s".'),
+        fileName
+      ),
+      action: (0, import_i18n7.__)("Please try again.")
+    };
+  }
   return __toCommonJS(index_exports);
 })();
 //# sourceMappingURL=index.js.map

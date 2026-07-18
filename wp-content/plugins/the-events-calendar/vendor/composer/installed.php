@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'the-events-calendar/the-events-calendar',
-        'pretty_version' => 'dev-release/M26.haunter',
-        'version' => 'dev-release/M26.haunter',
-        'reference' => '8f51b3fadbe9397027e28d3a2e07bad792ad628e',
+        'pretty_version' => 'dev-release/M26.jigglypuff',
+        'version' => 'dev-release/M26.jigglypuff',
+        'reference' => '1d832cecd59cac3ab84489f3bab12495ab6546c7',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'the-events-calendar/the-events-calendar' => array(
-            'pretty_version' => 'dev-release/M26.haunter',
-            'version' => 'dev-release/M26.haunter',
-            'reference' => '8f51b3fadbe9397027e28d3a2e07bad792ad628e',
+            'pretty_version' => 'dev-release/M26.jigglypuff',
+            'version' => 'dev-release/M26.jigglypuff',
+            'reference' => '1d832cecd59cac3ab84489f3bab12495ab6546c7',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

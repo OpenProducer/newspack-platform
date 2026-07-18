@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace TEC\Common\Nyholm\Psr7;
 
-use TEC\Common\Psr\Http\Message\MessageInterface;
-use TEC\Common\Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\MessageInterface;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * Trait implementing functionality common to requests and responses.

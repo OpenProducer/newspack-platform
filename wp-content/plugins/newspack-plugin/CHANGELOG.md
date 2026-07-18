@@ -1,3 +1,10 @@
+## [6.42.3](https://github.com/Automattic/newspack-plugin/compare/v6.42.2...v6.42.3) (2026-06-17)
+
+
+### Bug Fixes
+
+* **parse.ly:** update meta_type default ([#4724](https://github.com/Automattic/newspack-plugin/issues/4724)) ([d5f4ea9](https://github.com/Automattic/newspack-plugin/commit/d5f4ea9c082a3dd31900e97c4b5f725208a47b0b))
+
 ## [6.42.2](https://github.com/Automattic/newspack-plugin/compare/v6.42.1...v6.42.2) (2026-06-10)
 
 

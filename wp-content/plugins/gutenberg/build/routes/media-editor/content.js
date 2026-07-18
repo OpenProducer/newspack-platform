@@ -82,7 +82,7 @@ var require_use_sync_external_store_shim_development = __commonJS({
             "The result of getSnapshot should be cached to avoid an infinite loop"
           ), didWarnUncachedGetSnapshot = true);
         }
-        cachedValue = useState34({
+        cachedValue = useState35({
           inst: { value, getSnapshot }
         });
         var inst = cachedValue[0].inst, forceUpdate = cachedValue[1];
@@ -120,7 +120,7 @@ var require_use_sync_external_store_shim_development = __commonJS({
         return getSnapshot();
       }
       "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-      var React58 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState34 = React58.useState, useEffect32 = React58.useEffect, useLayoutEffect6 = React58.useLayoutEffect, useDebugValue2 = React58.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+      var React58 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState35 = React58.useState, useEffect32 = React58.useEffect, useLayoutEffect6 = React58.useLayoutEffect, useDebugValue2 = React58.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
       exports.useSyncExternalStore = void 0 !== React58.useSyncExternalStore ? React58.useSyncExternalStore : shim;
       "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
     })();
@@ -9509,7 +9509,7 @@ if (typeof process === "undefined" || true) {
 }
 var style_default = { "text": "_83ed8a8da5dd50ea__text", "heading-2xl": "_14437cfb77831647__heading-2xl", "heading-xl": "_3c78b7fa9b4072dd__heading-xl", "heading-lg": "aa58f227716bcde2__heading-lg", "heading-md": "fc4da56d8dfe52c4__heading-md", "heading-sm": "a9b78c7c82e8dff7__heading-sm", "body-xl": "_305ff559e52180d5__body-xl", "body-lg": "ca1aa3fc2029e958__body-lg", "body-md": "_131101940be12424__body-md", "body-sm": "_0e8d87a42c1f75fa__body-sm" };
 if (typeof process === "undefined" || true) {
-  registerStyle("d5c1b736fd", "._6defc79820e382c6__button{box-sizing:var(--_gcd-button-box-sizing,border-box);font-family:var(--_gcd-button-font-family,inherit);font-size:var(--_gcd-button-font-size,inherit);font-weight:var(--_gcd-button-font-weight,inherit)}.d2cff2e5dea83bd1__input{box-sizing:var(--_gcd-input-box-sizing,border-box);font-family:var(--_gcd-input-font-family,inherit);font-size:var(--_gcd-input-font-size,inherit);font-weight:var(--_gcd-input-font-weight,inherit);margin:var(--_gcd-input-margin,0);&:is(textarea,[type=text],[type=password],[type=color],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){background-color:var(--_gcd-input-background-color,transparent);border:var(--_gcd-input-border,none);border-radius:var(--_gcd-input-border-radius,0);box-shadow:var(--_gcd-input-box-shadow,0 0 0 transparent);color:var(--_gcd-input-color,var(--wpds-color-fg-interactive-neutral,#1e1e1e));&:focus{border-color:var(--_gcd-input-border-color-focus,var(--wp-admin-theme-color));box-shadow:var(--_gcd-input-box-shadow-focus,none);outline:var(--_gcd-input-outline-focus,none)}&:disabled{background:var(--_gcd-input-background-disabled,transparent);border-color:var(--_gcd-input-border-color-disabled,transparent);box-shadow:var(--_gcd-input-box-shadow-disabled,none);color:var(--_gcd-input-color-disabled,var(--wpds-color-fg-interactive-neutral-disabled,#8d8d8d))}&::placeholder{color:var(--_gcd-input-placeholder-color,var(--wpds-color-fg-interactive-neutral-disabled,#8d8d8d))}}&:is(textarea,[type=text],[type=password],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){line-height:var(--_gcd-input-line-height,inherit);min-height:var(--_gcd-input-min-height,auto);padding:var(--_gcd-input-padding,0)}}._547d86373d02e108__textarea{box-sizing:var(--_gcd-textarea-box-sizing,border-box);overflow:var(--_gcd-textarea-overflow,auto);resize:var(--_gcd-textarea-resize,block)}._8c15fd0ed9f28ba4__div{outline:var(--_gcd-div-outline,0 solid transparent)}p._43cec3e1eec1066d__p{font-size:var(--_gcd-p-font-size,13px);line-height:var(--_gcd-p-line-height,1.5);margin:var(--_gcd-p-margin,0)}:is(h1,h2,h3,h4,h5,h6).e97669c6d9a38497__heading{color:var(--_gcd-heading-color,var(--wpds-color-fg-content-neutral,#1e1e1e));font-size:var(--_gcd-heading-font-size,inherit);font-weight:var(--_gcd-heading-font-weight,var(--wpds-typography-font-weight-medium,499));margin:var(--_gcd-heading-margin,0)}._2c0831b0499dbd6e__a,._2c0831b0499dbd6e__a:is(:hover,:focus,:active){border-radius:var(--_gcd-a-border-radius,0);box-shadow:var(--_gcd-a-box-shadow,none);color:var(--_gcd-a-color,inherit);outline:var(--_gcd-a-outline,0 solid transparent);transition:var(--_gcd-a-transition,none)}");
+  registerStyle("d390e935a7", "._6defc79820e382c6__button{box-sizing:var(--_gcd-button-box-sizing,border-box);font-family:var(--_gcd-button-font-family,inherit);font-size:var(--_gcd-button-font-size,inherit);font-weight:var(--_gcd-button-font-weight,inherit)}.d2cff2e5dea83bd1__input{box-sizing:var(--_gcd-input-box-sizing,border-box);font-family:var(--_gcd-input-font-family,inherit);font-size:var(--_gcd-input-font-size,inherit);font-weight:var(--_gcd-input-font-weight,inherit);margin:var(--_gcd-input-margin,0);&:is(textarea,[type=text],[type=password],[type=color],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){background-color:var(--_gcd-input-background-color,transparent);border:var(--_gcd-input-border,none);border-radius:var(--_gcd-input-border-radius,0);box-shadow:var(--_gcd-input-box-shadow,0 0 0 transparent);color:var(--_gcd-input-color,var(--wpds-color-foreground-interactive-neutral,#1e1e1e));&:focus{border-color:var(--_gcd-input-border-color-focus,var(--wp-admin-theme-color));box-shadow:var(--_gcd-input-box-shadow-focus,none);outline:var(--_gcd-input-outline-focus,none)}&:disabled{background:var(--_gcd-input-background-disabled,transparent);border-color:var(--_gcd-input-border-color-disabled,transparent);box-shadow:var(--_gcd-input-box-shadow-disabled,none);color:var(--_gcd-input-color-disabled,var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d))}&::placeholder{color:var(--_gcd-input-placeholder-color,var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d))}}&:is(textarea,[type=text],[type=password],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){line-height:var(--_gcd-input-line-height,inherit);min-height:var(--_gcd-input-min-height,auto);padding:var(--_gcd-input-padding,0)}}._547d86373d02e108__textarea{box-sizing:var(--_gcd-textarea-box-sizing,border-box);overflow:var(--_gcd-textarea-overflow,auto);resize:var(--_gcd-textarea-resize,block)}._8c15fd0ed9f28ba4__div{outline:var(--_gcd-div-outline,0 solid transparent)}p._43cec3e1eec1066d__p{font-size:var(--_gcd-p-font-size,13px);line-height:var(--_gcd-p-line-height,1.5);margin:var(--_gcd-p-margin,0)}:is(h1,h2,h3,h4,h5,h6).e97669c6d9a38497__heading{color:var(--_gcd-heading-color,var(--wpds-color-foreground-content-neutral,#1e1e1e));font-size:var(--_gcd-heading-font-size,inherit);font-weight:var(--_gcd-heading-font-weight,var(--wpds-typography-font-weight-medium,499));margin:var(--_gcd-heading-margin,0)}._2c0831b0499dbd6e__a,._2c0831b0499dbd6e__a:is(:hover,:focus,:active){border-radius:var(--_gcd-a-border-radius,0);box-shadow:var(--_gcd-a-box-shadow,none);color:var(--_gcd-a-color,inherit);outline:var(--_gcd-a-outline,0 solid transparent);transition:var(--_gcd-a-transition,none)}");
 }
 var global_css_defense_default = { "button": "_6defc79820e382c6__button", "input": "d2cff2e5dea83bd1__input", "textarea": "_547d86373d02e108__textarea", "div": "_8c15fd0ed9f28ba4__div", "p": "_43cec3e1eec1066d__p", "heading": "e97669c6d9a38497__heading", "a": "_2c0831b0499dbd6e__a" };
 var Text = (0, import_element10.forwardRef)(function Text2({ variant = "body-md", render: render4, className, ...props }, ref) {
@@ -9613,7 +9613,7 @@ function registerStyle2(hash, css) {
   }
 }
 if (typeof process === "undefined" || true) {
-  registerStyle2("9d817a6077", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._96e6251aad1a6136__badge{border-radius:var(--wpds-border-radius-lg,8px);padding-block:var(--wpds-dimension-padding-xs,4px);padding-inline:var(--wpds-dimension-padding-sm,8px)}._99f7158cb520f750__is-high-intent{background-color:var(--wpds-color-bg-surface-error,#f6e6e3);color:var(--wpds-color-fg-content-error,#470000)}.c20ebef2365bc8b7__is-medium-intent{background-color:var(--wpds-color-bg-surface-warning,#fde6be);color:var(--wpds-color-fg-content-warning,#2e1900)}._365e1626c6202e52__is-low-intent{background-color:var(--wpds-color-bg-surface-caution,#fee995);color:var(--wpds-color-fg-content-caution,#281d00)}._33f8198127ddf4ef__is-stable-intent{background-color:var(--wpds-color-bg-surface-success,#c6f7cd);color:var(--wpds-color-fg-content-success,#002900)}._04c1aca8fc449412__is-informational-intent{background-color:var(--wpds-color-bg-surface-info,#deebfa);color:var(--wpds-color-fg-content-info,#001b4f)}._90726e69d495ec19__is-draft-intent{background-color:var(--wpds-color-bg-surface-neutral-weak,#f4f4f4);color:var(--wpds-color-fg-content-neutral,#1e1e1e)}._898f4a544993bd39__is-none-intent{background-color:var(--wpds-color-bg-surface-neutral-strong,#fff);border:var(--wpds-border-width-xs,1px) solid var(--wpds-color-stroke-surface-neutral,#dbdbdb);color:var(--wpds-color-fg-content-neutral,#1e1e1e);padding-block:calc(var(--wpds-dimension-padding-xs, 4px) - var(--wpds-border-width-xs, 1px));padding-inline:calc(var(--wpds-dimension-padding-sm, 8px) - var(--wpds-border-width-xs, 1px))}}}");
+  registerStyle2("9db2873e7f", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._96e6251aad1a6136__badge{border-radius:var(--wpds-border-radius-lg,8px);padding-block:var(--wpds-dimension-padding-xs,4px);padding-inline:var(--wpds-dimension-padding-sm,8px)}._99f7158cb520f750__is-high-intent{background-color:var(--wpds-color-background-surface-error,#f6e6e3);color:var(--wpds-color-foreground-content-error,#470000)}.c20ebef2365bc8b7__is-medium-intent{background-color:var(--wpds-color-background-surface-warning,#fde6be);color:var(--wpds-color-foreground-content-warning,#2e1900)}._365e1626c6202e52__is-low-intent{background-color:var(--wpds-color-background-surface-caution,#fee995);color:var(--wpds-color-foreground-content-caution,#281d00)}._33f8198127ddf4ef__is-stable-intent{background-color:var(--wpds-color-background-surface-success,#c6f7cd);color:var(--wpds-color-foreground-content-success,#002900)}._04c1aca8fc449412__is-informational-intent{background-color:var(--wpds-color-background-surface-info,#deebfa);color:var(--wpds-color-foreground-content-info,#001b4f)}._90726e69d495ec19__is-draft-intent{background-color:var(--wpds-color-background-surface-neutral-weak,#f4f4f4);color:var(--wpds-color-foreground-content-neutral,#1e1e1e)}._898f4a544993bd39__is-none-intent{background-color:var(--wpds-color-background-surface-neutral-strong,#fff);border:var(--wpds-border-width-xs,1px) solid var(--wpds-color-stroke-surface-neutral,#dbdbdb);color:var(--wpds-color-foreground-content-neutral,#1e1e1e);padding-block:calc(var(--wpds-dimension-padding-xs, 4px) - var(--wpds-border-width-xs, 1px));padding-inline:calc(var(--wpds-dimension-padding-sm, 8px) - var(--wpds-border-width-xs, 1px))}}}");
 }
 var style_default2 = { "badge": "_96e6251aad1a6136__badge", "is-high-intent": "_99f7158cb520f750__is-high-intent", "is-medium-intent": "c20ebef2365bc8b7__is-medium-intent", "is-low-intent": "_365e1626c6202e52__is-low-intent", "is-stable-intent": "_33f8198127ddf4ef__is-stable-intent", "is-informational-intent": "_04c1aca8fc449412__is-informational-intent", "is-draft-intent": "_90726e69d495ec19__is-draft-intent", "is-none-intent": "_898f4a544993bd39__is-none-intent" };
 var Badge = (0, import_element11.forwardRef)(function Badge2({ intent = "none", className, ...props }, ref) {
@@ -9641,7 +9641,6 @@ var Icon = (0, import_element12.forwardRef)(function Icon2({ icon, size: size4 =
     import_primitives.SVG,
     {
       ref,
-      fill: "currentColor",
       ...icon.props,
       ...restProps,
       width: size4,
@@ -9747,7 +9746,7 @@ if (typeof process === "undefined" || true) {
 }
 var resets_default = { "box-sizing": "_336cd3e4e743482f__box-sizing" };
 if (typeof process === "undefined" || true) {
-  registerStyle3("66ab1fd35b", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._02872bf298eadc43__root{--wp-ui-card-padding:var(--wpds-dimension-padding-2xl,24px);--wp-ui-card-header-content-gap:var(--wpds-dimension-gap-xl,24px);--wp-ui-card-header-content-margin:calc(var(--wp-ui-card-header-content-gap) - var(--wp-ui-card-padding));background-color:var(--wpds-color-bg-surface-neutral-strong,#fff);border:1px solid var(--wpds-color-stroke-surface-neutral-weak,#f0f0f0);border-radius:var(--wpds-border-radius-lg,8px);color:var(--wpds-color-fg-content-neutral,#1e1e1e);display:flex;flex-direction:column;overflow:clip}._5dffdaf2a6e669ac__content,.bbccc92e6ba5662d__header{padding:var(--wp-ui-card-padding);&:not(:first-child):not(:last-child){padding-block-end:0}}.bbccc92e6ba5662d__header+._5dffdaf2a6e669ac__content{margin-block-start:var(--wp-ui-card-header-content-margin);padding-block-start:0}.c1fa192587e1b4a6__fullbleed{margin-inline:calc(var(--wp-ui-card-padding)*-1);width:calc(100% + var(--wp-ui-card-padding)*2)}._02872bf298eadc43__root>:is(.bbccc92e6ba5662d__header,._5dffdaf2a6e669ac__content):first-child>.c1fa192587e1b4a6__fullbleed:first-child{margin-block-start:calc(var(--wp-ui-card-padding)*-1)}:is(.bbccc92e6ba5662d__header,._5dffdaf2a6e669ac__content):last-child>.c1fa192587e1b4a6__fullbleed:last-child{margin-block-end:calc(var(--wp-ui-card-padding)*-1)}}}");
+  registerStyle3("5d38cbdd27", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._02872bf298eadc43__root{--wp-ui-card-padding:var(--wpds-dimension-padding-2xl,24px);--wp-ui-card-header-content-gap:var(--wpds-dimension-gap-xl,24px);--wp-ui-card-header-content-margin:calc(var(--wp-ui-card-header-content-gap) - var(--wp-ui-card-padding));background-color:var(--wpds-color-background-surface-neutral-strong,#fff);border:1px solid var(--wpds-color-stroke-surface-neutral-weak,#f0f0f0);border-radius:var(--wpds-border-radius-lg,8px);color:var(--wpds-color-foreground-content-neutral,#1e1e1e);display:flex;flex-direction:column;overflow:clip}._5dffdaf2a6e669ac__content,.bbccc92e6ba5662d__header{padding:var(--wp-ui-card-padding);&:not(:first-child):not(:last-child){padding-block-end:0}}.bbccc92e6ba5662d__header+._5dffdaf2a6e669ac__content{margin-block-start:var(--wp-ui-card-header-content-margin);padding-block-start:0}.c1fa192587e1b4a6__fullbleed{margin-inline:calc(var(--wp-ui-card-padding)*-1);width:calc(100% + var(--wp-ui-card-padding)*2)}._02872bf298eadc43__root>:is(.bbccc92e6ba5662d__header,._5dffdaf2a6e669ac__content):first-child>.c1fa192587e1b4a6__fullbleed:first-child{margin-block-start:calc(var(--wp-ui-card-padding)*-1)}:is(.bbccc92e6ba5662d__header,._5dffdaf2a6e669ac__content):last-child>.c1fa192587e1b4a6__fullbleed:last-child{margin-block-end:calc(var(--wp-ui-card-padding)*-1)}}}");
 }
 var style_default3 = { "root": "_02872bf298eadc43__root", "header": "bbccc92e6ba5662d__header", "content": "_5dffdaf2a6e669ac__content", "fullbleed": "c1fa192587e1b4a6__fullbleed" };
 var Root = (0, import_element13.forwardRef)(function Card({ render: render4, ...restProps }, ref) {
@@ -9844,7 +9843,7 @@ function registerStyle4(hash, css) {
   }
 }
 if (typeof process === "undefined" || true) {
-  registerStyle4("66ab1fd35b", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._02872bf298eadc43__root{--wp-ui-card-padding:var(--wpds-dimension-padding-2xl,24px);--wp-ui-card-header-content-gap:var(--wpds-dimension-gap-xl,24px);--wp-ui-card-header-content-margin:calc(var(--wp-ui-card-header-content-gap) - var(--wp-ui-card-padding));background-color:var(--wpds-color-bg-surface-neutral-strong,#fff);border:1px solid var(--wpds-color-stroke-surface-neutral-weak,#f0f0f0);border-radius:var(--wpds-border-radius-lg,8px);color:var(--wpds-color-fg-content-neutral,#1e1e1e);display:flex;flex-direction:column;overflow:clip}._5dffdaf2a6e669ac__content,.bbccc92e6ba5662d__header{padding:var(--wp-ui-card-padding);&:not(:first-child):not(:last-child){padding-block-end:0}}.bbccc92e6ba5662d__header+._5dffdaf2a6e669ac__content{margin-block-start:var(--wp-ui-card-header-content-margin);padding-block-start:0}.c1fa192587e1b4a6__fullbleed{margin-inline:calc(var(--wp-ui-card-padding)*-1);width:calc(100% + var(--wp-ui-card-padding)*2)}._02872bf298eadc43__root>:is(.bbccc92e6ba5662d__header,._5dffdaf2a6e669ac__content):first-child>.c1fa192587e1b4a6__fullbleed:first-child{margin-block-start:calc(var(--wp-ui-card-padding)*-1)}:is(.bbccc92e6ba5662d__header,._5dffdaf2a6e669ac__content):last-child>.c1fa192587e1b4a6__fullbleed:last-child{margin-block-end:calc(var(--wp-ui-card-padding)*-1)}}}");
+  registerStyle4("5d38cbdd27", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._02872bf298eadc43__root{--wp-ui-card-padding:var(--wpds-dimension-padding-2xl,24px);--wp-ui-card-header-content-gap:var(--wpds-dimension-gap-xl,24px);--wp-ui-card-header-content-margin:calc(var(--wp-ui-card-header-content-gap) - var(--wp-ui-card-padding));background-color:var(--wpds-color-background-surface-neutral-strong,#fff);border:1px solid var(--wpds-color-stroke-surface-neutral-weak,#f0f0f0);border-radius:var(--wpds-border-radius-lg,8px);color:var(--wpds-color-foreground-content-neutral,#1e1e1e);display:flex;flex-direction:column;overflow:clip}._5dffdaf2a6e669ac__content,.bbccc92e6ba5662d__header{padding:var(--wp-ui-card-padding);&:not(:first-child):not(:last-child){padding-block-end:0}}.bbccc92e6ba5662d__header+._5dffdaf2a6e669ac__content{margin-block-start:var(--wp-ui-card-header-content-margin);padding-block-start:0}.c1fa192587e1b4a6__fullbleed{margin-inline:calc(var(--wp-ui-card-padding)*-1);width:calc(100% + var(--wp-ui-card-padding)*2)}._02872bf298eadc43__root>:is(.bbccc92e6ba5662d__header,._5dffdaf2a6e669ac__content):first-child>.c1fa192587e1b4a6__fullbleed:first-child{margin-block-start:calc(var(--wp-ui-card-padding)*-1)}:is(.bbccc92e6ba5662d__header,._5dffdaf2a6e669ac__content):last-child>.c1fa192587e1b4a6__fullbleed:last-child{margin-block-end:calc(var(--wp-ui-card-padding)*-1)}}}");
 }
 var style_default4 = { "root": "_02872bf298eadc43__root", "header": "bbccc92e6ba5662d__header", "content": "_5dffdaf2a6e669ac__content", "fullbleed": "c1fa192587e1b4a6__fullbleed" };
 var Header = (0, import_element14.forwardRef)(
@@ -9942,7 +9941,7 @@ function registerStyle5(hash, css) {
   }
 }
 if (typeof process === "undefined" || true) {
-  registerStyle5("66ab1fd35b", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._02872bf298eadc43__root{--wp-ui-card-padding:var(--wpds-dimension-padding-2xl,24px);--wp-ui-card-header-content-gap:var(--wpds-dimension-gap-xl,24px);--wp-ui-card-header-content-margin:calc(var(--wp-ui-card-header-content-gap) - var(--wp-ui-card-padding));background-color:var(--wpds-color-bg-surface-neutral-strong,#fff);border:1px solid var(--wpds-color-stroke-surface-neutral-weak,#f0f0f0);border-radius:var(--wpds-border-radius-lg,8px);color:var(--wpds-color-fg-content-neutral,#1e1e1e);display:flex;flex-direction:column;overflow:clip}._5dffdaf2a6e669ac__content,.bbccc92e6ba5662d__header{padding:var(--wp-ui-card-padding);&:not(:first-child):not(:last-child){padding-block-end:0}}.bbccc92e6ba5662d__header+._5dffdaf2a6e669ac__content{margin-block-start:var(--wp-ui-card-header-content-margin);padding-block-start:0}.c1fa192587e1b4a6__fullbleed{margin-inline:calc(var(--wp-ui-card-padding)*-1);width:calc(100% + var(--wp-ui-card-padding)*2)}._02872bf298eadc43__root>:is(.bbccc92e6ba5662d__header,._5dffdaf2a6e669ac__content):first-child>.c1fa192587e1b4a6__fullbleed:first-child{margin-block-start:calc(var(--wp-ui-card-padding)*-1)}:is(.bbccc92e6ba5662d__header,._5dffdaf2a6e669ac__content):last-child>.c1fa192587e1b4a6__fullbleed:last-child{margin-block-end:calc(var(--wp-ui-card-padding)*-1)}}}");
+  registerStyle5("5d38cbdd27", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._02872bf298eadc43__root{--wp-ui-card-padding:var(--wpds-dimension-padding-2xl,24px);--wp-ui-card-header-content-gap:var(--wpds-dimension-gap-xl,24px);--wp-ui-card-header-content-margin:calc(var(--wp-ui-card-header-content-gap) - var(--wp-ui-card-padding));background-color:var(--wpds-color-background-surface-neutral-strong,#fff);border:1px solid var(--wpds-color-stroke-surface-neutral-weak,#f0f0f0);border-radius:var(--wpds-border-radius-lg,8px);color:var(--wpds-color-foreground-content-neutral,#1e1e1e);display:flex;flex-direction:column;overflow:clip}._5dffdaf2a6e669ac__content,.bbccc92e6ba5662d__header{padding:var(--wp-ui-card-padding);&:not(:first-child):not(:last-child){padding-block-end:0}}.bbccc92e6ba5662d__header+._5dffdaf2a6e669ac__content{margin-block-start:var(--wp-ui-card-header-content-margin);padding-block-start:0}.c1fa192587e1b4a6__fullbleed{margin-inline:calc(var(--wp-ui-card-padding)*-1);width:calc(100% + var(--wp-ui-card-padding)*2)}._02872bf298eadc43__root>:is(.bbccc92e6ba5662d__header,._5dffdaf2a6e669ac__content):first-child>.c1fa192587e1b4a6__fullbleed:first-child{margin-block-start:calc(var(--wp-ui-card-padding)*-1)}:is(.bbccc92e6ba5662d__header,._5dffdaf2a6e669ac__content):last-child>.c1fa192587e1b4a6__fullbleed:last-child{margin-block-end:calc(var(--wp-ui-card-padding)*-1)}}}");
 }
 var style_default5 = { "root": "_02872bf298eadc43__root", "header": "bbccc92e6ba5662d__header", "content": "_5dffdaf2a6e669ac__content", "fullbleed": "c1fa192587e1b4a6__fullbleed" };
 var Content = (0, import_element15.forwardRef)(
@@ -10040,7 +10039,7 @@ function registerStyle6(hash, css) {
   }
 }
 if (typeof process === "undefined" || true) {
-  registerStyle6("66ab1fd35b", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._02872bf298eadc43__root{--wp-ui-card-padding:var(--wpds-dimension-padding-2xl,24px);--wp-ui-card-header-content-gap:var(--wpds-dimension-gap-xl,24px);--wp-ui-card-header-content-margin:calc(var(--wp-ui-card-header-content-gap) - var(--wp-ui-card-padding));background-color:var(--wpds-color-bg-surface-neutral-strong,#fff);border:1px solid var(--wpds-color-stroke-surface-neutral-weak,#f0f0f0);border-radius:var(--wpds-border-radius-lg,8px);color:var(--wpds-color-fg-content-neutral,#1e1e1e);display:flex;flex-direction:column;overflow:clip}._5dffdaf2a6e669ac__content,.bbccc92e6ba5662d__header{padding:var(--wp-ui-card-padding);&:not(:first-child):not(:last-child){padding-block-end:0}}.bbccc92e6ba5662d__header+._5dffdaf2a6e669ac__content{margin-block-start:var(--wp-ui-card-header-content-margin);padding-block-start:0}.c1fa192587e1b4a6__fullbleed{margin-inline:calc(var(--wp-ui-card-padding)*-1);width:calc(100% + var(--wp-ui-card-padding)*2)}._02872bf298eadc43__root>:is(.bbccc92e6ba5662d__header,._5dffdaf2a6e669ac__content):first-child>.c1fa192587e1b4a6__fullbleed:first-child{margin-block-start:calc(var(--wp-ui-card-padding)*-1)}:is(.bbccc92e6ba5662d__header,._5dffdaf2a6e669ac__content):last-child>.c1fa192587e1b4a6__fullbleed:last-child{margin-block-end:calc(var(--wp-ui-card-padding)*-1)}}}");
+  registerStyle6("5d38cbdd27", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._02872bf298eadc43__root{--wp-ui-card-padding:var(--wpds-dimension-padding-2xl,24px);--wp-ui-card-header-content-gap:var(--wpds-dimension-gap-xl,24px);--wp-ui-card-header-content-margin:calc(var(--wp-ui-card-header-content-gap) - var(--wp-ui-card-padding));background-color:var(--wpds-color-background-surface-neutral-strong,#fff);border:1px solid var(--wpds-color-stroke-surface-neutral-weak,#f0f0f0);border-radius:var(--wpds-border-radius-lg,8px);color:var(--wpds-color-foreground-content-neutral,#1e1e1e);display:flex;flex-direction:column;overflow:clip}._5dffdaf2a6e669ac__content,.bbccc92e6ba5662d__header{padding:var(--wp-ui-card-padding);&:not(:first-child):not(:last-child){padding-block-end:0}}.bbccc92e6ba5662d__header+._5dffdaf2a6e669ac__content{margin-block-start:var(--wp-ui-card-header-content-margin);padding-block-start:0}.c1fa192587e1b4a6__fullbleed{margin-inline:calc(var(--wp-ui-card-padding)*-1);width:calc(100% + var(--wp-ui-card-padding)*2)}._02872bf298eadc43__root>:is(.bbccc92e6ba5662d__header,._5dffdaf2a6e669ac__content):first-child>.c1fa192587e1b4a6__fullbleed:first-child{margin-block-start:calc(var(--wp-ui-card-padding)*-1)}:is(.bbccc92e6ba5662d__header,._5dffdaf2a6e669ac__content):last-child>.c1fa192587e1b4a6__fullbleed:last-child{margin-block-end:calc(var(--wp-ui-card-padding)*-1)}}}");
 }
 var style_default6 = { "root": "_02872bf298eadc43__root", "header": "bbccc92e6ba5662d__header", "content": "_5dffdaf2a6e669ac__content", "fullbleed": "c1fa192587e1b4a6__fullbleed" };
 var FullBleed = (0, import_element16.forwardRef)(
@@ -10135,57 +10134,57 @@ var import_element23 = __toESM(require_element(), 1);
 // packages/icons/build-module/library/aspect-ratio.mjs
 var import_primitives2 = __toESM(require_primitives(), 1);
 var import_jsx_runtime19 = __toESM(require_jsx_runtime(), 1);
-var aspect_ratio_default = /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_primitives2.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_primitives2.Path, { d: "M18.5 5.5h-13c-1.1 0-2 .9-2 2v9c0 1.1.9 2 2 2h13c1.1 0 2-.9 2-2v-9c0-1.1-.9-2-2-2zm.5 11c0 .3-.2.5-.5.5h-13c-.3 0-.5-.2-.5-.5v-9c0-.3.2-.5.5-.5h13c.3 0 .5.2.5.5v9zM6.5 12H8v-2h2V8.5H6.5V12zm9.5 2h-2v1.5h3.5V12H16v2z" }) });
+var aspect_ratio_default = /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_primitives2.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_primitives2.Path, { d: "M18.5 5.5h-13c-1.1 0-2 .9-2 2v9c0 1.1.9 2 2 2h13c1.1 0 2-.9 2-2v-9c0-1.1-.9-2-2-2zm.5 11c0 .3-.2.5-.5.5h-13c-.3 0-.5-.2-.5-.5v-9c0-.3.2-.5.5-.5h13c.3 0 .5.2.5.5v9zM6.5 12H8v-2h2V8.5H6.5V12zm9.5 2h-2v1.5h3.5V12H16v2z" }) });
 
 // packages/icons/build-module/library/check.mjs
 var import_primitives3 = __toESM(require_primitives(), 1);
 var import_jsx_runtime20 = __toESM(require_jsx_runtime(), 1);
-var check_default = /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(import_primitives3.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(import_primitives3.Path, { d: "M16.5 7.5 10 13.9l-2.5-2.4-1 1 3.5 3.6 7.5-7.6z" }) });
+var check_default = /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(import_primitives3.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(import_primitives3.Path, { d: "M16.5 7.5 10 13.9l-2.5-2.4-1 1 3.5 3.6 7.5-7.6z" }) });
 
 // packages/icons/build-module/library/chevron-down.mjs
 var import_primitives4 = __toESM(require_primitives(), 1);
 var import_jsx_runtime21 = __toESM(require_jsx_runtime(), 1);
-var chevron_down_default = /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(import_primitives4.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(import_primitives4.Path, { d: "M17.5 11.6L12 16l-5.5-4.4.9-1.2L12 14l4.5-3.6 1 1.2z" }) });
+var chevron_down_default = /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(import_primitives4.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(import_primitives4.Path, { d: "M17.5 11.6L12 16l-5.5-4.4.9-1.2L12 14l4.5-3.6 1 1.2z" }) });
 
 // packages/icons/build-module/library/close-small.mjs
 var import_primitives5 = __toESM(require_primitives(), 1);
 var import_jsx_runtime22 = __toESM(require_jsx_runtime(), 1);
-var close_small_default = /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(import_primitives5.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(import_primitives5.Path, { d: "M12 13.06l3.712 3.713 1.061-1.06L13.061 12l3.712-3.712-1.06-1.06L12 10.938 8.288 7.227l-1.061 1.06L10.939 12l-3.712 3.712 1.06 1.061L12 13.061z" }) });
+var close_small_default = /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(import_primitives5.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(import_primitives5.Path, { d: "M12 13.06l3.712 3.713 1.061-1.06L13.061 12l3.712-3.712-1.06-1.06L12 10.938 8.288 7.227l-1.061 1.06L10.939 12l-3.712 3.712 1.06 1.061L12 13.061z" }) });
 
 // packages/icons/build-module/library/close.mjs
 var import_primitives6 = __toESM(require_primitives(), 1);
 var import_jsx_runtime23 = __toESM(require_jsx_runtime(), 1);
-var close_default = /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(import_primitives6.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(import_primitives6.Path, { d: "m13.06 12 6.47-6.47-1.06-1.06L12 10.94 5.53 4.47 4.47 5.53 10.94 12l-6.47 6.47 1.06 1.06L12 13.06l6.47 6.47 1.06-1.06L13.06 12Z" }) });
+var close_default = /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(import_primitives6.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(import_primitives6.Path, { d: "m13.06 12 6.47-6.47-1.06-1.06L12 10.94 5.53 4.47 4.47 5.53 10.94 12l-6.47 6.47 1.06 1.06L12 13.06l6.47 6.47 1.06-1.06L13.06 12Z" }) });
 
 // packages/icons/build-module/library/drawer-right.mjs
 var import_primitives7 = __toESM(require_primitives(), 1);
 var import_jsx_runtime24 = __toESM(require_jsx_runtime(), 1);
-var drawer_right_default = /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(import_primitives7.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(import_primitives7.Path, { fillRule: "evenodd", clipRule: "evenodd", d: "M18 4H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-4 14.5H6c-.3 0-.5-.2-.5-.5V6c0-.3.2-.5.5-.5h8v13zm4.5-.5c0 .3-.2.5-.5.5h-2.5v-13H18c.3 0 .5.2.5.5v12z" }) });
+var drawer_right_default = /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(import_primitives7.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(import_primitives7.Path, { fillRule: "evenodd", clipRule: "evenodd", d: "M18 4H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-4 14.5H6c-.3 0-.5-.2-.5-.5V6c0-.3.2-.5.5-.5h8v13zm4.5-.5c0 .3-.2.5-.5.5h-2.5v-13H18c.3 0 .5.2.5.5v12z" }) });
 
 // packages/icons/build-module/library/envelope.mjs
 var import_primitives8 = __toESM(require_primitives(), 1);
 var import_jsx_runtime25 = __toESM(require_jsx_runtime(), 1);
-var envelope_default = /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(import_primitives8.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(import_primitives8.Path, { fillRule: "evenodd", clipRule: "evenodd", d: "M3 7c0-1.1.9-2 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Zm2-.5h14c.3 0 .5.2.5.5v1L12 13.5 4.5 7.9V7c0-.3.2-.5.5-.5Zm-.5 3.3V17c0 .3.2.5.5.5h14c.3 0 .5-.2.5-.5V9.8L12 15.4 4.5 9.8Z" }) });
+var envelope_default = /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(import_primitives8.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(import_primitives8.Path, { fillRule: "evenodd", clipRule: "evenodd", d: "M3 7c0-1.1.9-2 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Zm2-.5h14c.3 0 .5.2.5.5v1L12 13.5 4.5 7.9V7c0-.3.2-.5.5-.5Zm-.5 3.3V17c0 .3.2.5.5.5h14c.3 0 .5-.2.5-.5V9.8L12 15.4 4.5 9.8Z" }) });
 
 // packages/icons/build-module/library/error.mjs
 var import_primitives9 = __toESM(require_primitives(), 1);
 var import_jsx_runtime26 = __toESM(require_jsx_runtime(), 1);
-var error_default = /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(import_primitives9.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(import_primitives9.Path, { fillRule: "evenodd", clipRule: "evenodd", d: "M12.218 5.377a.25.25 0 0 0-.436 0l-7.29 12.96a.25.25 0 0 0 .218.373h14.58a.25.25 0 0 0 .218-.372l-7.29-12.96Zm-1.743-.735c.669-1.19 2.381-1.19 3.05 0l7.29 12.96a1.75 1.75 0 0 1-1.525 2.608H4.71a1.75 1.75 0 0 1-1.525-2.608l7.29-12.96ZM12.75 17.46h-1.5v-1.5h1.5v1.5Zm-1.5-3h1.5v-5h-1.5v5Z" }) });
+var error_default = /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(import_primitives9.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(import_primitives9.Path, { fillRule: "evenodd", clipRule: "evenodd", d: "M12.218 5.377a.25.25 0 0 0-.436 0l-7.29 12.96a.25.25 0 0 0 .218.373h14.58a.25.25 0 0 0 .218-.372l-7.29-12.96Zm-1.743-.735c.669-1.19 2.381-1.19 3.05 0l7.29 12.96a1.75 1.75 0 0 1-1.525 2.608H4.71a1.75 1.75 0 0 1-1.525-2.608l7.29-12.96ZM12.75 17.46h-1.5v-1.5h1.5v1.5Zm-1.5-3h1.5v-5h-1.5v5Z" }) });
 
 // packages/icons/build-module/library/flip-horizontal.mjs
 var import_primitives10 = __toESM(require_primitives(), 1);
 var import_jsx_runtime27 = __toESM(require_jsx_runtime(), 1);
-var flip_horizontal_default = /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(import_primitives10.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(import_primitives10.Path, { d: "M4 6v12c0 1.1.9 2 2 2h3v-1.5H6c-.3 0-.5-.2-.5-.5V6c0-.3.2-.5.5-.5h3V4H6c-1.1 0-2 .9-2 2zm7.2 16h1.5V2h-1.5v20zM15 5.5h1.5V4H15v1.5zm3.5.5H20c0-1.1-.9-2-2-2v1.5c.3 0 .5.2.5.5zm0 10.5H20v-2h-1.5v2zm0-3.5H20v-2h-1.5v2zm-.5 5.5V20c1.1 0 2-.9 2-2h-1.5c0 .3-.2.5-.5.5zM15 20h1.5v-1.5H15V20zm3.5-10.5H20v-2h-1.5v2z" }) });
+var flip_horizontal_default = /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(import_primitives10.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(import_primitives10.Path, { d: "M4 6v12c0 1.1.9 2 2 2h3v-1.5H6c-.3 0-.5-.2-.5-.5V6c0-.3.2-.5.5-.5h3V4H6c-1.1 0-2 .9-2 2zm7.2 16h1.5V2h-1.5v20zM15 5.5h1.5V4H15v1.5zm3.5.5H20c0-1.1-.9-2-2-2v1.5c.3 0 .5.2.5.5zm0 10.5H20v-2h-1.5v2zm0-3.5H20v-2h-1.5v2zm-.5 5.5V20c1.1 0 2-.9 2-2h-1.5c0 .3-.2.5-.5.5zM15 20h1.5v-1.5H15V20zm3.5-10.5H20v-2h-1.5v2z" }) });
 
 // packages/icons/build-module/library/flip-vertical.mjs
 var import_primitives11 = __toESM(require_primitives(), 1);
 var import_jsx_runtime28 = __toESM(require_jsx_runtime(), 1);
-var flip_vertical_default = /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(import_primitives11.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(import_primitives11.Path, { d: "M2 11.2v1.5h20v-1.5H2zM5.5 6c0-.3.2-.5.5-.5h12c.3 0 .5.2.5.5v3H20V6c0-1.1-.9-2-2-2H6c-1.1 0-2 .9-2 2v3h1.5V6zm2 14h2v-1.5h-2V20zm3.5 0h2v-1.5h-2V20zm7-1.5V20c1.1 0 2-.9 2-2h-1.5c0 .3-.2.5-.5.5zm.5-2H20V15h-1.5v1.5zM5.5 18H4c0 1.1.9 2 2 2v-1.5c-.3 0-.5-.2-.5-.5zm0-3H4v1.5h1.5V15zm9 5h2v-1.5h-2V20z" }) });
+var flip_vertical_default = /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(import_primitives11.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(import_primitives11.Path, { d: "M2 11.2v1.5h20v-1.5H2zM5.5 6c0-.3.2-.5.5-.5h12c.3 0 .5.2.5.5v3H20V6c0-1.1-.9-2-2-2H6c-1.1 0-2 .9-2 2v3h1.5V6zm2 14h2v-1.5h-2V20zm3.5 0h2v-1.5h-2V20zm7-1.5V20c1.1 0 2-.9 2-2h-1.5c0 .3-.2.5-.5.5zm.5-2H20V15h-1.5v1.5zM5.5 18H4c0 1.1.9 2 2 2v-1.5c-.3 0-.5-.2-.5-.5zm0-3H4v1.5h1.5V15zm9 5h2v-1.5h-2V20z" }) });
 
 // packages/icons/build-module/library/keyboard.mjs
 var import_primitives12 = __toESM(require_primitives(), 1);
 var import_jsx_runtime29 = __toESM(require_jsx_runtime(), 1);
-var keyboard_default = /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)(import_primitives12.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: [
+var keyboard_default = /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)(import_primitives12.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: [
   /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(import_primitives12.Path, { d: "m16 15.5h-8v-1.5h8zm-7.5-2.5h-2v-2h2zm3 0h-2v-2h2zm3 0h-2v-2h2zm3 0h-2v-2h2zm-9-3h-2v-2h2zm3 0h-2v-2h2zm3 0h-2v-2h2zm3 0h-2v-2h2z" }),
   /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(import_primitives12.Path, { d: "m18.5 6.5h-13a.5.5 0 0 0 -.5.5v9.5a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9.5a.5.5 0 0 0 -.5-.5zm-13-1.5h13a2 2 0 0 1 2 2v9.5a2 2 0 0 1 -2 2h-13a2 2 0 0 1 -2-2v-9.5a2 2 0 0 1 2-2z" })
 ] });
@@ -10193,67 +10192,67 @@ var keyboard_default = /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)(import_pri
 // packages/icons/build-module/library/line-solid.mjs
 var import_primitives13 = __toESM(require_primitives(), 1);
 var import_jsx_runtime30 = __toESM(require_jsx_runtime(), 1);
-var line_solid_default = /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(import_primitives13.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(import_primitives13.Path, { d: "M5 11.25h14v1.5H5z" }) });
+var line_solid_default = /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(import_primitives13.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(import_primitives13.Path, { d: "M5 11.25h14v1.5H5z" }) });
 
 // packages/icons/build-module/library/link.mjs
 var import_primitives14 = __toESM(require_primitives(), 1);
 var import_jsx_runtime31 = __toESM(require_jsx_runtime(), 1);
-var link_default = /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(import_primitives14.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(import_primitives14.Path, { d: "M10 17.389H8.444A5.194 5.194 0 1 1 8.444 7H10v1.5H8.444a3.694 3.694 0 0 0 0 7.389H10v1.5ZM14 7h1.556a5.194 5.194 0 0 1 0 10.39H14v-1.5h1.556a3.694 3.694 0 0 0 0-7.39H14V7Zm-4.5 6h5v-1.5h-5V13Z" }) });
+var link_default = /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(import_primitives14.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(import_primitives14.Path, { d: "M10 17.389H8.444A5.194 5.194 0 1 1 8.444 7H10v1.5H8.444a3.694 3.694 0 0 0 0 7.389H10v1.5ZM14 7h1.556a5.194 5.194 0 0 1 0 10.39H14v-1.5h1.556a3.694 3.694 0 0 0 0-7.39H14V7Zm-4.5 6h5v-1.5h-5V13Z" }) });
 
 // packages/icons/build-module/library/mobile.mjs
 var import_primitives15 = __toESM(require_primitives(), 1);
 var import_jsx_runtime32 = __toESM(require_jsx_runtime(), 1);
-var mobile_default = /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(import_primitives15.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(import_primitives15.Path, { d: "M15 4H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm.5 14c0 .3-.2.5-.5.5H9c-.3 0-.5-.2-.5-.5V6c0-.3.2-.5.5-.5h6c.3 0 .5.2.5.5v12zm-4.5-.5h2V16h-2v1.5z" }) });
+var mobile_default = /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(import_primitives15.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(import_primitives15.Path, { d: "M15 4H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm.5 14c0 .3-.2.5-.5.5H9c-.3 0-.5-.2-.5-.5V6c0-.3.2-.5.5-.5h6c.3 0 .5.2.5.5v12zm-4.5-.5h2V16h-2v1.5z" }) });
 
 // packages/icons/build-module/library/pencil.mjs
 var import_primitives16 = __toESM(require_primitives(), 1);
 var import_jsx_runtime33 = __toESM(require_jsx_runtime(), 1);
-var pencil_default = /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(import_primitives16.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(import_primitives16.Path, { d: "m19 7-3-3-8.5 8.5-1 4 4-1L19 7Zm-7 11.5H5V20h7v-1.5Z" }) });
+var pencil_default = /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(import_primitives16.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(import_primitives16.Path, { d: "m19 7-3-3-8.5 8.5-1 4 4-1L19 7Zm-7 11.5H5V20h7v-1.5Z" }) });
 
 // packages/icons/build-module/library/plus.mjs
 var import_primitives17 = __toESM(require_primitives(), 1);
 var import_jsx_runtime34 = __toESM(require_jsx_runtime(), 1);
-var plus_default = /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(import_primitives17.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(import_primitives17.Path, { d: "M11 12.5V17.5H12.5V12.5H17.5V11H12.5V6H11V11H6V12.5H11Z" }) });
+var plus_default = /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(import_primitives17.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(import_primitives17.Path, { d: "M11 12.5V17.5H12.5V12.5H17.5V11H12.5V6H11V11H6V12.5H11Z" }) });
 
 // packages/icons/build-module/library/redo.mjs
 var import_primitives18 = __toESM(require_primitives(), 1);
 var import_jsx_runtime35 = __toESM(require_jsx_runtime(), 1);
-var redo_default = /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(import_primitives18.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(import_primitives18.Path, { d: "M15.6 6.5l-1.1 1 2.9 3.3H8c-.9 0-1.7.3-2.3.9-1.4 1.5-1.4 4.2-1.4 5.6v.2h1.5v-.3c0-1.1 0-3.5 1-4.5.3-.3.7-.5 1.3-.5h9.2L14.5 15l1.1 1.1 4.6-4.6-4.6-5z" }) });
+var redo_default = /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(import_primitives18.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(import_primitives18.Path, { d: "M15.6 6.5l-1.1 1 2.9 3.3H8c-.9 0-1.7.3-2.3.9-1.4 1.5-1.4 4.2-1.4 5.6v.2h1.5v-.3c0-1.1 0-3.5 1-4.5.3-.3.7-.5 1.3-.5h9.2L14.5 15l1.1 1.1 4.6-4.6-4.6-5z" }) });
 
 // packages/icons/build-module/library/rotate-left.mjs
 var import_primitives19 = __toESM(require_primitives(), 1);
 var import_jsx_runtime36 = __toESM(require_jsx_runtime(), 1);
-var rotate_left_default = /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(import_primitives19.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(import_primitives19.Path, { d: "M12 4V2.2L9 4.8l3 2.5V5.5c3.6 0 6.5 2.9 6.5 6.5 0 2.9-1.9 5.3-4.5 6.2v.2l-.1-.2c-.4.1-.7.2-1.1.2l.2 1.5c.3 0 .6-.1 1-.2 3.5-.9 6-4 6-7.7 0-4.4-3.6-8-8-8zm-7.9 7l1.5.2c.1-1.2.5-2.3 1.2-3.2l-1.1-.9C4.8 8.2 4.3 9.6 4.1 11zm1.5 1.8l-1.5.2c.1.7.3 1.4.5 2 .3.7.6 1.3 1 1.8l1.2-.8c-.3-.5-.6-1-.8-1.5s-.4-1.1-.4-1.7zm1.5 5.5c1.1.9 2.4 1.4 3.8 1.6l.2-1.5c-1.1-.1-2.2-.5-3.1-1.2l-.9 1.1z" }) });
+var rotate_left_default = /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(import_primitives19.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(import_primitives19.Path, { d: "M12 4V2.2L9 4.8l3 2.5V5.5c3.6 0 6.5 2.9 6.5 6.5 0 2.9-1.9 5.3-4.5 6.2v.2l-.1-.2c-.4.1-.7.2-1.1.2l.2 1.5c.3 0 .6-.1 1-.2 3.5-.9 6-4 6-7.7 0-4.4-3.6-8-8-8zm-7.9 7l1.5.2c.1-1.2.5-2.3 1.2-3.2l-1.1-.9C4.8 8.2 4.3 9.6 4.1 11zm1.5 1.8l-1.5.2c.1.7.3 1.4.5 2 .3.7.6 1.3 1 1.8l1.2-.8c-.3-.5-.6-1-.8-1.5s-.4-1.1-.4-1.7zm1.5 5.5c1.1.9 2.4 1.4 3.8 1.6l.2-1.5c-1.1-.1-2.2-.5-3.1-1.2l-.9 1.1z" }) });
 
 // packages/icons/build-module/library/rotate-right.mjs
 var import_primitives20 = __toESM(require_primitives(), 1);
 var import_jsx_runtime37 = __toESM(require_jsx_runtime(), 1);
-var rotate_right_default = /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(import_primitives20.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(import_primitives20.Path, { d: "M15.1 4.8l-3-2.5V4c-4.4 0-8 3.6-8 8 0 3.7 2.5 6.9 6 7.7.3.1.6.1 1 .2l.2-1.5c-.4 0-.7-.1-1.1-.2l-.1.2v-.2c-2.6-.8-4.5-3.3-4.5-6.2 0-3.6 2.9-6.5 6.5-6.5v1.8l3-2.5zM20 11c-.2-1.4-.7-2.7-1.6-3.8l-1.2.8c.7.9 1.1 2 1.3 3.1L20 11zm-1.5 1.8c-.1.5-.2 1.1-.4 1.6s-.5 1-.8 1.5l1.2.9c.4-.5.8-1.1 1-1.8s.5-1.3.5-2l-1.5-.2zm-5.6 5.6l.2 1.5c1.4-.2 2.7-.7 3.8-1.6l-.9-1.1c-.9.7-2 1.1-3.1 1.2z" }) });
+var rotate_right_default = /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(import_primitives20.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(import_primitives20.Path, { d: "M15.1 4.8l-3-2.5V4c-4.4 0-8 3.6-8 8 0 3.7 2.5 6.9 6 7.7.3.1.6.1 1 .2l.2-1.5c-.4 0-.7-.1-1.1-.2l-.1.2v-.2c-2.6-.8-4.5-3.3-4.5-6.2 0-3.6 2.9-6.5 6.5-6.5v1.8l3-2.5zM20 11c-.2-1.4-.7-2.7-1.6-3.8l-1.2.8c.7.9 1.1 2 1.3 3.1L20 11zm-1.5 1.8c-.1.5-.2 1.1-.4 1.6s-.5 1-.8 1.5l1.2.9c.4-.5.8-1.1 1-1.8s.5-1.3.5-2l-1.5-.2zm-5.6 5.6l.2 1.5c1.4-.2 2.7-.7 3.8-1.6l-.9-1.1c-.9.7-2 1.1-3.1 1.2z" }) });
 
 // packages/icons/build-module/library/seen.mjs
 var import_primitives21 = __toESM(require_primitives(), 1);
 var import_jsx_runtime38 = __toESM(require_jsx_runtime(), 1);
-var seen_default = /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(import_primitives21.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(import_primitives21.Path, { d: "M3.99961 13C4.67043 13.3354 4.6703 13.3357 4.67017 13.3359L4.67298 13.3305C4.67621 13.3242 4.68184 13.3135 4.68988 13.2985C4.70595 13.2686 4.7316 13.2218 4.76695 13.1608C4.8377 13.0385 4.94692 12.8592 5.09541 12.6419C5.39312 12.2062 5.84436 11.624 6.45435 11.0431C7.67308 9.88241 9.49719 8.75 11.9996 8.75C14.502 8.75 16.3261 9.88241 17.5449 11.0431C18.1549 11.624 18.6061 12.2062 18.9038 12.6419C19.0523 12.8592 19.1615 13.0385 19.2323 13.1608C19.2676 13.2218 19.2933 13.2686 19.3093 13.2985C19.3174 13.3135 19.323 13.3242 19.3262 13.3305L19.3291 13.3359C19.3289 13.3357 19.3288 13.3354 19.9996 13C20.6704 12.6646 20.6703 12.6643 20.6701 12.664L20.6697 12.6632L20.6688 12.6614L20.6662 12.6563L20.6583 12.6408C20.6517 12.6282 20.6427 12.6108 20.631 12.5892C20.6078 12.5459 20.5744 12.4852 20.5306 12.4096C20.4432 12.2584 20.3141 12.0471 20.1423 11.7956C19.7994 11.2938 19.2819 10.626 18.5794 9.9569C17.1731 8.61759 14.9972 7.25 11.9996 7.25C9.00203 7.25 6.82614 8.61759 5.41987 9.9569C4.71736 10.626 4.19984 11.2938 3.85694 11.7956C3.68511 12.0471 3.55605 12.2584 3.4686 12.4096C3.42484 12.4852 3.39142 12.5459 3.36818 12.5892C3.35656 12.6108 3.34748 12.6282 3.34092 12.6408L3.33297 12.6563L3.33041 12.6614L3.32948 12.6632L3.32911 12.664C3.32894 12.6643 3.32879 12.6646 3.99961 13ZM11.9996 16C13.9326 16 15.4996 14.433 15.4996 12.5C15.4996 10.567 13.9326 9 11.9996 9C10.0666 9 8.49961 10.567 8.49961 12.5C8.49961 14.433 10.0666 16 11.9996 16Z" }) });
+var seen_default = /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(import_primitives21.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(import_primitives21.Path, { d: "M3.99961 13C4.67043 13.3354 4.6703 13.3357 4.67017 13.3359L4.67298 13.3305C4.67621 13.3242 4.68184 13.3135 4.68988 13.2985C4.70595 13.2686 4.7316 13.2218 4.76695 13.1608C4.8377 13.0385 4.94692 12.8592 5.09541 12.6419C5.39312 12.2062 5.84436 11.624 6.45435 11.0431C7.67308 9.88241 9.49719 8.75 11.9996 8.75C14.502 8.75 16.3261 9.88241 17.5449 11.0431C18.1549 11.624 18.6061 12.2062 18.9038 12.6419C19.0523 12.8592 19.1615 13.0385 19.2323 13.1608C19.2676 13.2218 19.2933 13.2686 19.3093 13.2985C19.3174 13.3135 19.323 13.3242 19.3262 13.3305L19.3291 13.3359C19.3289 13.3357 19.3288 13.3354 19.9996 13C20.6704 12.6646 20.6703 12.6643 20.6701 12.664L20.6697 12.6632L20.6688 12.6614L20.6662 12.6563L20.6583 12.6408C20.6517 12.6282 20.6427 12.6108 20.631 12.5892C20.6078 12.5459 20.5744 12.4852 20.5306 12.4096C20.4432 12.2584 20.3141 12.0471 20.1423 11.7956C19.7994 11.2938 19.2819 10.626 18.5794 9.9569C17.1731 8.61759 14.9972 7.25 11.9996 7.25C9.00203 7.25 6.82614 8.61759 5.41987 9.9569C4.71736 10.626 4.19984 11.2938 3.85694 11.7956C3.68511 12.0471 3.55605 12.2584 3.4686 12.4096C3.42484 12.4852 3.39142 12.5459 3.36818 12.5892C3.35656 12.6108 3.34748 12.6282 3.34092 12.6408L3.33297 12.6563L3.33041 12.6614L3.32948 12.6632L3.32911 12.664C3.32894 12.6643 3.32879 12.6646 3.99961 13ZM11.9996 16C13.9326 16 15.4996 14.433 15.4996 12.5C15.4996 10.567 13.9326 9 11.9996 9C10.0666 9 8.49961 10.567 8.49961 12.5C8.49961 14.433 10.0666 16 11.9996 16Z" }) });
 
 // packages/icons/build-module/library/star-empty.mjs
 var import_primitives22 = __toESM(require_primitives(), 1);
 var import_jsx_runtime39 = __toESM(require_jsx_runtime(), 1);
-var star_empty_default = /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(import_primitives22.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(import_primitives22.Path, { fillRule: "evenodd", clipRule: "evenodd", d: "M9.706 8.646a.25.25 0 01-.188.137l-4.626.672a.25.25 0 00-.139.427l3.348 3.262a.25.25 0 01.072.222l-.79 4.607a.25.25 0 00.362.264l4.138-2.176a.25.25 0 01.233 0l4.137 2.175a.25.25 0 00.363-.263l-.79-4.607a.25.25 0 01.072-.222l3.347-3.262a.25.25 0 00-.139-.427l-4.626-.672a.25.25 0 01-.188-.137l-2.069-4.192a.25.25 0 00-.448 0L9.706 8.646zM12 7.39l-.948 1.921a1.75 1.75 0 01-1.317.957l-2.12.308 1.534 1.495c.412.402.6.982.503 1.55l-.362 2.11 1.896-.997a1.75 1.75 0 011.629 0l1.895.997-.362-2.11a1.75 1.75 0 01.504-1.55l1.533-1.495-2.12-.308a1.75 1.75 0 01-1.317-.957L12 7.39z" }) });
+var star_empty_default = /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(import_primitives22.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(import_primitives22.Path, { fillRule: "evenodd", clipRule: "evenodd", d: "M9.706 8.646a.25.25 0 01-.188.137l-4.626.672a.25.25 0 00-.139.427l3.348 3.262a.25.25 0 01.072.222l-.79 4.607a.25.25 0 00.362.264l4.138-2.176a.25.25 0 01.233 0l4.137 2.175a.25.25 0 00.363-.263l-.79-4.607a.25.25 0 01.072-.222l3.347-3.262a.25.25 0 00-.139-.427l-4.626-.672a.25.25 0 01-.188-.137l-2.069-4.192a.25.25 0 00-.448 0L9.706 8.646zM12 7.39l-.948 1.921a1.75 1.75 0 01-1.317.957l-2.12.308 1.534 1.495c.412.402.6.982.503 1.55l-.362 2.11 1.896-.997a1.75 1.75 0 011.629 0l1.895.997-.362-2.11a1.75 1.75 0 01.504-1.55l1.533-1.495-2.12-.308a1.75 1.75 0 01-1.317-.957L12 7.39z" }) });
 
 // packages/icons/build-module/library/star-filled.mjs
 var import_primitives23 = __toESM(require_primitives(), 1);
 var import_jsx_runtime40 = __toESM(require_jsx_runtime(), 1);
-var star_filled_default = /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(import_primitives23.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(import_primitives23.Path, { d: "M11.776 4.454a.25.25 0 01.448 0l2.069 4.192a.25.25 0 00.188.137l4.626.672a.25.25 0 01.139.426l-3.348 3.263a.25.25 0 00-.072.222l.79 4.607a.25.25 0 01-.362.263l-4.138-2.175a.25.25 0 00-.232 0l-4.138 2.175a.25.25 0 01-.363-.263l.79-4.607a.25.25 0 00-.071-.222L4.754 9.881a.25.25 0 01.139-.426l4.626-.672a.25.25 0 00.188-.137l2.069-4.192z" }) });
+var star_filled_default = /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(import_primitives23.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(import_primitives23.Path, { d: "M11.776 4.454a.25.25 0 01.448 0l2.069 4.192a.25.25 0 00.188.137l4.626.672a.25.25 0 01.139.426l-3.348 3.263a.25.25 0 00-.072.222l.79 4.607a.25.25 0 01-.362.263l-4.138-2.175a.25.25 0 00-.232 0l-4.138 2.175a.25.25 0 01-.363-.263l.79-4.607a.25.25 0 00-.071-.222L4.754 9.881a.25.25 0 01.139-.426l4.626-.672a.25.25 0 00.188-.137l2.069-4.192z" }) });
 
 // packages/icons/build-module/library/undo.mjs
 var import_primitives24 = __toESM(require_primitives(), 1);
 var import_jsx_runtime41 = __toESM(require_jsx_runtime(), 1);
-var undo_default = /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(import_primitives24.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(import_primitives24.Path, { d: "M18.3 11.7c-.6-.6-1.4-.9-2.3-.9H6.7l2.9-3.3-1.1-1-4.5 5L8.5 16l1-1-2.7-2.7H16c.5 0 .9.2 1.3.5 1 1 1 3.4 1 4.5v.3h1.5v-.2c0-1.5 0-4.3-1.5-5.7z" }) });
+var undo_default = /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(import_primitives24.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(import_primitives24.Path, { d: "M18.3 11.7c-.6-.6-1.4-.9-2.3-.9H6.7l2.9-3.3-1.1-1-4.5 5L8.5 16l1-1-2.7-2.7H16c.5 0 .9.2 1.3.5 1 1 1 3.4 1 4.5v.3h1.5v-.2c0-1.5 0-4.3-1.5-5.7z" }) });
 
 // packages/icons/build-module/library/unseen.mjs
 var import_primitives25 = __toESM(require_primitives(), 1);
 var import_jsx_runtime42 = __toESM(require_jsx_runtime(), 1);
-var unseen_default = /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(import_primitives25.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(import_primitives25.Path, { d: "M20.7 12.7s0-.1-.1-.2c0-.2-.2-.4-.4-.6-.3-.5-.9-1.2-1.6-1.8-.7-.6-1.5-1.3-2.6-1.8l-.6 1.4c.9.4 1.6 1 2.1 1.5.6.6 1.1 1.2 1.4 1.6.1.2.3.4.3.5v.1l.7-.3.7-.3Zm-5.2-9.3-1.8 4c-.5-.1-1.1-.2-1.7-.2-3 0-5.2 1.4-6.6 2.7-.7.7-1.2 1.3-1.6 1.8-.2.3-.3.5-.4.6 0 0 0 .1-.1.2s0 0 .7.3l.7.3V13c0-.1.2-.3.3-.5.3-.4.7-1 1.4-1.6 1.2-1.2 3-2.3 5.5-2.3H13v.3c-.4 0-.8-.1-1.1-.1-1.9 0-3.5 1.6-3.5 3.5s.6 2.3 1.6 2.9l-2 4.4.9.4 7.6-16.2-.9-.4Zm-3 12.6c1.7-.2 3-1.7 3-3.5s-.2-1.4-.6-1.9L12.4 16Z" }) });
+var unseen_default = /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(import_primitives25.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(import_primitives25.Path, { d: "M20.7 12.7s0-.1-.1-.2c0-.2-.2-.4-.4-.6-.3-.5-.9-1.2-1.6-1.8-.7-.6-1.5-1.3-2.6-1.8l-.6 1.4c.9.4 1.6 1 2.1 1.5.6.6 1.1 1.2 1.4 1.6.1.2.3.4.3.5v.1l.7-.3.7-.3Zm-5.2-9.3-1.8 4c-.5-.1-1.1-.2-1.7-.2-3 0-5.2 1.4-6.6 2.7-.7.7-1.2 1.3-1.6 1.8-.2.3-.3.5-.4.6 0 0 0 .1-.1.2s0 0 .7.3l.7.3V13c0-.1.2-.3.3-.5.3-.4.7-1 1.4-1.6 1.2-1.2 3-2.3 5.5-2.3H13v.3c-.4 0-.8-.1-1.1-.1-1.9 0-3.5 1.6-3.5 3.5s.6 2.3 1.6 2.9l-2 4.4.9.4 7.6-16.2-.9-.4Zm-3 12.6c1.7-.2 3-1.7 3-3.5s-.2-1.4-.6-1.9L12.4 16Z" }) });
 
 // packages/ui/build-module/collapsible-card/context.mjs
 var import_element22 = __toESM(require_element(), 1);
@@ -10345,15 +10344,15 @@ function registerStyle7(hash, css) {
   }
 }
 if (typeof process === "undefined" || true) {
-  registerStyle7("2072cdf420", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._626190151275d6d3__heading-wrapper{--_gcd-heading-color:inherit;--_gcd-heading-font-size:inherit;--_gcd-heading-font-weight:inherit;--_gcd-heading-margin:0;font-family:inherit;line-height:inherit}.cab17c7a373cb60d__header-content{flex:1;min-width:0}.dd89d27c4f15912d__header-trigger-positioner{align-self:center;flex-shrink:0;max-height:0;overflow:visible}.bcfab5f2448bafef__header-trigger-wrapper{border-radius:var(--wpds-border-radius-sm,2px);display:flex;translate:0 -50%}._3106f8d2b0330faa__header-trigger{@media not (prefers-reduced-motion){transition:rotate .15s ease-out}}._5d2dfcb4085c6d0f__header[data-panel-open] ._3106f8d2b0330faa__header-trigger{rotate:180deg}._5d2dfcb4085c6d0f__header[data-disabled] ._3106f8d2b0330faa__header-trigger{color:var(--wpds-color-fg-interactive-neutral-disabled,#8d8d8d)}.e34cf37ccd0d81e0__content{height:var(--collapsible-panel-height);margin-block-start:var(--wp-ui-card-header-content-margin);overflow:hidden;&._165c4572592944b2__overflowVisible{overflow:visible}&[hidden]:not([hidden=until-found]){display:none}&[data-ending-style],&[data-starting-style]{height:0}@media not (prefers-reduced-motion){transition:all .15s ease-out}}}@layer compositions{._41bfdbf7b6c087c2__content-inner{padding-block-start:0}._5d2dfcb4085c6d0f__header{align-items:stretch;display:flex;flex-direction:row;gap:var(--wpds-dimension-gap-sm,8px);outline:none;&:not([data-disabled]){cursor:var(--wpds-cursor-control,pointer)}}}}");
+  registerStyle7("ee46794e90", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._626190151275d6d3__heading-wrapper{--_gcd-heading-color:inherit;--_gcd-heading-font-size:inherit;--_gcd-heading-font-weight:inherit;--_gcd-heading-margin:0;font-family:inherit;line-height:inherit}.cab17c7a373cb60d__header-content{flex:1;min-width:0}.dd89d27c4f15912d__header-trigger-positioner{align-self:center;flex-shrink:0;max-height:0;overflow:visible}.bcfab5f2448bafef__header-trigger-wrapper{border-radius:var(--wpds-border-radius-sm,2px);display:flex;translate:0 -50%}._3106f8d2b0330faa__header-trigger{@media not (prefers-reduced-motion){transition:rotate .15s ease-out}}._5d2dfcb4085c6d0f__header[data-panel-open] ._3106f8d2b0330faa__header-trigger{rotate:180deg}._5d2dfcb4085c6d0f__header[data-disabled] ._3106f8d2b0330faa__header-trigger{color:var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d)}.e34cf37ccd0d81e0__content{height:var(--collapsible-panel-height);margin-block-start:var(--wp-ui-card-header-content-margin);overflow:hidden;&._165c4572592944b2__overflowVisible{overflow:visible}&[hidden]:not([hidden=until-found]){display:none}&[data-ending-style],&[data-starting-style]{height:0}@media not (prefers-reduced-motion){transition:all .15s ease-out}}}@layer compositions{._41bfdbf7b6c087c2__content-inner{padding-block-start:0}._5d2dfcb4085c6d0f__header{align-items:stretch;display:flex;flex-direction:row;gap:var(--wpds-dimension-gap-sm,8px);outline:none;&:not([data-disabled]){cursor:var(--wpds-cursor-control,pointer)}}}}");
 }
 var style_default7 = { "heading-wrapper": "_626190151275d6d3__heading-wrapper", "header-content": "cab17c7a373cb60d__header-content", "header-trigger-positioner": "dd89d27c4f15912d__header-trigger-positioner", "header-trigger-wrapper": "bcfab5f2448bafef__header-trigger-wrapper", "header-trigger": "_3106f8d2b0330faa__header-trigger", "header": "_5d2dfcb4085c6d0f__header", "content": "e34cf37ccd0d81e0__content", "overflowVisible": "_165c4572592944b2__overflowVisible", "content-inner": "_41bfdbf7b6c087c2__content-inner" };
 if (typeof process === "undefined" || true) {
-  registerStyle7("d5c1b736fd", "._6defc79820e382c6__button{box-sizing:var(--_gcd-button-box-sizing,border-box);font-family:var(--_gcd-button-font-family,inherit);font-size:var(--_gcd-button-font-size,inherit);font-weight:var(--_gcd-button-font-weight,inherit)}.d2cff2e5dea83bd1__input{box-sizing:var(--_gcd-input-box-sizing,border-box);font-family:var(--_gcd-input-font-family,inherit);font-size:var(--_gcd-input-font-size,inherit);font-weight:var(--_gcd-input-font-weight,inherit);margin:var(--_gcd-input-margin,0);&:is(textarea,[type=text],[type=password],[type=color],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){background-color:var(--_gcd-input-background-color,transparent);border:var(--_gcd-input-border,none);border-radius:var(--_gcd-input-border-radius,0);box-shadow:var(--_gcd-input-box-shadow,0 0 0 transparent);color:var(--_gcd-input-color,var(--wpds-color-fg-interactive-neutral,#1e1e1e));&:focus{border-color:var(--_gcd-input-border-color-focus,var(--wp-admin-theme-color));box-shadow:var(--_gcd-input-box-shadow-focus,none);outline:var(--_gcd-input-outline-focus,none)}&:disabled{background:var(--_gcd-input-background-disabled,transparent);border-color:var(--_gcd-input-border-color-disabled,transparent);box-shadow:var(--_gcd-input-box-shadow-disabled,none);color:var(--_gcd-input-color-disabled,var(--wpds-color-fg-interactive-neutral-disabled,#8d8d8d))}&::placeholder{color:var(--_gcd-input-placeholder-color,var(--wpds-color-fg-interactive-neutral-disabled,#8d8d8d))}}&:is(textarea,[type=text],[type=password],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){line-height:var(--_gcd-input-line-height,inherit);min-height:var(--_gcd-input-min-height,auto);padding:var(--_gcd-input-padding,0)}}._547d86373d02e108__textarea{box-sizing:var(--_gcd-textarea-box-sizing,border-box);overflow:var(--_gcd-textarea-overflow,auto);resize:var(--_gcd-textarea-resize,block)}._8c15fd0ed9f28ba4__div{outline:var(--_gcd-div-outline,0 solid transparent)}p._43cec3e1eec1066d__p{font-size:var(--_gcd-p-font-size,13px);line-height:var(--_gcd-p-line-height,1.5);margin:var(--_gcd-p-margin,0)}:is(h1,h2,h3,h4,h5,h6).e97669c6d9a38497__heading{color:var(--_gcd-heading-color,var(--wpds-color-fg-content-neutral,#1e1e1e));font-size:var(--_gcd-heading-font-size,inherit);font-weight:var(--_gcd-heading-font-weight,var(--wpds-typography-font-weight-medium,499));margin:var(--_gcd-heading-margin,0)}._2c0831b0499dbd6e__a,._2c0831b0499dbd6e__a:is(:hover,:focus,:active){border-radius:var(--_gcd-a-border-radius,0);box-shadow:var(--_gcd-a-box-shadow,none);color:var(--_gcd-a-color,inherit);outline:var(--_gcd-a-outline,0 solid transparent);transition:var(--_gcd-a-transition,none)}");
+  registerStyle7("d390e935a7", "._6defc79820e382c6__button{box-sizing:var(--_gcd-button-box-sizing,border-box);font-family:var(--_gcd-button-font-family,inherit);font-size:var(--_gcd-button-font-size,inherit);font-weight:var(--_gcd-button-font-weight,inherit)}.d2cff2e5dea83bd1__input{box-sizing:var(--_gcd-input-box-sizing,border-box);font-family:var(--_gcd-input-font-family,inherit);font-size:var(--_gcd-input-font-size,inherit);font-weight:var(--_gcd-input-font-weight,inherit);margin:var(--_gcd-input-margin,0);&:is(textarea,[type=text],[type=password],[type=color],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){background-color:var(--_gcd-input-background-color,transparent);border:var(--_gcd-input-border,none);border-radius:var(--_gcd-input-border-radius,0);box-shadow:var(--_gcd-input-box-shadow,0 0 0 transparent);color:var(--_gcd-input-color,var(--wpds-color-foreground-interactive-neutral,#1e1e1e));&:focus{border-color:var(--_gcd-input-border-color-focus,var(--wp-admin-theme-color));box-shadow:var(--_gcd-input-box-shadow-focus,none);outline:var(--_gcd-input-outline-focus,none)}&:disabled{background:var(--_gcd-input-background-disabled,transparent);border-color:var(--_gcd-input-border-color-disabled,transparent);box-shadow:var(--_gcd-input-box-shadow-disabled,none);color:var(--_gcd-input-color-disabled,var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d))}&::placeholder{color:var(--_gcd-input-placeholder-color,var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d))}}&:is(textarea,[type=text],[type=password],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){line-height:var(--_gcd-input-line-height,inherit);min-height:var(--_gcd-input-min-height,auto);padding:var(--_gcd-input-padding,0)}}._547d86373d02e108__textarea{box-sizing:var(--_gcd-textarea-box-sizing,border-box);overflow:var(--_gcd-textarea-overflow,auto);resize:var(--_gcd-textarea-resize,block)}._8c15fd0ed9f28ba4__div{outline:var(--_gcd-div-outline,0 solid transparent)}p._43cec3e1eec1066d__p{font-size:var(--_gcd-p-font-size,13px);line-height:var(--_gcd-p-line-height,1.5);margin:var(--_gcd-p-margin,0)}:is(h1,h2,h3,h4,h5,h6).e97669c6d9a38497__heading{color:var(--_gcd-heading-color,var(--wpds-color-foreground-content-neutral,#1e1e1e));font-size:var(--_gcd-heading-font-size,inherit);font-weight:var(--_gcd-heading-font-weight,var(--wpds-typography-font-weight-medium,499));margin:var(--_gcd-heading-margin,0)}._2c0831b0499dbd6e__a,._2c0831b0499dbd6e__a:is(:hover,:focus,:active){border-radius:var(--_gcd-a-border-radius,0);box-shadow:var(--_gcd-a-box-shadow,none);color:var(--_gcd-a-color,inherit);outline:var(--_gcd-a-outline,0 solid transparent);transition:var(--_gcd-a-transition,none)}");
 }
 var global_css_defense_default2 = { "button": "_6defc79820e382c6__button", "input": "d2cff2e5dea83bd1__input", "textarea": "_547d86373d02e108__textarea", "div": "_8c15fd0ed9f28ba4__div", "p": "_43cec3e1eec1066d__p", "heading": "e97669c6d9a38497__heading", "a": "_2c0831b0499dbd6e__a" };
 if (typeof process === "undefined" || true) {
-  registerStyle7("693cd16544", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer utilities{._08e8a2e44959f892__outset-ring--focus,._970d04df7376df67__outset-ring--focus-within-except-active,.c5cb3ee4bddaa8e4__outset-ring--focus-within-visible,.cd83dfc2126a0846__outset-ring--focus-within,.d0541bc9dd9dc7b6__outset-ring--focus-visible,.e25b2bdd7aa21721__outset-ring--focus-except-active,.ecadb9e080e2dfa5__outset-ring--focus-parent-visible{@media not (prefers-reduced-motion){--_gcd-a-transition:outline 0.1s ease-out;transition:outline .1s ease-out}outline:0 solid transparent;outline-offset:1px}._08e8a2e44959f892__outset-ring--focus:focus,._970d04df7376df67__outset-ring--focus-within-except-active:focus-within:not(:has(:active)),.c5cb3ee4bddaa8e4__outset-ring--focus-within-visible:focus-within:has(:focus-visible),.cd83dfc2126a0846__outset-ring--focus-within:focus-within,.d0541bc9dd9dc7b6__outset-ring--focus-visible:focus-visible,.e25b2bdd7aa21721__outset-ring--focus-except-active:focus:not(:active),:focus-visible .ecadb9e080e2dfa5__outset-ring--focus-parent-visible{--_gcd-a-outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--wpds-color-stroke-focus-brand,var(--wp-admin-theme-color,#3858e9));--_gcd-div-outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--wpds-color-stroke-focus-brand,var(--wp-admin-theme-color,#3858e9));outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--wpds-color-stroke-focus-brand,var(--wp-admin-theme-color,#3858e9))}}}");
+  registerStyle7("5f8e7aa0bc", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer utilities{._08e8a2e44959f892__outset-ring--focus:focus,._970d04df7376df67__outset-ring--focus-within-except-active:focus-within:not(:has(:active)),.c5cb3ee4bddaa8e4__outset-ring--focus-within-visible:focus-within:has(:focus-visible),.cd83dfc2126a0846__outset-ring--focus-within:focus-within,.d0541bc9dd9dc7b6__outset-ring--focus-visible:focus-visible,.e25b2bdd7aa21721__outset-ring--focus-except-active:focus:not(:active),:focus-visible .ecadb9e080e2dfa5__outset-ring--focus-parent-visible{--_gcd-a-outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9));--_gcd-div-outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9));outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9));outline-offset:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px))}}}");
 }
 var focus_default = { "outset-ring--focus": "_08e8a2e44959f892__outset-ring--focus", "outset-ring--focus-except-active": "e25b2bdd7aa21721__outset-ring--focus-except-active", "outset-ring--focus-visible": "d0541bc9dd9dc7b6__outset-ring--focus-visible", "outset-ring--focus-within": "cd83dfc2126a0846__outset-ring--focus-within", "outset-ring--focus-within-except-active": "_970d04df7376df67__outset-ring--focus-within-except-active", "outset-ring--focus-within-visible": "c5cb3ee4bddaa8e4__outset-ring--focus-within-visible", "outset-ring--focus-parent-visible": "ecadb9e080e2dfa5__outset-ring--focus-parent-visible" };
 var Header2 = (0, import_element23.forwardRef)(
@@ -10525,7 +10524,7 @@ function registerStyle8(hash, css) {
   }
 }
 if (typeof process === "undefined" || true) {
-  registerStyle8("2072cdf420", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._626190151275d6d3__heading-wrapper{--_gcd-heading-color:inherit;--_gcd-heading-font-size:inherit;--_gcd-heading-font-weight:inherit;--_gcd-heading-margin:0;font-family:inherit;line-height:inherit}.cab17c7a373cb60d__header-content{flex:1;min-width:0}.dd89d27c4f15912d__header-trigger-positioner{align-self:center;flex-shrink:0;max-height:0;overflow:visible}.bcfab5f2448bafef__header-trigger-wrapper{border-radius:var(--wpds-border-radius-sm,2px);display:flex;translate:0 -50%}._3106f8d2b0330faa__header-trigger{@media not (prefers-reduced-motion){transition:rotate .15s ease-out}}._5d2dfcb4085c6d0f__header[data-panel-open] ._3106f8d2b0330faa__header-trigger{rotate:180deg}._5d2dfcb4085c6d0f__header[data-disabled] ._3106f8d2b0330faa__header-trigger{color:var(--wpds-color-fg-interactive-neutral-disabled,#8d8d8d)}.e34cf37ccd0d81e0__content{height:var(--collapsible-panel-height);margin-block-start:var(--wp-ui-card-header-content-margin);overflow:hidden;&._165c4572592944b2__overflowVisible{overflow:visible}&[hidden]:not([hidden=until-found]){display:none}&[data-ending-style],&[data-starting-style]{height:0}@media not (prefers-reduced-motion){transition:all .15s ease-out}}}@layer compositions{._41bfdbf7b6c087c2__content-inner{padding-block-start:0}._5d2dfcb4085c6d0f__header{align-items:stretch;display:flex;flex-direction:row;gap:var(--wpds-dimension-gap-sm,8px);outline:none;&:not([data-disabled]){cursor:var(--wpds-cursor-control,pointer)}}}}");
+  registerStyle8("ee46794e90", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._626190151275d6d3__heading-wrapper{--_gcd-heading-color:inherit;--_gcd-heading-font-size:inherit;--_gcd-heading-font-weight:inherit;--_gcd-heading-margin:0;font-family:inherit;line-height:inherit}.cab17c7a373cb60d__header-content{flex:1;min-width:0}.dd89d27c4f15912d__header-trigger-positioner{align-self:center;flex-shrink:0;max-height:0;overflow:visible}.bcfab5f2448bafef__header-trigger-wrapper{border-radius:var(--wpds-border-radius-sm,2px);display:flex;translate:0 -50%}._3106f8d2b0330faa__header-trigger{@media not (prefers-reduced-motion){transition:rotate .15s ease-out}}._5d2dfcb4085c6d0f__header[data-panel-open] ._3106f8d2b0330faa__header-trigger{rotate:180deg}._5d2dfcb4085c6d0f__header[data-disabled] ._3106f8d2b0330faa__header-trigger{color:var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d)}.e34cf37ccd0d81e0__content{height:var(--collapsible-panel-height);margin-block-start:var(--wp-ui-card-header-content-margin);overflow:hidden;&._165c4572592944b2__overflowVisible{overflow:visible}&[hidden]:not([hidden=until-found]){display:none}&[data-ending-style],&[data-starting-style]{height:0}@media not (prefers-reduced-motion){transition:all .15s ease-out}}}@layer compositions{._41bfdbf7b6c087c2__content-inner{padding-block-start:0}._5d2dfcb4085c6d0f__header{align-items:stretch;display:flex;flex-direction:row;gap:var(--wpds-dimension-gap-sm,8px);outline:none;&:not([data-disabled]){cursor:var(--wpds-cursor-control,pointer)}}}}");
 }
 var style_default8 = { "heading-wrapper": "_626190151275d6d3__heading-wrapper", "header-content": "cab17c7a373cb60d__header-content", "header-trigger-positioner": "dd89d27c4f15912d__header-trigger-positioner", "header-trigger-wrapper": "bcfab5f2448bafef__header-trigger-wrapper", "header-trigger": "_3106f8d2b0330faa__header-trigger", "header": "_5d2dfcb4085c6d0f__header", "content": "e34cf37ccd0d81e0__content", "overflowVisible": "_165c4572592944b2__overflowVisible", "content-inner": "_41bfdbf7b6c087c2__content-inner" };
 var Content2 = (0, import_element25.forwardRef)(
@@ -10560,12 +10559,32 @@ function renderSlotWithChildren(slot, defaultSlot, children) {
   return (0, import_element26.cloneElement)(slot ?? defaultSlot, { children });
 }
 
+// packages/ui/build-module/utils/theme-provider.mjs
+var theme = __toESM(require_theme(), 1);
+
 // packages/ui/build-module/lock-unlock.mjs
 var import_private_apis = __toESM(require_private_apis(), 1);
 var { lock, unlock } = (0, import_private_apis.__dangerousOptInToUnstableAPIsOnlyForCoreModules)(
   "I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.",
   "@wordpress/ui"
 );
+
+// packages/ui/build-module/utils/theme-provider.mjs
+function getThemeProvider() {
+  const themePackage = theme;
+  if (themePackage.ThemeProvider) {
+    return themePackage.ThemeProvider;
+  }
+  if (!themePackage.privateApis) {
+    throw new Error(
+      "@wordpress/ui: @wordpress/theme must expose `ThemeProvider` or `privateApis.ThemeProvider`."
+    );
+  }
+  return unlock(
+    themePackage.privateApis
+  ).ThemeProvider;
+}
+var ThemeProvider = getThemeProvider();
 
 // packages/ui/build-module/stack/stack.mjs
 var import_element27 = __toESM(require_element(), 1);
@@ -10691,7 +10710,6 @@ __export(tooltip_exports, {
 
 // packages/ui/build-module/tooltip/popup.mjs
 var import_element30 = __toESM(require_element(), 1);
-var import_theme = __toESM(require_theme(), 1);
 
 // packages/ui/build-module/tooltip/portal.mjs
 var import_element28 = __toESM(require_element(), 1);
@@ -10935,7 +10953,7 @@ if (typeof process === "undefined" || true) {
 }
 var resets_default2 = { "box-sizing": "_336cd3e4e743482f__box-sizing" };
 if (typeof process === "undefined" || true) {
-  registerStyle11("4811d023d1", '@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._480b748dd3510e64__positioner{z-index:var(--wp-ui-tooltip-z-index,initial)}._50096b232db7709d__popup{background-color:var(--wpds-color-bg-surface-neutral-strong,#fff);border-radius:var(--wpds-border-radius-md,4px);box-shadow:var(--wpds-elevation-sm,0 1px 2px 0 #0000000d,0 2px 3px 0 #0000000a,0 6px 6px 0 #00000008,0 8px 8px 0 #00000005);color:var(--wpds-color-fg-content-neutral,#1e1e1e);font-family:var(--wpds-typography-font-family-body,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-size:var(--wpds-typography-font-size-sm,12px);line-height:1.4;padding:var(--wpds-dimension-padding-xs,4px) var(--wpds-dimension-padding-sm,8px);@media (forced-colors:active){border-bottom-color:CanvasText;border-bottom-style:solid;border-bottom-width:1px;border-left-color:CanvasText;border-left-style:solid;border-left-width:1px;border-right-color:CanvasText;border-right-style:solid;border-right-width:1px;border-top-color:CanvasText;border-top-style:solid;border-top-width:1px}}}}');
+  registerStyle11("789467362f", '@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._480b748dd3510e64__positioner{z-index:var(--wp-ui-tooltip-z-index,initial)}._50096b232db7709d__popup{background-color:var(--wpds-color-background-surface-neutral-strong,#fff);border-radius:var(--wpds-border-radius-md,4px);box-shadow:var(--wpds-elevation-sm,0 1px 2px 0 #0000000d,0 2px 3px 0 #0000000a,0 6px 6px 0 #00000008,0 8px 8px 0 #00000005);color:var(--wpds-color-foreground-content-neutral,#1e1e1e);font-family:var(--wpds-typography-font-family-body,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-size:var(--wpds-typography-font-size-sm,12px);line-height:1.4;padding:var(--wpds-dimension-padding-xs,4px) var(--wpds-dimension-padding-sm,8px);@media (forced-colors:active){border-bottom-color:CanvasText;border-bottom-style:solid;border-bottom-width:1px;border-left-color:CanvasText;border-left-style:solid;border-left-width:1px;border-right-color:CanvasText;border-right-style:solid;border-right-width:1px;border-top-color:CanvasText;border-top-style:solid;border-top-width:1px}}}}');
 }
 var style_default10 = { "positioner": "_480b748dd3510e64__positioner", "popup": "_50096b232db7709d__popup" };
 var Positioner = (0, import_element29.forwardRef)(
@@ -11041,10 +11059,9 @@ function registerStyle12(hash, css) {
   }
 }
 if (typeof process === "undefined" || true) {
-  registerStyle12("4811d023d1", '@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._480b748dd3510e64__positioner{z-index:var(--wp-ui-tooltip-z-index,initial)}._50096b232db7709d__popup{background-color:var(--wpds-color-bg-surface-neutral-strong,#fff);border-radius:var(--wpds-border-radius-md,4px);box-shadow:var(--wpds-elevation-sm,0 1px 2px 0 #0000000d,0 2px 3px 0 #0000000a,0 6px 6px 0 #00000008,0 8px 8px 0 #00000005);color:var(--wpds-color-fg-content-neutral,#1e1e1e);font-family:var(--wpds-typography-font-family-body,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-size:var(--wpds-typography-font-size-sm,12px);line-height:1.4;padding:var(--wpds-dimension-padding-xs,4px) var(--wpds-dimension-padding-sm,8px);@media (forced-colors:active){border-bottom-color:CanvasText;border-bottom-style:solid;border-bottom-width:1px;border-left-color:CanvasText;border-left-style:solid;border-left-width:1px;border-right-color:CanvasText;border-right-style:solid;border-right-width:1px;border-top-color:CanvasText;border-top-style:solid;border-top-width:1px}}}}');
+  registerStyle12("789467362f", '@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._480b748dd3510e64__positioner{z-index:var(--wp-ui-tooltip-z-index,initial)}._50096b232db7709d__popup{background-color:var(--wpds-color-background-surface-neutral-strong,#fff);border-radius:var(--wpds-border-radius-md,4px);box-shadow:var(--wpds-elevation-sm,0 1px 2px 0 #0000000d,0 2px 3px 0 #0000000a,0 6px 6px 0 #00000008,0 8px 8px 0 #00000005);color:var(--wpds-color-foreground-content-neutral,#1e1e1e);font-family:var(--wpds-typography-font-family-body,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-size:var(--wpds-typography-font-size-sm,12px);line-height:1.4;padding:var(--wpds-dimension-padding-xs,4px) var(--wpds-dimension-padding-sm,8px);@media (forced-colors:active){border-bottom-color:CanvasText;border-bottom-style:solid;border-bottom-width:1px;border-left-color:CanvasText;border-left-style:solid;border-left-width:1px;border-right-color:CanvasText;border-right-style:solid;border-right-width:1px;border-top-color:CanvasText;border-top-style:solid;border-top-width:1px}}}}');
 }
 var style_default11 = { "positioner": "_480b748dd3510e64__positioner", "popup": "_50096b232db7709d__popup" };
-var ThemeProvider = unlock(import_theme.privateApis).ThemeProvider;
 var POPUP_COLOR = { background: "#1e1e1e" };
 var Popup = (0, import_element30.forwardRef)(function TooltipPopup3({ portal, positioner, children, className, ...props }, ref) {
   const popupContent = /* @__PURE__ */ (0, import_jsx_runtime48.jsx)(ThemeProvider, { color: POPUP_COLOR, children: /* @__PURE__ */ (0, import_jsx_runtime48.jsx)(
@@ -11278,15 +11295,15 @@ if (typeof process === "undefined" || true) {
 }
 var resets_default3 = { "box-sizing": "_336cd3e4e743482f__box-sizing" };
 if (typeof process === "undefined" || true) {
-  registerStyle14("693cd16544", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer utilities{._08e8a2e44959f892__outset-ring--focus,._970d04df7376df67__outset-ring--focus-within-except-active,.c5cb3ee4bddaa8e4__outset-ring--focus-within-visible,.cd83dfc2126a0846__outset-ring--focus-within,.d0541bc9dd9dc7b6__outset-ring--focus-visible,.e25b2bdd7aa21721__outset-ring--focus-except-active,.ecadb9e080e2dfa5__outset-ring--focus-parent-visible{@media not (prefers-reduced-motion){--_gcd-a-transition:outline 0.1s ease-out;transition:outline .1s ease-out}outline:0 solid transparent;outline-offset:1px}._08e8a2e44959f892__outset-ring--focus:focus,._970d04df7376df67__outset-ring--focus-within-except-active:focus-within:not(:has(:active)),.c5cb3ee4bddaa8e4__outset-ring--focus-within-visible:focus-within:has(:focus-visible),.cd83dfc2126a0846__outset-ring--focus-within:focus-within,.d0541bc9dd9dc7b6__outset-ring--focus-visible:focus-visible,.e25b2bdd7aa21721__outset-ring--focus-except-active:focus:not(:active),:focus-visible .ecadb9e080e2dfa5__outset-ring--focus-parent-visible{--_gcd-a-outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--wpds-color-stroke-focus-brand,var(--wp-admin-theme-color,#3858e9));--_gcd-div-outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--wpds-color-stroke-focus-brand,var(--wp-admin-theme-color,#3858e9));outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--wpds-color-stroke-focus-brand,var(--wp-admin-theme-color,#3858e9))}}}");
+  registerStyle14("5f8e7aa0bc", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer utilities{._08e8a2e44959f892__outset-ring--focus:focus,._970d04df7376df67__outset-ring--focus-within-except-active:focus-within:not(:has(:active)),.c5cb3ee4bddaa8e4__outset-ring--focus-within-visible:focus-within:has(:focus-visible),.cd83dfc2126a0846__outset-ring--focus-within:focus-within,.d0541bc9dd9dc7b6__outset-ring--focus-visible:focus-visible,.e25b2bdd7aa21721__outset-ring--focus-except-active:focus:not(:active),:focus-visible .ecadb9e080e2dfa5__outset-ring--focus-parent-visible{--_gcd-a-outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9));--_gcd-div-outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9));outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9));outline-offset:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px))}}}");
 }
 var focus_default2 = { "outset-ring--focus": "_08e8a2e44959f892__outset-ring--focus", "outset-ring--focus-except-active": "e25b2bdd7aa21721__outset-ring--focus-except-active", "outset-ring--focus-visible": "d0541bc9dd9dc7b6__outset-ring--focus-visible", "outset-ring--focus-within": "cd83dfc2126a0846__outset-ring--focus-within", "outset-ring--focus-within-except-active": "_970d04df7376df67__outset-ring--focus-within-except-active", "outset-ring--focus-within-visible": "c5cb3ee4bddaa8e4__outset-ring--focus-within-visible", "outset-ring--focus-parent-visible": "ecadb9e080e2dfa5__outset-ring--focus-parent-visible" };
 if (typeof process === "undefined" || true) {
-  registerStyle14("9f01019e30", '@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{.d4250949359b05ce__link{text-decoration-thickness:from-font;text-underline-offset:.2em}.c6055659b8e2cd2c__is-brand,.c6055659b8e2cd2c__is-brand:visited{--_gcd-a-color:var(--wpds-color-fg-interactive-brand,var(--wp-admin-theme-color,#3858e9));color:var(--wpds-color-fg-interactive-brand,var(--wp-admin-theme-color,#3858e9))}.c6055659b8e2cd2c__is-brand:active,.c6055659b8e2cd2c__is-brand:hover{--_gcd-a-color:var(--wpds-color-fg-interactive-brand-active,var(--wp-admin-theme-color,#3858e9));color:var(--wpds-color-fg-interactive-brand-active,var(--wp-admin-theme-color,#3858e9))}._92e0dfcaeee15b88__is-neutral,._92e0dfcaeee15b88__is-neutral:visited{--_gcd-a-color:var(--wpds-color-fg-interactive-neutral,#1e1e1e);color:var(--wpds-color-fg-interactive-neutral,#1e1e1e);text-decoration-color:var(--wpds-color-stroke-interactive-neutral,#8d8d8d)}._92e0dfcaeee15b88__is-neutral:active,._92e0dfcaeee15b88__is-neutral:hover{--_gcd-a-color:var(--wpds-color-fg-interactive-neutral-active,#1e1e1e);color:var(--wpds-color-fg-interactive-neutral-active,#1e1e1e)}.cf122a9bf1035d42__is-unstyled{--_gcd-a-color:inherit;color:inherit;text-decoration:none}._0cb411afac4c86c7__link-icon{display:inline-block;font-weight:var(--wpds-typography-font-weight-regular,400);line-height:1;margin-inline-start:var(--wpds-dimension-padding-xs,4px);text-decoration:none}._0cb411afac4c86c7__link-icon:after{content:"\\2197"}._0cb411afac4c86c7__link-icon:dir(rtl):after{content:"\\2196"}}}');
+  registerStyle14("7e0119b657", '@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{.d4250949359b05ce__link{text-decoration-thickness:from-font;text-underline-offset:.2em}.c6055659b8e2cd2c__is-brand,.c6055659b8e2cd2c__is-brand:visited{--_gcd-a-color:var(--wpds-color-foreground-interactive-brand,var(--wp-admin-theme-color,#3858e9));color:var(--wpds-color-foreground-interactive-brand,var(--wp-admin-theme-color,#3858e9))}.c6055659b8e2cd2c__is-brand:active,.c6055659b8e2cd2c__is-brand:hover{--_gcd-a-color:var(--wpds-color-foreground-interactive-brand-active,color-mix(in oklch,var(--wp-admin-theme-color,#3858e9) 52%,#000));color:var(--wpds-color-foreground-interactive-brand-active,color-mix(in oklch,var(--wp-admin-theme-color,#3858e9) 52%,#000))}._92e0dfcaeee15b88__is-neutral,._92e0dfcaeee15b88__is-neutral:visited{--_gcd-a-color:var(--wpds-color-foreground-interactive-neutral,#1e1e1e);color:var(--wpds-color-foreground-interactive-neutral,#1e1e1e);text-decoration-color:var(--wpds-color-stroke-interactive-neutral,#8d8d8d)}._92e0dfcaeee15b88__is-neutral:active,._92e0dfcaeee15b88__is-neutral:hover{--_gcd-a-color:var(--wpds-color-foreground-interactive-neutral-active,#1e1e1e);color:var(--wpds-color-foreground-interactive-neutral-active,#1e1e1e)}.cf122a9bf1035d42__is-unstyled{--_gcd-a-color:inherit;color:inherit;text-decoration:none}._0cb411afac4c86c7__link-icon{display:inline-block;font-weight:var(--wpds-typography-font-weight-regular,400);line-height:1;margin-inline-start:var(--wpds-dimension-padding-xs,4px);text-decoration:none}._0cb411afac4c86c7__link-icon:after{content:"\\2197"}._0cb411afac4c86c7__link-icon:dir(rtl):after{content:"\\2196"}}}');
 }
 var style_default13 = { "link": "d4250949359b05ce__link", "is-brand": "c6055659b8e2cd2c__is-brand", "is-neutral": "_92e0dfcaeee15b88__is-neutral", "is-unstyled": "cf122a9bf1035d42__is-unstyled", "link-icon": "_0cb411afac4c86c7__link-icon" };
 if (typeof process === "undefined" || true) {
-  registerStyle14("d5c1b736fd", "._6defc79820e382c6__button{box-sizing:var(--_gcd-button-box-sizing,border-box);font-family:var(--_gcd-button-font-family,inherit);font-size:var(--_gcd-button-font-size,inherit);font-weight:var(--_gcd-button-font-weight,inherit)}.d2cff2e5dea83bd1__input{box-sizing:var(--_gcd-input-box-sizing,border-box);font-family:var(--_gcd-input-font-family,inherit);font-size:var(--_gcd-input-font-size,inherit);font-weight:var(--_gcd-input-font-weight,inherit);margin:var(--_gcd-input-margin,0);&:is(textarea,[type=text],[type=password],[type=color],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){background-color:var(--_gcd-input-background-color,transparent);border:var(--_gcd-input-border,none);border-radius:var(--_gcd-input-border-radius,0);box-shadow:var(--_gcd-input-box-shadow,0 0 0 transparent);color:var(--_gcd-input-color,var(--wpds-color-fg-interactive-neutral,#1e1e1e));&:focus{border-color:var(--_gcd-input-border-color-focus,var(--wp-admin-theme-color));box-shadow:var(--_gcd-input-box-shadow-focus,none);outline:var(--_gcd-input-outline-focus,none)}&:disabled{background:var(--_gcd-input-background-disabled,transparent);border-color:var(--_gcd-input-border-color-disabled,transparent);box-shadow:var(--_gcd-input-box-shadow-disabled,none);color:var(--_gcd-input-color-disabled,var(--wpds-color-fg-interactive-neutral-disabled,#8d8d8d))}&::placeholder{color:var(--_gcd-input-placeholder-color,var(--wpds-color-fg-interactive-neutral-disabled,#8d8d8d))}}&:is(textarea,[type=text],[type=password],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){line-height:var(--_gcd-input-line-height,inherit);min-height:var(--_gcd-input-min-height,auto);padding:var(--_gcd-input-padding,0)}}._547d86373d02e108__textarea{box-sizing:var(--_gcd-textarea-box-sizing,border-box);overflow:var(--_gcd-textarea-overflow,auto);resize:var(--_gcd-textarea-resize,block)}._8c15fd0ed9f28ba4__div{outline:var(--_gcd-div-outline,0 solid transparent)}p._43cec3e1eec1066d__p{font-size:var(--_gcd-p-font-size,13px);line-height:var(--_gcd-p-line-height,1.5);margin:var(--_gcd-p-margin,0)}:is(h1,h2,h3,h4,h5,h6).e97669c6d9a38497__heading{color:var(--_gcd-heading-color,var(--wpds-color-fg-content-neutral,#1e1e1e));font-size:var(--_gcd-heading-font-size,inherit);font-weight:var(--_gcd-heading-font-weight,var(--wpds-typography-font-weight-medium,499));margin:var(--_gcd-heading-margin,0)}._2c0831b0499dbd6e__a,._2c0831b0499dbd6e__a:is(:hover,:focus,:active){border-radius:var(--_gcd-a-border-radius,0);box-shadow:var(--_gcd-a-box-shadow,none);color:var(--_gcd-a-color,inherit);outline:var(--_gcd-a-outline,0 solid transparent);transition:var(--_gcd-a-transition,none)}");
+  registerStyle14("d390e935a7", "._6defc79820e382c6__button{box-sizing:var(--_gcd-button-box-sizing,border-box);font-family:var(--_gcd-button-font-family,inherit);font-size:var(--_gcd-button-font-size,inherit);font-weight:var(--_gcd-button-font-weight,inherit)}.d2cff2e5dea83bd1__input{box-sizing:var(--_gcd-input-box-sizing,border-box);font-family:var(--_gcd-input-font-family,inherit);font-size:var(--_gcd-input-font-size,inherit);font-weight:var(--_gcd-input-font-weight,inherit);margin:var(--_gcd-input-margin,0);&:is(textarea,[type=text],[type=password],[type=color],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){background-color:var(--_gcd-input-background-color,transparent);border:var(--_gcd-input-border,none);border-radius:var(--_gcd-input-border-radius,0);box-shadow:var(--_gcd-input-box-shadow,0 0 0 transparent);color:var(--_gcd-input-color,var(--wpds-color-foreground-interactive-neutral,#1e1e1e));&:focus{border-color:var(--_gcd-input-border-color-focus,var(--wp-admin-theme-color));box-shadow:var(--_gcd-input-box-shadow-focus,none);outline:var(--_gcd-input-outline-focus,none)}&:disabled{background:var(--_gcd-input-background-disabled,transparent);border-color:var(--_gcd-input-border-color-disabled,transparent);box-shadow:var(--_gcd-input-box-shadow-disabled,none);color:var(--_gcd-input-color-disabled,var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d))}&::placeholder{color:var(--_gcd-input-placeholder-color,var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d))}}&:is(textarea,[type=text],[type=password],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){line-height:var(--_gcd-input-line-height,inherit);min-height:var(--_gcd-input-min-height,auto);padding:var(--_gcd-input-padding,0)}}._547d86373d02e108__textarea{box-sizing:var(--_gcd-textarea-box-sizing,border-box);overflow:var(--_gcd-textarea-overflow,auto);resize:var(--_gcd-textarea-resize,block)}._8c15fd0ed9f28ba4__div{outline:var(--_gcd-div-outline,0 solid transparent)}p._43cec3e1eec1066d__p{font-size:var(--_gcd-p-font-size,13px);line-height:var(--_gcd-p-line-height,1.5);margin:var(--_gcd-p-margin,0)}:is(h1,h2,h3,h4,h5,h6).e97669c6d9a38497__heading{color:var(--_gcd-heading-color,var(--wpds-color-foreground-content-neutral,#1e1e1e));font-size:var(--_gcd-heading-font-size,inherit);font-weight:var(--_gcd-heading-font-weight,var(--wpds-typography-font-weight-medium,499));margin:var(--_gcd-heading-margin,0)}._2c0831b0499dbd6e__a,._2c0831b0499dbd6e__a:is(:hover,:focus,:active){border-radius:var(--_gcd-a-border-radius,0);box-shadow:var(--_gcd-a-box-shadow,none);color:var(--_gcd-a-color,inherit);outline:var(--_gcd-a-outline,0 solid transparent);transition:var(--_gcd-a-transition,none)}");
 }
 var global_css_defense_default3 = { "button": "_6defc79820e382c6__button", "input": "d2cff2e5dea83bd1__input", "textarea": "_547d86373d02e108__textarea", "div": "_8c15fd0ed9f28ba4__div", "p": "_43cec3e1eec1066d__p", "heading": "e97669c6d9a38497__heading", "a": "_2c0831b0499dbd6e__a" };
 var Link = (0, import_element33.forwardRef)(function Link2({
@@ -11602,7 +11619,7 @@ function registerStyle16(hash, css) {
   }
 }
 if (typeof process === "undefined" || true) {
-  registerStyle16("683dd16f2c", "._956b6df0898efed0__page{text-wrap:pretty;background-color:var(--wpds-color-bg-surface-neutral,#fcfcfc);color:var(--wpds-color-fg-content-neutral,#1e1e1e);display:flex;flex-flow:column;height:100%;position:relative;z-index:1}._0625b55e82a0d93d__header{background:var(--wpds-color-bg-surface-neutral-strong,#fff);border-block-end:var(--wpds-border-width-xs,1px) solid var(--wpds-color-stroke-surface-neutral-weak,#f0f0f0);inset-block-start:0;padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px);position:sticky;z-index:1}.a43c44d5ae28b2e8__header-content{min-height:calc(var(--wpds-dimension-base, 4px)*8)}.b7cb5b9daf3a3b25__header-actions{flex-shrink:0}._8113be94e7caf73c__header-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}._9a776c7f70996f61__header-visual{display:grid;flex-shrink:0;grid-template-columns:1fr;grid-template-rows:1fr;height:calc(var(--wpds-dimension-base, 4px)*6);width:calc(var(--wpds-dimension-base, 4px)*6);>*{grid-column:1/-1;grid-row:1/-1;max-height:100%;max-width:100%}}.d5e0920cd15d35bc__sidebar-toggle-slot:empty{display:none}._60fea2f6bf5319cd__header-subtitle{color:var(--wpds-color-fg-content-neutral-weak,#707070);padding-block-end:var(--wpds-dimension-padding-xs,4px)}.be5e57d029ec4036__content{display:flex;flex-direction:column;flex-grow:1;overflow:auto;&._128806d0b26e3a50__has-padding{padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px)}}");
+  registerStyle16("ddd9aab364", "._956b6df0898efed0__page{text-wrap:pretty;background-color:var(--wpds-color-background-surface-neutral,#fcfcfc);color:var(--wpds-color-foreground-content-neutral,#1e1e1e);display:flex;flex-flow:column;height:100%;position:relative;z-index:1}._0625b55e82a0d93d__header{background:var(--wpds-color-background-surface-neutral-strong,#fff);border-block-end:var(--wpds-border-width-xs,1px) solid var(--wpds-color-stroke-surface-neutral-weak,#f0f0f0);inset-block-start:0;padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px);position:sticky;z-index:1}.a43c44d5ae28b2e8__header-content{min-height:var(--wpds-dimension-size-md,32px)}.b7cb5b9daf3a3b25__header-actions{flex-shrink:0}._8113be94e7caf73c__header-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}._9a776c7f70996f61__header-visual{display:grid;flex-shrink:0;grid-template-columns:1fr;grid-template-rows:1fr;height:var(--wpds-dimension-size-sm,24px);width:var(--wpds-dimension-size-sm,24px);>*{grid-column:1/-1;grid-row:1/-1;max-height:100%;max-width:100%}}.d5e0920cd15d35bc__sidebar-toggle-slot:empty{display:none}._60fea2f6bf5319cd__header-subtitle{color:var(--wpds-color-foreground-content-neutral-weak,#707070);padding-block-end:var(--wpds-dimension-padding-xs,4px)}.be5e57d029ec4036__content{display:flex;flex-direction:column;flex-grow:1;overflow:auto;&._128806d0b26e3a50__has-padding{padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px)}}");
 }
 var style_default15 = { "page": "_956b6df0898efed0__page", "header": "_0625b55e82a0d93d__header", "header-content": "a43c44d5ae28b2e8__header-content", "header-actions": "b7cb5b9daf3a3b25__header-actions", "header-title": "_8113be94e7caf73c__header-title", "header-visual": "_9a776c7f70996f61__header-visual", "sidebar-toggle-slot": "d5e0920cd15d35bc__sidebar-toggle-slot", "header-subtitle": "_60fea2f6bf5319cd__header-subtitle", "content": "be5e57d029ec4036__content", "has-padding": "_128806d0b26e3a50__has-padding" };
 function Header3({
@@ -11761,7 +11778,7 @@ function registerStyle17(hash, css) {
   }
 }
 if (typeof process === "undefined" || true) {
-  registerStyle17("683dd16f2c", "._956b6df0898efed0__page{text-wrap:pretty;background-color:var(--wpds-color-bg-surface-neutral,#fcfcfc);color:var(--wpds-color-fg-content-neutral,#1e1e1e);display:flex;flex-flow:column;height:100%;position:relative;z-index:1}._0625b55e82a0d93d__header{background:var(--wpds-color-bg-surface-neutral-strong,#fff);border-block-end:var(--wpds-border-width-xs,1px) solid var(--wpds-color-stroke-surface-neutral-weak,#f0f0f0);inset-block-start:0;padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px);position:sticky;z-index:1}.a43c44d5ae28b2e8__header-content{min-height:calc(var(--wpds-dimension-base, 4px)*8)}.b7cb5b9daf3a3b25__header-actions{flex-shrink:0}._8113be94e7caf73c__header-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}._9a776c7f70996f61__header-visual{display:grid;flex-shrink:0;grid-template-columns:1fr;grid-template-rows:1fr;height:calc(var(--wpds-dimension-base, 4px)*6);width:calc(var(--wpds-dimension-base, 4px)*6);>*{grid-column:1/-1;grid-row:1/-1;max-height:100%;max-width:100%}}.d5e0920cd15d35bc__sidebar-toggle-slot:empty{display:none}._60fea2f6bf5319cd__header-subtitle{color:var(--wpds-color-fg-content-neutral-weak,#707070);padding-block-end:var(--wpds-dimension-padding-xs,4px)}.be5e57d029ec4036__content{display:flex;flex-direction:column;flex-grow:1;overflow:auto;&._128806d0b26e3a50__has-padding{padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px)}}");
+  registerStyle17("ddd9aab364", "._956b6df0898efed0__page{text-wrap:pretty;background-color:var(--wpds-color-background-surface-neutral,#fcfcfc);color:var(--wpds-color-foreground-content-neutral,#1e1e1e);display:flex;flex-flow:column;height:100%;position:relative;z-index:1}._0625b55e82a0d93d__header{background:var(--wpds-color-background-surface-neutral-strong,#fff);border-block-end:var(--wpds-border-width-xs,1px) solid var(--wpds-color-stroke-surface-neutral-weak,#f0f0f0);inset-block-start:0;padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px);position:sticky;z-index:1}.a43c44d5ae28b2e8__header-content{min-height:var(--wpds-dimension-size-md,32px)}.b7cb5b9daf3a3b25__header-actions{flex-shrink:0}._8113be94e7caf73c__header-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}._9a776c7f70996f61__header-visual{display:grid;flex-shrink:0;grid-template-columns:1fr;grid-template-rows:1fr;height:var(--wpds-dimension-size-sm,24px);width:var(--wpds-dimension-size-sm,24px);>*{grid-column:1/-1;grid-row:1/-1;max-height:100%;max-width:100%}}.d5e0920cd15d35bc__sidebar-toggle-slot:empty{display:none}._60fea2f6bf5319cd__header-subtitle{color:var(--wpds-color-foreground-content-neutral-weak,#707070);padding-block-end:var(--wpds-dimension-padding-xs,4px)}.be5e57d029ec4036__content{display:flex;flex-direction:column;flex-grow:1;overflow:auto;&._128806d0b26e3a50__has-padding{padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px)}}");
 }
 var style_default16 = { "page": "_956b6df0898efed0__page", "header": "_0625b55e82a0d93d__header", "header-content": "a43c44d5ae28b2e8__header-content", "header-actions": "b7cb5b9daf3a3b25__header-actions", "header-title": "_8113be94e7caf73c__header-title", "header-visual": "_9a776c7f70996f61__header-visual", "sidebar-toggle-slot": "d5e0920cd15d35bc__sidebar-toggle-slot", "header-subtitle": "_60fea2f6bf5319cd__header-subtitle", "content": "be5e57d029ec4036__content", "has-padding": "_128806d0b26e3a50__has-padding" };
 function Page({
@@ -11814,7 +11831,7 @@ var import_core_data3 = __toESM(require_core_data());
 var import_data10 = __toESM(require_data());
 var import_editor = __toESM(require_editor());
 var import_html_entities = __toESM(require_html_entities());
-var import_i18n38 = __toESM(require_i18n());
+var import_i18n39 = __toESM(require_i18n());
 
 // packages/media-editor/build-module/components/media-editor-provider/index.mjs
 var import_element35 = __toESM(require_element(), 1);
@@ -17701,8 +17718,8 @@ function SummaryButton({
   validity,
   touched,
   disabled: disabled2,
-  onClick,
-  "aria-expanded": ariaExpanded
+  isOpen: isOpen2,
+  onClick
 }) {
   const { labelPosition, editVisibility } = field.layout;
   const errorMessage = get_first_validation_error_default(validity);
@@ -17731,9 +17748,9 @@ function SummaryButton({
     fieldLabel || ""
   );
   const rowRef = (0, import_element58.useRef)(null);
-  const handleRowClick = () => {
-    const selection = rowRef.current?.ownerDocument.defaultView?.getSelection();
-    if (selection && selection.toString().length > 0) {
+  const editButtonRef = (0, import_element58.useRef)(null);
+  const handleRowClick = (event) => {
+    if (!isOpen2 && event.detail < 2 && !editButtonRef.current?.contains(event.target) && rowRef.current?.ownerDocument.defaultView?.getSelection()?.toString()) {
       return;
     }
     onClick();
@@ -17813,11 +17830,12 @@ function SummaryButton({
         !disabled2 && /* @__PURE__ */ (0, import_jsx_runtime88.jsx)(
           import_components23.Button,
           {
+            ref: editButtonRef,
             className: "dataforms-layouts-panel__field-trigger-icon",
             label: ariaLabel,
             icon: pencil_default,
             size: "small",
-            "aria-expanded": ariaExpanded,
+            "aria-expanded": isOpen2,
             "aria-haspopup": "dialog",
             "aria-describedby": `${controlId}`
           }
@@ -18550,7 +18568,7 @@ function PanelModal({
         touched,
         disabled: fieldDefinition.readOnly === true,
         onClick: () => setIsOpen(true),
-        "aria-expanded": isOpen2
+        isOpen: isOpen2
       }
     ),
     isOpen2 && /* @__PURE__ */ (0, import_jsx_runtime89.jsx)(
@@ -18681,8 +18699,8 @@ function PanelDropdown({
               validity,
               touched,
               disabled: fieldDefinition.readOnly === true,
-              onClick: onToggle,
-              "aria-expanded": isOpen2
+              isOpen: isOpen2,
+              onClick: onToggle
             }
           ),
           renderContent: ({ onClose }) => /* @__PURE__ */ (0, import_jsx_runtime90.jsx)(DropdownContentWithValidation, { touched, children: /* @__PURE__ */ (0, import_jsx_runtime90.jsxs)("div", { ref: dialogRef, ...dialogProps, children: [
@@ -19481,19 +19499,19 @@ var store = (0, import_data.createReduxStore)(STORE_NAME, {
 (0, import_data.register)(store);
 
 // packages/media-editor/build-module/components/media-editor-modal/index.mjs
-var import_components39 = __toESM(require_components(), 1);
+var import_components40 = __toESM(require_components(), 1);
 var import_data9 = __toESM(require_data(), 1);
-var import_i18n37 = __toESM(require_i18n(), 1);
+var import_i18n38 = __toESM(require_i18n(), 1);
 var import_keyboard_shortcuts = __toESM(require_keyboard_shortcuts(), 1);
 var import_notices3 = __toESM(require_notices(), 1);
 
 // packages/media-editor/build-module/components/media-editor/index.mjs
-var import_components38 = __toESM(require_components(), 1);
+var import_components39 = __toESM(require_components(), 1);
 var import_compose6 = __toESM(require_compose(), 1);
 var import_data8 = __toESM(require_data(), 1);
 var import_core_data2 = __toESM(require_core_data(), 1);
 var import_element88 = __toESM(require_element(), 1);
-var import_i18n36 = __toESM(require_i18n(), 1);
+var import_i18n37 = __toESM(require_i18n(), 1);
 var import_keycodes2 = __toESM(require_keycodes(), 1);
 var import_notices2 = __toESM(require_notices(), 1);
 
@@ -20427,14 +20445,19 @@ var interface_skeleton_default = (0, import_element70.forwardRef)(InterfaceSkele
 
 // packages/media-editor/build-module/components/media-editor-canvas/index.mjs
 var import_element81 = __toESM(require_element(), 1);
+var import_components35 = __toESM(require_components(), 1);
+var import_i18n31 = __toESM(require_i18n(), 1);
 
 // packages/media-editor/build-module/image-editor/core/constants.mjs
 var import_i18n27 = __toESM(require_i18n(), 1);
 var MIN_ZOOM = 1;
 var ABSOLUTE_MIN_ZOOM = 0.1;
 var MAX_ZOOM = 10;
-var MIN_CROP_PIXELS = 24;
+var MIN_CROP_PIXELS = 16;
 var MIN_CROP_SCREEN_PX = 44;
+var SETTLE_TARGET_CANVAS_FILL = 0.8;
+var MAX_VIEW_SCALE = 8;
+var PIXEL_SNAP_DISPLAY_SCALE = 1;
 var DEFAULT_WHEEL_ZOOM_SPEED = 25e-4;
 var DEFAULT_KEYBOARD_STEP = 0.01;
 var KEYBOARD_SHIFT_STEP_MULTIPLIER = 10;
@@ -21115,6 +21138,17 @@ function getImageFit(containerSize, imageSize, rotation) {
     elementSize: { width: renderedW, height: renderedH },
     visualSize
   };
+}
+function getViewScale(cropRect, canvasSize, visualSize, targetFill, maxScale) {
+  const cropScreenW = cropRect.width * visualSize.width;
+  const cropScreenH = cropRect.height * visualSize.height;
+  if (!isValidSize(canvasSize) || !isValidSize(visualSize) || !(cropScreenW > 0) || !(cropScreenH > 0) || !Number.isFinite(targetFill) || !Number.isFinite(maxScale) || !(targetFill > 0) || !(maxScale >= 1)) {
+    return 1;
+  }
+  const kW = targetFill * canvasSize.width / cropScreenW;
+  const kH = targetFill * canvasSize.height / cropScreenH;
+  const k = Math.min(kW, kH);
+  return Math.min(maxScale, Math.max(1, k));
 }
 function createCamera(state, containerSize, imageSize) {
   const m2 = mat2d_exports.create();
@@ -21851,6 +21885,26 @@ function buildCropperSetters(dispatchCropperAction, getCropperState) {
 var import_element78 = __toESM(require_element(), 1);
 var import_i18n30 = __toESM(require_i18n(), 1);
 
+// packages/media-editor/build-module/image-editor/core/crop-rect.mjs
+function computeInscribedRect(aspectRatio, visualSize) {
+  let w2 = 1;
+  let h2 = 1;
+  if (aspectRatio && aspectRatio > 0 && visualSize.width > 0) {
+    const normalizedRatio = aspectRatio * visualSize.height / visualSize.width;
+    if (normalizedRatio <= 1) {
+      w2 = normalizedRatio;
+    } else {
+      h2 = 1 / normalizedRatio;
+    }
+  }
+  return {
+    x: (1 - w2) / 2,
+    y: (1 - h2) / 2,
+    width: w2,
+    height: h2
+  };
+}
+
 // packages/media-editor/build-module/image-editor/core/stencil-math.mjs
 function getMinCropPixels(displayScale) {
   if (displayScale <= 0) {
@@ -22030,26 +22084,6 @@ function computeShiftLockedResizeRect(drag2, clientX, clientY, imageSize, bounds
   };
 }
 
-// packages/media-editor/build-module/image-editor/core/crop-rect.mjs
-function computeInscribedRect(aspectRatio, visualSize) {
-  let w2 = 1;
-  let h2 = 1;
-  if (aspectRatio && aspectRatio > 0 && visualSize.width > 0) {
-    const normalizedRatio = aspectRatio * visualSize.height / visualSize.width;
-    if (normalizedRatio <= 1) {
-      w2 = normalizedRatio;
-    } else {
-      h2 = 1 / normalizedRatio;
-    }
-  }
-  return {
-    x: (1 - w2) / 2,
-    y: (1 - h2) / 2,
-    width: w2,
-    height: h2
-  };
-}
-
 // packages/media-editor/build-module/image-editor/react/hooks/use-interaction.mjs
 var import_element71 = __toESM(require_element(), 1);
 
@@ -22159,6 +22193,9 @@ var InteractionController = class {
    */
   handlePointerDown(e2, el) {
     if (e2.button !== 0) {
+      return;
+    }
+    if (e2.pointerType === "touch") {
       return;
     }
     e2.preventDefault();
@@ -22379,6 +22416,7 @@ var InteractionController = class {
     if (!touch) {
       return;
     }
+    moveEvent.preventDefault();
     cancelAnimationFrame(this.rafId);
     this.rafId = requestAnimationFrame(() => {
       const s2 = this.options.getState();
@@ -22416,13 +22454,11 @@ var InteractionController = class {
           const startMy = touch.startMidY - rect.top - latestContainerSize.height / 2;
           const panDx = visSize.width > 0 ? (mx - startMx) / visSize.width : 0;
           const panDy = visSize.height > 0 ? (my - startMy) / visSize.height : 0;
-          const zoomRatio = s2.zoom !== 0 ? 1 - newZoom / s2.zoom : 0;
-          const focalNormX = mx / visSize.width;
-          const focalNormY = my / visSize.height;
-          const zoomCropX = s2.pan.x + (focalNormX - s2.pan.x) * zoomRatio;
-          const zoomCropY = s2.pan.y + (focalNormY - s2.pan.y) * zoomRatio;
-          const newCropX = touch.startPanX + panDx + (zoomCropX - s2.pan.x);
-          const newCropY = touch.startPanY + panDy + (zoomCropY - s2.pan.y);
+          const zoomRatio = touch.startZoom !== 0 ? 1 - newZoom / touch.startZoom : 0;
+          const startFocalNormX = startMx / visSize.width;
+          const startFocalNormY = startMy / visSize.height;
+          const newCropX = touch.startPanX + panDx + (startFocalNormX - touch.startPanX) * zoomRatio;
+          const newCropY = touch.startPanY + panDy + (startFocalNormY - touch.startPanY) * zoomRatio;
           const { pan: clampedCrop } = restrictPanZoom(
             {
               ...s2,
@@ -22999,10 +23035,13 @@ function RectangleStencil({
   onResizeEnd,
   aspectRatio,
   freeformCrop = false,
+  isResizeDisabled = false,
   stencilTransition,
   cropBounds,
   onEscape,
-  minCropSize
+  minCropSize,
+  snapCropRect,
+  keyboardResizeStep
 }) {
   const boundsMinX = cropBounds?.minX ?? 0;
   const boundsMinY = cropBounds?.minY ?? 0;
@@ -23021,12 +23060,19 @@ function RectangleStencil({
   const keyboardResizeActiveRef = (0, import_element74.useRef)(false);
   const resizeHandleDescriptionId = (0, import_element74.useId)();
   const hasLockedRatio = !!(aspectRatio && aspectRatio > 0);
+  const activePointerResizeRef = (0, import_element74.useRef)(null);
   (0, import_element74.useEffect)(() => {
     return () => {
       clearTimeout(keyboardSettleTimerRef.current);
       keyboardResizeActiveRef.current = false;
+      activePointerResizeRef.current?.cancel(false);
     };
   }, []);
+  (0, import_element74.useEffect)(() => {
+    if (isResizeDisabled) {
+      activePointerResizeRef.current?.cancel();
+    }
+  }, [isResizeDisabled]);
   const latestHandlersRef = (0, import_element74.useRef)(null);
   const normalizedRatio = (0, import_element74.useMemo)(() => {
     if (!hasLockedRatio || imageSize.width === 0) {
@@ -23042,6 +23088,11 @@ function RectangleStencil({
   const height = cropRect.height * imageSize.height;
   const handlePointerDown = (0, import_element74.useCallback)(
     (handle, event) => {
+      if (isResizeDisabled || event.pointerType === "touch" && event.isPrimary === false) {
+        event.preventDefault();
+        event.stopPropagation();
+        return;
+      }
       if (event.button !== 0) {
         return;
       }
@@ -23088,12 +23139,13 @@ function RectangleStencil({
             );
           } else {
             newRect = h2.computeFreeRect(drag2, latestX, latestY);
+            newRect = h2.snapCropRect?.(newRect, drag2.handle) ?? newRect;
           }
           h2.onCropChange(newRect);
         });
       };
       let ended = false;
-      const onEnd = () => {
+      const endResize = (notifyResizeEnd = true, restoreFocus = true) => {
         if (ended) {
           return;
         }
@@ -23105,17 +23157,25 @@ function RectangleStencil({
         el.removeEventListener("pointermove", onMove);
         el.removeEventListener("pointerup", onEnd);
         el.removeEventListener("lostpointercapture", onEnd);
-        latestHandlersRef.current?.onResizeEnd?.();
-        el.focus({ preventScroll: true });
+        activePointerResizeRef.current = null;
+        if (notifyResizeEnd) {
+          latestHandlersRef.current?.onResizeEnd?.();
+        }
+        if (restoreFocus) {
+          el.focus({ preventScroll: true });
+        }
       };
+      const cancelResize = (notifyResizeEnd = true) => endResize(notifyResizeEnd, false);
+      const onEnd = () => endResize();
       el.addEventListener("pointermove", onMove);
       el.addEventListener("pointerup", onEnd);
       el.addEventListener("lostpointercapture", onEnd);
+      activePointerResizeRef.current = { cancel: cancelResize };
       onResizeStart?.(handle);
       clearTimeout(keyboardSettleTimerRef.current);
       keyboardResizeActiveRef.current = false;
     },
-    [cropRect, onResizeStart]
+    [cropRect, isResizeDisabled, onResizeStart]
   );
   const computeFreeRect = (0, import_element74.useCallback)(
     (drag2, clientX, clientY) => computeFreeResizeRect(
@@ -23158,11 +23218,15 @@ function RectangleStencil({
     computeFreeRect,
     computeShiftLockedRect,
     onCropChange,
-    onResizeEnd
+    onResizeEnd,
+    snapCropRect
   };
   const handleKeyDown = (0, import_element74.useCallback)(
     (handle, event) => {
       const key = event.key;
+      if (isResizeDisabled) {
+        return;
+      }
       if (key === "Escape") {
         event.preventDefault();
         event.stopPropagation();
@@ -23185,20 +23249,24 @@ function RectangleStencil({
           onResizeEnd?.();
         }, KEYBOARD_SETTLE_DELAY);
       };
-      const step = event.shiftKey ? DEFAULT_KEYBOARD_STEP * KEYBOARD_SHIFT_STEP_MULTIPLIER : DEFAULT_KEYBOARD_STEP;
+      const stepMultiplier = event.shiftKey ? KEYBOARD_SHIFT_STEP_MULTIPLIER : 1;
+      const stepX = keyboardResizeStep?.width ?? DEFAULT_KEYBOARD_STEP;
+      const stepY = keyboardResizeStep?.height ?? DEFAULT_KEYBOARD_STEP;
+      const adjustedStepX = stepX * stepMultiplier;
+      const adjustedStepY = stepY * stepMultiplier;
       let dx = 0;
       let dy = 0;
       if (key === "ArrowLeft") {
-        dx = -step;
+        dx = -adjustedStepX;
       }
       if (key === "ArrowRight") {
-        dx = step;
+        dx = adjustedStepX;
       }
       if (key === "ArrowUp") {
-        dy = -step;
+        dy = -adjustedStepY;
       }
       if (key === "ArrowDown") {
-        dy = step;
+        dy = adjustedStepY;
       }
       const keyboardDriverAxis = dx !== 0 ? "width" : "height";
       if (hasLockedRatio) {
@@ -23228,9 +23296,8 @@ function RectangleStencil({
         };
         const clientX = dx * imageSize.width;
         const clientY = dy * imageSize.height;
-        onCropChange(
-          computeFreeRect(syntheticDrag, clientX, clientY)
-        );
+        const rect = computeFreeRect(syntheticDrag, clientX, clientY);
+        onCropChange(snapCropRect?.(rect, handle) ?? rect);
         scheduleKeyboardResizeEnd();
       }
     },
@@ -23244,7 +23311,10 @@ function RectangleStencil({
       onCropChange,
       onResizeStart,
       onResizeEnd,
-      onEscape
+      onEscape,
+      keyboardResizeStep,
+      snapCropRect,
+      isResizeDisabled
     ]
   );
   if (containerSize.width === 0 || containerSize.height === 0) {
@@ -23255,6 +23325,7 @@ function RectangleStencil({
     "div",
     {
       className: "wp-media-editor-image-editor__stencil",
+      "data-testid": "cropper-stencil",
       style: {
         left,
         top,
@@ -23291,7 +23362,11 @@ function RectangleStencil({
             type: "button",
             className: `wp-media-editor-image-editor__handle wp-media-editor-image-editor__handle--${pos}`,
             onPointerDown: (event) => handlePointerDown(pos, event),
-            onTouchStart: (event) => event.stopPropagation(),
+            onTouchStart: (event) => {
+              if (event.touches.length < 2) {
+                event.stopPropagation();
+              }
+            },
             onKeyDown: (event) => handleKeyDown(pos, event),
             "aria-label": getHandleLabel(pos),
             "aria-describedby": resizeHandleDescriptionId
@@ -23325,6 +23400,7 @@ function DimmingOverlay({
     "div",
     {
       className: "wp-media-editor-image-editor__dimming",
+      "data-testid": "cropper-dimming",
       style: {
         left,
         top,
@@ -23594,6 +23670,110 @@ function getSourceRegion(state, imageSize) {
     zoom: safeState.zoom
   };
 }
+function getCropRectFromSourceRegion(state, imageSize, region) {
+  if (!isValidSize(imageSize) || region.width <= 0 || region.height <= 0) {
+    return null;
+  }
+  const safeState = sanitizeCropperState(state);
+  const syntheticContainer = { width: 1e3, height: 1e3 };
+  const baseCamera = createCamera(
+    { ...safeState, pan: { x: 0, y: 0 }, zoom: 1 },
+    syntheticContainer,
+    imageSize
+  );
+  const visibleBounds = getVisibleBounds(baseCamera);
+  if (visibleBounds.width <= 0 || visibleBounds.height <= 0) {
+    return null;
+  }
+  const sourceCenter = vec2_exports.fromValues(
+    (region.x + region.width / 2) / imageSize.width,
+    (region.y + region.height / 2) / imageSize.height
+  );
+  const screenCenter = vec2_exports.create();
+  const camera = createCamera(safeState, syntheticContainer, imageSize);
+  vec2_exports.transformMat2d(screenCenter, sourceCenter, camera);
+  const snapRotation = Math.round(safeState.rotation / 90) * 90;
+  const { width: rotW, height: rotH } = getRotatedBBox(
+    imageSize.width,
+    imageSize.height,
+    snapRotation
+  );
+  if (rotW <= 0 || rotH <= 0) {
+    return null;
+  }
+  const width = region.width * safeState.zoom / rotW;
+  const height = region.height * safeState.zoom / rotH;
+  const centerX = (screenCenter[0] - visibleBounds.left) / visibleBounds.width;
+  const centerY = (screenCenter[1] - visibleBounds.top) / visibleBounds.height;
+  return {
+    x: centerX - width / 2,
+    y: centerY - height / 2,
+    width,
+    height
+  };
+}
+var CARDINAL_ROTATION_EPSILON = 1e-6;
+function isCardinalRotation(rotation) {
+  const normalizedRotation = normalizeRotation(rotation);
+  const nearestCardinal = Math.round(normalizedRotation / 90) * 90;
+  return Math.abs(normalizedRotation - nearestCardinal) < CARDINAL_ROTATION_EPSILON;
+}
+function snapCropRectToSourcePixels(state, imageSize, cropRect, handle) {
+  const safeState = sanitizeCropperState(state);
+  if (!isCardinalRotation(safeState.rotation)) {
+    return cropRect;
+  }
+  return snapCropRectEdgesToSourcePixels(safeState, imageSize, cropRect, {
+    left: handle.includes("w"),
+    top: handle.includes("n"),
+    right: handle.includes("e"),
+    bottom: handle.includes("s")
+  });
+}
+function snapCropRectToSourcePixelGrid(state, imageSize, cropRect) {
+  return snapCropRectEdgesToSourcePixels(state, imageSize, cropRect, {
+    left: true,
+    top: true,
+    right: true,
+    bottom: true
+  });
+}
+function snapCropRectEdgesToSourcePixels(state, imageSize, cropRect, edges) {
+  if (!isValidSize(imageSize)) {
+    return cropRect;
+  }
+  const stateWithCrop = sanitizeCropperState({ ...state, cropRect });
+  const region = getSourceRegion(stateWithCrop, imageSize);
+  const shouldSnapX = edges.left || edges.right;
+  const shouldSnapY = edges.top || edges.bottom;
+  const left = edges.left ? Math.round(region.x) : region.x;
+  const top = edges.top ? Math.round(region.y) : region.y;
+  const right = edges.right ? Math.round(region.x + region.width) : region.x + region.width;
+  const bottom = edges.bottom ? Math.round(region.y + region.height) : region.y + region.height;
+  if (right <= left || bottom <= top) {
+    return cropRect;
+  }
+  const snappedCropRect = getCropRectFromSourceRegion(
+    stateWithCrop,
+    imageSize,
+    {
+      ...region,
+      x: left,
+      y: top,
+      width: right - left,
+      height: bottom - top
+    }
+  );
+  if (!snappedCropRect) {
+    return cropRect;
+  }
+  return {
+    x: shouldSnapX ? snappedCropRect.x : cropRect.x,
+    y: shouldSnapY ? snappedCropRect.y : cropRect.y,
+    width: shouldSnapX ? snappedCropRect.width : cropRect.width,
+    height: shouldSnapY ? snappedCropRect.height : cropRect.height
+  };
+}
 
 // packages/media-editor/build-module/image-editor/react/components/viewport-provider.mjs
 var import_element77 = __toESM(require_element(), 1);
@@ -23664,6 +23844,16 @@ function useViewport() {
 // packages/media-editor/build-module/image-editor/react/components/cropper.mjs
 var import_jsx_runtime112 = __toESM(require_jsx_runtime(), 1);
 var CROP_RECT_EPSILON = 1e-6;
+var CARDINAL_ROTATION_EPSILON2 = 1e-6;
+var SETTLE_TRANSITION_DURATION_MS = 200;
+var SETTLE_TRANSITION_FALLBACK_MS = SETTLE_TRANSITION_DURATION_MS + 100;
+var SETTLE_TRANSFORM_TRANSITION = `transform ${SETTLE_TRANSITION_DURATION_MS}ms ease-out`;
+var SETTLE_STENCIL_TRANSITION = [
+  `left ${SETTLE_TRANSITION_DURATION_MS}ms ease-out`,
+  `top ${SETTLE_TRANSITION_DURATION_MS}ms ease-out`,
+  `width ${SETTLE_TRANSITION_DURATION_MS}ms ease-out`,
+  `height ${SETTLE_TRANSITION_DURATION_MS}ms ease-out`
+].join(", ");
 function CropperInner({
   src,
   controller,
@@ -23769,29 +23959,6 @@ function CropperInner({
     ),
     [canvasSize, naturalWidth, naturalHeight, state.rotation]
   );
-  const minCropSize = (0, import_element78.useMemo)(() => {
-    if (naturalWidth <= 0 || naturalHeight <= 0) {
-      return void 0;
-    }
-    const snapRotation = Math.round(state.rotation / 90) * 90;
-    const bbox = getRotatedBBox(
-      naturalWidth,
-      naturalHeight,
-      snapRotation
-    );
-    const displayScale = elementSize.width / naturalWidth * state.zoom;
-    const minPixels = getMinCropPixels(displayScale);
-    return {
-      width: Math.min(1, minPixels * state.zoom / bbox.width),
-      height: Math.min(1, minPixels * state.zoom / bbox.height)
-    };
-  }, [
-    naturalWidth,
-    naturalHeight,
-    state.rotation,
-    state.zoom,
-    elementSize.width
-  ]);
   (0, import_element78.useEffect)(() => {
     setVisualSize(visualSize);
   }, [visualSize, setVisualSize]);
@@ -23844,16 +24011,133 @@ function CropperInner({
   const [isResizing, setIsResizing] = (0, import_element78.useState)(false);
   const isResizingRef = (0, import_element78.useRef)(false);
   const isSettlingRef = (0, import_element78.useRef)(false);
+  const [isTouchPinching, setIsTouchPinchingState] = (0, import_element78.useState)(false);
+  const isTouchPinchingRef = (0, import_element78.useRef)(false);
+  const setTouchPinching = (0, import_element78.useCallback)((isPinching) => {
+    isTouchPinchingRef.current = isPinching;
+    setIsTouchPinchingState(isPinching);
+  }, []);
   const [activeHandle, setActiveHandle] = (0, import_element78.useState)(
     null
   );
+  const viewScaleRest = (0, import_element78.useMemo)(
+    () => getViewScale(
+      state.cropRect,
+      canvasSize,
+      visualSize,
+      SETTLE_TARGET_CANVAS_FILL,
+      MAX_VIEW_SCALE
+    ),
+    [state.cropRect, canvasSize, visualSize]
+  );
+  const [frozenViewScale, setFrozenViewScale] = (0, import_element78.useState)(1);
+  const viewScale = isResizing ? frozenViewScale : viewScaleRest;
+  const scaledVisualSize = (0, import_element78.useMemo)(
+    () => ({
+      width: visualSize.width * viewScale,
+      height: visualSize.height * viewScale
+    }),
+    [visualSize.width, visualSize.height, viewScale]
+  );
+  const displayScale = naturalWidth > 0 ? elementSize.width / naturalWidth * state.zoom * viewScale : 0;
+  const keyboardResizeStep = (0, import_element78.useMemo)(() => {
+    if (displayScale < PIXEL_SNAP_DISPLAY_SCALE || aspectRatio && aspectRatio > 0 || naturalWidth <= 0 || naturalHeight <= 0) {
+      return void 0;
+    }
+    const snapRotation = Math.round(state.rotation / 90) * 90;
+    if (Math.abs(state.rotation - snapRotation) >= CARDINAL_ROTATION_EPSILON2) {
+      return void 0;
+    }
+    const bbox = getRotatedBBox(
+      naturalWidth,
+      naturalHeight,
+      snapRotation
+    );
+    if (bbox.width <= 0 || bbox.height <= 0) {
+      return void 0;
+    }
+    return {
+      width: state.zoom / bbox.width,
+      height: state.zoom / bbox.height
+    };
+  }, [
+    displayScale,
+    aspectRatio,
+    naturalWidth,
+    naturalHeight,
+    state.rotation,
+    state.zoom
+  ]);
+  const minCropSize = (0, import_element78.useMemo)(() => {
+    if (naturalWidth <= 0 || naturalHeight <= 0) {
+      return void 0;
+    }
+    const snapRotation = Math.round(state.rotation / 90) * 90;
+    const bbox = getRotatedBBox(
+      naturalWidth,
+      naturalHeight,
+      snapRotation
+    );
+    const minPixels = getMinCropPixels(displayScale);
+    return {
+      width: Math.min(1, minPixels * state.zoom / bbox.width),
+      height: Math.min(1, minPixels * state.zoom / bbox.height)
+    };
+  }, [
+    naturalWidth,
+    naturalHeight,
+    state.rotation,
+    state.zoom,
+    displayScale
+  ]);
+  const snapCropRect = (0, import_element78.useCallback)(
+    (rect, handle) => {
+      if (displayScale < PIXEL_SNAP_DISPLAY_SCALE || naturalWidth <= 0 || naturalHeight <= 0) {
+        return rect;
+      }
+      return snapCropRectToSourcePixels(
+        state,
+        { width: naturalWidth, height: naturalHeight },
+        rect,
+        handle
+      );
+    },
+    [displayScale, naturalWidth, naturalHeight, state]
+  );
+  const wasPixelSnapEnabledRef = (0, import_element78.useRef)(false);
+  (0, import_element78.useEffect)(() => {
+    const isPixelSnapEnabled = freeformCrop && (!aspectRatio || aspectRatio <= 0) && displayScale >= PIXEL_SNAP_DISPLAY_SCALE && naturalWidth > 0 && naturalHeight > 0;
+    const wasPixelSnapEnabled = wasPixelSnapEnabledRef.current;
+    wasPixelSnapEnabledRef.current = isPixelSnapEnabled;
+    if (!isPixelSnapEnabled || wasPixelSnapEnabled) {
+      return;
+    }
+    const snappedCropRect = snapCropRectToSourcePixelGrid(
+      state,
+      { width: naturalWidth, height: naturalHeight },
+      state.cropRect
+    );
+    const currentCropRect = state.cropRect;
+    if (Math.abs(currentCropRect.x - snappedCropRect.x) < CROP_RECT_EPSILON && Math.abs(currentCropRect.y - snappedCropRect.y) < CROP_RECT_EPSILON && Math.abs(currentCropRect.width - snappedCropRect.width) < CROP_RECT_EPSILON && Math.abs(currentCropRect.height - snappedCropRect.height) < CROP_RECT_EPSILON) {
+      return;
+    }
+    setCropRect(snappedCropRect);
+  }, [
+    aspectRatio,
+    displayScale,
+    freeformCrop,
+    naturalWidth,
+    naturalHeight,
+    setCropRect,
+    state
+  ]);
   const {
     handlers,
     onWheelNative,
     isDragging,
     isZooming,
     isPlacementActive: isInteractionPlacementActive
-  } = useInteraction(state, controller, canvasSize, visualSize, {
+  } = useInteraction(state, controller, canvasSize, scaledVisualSize, {
     minZoom: effectiveMinZoom,
     maxZoom,
     onGestureStart,
@@ -23864,12 +24148,36 @@ function CropperInner({
     onPointerDownCapture: () => {
       setIsFocusVisible(false);
     },
+    onTouchStartCapture: (event) => {
+      if (event.touches.length > 1) {
+        setTouchPinching(true);
+      }
+    },
+    onTouchMoveCapture: (event) => {
+      if (event.touches.length > 1) {
+        setTouchPinching(true);
+      }
+    },
+    onTouchEndCapture: (event) => {
+      if (event.touches.length === 0) {
+        setTouchPinching(false);
+      }
+    },
+    onTouchCancelCapture: (event) => {
+      if (event.touches.length === 0) {
+        setTouchPinching(false);
+      }
+    },
     onKeyDownCapture: (event) => {
       if (!["Shift", "Control", "Alt", "Meta"].includes(event.key)) {
         setIsFocusVisible(true);
       }
     },
     onPointerDown: (event) => {
+      if (isResizingRef.current || isTouchPinchingRef.current || event.pointerType === "touch" && event.isPrimary === false) {
+        event.preventDefault();
+        return;
+      }
       handlers.onPointerDown?.(event);
       setIsFocusVisible(false);
     }
@@ -23912,25 +24220,28 @@ function CropperInner({
   );
   const handleCropChange = (0, import_element78.useCallback)(
     (rect) => {
+      if (isTouchPinchingRef.current) {
+        return;
+      }
       setCropRect(rect);
-      if (isResizingRef.current && visualSize.width > 0 && visualSize.height > 0) {
-        const offsetX = (canvasSize.width - visualSize.width) / 2;
-        const offsetY = (canvasSize.height - visualSize.height) / 2;
+      if (isResizingRef.current && scaledVisualSize.width > 0 && scaledVisualSize.height > 0) {
+        const offsetX = (canvasSize.width - scaledVisualSize.width) / 2;
+        const offsetY = (canvasSize.height - scaledVisualSize.height) / 2;
         const rightOverflow = Math.max(
           0,
-          offsetX + (rect.x + rect.width) * visualSize.width - canvasSize.width
+          offsetX + (rect.x + rect.width) * scaledVisualSize.width - canvasSize.width
         );
         const leftOverflow = Math.max(
           0,
-          -(offsetX + rect.x * visualSize.width)
+          -(offsetX + rect.x * scaledVisualSize.width)
         );
         const bottomOverflow = Math.max(
           0,
-          offsetY + (rect.y + rect.height) * visualSize.height - canvasSize.height
+          offsetY + (rect.y + rect.height) * scaledVisualSize.height - canvasSize.height
         );
         const topOverflow = Math.max(
           0,
-          -(offsetY + rect.y * visualSize.height)
+          -(offsetY + rect.y * scaledVisualSize.height)
         );
         setViewportPan({
           x: -rightOverflow + leftOverflow,
@@ -23938,10 +24249,15 @@ function CropperInner({
         });
       }
     },
-    [setCropRect, setViewportPan, canvasSize, visualSize]
+    [setCropRect, setViewportPan, canvasSize, scaledVisualSize]
   );
   const [settling, setSettling] = (0, import_element78.useState)(false);
   const settleTimerRef = (0, import_element78.useRef)();
+  const finishSettling = (0, import_element78.useCallback)(() => {
+    clearTimeout(settleTimerRef.current);
+    isSettlingRef.current = false;
+    setSettling(false);
+  }, []);
   (0, import_element78.useEffect)(() => {
     return () => {
       clearTimeout(settleTimerRef.current);
@@ -23965,39 +24281,56 @@ function CropperInner({
   }, []);
   const handleResizeStart = (0, import_element78.useCallback)(
     (handle) => {
+      if (isTouchPinchingRef.current) {
+        return;
+      }
+      setFrozenViewScale(viewScaleRest);
       isResizingRef.current = true;
       setIsResizing(true);
       setActiveHandle(handle ?? null);
-      clearTimeout(settleTimerRef.current);
-      isSettlingRef.current = false;
-      setSettling(false);
+      finishSettling();
       resetViewport();
       onGestureStart?.();
     },
-    [onGestureStart, resetViewport]
+    [finishSettling, onGestureStart, resetViewport, viewScaleRest]
   );
   const handleResizeEnd = (0, import_element78.useCallback)(() => {
+    const isCancellingForPinch = isTouchPinchingRef.current;
     isResizingRef.current = false;
     setIsResizing(false);
     setActiveHandle(null);
+    clearTimeout(settleTimerRef.current);
+    if (isCancellingForPinch) {
+      finishSettling();
+      resetViewport();
+      return;
+    }
     isSettlingRef.current = true;
     setSettling(true);
     resetViewport();
     settleCrop();
     onGestureEnd?.();
-    clearTimeout(settleTimerRef.current);
-    settleTimerRef.current = setTimeout(() => {
-      isSettlingRef.current = false;
-      setSettling(false);
-    }, 200);
-  }, [settleCrop, onGestureEnd, resetViewport]);
+    settleTimerRef.current = setTimeout(
+      finishSettling,
+      SETTLE_TRANSITION_FALLBACK_MS
+    );
+  }, [finishSettling, settleCrop, onGestureEnd, resetViewport]);
+  const handleSettleTransitionEnd = (0, import_element78.useCallback)(
+    (event) => {
+      if (!isSettlingRef.current || event.propertyName !== "transform") {
+        return;
+      }
+      finishSettling();
+    },
+    [finishSettling]
+  );
   let imageTransition;
   if (settling) {
-    imageTransition = "transform 200ms ease-out";
+    imageTransition = SETTLE_TRANSFORM_TRANSITION;
   } else if (isZooming) {
     imageTransition = "transform 150ms linear";
   }
-  const settleStencilTransition = settling ? "left 200ms ease-out, top 200ms ease-out, width 200ms ease-out, height 200ms ease-out" : void 0;
+  const settleStencilTransition = settling ? SETTLE_STENCIL_TRANSITION : void 0;
   const imageStyle = (0, import_element78.useMemo)(() => {
     if (elementSize.width === 0 || elementSize.height === 0) {
       return {};
@@ -24011,11 +24344,25 @@ function CropperInner({
       maxHeight: elementSize.height,
       left: centerX,
       top: centerY,
-      transform: transformString,
-      transition: imageTransition
+      // Always lead with `scale()` (identity at rest) so the transform's
+      // function list stays structurally constant across rest, resize, and
+      // settle. A conditional that dropped `scale()` at viewScale === 1
+      // would change the list shape exactly when the settle transition
+      // crosses 1:1, forcing the browser to fall back to matrix-decomposition
+      // interpolation instead of interpolating each function in turn.
+      transform: `scale(${viewScale}) ${transformString}`,
+      transition: imageTransition,
+      imageRendering: displayScale > 1 ? "pixelated" : void 0
     };
-  }, [canvasSize, elementSize, transformString, imageTransition]);
-  const settleTransition = settling ? "transform 200ms ease-out" : void 0;
+  }, [
+    canvasSize,
+    elementSize,
+    transformString,
+    imageTransition,
+    displayScale,
+    viewScale
+  ]);
+  const settleTransition = settling ? SETTLE_TRANSFORM_TRANSITION : void 0;
   const willChange = isResizing || settling ? "transform" : void 0;
   let stageStyle;
   if (viewportState.pan.x !== 0 || viewportState.pan.y !== 0) {
@@ -24025,7 +24372,11 @@ function CropperInner({
       willChange
     };
   } else if (settling) {
-    stageStyle = { transition: settleTransition, willChange };
+    stageStyle = {
+      transform: "translate(0px, 0px)",
+      transition: settleTransition,
+      willChange
+    };
   }
   const setContainerRef = (0, import_element78.useCallback)(
     (element) => {
@@ -24086,11 +24437,13 @@ function CropperInner({
                 className: "wp-media-editor-image-editor__stage",
                 "data-testid": "cropper-stage",
                 style: stageStyle,
+                onTransitionEnd: handleSettleTransitionEnd,
                 children: [
                   /* @__PURE__ */ (0, import_jsx_runtime112.jsx)(
                     "img",
                     {
                       className: "wp-media-editor-image-editor__image",
+                      "data-testid": "cropper-image",
                       src,
                       alt: "",
                       onLoad: handleImageLoad,
@@ -24103,7 +24456,7 @@ function CropperInner({
                     {
                       cropRect: state.cropRect,
                       containerSize: canvasSize,
-                      imageSize: visualSize,
+                      imageSize: scaledVisualSize,
                       transition: settleStencilTransition
                     }
                   ),
@@ -24112,16 +24465,19 @@ function CropperInner({
                     {
                       cropRect: state.cropRect,
                       containerSize: canvasSize,
-                      imageSize: visualSize,
+                      imageSize: scaledVisualSize,
                       onCropChange: handleCropChange,
                       onResizeStart: handleResizeStart,
                       onResizeEnd: handleResizeEnd,
                       onEscape: handleEscape,
                       aspectRatio,
                       freeformCrop,
+                      isResizeDisabled: isTouchPinching,
                       stencilTransition: settleStencilTransition,
                       cropBounds,
-                      minCropSize
+                      minCropSize,
+                      snapCropRect,
+                      keyboardResizeStep
                     }
                   ),
                   (showGrid === true || isInteractiveGrid) && /* @__PURE__ */ (0, import_jsx_runtime112.jsx)(
@@ -24129,7 +24485,7 @@ function CropperInner({
                     {
                       cropRect: state.cropRect,
                       containerSize: canvasSize,
-                      imageSize: visualSize
+                      imageSize: scaledVisualSize
                     }
                   ),
                   activeHandle && outputSize && /* @__PURE__ */ (0, import_jsx_runtime112.jsx)(
@@ -24137,7 +24493,7 @@ function CropperInner({
                     {
                       cropRect: state.cropRect,
                       containerSize: canvasSize,
-                      imageSize: visualSize,
+                      imageSize: scaledVisualSize,
                       activeHandle,
                       outputWidth: outputSize.width,
                       outputHeight: outputSize.height
@@ -24540,6 +24896,9 @@ function MediaEditorCanvas({
   const { aspectRatioValue } = controller.cropOptions;
   const cropperImage = controller.state.image;
   const { beginGesture, endGesture, setImage } = controller;
+  const [status, setStatus] = (0, import_element81.useState)(
+    "loading"
+  );
   const aspectRatio = (0, import_element81.useMemo)(
     () => resolveAspectRatio(aspectRatioValue, cropperImage),
     [aspectRatioValue, cropperImage]
@@ -24566,27 +24925,59 @@ function MediaEditorCanvas({
       naturalHeight: mediaHeight
     });
   }, [cropperImage, mediaUrl, mediaWidth, mediaHeight, setImage]);
-  if (!mediaUrl || mediaType.type !== "image") {
+  const isImage = mediaType.type === "image";
+  (0, import_element81.useEffect)(() => {
+    if (!mediaUrl || !isImage) {
+      return;
+    }
+    setStatus("loading");
+    const probe = new window.Image();
+    probe.onload = () => setStatus("loaded");
+    probe.onerror = () => setStatus("error");
+    probe.src = mediaUrl;
+    if (probe.complete) {
+      setStatus(probe.naturalWidth > 0 ? "loaded" : "error");
+    }
+    return () => {
+      probe.onload = null;
+      probe.onerror = null;
+    };
+  }, [mediaUrl, isImage]);
+  if (!mediaUrl || !isImage) {
     return null;
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime114.jsx)("div", { className: "media-editor-canvas", children: /* @__PURE__ */ (0, import_jsx_runtime114.jsx)(
-    Cropper,
-    {
-      src: mediaUrl,
-      controller,
-      aspectRatio,
-      freeformCrop: true,
-      focusOnMount,
-      showGrid: "interactive",
-      isPlacementActive,
-      onGestureStart: handleGestureStart,
-      onGestureEnd: handleGestureEnd
-    }
-  ) });
+  if (status === "error") {
+    return /* @__PURE__ */ (0, import_jsx_runtime114.jsx)("div", { className: "media-editor-canvas", children: /* @__PURE__ */ (0, import_jsx_runtime114.jsx)("div", { className: "media-editor-canvas__error", role: "alert", children: /* @__PURE__ */ (0, import_jsx_runtime114.jsx)("p", { children: (0, import_i18n31.__)("Failed to load image.") }) }) });
+  }
+  return /* @__PURE__ */ (0, import_jsx_runtime114.jsxs)("div", { className: "media-editor-canvas", children: [
+    status === "loading" && /* @__PURE__ */ (0, import_jsx_runtime114.jsx)("div", { className: "media-editor-canvas__spinner", children: /* @__PURE__ */ (0, import_jsx_runtime114.jsx)(import_components35.Spinner, {}) }),
+    /* @__PURE__ */ (0, import_jsx_runtime114.jsx)(
+      "div",
+      {
+        className: clsx_default("media-editor-canvas__cropper", {
+          "is-loaded": status === "loaded"
+        }),
+        children: /* @__PURE__ */ (0, import_jsx_runtime114.jsx)(
+          Cropper,
+          {
+            src: mediaUrl,
+            controller,
+            aspectRatio,
+            freeformCrop: true,
+            focusOnMount: focusOnMount && status === "loaded",
+            showGrid: "interactive",
+            isPlacementActive,
+            onGestureStart: handleGestureStart,
+            onGestureEnd: handleGestureEnd
+          }
+        )
+      }
+    )
+  ] });
 }
 
 // packages/media-editor/build-module/components/media-editor-fine-rotation/index.mjs
-var import_i18n31 = __toESM(require_i18n(), 1);
+var import_i18n32 = __toESM(require_i18n(), 1);
 
 // packages/media-editor/build-module/hooks/use-crop-gesture-handlers.mjs
 var import_element82 = __toESM(require_element(), 1);
@@ -24957,7 +25348,7 @@ function MediaEditorFineRotation({
       children: /* @__PURE__ */ (0, import_jsx_runtime116.jsx)(
         RotationRuler,
         {
-          label: (0, import_i18n31.__)("Fine rotation"),
+          label: (0, import_i18n32.__)("Fine rotation"),
           min: -MAX_ROTATION_OFFSET,
           max: MAX_ROTATION_OFFSET,
           value: fineOffset,
@@ -24969,8 +25360,8 @@ function MediaEditorFineRotation({
 }
 
 // packages/media-editor/build-module/components/media-editor-image-controls/index.mjs
-var import_components35 = __toESM(require_components(), 1);
-var import_i18n32 = __toESM(require_i18n(), 1);
+var import_components36 = __toESM(require_components(), 1);
+var import_i18n33 = __toESM(require_i18n(), 1);
 
 // packages/media-editor/build-module/components/media-editor/use-crop-options.mjs
 var import_element85 = __toESM(require_element(), 1);
@@ -25023,21 +25414,21 @@ function MediaEditorImageControls({
   };
   const rotateButtons = /* @__PURE__ */ (0, import_jsx_runtime117.jsxs)(import_jsx_runtime117.Fragment, { children: [
     /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(
-      import_components35.Button,
+      import_components36.Button,
       {
         size: "compact",
         icon: rotate_left_default,
-        label: (0, import_i18n32.__)("Rotate 90\xB0 counter-clockwise"),
+        label: (0, import_i18n33.__)("Rotate 90\xB0 counter-clockwise"),
         showTooltip: true,
         onClick: () => snapRotate90(-1)
       }
     ),
     /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(
-      import_components35.Button,
+      import_components36.Button,
       {
         size: "compact",
         icon: rotate_right_default,
-        label: (0, import_i18n32.__)("Rotate 90\xB0 clockwise"),
+        label: (0, import_i18n33.__)("Rotate 90\xB0 clockwise"),
         showTooltip: true,
         onClick: () => snapRotate90(1)
       }
@@ -25045,11 +25436,11 @@ function MediaEditorImageControls({
   ] });
   const flipButtons = /* @__PURE__ */ (0, import_jsx_runtime117.jsxs)(import_jsx_runtime117.Fragment, { children: [
     /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(
-      import_components35.Button,
+      import_components36.Button,
       {
         size: "compact",
         icon: flip_horizontal_default,
-        label: (0, import_i18n32.__)("Flip horizontal"),
+        label: (0, import_i18n33.__)("Flip horizontal"),
         showTooltip: true,
         isPressed: state.flip.horizontal,
         onClick: () => setFlip({
@@ -25059,11 +25450,11 @@ function MediaEditorImageControls({
       }
     ),
     /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(
-      import_components35.Button,
+      import_components36.Button,
       {
         size: "compact",
         icon: flip_vertical_default,
-        label: (0, import_i18n32.__)("Flip vertical"),
+        label: (0, import_i18n33.__)("Flip vertical"),
         showTooltip: true,
         isPressed: state.flip.vertical,
         onClick: () => setFlip({
@@ -25075,11 +25466,11 @@ function MediaEditorImageControls({
   ] });
   const zoomButtons = /* @__PURE__ */ (0, import_jsx_runtime117.jsxs)(import_jsx_runtime117.Fragment, { children: [
     /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(
-      import_components35.Button,
+      import_components36.Button,
       {
         size: "compact",
         icon: plus_default,
-        label: (0, import_i18n32.__)("Zoom in"),
+        label: (0, import_i18n33.__)("Zoom in"),
         showTooltip: true,
         disabled: state.zoom >= MAX_ZOOM,
         accessibleWhenDisabled: true,
@@ -25087,11 +25478,11 @@ function MediaEditorImageControls({
       }
     ),
     /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(
-      import_components35.Button,
+      import_components36.Button,
       {
         size: "compact",
         icon: line_solid_default,
-        label: (0, import_i18n32.__)("Zoom out"),
+        label: (0, import_i18n33.__)("Zoom out"),
         showTooltip: true,
         disabled: state.zoom <= minZoom,
         accessibleWhenDisabled: true,
@@ -25100,17 +25491,17 @@ function MediaEditorImageControls({
     )
   ] });
   const aspectRatioDropdown = hasAspectRatioControl ? /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(
-    import_components35.DropdownMenu,
+    import_components36.DropdownMenu,
     {
       icon: aspect_ratio_default,
-      label: (0, import_i18n32.__)("Aspect ratio"),
+      label: (0, import_i18n33.__)("Aspect ratio"),
       popoverProps: { placement: "top" },
       toggleProps: { size: "compact" },
-      children: ({ onClose }) => /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(import_components35.MenuGroup, { label: (0, import_i18n32.__)("Aspect ratio"), children: aspectRatioOptions.map((preset) => {
+      children: ({ onClose }) => /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(import_components36.MenuGroup, { label: (0, import_i18n33.__)("Aspect ratio"), children: aspectRatioOptions.map((preset) => {
         const value = preset.value.toString();
         const isSelected = value === aspectRatioValue;
         return /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(
-          import_components35.MenuItem,
+          import_components36.MenuItem,
           {
             role: "menuitemradio",
             isSelected,
@@ -25134,14 +25525,14 @@ function MediaEditorImageControls({
           {
             className: "media-editor-image-controls__group",
             role: "group",
-            "aria-label": (0, import_i18n32.__)("Rotate"),
+            "aria-label": (0, import_i18n33.__)("Rotate"),
             children: [
               /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(
                 "span",
                 {
                   className: "media-editor-image-controls__label",
                   "aria-hidden": "true",
-                  children: (0, import_i18n32.__)("Rotate")
+                  children: (0, import_i18n33.__)("Rotate")
                 }
               ),
               /* @__PURE__ */ (0, import_jsx_runtime117.jsx)("div", { className: "media-editor-image-controls__buttons", children: rotateButtons })
@@ -25153,14 +25544,14 @@ function MediaEditorImageControls({
           {
             className: "media-editor-image-controls__group",
             role: "group",
-            "aria-label": (0, import_i18n32.__)("Flip"),
+            "aria-label": (0, import_i18n33.__)("Flip"),
             children: [
               /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(
                 "span",
                 {
                   className: "media-editor-image-controls__label",
                   "aria-hidden": "true",
-                  children: (0, import_i18n32.__)("Flip")
+                  children: (0, import_i18n33.__)("Flip")
                 }
               ),
               /* @__PURE__ */ (0, import_jsx_runtime117.jsx)("div", { className: "media-editor-image-controls__buttons", children: flipButtons })
@@ -25173,14 +25564,14 @@ function MediaEditorImageControls({
         {
           className: "media-editor-image-controls__group",
           role: "group",
-          "aria-label": (0, import_i18n32.__)("Zoom"),
+          "aria-label": (0, import_i18n33.__)("Zoom"),
           children: [
             /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(
               "span",
               {
                 className: "media-editor-image-controls__label",
                 "aria-hidden": "true",
-                children: (0, import_i18n32.__)("Zoom")
+                children: (0, import_i18n33.__)("Zoom")
               }
             ),
             /* @__PURE__ */ (0, import_jsx_runtime117.jsx)("div", { className: "media-editor-image-controls__buttons", children: zoomButtons })
@@ -25198,8 +25589,8 @@ function MediaEditorImageControls({
 }
 
 // packages/media-editor/build-module/components/media-editor-crop-panel/index.mjs
-var import_components36 = __toESM(require_components(), 1);
-var import_i18n33 = __toESM(require_i18n(), 1);
+var import_components37 = __toESM(require_components(), 1);
+var import_i18n34 = __toESM(require_i18n(), 1);
 var import_jsx_runtime118 = __toESM(require_jsx_runtime(), 1);
 function MediaEditorCropPanel({
   aspectRatioValue,
@@ -25218,13 +25609,13 @@ function MediaEditorCropPanel({
         gap: "xl",
         ...{ [CROP_CONTROL_ATTR]: true },
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime118.jsx)(VisuallyHidden, { render: /* @__PURE__ */ (0, import_jsx_runtime118.jsx)("h2", {}), children: (0, import_i18n33.__)("Crop options") }),
+          /* @__PURE__ */ (0, import_jsx_runtime118.jsx)(VisuallyHidden, { render: /* @__PURE__ */ (0, import_jsx_runtime118.jsx)("h2", {}), children: (0, import_i18n34.__)("Crop options") }),
           showTransformControls && /* @__PURE__ */ (0, import_jsx_runtime118.jsx)(MediaEditorImageControls, { withLabels: true }),
           /* @__PURE__ */ (0, import_jsx_runtime118.jsx)(
-            import_components36.SelectControl,
+            import_components37.SelectControl,
             {
               __next40pxDefaultSize: true,
-              label: (0, import_i18n33.__)("Aspect ratio"),
+              label: (0, import_i18n34.__)("Aspect ratio"),
               value: aspectRatioValue,
               onChange: onAspectRatioChange,
               options: aspectRatioOptions.map((preset) => ({
@@ -25240,57 +25631,57 @@ function MediaEditorCropPanel({
 }
 
 // packages/media-editor/build-module/components/media-editor-keyboard-shortcuts-modal/index.mjs
-var import_components37 = __toESM(require_components(), 1);
+var import_components38 = __toESM(require_components(), 1);
 var import_element86 = __toESM(require_element(), 1);
-var import_i18n34 = __toESM(require_i18n(), 1);
+var import_i18n35 = __toESM(require_i18n(), 1);
 var import_keycodes = __toESM(require_keycodes(), 1);
 var import_jsx_runtime119 = __toESM(require_jsx_runtime(), 1);
 var SHORTCUTS = [
   {
-    description: (0, import_i18n34.__)("Undo"),
+    description: (0, import_i18n35.__)("Undo"),
     keyCombination: { modifier: "primary", character: "z" }
   },
   {
-    description: (0, import_i18n34.__)("Redo"),
+    description: (0, import_i18n35.__)("Redo"),
     keyCombination: { modifier: "primaryShift", character: "z" }
   },
   {
-    description: (0, import_i18n34.__)("Pan"),
+    description: (0, import_i18n35.__)("Pan"),
     keyCombination: {
       character: ["\u2191", "\u2193", "\u2190", "\u2192"],
-      ariaLabel: (0, import_i18n34.__)("Arrow keys")
+      ariaLabel: (0, import_i18n35.__)("Arrow keys")
     }
   },
   {
-    description: (0, import_i18n34.__)("Zoom in"),
+    description: (0, import_i18n35.__)("Zoom in"),
     keyCombination: { character: "+" }
   },
   {
-    description: (0, import_i18n34.__)("Zoom out"),
+    description: (0, import_i18n35.__)("Zoom out"),
     keyCombination: { character: "-" }
   },
   {
-    description: (0, import_i18n34.__)("Rotate 90\xB0 clockwise"),
+    description: (0, import_i18n35.__)("Rotate 90\xB0 clockwise"),
     keyCombination: { character: "R" }
   },
   {
-    description: (0, import_i18n34.__)("Rotate 90\xB0 counter-clockwise"),
+    description: (0, import_i18n35.__)("Rotate 90\xB0 counter-clockwise"),
     keyCombination: { modifier: "shift", character: "R" }
   },
   {
-    description: (0, import_i18n34.__)("Flip horizontal"),
+    description: (0, import_i18n35.__)("Flip horizontal"),
     keyCombination: { character: "H" }
   },
   {
-    description: (0, import_i18n34.__)("Flip vertical"),
+    description: (0, import_i18n35.__)("Flip vertical"),
     keyCombination: { character: "V" }
   },
   {
-    description: (0, import_i18n34.__)("Pan or resize crop (large step)"),
+    description: (0, import_i18n35.__)("Pan or resize crop (large step)"),
     keyCombination: {
       modifier: "shift",
       character: ["\u2191", "\u2193", "\u2190", "\u2192"],
-      ariaLabel: (0, import_i18n34.__)("Shift + Arrow keys")
+      ariaLabel: (0, import_i18n35.__)("Shift + Arrow keys")
     }
   }
 ];
@@ -25340,13 +25731,13 @@ function MediaEditorKeyboardShortcutsModal({
   onClose
 }) {
   return /* @__PURE__ */ (0, import_jsx_runtime119.jsxs)(
-    import_components37.Modal,
+    import_components38.Modal,
     {
       className: "media-editor-keyboard-shortcuts-modal",
-      title: (0, import_i18n34.__)("Keyboard shortcuts"),
+      title: (0, import_i18n35.__)("Keyboard shortcuts"),
       onRequestClose: onClose,
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime119.jsx)("p", { className: "media-editor-keyboard-shortcuts-modal__note", children: (0, import_i18n34.__)(
+        /* @__PURE__ */ (0, import_jsx_runtime119.jsx)("p", { className: "media-editor-keyboard-shortcuts-modal__note", children: (0, import_i18n35.__)(
           "These shortcuts work when the image editor has focus."
         ) }),
         /* @__PURE__ */ (0, import_jsx_runtime119.jsx)(
@@ -25382,7 +25773,7 @@ var import_api_fetch = __toESM(require_api_fetch(), 1);
 var import_data7 = __toESM(require_data(), 1);
 var import_core_data = __toESM(require_core_data(), 1);
 var import_element87 = __toESM(require_element(), 1);
-var import_i18n35 = __toESM(require_i18n(), 1);
+var import_i18n36 = __toESM(require_i18n(), 1);
 var import_notices = __toESM(require_notices(), 1);
 
 // packages/media-editor/build-module/components/media-editor-modal/build-modifiers.mjs
@@ -25550,15 +25941,15 @@ function useSaveMediaEditor({
         });
       }
     } catch (error2) {
-      const message2 = error2 instanceof Error ? error2.message : error2?.message ?? (0, import_i18n35.__)("An unknown error occurred.");
+      const message2 = error2 instanceof Error ? error2.message : error2?.message ?? (0, import_i18n36.__)("An unknown error occurred.");
       createErrorNotice(
-        isImage ? (0, import_i18n35.sprintf)(
+        isImage ? (0, import_i18n36.sprintf)(
           /* translators: %s: Error message. */
-          (0, import_i18n35.__)("Could not save image. %s"),
+          (0, import_i18n36.__)("Could not save image. %s"),
           message2
-        ) : (0, import_i18n35.sprintf)(
+        ) : (0, import_i18n36.sprintf)(
           /* translators: %s: Error message. */
-          (0, import_i18n35.__)("Could not save media. %s"),
+          (0, import_i18n36.__)("Could not save media. %s"),
           message2
         ),
         {
@@ -25589,7 +25980,7 @@ function useSaveMediaEditor({
 var import_jsx_runtime120 = __toESM(require_jsx_runtime(), 1);
 var ATTACHMENT_EMBED_QUERY = { _embed: "author,wp:attached-to" };
 var PLACEMENT_CONTROL_IDLE_MS = 300;
-var { Tabs } = unlock3(import_components38.privateApis);
+var { Tabs } = unlock3(import_components39.privateApis);
 function MediaEditorSidebar({ tabs }) {
   const tabsContextValue = (0, import_element88.useContext)(Tabs.Context);
   return /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
@@ -25597,13 +25988,13 @@ function MediaEditorSidebar({ tabs }) {
     {
       scope: "media-editor",
       identifier: "media-editor/details",
-      title: (0, import_i18n36.__)("Details"),
+      title: (0, import_i18n37.__)("Details"),
       icon: drawer_right_default,
       isActiveByDefault: true,
       className: "media-editor__sidebar",
       panelClassName: "media-editor__sidebar-panel",
       headerClassName: "media-editor__sidebar-header",
-      closeLabel: (0, import_i18n36.__)("Close media panel"),
+      closeLabel: (0, import_i18n37.__)("Close media panel"),
       header: /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(Tabs.Context.Provider, { value: tabsContextValue, children: /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(Tabs.TabList, { children: tabs.map((tab) => /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(Tabs.Tab, { tabId: tab.id, children: tab.title }, tab.id)) }) }),
       children: /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(Tabs.Context.Provider, { value: tabsContextValue, children: tabs.map((tab) => /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
         Tabs.TabPanel,
@@ -25625,7 +26016,7 @@ function HeaderActions({
 }) {
   const [isShortcutsModalOpen, setIsShortcutsModalOpen] = (0, import_element88.useState)(false);
   return /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)(
-    import_components38.Flex,
+    import_components39.Flex,
     {
       className: "media-editor__header-actions",
       justify: "flex-end",
@@ -25633,21 +26024,21 @@ function HeaderActions({
       gap: 2,
       children: [
         isImage && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
-          import_components38.Button,
+          import_components39.Button,
           {
             size: "compact",
             icon: keyboard_default,
-            label: (0, import_i18n36.__)("Keyboard shortcuts"),
+            label: (0, import_i18n37.__)("Keyboard shortcuts"),
             onClick: () => setIsShortcutsModalOpen(true)
           }
         ),
         /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(pinned_items_default.Slot, { scope: "media-editor" }),
         showCloseButton && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
-          import_components38.Button,
+          import_components39.Button,
           {
             size: "compact",
             icon: close_default,
-            label: (0, import_i18n36.__)("Close"),
+            label: (0, import_i18n37.__)("Close"),
             onClick: onCancel,
             disabled: isSaving,
             accessibleWhenDisabled: true
@@ -25696,29 +26087,29 @@ function HistoryActions({
     endGesture();
   };
   return /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)(
-    import_components38.Flex,
+    import_components39.Flex,
     {
       className: "media-editor__history-actions",
       expanded: false,
       gap: 2,
       children: [
         /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
-          import_components38.Button,
+          import_components39.Button,
           {
             size: "compact",
             variant: "tertiary",
             disabled: !isDirty,
             accessibleWhenDisabled: true,
             onClick: handleReset,
-            children: (0, import_i18n36.__)("Reset")
+            children: (0, import_i18n37.__)("Reset")
           }
         ),
         /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
-          import_components38.Button,
+          import_components39.Button,
           {
             size: "compact",
             icon: undo_default,
-            label: (0, import_i18n36.__)("Undo"),
+            label: (0, import_i18n37.__)("Undo"),
             showTooltip: true,
             shortcut: import_keycodes2.displayShortcut.primary("z"),
             disabled: isUndoRedoDisabled || !hasUndo,
@@ -25727,11 +26118,11 @@ function HistoryActions({
           }
         ),
         /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
-          import_components38.Button,
+          import_components39.Button,
           {
             size: "compact",
             icon: redo_default,
-            label: (0, import_i18n36.__)("Redo"),
+            label: (0, import_i18n37.__)("Redo"),
             showTooltip: true,
             shortcut: (0, import_keycodes2.isAppleOS)() ? import_keycodes2.displayShortcut.primaryShift("z") : import_keycodes2.displayShortcut.primary("y"),
             disabled: isUndoRedoDisabled || !hasRedo,
@@ -25752,7 +26143,7 @@ function FooterActions({
 }) {
   const saveDisabled = isSaving || !hasMedia || !hasChanges;
   return /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)(
-    import_components38.Flex,
+    import_components39.Flex,
     {
       className: "media-editor__footer-actions",
       justify: "flex-end",
@@ -25760,18 +26151,18 @@ function FooterActions({
       gap: 2,
       children: [
         /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
-          import_components38.Button,
+          import_components39.Button,
           {
             __next40pxDefaultSize: true,
             variant: "tertiary",
             onClick: onCancel,
             disabled: isSaving,
             accessibleWhenDisabled: true,
-            children: (0, import_i18n36.__)("Cancel")
+            children: (0, import_i18n37.__)("Cancel")
           }
         ),
         /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
-          import_components38.Button,
+          import_components39.Button,
           {
             __next40pxDefaultSize: true,
             variant: "primary",
@@ -25779,7 +26170,7 @@ function FooterActions({
             isBusy: isSaving,
             disabled: saveDisabled,
             accessibleWhenDisabled: true,
-            children: (0, import_i18n36.__)("Save")
+            children: (0, import_i18n37.__)("Save")
           }
         )
       ]
@@ -25887,7 +26278,7 @@ function MediaEditorContent({
   const tabs = (0, import_element88.useMemo)(() => {
     const detailsTab = {
       id: "details",
-      title: (0, import_i18n36.__)("Details"),
+      title: (0, import_i18n37.__)("Details"),
       panel: /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
         Stack,
         {
@@ -25904,7 +26295,7 @@ function MediaEditorContent({
     return [
       {
         id: "crop",
-        title: (0, import_i18n36.__)("Crop"),
+        title: (0, import_i18n37.__)("Crop"),
         panel: /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
           Stack,
           {
@@ -26002,15 +26393,15 @@ function MediaEditorContent({
       onChange: handleChange,
       settings: { fields },
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime120.jsx)("div", { className: "media-editor", children: !media ? /* @__PURE__ */ (0, import_jsx_runtime120.jsx)("div", { className: "media-editor__loading", children: /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(import_components38.Spinner, {}) }) : /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)(import_jsx_runtime120.Fragment, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime120.jsx)("div", { className: "media-editor", children: !media ? /* @__PURE__ */ (0, import_jsx_runtime120.jsx)("div", { className: "media-editor__loading", children: /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(import_components39.Spinner, {}) }) : /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)(import_jsx_runtime120.Fragment, { children: [
           /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(Tabs, { children: /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(MediaEditorSidebar, { tabs }) }),
           /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
             interface_skeleton_default,
             {
               className: "media-editor__skeleton",
               labels: {
-                body: isImage ? (0, import_i18n36.__)("Image editor") : (0, import_i18n36.__)("Media preview"),
-                sidebar: (0, import_i18n36.__)("Media details")
+                body: isImage ? (0, import_i18n37.__)("Image editor") : (0, import_i18n37.__)("Media preview"),
+                sidebar: (0, import_i18n37.__)("Media details")
               },
               content: /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)("div", { className: "media-editor__content", children: [
                 /* @__PURE__ */ (0, import_jsx_runtime120.jsx)("div", { className: "media-editor__canvas-area", children: isImage ? /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
@@ -26029,17 +26420,17 @@ function MediaEditorContent({
           )
         ] }) }),
         /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
-          import_components38.__experimentalConfirmDialog,
+          import_components39.__experimentalConfirmDialog,
           {
             isOpen: isDiscardDialogOpen,
-            confirmButtonText: (0, import_i18n36.__)("Discard"),
-            cancelButtonText: (0, import_i18n36.__)("Keep editing"),
+            confirmButtonText: (0, import_i18n37.__)("Discard"),
+            cancelButtonText: (0, import_i18n37.__)("Keep editing"),
             onCancel: () => setIsDiscardDialogOpen(false),
             onConfirm: () => {
               setIsDiscardDialogOpen(false);
               discardAndClose();
             },
-            children: (0, import_i18n36.__)(
+            children: (0, import_i18n37.__)(
               "Are you sure you want to discard your unsaved changes?"
             )
           }
@@ -26162,11 +26553,11 @@ function MediaEditorModal({
         }
         handleClose();
         if (previous && savedId !== previous.id && onUpdate) {
-          createSuccessNotice((0, import_i18n37.__)("Image edited."), {
+          createSuccessNotice((0, import_i18n38.__)("Image edited."), {
             type: "snackbar",
             actions: [
               {
-                label: (0, import_i18n37.__)("Undo"),
+                label: (0, import_i18n38.__)("Undo"),
                 onClick: () => {
                   onUpdate({
                     id: previous.id,
@@ -26192,10 +26583,10 @@ function MediaEditorModal({
           className: "media-editor-modal__shortcut-scope",
           onKeyDown: stopKeyDownPropagation,
           children: /* @__PURE__ */ (0, import_jsx_runtime121.jsxs)(
-            import_components39.Modal,
+            import_components40.Modal,
             {
               className: "media-editor-modal",
-              title: (0, import_i18n37.__)("Edit media"),
+              title: (0, import_i18n38.__)("Edit media"),
               size: "fill",
               isDismissible: false,
               shouldCloseOnClickOutside,
@@ -26209,7 +26600,7 @@ function MediaEditorModal({
                   {
                     className: `media-editor-modal__footer is-${footerLayout}`,
                     role: "region",
-                    "aria-label": (0, import_i18n37.__)("Editor actions"),
+                    "aria-label": (0, import_i18n38.__)("Editor actions"),
                     children: footerActions
                   }
                 )
@@ -26233,7 +26624,7 @@ lock3(privateApis12, {
 // routes/media-editor/stage.tsx
 import { useNavigate, useParams } from "@wordpress/route";
 
-// routes/lock-unlock.ts
+// routes/lock-unlock/index.ts
 var import_private_apis5 = __toESM(require_private_apis());
 var { lock: lock4, unlock: unlock4 } = (0, import_private_apis5.__dangerousOptInToUnstableAPIsOnlyForCoreModules)(
   "I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.",
@@ -26241,10 +26632,10 @@ var { lock: lock4, unlock: unlock4 } = (0, import_private_apis5.__dangerousOptIn
 );
 
 // routes/media-editor/style.scss
-if (typeof document !== "undefined" && true && !document.head.querySelector("style[data-wp-hash='41e012c8fb']")) {
+if (typeof document !== "undefined" && true && !document.head.querySelector("style[data-wp-hash='6cbd1949e9']")) {
   const style = document.createElement("style");
-  style.setAttribute("data-wp-hash", "41e012c8fb");
-  style.appendChild(document.createTextNode('.media-editor-preview{align-items:center;box-sizing:border-box;display:flex;justify-content:center;min-height:100%;padding:32px;position:relative}.media-editor-preview__spinner{left:50%;position:absolute;top:50%;transform:translate(-50%,-50%)}.media-editor-preview--loading{height:100%;width:100%}.media-editor-preview--image img{height:auto;max-height:100%;max-width:100%;-o-object-fit:contain;object-fit:contain;opacity:0;width:auto}@keyframes __wp-base-styles-fade-in{0%{opacity:0}to{opacity:1}}@media not (prefers-reduced-motion){.media-editor-preview--image img.loaded{animation:__wp-base-styles-fade-in .08s linear 0s;animation-fill-mode:forwards}}.media-editor-preview--video video{height:auto;max-height:100%;max-width:100%;-o-object-fit:contain;object-fit:contain;width:auto}.media-editor-preview--audio audio{max-width:100%}.media-editor-preview--file{text-align:center}.media-editor-preview__file-info{background:#f0f0f0;border-radius:2px;padding:24px}.media-editor-preview__file-name{font-weight:600;margin-bottom:8px}.media-editor-preview__mime-type{color:#757575;font-size:.9em;margin-bottom:16px}.media-editor-preview__download-link{display:inline-block;margin-top:8px}.media-editor-preview--empty,.media-editor-preview--error{color:#757575;text-align:center}.media-editor-preview__url{color:#949494;font-size:.9em;margin-top:8px;word-break:break-all}.wp-media-editor-image-editor{cursor:grab;height:100%;overflow:hidden;position:relative;touch-action:none;-webkit-user-select:none;-moz-user-select:none;user-select:none;width:100%}.wp-media-editor-image-editor__canvas{inset:24px;min-height:100px;min-width:100px;position:absolute}.wp-media-editor-image-editor__canvas:focus{outline:none}.wp-media-editor-image-editor__stage{inset:0;position:absolute}.wp-media-editor-image-editor--dragging{cursor:grabbing}.wp-media-editor-image-editor__image{left:0;position:absolute;top:0;transform-origin:center center;will-change:transform}.wp-media-editor-image-editor__stencil{pointer-events:none;position:absolute}.wp-media-editor-image-editor__dimming{box-shadow:0 0 0 9999px hsla(0,0%,88%,.6);pointer-events:none;position:absolute;transition:box-shadow .15s ease}.wp-media-editor-image-editor--dragging .wp-media-editor-image-editor__dimming{box-shadow:0 0 0 9999px hsla(0,0%,88%,.4)}.wp-media-editor-image-editor__grid{overflow:hidden;pointer-events:none;position:absolute;transition:opacity .15s ease}.wp-media-editor-image-editor__canvas--grid-interactive .wp-media-editor-image-editor__grid{opacity:0;transition-delay:.1s}.wp-media-editor-image-editor__canvas--show-grid .wp-media-editor-image-editor__grid{opacity:1;transition-delay:0s}.wp-media-editor-image-editor__canvas--settling .wp-media-editor-image-editor__grid{opacity:0;transition:none}.wp-media-editor-image-editor__grid-line{background:hsla(0,0%,100%,.4);position:absolute}.wp-media-editor-image-editor__grid-line--horizontal{height:1px;left:0;width:100%}.wp-media-editor-image-editor__grid-line--vertical{height:100%;top:0;width:1px}.wp-media-editor-image-editor__dimensions-tooltip{background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.08);color:#1e1e1e;font-size:11px;font-variant-numeric:tabular-nums;line-height:1.4;padding:2px 6px;pointer-events:none;position:absolute;white-space:nowrap;z-index:2}.wp-media-editor-image-editor__stencil-rect{border:1px solid #1e1e1e;box-sizing:border-box;pointer-events:none;position:absolute;transition:border-color .15s ease,box-shadow .15s ease}.wp-media-editor-image-editor__canvas--focus-visible:focus .wp-media-editor-image-editor__stencil-rect{border-color:var(--wp-image-editor-focus-color,var(--wp-admin-theme-color,#007cba));box-shadow:0 0 0 1px var(--wp-image-editor-focus-color,var(--wp-admin-theme-color,#007cba))}.wp-media-editor-image-editor__handle{-webkit-appearance:none;-moz-appearance:none;appearance:none;background:#fff;border:1px solid var(--wp-admin-theme-color,#007cba);border-radius:50%;box-sizing:border-box;cursor:default;font:inherit;height:12px;margin:0;padding:0;pointer-events:auto;position:absolute;transition:background-color .15s ease,box-shadow .15s ease;width:12px}.wp-media-editor-image-editor__handle:focus{outline:none}.wp-media-editor-image-editor__canvas--focus-visible .wp-media-editor-image-editor__handle:focus{background:var(--wp-image-editor-focus-color,var(--wp-admin-theme-color,#007cba));border-color:transparent;box-shadow:0 0 0 2px #fff,0 0 0 4px var(--wp-image-editor-focus-color,var(--wp-admin-theme-color,#007cba))}.wp-media-editor-image-editor__handle:before{content:"";height:44px;left:50%;position:absolute;top:50%;transform:translate(-50%,-50%);width:44px}.wp-media-editor-image-editor__handle--n{cursor:ns-resize;left:50%;margin-left:-6px;top:-6px}.wp-media-editor-image-editor__handle--s{bottom:-6px;cursor:ns-resize;left:50%;margin-left:-6px}.wp-media-editor-image-editor__handle--e{cursor:ew-resize;margin-top:-6px;right:-6px;top:50%}.wp-media-editor-image-editor__handle--w{cursor:ew-resize;left:-6px;margin-top:-6px;top:50%}.wp-media-editor-image-editor__handle--nw{cursor:nwse-resize;left:-6px;top:-6px}.wp-media-editor-image-editor__handle--ne{cursor:nesw-resize;right:-6px;top:-6px}.wp-media-editor-image-editor__handle--sw{bottom:-6px;cursor:nesw-resize;left:-6px}.wp-media-editor-image-editor__handle--se{bottom:-6px;cursor:nwse-resize;right:-6px}.media-editor{display:flex;flex:1;flex-direction:column;height:100%;min-height:0}.media-editor .media-editor__loading{align-items:center;display:flex;height:100%;justify-content:center}.media-editor .interface-interface-skeleton{bottom:auto;flex:1;flex-direction:column;height:100%;left:auto;max-height:none;position:relative;right:auto;top:auto}.media-editor .interface-interface-skeleton__editor{flex:1;min-width:0}.media-editor .media-editor__content{border-radius:8px;display:flex;flex:1;flex-direction:column;margin:0 24px;min-height:0;overflow:hidden}.media-editor .media-editor__canvas-toolbar{background:#e0e0e0;display:flex;flex-shrink:0;justify-content:center;padding:8px 16px}.media-editor .media-editor__canvas-toolbar .media-editor-fine-rotation{flex:0 1 360px;min-width:0}.media-editor .media-editor__canvas-area{align-items:center;background:#e0e0e0;display:flex;flex:1;justify-content:center;min-height:0;overflow:auto}.media-editor .media-editor__canvas-area .media-editor-preview{height:100%}.media-editor .media-editor__canvas-area img,.media-editor .media-editor__canvas-area video{max-height:100%;max-width:100%;-o-object-fit:contain;object-fit:contain}.media-editor .media-editor__sidebar{box-sizing:border-box}.media-editor .media-editor__sidebar *,.media-editor .media-editor__sidebar :after,.media-editor .media-editor__sidebar :before{box-sizing:inherit}@media (min-width:600px){.media-editor .media-editor__sidebar{padding-left:1px}}.media-editor .media-editor__sidebar-panel{padding-bottom:24px}.media-editor .interface-interface-skeleton__sidebar{border-top:0;box-shadow:none;outline:1px solid transparent}.media-editor .media-editor__panel{padding:16px}@media (min-width:600px){.media-editor .media-editor__panel{padding:16px 24px 0 0}}.media-editor .components-panel__header.media-editor__sidebar-header{margin-right:0;padding-left:0;padding-right:8px}@media (min-width:600px){.media-editor .components-panel__header.media-editor__sidebar-header{margin-right:24px}}.media-editor .components-panel__header.media-editor__sidebar-header .components-button.has-icon{padding:0}@media (min-width:600px){.media-editor .components-panel__header.media-editor__sidebar-header .components-button.has-icon{display:flex}}@media (min-width:600px) and (max-width:781px){.media-editor .interface-interface-skeleton__sidebar:has(.interface-complementary-area__fill){position:relative!important}.media-editor .interface-complementary-area,.media-editor .interface-complementary-area__fill{width:280px!important}}@media (max-width:599px){.media-editor .interface-interface-skeleton__sidebar:has(.interface-complementary-area__fill){width:100%}.media-editor .interface-complementary-area,.media-editor .interface-complementary-area__fill{width:100%!important}}.media-editor__snackbar{bottom:24px;box-sizing:border-box;display:flex;flex-direction:column;left:0;padding-inline:16px;pointer-events:none;position:fixed;right:0}.media-editor__snackbar .components-snackbar{margin-inline:auto}.media-editor-form .dataforms-layouts-panel__field-control{text-wrap:pretty}.media-editor-modal.components-modal__frame .components-modal__content{display:flex;flex-direction:column;margin-bottom:0;min-height:0;padding:0}.media-editor-modal.components-modal__frame .components-modal__children-container{display:flex;flex:1;flex-direction:column;min-height:0}.media-editor-modal.components-modal__frame .media-editor-modal__footer{background:#fff;display:flex;flex-shrink:0;gap:16px;padding:16px 32px 24px;z-index:1000001}.media-editor-modal.components-modal__frame .media-editor-modal__footer.is-wide{align-items:center;flex-direction:row}.media-editor-modal.components-modal__frame .media-editor-modal__footer.is-wide .media-editor__footer-actions{margin-left:auto}.media-editor-modal.components-modal__frame .media-editor-modal__footer.is-narrow{flex-direction:column}.media-editor-modal.components-modal__frame .media-editor-modal__footer.is-narrow>.media-editor-image-controls{align-self:center}.media-editor-modal__footer-row{align-items:center;display:flex;flex-wrap:wrap;gap:16px}.media-editor-modal__footer-row .media-editor-image-controls,.media-editor-modal__footer-row .media-editor__footer-actions{margin-left:auto}.media-editor__history-actions .components-button.has-icon:not([aria-disabled=true]){color:var(--wp-admin-theme-color)}.media-editor-modal,.media-editor-modal__snackbar{display:flex;flex-direction:column}.media-editor-modal__snackbar{bottom:24px;box-sizing:border-box;left:0;padding-inline:16px;pointer-events:none;position:fixed;right:0}.media-editor-modal__snackbar .components-snackbar{margin-inline:auto}.media-editor-modal__snackbar{z-index:1000001}.media-editor-canvas{height:100%;position:relative;width:100%}.media-editor-image-controls{align-items:center;display:flex;flex-wrap:nowrap;gap:8px}.media-editor-image-controls.is-stacked{align-items:flex-start;flex-direction:column;gap:24px}.media-editor-image-controls__transforms{display:flex;gap:48px}.media-editor-image-controls__group{display:flex;flex-direction:column;gap:4px}.media-editor-image-controls__label{font-size:11px;font-weight:500;line-height:1.4;text-transform:uppercase}.media-editor-image-controls__buttons{display:flex;gap:8px;padding-inline:2px 0}.media-editor-keyboard-shortcuts-modal{min-width:280px}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__note{color:#757575;font-size:13px;margin:0 0 16px}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut-list{list-style:none;margin:0;padding:0}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut{align-items:baseline;border-top:1px solid #ddd;display:flex;margin-bottom:0;padding:.6rem 0}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut:last-child{border-bottom:1px solid #ddd}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut-description{flex:1;margin:0}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut-term{background:none;font-weight:600;margin:0 0 0 1rem;padding:0;text-align:right}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut-key{border-radius:8%;margin:0 .2rem;padding:.25rem .5rem}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut-key:last-child{margin:0 0 0 .2rem}.rotation-ruler{box-sizing:border-box;color:#1e1e1e;container-type:inline-size;cursor:ew-resize;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif;height:32px;min-width:180px;padding:0 8px;position:relative;touch-action:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.rotation-ruler[data-disabled]{cursor:default;opacity:.5;pointer-events:none}.rotation-ruler:has(.rotation-ruler__input:focus-visible){border-radius:4px;outline:2px solid var(--wp-admin-theme-color,#3858e9);outline-offset:2px}.rotation-ruler__input{clip:rect(0 0 0 0);border:0;height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;white-space:nowrap;width:1px}.rotation-ruler__pointer{background:var(--wp-admin-theme-color,#3858e9);border-radius:1px;bottom:0;height:18px;left:50%;pointer-events:none;position:absolute;transform:translateX(-50%);width:2px}.rotation-ruler__strip{inset:0;mask-image:linear-gradient(90deg,transparent 0,#000 8px,#000 calc(100% - 8px),transparent);-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 8px,#000 calc(100% - 8px),transparent);overflow:hidden;position:absolute}.rotation-ruler__ticks{display:block;left:50%;overflow:visible;position:absolute;top:0}.rotation-ruler__tick{stroke:currentColor;stroke-width:1}.rotation-ruler__tick--minor{opacity:.35}.rotation-ruler__tick--mid{opacity:.6}.rotation-ruler__tick--major{opacity:1}.rotation-ruler__label{fill:currentColor;font-size:10px;font-weight:400;opacity:.45}.rotation-ruler__active-label{color:#1e1e1e;font-size:12px;font-weight:600;height:14px;left:50%;line-height:14px;pointer-events:none;position:absolute;top:0;transform:translateX(-50%)}.rotation-ruler__active-label:before{background:linear-gradient(90deg,transparent 0,#e0e0e0 12px,#e0e0e0 calc(100% - 12px),transparent);content:"";height:100%;left:50%;position:absolute;top:0;transform:translateX(-50%);width:60px}.rotation-ruler__active-label-number{display:inline-block;position:relative}.rotation-ruler__active-label-sign{position:absolute;right:100%;top:0}.rotation-ruler__active-label-unit{left:100%;position:absolute;top:0}@container (max-width: 220px){.rotation-ruler__tick--minor{opacity:0}}@media (prefers-reduced-motion:reduce){.rotation-ruler__ticks{transition:none}}.media-editor-route__content{display:flex;flex:1;min-height:0;overflow:hidden}'));
+  style.setAttribute("data-wp-hash", "6cbd1949e9");
+  style.appendChild(document.createTextNode('.media-editor-preview{align-items:center;box-sizing:border-box;display:flex;justify-content:center;min-height:100%;padding:32px;position:relative}.media-editor-preview__spinner{left:50%;position:absolute;top:50%;transform:translate(-50%,-50%)}.media-editor-preview--loading{height:100%;width:100%}.media-editor-preview--image img{height:auto;max-height:100%;max-width:100%;-o-object-fit:contain;object-fit:contain;opacity:0;width:auto}@media not (prefers-reduced-motion){.media-editor-preview--image img.loaded{animation:__wp-base-styles-fade-in .08s linear 0s;animation-fill-mode:forwards}}.media-editor-preview--video video{height:auto;max-height:100%;max-width:100%;-o-object-fit:contain;object-fit:contain;width:auto}.media-editor-preview--audio audio{max-width:100%}.media-editor-preview--file{text-align:center}.media-editor-preview__file-info{background:#f0f0f0;border-radius:2px;padding:24px}.media-editor-preview__file-name{font-weight:600;margin-bottom:8px}.media-editor-preview__mime-type{color:#757575;font-size:.9em;margin-bottom:16px}.media-editor-preview__download-link{display:inline-block;margin-top:8px}.media-editor-preview--empty,.media-editor-preview--error{color:#757575;text-align:center}.media-editor-preview__url{color:#949494;font-size:.9em;margin-top:8px;word-break:break-all}.wp-media-editor-image-editor{cursor:grab;height:100%;overflow:hidden;position:relative;touch-action:none;-webkit-user-select:none;-moz-user-select:none;user-select:none;width:100%}.wp-media-editor-image-editor__canvas{inset:24px;min-height:100px;min-width:100px;position:absolute}.wp-media-editor-image-editor__canvas:focus{outline:none}.wp-media-editor-image-editor__stage{inset:0;position:absolute}.wp-media-editor-image-editor--dragging{cursor:grabbing}.wp-media-editor-image-editor__image{left:0;position:absolute;top:0;transform-origin:center center;will-change:transform}.wp-media-editor-image-editor__stencil{pointer-events:none;position:absolute}.wp-media-editor-image-editor__dimming{box-shadow:0 0 0 9999px hsla(0,0%,88%,.6);pointer-events:none;position:absolute;transition:box-shadow .15s ease}.wp-media-editor-image-editor--dragging .wp-media-editor-image-editor__dimming{box-shadow:0 0 0 9999px hsla(0,0%,88%,.4)}.wp-media-editor-image-editor__grid{overflow:hidden;pointer-events:none;position:absolute;transition:opacity .15s ease}.wp-media-editor-image-editor__canvas--grid-interactive .wp-media-editor-image-editor__grid{opacity:0;transition-delay:.1s}.wp-media-editor-image-editor__canvas--show-grid .wp-media-editor-image-editor__grid{opacity:1;transition-delay:0s}.wp-media-editor-image-editor__canvas--settling .wp-media-editor-image-editor__grid{opacity:0;transition:none}.wp-media-editor-image-editor__grid-line{background:hsla(0,0%,100%,.4);position:absolute}.wp-media-editor-image-editor__grid-line--horizontal{height:1px;left:0;width:100%}.wp-media-editor-image-editor__grid-line--vertical{height:100%;top:0;width:1px}.wp-media-editor-image-editor__dimensions-tooltip{background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.08);color:#1e1e1e;font-size:11px;font-variant-numeric:tabular-nums;line-height:1.4;padding:2px 6px;pointer-events:none;position:absolute;white-space:nowrap;z-index:2}.wp-media-editor-image-editor__stencil-rect{border:1px solid #1e1e1e;box-sizing:border-box;pointer-events:none;position:absolute;transition:border-color .15s ease,box-shadow .15s ease}.wp-media-editor-image-editor__canvas--focus-visible:focus .wp-media-editor-image-editor__stencil-rect{border-color:var(--wp-image-editor-focus-color,var(--wp-admin-theme-color,#007cba));box-shadow:0 0 0 1px var(--wp-image-editor-focus-color,var(--wp-admin-theme-color,#007cba))}.wp-media-editor-image-editor__handle{-webkit-appearance:none;-moz-appearance:none;appearance:none;background:#fff;border:1px solid var(--wp-admin-theme-color,#007cba);border-radius:50%;box-sizing:border-box;cursor:default;font:inherit;height:12px;margin:0;padding:0;pointer-events:auto;position:absolute;transition:background-color .15s ease,box-shadow .15s ease;width:12px}.wp-media-editor-image-editor__handle:focus{outline:none}.wp-media-editor-image-editor__canvas--focus-visible .wp-media-editor-image-editor__handle:focus{background:var(--wp-image-editor-focus-color,var(--wp-admin-theme-color,#007cba));border-color:transparent;box-shadow:0 0 0 2px #fff,0 0 0 4px var(--wp-image-editor-focus-color,var(--wp-admin-theme-color,#007cba))}.wp-media-editor-image-editor__handle:before{content:"";height:44px;left:50%;position:absolute;top:50%;transform:translate(-50%,-50%);width:44px}.wp-media-editor-image-editor__handle--n{cursor:ns-resize;left:50%;margin-left:-6px;top:-6px}.wp-media-editor-image-editor__handle--s{bottom:-6px;cursor:ns-resize;left:50%;margin-left:-6px}.wp-media-editor-image-editor__handle--e{cursor:ew-resize;margin-top:-6px;right:-6px;top:50%}.wp-media-editor-image-editor__handle--w{cursor:ew-resize;left:-6px;margin-top:-6px;top:50%}.wp-media-editor-image-editor__handle--nw{cursor:nwse-resize;left:-6px;top:-6px}.wp-media-editor-image-editor__handle--ne{cursor:nesw-resize;right:-6px;top:-6px}.wp-media-editor-image-editor__handle--sw{bottom:-6px;cursor:nesw-resize;left:-6px}.wp-media-editor-image-editor__handle--se{bottom:-6px;cursor:nwse-resize;right:-6px}.media-editor{display:flex;flex:1;flex-direction:column;height:100%;min-height:0}.media-editor .media-editor__loading{align-items:center;display:flex;height:100%;justify-content:center}.media-editor .interface-interface-skeleton{bottom:auto;flex:1;flex-direction:column;height:100%;left:auto;max-height:none;position:relative;right:auto;top:auto}.media-editor-modal .media-editor .interface-interface-skeleton.interface-interface-skeleton{top:auto}.media-editor .interface-interface-skeleton__editor{flex:1;min-width:0}.media-editor .media-editor__content{border-radius:8px;display:flex;flex:1;flex-direction:column;margin:0 24px;min-height:0;overflow:hidden}.media-editor .media-editor__canvas-toolbar{background:#e0e0e0;display:flex;flex-shrink:0;justify-content:center;padding:8px 16px}.media-editor .media-editor__canvas-toolbar .media-editor-fine-rotation{flex:0 1 360px;min-width:0}.media-editor .media-editor__canvas-area{align-items:center;background:#e0e0e0;display:flex;flex:1;justify-content:center;min-height:0;overflow:auto}.media-editor .media-editor__canvas-area .media-editor-preview{height:100%}.media-editor .media-editor__canvas-area img,.media-editor .media-editor__canvas-area video{max-height:100%;max-width:100%;-o-object-fit:contain;object-fit:contain}.media-editor .media-editor__sidebar{box-sizing:border-box}.media-editor .media-editor__sidebar *,.media-editor .media-editor__sidebar :after,.media-editor .media-editor__sidebar :before{box-sizing:inherit}@media (min-width:600px){.media-editor .media-editor__sidebar{padding-left:1px}}.media-editor .media-editor__sidebar-panel{padding-bottom:24px}.media-editor .interface-interface-skeleton__sidebar{border-top:0;box-shadow:none;outline:1px solid transparent}.media-editor .media-editor__panel{padding:16px}@media (min-width:600px){.media-editor .media-editor__panel{padding:16px 24px 0 0}}.media-editor .components-panel__header.media-editor__sidebar-header{margin-right:0;padding-left:0;padding-right:8px}@media (min-width:600px){.media-editor .components-panel__header.media-editor__sidebar-header{margin-right:24px}}.media-editor .components-panel__header.media-editor__sidebar-header .components-button.has-icon{padding:0}@media (min-width:600px){.media-editor .components-panel__header.media-editor__sidebar-header .components-button.has-icon{display:flex}}@media (min-width:600px) and (max-width:781px){.media-editor .interface-interface-skeleton__sidebar:has(.interface-complementary-area__fill){position:relative!important}.media-editor .interface-complementary-area,.media-editor .interface-complementary-area__fill{width:280px!important}}@media (max-width:599px){.media-editor .interface-interface-skeleton__sidebar:has(.interface-complementary-area__fill){width:100%}.media-editor .interface-complementary-area,.media-editor .interface-complementary-area__fill{width:100%!important}}.media-editor__snackbar{bottom:24px;box-sizing:border-box;display:flex;flex-direction:column;left:0;padding-inline:16px;pointer-events:none;position:fixed;right:0}.media-editor__snackbar .components-snackbar{margin-inline:auto}.media-editor-form .dataforms-layouts-panel__field-control{text-wrap:pretty}.media-editor-modal.components-modal__frame .components-modal__content{display:flex;flex-direction:column;margin-bottom:0;min-height:0;padding:0}.media-editor-modal.components-modal__frame .components-modal__children-container{display:flex;flex:1;flex-direction:column;min-height:0}.media-editor-modal.components-modal__frame .media-editor-modal__footer{background:#fff;display:flex;flex-shrink:0;gap:16px;padding:16px 32px 24px;z-index:1000001}.media-editor-modal.components-modal__frame .media-editor-modal__footer.is-wide{align-items:center;flex-direction:row}.media-editor-modal.components-modal__frame .media-editor-modal__footer.is-wide .media-editor__footer-actions{margin-left:auto}.media-editor-modal.components-modal__frame .media-editor-modal__footer.is-narrow{flex-direction:column}.media-editor-modal.components-modal__frame .media-editor-modal__footer.is-narrow>.media-editor-image-controls{align-self:center}.media-editor-modal__footer-row{align-items:center;display:flex;flex-wrap:wrap;gap:16px}.media-editor-modal__footer-row .media-editor-image-controls,.media-editor-modal__footer-row .media-editor__footer-actions{margin-left:auto}.media-editor__history-actions .components-button.has-icon:not([aria-disabled=true]){color:var(--wp-admin-theme-color)}.media-editor-modal,.media-editor-modal__snackbar{display:flex;flex-direction:column}.media-editor-modal__snackbar{bottom:24px;box-sizing:border-box;left:0;padding-inline:16px;pointer-events:none;position:fixed;right:0}.media-editor-modal__snackbar .components-snackbar{margin-inline:auto}.media-editor-modal__snackbar{z-index:1000001}.media-editor-canvas{height:100%;position:relative;width:100%}.media-editor-canvas__cropper{height:100%;opacity:0;pointer-events:none;width:100%}.media-editor-canvas__cropper.is-loaded{opacity:1;pointer-events:auto}@keyframes __wp-base-styles-fade-in{0%{opacity:0}to{opacity:1}}@media not (prefers-reduced-motion){.media-editor-canvas__cropper.is-loaded{animation:__wp-base-styles-fade-in .2s linear 0s;animation-fill-mode:forwards}}.media-editor-canvas__spinner{left:50%;position:absolute;top:50%;transform:translate(-50%,-50%)}.media-editor-canvas__error{align-items:center;color:#757575;display:flex;height:100%;justify-content:center;text-align:center;width:100%}.media-editor-image-controls{align-items:center;display:flex;flex-wrap:nowrap;gap:8px}.media-editor-image-controls.is-stacked{align-items:flex-start;flex-direction:column;gap:24px}.media-editor-image-controls__transforms{display:flex;gap:48px}.media-editor-image-controls__group{display:flex;flex-direction:column;gap:4px}.media-editor-image-controls__label{font-size:11px;font-weight:500;line-height:1.4;text-transform:uppercase}.media-editor-image-controls__buttons{display:flex;gap:8px;padding-inline:2px 0}.media-editor-keyboard-shortcuts-modal{min-width:280px}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__note{color:#757575;font-size:13px;margin:0 0 16px}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut-list{list-style:none;margin:0;padding:0}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut{align-items:baseline;border-top:1px solid #ddd;display:flex;margin-bottom:0;padding:.6rem 0}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut:last-child{border-bottom:1px solid #ddd}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut-description{flex:1;margin:0}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut-term{background:none;font-weight:600;margin:0 0 0 1rem;padding:0;text-align:right}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut-key{border-radius:8%;margin:0 .2rem;padding:.25rem .5rem}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut-key:last-child{margin:0 0 0 .2rem}.rotation-ruler{box-sizing:border-box;color:#1e1e1e;container-type:inline-size;cursor:ew-resize;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif;height:32px;min-width:180px;padding:0 8px;position:relative;touch-action:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.rotation-ruler[data-disabled]{cursor:default;opacity:.5;pointer-events:none}.rotation-ruler:has(.rotation-ruler__input:focus-visible){border-radius:4px;outline:2px solid var(--wp-admin-theme-color,#3858e9);outline-offset:2px}.rotation-ruler__input{clip:rect(0 0 0 0);border:0;height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;white-space:nowrap;width:1px}.rotation-ruler__pointer{background:var(--wp-admin-theme-color,#3858e9);border-radius:1px;bottom:0;height:18px;left:50%;pointer-events:none;position:absolute;transform:translateX(-50%);width:2px}.rotation-ruler__strip{inset:0;mask-image:linear-gradient(90deg,transparent 0,#000 8px,#000 calc(100% - 8px),transparent);-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 8px,#000 calc(100% - 8px),transparent);overflow:hidden;position:absolute}.rotation-ruler__ticks{display:block;left:50%;overflow:visible;position:absolute;top:0}.rotation-ruler__tick{stroke:currentColor;stroke-width:1}.rotation-ruler__tick--minor{opacity:.35}.rotation-ruler__tick--mid{opacity:.6}.rotation-ruler__tick--major{opacity:1}.rotation-ruler__label{fill:currentColor;font-size:10px;font-weight:400;opacity:.45}.rotation-ruler__active-label{color:#1e1e1e;font-size:12px;font-weight:600;height:14px;left:50%;line-height:14px;pointer-events:none;position:absolute;top:0;transform:translateX(-50%)}.rotation-ruler__active-label:before{background:linear-gradient(90deg,transparent 0,#e0e0e0 12px,#e0e0e0 calc(100% - 12px),transparent);content:"";height:100%;left:50%;position:absolute;top:0;transform:translateX(-50%);width:60px}.rotation-ruler__active-label-number{display:inline-block;position:relative}.rotation-ruler__active-label-sign{position:absolute;right:100%;top:0}.rotation-ruler__active-label-unit{left:100%;position:absolute;top:0}@container (max-width: 220px){.rotation-ruler__tick--minor{opacity:0}}@media (prefers-reduced-motion:reduce){.rotation-ruler__ticks{transition:none}}.media-editor-route__content{display:flex;flex:1;min-height:0;overflow:hidden}'));
   document.head.appendChild(style);
 }
 
@@ -26259,7 +26650,7 @@ function isMediaEditorAdminPage() {
 }
 function getMediaTitle(media) {
   const title = typeof media?.title === "string" ? media.title : media?.title?.rendered || media?.title?.raw;
-  return title ? (0, import_html_entities.decodeEntities)(title) : (0, import_i18n38.__)("Edit media");
+  return title ? (0, import_html_entities.decodeEntities)(title) : (0, import_i18n39.__)("Edit media");
 }
 function MediaEditorRoute() {
   const { id } = useParams({ from: "/media-editor/$id" });
@@ -26308,7 +26699,7 @@ function MediaEditorRoute() {
             {
               items: isStandaloneAdminPage ? [{ label: title }] : [
                 {
-                  label: (0, import_i18n38.__)("Media"),
+                  label: (0, import_i18n39.__)("Media"),
                   to: MEDIA_LIST_PATH
                 },
                 { label: title }

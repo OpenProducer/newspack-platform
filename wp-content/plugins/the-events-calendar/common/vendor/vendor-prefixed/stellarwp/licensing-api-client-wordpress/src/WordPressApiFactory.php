@@ -6,8 +6,8 @@ use TEC\Common\LiquidWeb\LicensingApiClient\Api;
 use TEC\Common\LiquidWeb\LicensingApiClient\ApiBuilder;
 use TEC\Common\LiquidWeb\LicensingApiClient\Config;
 use TEC\Common\Psr\Http\Client\ClientInterface;
-use TEC\Common\Psr\Http\Message\RequestFactoryInterface;
-use TEC\Common\Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * Builds the core licensing API client with WordPress-compatible transport dependencies.

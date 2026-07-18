@@ -19,6 +19,7 @@ use Yoast\WP\SEO\MyYoast_Client\Application\Ports\Client_Registration_Interface;
 use Yoast\WP\SEO\MyYoast_Client\Application\Ports\Discovery_Interface;
 use Yoast\WP\SEO\MyYoast_Client\Application\Ports\ID_Token_Validator_Interface;
 use Yoast\WP\SEO\MyYoast_Client\Domain\Auth_Flow_State;
+use Yoast\WP\SEO\MyYoast_Client\Domain\Resource_Indicator;
 use Yoast\WP\SEO\MyYoast_Client\Domain\Token_Set;
 use Yoast\WP\SEO\MyYoast_Client\Infrastructure\Encoding\Base64url;
 use YoastSEO_Vendor\Psr\Log\LoggerAwareInterface;
@@ -101,16 +102,17 @@ class Authorization_Code_Handler implements LoggerAwareInterface {
 	 *
 	 * Generates PKCE challenge, state, and nonce, and stores them in the expiring store.
 	 *
-	 * @param int         $user_id      The WordPress user ID.
-	 * @param string      $redirect_uri The callback redirect URI.
-	 * @param string[]    $scopes       The scopes to request.
-	 * @param string|null $return_url   The URL to return the user to after authorization completes.
+	 * @param int                $user_id            The WordPress user ID.
+	 * @param string             $redirect_uri       The callback redirect URI.
+	 * @param string[]           $scopes             The scopes to request.
+	 * @param Resource_Indicator $resource_indicator The RFC 8707 resource indicator the issued token should be bound to.
+	 * @param string|null        $return_url         The URL to return the user to after authorization completes.
 	 *
 	 * @return string The authorization URL to redirect the user to.
 	 *
 	 * @throws Authorization_Flow_Exception If any of the auth flow prerequisites (registration, discovery, random number generation, or state parameter validation) fails.
 	 */
-	public function get_authorization_url( int $user_id, string $redirect_uri, array $scopes = [], ?string $return_url = null ): string {
+	public function get_authorization_url( int $user_id, string $redirect_uri, array $scopes, Resource_Indicator $resource_indicator, ?string $return_url = null ): string {
 		if ( $user_id <= 0 ) {
 			throw new Authorization_Flow_Exception( 'invalid_user', 'A valid WordPress user ID is required to start the authorization flow.' );
 		}
@@ -146,7 +148,7 @@ class Authorization_Code_Handler implements LoggerAwareInterface {
 		}
 
 		try {
-			$flow_state = new Auth_Flow_State( $code_verifier, $state, $nonce, $redirect_uri, $return_url );
+			$flow_state = new Auth_Flow_State( $code_verifier, $state, $nonce, $redirect_uri, $return_url, $resource_indicator );
 		} catch ( InvalidArgumentException $e ) {
 			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Internal exception message.
 			throw new Authorization_Flow_Exception( 'invalid_state', $e->getMessage(), 0, $e );
@@ -172,6 +174,10 @@ class Authorization_Code_Handler implements LoggerAwareInterface {
 
 		if ( $nonce !== null ) {
 			$params['nonce'] = $nonce;
+		}
+
+		if ( ! $resource_indicator->is_default() ) {
+			$params['resource'] = $resource_indicator->value();
 		}
 
 		return $auth_endpoint . '?' . \http_build_query( $params, '', '&', \PHP_QUERY_RFC3986 );
@@ -208,8 +214,9 @@ class Authorization_Code_Handler implements LoggerAwareInterface {
 		// Clean up the stored flow state.
 		$this->expiring_store->delete_for_user( self::CURRENT_AUTH_FLOW_STATE_KEY, $user_id );
 
-		$grant     = new Authorization_Code_Grant( $code, $flow_state->get_redirect_uri(), $flow_state->get_code_verifier() );
-		$token_set = $this->grant_handler->request_token( $grant );
+		$resource_indicator = $flow_state->get_resource_indicator();
+		$grant              = new Authorization_Code_Grant( $code, $flow_state->get_redirect_uri(), $flow_state->get_code_verifier() );
+		$token_set          = $this->grant_handler->request_token( $grant, $resource_indicator );
 
 		// Validate ID token nonce (replay protection) if an ID token was returned.
 		$this->validate_id_token_nonce( $token_set, $flow_state );

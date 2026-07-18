@@ -4,7 +4,7 @@
     'name' => 'the-events-calendar/tribe-common',
     'pretty_version' => 'dev-main',
     'version' => 'dev-main',
-    'reference' => '1c212501eac3db8f396f4288c45566efdc6beb61',
+    'reference' => 'e4ff04411dc28822c0b666e870173c81836ad6fd',
     'type' => 'wordpress-plugin',
     'install_path' => __DIR__ . '/../',
     'aliases' => 
@@ -136,9 +136,9 @@
     ),
     'stellarwp/arrays' => 
     array (
-      'pretty_version' => '1.2.2',
-      'version' => '1.2.2.0',
-      'reference' => 'fe0a4cec1a299c196cc89bdba18ac99dea6bf5a2',
+      'pretty_version' => '1.3.2',
+      'version' => '1.3.2.0',
+      'reference' => 'e994abcdb5d76fb5fdea7f2e1549d0603c13f91e',
       'type' => 'library',
       'install_path' => __DIR__ . '/../stellarwp/arrays',
       'aliases' => 
@@ -148,9 +148,9 @@
     ),
     'stellarwp/assets' => 
     array (
-      'pretty_version' => '1.4.10',
-      'version' => '1.4.10.0',
-      'reference' => 'a7c196cd6a4189d3f8f1112c5e66bcf1a5d1f610',
+      'pretty_version' => '1.5.2',
+      'version' => '1.5.2.0',
+      'reference' => '55045a2751222c5ade7f192acfaada2cea9a92f7',
       'type' => 'library',
       'install_path' => __DIR__ . '/../stellarwp/assets',
       'aliases' => 

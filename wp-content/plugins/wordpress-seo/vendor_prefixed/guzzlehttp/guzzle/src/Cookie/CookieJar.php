@@ -88,20 +88,20 @@ class CookieJar implements \YoastSEO_Vendor\GuzzleHttp\Cookie\CookieJarInterface
     }
     public function clear(?string $domain = null, ?string $path = null, ?string $name = null) : void
     {
-        if (!$domain) {
+        if ($domain === null) {
             $this->cookies = [];
             return;
         } elseif (!$path) {
             $this->cookies = \array_filter($this->cookies, static function (\YoastSEO_Vendor\GuzzleHttp\Cookie\SetCookie $cookie) use($domain) : bool {
-                return !$cookie->matchesDomain($domain);
+                return $cookie->getDomain() === null || !$cookie->matchesDomain($domain);
             });
         } elseif (!$name) {
             $this->cookies = \array_filter($this->cookies, static function (\YoastSEO_Vendor\GuzzleHttp\Cookie\SetCookie $cookie) use($path, $domain) : bool {
-                return !($cookie->matchesPath($path) && $cookie->matchesDomain($domain));
+                return !($cookie->getDomain() !== null && $cookie->matchesPath($path) && $cookie->matchesDomain($domain));
             });
         } else {
             $this->cookies = \array_filter($this->cookies, static function (\YoastSEO_Vendor\GuzzleHttp\Cookie\SetCookie $cookie) use($path, $domain, $name) {
-                return !($cookie->getName() == $name && $cookie->matchesPath($path) && $cookie->matchesDomain($domain));
+                return !($cookie->getDomain() !== null && $cookie->getName() == $name && $cookie->matchesPath($path) && $cookie->matchesDomain($domain));
             });
         }
     }
@@ -220,7 +220,7 @@ class CookieJar implements \YoastSEO_Vendor\GuzzleHttp\Cookie\CookieJarInterface
         $host = $uri->getHost();
         $path = $uri->getPath() ?: '/';
         foreach ($this->cookies as $cookie) {
-            if ($cookie->matchesPath($path) && $cookie->matchesDomain($host) && !$cookie->isExpired() && (!$cookie->getSecure() || $scheme === 'https')) {
+            if ($cookie->getDomain() !== null && $cookie->matchesPath($path) && $cookie->matchesDomain($host) && !$cookie->isExpired() && (!$cookie->getSecure() || $scheme === 'https')) {
                 $values[] = $cookie->getName() . '=' . $cookie->getValue();
             }
         }
@@ -233,7 +233,7 @@ class CookieJar implements \YoastSEO_Vendor\GuzzleHttp\Cookie\CookieJarInterface
     private function removeCookieIfEmpty(\YoastSEO_Vendor\GuzzleHttp\Cookie\SetCookie $cookie) : void
     {
         $cookieValue = $cookie->getValue();
-        if ($cookieValue === null || $cookieValue === '') {
+        if (($cookieValue === null || $cookieValue === '') && $cookie->getDomain() !== null) {
             $this->clear($cookie->getDomain(), $cookie->getPath(), $cookie->getName());
         }
     }

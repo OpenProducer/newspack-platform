@@ -228,6 +228,7 @@ class ComposerStaticInit6b6268ba2c15e3c66299046a44fd2a9c
         'Newspack\\Optional_Modules\\InDesign_Exporter' => __DIR__ . '/../..' . '/includes/optional-modules/class-indesign-exporter.php',
         'Newspack\\Organic_Profile_Block' => __DIR__ . '/../..' . '/includes/plugins/class-organic-profile-block.php',
         'Newspack\\PWA' => __DIR__ . '/../..' . '/includes/plugins/class-pwa.php',
+        'Newspack\\Parsely' => __DIR__ . '/../..' . '/includes/plugins/class-parsely.php',
         'Newspack\\Parsely_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-parsely-configuration-manager.php',
         'Newspack\\Patches' => __DIR__ . '/../..' . '/includes/class-patches.php',
         'Newspack\\Perfmatters' => __DIR__ . '/../..' . '/includes/plugins/class-perfmatters.php',

@@ -7,7 +7,6 @@ use YoastSEO_Vendor\GuzzleHttp\HandlerStack;
 use YoastSEO_Vendor\GuzzleHttp\Promise as P;
 use YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface;
 use YoastSEO_Vendor\GuzzleHttp\TransferStats;
-use YoastSEO_Vendor\GuzzleHttp\Utils;
 use YoastSEO_Vendor\Psr\Http\Message\RequestInterface;
 use YoastSEO_Vendor\Psr\Http\Message\ResponseInterface;
 use YoastSEO_Vendor\Psr\Http\Message\StreamInterface;
@@ -131,7 +130,7 @@ class MockHandler implements \Countable
             if ($value instanceof \YoastSEO_Vendor\Psr\Http\Message\ResponseInterface || $value instanceof \Throwable || $value instanceof \YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface || \is_callable($value)) {
                 $this->queue[] = $value;
             } else {
-                throw new \TypeError('Expected a Response, Promise, Throwable or callable. Found ' . \YoastSEO_Vendor\GuzzleHttp\Utils::describeType($value));
+                throw new \TypeError('Expected a Response, Promise, Throwable or callable. Found ' . \get_debug_type($value));
             }
         }
     }

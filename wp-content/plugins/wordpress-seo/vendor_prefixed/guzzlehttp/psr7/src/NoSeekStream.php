@@ -14,6 +14,12 @@ final class NoSeekStream implements \YoastSEO_Vendor\Psr\Http\Message\StreamInte
     private $stream;
     public function seek($offset, $whence = \SEEK_SET) : void
     {
+        if (!\is_int($offset)) {
+            \YoastSEO_Vendor\trigger_deprecation('guzzlehttp/psr7', '2.11', 'Passing %s to StreamInterface::seek() is deprecated; guzzlehttp/psr7 3.0 requires int for $offset.', \get_debug_type($offset));
+        }
+        if (!\is_int($whence)) {
+            \YoastSEO_Vendor\trigger_deprecation('guzzlehttp/psr7', '2.11', 'Passing %s to StreamInterface::seek() is deprecated; guzzlehttp/psr7 3.0 requires int for $whence.', \get_debug_type($whence));
+        }
         throw new \RuntimeException('Cannot seek a NoSeekStream');
     }
     public function isSeekable() : bool

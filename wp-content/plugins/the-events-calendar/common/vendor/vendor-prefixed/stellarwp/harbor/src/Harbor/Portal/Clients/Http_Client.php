@@ -4,7 +4,7 @@ namespace TEC\Common\LiquidWeb\Harbor\Portal\Clients;
 
 use TEC\Common\Psr\Http\Client\ClientExceptionInterface;
 use TEC\Common\Psr\Http\Client\ClientInterface;
-use TEC\Common\Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\RequestFactoryInterface;
 use TEC\Common\LiquidWeb\Harbor\Portal\Catalog_Collection;
 use TEC\Common\LiquidWeb\Harbor\Portal\Error_Code;
 use TEC\Common\LiquidWeb\Harbor\Portal\Results\Product_Catalog;

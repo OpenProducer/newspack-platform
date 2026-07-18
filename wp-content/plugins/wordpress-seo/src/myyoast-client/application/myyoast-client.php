@@ -17,8 +17,10 @@ use Yoast\WP\SEO\MyYoast_Client\Application\Ports\OAuth_Server_Client_Interface;
 use Yoast\WP\SEO\MyYoast_Client\Application\Ports\Site_URL_Provider_Interface;
 use Yoast\WP\SEO\MyYoast_Client\Application\Ports\Token_Storage_Interface;
 use Yoast\WP\SEO\MyYoast_Client\Application\Ports\User_Token_Storage_Interface;
+use Yoast\WP\SEO\MyYoast_Client\Domain\Exceptions\Invalid_Resource_Exception;
 use Yoast\WP\SEO\MyYoast_Client\Domain\HTTP_Response;
 use Yoast\WP\SEO\MyYoast_Client\Domain\Registered_Client;
+use Yoast\WP\SEO\MyYoast_Client\Domain\Resource_Indicator;
 use Yoast\WP\SEO\MyYoast_Client\Domain\Token_Set;
 use Yoast\WP\SEO\MyYoast_Client\Domain\Token_Type_Hint;
 use YoastSEO_Vendor\Psr\Log\LoggerAwareInterface;
@@ -204,17 +206,19 @@ class MyYoast_Client implements LoggerAwareInterface {
 	/**
 	 * Builds the authorization URL for the user authorization flow.
 	 *
-	 * @param int         $user_id      The WordPress user ID.
-	 * @param string      $redirect_uri The callback redirect URI.
-	 * @param string[]    $scopes       The scopes to request.
-	 * @param string|null $return_url   The URL to return the user to after authorization completes.
+	 * @param int         $user_id            The WordPress user ID.
+	 * @param string      $redirect_uri       The callback redirect URI.
+	 * @param string[]    $scopes             The scopes to request.
+	 * @param string|null $resource_indicator The RFC 8707 resource indicator the issued token should be bound to.
+	 * @param string|null $return_url         The URL to return the user to after authorization completes.
 	 *
 	 * @return string The authorization URL.
 	 *
 	 * @throws Authorization_Flow_Exception If registration, discovery, or parameter validation fails.
+	 * @throws Invalid_Resource_Exception     If the resource indicator is malformed.
 	 */
-	public function get_authorization_url( int $user_id, string $redirect_uri, array $scopes = [], ?string $return_url = null ): string {
-		return $this->auth_code_handler->get_authorization_url( $user_id, $redirect_uri, $scopes, $return_url );
+	public function get_authorization_url( int $user_id, string $redirect_uri, array $scopes = [], ?string $resource_indicator = null, ?string $return_url = null ): string {
+		return $this->auth_code_handler->get_authorization_url( $user_id, $redirect_uri, $scopes, new Resource_Indicator( $resource_indicator ), $return_url );
 	}
 
 	/**
@@ -238,21 +242,24 @@ class MyYoast_Client implements LoggerAwareInterface {
 	/**
 	 * Returns a valid site-level access token (client_credentials).
 	 *
-	 * @param string[] $scopes The service:* scopes to request.
+	 * @param string[]    $scopes             The service:* scopes to request.
+	 * @param string|null $resource_indicator The RFC 8707 resource indicator the token should be bound to, or null for the default resource.
 	 *
 	 * @return Token_Set The site-level token set.
 	 *
-	 * @throws Token_Request_Failed_Exception If the token request fails.
-	 * @throws Token_Storage_Exception        If encrypting the token set for storage fails.
+	 * @throws Invalid_Resource_Exception     If the resource indicator is malformed.
+	 * @throws Token_Request_Failed_Exception If the token request fails. May also throw Token_Storage_Exception when encrypting the token set for storage fails.
 	 */
-	public function get_site_token( array $scopes = [] ): Token_Set {
-		$cached = $this->token_storage->get();
+	public function get_site_token( array $scopes = [], ?string $resource_indicator = null ): Token_Set {
+		$indicator = new Resource_Indicator( $resource_indicator );
+
+		$cached = $this->token_storage->get( $indicator );
 		if ( $cached !== null && ! $cached->is_expired() && $cached->has_scopes( $scopes ) ) {
 			return $cached;
 		}
 
 		$grant     = new Client_Credentials_Grant( $scopes, $this->site_url_provider->get() );
-		$token_set = $this->grant_handler->request_token( $grant );
+		$token_set = $this->grant_handler->request_token( $grant, $indicator );
 		$this->token_storage->store( $token_set );
 
 		return $token_set;
@@ -261,14 +268,18 @@ class MyYoast_Client implements LoggerAwareInterface {
 	/**
 	 * Returns a valid user-level access token, auto-refreshing if expired.
 	 *
-	 * @param int      $user_id         The WordPress user ID.
-	 * @param string[] $required_scopes Optional scopes required for the token; if provided, no token will be returned unless it has at least these scopes.
-	 *                                  This is to avoid refreshing a token that would trigger an immediate re-authorization due to missing scopes.
+	 * @param int         $user_id            The WordPress user ID.
+	 * @param string[]    $required_scopes    Optional scopes required for the token; if provided, no token will be returned unless it has at least these scopes.
+	 *                                        This is to avoid refreshing a token that would trigger an immediate re-authorization due to missing scopes.
+	 * @param string|null $resource_indicator The RFC 8707 resource indicator the token should be bound to, or null for the default resource.
 	 *
 	 * @return Token_Set|null The user token set, or null if the user hasn't authorized.
+	 *
+	 * @throws Invalid_Resource_Exception If the resource indicator is malformed.
 	 */
-	public function get_user_token( int $user_id, array $required_scopes = [] ): ?Token_Set {
-		$token_set = $this->user_token_storage->get( $user_id );
+	public function get_user_token( int $user_id, array $required_scopes = [], ?string $resource_indicator = null ): ?Token_Set {
+		$indicator = new Resource_Indicator( $resource_indicator );
+		$token_set = $this->user_token_storage->get( $user_id, $indicator );
 		if ( $token_set === null ) {
 			return null;
 		}
@@ -287,26 +298,22 @@ class MyYoast_Client implements LoggerAwareInterface {
 			return null;
 		}
 
+		// Refresh must keep the audience binding (RFC 8707 §2); pull it from the stored token.
+		$bound_resource = $token_set->get_resource_indicator();
+
+		// If the client was just re-registered, this refresh will fail with invalid_grant.
+		// error_count is 0 on first attempt; after one invalid_grant it becomes 1.
+		// On the second consecutive invalid_grant (error_count >= 1), clear and give up.
+		$grant    = new Refresh_Token_Grant( $refresh_token );
+		$lock_key = 'wpseo_myyoast_refresh:' . \hash( 'sha256', $refresh_token );
 		try {
-			// If the client was just re-registered, this refresh will fail with invalid_grant.
-			// error_count is 0 on first attempt; after one invalid_grant it becomes 1.
-			// On the second consecutive invalid_grant (error_count >= 1), clear and give up.
-			$grant         = new Refresh_Token_Grant( $refresh_token );
-			$lock_key      = 'wpseo_myyoast_refresh:' . \hash( 'sha256', $refresh_token );
 			$new_token_set = $this->lock_helper->execute(
 				$lock_key,
-				function () use ( $grant ) {
-					return $this->grant_handler->request_token( $grant );
+				function () use ( $grant, $bound_resource ) {
+					return $this->grant_handler->request_token( $grant, $bound_resource );
 				},
 				self::REFRESH_LOCK_TTL_IN_SECONDS,
 			);
-			try {
-				$this->user_token_storage->store( $user_id, $new_token_set );
-			} catch ( Token_Storage_Exception $e ) {
-				// Next request will re-refresh from the old stored token.
-				$this->logger->warning( 'Failed to persist refreshed token: {error}', [ 'error' => $e->getMessage() ] );
-			}
-			return $new_token_set;
 		} catch ( Lock_Timeout_Exception $e ) {
 			// Concurrent refresh in progress, treat as transient failure.
 			$this->logger->debug( 'Skipping token refresh for user {user_id}: concurrent refresh in progress.', [ 'user_id' => $user_id ] );
@@ -315,7 +322,7 @@ class MyYoast_Client implements LoggerAwareInterface {
 			if ( $e->get_error_code() === 'invalid_grant' ) {
 				if ( $token_set->get_error_count() >= 1 ) {
 					$this->logger->warning( 'Repeated invalid_grant for user {user_id}, clearing stored tokens.', [ 'user_id' => $user_id ] );
-					$this->user_token_storage->delete( $user_id );
+					$this->user_token_storage->delete( $user_id, $indicator );
 					return null;
 				}
 
@@ -329,28 +336,42 @@ class MyYoast_Client implements LoggerAwareInterface {
 
 			return null;
 		}
+		try {
+			$this->user_token_storage->store( $user_id, $new_token_set );
+		} catch ( Token_Storage_Exception $e ) {
+			// Next request will re-refresh from the old stored token.
+			$this->logger->warning( 'Failed to persist refreshed token: {error}', [ 'error' => $e->getMessage() ] );
+		}
+		return $new_token_set;
 	}
 
 	/**
-	 * Whether the given user has authorized with MyYoast.
+	 * Whether the given user has authorized with MyYoast for a resource.
 	 *
-	 * @param int $user_id The WordPress user ID.
+	 * @param int         $user_id            The WordPress user ID.
+	 * @param string|null $resource_indicator The RFC 8707 resource indicator, or null for the default resource.
 	 *
 	 * @return bool
+	 *
+	 * @throws Invalid_Resource_Exception If the resource indicator is malformed.
 	 */
-	public function has_user_token( int $user_id ): bool {
-		return $this->user_token_storage->get( $user_id ) !== null;
+	public function has_user_token( int $user_id, ?string $resource_indicator = null ): bool {
+		return $this->user_token_storage->get( $user_id, new Resource_Indicator( $resource_indicator ) ) !== null;
 	}
 
 	/**
-	 * Revokes the user's tokens and clears storage.
+	 * Revokes the user's tokens for a resource and clears storage.
 	 *
-	 * @param int $user_id The WordPress user ID.
+	 * @param int         $user_id            The WordPress user ID.
+	 * @param string|null $resource_indicator The RFC 8707 resource indicator, or null for the default resource.
 	 *
 	 * @return void
+	 *
+	 * @throws Invalid_Resource_Exception If the resource indicator is malformed.
 	 */
-	public function revoke_user_token( int $user_id ): void {
-		$token_set = $this->user_token_storage->get( $user_id );
+	public function revoke_user_token( int $user_id, ?string $resource_indicator = null ): void {
+		$indicator = new Resource_Indicator( $resource_indicator );
+		$token_set = $this->user_token_storage->get( $user_id, $indicator );
 		if ( $token_set === null ) {
 			return;
 		}
@@ -360,7 +381,25 @@ class MyYoast_Client implements LoggerAwareInterface {
 			$this->revocation_handler->revoke( $token_set->get_refresh_token(), Token_Type_Hint::REFRESH_TOKEN );
 		}
 
-		$this->user_token_storage->delete( $user_id );
+		$this->user_token_storage->delete( $user_id, $indicator );
+	}
+
+	/**
+	 * Revokes every user token across all resource buckets ("log out everywhere").
+	 *
+	 * @param int $user_id The WordPress user ID.
+	 *
+	 * @return void
+	 */
+	public function revoke_all_user_tokens( int $user_id ): void {
+		$tokens = $this->user_token_storage->get_all( $user_id );
+		foreach ( $tokens as $token_set ) {
+			$this->revocation_handler->revoke( $token_set->get_access_token(), Token_Type_Hint::ACCESS_TOKEN );
+			if ( $token_set->get_refresh_token() !== null ) {
+				$this->revocation_handler->revoke( $token_set->get_refresh_token(), Token_Type_Hint::REFRESH_TOKEN );
+			}
+			$this->user_token_storage->delete( $user_id, $token_set->get_resource_indicator() );
+		}
 	}
 
 	/**
@@ -381,12 +420,25 @@ class MyYoast_Client implements LoggerAwareInterface {
 	}
 
 	/**
-	 * Clears the site-level token.
+	 * Clears the site-level token for a resource bucket.
+	 *
+	 * @param string|null $resource_indicator The RFC 8707 resource indicator, or null for the default resource.
+	 *
+	 * @return void
+	 *
+	 * @throws Invalid_Resource_Exception If the resource indicator is malformed.
+	 */
+	public function clear_site_token( ?string $resource_indicator = null ): void {
+		$this->token_storage->delete( new Resource_Indicator( $resource_indicator ) );
+	}
+
+	/**
+	 * Clears every site-level token across resource buckets.
 	 *
 	 * @return void
 	 */
-	public function clear_site_token(): void {
-		$this->token_storage->delete();
+	public function clear_all_site_tokens(): void {
+		$this->token_storage->delete_all();
 	}
 
 	/**

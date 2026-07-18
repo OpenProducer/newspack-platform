@@ -89,14 +89,34 @@ namespace StellarWP\Uplink {
         }
     }
 }
+namespace TrustedLogin {
+    if(!function_exists('\\TrustedLogin\\function_exists')){
+        function function_exists(...$args) {
+            return \TEC\Common\TrustedLogin\function_exists(...func_get_args());
+        }
+    }
+}
 
 
 namespace TEC\Common {
 
+    use BrianHenryIE\Strauss\Types\AutoloadAliasInterface;
+
+    /**
+     * @see AutoloadAliasInterface
+     *
+     * @phpstan-type ClassAliasArray array{'type':'class',isabstract:bool,classname:string,namespace?:string,extends:string,implements:array<string>}
+     * @phpstan-type InterfaceAliasArray array{'type':'interface',interfacename:string,namespace?:string,extends:array<string>}
+     * @phpstan-type TraitAliasArray array{'type':'trait',traitname:string,namespace?:string,use:array<string>}
+     * @phpstan-type AutoloadAliasArray array<string,ClassAliasArray|InterfaceAliasArray|TraitAliasArray>
+     */
     class AliasAutoloader
     {
         private string $includeFilePath;
 
+        /**
+         * @var AutoloadAliasArray
+         */
         private array $autoloadAliases = array (
   'Firebase\\JWT\\BeforeValidException' => 
   array (
@@ -1872,6 +1892,18 @@ namespace TEC\Common {
     'extends' => 'TEC\\Common\\StellarWP\\Assets\\Utils',
     'implements' => 
     array (
+    ),
+  ),
+  'Your\\Namespace\\Container' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Container',
+    'isabstract' => false,
+    'namespace' => 'Your\\Namespace',
+    'extends' => 'TEC\\Common\\Your\\Namespace\\Container',
+    'implements' => 
+    array (
+      0 => 'StellarWP\\ContainerContract\\ContainerInterface',
     ),
   ),
   'StellarWP\\DB\\Config' => 
@@ -6547,6 +6579,61 @@ namespace TEC\Common {
     array (
     ),
   ),
+  'TrustedLogin\\TrustedLoginClientTest' => 
+  array (
+    'type' => 'class',
+    'classname' => 'TrustedLoginClientTest',
+    'isabstract' => false,
+    'namespace' => 'TrustedLogin',
+    'extends' => 'TEC\\Common\\TrustedLogin\\TrustedLoginClientTest',
+    'implements' => 
+    array (
+    ),
+  ),
+  'TrustedLogin\\TrustedLoginEncryptionTest' => 
+  array (
+    'type' => 'class',
+    'classname' => 'TrustedLoginEncryptionTest',
+    'isabstract' => false,
+    'namespace' => 'TrustedLogin',
+    'extends' => 'TEC\\Common\\TrustedLogin\\TrustedLoginEncryptionTest',
+    'implements' => 
+    array (
+    ),
+  ),
+  'TrustedLogin\\TrustedLoginLoggingTest' => 
+  array (
+    'type' => 'class',
+    'classname' => 'TrustedLoginLoggingTest',
+    'isabstract' => false,
+    'namespace' => 'TrustedLogin',
+    'extends' => 'TEC\\Common\\TrustedLogin\\TrustedLoginLoggingTest',
+    'implements' => 
+    array (
+    ),
+  ),
+  'TrustedLogin\\TrustedLoginRemoteTest' => 
+  array (
+    'type' => 'class',
+    'classname' => 'TrustedLoginRemoteTest',
+    'isabstract' => false,
+    'namespace' => 'TrustedLogin',
+    'extends' => 'TEC\\Common\\TrustedLogin\\TrustedLoginRemoteTest',
+    'implements' => 
+    array (
+    ),
+  ),
+  'TrustedLogin\\TrustedLoginSiteAccessTest' => 
+  array (
+    'type' => 'class',
+    'classname' => 'TrustedLoginSiteAccessTest',
+    'isabstract' => false,
+    'namespace' => 'TrustedLogin',
+    'extends' => 'TEC\\Common\\TrustedLogin\\TrustedLoginSiteAccessTest',
+    'implements' => 
+    array (
+    ),
+  ),
   'Monolog\\Handler\\FormattableHandlerTrait' => 
   array (
     'type' => 'trait',
@@ -7045,136 +7132,6 @@ namespace TEC\Common {
     'extends' => 
     array (
       0 => 'TEC\\Common\\Psr\\Http\\Client\\RequestExceptionInterface',
-    ),
-  ),
-  'Psr\\Http\\Message\\RequestFactoryInterface' => 
-  array (
-    'type' => 'interface',
-    'interfacename' => 'RequestFactoryInterface',
-    'namespace' => 'Psr\\Http\\Message',
-    'extends' => 
-    array (
-      0 => 'TEC\\Common\\Psr\\Http\\Message\\RequestFactoryInterface',
-    ),
-  ),
-  'Psr\\Http\\Message\\ResponseFactoryInterface' => 
-  array (
-    'type' => 'interface',
-    'interfacename' => 'ResponseFactoryInterface',
-    'namespace' => 'Psr\\Http\\Message',
-    'extends' => 
-    array (
-      0 => 'TEC\\Common\\Psr\\Http\\Message\\ResponseFactoryInterface',
-    ),
-  ),
-  'Psr\\Http\\Message\\ServerRequestFactoryInterface' => 
-  array (
-    'type' => 'interface',
-    'interfacename' => 'ServerRequestFactoryInterface',
-    'namespace' => 'Psr\\Http\\Message',
-    'extends' => 
-    array (
-      0 => 'TEC\\Common\\Psr\\Http\\Message\\ServerRequestFactoryInterface',
-    ),
-  ),
-  'Psr\\Http\\Message\\StreamFactoryInterface' => 
-  array (
-    'type' => 'interface',
-    'interfacename' => 'StreamFactoryInterface',
-    'namespace' => 'Psr\\Http\\Message',
-    'extends' => 
-    array (
-      0 => 'TEC\\Common\\Psr\\Http\\Message\\StreamFactoryInterface',
-    ),
-  ),
-  'Psr\\Http\\Message\\UploadedFileFactoryInterface' => 
-  array (
-    'type' => 'interface',
-    'interfacename' => 'UploadedFileFactoryInterface',
-    'namespace' => 'Psr\\Http\\Message',
-    'extends' => 
-    array (
-      0 => 'TEC\\Common\\Psr\\Http\\Message\\UploadedFileFactoryInterface',
-    ),
-  ),
-  'Psr\\Http\\Message\\UriFactoryInterface' => 
-  array (
-    'type' => 'interface',
-    'interfacename' => 'UriFactoryInterface',
-    'namespace' => 'Psr\\Http\\Message',
-    'extends' => 
-    array (
-      0 => 'TEC\\Common\\Psr\\Http\\Message\\UriFactoryInterface',
-    ),
-  ),
-  'Psr\\Http\\Message\\MessageInterface' => 
-  array (
-    'type' => 'interface',
-    'interfacename' => 'MessageInterface',
-    'namespace' => 'Psr\\Http\\Message',
-    'extends' => 
-    array (
-      0 => 'TEC\\Common\\Psr\\Http\\Message\\MessageInterface',
-    ),
-  ),
-  'Psr\\Http\\Message\\RequestInterface' => 
-  array (
-    'type' => 'interface',
-    'interfacename' => 'RequestInterface',
-    'namespace' => 'Psr\\Http\\Message',
-    'extends' => 
-    array (
-      0 => 'TEC\\Common\\Psr\\Http\\Message\\RequestInterface',
-    ),
-  ),
-  'Psr\\Http\\Message\\ResponseInterface' => 
-  array (
-    'type' => 'interface',
-    'interfacename' => 'ResponseInterface',
-    'namespace' => 'Psr\\Http\\Message',
-    'extends' => 
-    array (
-      0 => 'TEC\\Common\\Psr\\Http\\Message\\ResponseInterface',
-    ),
-  ),
-  'Psr\\Http\\Message\\ServerRequestInterface' => 
-  array (
-    'type' => 'interface',
-    'interfacename' => 'ServerRequestInterface',
-    'namespace' => 'Psr\\Http\\Message',
-    'extends' => 
-    array (
-      0 => 'TEC\\Common\\Psr\\Http\\Message\\ServerRequestInterface',
-    ),
-  ),
-  'Psr\\Http\\Message\\StreamInterface' => 
-  array (
-    'type' => 'interface',
-    'interfacename' => 'StreamInterface',
-    'namespace' => 'Psr\\Http\\Message',
-    'extends' => 
-    array (
-      0 => 'TEC\\Common\\Psr\\Http\\Message\\StreamInterface',
-    ),
-  ),
-  'Psr\\Http\\Message\\UploadedFileInterface' => 
-  array (
-    'type' => 'interface',
-    'interfacename' => 'UploadedFileInterface',
-    'namespace' => 'Psr\\Http\\Message',
-    'extends' => 
-    array (
-      0 => 'TEC\\Common\\Psr\\Http\\Message\\UploadedFileInterface',
-    ),
-  ),
-  'Psr\\Http\\Message\\UriInterface' => 
-  array (
-    'type' => 'interface',
-    'interfacename' => 'UriInterface',
-    'namespace' => 'Psr\\Http\\Message',
-    'extends' => 
-    array (
-      0 => 'TEC\\Common\\Psr\\Http\\Message\\UriInterface',
     ),
   ),
   'Psr\\Log\\LoggerAwareInterface' => 
@@ -7767,6 +7724,36 @@ namespace TEC\Common {
       0 => 'TEC\\Common\\StellarWP\\Uplink\\View\\Contracts\\View',
     ),
   ),
+  'ActionScheduler_Exception' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'ActionScheduler_Exception',
+    'namespace' => '\\',
+    'extends' => 
+    array (
+      0 => 'TEC__Common__ActionScheduler_Exception',
+    ),
+  ),
+  'ActionScheduler_Schedule' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'ActionScheduler_Schedule',
+    'namespace' => '\\',
+    'extends' => 
+    array (
+      0 => 'TEC__Common__ActionScheduler_Schedule',
+    ),
+  ),
+  'CronExpression_FieldInterface' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'CronExpression_FieldInterface',
+    'namespace' => '\\',
+    'extends' => 
+    array (
+      0 => 'TEC__Common__CronExpression_FieldInterface',
+    ),
+  ),
 );
 
         public function __construct()
@@ -7774,7 +7761,10 @@ namespace TEC\Common {
             $this->includeFilePath = __DIR__ . '/autoload_alias.php';
         }
 
-        public function autoload($class)
+        /**
+         * @param string $class
+         */
+        public function autoload($class): void
         {
             if (!isset($this->autoloadAliases[$class])) {
                 return;
@@ -7807,13 +7797,16 @@ namespace TEC\Common {
             }
         }
 
-        private function load(string $includeFile)
+        private function load(string $includeFile): void
         {
             file_put_contents($this->includeFilePath, $includeFile);
             include $this->includeFilePath;
             file_exists($this->includeFilePath) && unlink($this->includeFilePath);
         }
 
+        /**
+         * @param ClassAliasArray $class
+         */
         private function classTemplate(array $class): string
         {
             $abstract = $class['isabstract'] ? 'abstract ' : '';
@@ -7836,6 +7829,9 @@ namespace TEC\Common {
                 EOD;
         }
 
+        /**
+         * @param InterfaceAliasArray $interface
+         */
         private function interfaceTemplate(array $interface): string
         {
             $interfacename = $interface['interfacename'];
@@ -7850,6 +7846,10 @@ namespace TEC\Common {
                 interface $interfacename extends $extends {}
                 EOD;
         }
+
+        /**
+         * @param TraitAliasArray $trait
+         */
         private function traitTemplate(array $trait): string
         {
             $traitname = $trait['traitname'];

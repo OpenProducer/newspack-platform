@@ -3,6 +3,7 @@
 namespace YoastSEO_Vendor\GuzzleHttp\Handler;
 
 use YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface;
+use YoastSEO_Vendor\GuzzleHttp\TransportSharing;
 use YoastSEO_Vendor\Psr\Http\Message\RequestInterface;
 /**
  * HTTP handler that uses cURL easy handles as a transport layer.
@@ -20,15 +21,29 @@ class CurlHandler
      */
     private $factory;
     /**
+     * @var CurlShareHandleState|null
+     */
+    private $shareHandleState;
+    /**
      * Accepts an associative array of options:
      *
      * - handle_factory: Optional curl factory used to create cURL handles.
+     * - transport_sharing: Optional transport sharing mode.
      *
-     * @param array{handle_factory?: ?CurlFactoryInterface} $options Array of options to use with the handler
+     * @param array{handle_factory?: ?CurlFactoryInterface, transport_sharing?: mixed} $options Array of options to use with the handler
      */
     public function __construct(array $options = [])
     {
-        $this->factory = $options['handle_factory'] ?? new \YoastSEO_Vendor\GuzzleHttp\Handler\CurlFactory(3);
+        \YoastSEO_Vendor\GuzzleHttp\Handler\CurlShareHandleState::assertNoRequiredSharingCustomFactoryConflict($options, 'CurlHandler');
+        $transportSharing = $options['transport_sharing'] ?? null;
+        $sharingMode = \YoastSEO_Vendor\GuzzleHttp\Handler\CurlShareHandleState::normalizeMode($transportSharing, 'transport_sharing');
+        if (\array_key_exists('handle_factory', $options) && $options['handle_factory'] !== null) {
+            $this->shareHandleState = null;
+            $this->factory = $options['handle_factory'];
+            return;
+        }
+        $this->shareHandleState = $sharingMode !== \YoastSEO_Vendor\GuzzleHttp\TransportSharing::NONE ? \YoastSEO_Vendor\GuzzleHttp\Handler\CurlShareHandleState::fromOption($transportSharing) : null;
+        $this->factory = $this->shareHandleState !== null ? new \YoastSEO_Vendor\GuzzleHttp\Handler\CurlFactory(3, $this->shareHandleState->mode, $this->shareHandleState->handle) : new \YoastSEO_Vendor\GuzzleHttp\Handler\CurlFactory(3);
     }
     public function __invoke(\YoastSEO_Vendor\Psr\Http\Message\RequestInterface $request, array $options) : \YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface
     {

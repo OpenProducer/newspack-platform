@@ -2,7 +2,7 @@
 
 namespace TEC\Common\LiquidWeb\LicensingApiClient\Exceptions\Contracts;
 
-use TEC\Common\Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
 /**

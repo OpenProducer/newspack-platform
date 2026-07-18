@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TEC\Common\Psr\Http\Message;
+namespace Psr\Http\Message;
 
 /**
  * HTTP messages consist of requests from a client to a server and responses

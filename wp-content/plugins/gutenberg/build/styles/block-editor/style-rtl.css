@@ -1519,14 +1519,22 @@ iframe[name=editor-canvas] {
   background: linear-gradient(45deg, transparent 48%, #ddd 48%, #ddd 52%, transparent 52%);
 }
 
+.block-editor-panel-color-gradient-settings__contrast-notice {
+  margin-bottom: 16px;
+}
+
 /**
 * The following styles replicate the separated border of the
 * `ItemGroup` component but allows for hidden items. This is because
 * to maintain the order of `ToolsPanel` controls, each `ToolsPanelItem`
 * must at least render a placeholder which would otherwise interfere
 * with the `:last-child` styles.
+*
+* Applied via the shared `block-editor-color-gradient-item` class on
+* color/gradient dropdown items across the Color, Background, and
+* Typography panels.
 */
-.block-editor-tools-panel-color-gradient-settings__item {
+.block-editor-color-gradient-item {
   padding: 0;
   max-width: 100%;
   position: relative;
@@ -1534,18 +1542,17 @@ iframe[name=editor-canvas] {
   border-left: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
 }
-.block-editor-tools-panel-color-gradient-settings__item:nth-child(1 of .block-editor-tools-panel-color-gradient-settings__item) {
-  margin-top: 24px;
+.block-editor-color-gradient-item:nth-child(1 of .block-editor-color-gradient-item) {
   border-top-right-radius: 2px;
   border-top-left-radius: 2px;
   border-top: 1px solid #ddd;
 }
-.block-editor-tools-panel-color-gradient-settings__item:nth-last-child(1 of .block-editor-tools-panel-color-gradient-settings__item) {
+.block-editor-color-gradient-item:nth-last-child(1 of .block-editor-color-gradient-item) {
   border-bottom-right-radius: 2px;
   border-bottom-left-radius: 2px;
 }
-.block-editor-tools-panel-color-gradient-settings__item > div,
-.block-editor-tools-panel-color-gradient-settings__item > div > button {
+.block-editor-color-gradient-item > div,
+.block-editor-color-gradient-item > div > button {
   border-radius: inherit;
 }
 
@@ -1568,6 +1575,9 @@ iframe[name=editor-canvas] {
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: calc(100% - 44px);
+}
+.block-editor-tools-panel-color-gradient-settings__dropdown > button.has-contrast-warning .block-editor-panel-color-gradient-settings__color-name {
+  max-width: calc(100% - 72px);
 }
 
 .block-editor-panel-color-gradient-settings__dropdown {
@@ -1599,6 +1609,19 @@ iframe[name=editor-canvas] {
   .block-editor-panel-color-gradient-settings__reset {
     opacity: 1;
   }
+}
+.block-editor-panel-color-gradient-settings__dropdown.has-contrast-warning + .block-editor-panel-color-gradient-settings__reset {
+  left: 28px;
+}
+
+.block-editor-panel-color-gradient-settings__contrast-warning {
+  position: absolute;
+  left: 0;
+  top: 8px;
+  margin: auto 8px auto;
+}
+.block-editor-panel-color-gradient-settings__contrast-warning.block-editor-panel-color-gradient-settings__contrast-warning {
+  border-radius: 2px;
 }
 
 .block-editor-date-format-picker {
@@ -3410,33 +3433,6 @@ iframe[name=editor-canvas] {
   font-size: 12px;
 }
 
-/**
- * ItemGroup-like border styles for the background panel's ToolsPanelItems.
- * Replicates the separated border of the `ItemGroup` component while
- * allowing for hidden placeholder items (same approach as the color panel).
- */
-.block-editor-background-panel__item {
-  padding: 0;
-  max-width: 100%;
-  position: relative;
-  border-right: 1px solid #ddd;
-  border-left: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-}
-.block-editor-background-panel__item:nth-child(1 of .block-editor-background-panel__item) {
-  border-top-right-radius: 2px;
-  border-top-left-radius: 2px;
-  border-top: 1px solid #ddd;
-}
-.block-editor-background-panel__item:nth-last-child(1 of .block-editor-background-panel__item) {
-  border-bottom-right-radius: 2px;
-  border-bottom-left-radius: 2px;
-}
-.block-editor-background-panel__item > div,
-.block-editor-background-panel__item > div > button {
-  border-radius: inherit;
-}
-
 .background-block-support-panel {
   /* Increased specificity required to remove the slot wrapper's row gap */
 }
@@ -3651,15 +3647,12 @@ div.block-editor-bindings__panel button:hover .block-editor-bindings__item span 
 .color-block-support-panel.color-block-support-panel .color-block-support-panel__inner-wrapper {
   row-gap: 0;
 }
-.color-block-support-panel {
-  /**
-   * After converting PanelColorGradientSettings to render as a ToolsPanel
-   * we need to remove the top margin when wrapping inner content due to
-   * rendering via SlotFills.
-   */
+
+.elements-block-support-panel {
+  /* Increased specificity required to remove the slot wrapper's row gap */
 }
-.color-block-support-panel .block-editor-tools-panel-color-gradient-settings__item.first {
-  margin-top: 0;
+.elements-block-support-panel.elements-block-support-panel .elements-block-support-panel__inner-wrapper {
+  row-gap: 0;
 }
 
 .dimensions-block-support-panel .single-column {

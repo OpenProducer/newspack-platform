@@ -1,1 +1,1 @@
-<?php return array('dependencies' => array('react-jsx-runtime', 'wc-store-data', 'wp-block-editor', 'wp-blocks', 'wp-components', 'wp-compose', 'wp-core-data', 'wp-data', 'wp-i18n', 'wp-polyfill', 'wp-primitives'), 'version' => 'f85e03937ee91834afe2');
+<?php return array('dependencies' => array('react-jsx-runtime', 'wc-store-data', 'wp-block-editor', 'wp-blocks', 'wp-components', 'wp-compose', 'wp-core-data', 'wp-data', 'wp-i18n', 'wp-polyfill', 'wp-primitives'), 'version' => 'ff864fd46991374b2196');
