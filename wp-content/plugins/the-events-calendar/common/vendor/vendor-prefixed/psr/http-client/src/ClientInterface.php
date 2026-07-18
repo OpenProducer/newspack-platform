@@ -2,8 +2,8 @@
 
 namespace TEC\Common\Psr\Http\Client;
 
-use TEC\Common\Psr\Http\Message\RequestInterface;
-use TEC\Common\Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 interface ClientInterface
 {

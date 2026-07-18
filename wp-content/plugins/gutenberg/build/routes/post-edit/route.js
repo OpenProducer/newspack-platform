@@ -58,12 +58,22 @@ var import_core_data = __toESM(require_core_data());
 var import_html_entities = __toESM(require_html_entities());
 var import_i18n = __toESM(require_i18n());
 import { notFound } from "@wordpress/route";
+var TEMPLATE_POST_TYPES = ["wp_template", "wp_template_part"];
+function getPostId(params) {
+  const id = params["*"];
+  if (!id) {
+    throw notFound();
+  }
+  try {
+    return decodeURIComponent(id);
+  } catch {
+    return id;
+  }
+}
 var route = {
-  beforeLoad: async ({
-    params
-  }) => {
-    const postId = parseInt(params.id, 10);
-    if (Number.isNaN(postId)) {
+  beforeLoad: async ({ params }) => {
+    const postId = getPostId(params);
+    if (!TEMPLATE_POST_TYPES.includes(params.type) && !/^\d+$/.test(postId)) {
       throw notFound();
     }
     try {
@@ -82,13 +92,12 @@ var route = {
       throw notFound();
     }
   },
-  title: async ({
-    params
-  }) => {
+  title: async ({ params }) => {
+    const postId = getPostId(params);
     const post = await (0, import_data.resolveSelect)(import_core_data.store).getEntityRecord(
       "postType",
       params.type,
-      params.id
+      postId
     );
     if (post?.title?.rendered) {
       return (0, import_html_entities.decodeEntities)(post.title.rendered);
@@ -100,9 +109,10 @@ var route = {
   },
   async canvas(context) {
     const { params } = context;
+    const postId = getPostId(params);
     return {
       postType: params.type,
-      postId: params.id
+      postId
     };
   }
 };

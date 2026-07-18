@@ -10,7 +10,7 @@ use TEC\Common\LiquidWeb\LicensingApiClient\Http\Factories\ResponseExceptionFact
 use TEC\Common\LiquidWeb\LicensingApiClient\Value\AuthToken;
 use TEC\Common\Psr\Http\Client\ClientExceptionInterface;
 use TEC\Common\Psr\Http\Client\ClientInterface as HttpClient;
-use TEC\Common\Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Executes API requests and delegates response error mapping.

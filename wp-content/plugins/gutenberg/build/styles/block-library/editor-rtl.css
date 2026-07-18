@@ -2365,25 +2365,6 @@ html[dir=rtl] .has-drop-cap:not(:focus)::first-letter {
   width: 112px;
 }
 
-.wp-block-tab-list > .block-editor-block-list__layout {
-  display: contents;
-}
-.wp-block-tab-list .block-editor-block-list__block:has(> .wp-block-tab) {
-  display: contents;
-}
-
-.wp-block-tab.is-selected {
-  outline-offset: 2px;
-}
-
-.block-editor-block-preview__live-content:has(.wp-block-tab) {
-  flex-basis: inherit !important;
-  flex-grow: inherit !important;
-}
-.block-editor-block-preview__live-content:has(.wp-block-tab) .wp-block-tab {
-  flex-basis: 100% !important;
-}
-
 .block-editor-template-part__selection-modal {
   z-index: 1000001;
 }

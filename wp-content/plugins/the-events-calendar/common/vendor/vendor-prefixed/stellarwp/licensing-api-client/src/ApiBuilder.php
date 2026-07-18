@@ -20,8 +20,8 @@ use TEC\Common\LiquidWeb\LicensingApiClient\Resources\LicensesResource;
 use TEC\Common\LiquidWeb\LicensingApiClient\Resources\ProductsResource;
 use TEC\Common\LiquidWeb\LicensingApiClient\Resources\TokensResource;
 use TEC\Common\Psr\Http\Client\ClientInterface as HttpClient;
-use TEC\Common\Psr\Http\Message\RequestFactoryInterface;
-use TEC\Common\Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * Builds a fully-wired API client from the transport dependencies.

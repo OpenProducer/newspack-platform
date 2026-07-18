@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace TEC\Common\Nyholm\Psr7;
 
-use TEC\Common\Psr\Http\Message\RequestInterface;
-use TEC\Common\Psr\Http\Message\UriInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\UriInterface;
 
 /**
  * @author Michael Dowling and contributors to guzzlehttp/psr7

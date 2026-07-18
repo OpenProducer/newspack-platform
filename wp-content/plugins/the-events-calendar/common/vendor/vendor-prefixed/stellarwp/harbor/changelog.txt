@@ -1,0 +1,32 @@
+### [1.4.0] 2026-05-21
+
+* Fix - Type-hint in WP Core's callback was too strict and could cause fatal.
+* Feature - Added the `lw_harbor_refresh_catalog()` global function to force a synchronous re-fetch of the product catalog from the Commerce Portal API.
+
+### [1.3.0] 2026-05-19
+
+* Feature - Registered Legacy Licenses can now be utilized for updates if `use_for_updates` is `true`.
+* Tweak - The Software License Manager page now shows a splash screen until a Unified License Key is entered.
+
+### [1.2.0] 2026-05-13
+
+* Feature - The features page no longer shows unless a Premium Addon has been registered.
+* Tweak - Added the `lw_harbor/loaded` action to indicate when Harbor is loaded.
+* Tweak - Added the `lw_harbor/premium_plugin_exists` filter to declare whether a premium plugin exists on a site.
+* Tweak - Removed opt-in as it will not be necessary now that external communications are gated behind a Premium Addon enabling Harbor.
+* Tweak - The `lw-harbor/hide_menu_item` now also applies to the submenu item created by `lw_harbor_register_submenu()`.
+
+### [1.1.0] 2026-05-12
+
+* Feature - External connections are now gated behind a per-site opt-in flow.
+* Fix - Moved the Licensing Page to a submenu item under Settings.
+* Tweak - Added the `lw-harbor/hide_menu_item` to hide the Licensing Page submenu item while leaving the submenu page registered.
+
+### [1.0.1] 2026-04-29
+
+* Feature - Show Harbor version on admin page footer.
+* Fix - Upgrade buttons now route existing subscribers to the portal's change-plan flow for the target tier instead of the catalog `purchase_url`, which was adding a duplicate plan to the basket. Unlicensed visitors still see the `purchase_url` for a fresh purchase.
+
+### [1.0.0] 2026-04-28
+
+* Feature - Initial version.

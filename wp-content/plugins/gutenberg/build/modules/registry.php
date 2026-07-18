@@ -88,6 +88,11 @@ return array(
 		'asset' => 'core-abilities/index.min.asset.php',
 	),
 	array(
+		'id' => '@wordpress/dashboard-init',
+		'path' => 'dashboard-init/index',
+		'asset' => 'dashboard-init/index.min.asset.php',
+	),
+	array(
 		'id' => '@wordpress/edit-site-init',
 		'path' => 'edit-site-init/index',
 		'asset' => 'edit-site-init/index.min.asset.php',

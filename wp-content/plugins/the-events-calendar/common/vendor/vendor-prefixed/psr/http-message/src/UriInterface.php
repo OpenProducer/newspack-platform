@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TEC\Common\Psr\Http\Message;
+namespace Psr\Http\Message;
 
 /**
  * Value object representing a URI.

@@ -1,1 +1,1 @@
-<?php return array('dependencies' => array('react-jsx-runtime', 'wc-blocks-shared-context', 'wp-block-editor', 'wp-blocks', 'wp-element', 'wp-polyfill', 'wp-primitives'), 'version' => '0bb895088d4139920107');
+<?php return array('dependencies' => array('react-jsx-runtime', 'wc-blocks-shared-context', 'wp-block-editor', 'wp-blocks', 'wp-element', 'wp-polyfill', 'wp-primitives'), 'version' => '517cfc8453644d92207a');

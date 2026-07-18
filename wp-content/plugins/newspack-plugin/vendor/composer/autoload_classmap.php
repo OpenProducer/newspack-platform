@@ -152,6 +152,7 @@ return array(
     'Newspack\\Optional_Modules\\InDesign_Exporter' => $baseDir . '/includes/optional-modules/class-indesign-exporter.php',
     'Newspack\\Organic_Profile_Block' => $baseDir . '/includes/plugins/class-organic-profile-block.php',
     'Newspack\\PWA' => $baseDir . '/includes/plugins/class-pwa.php',
+    'Newspack\\Parsely' => $baseDir . '/includes/plugins/class-parsely.php',
     'Newspack\\Parsely_Configuration_Manager' => $baseDir . '/includes/configuration_managers/class-parsely-configuration-manager.php',
     'Newspack\\Patches' => $baseDir . '/includes/class-patches.php',
     'Newspack\\Perfmatters' => $baseDir . '/includes/plugins/class-perfmatters.php',

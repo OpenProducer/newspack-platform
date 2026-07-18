@@ -4,9 +4,9 @@ namespace TEC\Common\LiquidWeb\LicensingApiClient\Http;
 
 use JsonException;
 use TEC\Common\LiquidWeb\LicensingApiClient\Value\AuthToken;
-use TEC\Common\Psr\Http\Message\RequestFactoryInterface;
-use TEC\Common\Psr\Http\Message\RequestInterface;
-use TEC\Common\Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * Builds PSR-7 requests from SDK configuration and endpoint input.

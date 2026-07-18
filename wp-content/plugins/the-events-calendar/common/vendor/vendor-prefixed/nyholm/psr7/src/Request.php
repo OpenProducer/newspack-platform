@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace TEC\Common\Nyholm\Psr7;
 
-use TEC\Common\Psr\Http\Message\{RequestInterface, StreamInterface, UriInterface};
+use Psr\Http\Message\{RequestInterface, StreamInterface, UriInterface};
 
 /**
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>

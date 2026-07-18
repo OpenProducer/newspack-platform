@@ -121,7 +121,7 @@ return array(
 	),
 	array(
 		'name'        => 'post-edit',
-		'path'        => '/types/$type/edit/$id',
+		'path'        => '/types/$type/edit/$',
 		'page'        => 'site-editor-v2',
 		'has_route'   => true,
 		'has_content' => false,

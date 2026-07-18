@@ -547,6 +547,8 @@ class WC_Checkout {
 					'subtotal_tax' => $values['line_subtotal_tax'],
 					'total_tax'    => $values['line_tax'],
 					'taxes'        => $values['line_tax_data'],
+					// Order model compositions: set the order instance (early one, for `set_backorder_meta`).
+					'order'        => $order,
 				)
 			);
 

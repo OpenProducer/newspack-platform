@@ -70,6 +70,12 @@ final class BufferStream implements \YoastSEO_Vendor\Psr\Http\Message\StreamInte
     }
     public function seek($offset, $whence = \SEEK_SET) : void
     {
+        if (!\is_int($offset)) {
+            \YoastSEO_Vendor\trigger_deprecation('guzzlehttp/psr7', '2.11', 'Passing %s to StreamInterface::seek() is deprecated; guzzlehttp/psr7 3.0 requires int for $offset.', \get_debug_type($offset));
+        }
+        if (!\is_int($whence)) {
+            \YoastSEO_Vendor\trigger_deprecation('guzzlehttp/psr7', '2.11', 'Passing %s to StreamInterface::seek() is deprecated; guzzlehttp/psr7 3.0 requires int for $whence.', \get_debug_type($whence));
+        }
         throw new \RuntimeException('Cannot seek a BufferStream');
     }
     public function eof() : bool
@@ -85,6 +91,9 @@ final class BufferStream implements \YoastSEO_Vendor\Psr\Http\Message\StreamInte
      */
     public function read($length) : string
     {
+        if (!\is_int($length)) {
+            \YoastSEO_Vendor\trigger_deprecation('guzzlehttp/psr7', '2.11', 'Passing %s to StreamInterface::read() is deprecated; guzzlehttp/psr7 3.0 requires int for $length.', \get_debug_type($length));
+        }
         $currentLength = \strlen($this->buffer);
         if ($length >= $currentLength) {
             // No need to slice the buffer because we don't have enough data.
@@ -102,6 +111,9 @@ final class BufferStream implements \YoastSEO_Vendor\Psr\Http\Message\StreamInte
      */
     public function write($string) : int
     {
+        if (!\is_string($string)) {
+            \YoastSEO_Vendor\trigger_deprecation('guzzlehttp/psr7', '2.11', 'Passing %s to StreamInterface::write() is deprecated; guzzlehttp/psr7 3.0 requires string for $string.', \get_debug_type($string));
+        }
         $this->buffer .= $string;
         if (\strlen($this->buffer) >= $this->hwm) {
             return 0;
@@ -113,6 +125,9 @@ final class BufferStream implements \YoastSEO_Vendor\Psr\Http\Message\StreamInte
      */
     public function getMetadata($key = null)
     {
+        if ($key !== null && !\is_string($key)) {
+            \YoastSEO_Vendor\trigger_deprecation('guzzlehttp/psr7', '2.11', 'Passing %s to StreamInterface::getMetadata() is deprecated; guzzlehttp/psr7 3.0 requires string|null for $key.', \get_debug_type($key));
+        }
         if ($key === 'hwm') {
             return $this->hwm;
         }

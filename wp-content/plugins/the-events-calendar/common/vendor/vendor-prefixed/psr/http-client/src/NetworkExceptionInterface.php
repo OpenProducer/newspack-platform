@@ -2,7 +2,7 @@
 
 namespace TEC\Common\Psr\Http\Client;
 
-use TEC\Common\Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\RequestInterface;
 
 /**
  * Thrown when the request cannot be completed because of network issues.
