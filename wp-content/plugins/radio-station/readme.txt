@@ -5,8 +5,8 @@ Tags: radio station, radio shows, radio station schedule, radio broadcasting, st
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 3.3
-Tested up to: 6.8.2
-Stable tag: 2.5.17
+Tested up to: 7.0
+Stable tag: 2.7.1
 
 Radio Station lets you build and manage a Show Schedule for a radio station or Internet broadcaster's WordPress website. 
 
@@ -404,8 +404,43 @@ We recommend you test these on a Staging site (or a development copy of your liv
 
 == Changelog ==
 
+= 2.7.1 =
+* Fixed: Print Late Footer Stylesheets Priority
+
+= 2.7.0 =
+* Updated: Radio Player Script (1.0.5)
+
+= 2.5.20 =
+* Updated: Freemius SDK (2.13.0)
+* Updated: Plugin Panel (1.3.7) for delayed translations
+* Updated: Radio Player (1.0.4)
+* Changed: split station content and settings Admin menus
+* Changed: display label of Overrides to Specials
+* Changed: handle of radio-player assets to stream-player
+* Improved: Related Show and Linked Show select Show ordering
+* Improved: handle Special/Override meta in Archive shortcode
+* Improved: edit Special/Override permissions for linked Shows
+* Improved: Timezone and Clock Timezone display formatting
+* Improved: Special override interface change highlighting
+* Added: Dashboard overview widget and Content Dashboard page
+* Added: Station Tagline, Callsign, Frequency, Location options
+* Added: Default Player display for Station Meta
+* Added: Special Overrides data routes/feed to Data API
+* Added: Solid and Solid with Transparent Outline Player Buttons
+* Added: Link main language term to filtered show archive
+* Added: Channel input support for Shifts and Overrides
+* Added: Genre and Description filters for admin Show list
+* Added: Station and Show text line number fields
+* Fixed: Player Amplitude script pause/unpause source bug
+* Fixed: Special/Override (non-linked) Host/Producer data
+* Fixed: Radio Player (other developer) plugin conflicts
+* Fixed: Override Drafts without dates not listing in Admin
+* Fixed: Block asset paths for script/style file versions
+* Fixed: Display user timezone for timezone shortcode
+* Removed: Freemius Pricing v2 filter (merged in Freemius)
+
 = 2.5.17 =
-* Updated: Bump version number to fix release bug
+* Fixed: Current Show widget reloading when Shift display is off
 
 = 2.5.16 =
 * Fixed: Player Block control color style preview / loading
@@ -1085,6 +1120,13 @@ We recommend you test these on a Staging site (or a development copy of your liv
 * Initial release
 
 == Upgrade Notice ==
+
+= 2.7.0 =
+* Major Player Upgrade and Stability Release
+* https://radiostation.pro/radio-station-2-7-0-and-radio-station-pro-2-8-0-release/
+* Improved Player Script and Preview
+* New Radio Content Menu / Dashboard
+* Cumulative Feedback Bugfixes
 
 = 2.5.0 =
 * Radio Station Blocks for Gutenberg Block Editor!
