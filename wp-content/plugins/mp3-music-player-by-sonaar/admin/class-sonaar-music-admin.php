@@ -6492,7 +6492,7 @@ class Sonaar_Music_Admin {
                 <?php if ( get_admin_page_title() ) : ?>
                     <h2><?php echo wp_kses_post( get_admin_page_title() ); ?></h2>
                 <?php endif; ?>
-                <a href="<?php echo esc_url('https://sonaar.io/docs/mp3-audio-player/') ?>" target="_blank" class="srmp3-helpcenter dashicons-before dashicons-editor-help"><?php echo esc_html__( 'Help Center', 'sonaar-music' ); ?></a><button id="srmp3-settings-save-bt" class="button button-primary"><?php echo esc_html__( 'Save Changes', 'sonaar-music' ); ?></button></div>
+                <a href="<?php echo esc_url('https://sonaar.io/docs/mp3-audio-player/') ?>" target="_blank" class="srmp3-helpcenter dashicons-before dashicons-editor-help"><?php echo esc_html__( 'Help Center', 'sonaar-music' ); ?></a><button id="srmp3-settings-save-bt" class="button button-primary"><?php echo esc_html__( 'Save Template', 'sonaar-music' ); ?></button></div>
                 <div class="nav-tab-wrapper">
                    
                 <?php foreach ( $tabs as $option_key => $tab_data ) : ?>

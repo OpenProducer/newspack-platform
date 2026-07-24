@@ -918,7 +918,10 @@ class Sonaar_Music_Widget extends WP_Widget{
             data-peakFile-allow="'. esc_html((isset($track['peak_allow_frontend'])) ? $track['peak_allow_frontend'] : '') . '"
             data-is-preview="'. esc_html((isset($track['isPreview'])) ? $track['isPreview'] : '') . '"
             data-track-lyric="'. esc_html((isset($track['has_lyric'])) ? $track['has_lyric'] : '') . '"';
-            //error_log('track peaks == ' . $track['peaks']);
+            if( array_key_exists( 'reverse_post_tracklist', $track) && $track['reverse_post_tracklist'] === true ){
+                 $format_playlist .= ' data-reverse="1"';
+                 $format_playlist .= ( array_key_exists( 'post_track_count', $track) && $track['post_track_count'] !== '')? ' data-post_track_count="' . esc_attr( $track['post_track_count'] ) . '"' : '';
+            }
             $format_playlist .= ( array_key_exists( 'icecast_json', $track) && $track['icecast_json'] !== '')? ' data-icecast_json="' . esc_attr( $track['icecast_json'] ) . '"' : '';
             $format_playlist .= ( array_key_exists( 'icecast_mount', $track) && $track['icecast_mount'] !== '')? ' data-icecast_mount="' . esc_attr( $track['icecast_mount'] ) . '"' : '';
             $format_playlist .= ( array_key_exists( 'icecast_json', $track) && $track['icecast_json'] !== '' && $track['optional_poster'] != false)? ' data-optional_poster="true"' : ''; //if icecast we need to display the optional poster if no image is provided
@@ -2612,7 +2615,7 @@ class Sonaar_Music_Widget extends WP_Widget{
             $track['has_song_store'] = true;
         }
         $song_store_list_content = '';
-        if( ! is_array($track['song_store_list']) ){
+        if( ! isset($track['song_store_list']) || ! is_array($track['song_store_list'])  ){
             $track['song_store_list'] = [];
         }
         
@@ -2620,7 +2623,7 @@ class Sonaar_Music_Widget extends WP_Widget{
             $track['song_store_list'] = [];
         }
         if ( is_array($track['song_store_list']) ){
-            if ($track['has_song_store']){
+            if (isset( $track['has_song_store'] ) && $track['has_song_store']){
                 if(count($track['song_store_list']) > 0 ){
                     foreach( $track['song_store_list'] as $key2 => $store ){
                         $storeButtonPosition[$key1][$key2]=[];
@@ -3428,12 +3431,18 @@ class Sonaar_Music_Widget extends WP_Widget{
             $make_offer_enabled = false;
             $make_offer_enabled_hide_price = false;
 
-            if (method_exists('SRMP3_WooCommerce', 'is_make_offer_enabled')) {
-                $make_offer_enabled = SRMP3_WooCommerce::is_make_offer_enabled($post_id);
-                if($make_offer_enabled === "yes"){
-                    if (get_post_meta($post_id, '_make_offer_hide_price', true) === 'yes') {
-                        $make_offer_enabled_hide_price = true;
-                    }
+            if (
+                method_exists('SRMP3_WooCommerce', 'is_make_offer_enabled') &&
+                get_post_type($post_id) !== 'product_variation'
+            ) {
+                $product = wc_get_product($post_id);
+                if ($product && !$product->is_type('variable')) {
+                    $make_offer_enabled = SRMP3_WooCommerce::is_make_offer_enabled($post_id);
+                    if($make_offer_enabled === "yes"){
+                        if (get_post_meta($post_id, '_make_offer_hide_price', true) === 'yes') {
+                            $make_offer_enabled_hide_price = true;
+                        }
+                    } 
                 }
             }
 
@@ -3842,6 +3851,7 @@ class Sonaar_Music_Widget extends WP_Widget{
         }
         return false;
     }
+    
     private function get_playlist($album_ids = array(), $category = null, $posts_not_in = null, $category_not_in = null, $author = null, $title = null, $feed_title = null, $feed = null, $feed_img = null, $el_widget_id = null, $artwork = null, $posts_per_pages = null, $all_category = null, $single_playlist = false, $reverse_tracklist = false, $audio_meta_field = null, $repeater_meta_field = null, $player = 'widget', $track_desc_postcontent  = null, $import_file = null, $rss_items = -1, $rss_item_title = null, $isPlayer_Favorite = null, $isPlayer_recentlyPlayed = null) {
         // Capture the start time
         // $start_time = microtime(true);
@@ -3850,9 +3860,11 @@ class Sonaar_Music_Widget extends WP_Widget{
         $tracks = array();
         $albums = '';
         $favoriteList = false;
+        $cta_favorite_settings = false;
         $userHistoryList = false;
         $feed_desc = false;
         $feed_id = false;
+        
         // Collect all the parameters into an associative array for easier handling with third party
         $params = compact('album_ids', 'category', 'posts_not_in', 'category_not_in', 'author', 'title', 'feed_title', 'feed', 'feed_img', 'feed_desc', 'feed_id', 'el_widget_id', 'artwork', 'posts_per_pages', 'all_category', 'single_playlist', 'reverse_tracklist', 'audio_meta_field', 'repeater_meta_field', 'player', 'track_desc_postcontent', 'import_file', 'rss_items', 'rss_item_title', 'isPlayer_Favorite', 'isPlayer_recentlyPlayed');
         do_action_ref_array('srmp3_pre_get_playlist', array(&$params));
@@ -3861,12 +3873,12 @@ class Sonaar_Music_Widget extends WP_Widget{
         if(function_exists( 'run_sonaar_music_pro' ) &&  get_site_option('SRMP3_ecommerce') == '1'){
             $favoriteList = $this->loadUserPlaylists_fromCookies('Favorites');
             $userHistoryList = $this->loadUserPlaylists_fromCookies('RecentlyPlayed');
+            $cta_favorite_settings = Sonaar_Music::get_option('force_cta_favorite', 'srmp3_settings_favorites');
         }
 
         $cta_download_settings = Sonaar_Music::get_option('force_cta_download', 'srmp3_settings_download');
         $cta_link_settings = Sonaar_Music::get_option('force_cta_singlepost', 'srmp3_settings_general');
         $cta_share_settings = Sonaar_Music::get_option('force_cta_share', 'srmp3_settings_share');
-        $cta_favorite_settings = Sonaar_Music::get_option('force_cta_favorite', 'srmp3_settings_favorites');
         
         $this->cta_download_visibility = $this->checkCTA_Visibility('cta_visibility_download', 'download');
         $this->cta_share_visibility = $this->checkCTA_Visibility('cta_visibility_share', 'share');
@@ -3984,12 +3996,24 @@ class Sonaar_Music_Widget extends WP_Widget{
 
                 $args = array(
                     'posts_per_page' => $posts_per_pages,
-                    'post_type' => $sr_postypes,
-                    'post__in' => $album_ids,
-                    'lang' => '',
-                    'order' => $ordering['order'],
-                    'orderby' => $ordering['orderby']
+                    'post_type'      => $sr_postypes,
+                    'post__in'       => $album_ids,
+                    'lang'           => '',
+                    'order'          => $ordering['order'],
+                    'orderby'        => $ordering['orderby']
                 );
+
+                
+                if ( is_array($album_ids) && count($album_ids) === 1 ) { // Allow displaying a saved album in draft status if it is the current post. This enables the player of a single playlist post in draft to be visible during a preview.
+                    $post_id = reset($album_ids);
+                    if (
+                        (string) $post_id === (string) get_the_ID() &&
+                        get_post_status($post_id) === 'draft'
+                    ) {
+                        $args['post_status'] = array('draft', 'publish');
+                    }
+                }
+
                 if ( isset($audio_meta_field) && $audio_meta_field != ''){ // This allow to retrieve all post types (posts, page, products, etc) even if they are not set in the srmp3_posttypes in the plugin settings.
                     if (!is_array($args['post_type'])) {
                         $args['post_type'] = array($args['post_type']);
@@ -4028,7 +4052,7 @@ class Sonaar_Music_Widget extends WP_Widget{
         }else{
             $artistSeparator = '';
         }
-       
+    
         if( $feed == '1' ){
             //001. FEED = 1 MEANS ITS A FEED BUILT WITH ELEMENTOR AND USE TRACKS UPLOAD. IF A PREDEFINED PLAYLIST IS SET, GO TO 003. FEED = 1 VALUE IS SET IN THE SR-MUSIC-PLAYER.PHP
             if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
@@ -4111,6 +4135,7 @@ class Sonaar_Music_Widget extends WP_Widget{
                 $album_tracks[$i]["length"] = $track_length;
 
                 $album_tracks[$i]["peak_allow_frontend"] = 'name';
+
                 if( $mp3_id ){
                     //ita media in the library
                     $peakFile = $peaks_dir . $mp3_id . '.peak';
@@ -4124,6 +4149,22 @@ class Sonaar_Music_Widget extends WP_Widget{
                     // Replace the server path with the URL
                     $peakFileUrl = str_replace($upload_dir['basedir'], $upload_dir['baseurl'], $peakFile);
                     $album_tracks[$i]["peakFile"] = $peakFileUrl;
+                } else {
+                    $expected_peak =  Sonaar_Music::get_peak_dir() . hash(
+                        'sha256',
+                        wp_normalize_path( $album_tracks[$i]['mp3'] )
+                    ) . '.peak';
+
+                    if ( file_exists( $expected_peak ) ) {
+
+                        $peakFileUrl = str_replace(
+                            $upload_dir['basedir'],
+                            $upload_dir['baseurl'],
+                            $expected_peak
+                        );
+
+                        $album_tracks[$i]["peakFile"] = $peakFileUrl;
+                    }
                 }
 
                 $album_tracks[$i]["album_title"] = ( $album_title )? $album_title : '';
@@ -4645,6 +4686,12 @@ class Sonaar_Music_Widget extends WP_Widget{
                             $album_tracks[$i]["track_image_id"] = $thumb_id;
                         }
                         $album_tracks[$i]["track_pos"] = ( get_post_meta( $a->ID, 'reverse_post_tracklist', true) )? count($album_tracks) - ($i + 1) : $i ;
+
+                        if( get_post_meta( $a->ID, 'reverse_post_tracklist', true) ){ 
+                            $album_tracks[$i]['reverse_post_tracklist'] = true; 
+                            $album_tracks[$i]['post_track_count'] = count($album_tracks); 
+                        } 
+
                         $album_tracks[$i]["release_date"] = get_post_meta($a->ID, 'alb_release_date', true);
                         $album_tracks[$i]["song_store_list"] = $song_store_list;
                         $album_tracks[$i]["has_song_store"] = $has_song_store;
@@ -4817,328 +4864,328 @@ class Sonaar_Music_Widget extends WP_Widget{
     }
 
 public function importFile($import_file, $a = null, $combinedtracks = false, $rss_items = -1, $rss_item_title = null, $isPlayer_Favorite = null, $favoriteList = null ){
-      
-      $upload_dir = wp_get_upload_dir();
-      $peaks_dir = Sonaar_Music::get_peak_dir();
 
-      $wc_add_to_cart = (isset($a)) ? $this->wc_add_to_cart($a->ID) : false;
-      $wc_buynow_bt   = (isset($a)) ? $this->wc_buynow_bt($a->ID) : false;
-      $is_variable_product = ($wc_add_to_cart == 'true' || $wc_buynow_bt == 'true' ) ? $this->is_variable_product($a->ID) : '';
-                  
-      $album_tracks = false;
+    $upload_dir = wp_get_upload_dir();
+    $peaks_dir = Sonaar_Music::get_peak_dir();
 
-      $json_file = $import_file;
+    $wc_add_to_cart = (isset($a)) ? $this->wc_add_to_cart($a->ID) : false;
+    $wc_buynow_bt   = (isset($a)) ? $this->wc_buynow_bt($a->ID) : false;
+    $is_variable_product = ($wc_add_to_cart == 'true' || $wc_buynow_bt == 'true') ? $this->is_variable_product($a->ID) : '';
 
-      try {
+    $album_tracks = false;
+    $json_file = $import_file;
 
-        // SSRF FIX START ----------------------------
+    try {
 
-        // Validate URL
-        $validated_url = esc_url_raw($json_file);
-        $parsed = wp_parse_url($validated_url);
+        /**
+         * =========================================================
+         * SSRF FIX (SAFE + BACKWARD COMPATIBLE WITH CSV UPLOADS)
+         * =========================================================
+         */
 
-        if (!$validated_url || !isset($parsed['scheme']) || !in_array($parsed['scheme'], ['http','https']) || empty($parsed['host'])) {
-            return false;
+        $is_local_path = !preg_match('#^https?://#i', $import_file);
+
+        if ($is_local_path) {
+
+            if (!file_exists($import_file) || !is_readable($import_file)) {
+                return false;
+            }
+
+            $json_file = file_get_contents($import_file);
+
+        } else {
+
+            $validated_url = esc_url_raw($import_file);
+            $parsed = wp_parse_url($validated_url);
+
+            if (
+                !$validated_url ||
+                !isset($parsed['scheme']) ||
+                !in_array($parsed['scheme'], ['http', 'https'], true) ||
+                empty($parsed['host'])
+            ) {
+                return false;
+            }
+
+            $blocked_hosts = ['localhost', '127.0.0.1', '::1'];
+
+            if (in_array(strtolower($parsed['host']), $blocked_hosts, true)) {
+                return false;
+            }
+
+            $ip = gethostbyname($parsed['host']);
+
+            if (
+                !$ip ||
+                !filter_var(
+                    $ip,
+                    FILTER_VALIDATE_IP,
+                    FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+                )
+            ) {
+                return false;
+            }
+
+            $response = wp_remote_get($validated_url, [
+                'timeout' => 10,
+                'redirection' => 3,
+                'reject_unsafe_urls' => true,
+                'user-agent' => 'Sonaar Importer'
+            ]);
+
+            if (is_wp_error($response)) {
+                return false;
+            }
+
+            $json_file = wp_remote_retrieve_body($response);
         }
 
-        // Block obvious local hosts
-        $blocked_hosts = ['localhost', '127.0.0.1', '::1'];
-        if (in_array($parsed['host'], $blocked_hosts)) {
-            return false;
-        }
+        /**
+         * Detect file type
+         */
+        $lower = strtolower($import_file);
 
-        // Resolve host → IP
-        $ip = gethostbyname($parsed['host']);
-        if (!$ip || !filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
-            return false;
-        }
-
-        // Fetch remote content securely
-        $response = wp_remote_get($validated_url, [
-            'timeout' => 10,
-            'redirection' => 3,
-            'reject_unsafe_urls' => true,
-        ]);
-
-        if (is_wp_error($response)) {
-            return false;
-        }
-
-        $json_file = wp_remote_retrieve_body($response);
-
-        // SSRF FIX END ----------------------------
-
-
-        if (strtolower(substr($validated_url, -4)) === '.csv') {
+        if (str_ends_with($lower, '.csv')) {
             $fileType = 'csv';
-        } else if (strtolower(substr($validated_url, -5)) === '.json') {
+        } elseif (str_ends_with($lower, '.json')) {
             $fileType = 'json';
         } else {
             $fileType = 'rss';
         }
 
         if (current_user_can('manage_options') && empty($json_file)) {
-            $error = "<p style='color:red;'>Notice to admin: Unable to open the stream for URL - <a href='" . esc_url($import_file) . "' target='_blank'>" .  esc_url($import_file) . "</a>";
-            $error .="</p>";
-            echo $error;
+            echo "<p style='color:red;'>Notice: Unable to load import file</p>";
         }
-        
-        if ($fileType == 'csv') {
-            // Process the CSV file data
-            $csv_rows = str_getcsv($json_file, "\n"); // Split into rows
-        
-            // Detect delimiter from the first row
+
+        /**
+         * =========================
+         * CSV PROCESSING 
+         * =========================
+         */
+
+        if ($fileType === 'csv') {
+
+            $csv_rows = str_getcsv($json_file, "\n");
+
             $header_row = $csv_rows[0];
             $delimiter = (strpos($header_row, ";") !== false) ? ";" : ",";
-        
-            $header_row = str_getcsv(array_shift($csv_rows), $delimiter); // Parse header with detected delimiter
-        
+
+            $header_row = str_getcsv(array_shift($csv_rows), $delimiter);
+
             $playlists = [];
             $track_pos = 0;
-            $playlist_image = false;
-            $playlist_name = false;
             $combined_playlist_tracks = [];
-        
+
             foreach ($csv_rows as $csv_row) {
-                $row_data = str_getcsv($csv_row, $delimiter); // Parse rows with detected delimiter
-        
-                // Ensure the row matches the header column count
-                /*if (count($header_row) > count($row_data)) {
-                    $row_data = array_pad($row_data, count($header_row), '');
-                } elseif (count($header_row) < count($row_data)) {
-                    $row_data = array_slice($row_data, 0, count($header_row));
-                }*/
-        
+
+                $row_data = str_getcsv($csv_row, $delimiter);
+
                 if (count($header_row) != count($row_data)) {
-                    if (current_user_can('manage_options')) {
-                        echo "<p style='color:red;'>Notice to admin: Mismatch in row: $csv_row\n<br>";
-                        echo "Expected columns: " . count($header_row) . ", Actual columns: " . count($row_data) . "\n<br></p>";
-                    }
                     continue;
                 }
-        
+
                 $data_row = array_combine($header_row, $row_data);
-        
+
                 $song_store_list = [];
+
                 foreach ($data_row as $key => $value) {
+
                     if (strpos($key, 'cta_title_') === 0) {
+
                         $num = substr($key, -1);
+
                         if ($value != '') {
                             $song_store_list[] = [
-                                'store-icon' => $data_row['cta_icon_' . $num],
+                                'store-icon' => $data_row['cta_icon_' . $num] ?? '',
                                 'store-name' => $value,
-                                'store-link' => (isset($data_row['cta_link_' . $num])) ? $data_row['cta_link_' . $num] : '',
-                                'store-target' => (isset($data_row['cta_target_' . $num])) ? $data_row['cta_target_' . $num] : '_blank',
-                                'link-option' => (isset($data_row['cta_is_popup_' . $num]) && $data_row['cta_is_popup_' . $num] !== '') ? 'popup' : '',
-                                'store-content' => (isset($data_row['cta_popup_content_' . $num])) ? $data_row['cta_popup_content_' . $num] : '',
+                                'store-link' => $data_row['cta_link_' . $num] ?? '',
+                                'store-target' => $data_row['cta_target_' . $num] ?? '_blank',
+                                'link-option' => (!empty($data_row['cta_is_popup_' . $num])) ? 'popup' : '',
+                                'store-content' => $data_row['cta_popup_content_' . $num] ?? '',
                             ];
                         }
                     }
                 }
-        
-                $audioSrc = isset($data_row['track_url']) ? $data_row['track_url'] : '';
-                $track_title = isset($data_row['track_title']) ? $data_row['track_title'] : '';
-                $track_title = apply_filters('srmp3_track_title', $track_title, null, $audioSrc);
-        
+
+                $audioSrc = $data_row['track_url'] ?? '';
+
+                $track_title = apply_filters(
+                    'srmp3_track_title',
+                    $data_row['track_title'] ?? '',
+                    null,
+                    $audioSrc
+                );
+
                 $track = [
                     'id' => '',
-                    'playlist_name' => isset($data_row['playlist_name']) ? $data_row['playlist_name'] : '',
-                    'playlist_image' => isset($data_row['playlist_image']) ? $data_row['playlist_image'] : '',
+                    'playlist_name' => $data_row['playlist_name'] ?? '',
+                    'playlist_image' => $data_row['playlist_image'] ?? '',
                     'mp3' => $audioSrc,
                     'loading' => true,
-                    'category_slug' => isset($data_row['playlist_category']) ? $data_row['playlist_category'] : '',
+                    'category_slug' => $data_row['playlist_category'] ?? '',
                     'track_title' => $track_title,
-                    'track_artist' => isset($data_row['track_artist']) ? $data_row['track_artist'] : '',
-                    'length' => isset($data_row['track_length']) ? $data_row['track_length'] : '',
-                    'album_title' => isset($data_row['album_title']) ? $data_row['album_title'] : '',
-                    'poster' => isset($data_row['track_image']) ? $data_row['track_image'] : '',
+                    'track_artist' => $data_row['track_artist'] ?? '',
+                    'length' => $data_row['track_length'] ?? '',
+                    'album_title' => $data_row['album_title'] ?? '',
+                    'poster' => $data_row['track_image'] ?? '',
                     'track_pos' => (isset($a) && get_post_meta($a->ID, 'reverse_post_tracklist', true)) ? count($csv_rows) - ($track_pos + 1) : $track_pos++,
-                    'release_date' => isset($data_row['album_subtitle']) ? $data_row['album_subtitle'] : '',
-                    'song_store_list' => isset($song_store_list) ? $song_store_list : '',
-                    'album_store_list' => ($wc_add_to_cart == 'true' || $wc_buynow_bt == 'true') ? $this->push_woocart_in_storelist($a, $is_variable_product, $wc_add_to_cart, $wc_buynow_bt) : false,
-                    'has_song_store' => (isset($song_store_list[0])) ? true : false,
-                    'sourcePostID' => (isset($a)) ? $a->ID : '',
-                    'has_lyric' => isset($data_row['track_lyrics']) ? true : false,
-                    'description' => isset($data_row['description']) ? $data_row['description'] : '',
-                    'woocommerce_download_file' => isset($data_row['woocommerce_download_file']) ? $data_row['woocommerce_download_file'] : '',
-                    'track_lyrics' => isset($data_row['track_lyrics']) ? $data_row['track_lyrics'] : '',
+                    'release_date' => $data_row['album_subtitle'] ?? '',
+                    'song_store_list' => $song_store_list,
+                    'album_store_list' => ($wc_add_to_cart == 'true' || $wc_buynow_bt == 'true')
+                        ? $this->push_woocart_in_storelist($a, $this->is_variable_product($a->ID), $wc_add_to_cart, $wc_buynow_bt)
+                        : false,
+                    'has_song_store' => !empty($song_store_list),
+                    'sourcePostID' => $a->ID ?? '',
+                    'has_lyric' => !empty($data_row['track_lyrics']),
+                    'description' => $data_row['description'] ?? '',
+                    'woocommerce_download_file' => $data_row['woocommerce_download_file'] ?? '',
+                    'track_lyrics' => $data_row['track_lyrics'] ?? '',
                 ];
-                if( isset($a) && isset($cta_download_settings)){
-                    $trackFavorited = $this->isTrack_PartOfUserPlaylist($track['track_pos'], $a->ID, $favoriteList);
-                    $track['optional_storelist_cta'] =  $this->force_pushOptionalCTA($audioSrc, $a, $trackFavorited, $cta_download_settings, $cta_link_settings, $cta_share_settings, $cta_favorite_settings);
-                    if( $isPlayer_Favorite ){
-                        $track['favorite'] = $trackFavorited;
-                    }
-                }
 
-                $track["peak_allow_frontend"] = 'name';
-                 
-                $peakFile = basename($audioSrc);
-                $peakFile = $peaks_dir . $peakFile . '.peak';
-                if (is_string($peakFile) && file_exists($peakFile)){
-                    // Replace the server path with the URL
-                    $peakFileUrl = str_replace($upload_dir['basedir'], $upload_dir['baseurl'], $peakFile);
-                    $track["peakFile"] = $peakFileUrl;
-                }
+                $combined_playlist_tracks[] = $track;
 
-        
-                $playlist_name = isset($data_row['playlist_name']) ? $data_row['playlist_name'] : '';
-                $playlist_image = isset($data_row['playlist_image']) ? $data_row['playlist_image'] : '';
-        
+                $playlist_name = $data_row['playlist_name'] ?? '';
+
                 if (!isset($playlists[$playlist_name])) {
                     $playlists[$playlist_name] = [
                         'playlist_name' => $playlist_name,
-                        'playlist_image' => $playlist_image,
+                        'playlist_image' => $data_row['playlist_image'] ?? '',
                         'tracks' => []
                     ];
                 }
-        
-                // Add track to the corresponding playlist only if the playlist_name matches
-                if ($track['playlist_name'] === $playlist_name) {
-                    $playlists[$playlist_name]['tracks'][] = $track;
-                }
-        
-                // Add track to the combined playlist
-                $combined_playlist_tracks[] = $track;
+
+                $playlists[$playlist_name]['tracks'][] = $track;
             }
-        
+
             if ($combinedtracks) {
-                $combined_playlist_name = "Combined Tracks";
-                $combined_playlist_image = ""; // Set a default image if you like
-                // Add the combined playlist to the $playlists array
-                $playlists[$combined_playlist_name] = [
-                    'playlist_name' => $combined_playlist_name,
-                    'playlist_image' => $combined_playlist_image,
+                return [
+                    'playlist_name' => 'Combined Tracks',
+                    'playlist_image' => '',
                     'tracks' => $combined_playlist_tracks
                 ];
-                return $playlists['Combined Tracks'];
             }
-        
+
             return array_values($playlists);
-        }else if($fileType == 'json'){
-            // Process the JSON file data // NOT USED AT THE MOMENT
+        }
+
+        /**
+         * =========================
+         * JSON + RSS 
+         * =========================
+         */
+
+        if ($fileType === 'json') {
+
             $playlist = json_decode($json_file, true, 512, JSON_THROW_ON_ERROR);
             $json_tracks = $playlist['tracks'];
             $tracks = [];
             $track_pos = 0;
-            if (isset($a)){
-                foreach ($json_tracks as &$track) { //To modify the original array, you can use the & operator to pass each element in the $json_tracks array by reference, like this:
+
+            if (isset($a)) {
+                foreach ($json_tracks as &$track) {
                     $track['sourcePostID'] = $a->ID;
-                    $track['track_pos'] = ( get_post_meta( $a->ID, 'reverse_post_tracklist', true) )? count($json_tracks) - ($track_pos + 1) : $track_pos++ ;
-                    $track['album_store_list'] = ($wc_add_to_cart == 'true' || $wc_buynow_bt == 'true') ? $this->push_woocart_in_storelist($a, $is_variable_product, $wc_add_to_cart, $wc_buynow_bt) : false;
-                    $track['has_song_store'] = (isset($track['album_store_list'][0])) ? true : false;
+                    $track['track_pos'] = (get_post_meta($a->ID, 'reverse_post_tracklist', true))
+                        ? count($json_tracks) - ($track_pos + 1)
+                        : $track_pos++;
+
+                    $track['album_store_list'] =
+                        ($wc_add_to_cart == 'true' || $wc_buynow_bt == 'true')
+                        ? $this->push_woocart_in_storelist($a, $this->is_variable_product($a->ID), $wc_add_to_cart, $wc_buynow_bt)
+                        : false;
+
+                    $track['has_song_store'] = !empty($track['album_store_list'][0]);
                 }
             }
-            $tracks = array_merge($tracks, $json_tracks);
-            return $tracks;
-        }else{
-            // Process the RSS feed data
-            $feed = simplexml_load_string($json_file);
-            if (!$feed){
-                return;
-            }
-            $playlist_name = isset($feed->channel->title) ? sanitize_text_field((string) $feed->channel->title) : '';
-            $playlist_image = isset($feed->channel->image) ? esc_url_raw((string) $feed->channel->image->url) : '';
 
-            $playlist = [
-                'playlist_name' => $playlist_name,
-                'playlist_image' => $playlist_image,
-                //'tracks' => []
-            ];
-            $tracks = [];
-            $track_pos = 0;
-            $itunes_ns = 'http://www.itunes.com/dtds/podcast-1.0.dtd';
-
-            $counter = 0;
-            if(isset($rss_item_title)){
-                // Use a regular expression to match the exact pattern, e.g., "Podcast 150"
-                $pattern = '/' . preg_quote($rss_item_title, '/') . '/i'; // Add 'i' flag for case-insensitive search
-            }
-            foreach ($feed->channel->item as $item) {
-                if ($rss_items != -1 && $counter >= $rss_items) {
-                    break;
-                }
-                $item_title = isset($item->title) ? (string) $item->title : '';
-                if (isset($rss_item_title) && !preg_match($pattern, $item_title)) {
-                    continue;
-                }
-                $itunes_data = $item->children($itunes_ns);
-                if (isset($itunes_data->image)) {
-                    $itunes_image = $itunes_data->image->attributes();
-                } else {
-                    $itunes_image = null;
-                }
-                if(isset($itunes_data->duration)){
-                    $item_duration = (string) $itunes_data->duration;
-                    if (strpos($item_duration,':') !== false) {
-                        $episode_audio_file_duration = $item_duration;
-                    }else{
-                        $file_duration_secs             = intval($item_duration);
-                        $hours                          = floor( $file_duration_secs / 3600 ) . ':';
-                        $minutes                        = substr( '00' . floor( ( $file_duration_secs % 3600 / 60 ) ), -2 ) . ':';
-                        $seconds                        = substr( '00' . $file_duration_secs % 60, -2 );
-                        $episode_audio_file_duration    = ltrim( $hours . $minutes . $seconds, '0:0' );
-                    }
-                }
-
-                $audioSrc = isset($item->enclosure) ? esc_url((string) $item->enclosure['url']) : '';
-
-                $track_title = isset($item->title) ? sanitize_text_field((string) $item->title) : '';
-                $track = [
-                    'id' => '',
-                    'mp3' =>  $audioSrc,
-                    'loading' => true,
-                    'track_title' => esc_html($track_title),
-                    'track_artist' => isset($item->itunes_author) ? sanitize_text_field((string) $item->itunes_author) : '',
-                    'length' => isset($episode_audio_file_duration) ? $episode_audio_file_duration : '',
-                    'album_title' =>  $playlist_name,
-                    'poster' => isset($itunes_image['href']) ? esc_url((string) $itunes_image['href']) : $playlist_image,
-                    'published_date' => isset($item->pubDate) ? esc_html((string) $item->pubDate) : '',
-                    'track_pos' => $track_pos,
-                    'release_date' => '',
-                    'song_store_list' => '',
-                    'album_store_list' => false,
-                    'has_song_store' => false,
-                    'sourcePostID' => (isset($a)) ? $a->ID : '',
-                    'has_lyric' => false,
-                    'description' => isset($item->description) ? (string) $item->description : '',
-                    'woocommerce_download_file' => '',
-                    'track_lyrics' => '',
-                ];
-                if(isset($a) && isset($cta_download_settings)){
-                    $trackFavorited = $this->isTrack_PartOfUserPlaylist($track['track_pos'], $a->ID, $favoriteList);
-                    $track['optional_storelist_cta'] =  $this->force_pushOptionalCTA($audioSrc, $a, $trackFavorited, $cta_download_settings, $cta_link_settings, $cta_share_settings, $cta_favorite_settings);
-                    if( $isPlayer_Favorite ){
-                            $track['favorite'] = $trackFavorited;
-                    }
-                }
-                $track_pos++;
-                $tracks[] = $track;
-                $counter++;
-            }
-            $playlist['tracks'] = $tracks;
-            
-            return $playlist;
-
+            return array_merge($tracks, $json_tracks);
         }
 
-      } catch (JsonException $e) {
-          if ( current_user_can( 'manage_options' ) ) {
-          // There was an error decoding the JSON data                    
-          echo 'Notice to admin: Playlist - Error decoding the Playlist JSON file: ' . $e->getMessage() . '. <br>Validate the JSON file here: https://jsonlint.com/';
-              // The user is an admin
-          } else {
-          // The user is not an admin, dont show error
-          }
-         
-      }
-  /*
-  //
-  //
-  // End of JSON Parser
-  //
-  //
-  */
+        // RSS 
+        $feed = simplexml_load_string($json_file);
 
+        if (!$feed) {
+            return;
+        }
+
+        $playlist_name = isset($feed->channel->title) ? sanitize_text_field((string) $feed->channel->title) : '';
+        $playlist_image = isset($feed->channel->image) ? esc_url_raw((string) $feed->channel->image->url) : '';
+
+        $playlist = [
+            'playlist_name' => $playlist_name,
+        ];
+
+        $tracks = [];
+        $track_pos = 0;
+        $itunes_ns = 'http://www.itunes.com/dtds/podcast-1.0.dtd';
+        $counter = 0;
+
+        if (isset($rss_item_title)) {
+            $pattern = '/' . preg_quote($rss_item_title, '/') . '/i';
+        }
+
+        foreach ($feed->channel->item as $item) {
+
+            if ($rss_items != -1 && $counter >= $rss_items) {
+                break;
+            }
+
+            $item_title = (string) $item->title;
+
+            if (isset($rss_item_title) && !preg_match($pattern, $item_title)) {
+                continue;
+            }
+
+            $itunes_data = $item->children($itunes_ns);
+            if (isset($itunes_data->image)) { 
+                $itunes_image = $itunes_data->image->attributes(); 
+            } else { 
+                $itunes_image = null; 
+            } 
+            if(isset($itunes_data->duration)){ 
+                $item_duration = (string) $itunes_data->duration; 
+                if (strpos($item_duration,':') !== false) { 
+                    $episode_audio_file_duration = $item_duration; 
+                }else{ 
+                    $file_duration_secs             = intval($item_duration); 
+                    $hours                          = floor( $file_duration_secs / 3600 ) . ':'; 
+                    $minutes                        = substr( '00' . floor( ( $file_duration_secs % 3600 / 60 ) ), -2 ) . ':'; 
+                    $seconds                        = substr( '00' . $file_duration_secs % 60, -2 ); 
+                    $episode_audio_file_duration    = ltrim( $hours . $minutes . $seconds, '0:0' ); 
+                } 
+            } 
+
+            $audioSrc = isset($item->enclosure) ? esc_url((string) $item->enclosure['url']) : '';
+
+            $track = [
+                'id' => '', 
+                'mp3' =>  $audioSrc, 
+                'loading' => true, 
+                'track_title' => sanitize_text_field($item_title),
+                'track_artist' => isset($item->itunes_author) ? (string) $item->itunes_author : '', 
+                'length' => isset($episode_audio_file_duration) ? $episode_audio_file_duration : '', 
+                'album_title' =>  $playlist_name, 
+                'poster' => isset($itunes_image['href']) ? esc_url((string) $itunes_image['href']) : $playlist_image, 
+                'published_date' => isset($item->pubDate) ? esc_html((string) $item->pubDate) : '', 
+                'track_pos' => $track_pos++, 
+                'release_date' => '', 
+                'song_store_list' => '', 
+                'album_store_list' => false, 
+                'has_song_store' => false, 
+                'sourcePostID' => $a->ID ?? '',
+                'has_lyric' => false, 
+                'description' => isset($item->description) ? (string) $item->description : '', 
+                'woocommerce_download_file' => '', 
+            ];
+
+            $tracks[] = $track;
+            $counter++;
+        }
+
+        $playlist['tracks'] = $tracks;
+        return $playlist;
+
+    } catch (Exception $e) {
+        return false;
+    }
 }
 }

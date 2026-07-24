@@ -4081,6 +4081,10 @@ msgstr ""
 msgid "Save Changes"
 msgstr ""
 
+#: admin/class-sonaar-music-admin.php:6495
+msgid "Save Template"
+msgstr ""
+
 #: admin/class-sonaar-music-admin.php:5760
 msgid "Create New Shortcode"
 msgstr ""
@@ -5982,7 +5986,7 @@ msgid "Player HTML"
 msgstr ""
 
 #: admin/library/Shortcode_Builder/shortcode_builder.php:1097
-msgid "Save as Template"
+msgid "Template Name"
 msgstr ""
 
 #: admin/library/Shortcode_Builder/shortcode_builder.php:1104

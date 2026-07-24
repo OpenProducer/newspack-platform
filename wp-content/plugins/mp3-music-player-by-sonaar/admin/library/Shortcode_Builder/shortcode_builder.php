@@ -1127,7 +1127,7 @@ class SRMP3_ShortcodeBuilder {
         *  TEMPLATES
         */
         $shortcode_options->add_field(array(
-            'name' => esc_html__('Save as Template', 'sonaar-music'),
+            'name' => esc_html__('Template Name', 'sonaar-music'),
             'desc' => '<div class="description">Use only letters, numbers and spaces. No special characters allowed.</div>
                 <div id="shortcode_preloader_templates" style="display: none;">
                     <div class="shortcode_spinner"></div>

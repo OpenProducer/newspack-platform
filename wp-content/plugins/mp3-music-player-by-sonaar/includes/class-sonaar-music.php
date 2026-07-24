@@ -620,7 +620,14 @@ class Sonaar_Music {
 		//generate public temp audio peak files
 		check_ajax_referer('sonaar_music_ajax_peaks_nonce', 'nonce');
 	
-		$peaks 		= array_map( 'floatval', explode( ',', filter_input( INPUT_POST, 'peaks' ) ?? '' ) );
+		$raw_peaks = filter_input(INPUT_POST, 'peaks') ?? '';
+		if ( strlen( $raw_peaks ) > 25000 ) { // Limit the length of the peaks string to prevent abuse
+			wp_send_json_error( 'Peak data too large.' );
+		}
+		$peaks = array_map( 'floatval', explode( ',', $raw_peaks ) );
+		if ( count( $peaks ) > 5000 ) { // Limit the number of peaks to prevent abuse	
+			wp_send_json_error( 'Too many peaks.' );
+		}
 		$post_id    = filter_input( INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT ) ?? null;
 		$media_id	= filter_input( INPUT_POST, 'media_id', FILTER_SANITIZE_NUMBER_INT ) ?? null;
 		$index      = filter_input( INPUT_POST, 'index', FILTER_SANITIZE_NUMBER_INT ) ?? 0;
@@ -643,34 +650,25 @@ class Sonaar_Music {
 		);
 		
 		// Define the directory and file path
-		$upload_dir 	= wp_get_upload_dir();
 		$peaks_dir 		= $this->get_peak_dir();
 
-		if( $media_id ){
-			// its a file from the media library
-			if($is_preview == 'true'){
-				// its a preview file
-				$file_name 	= $media_id . '_preview.peak';
+		if ( $media_id ) {
 
-			}else{
-				// its a file from our custom field
-				$file_name 	= $media_id . '.peak';
+			$file_name = $media_id;
 
+		} else {
+			if ( ! $media_id && empty( $file ) ) {
+				wp_send_json_error( 'Missing file.' );
 			}
-		}else if ( $peak_file_type === 'name' || !$post_id ){
-			// its a file from a 001 Elementor Widget, 002. Feed Shortcode or 003. ACF Field
-			$extractedFile = basename($file);
-			$file_name 	= $extractedFile . '.peak';
-		}else{
-			// its external
-			if($is_preview == 'true'){
-				// its an external from our STREAM preview file
-				$file_name 	= $post_id . '_' . $index . '_preview.peak';
-			}else{
-				// its an external from our STREAM custom field 
-				$file_name 	= $post_id . '_' . $index . '.peak';
-			}
+			$file_name = hash( 'sha256', wp_normalize_path( $file ) );
+
 		}
+
+		if ( $is_preview == 'true' ) {
+			$file_name .= '_preview';
+		}
+
+		$file_name .= '.peak';
 
 	
 		// Create the directory if it doesn't exist
@@ -684,27 +682,51 @@ class Sonaar_Music {
 		}
 
 		$file_path 		= $peaks_dir . $file_name;
+
+		if ( $media_id ) {
+			$valid = preg_match('/^\d+(_preview)?\.peak$/', $file_name);
+		} else {
+			$valid = preg_match('/^[a-f0-9]{64}(_preview)?\.peak$/', $file_name);
+		}
+
+		if ( ! $valid ) {
+			wp_send_json_error('Invalid filename.');
+		}
+
 		$write_result = file_put_contents($file_path, $peaks);
 		$file_path = wp_slash($file_path);
 		
 		if ($write_result !== false) {
-			if (!$post_id){
-				wp_send_json_success('Peaks updated for feed in the post successfully.');
-			}else{
 
-				$alb_tracklist = get_post_meta($post_id, 'alb_tracklist', true);
-				if (isset($alb_tracklist[$index])) {
-					if($is_preview == 'true'){
-						$alb_tracklist[$index]['track_peaks_preview'] = $file_path;
-					}else{
-						$alb_tracklist[$index]['track_peaks'] = $file_path;
-					}
-					update_post_meta($post_id, 'alb_tracklist', $alb_tracklist);
-					wp_send_json_success('Peaks updated successfully.');
-				}
+			if (!$post_id) {
+				wp_send_json_success('Peaks written successfully.');
 			}
-			
-			wp_send_json_success('Peaks written to file successfully.');
+
+			// Anonymous visitors are not allowed to modify post meta.
+			if ( ! is_user_logged_in() ) {
+				wp_send_json_success('Peak file generated.');
+			}
+
+			// Only users allowed to edit the post may update its metadata.
+			if ( ! current_user_can( 'edit_post', $post_id ) ) {
+				wp_send_json_error( 'Permission denied.' );
+			}
+
+			$alb_tracklist = get_post_meta($post_id, 'alb_tracklist', true);
+
+			if (isset($alb_tracklist[$index])) {
+
+				if ($is_preview == 'true') {
+					$alb_tracklist[$index]['track_peaks_preview'] = $file_path;
+				} else {
+					$alb_tracklist[$index]['track_peaks'] = $file_path;
+				}
+
+				update_post_meta($post_id, 'alb_tracklist', $alb_tracklist);
+			}
+
+			wp_send_json_success('Peaks updated successfully.');
+
 		} else {
 			wp_send_json_error('Failed to write peaks to file.');
 		}

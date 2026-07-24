@@ -2124,6 +2124,10 @@ h2.srmp3_import_subtitle {
     margin-top: 5px;
 }
 
+.cmb2-wrap input[type=checkbox]{
+    -webkit-appearance: checkbox;
+    appearance: auto;
+}
 
 #shortcode_preloader, #shortcode_preloader_templates {
     position: absolute;

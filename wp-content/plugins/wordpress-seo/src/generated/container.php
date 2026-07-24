@@ -30,6 +30,7 @@ class Cached_Container extends Container
             'WPSEO_Shortlinker' => 'getWPSEOShortlinkerService',
             'WPSEO_Utils' => 'getWPSEOUtilsService',
             'Yoast\\WP\\Lib\\Migrations\\Adapter' => 'getAdapterService',
+            'Yoast\\WP\\SEO\\AI\\Authentication\\Application\\AI_Request_Sender_Factory' => 'getAIRequestSenderFactoryService',
             'Yoast\\WP\\SEO\\AI\\Authorization\\Application\\Token_Manager' => 'getTokenManagerService',
             'Yoast\\WP\\SEO\\AI\\Authorization\\User_Interface\\Callback_Route' => 'getCallbackRouteService',
             'Yoast\\WP\\SEO\\AI\\Authorization\\User_Interface\\Refresh_Callback_Route' => 'getRefreshCallbackRouteService',
@@ -46,6 +47,7 @@ class Cached_Container extends Container
             'Yoast\\WP\\SEO\\AI\\Generator\\User_Interface\\Get_Suggestions_Route' => 'getGetSuggestionsRoute2Service',
             'Yoast\\WP\\SEO\\AI\\Generator\\User_Interface\\Get_Usage_Route' => 'getGetUsageRouteService',
             'Yoast\\WP\\SEO\\AI\\HTTP_Request\\Application\\Request_Handler' => 'getRequestHandlerService',
+            'Yoast\\WP\\SEO\\AI\\HTTP_Request\\Application\\Response_Validator' => 'getResponseValidatorService',
             'Yoast\\WP\\SEO\\AI\\HTTP_Request\\Infrastructure\\API_Client' => 'getAPIClientService',
             'Yoast\\WP\\SEO\\AI_Authorization\\Application\\Token_Manager' => 'getTokenManager2Service',
             'Yoast\\WP\\SEO\\AI_Authorization\\User_Interface\\Callback_Route' => 'getCallbackRoute2Service',
@@ -114,6 +116,10 @@ class Cached_Container extends Container
             'Yoast\\WP\\SEO\\Builders\\Indexable_System_Page_Builder' => 'getIndexableSystemPageBuilderService',
             'Yoast\\WP\\SEO\\Builders\\Indexable_Term_Builder' => 'getIndexableTermBuilderService',
             'Yoast\\WP\\SEO\\Builders\\Primary_Term_Builder' => 'getPrimaryTermBuilderService',
+            'Yoast\\WP\\SEO\\Bulk_Editor\\User_Interface\\Bulk_Editor_Integration' => 'getBulkEditorIntegrationService',
+            'Yoast\\WP\\SEO\\Bulk_Editor\\User_Interface\\Posts_Route' => 'getPostsRouteService',
+            'Yoast\\WP\\SEO\\Bulk_Editor\\User_Interface\\Search_Bulk_Update_Route' => 'getSearchBulkUpdateRouteService',
+            'Yoast\\WP\\SEO\\Bulk_Editor\\User_Interface\\Social_Bulk_Update_Route' => 'getSocialBulkUpdateRouteService',
             'Yoast\\WP\\SEO\\Commands\\Cleanup_Command' => 'getCleanupCommandService',
             'Yoast\\WP\\SEO\\Commands\\Index_Command' => 'getIndexCommandService',
             'Yoast\\WP\\SEO\\Conditionals\\AI_Conditional' => 'getAIConditionalService',
@@ -450,8 +456,10 @@ class Cached_Container extends Container
             'Yoast\\WP\\SEO\\Memoizers\\Presentation_Memoizer' => 'getPresentationMemoizerService',
             'Yoast\\WP\\SEO\\MyYoast_Client\\Application\\MyYoast_Client' => 'getMyYoastClientService',
             'Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\Auth_Command' => 'getAuthCommandService',
+            'Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\Management_Route' => 'getManagementRouteService',
             'Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\MyYoast_Cleanup_Integration' => 'getMyYoastCleanupIntegrationService',
             'Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\MyYoast_Client_Integration' => 'getMyYoastClientIntegrationService',
+            'Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\OAuth_Callback_Integration' => 'getOAuthCallbackIntegrationService',
             'Yoast\\WP\\SEO\\Plans\\User_Interface\\Plans_Page_Integration' => 'getPlansPageIntegrationService',
             'Yoast\\WP\\SEO\\Plans\\User_Interface\\Upgrade_Sidebar_Menu_Integration' => 'getUpgradeSidebarMenuIntegrationService',
             'Yoast\\WP\\SEO\\Presentations\\Abstract_Presentation' => 'getAbstractPresentationService',
@@ -564,6 +572,11 @@ class Cached_Container extends Container
             'Psr\\Container\\ContainerInterface' => true,
             'YoastSEO_Vendor\\Symfony\\Component\\DependencyInjection\\ContainerInterface' => true,
             'YoastSEO_Vendor\\YoastSEO_Vendor\\Symfony\\Component\\DependencyInjection\\ContainerInterface' => true,
+            'Yoast\\WP\\SEO\\AI\\Authentication\\Application\\AI_Request_Sender' => true,
+            'Yoast\\WP\\SEO\\AI\\Authentication\\Application\\OAuth_Auth_Strategy' => true,
+            'Yoast\\WP\\SEO\\AI\\Authentication\\Application\\Token_Auth_Strategy' => true,
+            'Yoast\\WP\\SEO\\AI\\Authentication\\Domain\\Auth_Method' => true,
+            'Yoast\\WP\\SEO\\AI\\Authentication\\Domain\\Exceptions\\Auth_Strategy_Unavailable_Exception' => true,
             'Yoast\\WP\\SEO\\AI\\Authorization\\Application\\Code_Generator_Interface' => true,
             'Yoast\\WP\\SEO\\AI\\Authorization\\Application\\Code_Verifier_Handler' => true,
             'Yoast\\WP\\SEO\\AI\\Authorization\\Application\\Code_Verifier_Handler_Interface' => true,
@@ -588,8 +601,10 @@ class Cached_Container extends Container
             'Yoast\\WP\\SEO\\AI\\Content_Planner\\Application\\Content_Suggestion_Command' => true,
             'Yoast\\WP\\SEO\\AI\\Content_Planner\\Application\\Content_Suggestion_Command_Handler' => true,
             'Yoast\\WP\\SEO\\AI\\Content_Planner\\Domain\\Category' => true,
+            'Yoast\\WP\\SEO\\AI\\Content_Planner\\Domain\\Content_Outline_Parameters' => true,
             'Yoast\\WP\\SEO\\AI\\Content_Planner\\Domain\\Content_Suggestion' => true,
             'Yoast\\WP\\SEO\\AI\\Content_Planner\\Domain\\Content_Suggestion_List' => true,
+            'Yoast\\WP\\SEO\\AI\\Content_Planner\\Domain\\Content_Suggestion_Parameters' => true,
             'Yoast\\WP\\SEO\\AI\\Content_Planner\\Domain\\Content_Suggestion_Response' => true,
             'Yoast\\WP\\SEO\\AI\\Content_Planner\\Domain\\Post' => true,
             'Yoast\\WP\\SEO\\AI\\Content_Planner\\Domain\\Post_List' => true,
@@ -609,7 +624,9 @@ class Cached_Container extends Container
             'Yoast\\WP\\SEO\\AI\\Generator\\Application\\Suggestions_Provider' => true,
             'Yoast\\WP\\SEO\\AI\\Generator\\Domain\\Suggestion' => true,
             'Yoast\\WP\\SEO\\AI\\Generator\\Domain\\Suggestions_Bucket' => true,
+            'Yoast\\WP\\SEO\\AI\\Generator\\Domain\\Suggestions_Parameters' => true,
             'Yoast\\WP\\SEO\\AI\\Generator\\Domain\\URLs_Interface' => true,
+            'Yoast\\WP\\SEO\\AI\\Generator\\Domain\\Usage_Parameters' => true,
             'Yoast\\WP\\SEO\\AI\\Generator\\Infrastructure\\Endpoints\\Bust_Subscription_Cache_Endpoint' => true,
             'Yoast\\WP\\SEO\\AI\\Generator\\Infrastructure\\Endpoints\\Get_Suggestions_Endpoint' => true,
             'Yoast\\WP\\SEO\\AI\\Generator\\Infrastructure\\Endpoints\\Get_Usage_Endpoint' => true,
@@ -618,7 +635,9 @@ class Cached_Container extends Container
             'Yoast\\WP\\SEO\\AI\\HTTP_Request\\Application\\Response_Parser' => true,
             'Yoast\\WP\\SEO\\AI\\HTTP_Request\\Application\\Response_Parser_Interface' => true,
             'Yoast\\WP\\SEO\\AI\\HTTP_Request\\Domain\\Exceptions\\Bad_Request_Exception' => true,
+            'Yoast\\WP\\SEO\\AI\\HTTP_Request\\Domain\\Exceptions\\Consent_Required_Exception' => true,
             'Yoast\\WP\\SEO\\AI\\HTTP_Request\\Domain\\Exceptions\\Forbidden_Exception' => true,
+            'Yoast\\WP\\SEO\\AI\\HTTP_Request\\Domain\\Exceptions\\Insufficient_Scope_Exception' => true,
             'Yoast\\WP\\SEO\\AI\\HTTP_Request\\Domain\\Exceptions\\Internal_Server_Error_Exception' => true,
             'Yoast\\WP\\SEO\\AI\\HTTP_Request\\Domain\\Exceptions\\Not_Found_Exception' => true,
             'Yoast\\WP\\SEO\\AI\\HTTP_Request\\Domain\\Exceptions\\Payment_Required_Exception' => true,
@@ -679,6 +698,35 @@ class Cached_Container extends Container
             'Yoast\\WP\\SEO\\Analytics\\Domain\\Missing_Indexable_Count' => true,
             'Yoast\\WP\\SEO\\Analytics\\Domain\\To_Be_Cleaned_Indexable_Bucket' => true,
             'Yoast\\WP\\SEO\\Analytics\\Domain\\To_Be_Cleaned_Indexable_Count' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Application\\Content_Types\\Content_Type_Access_Checker_Interface' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Application\\Content_Types\\Content_Types_Repository' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Application\\Endpoints\\Endpoints_Repository' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Application\\Posts\\Posts_Repository' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Application\\Updates\\Bulk_Updater' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Application\\Updates\\Meta_Writer_Interface' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Application\\Updates\\Post_Access_Checker_Interface' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Domain\\Content_Types\\Content_Type' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Domain\\Content_Types\\Content_Types_List' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Domain\\Posts\\Post' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Domain\\Posts\\Posts_List' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Domain\\Posts\\Posts_Page' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Domain\\Posts\\Posts_Query' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Domain\\Updates\\Batch_Limit' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Domain\\Updates\\Post_Update' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Domain\\Updates\\Post_Update_Collection' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Domain\\Updates\\Update_Error' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Domain\\Updates\\Update_Result_Collection' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Infrastructure\\Content_Types\\Content_Type_Access_Checker' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Infrastructure\\Content_Types\\Content_Types_Collector' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Infrastructure\\Endpoints\\Posts_Endpoint' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Infrastructure\\Endpoints\\Update_Search_Endpoint' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Infrastructure\\Endpoints\\Update_Social_Endpoint' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Infrastructure\\Nonces\\Nonce_Repository' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Infrastructure\\Posts\\Indexable_Posts_Collector' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Infrastructure\\Posts\\Post_Editability_Resolver' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Infrastructure\\Posts\\Post_Meta_Posts_Collector' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Infrastructure\\Updates\\Meta_Writer' => true,
+            'Yoast\\WP\\SEO\\Bulk_Editor\\Infrastructure\\Updates\\Post_Access_Checker' => true,
             'Yoast\\WP\\SEO\\Content_Type_Visibility\\Application\\Content_Type_Visibility_Dismiss_Notifications' => true,
             'Yoast\\WP\\SEO\\Dashboard\\Application\\Configuration\\Dashboard_Configuration' => true,
             'Yoast\\WP\\SEO\\Dashboard\\Application\\Content_Types\\Content_Types_Repository' => true,
@@ -851,20 +899,26 @@ class Cached_Container extends Container
             'Yoast\\WP\\SEO\\MyYoast_Client\\Application\\Exceptions\\Client_Authentication_Exception' => true,
             'Yoast\\WP\\SEO\\MyYoast_Client\\Application\\Exceptions\\Discovery_Failed_Exception' => true,
             'Yoast\\WP\\SEO\\MyYoast_Client\\Application\\Exceptions\\ID_Token_Validation_Exception' => true,
+            'Yoast\\WP\\SEO\\MyYoast_Client\\Application\\Exceptions\\Rate_Limited_Exception' => true,
             'Yoast\\WP\\SEO\\MyYoast_Client\\Application\\Exceptions\\Registration_Failed_Exception' => true,
+            'Yoast\\WP\\SEO\\MyYoast_Client\\Application\\Exceptions\\Registration_Not_Found_Exception' => true,
+            'Yoast\\WP\\SEO\\MyYoast_Client\\Application\\Exceptions\\Registration_Temporarily_Unavailable_Exception' => true,
             'Yoast\\WP\\SEO\\MyYoast_Client\\Application\\Exceptions\\Server_Capability_Exception' => true,
             'Yoast\\WP\\SEO\\MyYoast_Client\\Application\\Exceptions\\Token_Request_Failed_Exception' => true,
             'Yoast\\WP\\SEO\\MyYoast_Client\\Application\\Exceptions\\Token_Storage_Exception' => true,
             'Yoast\\WP\\SEO\\MyYoast_Client\\Application\\Grants\\Authorization_Code_Grant' => true,
             'Yoast\\WP\\SEO\\MyYoast_Client\\Application\\Grants\\Client_Credentials_Grant' => true,
             'Yoast\\WP\\SEO\\MyYoast_Client\\Application\\Grants\\Refresh_Token_Grant' => true,
+            'Yoast\\WP\\SEO\\MyYoast_Client\\Application\\Management_Endpoints_Repository' => true,
             'Yoast\\WP\\SEO\\MyYoast_Client\\Application\\MyYoast_Client_Cleanup' => true,
+            'Yoast\\WP\\SEO\\MyYoast_Client\\Application\\OAuth_Callback_Handler' => true,
             'Yoast\\WP\\SEO\\MyYoast_Client\\Application\\OAuth_Grant_Handler' => true,
             'Yoast\\WP\\SEO\\MyYoast_Client\\Application\\Ports\\Client_Authenticator_Interface' => true,
             'Yoast\\WP\\SEO\\MyYoast_Client\\Application\\Ports\\Client_Registration_Interface' => true,
             'Yoast\\WP\\SEO\\MyYoast_Client\\Application\\Ports\\Discovery_Interface' => true,
             'Yoast\\WP\\SEO\\MyYoast_Client\\Application\\Ports\\ID_Token_Validator_Interface' => true,
             'Yoast\\WP\\SEO\\MyYoast_Client\\Application\\Ports\\OAuth_Server_Client_Interface' => true,
+            'Yoast\\WP\\SEO\\MyYoast_Client\\Application\\Ports\\Redirect_URI_Provider_Interface' => true,
             'Yoast\\WP\\SEO\\MyYoast_Client\\Application\\Ports\\Site_URL_Provider_Interface' => true,
             'Yoast\\WP\\SEO\\MyYoast_Client\\Application\\Ports\\Token_Storage_Interface' => true,
             'Yoast\\WP\\SEO\\MyYoast_Client\\Application\\Ports\\User_Token_Storage_Interface' => true,
@@ -890,6 +944,11 @@ class Cached_Container extends Container
             'Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\DPoP\\DPoP_Handler' => true,
             'Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\DPoP\\DPoP_Proof_Exception' => true,
             'Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Encoding\\Base64url' => true,
+            'Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Endpoints\\Authorize_Endpoint' => true,
+            'Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Endpoints\\Connect_Endpoint' => true,
+            'Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Endpoints\\Disconnect_Endpoint' => true,
+            'Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Endpoints\\Refresh_Status_Endpoint' => true,
+            'Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Endpoints\\Update_Endpoint' => true,
             'Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Http\\HTTP_Client' => true,
             'Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\OIDC\\Discovery_Client' => true,
             'Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\OIDC\\ID_Token_Validator' => true,
@@ -897,7 +956,11 @@ class Cached_Container extends Container
             'Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Registration\\Client_Registration' => true,
             'Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Token\\Token_Storage' => true,
             'Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Token\\User_Token_Storage' => true,
+            'Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\WordPress\\Redirect_URI_Provider' => true,
             'Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\WordPress\\Site_URL_Provider' => true,
+            'Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\Connection_Permission' => true,
+            'Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\Integrations_Page_Script_Data' => true,
+            'Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\Status_Presenter' => true,
             'Yoast\\WP\\SEO\\Plans\\Application\\Add_Ons_Collector' => true,
             'Yoast\\WP\\SEO\\Plans\\Application\\Duplicate_Post_Manager' => true,
             'Yoast\\WP\\SEO\\Plans\\Domain\\Add_Ons\\Premium' => true,
@@ -1099,6 +1162,28 @@ class Cached_Container extends Container
     }
 
     /**
+     * Gets the public 'Yoast\WP\SEO\AI\Authentication\Application\AI_Request_Sender_Factory' shared autowired service.
+     *
+     * @return \Yoast\WP\SEO\AI\Authentication\Application\AI_Request_Sender_Factory
+     */
+    protected function getAIRequestSenderFactoryService()
+    {
+        $a = new \Yoast\WP\SEO\AI\Authentication\Application\OAuth_Auth_Strategy(($this->services['Yoast\\WP\\SEO\\MyYoast_Client\\Application\\MyYoast_Client'] ?? $this->getMyYoastClientService()), ($this->services['Yoast\\WP\\SEO\\AI\\HTTP_Request\\Infrastructure\\API_Client'] ?? ($this->services['Yoast\\WP\\SEO\\AI\\HTTP_Request\\Infrastructure\\API_Client'] = new \Yoast\WP\SEO\AI\HTTP_Request\Infrastructure\API_Client())), ($this->services['Yoast\\WP\\SEO\\AI\\HTTP_Request\\Application\\Response_Validator'] ?? ($this->services['Yoast\\WP\\SEO\\AI\\HTTP_Request\\Application\\Response_Validator'] = new \Yoast\WP\SEO\AI\HTTP_Request\Application\Response_Validator())));
+
+        $b = ($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] ?? ($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] = new \Yoast\WP\SEO\Loggers\Logger()));
+
+        $a->setLogger($b);
+        $c = new \Yoast\WP\SEO\AI\Authentication\Application\Token_Auth_Strategy(($this->services['Yoast\\WP\\SEO\\AI\\Authorization\\Application\\Token_Manager'] ?? $this->getTokenManagerService()), ($this->services['Yoast\\WP\\SEO\\AI\\HTTP_Request\\Application\\Request_Handler'] ?? $this->getRequestHandlerService()));
+        $c->setLogger($b);
+
+        $this->services['Yoast\\WP\\SEO\\AI\\Authentication\\Application\\AI_Request_Sender_Factory'] = $instance = new \Yoast\WP\SEO\AI\Authentication\Application\AI_Request_Sender_Factory(($this->services['Yoast\\WP\\SEO\\Conditionals\\MyYoast_Connection_Conditional'] ?? ($this->services['Yoast\\WP\\SEO\\Conditionals\\MyYoast_Connection_Conditional'] = new \Yoast\WP\SEO\Conditionals\MyYoast_Connection_Conditional())), $a, $c);
+
+        $instance->setLogger($b);
+
+        return $instance;
+    }
+
+    /**
      * Gets the public 'Yoast\WP\SEO\AI\Authorization\Application\Token_Manager' shared autowired service.
      *
      * @return \Yoast\WP\SEO\AI\Authorization\Application\Token_Manager
@@ -1137,7 +1222,7 @@ class Cached_Container extends Container
      */
     protected function getConsentHandlerService()
     {
-        return $this->services['Yoast\\WP\\SEO\\AI\\Consent\\Application\\Consent_Handler'] = new \Yoast\WP\SEO\AI\Consent\Application\Consent_Handler(($this->services['Yoast\\WP\\SEO\\Helpers\\User_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\User_Helper'] = new \Yoast\WP\SEO\Helpers\User_Helper())));
+        return $this->services['Yoast\\WP\\SEO\\AI\\Consent\\Application\\Consent_Handler'] = new \Yoast\WP\SEO\AI\Consent\Application\Consent_Handler(($this->services['Yoast\\WP\\SEO\\Helpers\\User_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\User_Helper'] = new \Yoast\WP\SEO\Helpers\User_Helper())), ($this->services['Yoast\\WP\\SEO\\AI\\Authentication\\Application\\AI_Request_Sender_Factory'] ?? $this->getAIRequestSenderFactoryService()), ($this->services['Yoast\\WP\\SEO\\AI\\Authorization\\Application\\Token_Manager'] ?? $this->getTokenManagerService()));
     }
 
     /**
@@ -1157,7 +1242,7 @@ class Cached_Container extends Container
      */
     protected function getConsentRouteService()
     {
-        return $this->services['Yoast\\WP\\SEO\\AI\\Consent\\User_Interface\\Consent_Route'] = new \Yoast\WP\SEO\AI\Consent\User_Interface\Consent_Route(($this->services['Yoast\\WP\\SEO\\AI\\Consent\\Application\\Consent_Handler'] ?? $this->getConsentHandlerService()), ($this->services['Yoast\\WP\\SEO\\AI\\Authorization\\Application\\Token_Manager'] ?? $this->getTokenManagerService()));
+        return $this->services['Yoast\\WP\\SEO\\AI\\Consent\\User_Interface\\Consent_Route'] = new \Yoast\WP\SEO\AI\Consent\User_Interface\Consent_Route(($this->services['Yoast\\WP\\SEO\\AI\\Consent\\Application\\Consent_Handler'] ?? $this->getConsentHandlerService()), ($this->services['Yoast\\WP\\SEO\\AI\\Authorization\\Application\\Token_Manager'] ?? $this->getTokenManagerService()), ($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] ?? ($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] = new \Yoast\WP\SEO\Loggers\Logger())));
     }
 
     /**
@@ -1187,7 +1272,7 @@ class Cached_Container extends Container
      */
     protected function getGetOutlineRouteService()
     {
-        return $this->services['Yoast\\WP\\SEO\\AI\\Content_Planner\\User_Interface\\Get_Outline_Route'] = new \Yoast\WP\SEO\AI\Content_Planner\User_Interface\Get_Outline_Route(new \Yoast\WP\SEO\AI\Content_Planner\Application\Content_Outline_Command_Handler(($this->privates['Yoast\\WP\\SEO\\AI\\Content_Planner\\Infrastructure\\Recent_Content\\Recent_Content_Collector'] ?? $this->getRecentContentCollectorService()), ($this->services['Yoast\\WP\\SEO\\AI\\Authorization\\Application\\Token_Manager'] ?? $this->getTokenManagerService()), ($this->services['Yoast\\WP\\SEO\\AI\\HTTP_Request\\Application\\Request_Handler'] ?? $this->getRequestHandlerService()), ($this->services['Yoast\\WP\\SEO\\AI\\Consent\\Application\\Consent_Handler'] ?? $this->getConsentHandlerService())));
+        return $this->services['Yoast\\WP\\SEO\\AI\\Content_Planner\\User_Interface\\Get_Outline_Route'] = new \Yoast\WP\SEO\AI\Content_Planner\User_Interface\Get_Outline_Route(new \Yoast\WP\SEO\AI\Content_Planner\Application\Content_Outline_Command_Handler(($this->privates['Yoast\\WP\\SEO\\AI\\Content_Planner\\Infrastructure\\Recent_Content\\Recent_Content_Collector'] ?? $this->getRecentContentCollectorService()), ($this->services['Yoast\\WP\\SEO\\AI\\Authentication\\Application\\AI_Request_Sender_Factory'] ?? $this->getAIRequestSenderFactoryService()), ($this->services['Yoast\\WP\\SEO\\AI\\Consent\\Application\\Consent_Handler'] ?? $this->getConsentHandlerService())));
     }
 
     /**
@@ -1197,7 +1282,7 @@ class Cached_Container extends Container
      */
     protected function getGetSuggestionsRouteService()
     {
-        return $this->services['Yoast\\WP\\SEO\\AI\\Content_Planner\\User_Interface\\Get_Suggestions_Route'] = new \Yoast\WP\SEO\AI\Content_Planner\User_Interface\Get_Suggestions_Route(new \Yoast\WP\SEO\AI\Content_Planner\Application\Content_Suggestion_Command_Handler(($this->privates['Yoast\\WP\\SEO\\AI\\Content_Planner\\Infrastructure\\Recent_Content\\Recent_Content_Collector'] ?? $this->getRecentContentCollectorService()), ($this->services['Yoast\\WP\\SEO\\AI\\Authorization\\Application\\Token_Manager'] ?? $this->getTokenManagerService()), ($this->services['Yoast\\WP\\SEO\\AI\\HTTP_Request\\Application\\Request_Handler'] ?? $this->getRequestHandlerService()), ($this->services['Yoast\\WP\\SEO\\AI\\Consent\\Application\\Consent_Handler'] ?? $this->getConsentHandlerService()), new \Yoast\WP\SEO\AI\Content_Planner\Infrastructure\WordPress_Category_Repository()));
+        return $this->services['Yoast\\WP\\SEO\\AI\\Content_Planner\\User_Interface\\Get_Suggestions_Route'] = new \Yoast\WP\SEO\AI\Content_Planner\User_Interface\Get_Suggestions_Route(new \Yoast\WP\SEO\AI\Content_Planner\Application\Content_Suggestion_Command_Handler(($this->privates['Yoast\\WP\\SEO\\AI\\Content_Planner\\Infrastructure\\Recent_Content\\Recent_Content_Collector'] ?? $this->getRecentContentCollectorService()), ($this->services['Yoast\\WP\\SEO\\AI\\Authentication\\Application\\AI_Request_Sender_Factory'] ?? $this->getAIRequestSenderFactoryService()), ($this->services['Yoast\\WP\\SEO\\AI\\Consent\\Application\\Consent_Handler'] ?? $this->getConsentHandlerService()), new \Yoast\WP\SEO\AI\Content_Planner\Infrastructure\WordPress_Category_Repository()));
     }
 
     /**
@@ -1217,7 +1302,7 @@ class Cached_Container extends Container
      */
     protected function getAiGeneratorIntegrationService()
     {
-        return $this->services['Yoast\\WP\\SEO\\AI\\Generator\\User_Interface\\Ai_Generator_Integration'] = new \Yoast\WP\SEO\AI\Generator\User_Interface\Ai_Generator_Integration(($this->services['WPSEO_Admin_Asset_Manager'] ?? $this->getWPSEOAdminAssetManagerService()), ($this->services['WPSEO_Addon_Manager'] ?? $this->getWPSEOAddonManagerService()), ($this->services['Yoast\\WP\\SEO\\AI\\HTTP_Request\\Infrastructure\\API_Client'] ?? ($this->services['Yoast\\WP\\SEO\\AI\\HTTP_Request\\Infrastructure\\API_Client'] = new \Yoast\WP\SEO\AI\HTTP_Request\Infrastructure\API_Client())), ($this->services['Yoast\\WP\\SEO\\Helpers\\Current_Page_Helper'] ?? $this->getCurrentPageHelperService()), ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] = new \Yoast\WP\SEO\Helpers\Options_Helper())), ($this->services['Yoast\\WP\\SEO\\Helpers\\User_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\User_Helper'] = new \Yoast\WP\SEO\Helpers\User_Helper())), ($this->services['Yoast\\WP\\SEO\\Introductions\\Infrastructure\\Introductions_Seen_Repository'] ?? $this->getIntroductionsSeenRepositoryService()), ($this->privates['Yoast\\WP\\SEO\\AI\\Generator\\Application\\Generator_Endpoints_Repository'] ?? $this->getGeneratorEndpointsRepositoryService()), ($this->privates['Yoast\\WP\\SEO\\AI\\Consent\\Application\\Consent_Endpoints_Repository'] ?? $this->getConsentEndpointsRepositoryService()), ($this->privates['Yoast\\WP\\SEO\\AI\\Free_Sparks\\Application\\Free_Sparks_Endpoints_Repository'] ?? $this->getFreeSparksEndpointsRepositoryService()));
+        return $this->services['Yoast\\WP\\SEO\\AI\\Generator\\User_Interface\\Ai_Generator_Integration'] = new \Yoast\WP\SEO\AI\Generator\User_Interface\Ai_Generator_Integration(($this->services['WPSEO_Admin_Asset_Manager'] ?? $this->getWPSEOAdminAssetManagerService()), ($this->services['WPSEO_Addon_Manager'] ?? $this->getWPSEOAddonManagerService()), ($this->services['Yoast\\WP\\SEO\\AI\\HTTP_Request\\Infrastructure\\API_Client'] ?? ($this->services['Yoast\\WP\\SEO\\AI\\HTTP_Request\\Infrastructure\\API_Client'] = new \Yoast\WP\SEO\AI\HTTP_Request\Infrastructure\API_Client())), ($this->services['Yoast\\WP\\SEO\\Helpers\\Current_Page_Helper'] ?? $this->getCurrentPageHelperService()), ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] = new \Yoast\WP\SEO\Helpers\Options_Helper())), ($this->services['Yoast\\WP\\SEO\\Helpers\\User_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\User_Helper'] = new \Yoast\WP\SEO\Helpers\User_Helper())), ($this->services['Yoast\\WP\\SEO\\Introductions\\Infrastructure\\Introductions_Seen_Repository'] ?? $this->getIntroductionsSeenRepositoryService()), ($this->privates['Yoast\\WP\\SEO\\AI\\Generator\\Application\\Generator_Endpoints_Repository'] ?? $this->getGeneratorEndpointsRepositoryService()), ($this->privates['Yoast\\WP\\SEO\\AI\\Consent\\Application\\Consent_Endpoints_Repository'] ?? $this->getConsentEndpointsRepositoryService()), ($this->privates['Yoast\\WP\\SEO\\AI\\Free_Sparks\\Application\\Free_Sparks_Endpoints_Repository'] ?? $this->getFreeSparksEndpointsRepositoryService()), ($this->services['Yoast\\WP\\SEO\\Conditionals\\MyYoast_Connection_Conditional'] ?? ($this->services['Yoast\\WP\\SEO\\Conditionals\\MyYoast_Connection_Conditional'] = new \Yoast\WP\SEO\Conditionals\MyYoast_Connection_Conditional())), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\Status_Presenter'] ?? $this->getStatusPresenterService()), ($this->services['Yoast\\WP\\SEO\\Helpers\\Short_Link_Helper'] ?? $this->getShortLinkHelperService()), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\Connection_Permission'] ?? ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\Connection_Permission'] = new \Yoast\WP\SEO\MyYoast_Client\User_Interface\Connection_Permission())));
     }
 
     /**
@@ -1237,7 +1322,7 @@ class Cached_Container extends Container
      */
     protected function getGetSuggestionsRoute2Service()
     {
-        return $this->services['Yoast\\WP\\SEO\\AI\\Generator\\User_Interface\\Get_Suggestions_Route'] = new \Yoast\WP\SEO\AI\Generator\User_Interface\Get_Suggestions_Route(new \Yoast\WP\SEO\AI\Generator\Application\Suggestions_Provider(($this->services['Yoast\\WP\\SEO\\AI\\Consent\\Application\\Consent_Handler'] ?? $this->getConsentHandlerService()), ($this->services['Yoast\\WP\\SEO\\AI\\HTTP_Request\\Application\\Request_Handler'] ?? $this->getRequestHandlerService()), ($this->services['Yoast\\WP\\SEO\\AI\\Authorization\\Application\\Token_Manager'] ?? $this->getTokenManagerService()), ($this->services['Yoast\\WP\\SEO\\Helpers\\User_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\User_Helper'] = new \Yoast\WP\SEO\Helpers\User_Helper()))));
+        return $this->services['Yoast\\WP\\SEO\\AI\\Generator\\User_Interface\\Get_Suggestions_Route'] = new \Yoast\WP\SEO\AI\Generator\User_Interface\Get_Suggestions_Route(new \Yoast\WP\SEO\AI\Generator\Application\Suggestions_Provider(($this->services['Yoast\\WP\\SEO\\AI\\Consent\\Application\\Consent_Handler'] ?? $this->getConsentHandlerService()), ($this->services['Yoast\\WP\\SEO\\AI\\Authentication\\Application\\AI_Request_Sender_Factory'] ?? $this->getAIRequestSenderFactoryService())));
     }
 
     /**
@@ -1247,7 +1332,7 @@ class Cached_Container extends Container
      */
     protected function getGetUsageRouteService()
     {
-        return $this->services['Yoast\\WP\\SEO\\AI\\Generator\\User_Interface\\Get_Usage_Route'] = new \Yoast\WP\SEO\AI\Generator\User_Interface\Get_Usage_Route(($this->services['Yoast\\WP\\SEO\\AI\\Authorization\\Application\\Token_Manager'] ?? $this->getTokenManagerService()), ($this->services['Yoast\\WP\\SEO\\AI\\HTTP_Request\\Application\\Request_Handler'] ?? $this->getRequestHandlerService()), ($this->services['Yoast\\WP\\SEO\\AI\\Consent\\Application\\Consent_Handler'] ?? $this->getConsentHandlerService()), ($this->services['WPSEO_Addon_Manager'] ?? $this->getWPSEOAddonManagerService()));
+        return $this->services['Yoast\\WP\\SEO\\AI\\Generator\\User_Interface\\Get_Usage_Route'] = new \Yoast\WP\SEO\AI\Generator\User_Interface\Get_Usage_Route(($this->services['Yoast\\WP\\SEO\\AI\\Authentication\\Application\\AI_Request_Sender_Factory'] ?? $this->getAIRequestSenderFactoryService()), ($this->services['Yoast\\WP\\SEO\\AI\\Consent\\Application\\Consent_Handler'] ?? $this->getConsentHandlerService()), ($this->services['WPSEO_Addon_Manager'] ?? $this->getWPSEOAddonManagerService()));
     }
 
     /**
@@ -1257,7 +1342,17 @@ class Cached_Container extends Container
      */
     protected function getRequestHandlerService()
     {
-        return $this->services['Yoast\\WP\\SEO\\AI\\HTTP_Request\\Application\\Request_Handler'] = new \Yoast\WP\SEO\AI\HTTP_Request\Application\Request_Handler(($this->services['Yoast\\WP\\SEO\\AI\\HTTP_Request\\Infrastructure\\API_Client'] ?? ($this->services['Yoast\\WP\\SEO\\AI\\HTTP_Request\\Infrastructure\\API_Client'] = new \Yoast\WP\SEO\AI\HTTP_Request\Infrastructure\API_Client())), new \Yoast\WP\SEO\AI\HTTP_Request\Application\Response_Parser());
+        return $this->services['Yoast\\WP\\SEO\\AI\\HTTP_Request\\Application\\Request_Handler'] = new \Yoast\WP\SEO\AI\HTTP_Request\Application\Request_Handler(($this->services['Yoast\\WP\\SEO\\AI\\HTTP_Request\\Infrastructure\\API_Client'] ?? ($this->services['Yoast\\WP\\SEO\\AI\\HTTP_Request\\Infrastructure\\API_Client'] = new \Yoast\WP\SEO\AI\HTTP_Request\Infrastructure\API_Client())), new \Yoast\WP\SEO\AI\HTTP_Request\Application\Response_Parser(), ($this->services['Yoast\\WP\\SEO\\AI\\HTTP_Request\\Application\\Response_Validator'] ?? ($this->services['Yoast\\WP\\SEO\\AI\\HTTP_Request\\Application\\Response_Validator'] = new \Yoast\WP\SEO\AI\HTTP_Request\Application\Response_Validator())));
+    }
+
+    /**
+     * Gets the public 'Yoast\WP\SEO\AI\HTTP_Request\Application\Response_Validator' shared autowired service.
+     *
+     * @return \Yoast\WP\SEO\AI\HTTP_Request\Application\Response_Validator
+     */
+    protected function getResponseValidatorService()
+    {
+        return $this->services['Yoast\\WP\\SEO\\AI\\HTTP_Request\\Application\\Response_Validator'] = new \Yoast\WP\SEO\AI\HTTP_Request\Application\Response_Validator();
     }
 
     /**
@@ -1309,7 +1404,7 @@ class Cached_Container extends Container
      */
     protected function getConsentHandler2Service()
     {
-        return $this->services['Yoast\\WP\\SEO\\AI_Consent\\Application\\Consent_Handler'] = new \Yoast\WP\SEO\AI_Consent\Application\Consent_Handler(($this->services['Yoast\\WP\\SEO\\Helpers\\User_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\User_Helper'] = new \Yoast\WP\SEO\Helpers\User_Helper())));
+        return $this->services['Yoast\\WP\\SEO\\AI_Consent\\Application\\Consent_Handler'] = new \Yoast\WP\SEO\AI_Consent\Application\Consent_Handler(($this->services['Yoast\\WP\\SEO\\Helpers\\User_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\User_Helper'] = new \Yoast\WP\SEO\Helpers\User_Helper())), ($this->services['Yoast\\WP\\SEO\\AI_Authorization\\Application\\Token_Manager'] ?? $this->getTokenManager2Service()), ($this->services['Yoast\\WP\\SEO\\AI_HTTP_Request\\Application\\Request_Handler'] ?? $this->getRequestHandler2Service()));
     }
 
     /**
@@ -1329,7 +1424,7 @@ class Cached_Container extends Container
      */
     protected function getConsentRoute2Service()
     {
-        return $this->services['Yoast\\WP\\SEO\\AI_Consent\\User_Interface\\Consent_Route'] = new \Yoast\WP\SEO\AI_Consent\User_Interface\Consent_Route(($this->services['Yoast\\WP\\SEO\\AI_Consent\\Application\\Consent_Handler'] ?? $this->getConsentHandler2Service()), ($this->services['Yoast\\WP\\SEO\\AI_Authorization\\Application\\Token_Manager'] ?? $this->getTokenManager2Service()));
+        return $this->services['Yoast\\WP\\SEO\\AI_Consent\\User_Interface\\Consent_Route'] = new \Yoast\WP\SEO\AI_Consent\User_Interface\Consent_Route(($this->services['Yoast\\WP\\SEO\\AI_Consent\\Application\\Consent_Handler'] ?? $this->getConsentHandler2Service()), ($this->services['Yoast\\WP\\SEO\\AI_Authorization\\Application\\Token_Manager'] ?? $this->getTokenManager2Service()), ($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] ?? ($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] = new \Yoast\WP\SEO\Loggers\Logger())));
     }
 
     /**
@@ -1349,7 +1444,7 @@ class Cached_Container extends Container
      */
     protected function getAiGeneratorIntegration2Service()
     {
-        return $this->services['Yoast\\WP\\SEO\\AI_Generator\\User_Interface\\Ai_Generator_Integration'] = new \Yoast\WP\SEO\AI_Generator\User_Interface\Ai_Generator_Integration(($this->services['WPSEO_Admin_Asset_Manager'] ?? $this->getWPSEOAdminAssetManagerService()), ($this->services['WPSEO_Addon_Manager'] ?? $this->getWPSEOAddonManagerService()), ($this->services['Yoast\\WP\\SEO\\AI_HTTP_Request\\Infrastructure\\API_Client'] ?? ($this->services['Yoast\\WP\\SEO\\AI_HTTP_Request\\Infrastructure\\API_Client'] = new \Yoast\WP\SEO\AI_HTTP_Request\Infrastructure\API_Client())), ($this->services['Yoast\\WP\\SEO\\Helpers\\Current_Page_Helper'] ?? $this->getCurrentPageHelperService()), ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] = new \Yoast\WP\SEO\Helpers\Options_Helper())), ($this->services['Yoast\\WP\\SEO\\Helpers\\User_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\User_Helper'] = new \Yoast\WP\SEO\Helpers\User_Helper())), ($this->services['Yoast\\WP\\SEO\\Introductions\\Infrastructure\\Introductions_Seen_Repository'] ?? $this->getIntroductionsSeenRepositoryService()), ($this->privates['Yoast\\WP\\SEO\\AI\\Generator\\Application\\Generator_Endpoints_Repository'] ?? $this->getGeneratorEndpointsRepositoryService()), ($this->privates['Yoast\\WP\\SEO\\AI\\Consent\\Application\\Consent_Endpoints_Repository'] ?? $this->getConsentEndpointsRepositoryService()), ($this->privates['Yoast\\WP\\SEO\\AI\\Free_Sparks\\Application\\Free_Sparks_Endpoints_Repository'] ?? $this->getFreeSparksEndpointsRepositoryService()));
+        return $this->services['Yoast\\WP\\SEO\\AI_Generator\\User_Interface\\Ai_Generator_Integration'] = new \Yoast\WP\SEO\AI_Generator\User_Interface\Ai_Generator_Integration(($this->services['WPSEO_Admin_Asset_Manager'] ?? $this->getWPSEOAdminAssetManagerService()), ($this->services['WPSEO_Addon_Manager'] ?? $this->getWPSEOAddonManagerService()), ($this->services['Yoast\\WP\\SEO\\AI_HTTP_Request\\Infrastructure\\API_Client'] ?? ($this->services['Yoast\\WP\\SEO\\AI_HTTP_Request\\Infrastructure\\API_Client'] = new \Yoast\WP\SEO\AI_HTTP_Request\Infrastructure\API_Client())), ($this->services['Yoast\\WP\\SEO\\Helpers\\Current_Page_Helper'] ?? $this->getCurrentPageHelperService()), ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] = new \Yoast\WP\SEO\Helpers\Options_Helper())), ($this->services['Yoast\\WP\\SEO\\Helpers\\User_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\User_Helper'] = new \Yoast\WP\SEO\Helpers\User_Helper())), ($this->services['Yoast\\WP\\SEO\\Introductions\\Infrastructure\\Introductions_Seen_Repository'] ?? $this->getIntroductionsSeenRepositoryService()), ($this->privates['Yoast\\WP\\SEO\\AI\\Generator\\Application\\Generator_Endpoints_Repository'] ?? $this->getGeneratorEndpointsRepositoryService()), ($this->privates['Yoast\\WP\\SEO\\AI\\Consent\\Application\\Consent_Endpoints_Repository'] ?? $this->getConsentEndpointsRepositoryService()), ($this->privates['Yoast\\WP\\SEO\\AI\\Free_Sparks\\Application\\Free_Sparks_Endpoints_Repository'] ?? $this->getFreeSparksEndpointsRepositoryService()), ($this->services['Yoast\\WP\\SEO\\Conditionals\\MyYoast_Connection_Conditional'] ?? ($this->services['Yoast\\WP\\SEO\\Conditionals\\MyYoast_Connection_Conditional'] = new \Yoast\WP\SEO\Conditionals\MyYoast_Connection_Conditional())), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\Status_Presenter'] ?? $this->getStatusPresenterService()), ($this->services['Yoast\\WP\\SEO\\Helpers\\Short_Link_Helper'] ?? $this->getShortLinkHelperService()), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\Connection_Permission'] ?? ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\Connection_Permission'] = new \Yoast\WP\SEO\MyYoast_Client\User_Interface\Connection_Permission())));
     }
 
     /**
@@ -2193,6 +2288,56 @@ class Cached_Container extends Container
         }
 
         return $this->services['Yoast\\WP\\SEO\\Builders\\Primary_Term_Builder'] = new \Yoast\WP\SEO\Builders\Primary_Term_Builder(($this->services['Yoast\\WP\\SEO\\Repositories\\Primary_Term_Repository'] ?? ($this->services['Yoast\\WP\\SEO\\Repositories\\Primary_Term_Repository'] = new \Yoast\WP\SEO\Repositories\Primary_Term_Repository())), $a, ($this->services['Yoast\\WP\\SEO\\Helpers\\Primary_Term_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Primary_Term_Helper'] = new \Yoast\WP\SEO\Helpers\Primary_Term_Helper())), ($this->services['Yoast\\WP\\SEO\\Helpers\\Meta_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Meta_Helper'] = new \Yoast\WP\SEO\Helpers\Meta_Helper())));
+    }
+
+    /**
+     * Gets the public 'Yoast\WP\SEO\Bulk_Editor\User_Interface\Bulk_Editor_Integration' shared autowired service.
+     *
+     * @return \Yoast\WP\SEO\Bulk_Editor\User_Interface\Bulk_Editor_Integration
+     */
+    protected function getBulkEditorIntegrationService()
+    {
+        return $this->services['Yoast\\WP\\SEO\\Bulk_Editor\\User_Interface\\Bulk_Editor_Integration'] = new \Yoast\WP\SEO\Bulk_Editor\User_Interface\Bulk_Editor_Integration(($this->services['WPSEO_Admin_Asset_Manager'] ?? $this->getWPSEOAdminAssetManagerService()), ($this->services['Yoast\\WP\\SEO\\Helpers\\Current_Page_Helper'] ?? $this->getCurrentPageHelperService()), ($this->services['Yoast\\WP\\SEO\\Helpers\\Product_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Product_Helper'] = new \Yoast\WP\SEO\Helpers\Product_Helper())), ($this->services['Yoast\\WP\\SEO\\Helpers\\Short_Link_Helper'] ?? $this->getShortLinkHelperService()), ($this->privates['Yoast\\WP\\SEO\\Bulk_Editor\\Application\\Content_Types\\Content_Types_Repository'] ?? $this->getContentTypesRepositoryService()), new \Yoast\WP\SEO\Bulk_Editor\Infrastructure\Nonces\Nonce_Repository(), new \Yoast\WP\SEO\Bulk_Editor\Application\Endpoints\Endpoints_Repository(new \Yoast\WP\SEO\Bulk_Editor\Infrastructure\Endpoints\Posts_Endpoint(), new \Yoast\WP\SEO\Bulk_Editor\Infrastructure\Endpoints\Update_Search_Endpoint(), new \Yoast\WP\SEO\Bulk_Editor\Infrastructure\Endpoints\Update_Social_Endpoint()), ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] = new \Yoast\WP\SEO\Helpers\Options_Helper())));
+    }
+
+    /**
+     * Gets the public 'Yoast\WP\SEO\Bulk_Editor\User_Interface\Posts_Route' shared autowired service.
+     *
+     * @return \Yoast\WP\SEO\Bulk_Editor\User_Interface\Posts_Route
+     */
+    protected function getPostsRouteService()
+    {
+        $a = new \Yoast\WP\SEO\Bulk_Editor\Infrastructure\Posts\Post_Editability_Resolver(($this->privates['Yoast\\WP\\SEO\\Bulk_Editor\\Infrastructure\\Updates\\Post_Access_Checker'] ?? $this->getPostAccessCheckerService()));
+
+        return $this->services['Yoast\\WP\\SEO\\Bulk_Editor\\User_Interface\\Posts_Route'] = new \Yoast\WP\SEO\Bulk_Editor\User_Interface\Posts_Route(new \Yoast\WP\SEO\Bulk_Editor\Application\Posts\Posts_Repository(new \Yoast\WP\SEO\Bulk_Editor\Infrastructure\Posts\Indexable_Posts_Collector(($this->services['Yoast\\WP\\SEO\\Repositories\\Indexable_Repository'] ?? $this->getIndexableRepositoryService()), $a), new \Yoast\WP\SEO\Bulk_Editor\Infrastructure\Posts\Post_Meta_Posts_Collector($a), ($this->services['Yoast\\WP\\SEO\\Helpers\\Indexable_Helper'] ?? $this->getIndexableHelperService())), ($this->privates['Yoast\\WP\\SEO\\Bulk_Editor\\Application\\Content_Types\\Content_Types_Repository'] ?? $this->getContentTypesRepositoryService()), ($this->privates['Yoast\\WP\\SEO\\Bulk_Editor\\Infrastructure\\Content_Types\\Content_Type_Access_Checker'] ?? ($this->privates['Yoast\\WP\\SEO\\Bulk_Editor\\Infrastructure\\Content_Types\\Content_Type_Access_Checker'] = new \Yoast\WP\SEO\Bulk_Editor\Infrastructure\Content_Types\Content_Type_Access_Checker())), ($this->services['Yoast\\WP\\SEO\\Helpers\\User_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\User_Helper'] = new \Yoast\WP\SEO\Helpers\User_Helper())));
+    }
+
+    /**
+     * Gets the public 'Yoast\WP\SEO\Bulk_Editor\User_Interface\Search_Bulk_Update_Route' shared autowired service.
+     *
+     * @return \Yoast\WP\SEO\Bulk_Editor\User_Interface\Search_Bulk_Update_Route
+     */
+    protected function getSearchBulkUpdateRouteService()
+    {
+        $this->services['Yoast\\WP\\SEO\\Bulk_Editor\\User_Interface\\Search_Bulk_Update_Route'] = $instance = new \Yoast\WP\SEO\Bulk_Editor\User_Interface\Search_Bulk_Update_Route(($this->privates['Yoast\\WP\\SEO\\Bulk_Editor\\Application\\Updates\\Bulk_Updater'] ?? $this->getBulkUpdaterService()));
+
+        $instance->setLogger(($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] ?? ($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] = new \Yoast\WP\SEO\Loggers\Logger())));
+
+        return $instance;
+    }
+
+    /**
+     * Gets the public 'Yoast\WP\SEO\Bulk_Editor\User_Interface\Social_Bulk_Update_Route' shared autowired service.
+     *
+     * @return \Yoast\WP\SEO\Bulk_Editor\User_Interface\Social_Bulk_Update_Route
+     */
+    protected function getSocialBulkUpdateRouteService()
+    {
+        $this->services['Yoast\\WP\\SEO\\Bulk_Editor\\User_Interface\\Social_Bulk_Update_Route'] = $instance = new \Yoast\WP\SEO\Bulk_Editor\User_Interface\Social_Bulk_Update_Route(($this->privates['Yoast\\WP\\SEO\\Bulk_Editor\\Application\\Updates\\Bulk_Updater'] ?? $this->getBulkUpdaterService()));
+
+        $instance->setLogger(($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] ?? ($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] = new \Yoast\WP\SEO\Loggers\Logger())));
+
+        return $instance;
     }
 
     /**
@@ -4575,7 +4720,7 @@ class Cached_Container extends Container
      */
     protected function getIntegrationsPageService()
     {
-        return $this->services['Yoast\\WP\\SEO\\Integrations\\Admin\\Integrations_Page'] = new \Yoast\WP\SEO\Integrations\Admin\Integrations_Page(($this->services['WPSEO_Admin_Asset_Manager'] ?? $this->getWPSEOAdminAssetManagerService()), ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] = new \Yoast\WP\SEO\Helpers\Options_Helper())), ($this->services['Yoast\\WP\\SEO\\Conditionals\\Third_Party\\Elementor_Activated_Conditional'] ?? ($this->services['Yoast\\WP\\SEO\\Conditionals\\Third_Party\\Elementor_Activated_Conditional'] = new \Yoast\WP\SEO\Conditionals\Third_Party\Elementor_Activated_Conditional())), ($this->services['Yoast\\WP\\SEO\\Conditionals\\Jetpack_Conditional'] ?? ($this->services['Yoast\\WP\\SEO\\Conditionals\\Jetpack_Conditional'] = new \Yoast\WP\SEO\Conditionals\Jetpack_Conditional())), ($this->privates['Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Integrations\\Site_Kit'] ?? $this->getSiteKitService()), ($this->privates['Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Endpoints\\Site_Kit_Consent_Management_Endpoint'] ?? ($this->privates['Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Endpoints\\Site_Kit_Consent_Management_Endpoint'] = new \Yoast\WP\SEO\Dashboard\Infrastructure\Endpoints\Site_Kit_Consent_Management_Endpoint())), ($this->services['Yoast\\WP\\SEO\\Schema\\Application\\Configuration\\Schema_Configuration'] ?? $this->getSchemaConfigurationService()));
+        return $this->services['Yoast\\WP\\SEO\\Integrations\\Admin\\Integrations_Page'] = new \Yoast\WP\SEO\Integrations\Admin\Integrations_Page(($this->services['WPSEO_Admin_Asset_Manager'] ?? $this->getWPSEOAdminAssetManagerService()), ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] = new \Yoast\WP\SEO\Helpers\Options_Helper())), ($this->services['Yoast\\WP\\SEO\\Conditionals\\Third_Party\\Elementor_Activated_Conditional'] ?? ($this->services['Yoast\\WP\\SEO\\Conditionals\\Third_Party\\Elementor_Activated_Conditional'] = new \Yoast\WP\SEO\Conditionals\Third_Party\Elementor_Activated_Conditional())), ($this->services['Yoast\\WP\\SEO\\Conditionals\\Jetpack_Conditional'] ?? ($this->services['Yoast\\WP\\SEO\\Conditionals\\Jetpack_Conditional'] = new \Yoast\WP\SEO\Conditionals\Jetpack_Conditional())), ($this->privates['Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Integrations\\Site_Kit'] ?? $this->getSiteKitService()), ($this->privates['Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Endpoints\\Site_Kit_Consent_Management_Endpoint'] ?? ($this->privates['Yoast\\WP\\SEO\\Dashboard\\Infrastructure\\Endpoints\\Site_Kit_Consent_Management_Endpoint'] = new \Yoast\WP\SEO\Dashboard\Infrastructure\Endpoints\Site_Kit_Consent_Management_Endpoint())), ($this->services['Yoast\\WP\\SEO\\Schema\\Application\\Configuration\\Schema_Configuration'] ?? $this->getSchemaConfigurationService()), new \Yoast\WP\SEO\MyYoast_Client\User_Interface\Integrations_Page_Script_Data(($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\Status_Presenter'] ?? $this->getStatusPresenterService()), ($this->services['Yoast\\WP\\SEO\\Conditionals\\MyYoast_Connection_Conditional'] ?? ($this->services['Yoast\\WP\\SEO\\Conditionals\\MyYoast_Connection_Conditional'] = new \Yoast\WP\SEO\Conditionals\MyYoast_Connection_Conditional())), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Application\\OAuth_Callback_Handler'] ?? $this->getOAuthCallbackHandlerService()), ($this->services['Yoast\\WP\\SEO\\Helpers\\Short_Link_Helper'] ?? $this->getShortLinkHelperService()), new \Yoast\WP\SEO\MyYoast_Client\Application\Management_Endpoints_Repository(new \Yoast\WP\SEO\MyYoast_Client\Infrastructure\Endpoints\Authorize_Endpoint(), new \Yoast\WP\SEO\MyYoast_Client\Infrastructure\Endpoints\Connect_Endpoint(), new \Yoast\WP\SEO\MyYoast_Client\Infrastructure\Endpoints\Disconnect_Endpoint(), new \Yoast\WP\SEO\MyYoast_Client\Infrastructure\Endpoints\Refresh_Status_Endpoint(), new \Yoast\WP\SEO\MyYoast_Client\Infrastructure\Endpoints\Update_Endpoint()), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\Connection_Permission'] ?? ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\Connection_Permission'] = new \Yoast\WP\SEO\MyYoast_Client\User_Interface\Connection_Permission()))));
     }
 
     /**
@@ -5629,6 +5774,10 @@ class Cached_Container extends Container
         $instance->register_integration('Yoast\\WP\\SEO\\Alerts\\User_Interface\\Default_SEO_Data\\Default_SEO_Data_Watcher');
         $instance->register_integration('Yoast\\WP\\SEO\\Alerts\\User_Interface\\Resolve_Alert_Route');
         $instance->register_integration('Yoast\\WP\\SEO\\Analytics\\User_Interface\\Last_Completed_Indexation_Integration');
+        $instance->register_integration('Yoast\\WP\\SEO\\Bulk_Editor\\User_Interface\\Bulk_Editor_Integration');
+        $instance->register_route('Yoast\\WP\\SEO\\Bulk_Editor\\User_Interface\\Posts_Route');
+        $instance->register_route('Yoast\\WP\\SEO\\Bulk_Editor\\User_Interface\\Search_Bulk_Update_Route');
+        $instance->register_route('Yoast\\WP\\SEO\\Bulk_Editor\\User_Interface\\Social_Bulk_Update_Route');
         $instance->register_command('Yoast\\WP\\SEO\\Commands\\Cleanup_Command');
         $instance->register_command('Yoast\\WP\\SEO\\Commands\\Index_Command');
         $instance->register_migration('free', '20171228151840', 'Yoast\\WP\\SEO\\Config\\Migrations\\WpYoastIndexable');
@@ -5796,8 +5945,10 @@ class Cached_Container extends Container
         $instance->register_integration('Yoast\\WP\\SEO\\Llms_Txt\\User_Interface\\Llms_Txt_Cron_Callback_Integration');
         $instance->register_integration('Yoast\\WP\\SEO\\Llms_Txt\\User_Interface\\Schedule_Population_On_Activation_Integration');
         $instance->register_command('Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\Auth_Command');
+        $instance->register_route('Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\Management_Route');
         $instance->register_integration('Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\MyYoast_Cleanup_Integration');
         $instance->register_integration('Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\MyYoast_Client_Integration');
+        $instance->register_integration('Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\OAuth_Callback_Integration');
         $instance->register_integration('Yoast\\WP\\SEO\\Plans\\User_Interface\\Plans_Page_Integration');
         $instance->register_integration('Yoast\\WP\\SEO\\Plans\\User_Interface\\Upgrade_Sidebar_Menu_Integration');
         $instance->register_route('Yoast\\WP\\SEO\\Routes\\Alert_Dismissal_Route');
@@ -5872,28 +6023,17 @@ class Cached_Container extends Container
     protected function getMyYoastClientService()
     {
         $a = ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Registration\\Client_Registration'] ?? $this->getClientRegistrationService());
-        $b = ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\OIDC\\Discovery_Client'] ?? $this->getDiscoveryClientService());
-        $c = ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Crypto\\JWT_Signer'] ?? ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Crypto\\JWT_Signer'] = new \Yoast\WP\SEO\MyYoast_Client\Infrastructure\Crypto\JWT_Signer()));
+        $b = ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Http\\HTTP_Client'] ?? $this->getHTTPClientService());
 
-        $d = new \Yoast\WP\SEO\MyYoast_Client\Infrastructure\Crypto\Client_Authenticator(($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Crypto\\Key_Pair_Manager'] ?? $this->getKeyPairManagerService()), $c);
-        $e = ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Http\\HTTP_Client'] ?? $this->getHTTPClientService());
+        $c = new \Yoast\WP\SEO\MyYoast_Client\Application\Token_Revocation_Handler(($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\OIDC\\Discovery_Client'] ?? $this->getDiscoveryClientService()), $a, ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Crypto\\Client_Authenticator'] ?? $this->getClientAuthenticatorService()), $b);
 
-        $f = new \Yoast\WP\SEO\MyYoast_Client\Application\OAuth_Grant_Handler($b, $a, $d, $e);
+        $d = ($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] ?? ($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] = new \Yoast\WP\SEO\Loggers\Logger()));
 
-        $g = ($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] ?? ($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] = new \Yoast\WP\SEO\Loggers\Logger()));
+        $c->setLogger($d);
 
-        $f->setLogger($g);
-        $h = new \Yoast\WP\SEO\MyYoast_Client\Infrastructure\OIDC\ID_Token_Validator($b, $c, $e, ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\OIDC\\Issuer_Config'] ?? ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\OIDC\\Issuer_Config'] = new \Yoast\WP\SEO\MyYoast_Client\Infrastructure\OIDC\Issuer_Config())));
-        $h->setLogger($g);
+        $this->services['Yoast\\WP\\SEO\\MyYoast_Client\\Application\\MyYoast_Client'] = $instance = new \Yoast\WP\SEO\MyYoast_Client\Application\MyYoast_Client($a, ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Application\\Authorization_Code_Handler'] ?? $this->getAuthorizationCodeHandlerService()), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Application\\OAuth_Grant_Handler'] ?? $this->getOAuthGrantHandlerService()), $c, $b, ($this->services['Yoast\\WP\\SEO\\Helpers\\Lock_Helper'] ?? $this->getLockHelperService()), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Token\\Token_Storage'] ?? $this->getTokenStorageService()), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Token\\User_Token_Storage'] ?? $this->getUserTokenStorageService()), new \Yoast\WP\SEO\MyYoast_Client\Infrastructure\WordPress\Site_URL_Provider(), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\WordPress\\Redirect_URI_Provider'] ?? ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\WordPress\\Redirect_URI_Provider'] = new \Yoast\WP\SEO\MyYoast_Client\Infrastructure\WordPress\Redirect_URI_Provider())));
 
-        $i = new \Yoast\WP\SEO\MyYoast_Client\Application\Authorization_Code_Handler($b, $a, $f, $h, ($this->privates['Yoast\\WP\\SEO\\Expiring_Store\\Application\\Expiring_Store'] ?? $this->getExpiringStoreService()));
-        $i->setLogger($g);
-        $j = new \Yoast\WP\SEO\MyYoast_Client\Application\Token_Revocation_Handler($b, $a, $d, $e);
-        $j->setLogger($g);
-
-        $this->services['Yoast\\WP\\SEO\\MyYoast_Client\\Application\\MyYoast_Client'] = $instance = new \Yoast\WP\SEO\MyYoast_Client\Application\MyYoast_Client($a, $i, $f, $j, $e, ($this->services['Yoast\\WP\\SEO\\Helpers\\Lock_Helper'] ?? $this->getLockHelperService()), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Token\\Token_Storage'] ?? $this->getTokenStorageService()), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Token\\User_Token_Storage'] ?? $this->getUserTokenStorageService()), new \Yoast\WP\SEO\MyYoast_Client\Infrastructure\WordPress\Site_URL_Provider());
-
-        $instance->setLogger($g);
+        $instance->setLogger($d);
 
         return $instance;
     }
@@ -5906,6 +6046,20 @@ class Cached_Container extends Container
     protected function getAuthCommandService()
     {
         return $this->services['Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\Auth_Command'] = new \Yoast\WP\SEO\MyYoast_Client\User_Interface\Auth_Command(($this->services['Yoast\\WP\\SEO\\MyYoast_Client\\Application\\MyYoast_Client'] ?? $this->getMyYoastClientService()), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Registration\\Client_Registration'] ?? $this->getClientRegistrationService()), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\OIDC\\Issuer_Config'] ?? ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\OIDC\\Issuer_Config'] = new \Yoast\WP\SEO\MyYoast_Client\Infrastructure\OIDC\Issuer_Config())), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Token\\Token_Storage'] ?? $this->getTokenStorageService()), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Token\\User_Token_Storage'] ?? $this->getUserTokenStorageService()), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Application\\MyYoast_Client_Cleanup'] ?? $this->getMyYoastClientCleanupService()));
+    }
+
+    /**
+     * Gets the public 'Yoast\WP\SEO\MyYoast_Client\User_Interface\Management_Route' shared autowired service.
+     *
+     * @return \Yoast\WP\SEO\MyYoast_Client\User_Interface\Management_Route
+     */
+    protected function getManagementRouteService()
+    {
+        $this->services['Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\Management_Route'] = $instance = new \Yoast\WP\SEO\MyYoast_Client\User_Interface\Management_Route(($this->services['Yoast\\WP\\SEO\\MyYoast_Client\\Application\\MyYoast_Client'] ?? $this->getMyYoastClientService()), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\Status_Presenter'] ?? $this->getStatusPresenterService()), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\OIDC\\Issuer_Config'] ?? ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\OIDC\\Issuer_Config'] = new \Yoast\WP\SEO\MyYoast_Client\Infrastructure\OIDC\Issuer_Config())), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Registration\\Client_Registration'] ?? $this->getClientRegistrationService()), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\Connection_Permission'] ?? ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\Connection_Permission'] = new \Yoast\WP\SEO\MyYoast_Client\User_Interface\Connection_Permission())));
+
+        $instance->setLogger(($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] ?? ($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] = new \Yoast\WP\SEO\Loggers\Logger())));
+
+        return $instance;
     }
 
     /**
@@ -5930,6 +6084,16 @@ class Cached_Container extends Container
         $instance->setLogger(($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] ?? ($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] = new \Yoast\WP\SEO\Loggers\Logger())));
 
         return $instance;
+    }
+
+    /**
+     * Gets the public 'Yoast\WP\SEO\MyYoast_Client\User_Interface\OAuth_Callback_Integration' shared autowired service.
+     *
+     * @return \Yoast\WP\SEO\MyYoast_Client\User_Interface\OAuth_Callback_Integration
+     */
+    protected function getOAuthCallbackIntegrationService()
+    {
+        return $this->services['Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\OAuth_Callback_Integration'] = new \Yoast\WP\SEO\MyYoast_Client\User_Interface\OAuth_Callback_Integration(($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Application\\OAuth_Callback_Handler'] ?? $this->getOAuthCallbackHandlerService()), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Application\\Authorization_Code_Handler'] ?? $this->getAuthorizationCodeHandlerService()), ($this->services['Yoast\\WP\\SEO\\Helpers\\Redirect_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Redirect_Helper'] = new \Yoast\WP\SEO\Helpers\Redirect_Helper())));
     }
 
     /**
@@ -7039,6 +7203,40 @@ class Cached_Container extends Container
     }
 
     /**
+     * Gets the private 'Yoast\WP\SEO\Bulk_Editor\Application\Content_Types\Content_Types_Repository' shared autowired service.
+     *
+     * @return \Yoast\WP\SEO\Bulk_Editor\Application\Content_Types\Content_Types_Repository
+     */
+    protected function getContentTypesRepositoryService()
+    {
+        return $this->privates['Yoast\\WP\\SEO\\Bulk_Editor\\Application\\Content_Types\\Content_Types_Repository'] = new \Yoast\WP\SEO\Bulk_Editor\Application\Content_Types\Content_Types_Repository(new \Yoast\WP\SEO\Bulk_Editor\Infrastructure\Content_Types\Content_Types_Collector(($this->services['Yoast\\WP\\SEO\\Helpers\\Post_Type_Helper'] ?? $this->getPostTypeHelperService()), ($this->privates['Yoast\\WP\\SEO\\Bulk_Editor\\Infrastructure\\Content_Types\\Content_Type_Access_Checker'] ?? ($this->privates['Yoast\\WP\\SEO\\Bulk_Editor\\Infrastructure\\Content_Types\\Content_Type_Access_Checker'] = new \Yoast\WP\SEO\Bulk_Editor\Infrastructure\Content_Types\Content_Type_Access_Checker()))));
+    }
+
+    /**
+     * Gets the private 'Yoast\WP\SEO\Bulk_Editor\Application\Updates\Bulk_Updater' shared autowired service.
+     *
+     * @return \Yoast\WP\SEO\Bulk_Editor\Application\Updates\Bulk_Updater
+     */
+    protected function getBulkUpdaterService()
+    {
+        $this->privates['Yoast\\WP\\SEO\\Bulk_Editor\\Application\\Updates\\Bulk_Updater'] = $instance = new \Yoast\WP\SEO\Bulk_Editor\Application\Updates\Bulk_Updater(($this->privates['Yoast\\WP\\SEO\\Bulk_Editor\\Infrastructure\\Updates\\Post_Access_Checker'] ?? $this->getPostAccessCheckerService()), new \Yoast\WP\SEO\Bulk_Editor\Infrastructure\Updates\Meta_Writer(($this->services['Yoast\\WP\\SEO\\Helpers\\Meta_Helper'] ?? ($this->services['Yoast\\WP\\SEO\\Helpers\\Meta_Helper'] = new \Yoast\WP\SEO\Helpers\Meta_Helper()))));
+
+        $instance->setLogger(($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] ?? ($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] = new \Yoast\WP\SEO\Loggers\Logger())));
+
+        return $instance;
+    }
+
+    /**
+     * Gets the private 'Yoast\WP\SEO\Bulk_Editor\Infrastructure\Updates\Post_Access_Checker' shared autowired service.
+     *
+     * @return \Yoast\WP\SEO\Bulk_Editor\Infrastructure\Updates\Post_Access_Checker
+     */
+    protected function getPostAccessCheckerService()
+    {
+        return $this->privates['Yoast\\WP\\SEO\\Bulk_Editor\\Infrastructure\\Updates\\Post_Access_Checker'] = new \Yoast\WP\SEO\Bulk_Editor\Infrastructure\Updates\Post_Access_Checker(($this->services['Yoast\\WP\\SEO\\Helpers\\Post_Type_Helper'] ?? $this->getPostTypeHelperService()));
+    }
+
+    /**
      * Gets the private 'Yoast\WP\SEO\Content_Type_Visibility\Application\Content_Type_Visibility_Dismiss_Notifications' shared autowired service.
      *
      * @return \Yoast\WP\SEO\Content_Type_Visibility\Application\Content_Type_Visibility_Dismiss_Notifications
@@ -7207,6 +7405,27 @@ class Cached_Container extends Container
     }
 
     /**
+     * Gets the private 'Yoast\WP\SEO\MyYoast_Client\Application\Authorization_Code_Handler' shared autowired service.
+     *
+     * @return \Yoast\WP\SEO\MyYoast_Client\Application\Authorization_Code_Handler
+     */
+    protected function getAuthorizationCodeHandlerService()
+    {
+        $a = ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\OIDC\\Discovery_Client'] ?? $this->getDiscoveryClientService());
+        $b = new \Yoast\WP\SEO\MyYoast_Client\Infrastructure\OIDC\ID_Token_Validator($a, ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Crypto\\JWT_Signer'] ?? ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Crypto\\JWT_Signer'] = new \Yoast\WP\SEO\MyYoast_Client\Infrastructure\Crypto\JWT_Signer())), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Http\\HTTP_Client'] ?? $this->getHTTPClientService()), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\OIDC\\Issuer_Config'] ?? ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\OIDC\\Issuer_Config'] = new \Yoast\WP\SEO\MyYoast_Client\Infrastructure\OIDC\Issuer_Config())));
+
+        $c = ($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] ?? ($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] = new \Yoast\WP\SEO\Loggers\Logger()));
+
+        $b->setLogger($c);
+
+        $this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Application\\Authorization_Code_Handler'] = $instance = new \Yoast\WP\SEO\MyYoast_Client\Application\Authorization_Code_Handler($a, ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Registration\\Client_Registration'] ?? $this->getClientRegistrationService()), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Application\\OAuth_Grant_Handler'] ?? $this->getOAuthGrantHandlerService()), $b, ($this->privates['Yoast\\WP\\SEO\\Expiring_Store\\Application\\Expiring_Store'] ?? $this->getExpiringStoreService()), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\WordPress\\Redirect_URI_Provider'] ?? ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\WordPress\\Redirect_URI_Provider'] = new \Yoast\WP\SEO\MyYoast_Client\Infrastructure\WordPress\Redirect_URI_Provider())));
+
+        $instance->setLogger($c);
+
+        return $instance;
+    }
+
+    /**
      * Gets the private 'Yoast\WP\SEO\MyYoast_Client\Application\MyYoast_Client_Cleanup' shared autowired service.
      *
      * @return \Yoast\WP\SEO\MyYoast_Client\Application\MyYoast_Client_Cleanup
@@ -7218,6 +7437,44 @@ class Cached_Container extends Container
         $instance->setLogger(($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] ?? ($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] = new \Yoast\WP\SEO\Loggers\Logger())));
 
         return $instance;
+    }
+
+    /**
+     * Gets the private 'Yoast\WP\SEO\MyYoast_Client\Application\OAuth_Callback_Handler' shared autowired service.
+     *
+     * @return \Yoast\WP\SEO\MyYoast_Client\Application\OAuth_Callback_Handler
+     */
+    protected function getOAuthCallbackHandlerService()
+    {
+        $this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Application\\OAuth_Callback_Handler'] = $instance = new \Yoast\WP\SEO\MyYoast_Client\Application\OAuth_Callback_Handler(($this->services['Yoast\\WP\\SEO\\MyYoast_Client\\Application\\MyYoast_Client'] ?? $this->getMyYoastClientService()), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Application\\Authorization_Code_Handler'] ?? $this->getAuthorizationCodeHandlerService()), ($this->privates['Yoast\\WP\\SEO\\Expiring_Store\\Application\\Expiring_Store'] ?? $this->getExpiringStoreService()));
+
+        $instance->setLogger(($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] ?? ($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] = new \Yoast\WP\SEO\Loggers\Logger())));
+
+        return $instance;
+    }
+
+    /**
+     * Gets the private 'Yoast\WP\SEO\MyYoast_Client\Application\OAuth_Grant_Handler' shared autowired service.
+     *
+     * @return \Yoast\WP\SEO\MyYoast_Client\Application\OAuth_Grant_Handler
+     */
+    protected function getOAuthGrantHandlerService()
+    {
+        $this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Application\\OAuth_Grant_Handler'] = $instance = new \Yoast\WP\SEO\MyYoast_Client\Application\OAuth_Grant_Handler(($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\OIDC\\Discovery_Client'] ?? $this->getDiscoveryClientService()), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Registration\\Client_Registration'] ?? $this->getClientRegistrationService()), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Crypto\\Client_Authenticator'] ?? $this->getClientAuthenticatorService()), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Http\\HTTP_Client'] ?? $this->getHTTPClientService()));
+
+        $instance->setLogger(($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] ?? ($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] = new \Yoast\WP\SEO\Loggers\Logger())));
+
+        return $instance;
+    }
+
+    /**
+     * Gets the private 'Yoast\WP\SEO\MyYoast_Client\Infrastructure\Crypto\Client_Authenticator' shared autowired service.
+     *
+     * @return \Yoast\WP\SEO\MyYoast_Client\Infrastructure\Crypto\Client_Authenticator
+     */
+    protected function getClientAuthenticatorService()
+    {
+        return $this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Crypto\\Client_Authenticator'] = new \Yoast\WP\SEO\MyYoast_Client\Infrastructure\Crypto\Client_Authenticator(($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Crypto\\Key_Pair_Manager'] ?? $this->getKeyPairManagerService()), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Crypto\\JWT_Signer'] ?? ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Crypto\\JWT_Signer'] = new \Yoast\WP\SEO\MyYoast_Client\Infrastructure\Crypto\JWT_Signer())));
     }
 
     /**
@@ -7302,6 +7559,16 @@ class Cached_Container extends Container
         $instance->setLogger(($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] ?? ($this->services['Yoast\\WP\\SEO\\Loggers\\Logger'] = new \Yoast\WP\SEO\Loggers\Logger())));
 
         return $instance;
+    }
+
+    /**
+     * Gets the private 'Yoast\WP\SEO\MyYoast_Client\User_Interface\Status_Presenter' shared autowired service.
+     *
+     * @return \Yoast\WP\SEO\MyYoast_Client\User_Interface\Status_Presenter
+     */
+    protected function getStatusPresenterService()
+    {
+        return $this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\User_Interface\\Status_Presenter'] = new \Yoast\WP\SEO\MyYoast_Client\User_Interface\Status_Presenter(($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\Registration\\Client_Registration'] ?? $this->getClientRegistrationService()), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\OIDC\\Issuer_Config'] ?? ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\OIDC\\Issuer_Config'] = new \Yoast\WP\SEO\MyYoast_Client\Infrastructure\OIDC\Issuer_Config())), ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\WordPress\\Redirect_URI_Provider'] ?? ($this->privates['Yoast\\WP\\SEO\\MyYoast_Client\\Infrastructure\\WordPress\\Redirect_URI_Provider'] = new \Yoast\WP\SEO\MyYoast_Client\Infrastructure\WordPress\Redirect_URI_Provider())));
     }
 
     /**

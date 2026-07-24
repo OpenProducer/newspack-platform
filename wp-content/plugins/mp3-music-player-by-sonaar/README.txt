@@ -3,9 +3,9 @@ Contributors: sonaar, eduplessis
 Tags: MP3, music player, podcast player, audio player, woocommerce
 Donate link: https://sonaar.io
 Requires at least: 4.7
-Tested up to: 6.9
+Tested up to: 7.0
 Requires PHP: 5.6
-Stable tag: 5.12
+Stable tag: 5.13.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -342,6 +342,26 @@ Yes, with the pro version, you can click on the 'Add to Favorite' icon to store 
 10. Shortcode Builder: Create, Import and Customize audio players using shortcodes in real-time
 
 == Changelog ==
+= 5.13.1 =
+- Hotfix: Share button issue when playlist is set to reverse mode.
+- Hotfix: Favorite button issue when playlist is set to reverse mode.
+
+= 5.13 =
+- Fix: Remember Track Progress no longer stores an incorrect playback position 
+- Fix: Download links now work correctly when media library files are hosted on an external server 
+- Fix: Prevent unnecessary AJAX calls when built-in statistics are disabled 
+- Fix: Remove Add to Cart option now works correctly with WooCommerce variable products on single product post 
+- Fix: Added extra bottom spacing to popups to prevent browser navigation bars from hiding content on mobile devices 
+- Fix: Preview Generator now supports all post types 
+- Fix: Draft playlist posts now display correctly in frontend preview mode 
+- Fix: CMB2 checkbox compatibility with WordPress 7 
+- Fix: CSV post import regression introduced by the JSON import security update 
+- Fix: Share button issue when playlist order is reversed 
+- Fix: RSS player artwork now updates correctly based on the current track artwork 
+- Fix: Security vulnerability reported by patchstack
+- Fix: Favorite icon display issue with the Starter plan 
+- Tweak: Updated labels in the Shortcode Builder for improved clarity 
+
 = 5.12 =
 - Fix: Resolved a SSRF security vulnerability
 - Fix: PHP warning in wp-admin caused by accessing array offset on null playlist
