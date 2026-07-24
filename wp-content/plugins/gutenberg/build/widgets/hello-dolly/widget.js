@@ -24,13 +24,6 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 
-// package-external:@wordpress/i18n
-var require_i18n = __commonJS({
-  "package-external:@wordpress/i18n"(exports, module) {
-    module.exports = window.wp.i18n;
-  }
-});
-
 // package-external:@wordpress/primitives
 var require_primitives = __commonJS({
   "package-external:@wordpress/primitives"(exports, module) {
@@ -45,9 +38,6 @@ var require_jsx_runtime = __commonJS({
   }
 });
 
-// widgets/hello-dolly/widget.ts
-var import_i18n = __toESM(require_i18n());
-
 // packages/icons/build-module/library/audio.mjs
 var import_primitives = __toESM(require_primitives(), 1);
 var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
@@ -56,7 +46,6 @@ var audio_default = /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_primitive
 // widgets/hello-dolly/widget.ts
 var widget_default = {
   name: "core/hello-dolly",
-  title: (0, import_i18n.__)("Hello Dolly"),
   icon: audio_default
 };
 export {

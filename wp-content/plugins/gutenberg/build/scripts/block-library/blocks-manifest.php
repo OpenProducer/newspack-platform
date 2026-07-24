@@ -21,6 +21,7 @@ return array(
 			'background' => array(
 				'backgroundImage' => true,
 				'backgroundSize' => true,
+				'gradient' => true,
 				'__experimentalDefaultControls' => array(
 					'backgroundImage' => true
 				)
@@ -2267,6 +2268,17 @@ return array(
 				'source' => 'attribute',
 				'selector' => 'video',
 				'attribute' => 'poster'
+			),
+			'allowedVideoProviders' => array(
+				'type' => 'array',
+				'default' => array(
+					'youtube',
+					'vimeo',
+					'videopress',
+					'animoto',
+					'tiktok',
+					'wordpress-tv'
+				)
 			)
 		),
 		'usesContext' => array(
@@ -2896,7 +2908,9 @@ return array(
 		'title' => 'Gallery',
 		'category' => 'media',
 		'usesContext' => array(
-			'galleryId'
+			'galleryId',
+			'postId',
+			'postType'
 		),
 		'allowedBlocks' => array(
 			'core/image'
@@ -2962,6 +2976,9 @@ return array(
 				'default' => array(
 					
 				)
+			),
+			'dynamicContent' => array(
+				'type' => 'object'
 			),
 			'navigationButtonType' => array(
 				'type' => 'string',
@@ -3054,11 +3071,11 @@ return array(
 				'margin' => true,
 				'padding' => true,
 				'blockGap' => array(
-					'horizontal',
-					'vertical'
-				),
-				'__experimentalSkipSerialization' => array(
-					'blockGap'
+					'sides' => array(
+						'horizontal',
+						'vertical'
+					),
+					'__experimentalDefault' => 'var( --wp--style--gallery-gap-default, var( --gallery-block--gutter-size, var( --wp--style--block-gap, 0.5em ) ) )'
 				),
 				'__experimentalDefaultControls' => array(
 					'blockGap' => true,
@@ -3361,8 +3378,7 @@ return array(
 		'attributes' => array(
 			'content' => array(
 				'type' => 'string',
-				'source' => 'raw',
-				'role' => 'content'
+				'role' => 'local'
 			)
 		),
 		'supports' => array(
@@ -3372,6 +3388,7 @@ return array(
 			'interactivity' => array(
 				'clientNavigation' => true
 			),
+			'listView' => true,
 			'customCSS' => false,
 			'visibility' => false
 		),
@@ -3419,9 +3436,11 @@ return array(
 			),
 			'html' => false,
 			'color' => array(
-				'background' => true,
-				'text' => true,
-				'__experimentalSkipSerialization' => true
+				'__experimentalSkipSerialization' => true,
+				'__experimentalDefaultControls' => array(
+					'background' => true,
+					'text' => true
+				)
 			),
 			'interactivity' => array(
 				'clientNavigation' => true
@@ -3623,7 +3642,7 @@ return array(
 			)
 		),
 		'selectors' => array(
-			'dimensions' => '.wp-block-image img',
+			'dimensions' => '.wp-block-image img, .wp-block-image .components-placeholder',
 			'border' => '.wp-block-image img, .wp-block-image .wp-block-image__crop-area, .wp-block-image .components-placeholder',
 			'shadow' => '.wp-block-image img, .wp-block-image .wp-block-image__crop-area, .wp-block-image .components-placeholder',
 			'filter' => array(
@@ -3761,14 +3780,6 @@ return array(
 				'type' => 'boolean',
 				'default' => false
 			),
-			'postLayout' => array(
-				'type' => 'string',
-				'default' => 'list'
-			),
-			'columns' => array(
-				'type' => 'number',
-				'default' => 3
-			),
 			'order' => array(
 				'type' => 'string',
 				'default' => 'desc'
@@ -3810,6 +3821,7 @@ return array(
 			'anchor' => true,
 			'align' => true,
 			'html' => false,
+			'layout' => true,
 			'color' => array(
 				'gradients' => true,
 				'link' => true,
@@ -3821,7 +3833,13 @@ return array(
 			),
 			'spacing' => array(
 				'margin' => true,
-				'padding' => true
+				'padding' => true,
+				'blockGap' => array(
+					'__experimentalDefault' => '1.25em'
+				),
+				'__experimentalDefaultControls' => array(
+					'blockGap' => true
+				)
 			),
 			'typography' => array(
 				'fontSize' => true,
@@ -5022,6 +5040,7 @@ return array(
 				'full'
 			),
 			'splitting' => true,
+			'editableRoot' => true,
 			'anchor' => true,
 			'className' => false,
 			'__experimentalBorder' => array(
@@ -5105,7 +5124,6 @@ return array(
 	'playlist' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
-		'__experimental' => true,
 		'name' => 'core/playlist',
 		'title' => 'Playlist',
 		'category' => 'media',
@@ -5119,9 +5137,6 @@ return array(
 			'core/playlist-track'
 		),
 		'attributes' => array(
-			'currentTrack' => array(
-				'type' => 'string'
-			),
 			'type' => array(
 				'type' => 'string',
 				'default' => 'audio'
@@ -5138,6 +5153,10 @@ return array(
 				'type' => 'boolean',
 				'default' => true
 			),
+			'showPlayButtonArtwork' => array(
+				'type' => 'boolean',
+				'default' => false
+			),
 			'showArtists' => array(
 				'type' => 'boolean',
 				'default' => true
@@ -5150,13 +5169,37 @@ return array(
 				'type' => 'boolean',
 				'default' => true
 			),
+			'waveformStyle' => array(
+				'type' => 'string',
+				'enum' => array(
+					'bars',
+					'mirror',
+					'line',
+					'blocks',
+					'dots',
+					'seekbar'
+				),
+				'default' => 'bars'
+			),
+			'waveformColor' => array(
+				'type' => 'string'
+			),
+			'waveformGradient' => array(
+				'type' => 'string'
+			),
+			'waveformBackgroundColor' => array(
+				'type' => 'string'
+			),
+			'waveformBackgroundGradient' => array(
+				'type' => 'string'
+			),
 			'caption' => array(
 				'type' => 'string'
 			)
 		),
 		'providesContext' => array(
 			'showArtists' => 'showArtists',
-			'currentTrack' => 'currentTrack'
+			'showImages' => 'showImages'
 		),
 		'supports' => array(
 			'anchor' => true,
@@ -5171,12 +5214,10 @@ return array(
 			),
 			'__experimentalBorder' => array(
 				'color' => true,
-				'radius' => true,
 				'style' => true,
 				'width' => true,
 				'__experimentalDefaultControls' => array(
 					'color' => true,
-					'radius' => true,
 					'style' => true,
 					'width' => true
 				)
@@ -5185,33 +5226,12 @@ return array(
 			'spacing' => array(
 				'margin' => true,
 				'padding' => true
-			)
-		),
-		'styles' => array(
-			array(
-				'name' => 'bars',
-				'label' => 'Bars',
-				'isDefault' => true
 			),
-			array(
-				'name' => 'mirror',
-				'label' => 'Mirror'
-			),
-			array(
-				'name' => 'line',
-				'label' => 'Line'
-			),
-			array(
-				'name' => 'blocks',
-				'label' => 'Blocks'
-			),
-			array(
-				'name' => 'dots',
-				'label' => 'Dots'
-			),
-			array(
-				'name' => 'seekbar',
-				'label' => 'Seekbar'
+			'typography' => array(
+				'fontSize' => true,
+				'__experimentalDefaultControls' => array(
+					'fontSize' => true
+				)
 			)
 		),
 		'editorStyle' => 'wp-block-playlist-editor',
@@ -5220,7 +5240,6 @@ return array(
 	'playlist-track' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
-		'__experimental' => true,
 		'name' => 'core/playlist-track',
 		'title' => 'Playlist track',
 		'category' => 'media',
@@ -5235,7 +5254,7 @@ return array(
 		'textdomain' => 'default',
 		'usesContext' => array(
 			'showArtists',
-			'currentTrack'
+			'showImages'
 		),
 		'attributes' => array(
 			'blob' => array(
@@ -5244,9 +5263,6 @@ return array(
 			),
 			'id' => array(
 				'type' => 'number'
-			),
-			'uniqueId' => array(
-				'type' => 'string'
 			),
 			'src' => array(
 				'type' => 'string'
@@ -5262,6 +5278,9 @@ return array(
 				'type' => 'string'
 			),
 			'image' => array(
+				'type' => 'string'
+			),
+			'imageAlt' => array(
 				'type' => 'string'
 			),
 			'length' => array(
@@ -5765,6 +5784,7 @@ return array(
 			'background' => array(
 				'backgroundImage' => true,
 				'backgroundSize' => true,
+				'gradient' => true,
 				'__experimentalDefaultControls' => array(
 					'backgroundImage' => true
 				)
@@ -6182,7 +6202,8 @@ return array(
 			'templateSlug',
 			'previewPostType',
 			'enhancedPagination',
-			'postType'
+			'postType',
+			'postId'
 		),
 		'supports' => array(
 			'anchor' => true,
@@ -6580,8 +6601,10 @@ return array(
 			'background' => array(
 				'backgroundImage' => true,
 				'backgroundSize' => true,
+				'gradient' => true,
 				'__experimentalDefaultControls' => array(
-					'backgroundImage' => true
+					'backgroundImage' => true,
+					'gradient' => true
 				)
 			),
 			'color' => array(
@@ -6680,7 +6703,8 @@ return array(
 					),
 					'format' => array(
 						
-					)
+					),
+					'excludeCurrent' => null
 				)
 			),
 			'tagName' => array(
@@ -6696,7 +6720,8 @@ return array(
 			)
 		),
 		'usesContext' => array(
-			'templateSlug'
+			'templateSlug',
+			'postType'
 		),
 		'providesContext' => array(
 			'queryId' => 'queryId',
@@ -7188,8 +7213,10 @@ return array(
 			'background' => array(
 				'backgroundImage' => true,
 				'backgroundSize' => true,
+				'gradient' => true,
 				'__experimentalDefaultControls' => array(
-					'backgroundImage' => true
+					'backgroundImage' => true,
+					'gradient' => true
 				)
 			),
 			'__experimentalBorder' => array(
@@ -8093,7 +8120,6 @@ return array(
 	),
 	'tab-list' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
-		'__experimental' => true,
 		'apiVersion' => 3,
 		'name' => 'core/tab-list',
 		'title' => 'Tab List',
@@ -8113,8 +8139,9 @@ return array(
 				'selector' => 'button',
 				'query' => array(
 					'label' => array(
-						'type' => 'string',
-						'source' => 'html'
+						'type' => 'rich-text',
+						'source' => 'rich-text',
+						'role' => 'content'
 					)
 				),
 				'default' => array(
@@ -8124,6 +8151,7 @@ return array(
 		),
 		'supports' => array(
 			'html' => false,
+			'ariaLabel' => true,
 			'visibility' => false,
 			'lock' => false,
 			'color' => array(
@@ -8149,7 +8177,7 @@ return array(
 			'layout' => array(
 				'default' => array(
 					'type' => 'flex',
-					'flexWrap' => 'nowrap'
+					'flexWrap' => 'wrap'
 				),
 				'allowVerticalAlignment' => false,
 				'allowOrientation' => false,
@@ -8177,11 +8205,11 @@ return array(
 				'padding' => '.wp-block-tab-list button'
 			)
 		),
-		'style' => 'wp-block-tab-list'
+		'style' => 'wp-block-tab-list',
+		'editorStyle' => 'wp-block-tab-list-editor'
 	),
 	'tab-panel' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
-		'__experimental' => true,
 		'apiVersion' => 3,
 		'name' => 'core/tab-panel',
 		'title' => 'Tab Panel',
@@ -8198,8 +8226,6 @@ return array(
 			'core/tab-panels'
 		),
 		'usesContext' => array(
-			'core/tabs-activeTabIndex',
-			'core/tabs-editorActiveTabIndex',
 			'core/tabs-id'
 		),
 		'supports' => array(
@@ -8235,7 +8261,6 @@ return array(
 	),
 	'tab-panels' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
-		'__experimental' => true,
 		'apiVersion' => 3,
 		'name' => 'core/tab-panels',
 		'title' => 'Tab Panels',
@@ -8594,7 +8619,6 @@ return array(
 	),
 	'tabs' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
-		'__experimental' => true,
 		'apiVersion' => 3,
 		'name' => 'core/tabs',
 		'title' => 'Tabs',
@@ -8640,10 +8664,6 @@ return array(
 				'fontSize' => true,
 				'__experimentalFontFamily' => true
 			)
-		),
-		'providesContext' => array(
-			'core/tabs-activeTabIndex' => 'activeTabIndex',
-			'core/tabs-editorActiveTabIndex' => 'editorActiveTabIndex'
 		),
 		'usesContext' => array(
 			'core/tabs-list',
@@ -8906,9 +8926,6 @@ return array(
 			'taxonomy'
 		),
 		'attributes' => array(
-			'textAlign' => array(
-				'type' => 'string'
-			),
 			'level' => array(
 				'type' => 'number',
 				'default' => 0
@@ -8943,6 +8960,7 @@ return array(
 			'typography' => array(
 				'fontSize' => true,
 				'lineHeight' => true,
+				'textAlign' => true,
 				'__experimentalFontFamily' => true,
 				'__experimentalFontWeight' => true,
 				'__experimentalFontStyle' => true,
@@ -9168,8 +9186,10 @@ return array(
 			'background' => array(
 				'backgroundImage' => true,
 				'backgroundSize' => true,
+				'gradient' => true,
 				'__experimentalDefaultControls' => array(
-					'backgroundImage' => true
+					'backgroundImage' => true,
+					'gradient' => true
 				)
 			),
 			'color' => array(
@@ -9292,6 +9312,12 @@ return array(
 				'selector' => 'video',
 				'attribute' => 'src',
 				'role' => 'content'
+			),
+			'width' => array(
+				'type' => 'number'
+			),
+			'height' => array(
+				'type' => 'number'
 			),
 			'playsInline' => array(
 				'type' => 'boolean',

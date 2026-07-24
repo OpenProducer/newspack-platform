@@ -149,6 +149,7 @@ var wp;
     OperationType2["ResizeCrop"] = "RESIZE_CROP";
     OperationType2["Rotate"] = "ROTATE";
     OperationType2["TranscodeImage"] = "TRANSCODE_IMAGE";
+    OperationType2["TranscodeGif"] = "TRANSCODE_GIF";
     OperationType2["ThumbnailGeneration"] = "THUMBNAIL_GENERATION";
     OperationType2["Finalize"] = "FINALIZE";
     OperationType2["DetectUltraHdr"] = "DETECT_ULTRAHDR";
@@ -413,6 +414,7 @@ var wp;
   __export(private_selectors_exports, {
     getActiveImageProcessingCount: () => getActiveImageProcessingCount,
     getActiveUploadCount: () => getActiveUploadCount,
+    getActiveVideoProcessingCount: () => getActiveVideoProcessingCount,
     getAllItems: () => getAllItems,
     getBlobUrls: () => getBlobUrls,
     getFailedItems: () => getFailedItems,
@@ -420,6 +422,7 @@ var wp;
     getItemProgress: () => getItemProgress,
     getPendingImageProcessing: () => getPendingImageProcessing,
     getPendingUploads: () => getPendingUploads,
+    getPendingVideoProcessing: () => getPendingVideoProcessing,
     hasPendingItemsByParentId: () => hasPendingItemsByParentId,
     isBatchUploaded: () => isBatchUploaded,
     isPaused: () => isPaused
@@ -458,10 +461,21 @@ var wp;
       (item) => item.currentOperation === OperationType.ResizeCrop || item.currentOperation === OperationType.Rotate
     ).length;
   }
+  function getActiveVideoProcessingCount(state) {
+    return state.queue.filter(
+      (item) => item.currentOperation === OperationType.TranscodeGif
+    ).length;
+  }
   function getPendingImageProcessing(state) {
     return state.queue.filter((item) => {
       const nextOperation = Array.isArray(item.operations?.[0]) ? item.operations[0][0] : item.operations?.[0];
       return (nextOperation === OperationType.ResizeCrop || nextOperation === OperationType.Rotate) && item.currentOperation !== OperationType.ResizeCrop && item.currentOperation !== OperationType.Rotate;
+    });
+  }
+  function getPendingVideoProcessing(state) {
+    return state.queue.filter((item) => {
+      const nextOperation = Array.isArray(item.operations?.[0]) ? item.operations[0][0] : item.operations?.[0];
+      return nextOperation === OperationType.TranscodeGif && item.currentOperation !== OperationType.TranscodeGif;
     });
   }
   function getFailedItems(state) {
@@ -623,6 +637,22 @@ var wp;
   function getFileBasename(name) {
     return name.includes(".") ? name.split(".").slice(0, -1).join(".") : name;
   }
+  function isAnimatedGif(buffer) {
+    const view = new Uint8Array(buffer);
+    if (view.length < 4 || view[0] !== 71 || view[1] !== 73 || view[2] !== 70 || view[3] !== 56) {
+      return false;
+    }
+    let frameCount = 0;
+    for (let i = 0; i < view.length - 2; i++) {
+      if (view[i] === 0 && view[i + 1] === 33 && view[i + 2] === 249) {
+        frameCount++;
+        if (frameCount > 1) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 
   // packages/upload-media/build-module/store/utils/index.mjs
   var vipsModulePromise;
@@ -638,15 +668,14 @@ var wp;
     }
     return vipsModulePromise;
   }
-  async function vipsConvertImageFormat(id, file, type, quality, interlaced) {
+  async function vipsConvertImageFormat(id, file, type, options = {}) {
     const { vipsConvertImageFormat: convertImageFormat } = await loadVipsModule();
     const buffer = await convertImageFormat(
       id,
       await file.arrayBuffer(),
       file.type,
       type,
-      quality,
-      interlaced
+      options
     );
     const ext = type.split("/")[1];
     const fileName = `${getFileBasename(file.name)}.${ext}`;
@@ -666,19 +695,26 @@ var wp;
     const { vipsGetUltraHdrInfo: getUltraHdrInfo } = await loadVipsModule();
     return getUltraHdrInfo(buffer);
   }
-  async function vipsResizeImage(id, file, resize, smartCrop, addSuffix, signal, scaledSuffix, quality) {
+  async function vipsResizeImage(id, file, resize, options = {}) {
+    const {
+      smartCrop = false,
+      addSuffix = false,
+      signal,
+      scaledSuffix,
+      quality,
+      stripMeta,
+      maxBitdepth
+    } = options;
     if (signal?.aborted) {
       throw new Error("Operation aborted");
     }
     const { vipsResizeImage: resizeImage } = await loadVipsModule();
-    const { buffer, width, height, originalWidth, originalHeight } = await resizeImage(
-      id,
-      await file.arrayBuffer(),
-      file.type,
-      resize,
+    const { buffer, width, height, originalWidth, originalHeight } = await resizeImage(id, await file.arrayBuffer(), file.type, resize, {
       smartCrop,
-      quality
-    );
+      quality,
+      stripMeta,
+      maxBitdepth
+    });
     let fileName = file.name;
     const wasResized = originalWidth > width || originalHeight > height;
     if (wasResized) {
@@ -757,6 +793,103 @@ var wp;
     }
   }
 
+  // packages/upload-media/build-module/store/utils/video-conversion.mjs
+  var UNSUPPORTED_ERROR_PREFIX = "Unsupported";
+  var SIZE_LIMIT_ERROR_PREFIX = `${UNSUPPORTED_ERROR_PREFIX}: GIF exceeds maximum conversion size`;
+  var CONVERSION_TIMEOUT_ERROR_PREFIX = "GIF to video conversion timed out";
+  var DEFAULT_CONVERSION_TIMEOUT = 3e4;
+  function isUnsupportedConversionError(error) {
+    return error instanceof Error && error.message.startsWith(UNSUPPORTED_ERROR_PREFIX);
+  }
+  function isSizeLimitConversionError(error) {
+    return error instanceof Error && error.message.startsWith(SIZE_LIMIT_ERROR_PREFIX);
+  }
+  function isConversionTimeoutError(error) {
+    return error instanceof Error && error.message.startsWith(CONVERSION_TIMEOUT_ERROR_PREFIX);
+  }
+  var videoConversionModulePromise;
+  var videoConversionModule;
+  function loadVideoConversionModule() {
+    if (!videoConversionModulePromise) {
+      videoConversionModulePromise = import("@wordpress/video-conversion/worker").then((mod) => {
+        videoConversionModule = mod;
+        return mod;
+      }).catch((error) => {
+        videoConversionModulePromise = void 0;
+        throw error;
+      });
+    }
+    return videoConversionModulePromise;
+  }
+  async function convertGifToVideo(id, file, outputMimeType, {
+    maxDimensions,
+    timeout = DEFAULT_CONVERSION_TIMEOUT,
+    maxTotalPixels
+  } = {}) {
+    const mod = await loadVideoConversionModule();
+    const conversion = mod.convertGifToVideo(
+      id,
+      file,
+      outputMimeType,
+      maxDimensions,
+      maxTotalPixels
+    );
+    let buffer;
+    if (timeout > 0) {
+      let timer;
+      try {
+        buffer = await Promise.race([
+          conversion,
+          new Promise((_, reject) => {
+            timer = setTimeout(() => {
+              reject(
+                new Error(
+                  `${CONVERSION_TIMEOUT_ERROR_PREFIX} after ${timeout}ms`
+                )
+              );
+            }, timeout);
+          })
+        ]);
+      } catch (error) {
+        if (isConversionTimeoutError(error)) {
+          conversion.catch(() => {
+          });
+          mod.cancelGifToVideoOperations(id).catch(() => {
+          });
+        }
+        throw error;
+      } finally {
+        clearTimeout(timer);
+      }
+    } else {
+      buffer = await conversion;
+    }
+    const ext = outputMimeType === "video/webm" ? "webm" : "mp4";
+    const fileName = `${getFileBasename(file.name)}.${ext}`;
+    return new File(
+      [new Blob([buffer], { type: outputMimeType })],
+      fileName,
+      { type: outputMimeType }
+    );
+  }
+  async function cancelGifToVideoOperations(id) {
+    const mod = videoConversionModule ?? (videoConversionModulePromise ? await videoConversionModulePromise.catch(() => void 0) : void 0);
+    if (!mod) {
+      return false;
+    }
+    return mod.cancelGifToVideoOperations(id);
+  }
+  function terminateVideoConversionWorker() {
+    if (videoConversionModule) {
+      videoConversionModule.terminateVideoConversionWorker();
+      return;
+    }
+    if (videoConversionModulePromise) {
+      void videoConversionModulePromise.then((mod) => mod.terminateVideoConversionWorker()).catch(() => {
+      });
+    }
+  }
+
   // packages/upload-media/build-module/store/utils/debug-logger.mjs
   function isDebugEnabled() {
     return true;
@@ -809,6 +942,7 @@ var wp;
     ErrorCode2["IMAGE_TRANSCODING_ERROR"] = "IMAGE_TRANSCODING_ERROR";
     ErrorCode2["IMAGE_ROTATION_ERROR"] = "IMAGE_ROTATION_ERROR";
     ErrorCode2["MEDIA_TRANSCODING_ERROR"] = "MEDIA_TRANSCODING_ERROR";
+    ErrorCode2["GIF_TRANSCODING_ERROR"] = "GIF_TRANSCODING_ERROR";
     ErrorCode2["GENERAL"] = "GENERAL";
     return ErrorCode2;
   })(ErrorCode || {});
@@ -987,7 +1121,10 @@ var wp;
         }
       }
       item.abortController?.abort();
-      await vipsCancelOperations(id);
+      vipsCancelOperations(id).catch(() => {
+      });
+      cancelGifToVideoOperations(id).catch(() => {
+      });
       if (!silent) {
         const { onError } = item;
         onError?.(error ?? new Error("Upload cancelled"));
@@ -1017,17 +1154,23 @@ var wp;
           dispatch.processItem(pending.id);
         }
       }
+      if (currentOperation === OperationType.TranscodeGif) {
+        for (const pending of select2.getPendingVideoProcessing()) {
+          dispatch.processItem(pending.id);
+        }
+      }
       if (currentOperation === OperationType.ResizeCrop || currentOperation === OperationType.Rotate || currentOperation === OperationType.TranscodeImage) {
         maybeRecycleVipsWorker(select2.getActiveImageProcessingCount());
       }
       if (parentId) {
         const parentItem = select2.getItem(parentId);
         if (parentItem) {
+          const isOptionalCompanion = item.additionalData?.image_size === "animated_video" || item.additionalData?.image_size === "animated_video_poster";
           if (select2.hasPendingItemsByParentId(parentId)) {
             if (parentItem.operations && parentItem.operations.length > 0) {
               dispatch.processItem(parentId);
             }
-          } else if (parentItem.subSizes && parentItem.subSizes.length > 0) {
+          } else if (parentItem.subSizes && parentItem.subSizes.length > 0 || isOptionalCompanion) {
             if (parentItem.operations && parentItem.operations.length > 0) {
               dispatch.processItem(parentId);
             }
@@ -1038,7 +1181,7 @@ var wp;
               mediaDelete(parentAttachmentId).catch(() => {
               });
             }
-            dispatch.cancelItem(
+            await dispatch.cancelItem(
               parentId,
               new UploadError({
                 code: error instanceof UploadError && error.code || ErrorCode.GENERAL,
@@ -1142,6 +1285,7 @@ var wp;
     revokeBlobUrls: () => revokeBlobUrls,
     rotateItem: () => rotateItem,
     sideloadItem: () => sideloadItem,
+    transcodeGifItem: () => transcodeGifItem,
     transcodeImageItem: () => transcodeImageItem,
     updateItemProgress: () => updateItemProgress,
     updateSettings: () => updateSettings,
@@ -1557,7 +1701,8 @@ var wp;
       tileHeight: height,
       outputWidth: width,
       outputHeight: height,
-      rotation
+      rotation,
+      exifOrientation: rotation === 0 ? getUnappliedExifOrientation(buffer) : 1
     };
   }
   function parseGridImage(r, buffer, gridItemId, locations, allAssoc, properties, irefBox, idatOffset) {
@@ -1650,8 +1795,129 @@ var wp;
       tileHeight,
       outputWidth,
       outputHeight,
-      rotation
+      rotation,
+      exifOrientation: rotation === 0 ? getUnappliedExifOrientation(buffer) : 1
     };
+  }
+  function readTiffOrientation(payload) {
+    if (payload.length < 8) {
+      return 1;
+    }
+    const view = new DataView(
+      payload.buffer,
+      payload.byteOffset,
+      payload.byteLength
+    );
+    let tiffStart = 0;
+    const firstWord = view.getUint16(0);
+    if (firstWord !== 18761 && firstWord !== 19789) {
+      tiffStart = view.getUint32(0) + 4;
+    }
+    if (tiffStart + 8 > payload.length) {
+      return 1;
+    }
+    const byteOrder = view.getUint16(tiffStart);
+    let little;
+    if (byteOrder === 18761) {
+      little = true;
+    } else if (byteOrder === 19789) {
+      little = false;
+    } else {
+      return 1;
+    }
+    const ifd0 = tiffStart + view.getUint32(tiffStart + 4, little);
+    if (ifd0 + 2 > payload.length) {
+      return 1;
+    }
+    const entryCount = view.getUint16(ifd0, little);
+    for (let i = 0; i < entryCount; i++) {
+      const entry = ifd0 + 2 + i * 12;
+      if (entry + 12 > payload.length) {
+        break;
+      }
+      if (view.getUint16(entry, little) === 274) {
+        const value = view.getUint16(entry + 8, little);
+        return value >= 1 && value <= 8 ? value : 1;
+      }
+    }
+    return 1;
+  }
+  function findMeta(r) {
+    const metaBox = findBox(r, 0, r.view.byteLength, "meta");
+    if (!metaBox) {
+      return null;
+    }
+    const start = metaBox.offset + metaBox.headerSize + 4;
+    const end = metaBox.offset + metaBox.size;
+    return { box: metaBox, children: findBoxes(r, start, end) };
+  }
+  function parseExifOrientation(buffer) {
+    try {
+      const r = new Reader(buffer);
+      const meta = findMeta(r);
+      if (!meta) {
+        return 1;
+      }
+      const iinfBox = meta.children.find((b) => b.type === "iinf");
+      const ilocBox = meta.children.find((b) => b.type === "iloc");
+      if (!iinfBox || !ilocBox) {
+        return 1;
+      }
+      const itemTypes = parseIinf(r, iinfBox);
+      let exifItemId;
+      for (const [id, type] of itemTypes) {
+        if (type === "Exif") {
+          exifItemId = id;
+          break;
+        }
+      }
+      if (exifItemId === void 0) {
+        return 1;
+      }
+      const loc = parseIloc(r, ilocBox).get(exifItemId);
+      if (!loc || loc.extents.length === 0) {
+        return 1;
+      }
+      const idatBox = meta.children.find((b) => b.type === "idat");
+      const idatOffset = idatBox ? idatBox.offset + idatBox.headerSize : 0;
+      return readTiffOrientation(readItemData(buffer, loc, idatOffset));
+    } catch {
+      return 1;
+    }
+  }
+  function hasNativeTransform(r) {
+    const meta = findMeta(r);
+    if (!meta) {
+      return false;
+    }
+    const iprp = meta.children.find((b) => b.type === "iprp");
+    if (!iprp) {
+      return false;
+    }
+    const ipco = findBox(
+      r,
+      iprp.offset + iprp.headerSize,
+      iprp.offset + iprp.size,
+      "ipco"
+    );
+    if (!ipco) {
+      return false;
+    }
+    const start = ipco.offset + ipco.headerSize;
+    const end = ipco.offset + ipco.size;
+    return Boolean(
+      findBox(r, start, end, "irot") || findBox(r, start, end, "imir")
+    );
+  }
+  function getUnappliedExifOrientation(buffer) {
+    try {
+      if (hasNativeTransform(new Reader(buffer))) {
+        return 1;
+      }
+    } catch {
+      return 1;
+    }
+    return parseExifOrientation(buffer);
   }
 
   // packages/upload-media/build-module/canvas-utils.mjs
@@ -1741,7 +2007,10 @@ var wp;
               frame.close();
             }
           }
-          const outputCanvas = applyRotation(canvas, heicData.rotation);
+          const outputCanvas = heicData.rotation !== 0 ? applyRotation(canvas, heicData.rotation) : applyExifOrientation(
+            canvas,
+            heicData.exifOrientation
+          );
           const jpegBlob = await outputCanvas.convertToBlob({
             type: "image/jpeg",
             quality
@@ -1773,6 +2042,43 @@ var wp;
     ctx.rotate(-rotation * Math.PI / 180);
     ctx.drawImage(source, -source.width / 2, -source.height / 2);
     return rotated;
+  }
+  function applyExifOrientation(source, orientation) {
+    if (orientation <= 1 || orientation > 8) {
+      return source;
+    }
+    const { width: sw, height: sh } = source;
+    const swap = orientation >= 5;
+    const out = new OffscreenCanvas(swap ? sh : sw, swap ? sw : sh);
+    const ctx = out.getContext("2d");
+    if (!ctx) {
+      return source;
+    }
+    switch (orientation) {
+      case 2:
+        ctx.transform(-1, 0, 0, 1, sw, 0);
+        break;
+      case 3:
+        ctx.transform(-1, 0, 0, -1, sw, sh);
+        break;
+      case 4:
+        ctx.transform(1, 0, 0, -1, 0, sh);
+        break;
+      case 5:
+        ctx.transform(0, 1, 1, 0, 0, 0);
+        break;
+      case 6:
+        ctx.transform(0, 1, -1, 0, sh, 0);
+        break;
+      case 7:
+        ctx.transform(0, -1, -1, 0, sh, sw);
+        break;
+      case 8:
+        ctx.transform(0, -1, 1, 0, 0, sw);
+        break;
+    }
+    ctx.drawImage(source, 0, 0);
+    return out;
   }
   function decodeHevcFrame(codec, description, width, height, data) {
     return new Promise((resolve, reject) => {
@@ -2114,6 +2420,12 @@ var wp;
           return;
         }
       }
+      if (operation === OperationType.TranscodeGif) {
+        const activeCount = select2.getActiveVideoProcessingCount();
+        if (activeCount >= 1) {
+          return;
+        }
+      }
       if (attachment) {
         const isHeicUrl = attachment.url && /\.hei[cf]$/i.test(attachment.url);
         if (!isHeicUrl) {
@@ -2159,6 +2471,9 @@ var wp;
         id,
         operation
       });
+      debug(
+        `Starting operation ${operation} for ${item.file.name} (item ${item.id})`
+      );
       switch (operation) {
         case OperationType.Prepare:
           dispatch.prepareItem(item.id);
@@ -2177,6 +2492,12 @@ var wp;
           break;
         case OperationType.TranscodeImage:
           dispatch.transcodeImageItem(
+            item.id,
+            operationArgs
+          );
+          break;
+        case OperationType.TranscodeGif:
+          dispatch.transcodeGifItem(
             item.id,
             operationArgs
           );
@@ -2241,6 +2562,7 @@ var wp;
       });
       if (select2.getAllItems().length === 0) {
         terminateVipsWorker();
+        terminateVideoConversionWorker();
       }
     };
   }
@@ -2266,6 +2588,12 @@ var wp;
           dispatch.processItem(pendingItem.id);
         }
       }
+      if (previousOperation === OperationType.TranscodeGif) {
+        const pendingItems = select2.getPendingVideoProcessing();
+        for (const pendingItem of pendingItems) {
+          dispatch.processItem(pendingItem.id);
+        }
+      }
       if (previousOperation === OperationType.ResizeCrop || previousOperation === OperationType.Rotate || previousOperation === OperationType.TranscodeImage) {
         maybeRecycleVipsWorker(select2.getActiveImageProcessingCount());
       }
@@ -2275,7 +2603,7 @@ var wp;
   function isValidImageFormat(format) {
     return VALID_IMAGE_FORMATS.includes(format);
   }
-  async function getTranscodeImageOperation(file, outputMimeType, interlaced = false) {
+  async function getTranscodeImageOperation(file, outputMimeType, interlaced = false, quality = DEFAULT_OUTPUT_QUALITY) {
     if (file.type === "image/png" && outputMimeType === "image/jpeg") {
       const blobUrl = (0, import_blob.createBlobURL)(file);
       try {
@@ -2297,7 +2625,7 @@ var wp;
       OperationType.TranscodeImage,
       {
         outputFormat: formatPart,
-        outputQuality: DEFAULT_OUTPUT_QUALITY,
+        outputQuality: quality,
         interlaced
       }
     ];
@@ -2311,6 +2639,41 @@ var wp;
       const { file } = item;
       const operations = [];
       const settings = select2.getSettings();
+      if (file.type === "image/gif" && settings.gifConvert !== false && typeof ImageDecoder !== "undefined" && typeof VideoEncoder !== "undefined") {
+        let isAnimated = false;
+        try {
+          isAnimated = isAnimatedGif(await file.arrayBuffer());
+        } catch {
+          isAnimated = false;
+        }
+        if (isAnimated) {
+          let hasTransparency = false;
+          const blobUrl = (0, import_blob.createBlobURL)(file);
+          try {
+            hasTransparency = await vipsHasTransparency(blobUrl);
+          } catch {
+            hasTransparency = true;
+          } finally {
+            (0, import_blob.revokeBlobURL)(blobUrl);
+          }
+          if (!hasTransparency) {
+            operations.push(
+              OperationType.Upload,
+              OperationType.ThumbnailGeneration,
+              OperationType.Finalize
+            );
+            dispatch({
+              type: Type.AddOperations,
+              id,
+              operations
+            });
+            dispatch.finishOperation(id, {
+              animatedGifFile: item.file
+            });
+            return;
+          }
+        }
+      }
       let heicJpeg = null;
       const isImage = file.type.startsWith("image/");
       const isVipsSupported = CLIENT_SIDE_SUPPORTED_MIME_TYPES.includes(
@@ -2441,6 +2804,11 @@ var wp;
         filesList: [item.file],
         additionalData: item.additionalData,
         signal: item.abortController?.signal,
+        // The queue's own items drive upload progress UI and save
+        // locking; without this, consumers that track uploads themselves
+        // (e.g. the editor's progress snackbar) would count this file a
+        // second time.
+        isTransportOnly: true,
         onFileChange: ([attachment]) => {
           if (attachment && !(0, import_blob.isBlobURL)(attachment.url)) {
             finishUpload(attachment);
@@ -2513,16 +2881,21 @@ var wp;
       const startTime = performance.now();
       const addSuffix = Boolean(item.parentId);
       const scaledSuffix = Boolean(args.isThresholdResize);
+      const { imageStripMeta, imageMaxBitDepth } = select2.getSettings();
       try {
         const file = await vipsResizeImage(
           item.id,
           item.file,
           args.resize,
-          false,
-          // smartCrop
-          addSuffix,
-          item.abortController?.signal,
-          scaledSuffix
+          {
+            smartCrop: false,
+            addSuffix,
+            signal: item.abortController?.signal,
+            scaledSuffix,
+            quality: args.quality,
+            stripMeta: imageStripMeta,
+            maxBitdepth: imageMaxBitDepth
+          }
         );
         measure({
           measureName: `ResizeCrop ${item.file.name}`,
@@ -2632,13 +3005,18 @@ var wp;
       const outputMimeType = `image/${args.outputFormat}`;
       const quality = args.outputQuality ?? DEFAULT_OUTPUT_QUALITY;
       const interlaced = args.interlaced ?? false;
+      const { imageStripMeta, imageMaxBitDepth } = select2.getSettings();
       try {
         const file = await vipsConvertImageFormat(
           item.id,
           item.file,
           outputMimeType,
-          quality,
-          interlaced
+          {
+            quality,
+            interlaced,
+            stripMeta: imageStripMeta,
+            maxBitdepth: imageMaxBitDepth
+          }
         );
         measure({
           measureName: `Transcode ${item.file.name}`,
@@ -2674,6 +3052,89 @@ var wp;
       }
     };
   }
+  function transcodeGifItem(id, args) {
+    return async ({ select: select2, dispatch }) => {
+      const item = select2.getItem(id);
+      if (!item) {
+        return;
+      }
+      const outputFormat = args?.outputFormat ?? "mp4";
+      const outputMimeType = `video/${outputFormat}`;
+      const gifFile = item.file;
+      try {
+        const file = await convertGifToVideo(
+          item.id,
+          gifFile,
+          outputMimeType,
+          {
+            timeout: args?.timeout,
+            maxTotalPixels: args?.maxTotalPixels
+          }
+        );
+        dispatch.finishOperation(id, { file });
+        dispatch.addSideloadItem({
+          file: gifFile,
+          batchId: v4_default(),
+          parentId: item.parentId,
+          additionalData: {
+            post: item.additionalData?.post,
+            image_size: "animated_video_poster",
+            convert_format: false
+          },
+          operations: [
+            [
+              OperationType.TranscodeImage,
+              {
+                outputFormat: "jpeg",
+                outputQuality: DEFAULT_OUTPUT_QUALITY,
+                interlaced: false
+              }
+            ],
+            OperationType.Upload
+          ]
+        });
+      } catch (error) {
+        if (isUnsupportedConversionError(error)) {
+          if (isSizeLimitConversionError(error)) {
+            debug(
+              `Skipping GIF to video conversion: ${error instanceof Error ? error.message : error}`
+            );
+          }
+          dispatch.cancelItem(
+            id,
+            new Error("Animated GIF conversion unsupported"),
+            true
+          );
+          return;
+        }
+        if (isConversionTimeoutError(error)) {
+          debug(
+            `GIF to video conversion timed out; keeping the original GIF only: ${error instanceof Error ? error.message : error}`
+          );
+          dispatch.cancelItem(
+            id,
+            new Error("Animated GIF conversion timed out"),
+            true
+          );
+          return;
+        }
+        console.error(
+          "[video-conversion] GIF to video conversion failed:",
+          error
+        );
+        dispatch.cancelItem(
+          id,
+          new UploadError({
+            code: ErrorCode.GIF_TRANSCODING_ERROR,
+            message: "Animated GIF could not be converted to video",
+            file: item.file,
+            cause: error instanceof Error ? error : void 0
+          }),
+          true
+        );
+      }
+    };
+  }
   function generateThumbnails(id) {
     return async ({ select: select2, dispatch }) => {
       const item = select2.getItem(id);
@@ -2693,55 +3154,101 @@ var wp;
           parentId: item.id,
           additionalData: {
             post: attachment.id,
-            image_size: "original-heic",
+            image_size: "source_original",
             convert_format: false
           },
           operations: [OperationType.Upload]
         });
       }
+      if (item.animatedGifFile && attachment.id) {
+        const outputFormat = settings.videoOutputFormat === "video/webm" ? "webm" : "mp4";
+        dispatch.addSideloadItem({
+          file: item.animatedGifFile,
+          batchId: v4_default(),
+          parentId: item.id,
+          additionalData: {
+            post: attachment.id,
+            image_size: "animated_video",
+            convert_format: false
+          },
+          operations: [
+            [
+              OperationType.TranscodeGif,
+              {
+                outputFormat
+              }
+            ],
+            OperationType.Upload
+          ]
+        });
+      }
+      let exifOrientation = attachment.exif_orientation || 1;
+      const sourceType = item.sourceFile.type;
+      const isHeifFamily = sourceType === "image/avif" || sourceType === "image/heif";
+      let needsClientRotation = false;
+      if (isHeifFamily) {
+        exifOrientation = getUnappliedExifOrientation(
+          await item.sourceFile.arrayBuffer()
+        );
+        needsClientRotation = exifOrientation !== 1;
+      }
+      let rotatedSource;
       {
-        const needsRotation = attachment.exif_orientation && attachment.exif_orientation !== 1 && !item.file.name.includes("-scaled");
-        if (needsRotation && attachment.id) {
+        const needsRotation = exifOrientation !== 1 && !item.file.name.includes("-scaled");
+        if ((needsRotation || needsClientRotation) && attachment.id) {
           try {
-            const rotatedFile = await vipsRotateImage(
+            rotatedSource = await vipsRotateImage(
               item.id,
               item.sourceFile,
-              attachment.exif_orientation,
+              exifOrientation,
               item.abortController?.signal
             );
-            dispatch.addSideloadItem({
-              file: rotatedFile,
-              batchId: v4_default(),
-              parentId: item.id,
-              additionalData: {
-                post: attachment.id,
-                image_size: "original",
-                convert_format: false
-              },
-              operations: [OperationType.Upload]
-            });
           } catch {
             console.warn(
               "Failed to rotate image, continuing with thumbnails"
             );
           }
         }
+        if (needsRotation && rotatedSource && attachment.id) {
+          dispatch.addSideloadItem({
+            file: rotatedSource,
+            batchId: v4_default(),
+            parentId: item.id,
+            additionalData: {
+              post: attachment.id,
+              image_size: "original",
+              convert_format: false
+            },
+            operations: [OperationType.Upload]
+          });
+        }
       }
       if (!item.parentId && attachment.missing_image_sizes && attachment.missing_image_sizes.length > 0) {
         const allImageSizes = settings.allImageSizes || {};
         const sizesToGenerate = attachment.missing_image_sizes;
-        const thumbnailSource = item.sourceFile;
+        const thumbnailSource = needsClientRotation && rotatedSource ? rotatedSource : item.sourceFile;
         const file = attachment.filename ? renameFile(thumbnailSource, attachment.filename) : thumbnailSource;
         const batchId = v4_default();
         const isUltraHdr = ultraHdrItems.has(item.id);
         const outputMimeType = attachment.image_output_format;
         const interlaced = attachment.image_save_progressive ?? false;
+        const imageQuality = attachment.image_quality;
+        const fallbackQuality = settings.imageQuality ?? DEFAULT_OUTPUT_QUALITY;
+        const defaultQuality = typeof imageQuality?.default === "number" ? imageQuality.default / 100 : fallbackQuality;
+        const qualityForSize = (sizeName) => {
+          const sized = imageQuality?.sizes?.[sizeName];
+          if (typeof sized === "number") {
+            return sized / 100;
+          }
+          return defaultQuality;
+        };
         let thumbnailTranscodeOperation = null;
         if (!isUltraHdr && outputMimeType) {
           thumbnailTranscodeOperation = await getTranscodeImageOperation(
             thumbnailSource,
             outputMimeType,
-            interlaced
+            interlaced,
+            defaultQuality
           );
         }
         const dimensionGroups = /* @__PURE__ */ new Map();
@@ -2763,11 +3270,21 @@ var wp;
         }
         for (const [, names] of dimensionGroups) {
           const imageSize = allImageSizes[names[0]];
+          const sizeQuality = qualityForSize(names[0]);
           const thumbnailOperations = [
-            [OperationType.ResizeCrop, { resize: imageSize }]
+            [
+              OperationType.ResizeCrop,
+              { resize: imageSize, quality: sizeQuality }
+            ]
           ];
           if (!isUltraHdr && thumbnailTranscodeOperation) {
-            thumbnailOperations.push(thumbnailTranscodeOperation);
+            thumbnailOperations.push([
+              thumbnailTranscodeOperation[0],
+              {
+                ...thumbnailTranscodeOperation[1],
+                outputQuality: sizeQuality
+              }
+            ]);
           }
           thumbnailOperations.push(OperationType.Upload);
           const imageSizeParam = names.length === 1 ? names[0] : names;
@@ -2801,7 +3318,8 @@ var wp;
                       width: bigImageSizeThreshold,
                       height: bigImageSizeThreshold
                     },
-                    isThresholdResize: true
+                    isThresholdResize: true,
+                    quality: defaultQuality
                   }
                 ]
               ];

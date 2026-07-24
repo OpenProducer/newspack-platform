@@ -133,6 +133,17 @@ return array(
 		'asset' => 'route/index.min.asset.php',
 	),
 	array(
+		'id' => '@wordpress/video-conversion/loader',
+		'path' => 'video-conversion/loader',
+		'asset' => 'video-conversion/loader.min.asset.php',
+	),
+	array(
+		'id' => '@wordpress/video-conversion/worker',
+		'path' => 'video-conversion/worker',
+		'asset' => 'video-conversion/worker.min.asset.php',
+		'min_only' => true,
+	),
+	array(
 		'id' => '@wordpress/vips/loader',
 		'path' => 'vips/loader',
 		'asset' => 'vips/loader.min.asset.php',
