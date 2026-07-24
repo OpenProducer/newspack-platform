@@ -1,4 +1,6 @@
 var ReactDOM = (() => {
+function __wpWarnCompat(key) {var w = __wpWarnCompat.warned || (__wpWarnCompat.warned = {});if (w[key]) return;w[key] = true;var messages = {"legacy-element":"A React element created by an older React runtime (React 17/18) was detected and is handled by a compatibility patch. This usually means a bundled package ships its own React; align it with React 19.","inert":"An empty-string `inert` attribute was used. React 19 treats `inert` as a boolean, so the value was coerced to `true` by a compatibility patch. Pass `inert={true}` instead."};if (typeof console !== "undefined" && console.warn) {console.warn("[wordpress-react-19] " + messages[key]);}}
+
   var __create = Object.create;
   var __defProp = Object.defineProperty;
   var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -32,6 +34,28 @@ var ReactDOM = (() => {
     mod
   ));
   var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+  // ../react-19/warn-compat.js
+  var warn_compat_exports = {};
+  __export(warn_compat_exports, {
+    warnCompat: () => warnCompat
+  });
+  function warnCompat(key, message) {
+    if (warned.has(key)) {
+      return;
+    }
+    warned.add(key);
+    if (typeof console !== "undefined" && console.warn) {
+      console.warn(`${PREFIX} ${message}`);
+    }
+  }
+  var PREFIX, warned;
+  var init_warn_compat = __esm({
+    "../react-19/warn-compat.js"() {
+      PREFIX = "[wordpress-react-19]";
+      warned = /* @__PURE__ */ new Set();
+    }
+  });
 
   // react-external:react
   var require_react = __commonJS({
@@ -2072,7 +2096,7 @@ var ReactDOM = (() => {
             case "object":
               if (null === value) return "null";
               if (isArrayImpl(value)) return "[...]";
-              if ((value.$$typeof === REACT_ELEMENT_TYPE || value.$$typeof === REACT_LEGACY_ELEMENT_TYPE))
+              if ((value.$$typeof === REACT_ELEMENT_TYPE || (value.$$typeof === REACT_LEGACY_ELEMENT_TYPE && (__wpWarnCompat("legacy-element"), true))))
                 return (maxLength = getComponentNameFromType(value.type)) ? "<" + maxLength + ">" : "<...>";
               var name = objectName(value);
               if ("Object" === name) {
@@ -3249,7 +3273,7 @@ var ReactDOM = (() => {
                 value = "null";
                 break;
               } else {
-                if ((value.$$typeof === REACT_ELEMENT_TYPE || value.$$typeof === REACT_LEGACY_ELEMENT_TYPE)) {
+                if ((value.$$typeof === REACT_ELEMENT_TYPE || (value.$$typeof === REACT_LEGACY_ELEMENT_TYPE && (__wpWarnCompat("legacy-element"), true)))) {
                   var typeName2 = getComponentNameFromType(value.type) || "\u2026", key = value.key;
                   value = value.props;
                   var propsKeys = Object.keys(value), propsLength = propsKeys.length;
@@ -3387,7 +3411,7 @@ var ReactDOM = (() => {
                 else {
                   if (!(3 <= indent)) {
                     if ("object" === typeof key && "object" === typeof nextValue && null !== key && null !== nextValue && key.$$typeof === nextValue.$$typeof)
-                      if ((nextValue.$$typeof === REACT_ELEMENT_TYPE || nextValue.$$typeof === REACT_LEGACY_ELEMENT_TYPE)) {
+                      if ((nextValue.$$typeof === REACT_ELEMENT_TYPE || (nextValue.$$typeof === REACT_LEGACY_ELEMENT_TYPE && (__wpWarnCompat("legacy-element"), true)))) {
                         if (key.type === nextValue.type && key.key === nextValue.key) {
                           key = getComponentNameFromType(nextValue.type) || "\u2026";
                           isDeeplyEqual = "\xA0\xA0".repeat(indent) + _key;
@@ -4024,7 +4048,7 @@ var ReactDOM = (() => {
                 resolvedType = "";
                 if (void 0 === type || "object" === typeof type && null !== type && 0 === Object.keys(type).length)
                   resolvedType += " You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.";
-                null === type ? pendingProps = "null" : isArrayImpl(type) ? pendingProps = "array" : void 0 !== type && (type.$$typeof === REACT_ELEMENT_TYPE || type.$$typeof === REACT_LEGACY_ELEMENT_TYPE) ? (pendingProps = "<" + (getComponentNameFromType(type.type) || "Unknown") + " />", resolvedType = " Did you accidentally export a JSX literal instead of a component?") : pendingProps = typeof type;
+                null === type ? pendingProps = "null" : isArrayImpl(type) ? pendingProps = "array" : void 0 !== type && (type.$$typeof === REACT_ELEMENT_TYPE || (type.$$typeof === REACT_LEGACY_ELEMENT_TYPE && (__wpWarnCompat("legacy-element"), true))) ? (pendingProps = "<" + (getComponentNameFromType(type.type) || "Unknown") + " />", resolvedType = " Did you accidentally export a JSX literal instead of a component?") : pendingProps = typeof type;
                 (fiberTag = owner ? getComponentNameFromOwner(owner) : null) && (resolvedType += "\n\nCheck the render method of `" + fiberTag + "`.");
                 fiberTag = 29;
                 pendingProps = Error(
@@ -5032,7 +5056,7 @@ var ReactDOM = (() => {
               ), newChild.return = returnFiber, newChild._debugOwner = returnFiber, newChild._debugTask = returnFiber._debugTask, newChild._debugInfo = currentDebugInfo, newChild;
             if ("object" === typeof newChild && null !== newChild) {
               switch (newChild.$$typeof) {
-                case REACT_LEGACY_ELEMENT_TYPE: case REACT_ELEMENT_TYPE:
+                case REACT_LEGACY_ELEMENT_TYPE: __wpWarnCompat("legacy-element"); case REACT_ELEMENT_TYPE:
                   return lanes = createFiberFromElement(
                     newChild,
                     returnFiber.mode,
@@ -5082,7 +5106,7 @@ var ReactDOM = (() => {
               return null !== key ? null : updateTextNode(returnFiber, oldFiber, "" + newChild, lanes);
             if ("object" === typeof newChild && null !== newChild) {
               switch (newChild.$$typeof) {
-                case REACT_LEGACY_ELEMENT_TYPE: case REACT_ELEMENT_TYPE:
+                case REACT_LEGACY_ELEMENT_TYPE: __wpWarnCompat("legacy-element"); case REACT_ELEMENT_TYPE:
                   return newChild.key === key ? (key = pushDebugInfo(newChild._debugInfo), returnFiber = updateElement(
                     returnFiber,
                     oldFiber,
@@ -5137,7 +5161,7 @@ var ReactDOM = (() => {
               return existingChildren = existingChildren.get(newIdx) || null, updateTextNode(returnFiber, existingChildren, "" + newChild, lanes);
             if ("object" === typeof newChild && null !== newChild) {
               switch (newChild.$$typeof) {
-                case REACT_LEGACY_ELEMENT_TYPE: case REACT_ELEMENT_TYPE:
+                case REACT_LEGACY_ELEMENT_TYPE: __wpWarnCompat("legacy-element"); case REACT_ELEMENT_TYPE:
                   return newIdx = existingChildren.get(
                     null === newChild.key ? newIdx : newChild.key
                   ) || null, existingChildren = pushDebugInfo(newChild._debugInfo), returnFiber = updateElement(
@@ -5196,7 +5220,7 @@ var ReactDOM = (() => {
           function warnOnInvalidKey(returnFiber, workInProgress2, child, knownKeys) {
             if ("object" !== typeof child || null === child) return knownKeys;
             switch (child.$$typeof) {
-              case REACT_LEGACY_ELEMENT_TYPE: case REACT_ELEMENT_TYPE:
+              case REACT_LEGACY_ELEMENT_TYPE: __wpWarnCompat("legacy-element"); case REACT_ELEMENT_TYPE:
               case REACT_PORTAL_TYPE:
                 warnForMissingKey(returnFiber, workInProgress2, child);
                 var key = child.key;
@@ -5357,7 +5381,7 @@ var ReactDOM = (() => {
             "object" === typeof newChild && null !== newChild && newChild.type === REACT_FRAGMENT_TYPE && null === newChild.key && (validateFragmentProps(newChild, null, returnFiber), newChild = newChild.props.children);
             if ("object" === typeof newChild && null !== newChild) {
               switch (newChild.$$typeof) {
-                case REACT_LEGACY_ELEMENT_TYPE: case REACT_ELEMENT_TYPE:
+                case REACT_LEGACY_ELEMENT_TYPE: __wpWarnCompat("legacy-element"); case REACT_ELEMENT_TYPE:
                   var prevDebugInfo = pushDebugInfo(newChild._debugInfo);
                   a: {
                     for (var key = newChild.key; null !== currentFirstChild; ) {
@@ -14650,7 +14674,7 @@ var ReactDOM = (() => {
               "" !== value || didWarnForNewBooleanPropsWithEmptyValue[key] || (didWarnForNewBooleanPropsWithEmptyValue[key] = true, console.error(
                 "Received an empty string for a boolean attribute `%s`. This will treat the attribute as if it were false. Either pass `false` to silence this warning, or pass `true` if you used an empty string in earlier versions of React to indicate this attribute is true.",
                 key
-              ));
+              )); if ( "" === value ) __wpWarnCompat("inert");  if ( "string" === typeof value ) value = true; 
             case "allowFullScreen":
             case "async":
             case "autoPlay":
@@ -20401,7 +20425,7 @@ var ReactDOM = (() => {
           var isStrictMode = false, identifierPrefix = "", onUncaughtError = defaultOnUncaughtError, onCaughtError = defaultOnCaughtError, onRecoverableError = defaultOnRecoverableError;
           null !== options && void 0 !== options && (options.hydrate ? console.warn(
             "hydrate through createRoot is deprecated. Use ReactDOMClient.hydrateRoot(container, <App />) instead."
-          ) : "object" === typeof options && null !== options && (options.$$typeof === REACT_ELEMENT_TYPE || options.$$typeof === REACT_LEGACY_ELEMENT_TYPE) && console.error(
+          ) : "object" === typeof options && null !== options && (options.$$typeof === REACT_ELEMENT_TYPE || (options.$$typeof === REACT_LEGACY_ELEMENT_TYPE && (__wpWarnCompat("legacy-element"), true))) && console.error(
             "You passed a JSX element to createRoot. You probably meant to call root.render instead. Example usage:\n\n  let root = createRoot(domContainer);\n  root.render(<App />);"
           ), true === options.unstable_strictMode && (isStrictMode = true), void 0 !== options.identifierPrefix && (identifierPrefix = options.identifierPrefix), void 0 !== options.onUncaughtError && (onUncaughtError = options.onUncaughtError), void 0 !== options.onCaughtError && (onCaughtError = options.onCaughtError), void 0 !== options.onRecoverableError && (onRecoverableError = options.onRecoverableError));
           options = createFiberRoot(
@@ -20523,6 +20547,10 @@ var ReactDOM = (() => {
     return null;
   }
   function findDOMNode(instance) {
+    warnCompat(
+      "findDOMNode",
+      "`ReactDOM.findDOMNode` was removed in React 19 and is emulated by a compatibility polyfill. Use refs instead."
+    );
     if (instance === null || instance === void 0) {
       return null;
     }
@@ -20543,6 +20571,10 @@ var ReactDOM = (() => {
     return hostFiber?.stateNode ?? null;
   }
   function render(element, container, callback) {
+    warnCompat(
+      "render",
+      "`ReactDOM.render` was removed in React 19 and is emulated by a compatibility polyfill. Use `createRoot` instead."
+    );
     let root = roots.get(container);
     if (!root) {
       root = (0, import_client.createRoot)(container);
@@ -20556,6 +20588,10 @@ var ReactDOM = (() => {
     }
   }
   function hydrate(element, container, callback) {
+    warnCompat(
+      "hydrate",
+      "`ReactDOM.hydrate` was removed in React 19 and is emulated by a compatibility polyfill. Use `hydrateRoot` instead."
+    );
     let root = roots.get(container);
     if (!root) {
       root = (0, import_client.hydrateRoot)(container, element);
@@ -20568,6 +20604,10 @@ var ReactDOM = (() => {
     }
   }
   function unmountComponentAtNode(container) {
+    warnCompat(
+      "unmountComponentAtNode",
+      "`ReactDOM.unmountComponentAtNode` was removed in React 19 and is emulated by a compatibility polyfill. Use `root.unmount` instead."
+    );
     const root = roots.get(container);
     if (!root) {
       return false;
@@ -20583,6 +20623,7 @@ var ReactDOM = (() => {
     "../react-19/react-polyfill.js"() {
       import_react_dom = __toESM(require_react_dom());
       import_client = __toESM(require_client());
+      init_warn_compat();
       internalsKey = "_reactInternals";
       HostComponent = 5;
       HostText = 6;
@@ -20593,12 +20634,26 @@ var ReactDOM = (() => {
   // ../react-19/react-dom.js
   var require_react_dom2 = __commonJS({
     "../react-19/react-dom.js"(exports, module) {
-      module.exports = {
+      var { warnCompat: warnCompat2 } = (init_warn_compat(), __toCommonJS(warn_compat_exports));
+      var SECRET_INTERNALS_KEY = "__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED";
+      var secretInternals = {};
+      var reactDOM = {
         ...require_react_dom(),
         ...require_client(),
-        ...(init_react_polyfill(), __toCommonJS(react_polyfill_exports)),
-        __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: {}
+        ...(init_react_polyfill(), __toCommonJS(react_polyfill_exports))
       };
+      Object.defineProperty(reactDOM, SECRET_INTERNALS_KEY, {
+        enumerable: true,
+        configurable: true,
+        get() {
+          warnCompat2(
+            "react-dom-secret-internals",
+            `Accessing \`${SECRET_INTERNALS_KEY}\` was removed in React 19 and is provided by a compatibility shim.`
+          );
+          return secretInternals;
+        }
+      });
+      module.exports = reactDOM;
     }
   });
   return require_react_dom2();

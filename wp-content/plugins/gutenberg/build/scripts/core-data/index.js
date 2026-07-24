@@ -3083,8 +3083,10 @@ var wp;
           "description",
           "gmt_offset",
           "home",
+          "image_max_bit_depth",
           "image_sizes",
           "image_size_threshold",
+          "image_strip_meta",
           "name",
           "site_icon",
           "site_icon_url",
@@ -3278,6 +3280,16 @@ var wp;
       plural: "icons",
       key: "name",
       supportsPagination: false
+    },
+    {
+      label: (0, import_i18n.__)("Icon Collections"),
+      name: "iconCollection",
+      kind: "root",
+      baseURL: "/wp/v2/icon-collections",
+      baseURLParams: { context: "view" },
+      plural: "iconCollections",
+      key: "slug",
+      supportsPagination: false
     }
   ];
   var deprecatedEntities = {
@@ -3314,7 +3326,7 @@ var wp;
     if (persistedRecord) {
       const objectType = `postType/${name}`;
       const objectId = persistedRecord.id;
-      const serializedDoc = getSyncManager()?.createPersistedCRDTDoc(
+      const serializedDoc = await getSyncManager()?.createPersistedCRDTDoc(
         objectType,
         objectId
       );
@@ -5912,6 +5924,10 @@ var wp;
     dispatch3({ type: "SET_COLLABORATION_SUPPORTED", supported });
     if (!supported && hasSyncManager()) {
       getSyncManager().unloadAll();
+      dispatch3.__unstableNotifySyncUndoManagerChange({
+        hasUndo: false,
+        hasRedo: false
+      });
     }
   };
   function receiveViewConfig(kind, name, config) {
@@ -6281,7 +6297,8 @@ var wp;
             blocks: recordWithTransients.blocks
           });
         }
-        void getSyncManager()?.load(
+        const syncManager2 = select4?.isCollaborationSupported?.() === false ? void 0 : getSyncManager();
+        void syncManager2?.load(
           entityConfig.syncConfig,
           objectType,
           objectId,

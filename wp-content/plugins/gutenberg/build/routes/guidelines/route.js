@@ -52,8 +52,15 @@ var require_block_library = __commonJS({
   }
 });
 
+// package-external:@wordpress/core-data
+var require_core_data = __commonJS({
+  "package-external:@wordpress/core-data"(exports, module) {
+    module.exports = window.wp.coreData;
+  }
+});
+
 // routes/guidelines/route.ts
-var import_i18n = __toESM(require_i18n());
+var import_i18n2 = __toESM(require_i18n());
 
 // routes/guidelines/bootstrap-block-registry.ts
 var import_data = __toESM(require_data());
@@ -69,10 +76,36 @@ function bootstrapBlockRegistry() {
   (0, import_block_library.registerCoreBlocks)();
 }
 
+// routes/guidelines/entity.ts
+var import_data2 = __toESM(require_data());
+var import_core_data = __toESM(require_core_data());
+var import_i18n = __toESM(require_i18n());
+var registered = false;
+function registerGuidelineScopeEntity() {
+  if (registered) {
+    return;
+  }
+  registered = true;
+  (0, import_data2.dispatch)(import_core_data.store).addEntities([
+    {
+      label: (0, import_i18n.__)("Guideline Scope"),
+      name: "guidelineScope",
+      kind: "root",
+      baseURL: "/wp/v2/knowledge/guideline-scopes",
+      plural: "guidelineScopes",
+      key: "slug",
+      supportsPagination: false
+    }
+  ]);
+}
+
 // routes/guidelines/route.ts
 var route = {
-  beforeLoad: bootstrapBlockRegistry,
-  title: () => (0, import_i18n.__)("Guidelines")
+  beforeLoad: () => {
+    bootstrapBlockRegistry();
+    registerGuidelineScopeEntity();
+  },
+  title: () => (0, import_i18n2.__)("Guidelines")
 };
 export {
   route
