@@ -71,37 +71,37 @@ var require_use_sync_external_store_shim_development = __commonJS({
       function is(x2, y2) {
         return x2 === y2 && (0 !== x2 || 1 / x2 === 1 / y2) || x2 !== x2 && y2 !== y2;
       }
-      function useSyncExternalStore$2(subscribe, getSnapshot) {
-        didWarnOld18Alpha || void 0 === React58.startTransition || (didWarnOld18Alpha = true, console.error(
+      function useSyncExternalStore$2(subscribe2, getSnapshot2) {
+        didWarnOld18Alpha || void 0 === React73.startTransition || (didWarnOld18Alpha = true, console.error(
           "You are using an outdated, pre-release alpha of React 18 that does not support useSyncExternalStore. The use-sync-external-store shim will not work correctly. Upgrade to a newer pre-release."
         ));
-        var value = getSnapshot();
+        var value = getSnapshot2();
         if (!didWarnUncachedGetSnapshot) {
-          var cachedValue = getSnapshot();
+          var cachedValue = getSnapshot2();
           objectIs(value, cachedValue) || (console.error(
             "The result of getSnapshot should be cached to avoid an infinite loop"
           ), didWarnUncachedGetSnapshot = true);
         }
-        cachedValue = useState35({
-          inst: { value, getSnapshot }
+        cachedValue = useState42({
+          inst: { value, getSnapshot: getSnapshot2 }
         });
         var inst = cachedValue[0].inst, forceUpdate = cachedValue[1];
         useLayoutEffect6(
           function() {
             inst.value = value;
-            inst.getSnapshot = getSnapshot;
+            inst.getSnapshot = getSnapshot2;
             checkIfSnapshotChanged(inst) && forceUpdate({ inst });
           },
-          [subscribe, value, getSnapshot]
+          [subscribe2, value, getSnapshot2]
         );
-        useEffect32(
+        useEffect36(
           function() {
             checkIfSnapshotChanged(inst) && forceUpdate({ inst });
-            return subscribe(function() {
+            return subscribe2(function() {
               checkIfSnapshotChanged(inst) && forceUpdate({ inst });
             });
           },
-          [subscribe]
+          [subscribe2]
         );
         useDebugValue2(value);
         return value;
@@ -116,12 +116,12 @@ var require_use_sync_external_store_shim_development = __commonJS({
           return true;
         }
       }
-      function useSyncExternalStore$1(subscribe, getSnapshot) {
-        return getSnapshot();
+      function useSyncExternalStore$1(subscribe2, getSnapshot2) {
+        return getSnapshot2();
       }
       "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-      var React58 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState35 = React58.useState, useEffect32 = React58.useEffect, useLayoutEffect6 = React58.useLayoutEffect, useDebugValue2 = React58.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
-      exports.useSyncExternalStore = void 0 !== React58.useSyncExternalStore ? React58.useSyncExternalStore : shim;
+      var React73 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState42 = React73.useState, useEffect36 = React73.useEffect, useLayoutEffect6 = React73.useLayoutEffect, useDebugValue2 = React73.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+      exports.useSyncExternalStore = void 0 !== React73.useSyncExternalStore ? React73.useSyncExternalStore : shim;
       "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
     })();
   }
@@ -148,14 +148,14 @@ var require_with_selector_development = __commonJS({
         return x2 === y2 && (0 !== x2 || 1 / x2 === 1 / y2) || x2 !== x2 && y2 !== y2;
       }
       "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-      var React58 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore2 = shim.useSyncExternalStore, useRef41 = React58.useRef, useEffect32 = React58.useEffect, useMemo38 = React58.useMemo, useDebugValue2 = React58.useDebugValue;
-      exports.useSyncExternalStoreWithSelector = function(subscribe, getSnapshot, getServerSnapshot, selector, isEqual) {
-        var instRef = useRef41(null);
+      var React73 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore3 = shim.useSyncExternalStore, useRef52 = React73.useRef, useEffect36 = React73.useEffect, useMemo46 = React73.useMemo, useDebugValue2 = React73.useDebugValue;
+      exports.useSyncExternalStoreWithSelector = function(subscribe2, getSnapshot2, getServerSnapshot2, selector, isEqual) {
+        var instRef = useRef52(null);
         if (null === instRef.current) {
           var inst = { hasValue: false, value: null };
           instRef.current = inst;
         } else inst = instRef.current;
-        instRef = useMemo38(
+        instRef = useMemo46(
           function() {
             function memoizedSelector(nextSnapshot) {
               if (!hasMemo) {
@@ -178,20 +178,20 @@ var require_with_selector_development = __commonJS({
               memoizedSnapshot = nextSnapshot;
               return memoizedSelection = nextSelection;
             }
-            var hasMemo = false, memoizedSnapshot, memoizedSelection, maybeGetServerSnapshot = void 0 === getServerSnapshot ? null : getServerSnapshot;
+            var hasMemo = false, memoizedSnapshot, memoizedSelection, maybeGetServerSnapshot = void 0 === getServerSnapshot2 ? null : getServerSnapshot2;
             return [
               function() {
-                return memoizedSelector(getSnapshot());
+                return memoizedSelector(getSnapshot2());
               },
               null === maybeGetServerSnapshot ? void 0 : function() {
                 return memoizedSelector(maybeGetServerSnapshot());
               }
             ];
           },
-          [getSnapshot, getServerSnapshot, selector, isEqual]
+          [getSnapshot2, getServerSnapshot2, selector, isEqual]
         );
-        var value = useSyncExternalStore2(subscribe, instRef[0], instRef[1]);
-        useEffect32(
+        var value = useSyncExternalStore3(subscribe2, instRef[0], instRef[1]);
+        useEffect36(
           function() {
             inst.hasValue = true;
             inst.value = value;
@@ -348,6 +348,13 @@ var require_es6 = __commonJS({
 var require_date = __commonJS({
   "package-external:@wordpress/date"(exports, module) {
     module.exports = window.wp.date;
+  }
+});
+
+// package-external:@wordpress/rich-text
+var require_rich_text = __commonJS({
+  "package-external:@wordpress/rich-text"(exports, module) {
+    module.exports = window.wp.richText;
   }
 });
 
@@ -526,10 +533,10 @@ var clsx_default = clsx;
 // packages/ui/build-module/badge/badge.mjs
 var import_element11 = __toESM(require_element(), 1);
 
-// node_modules/@base-ui/utils/esm/useControlled.js
+// node_modules/@base-ui/utils/useControlled.mjs
 var React2 = __toESM(require_react(), 1);
 
-// node_modules/@base-ui/utils/esm/error.js
+// node_modules/@base-ui/utils/error.mjs
 var set;
 if (true) {
   set = /* @__PURE__ */ new Set();
@@ -544,7 +551,7 @@ function error(...messages) {
   }
 }
 
-// node_modules/@base-ui/utils/esm/useControlled.js
+// node_modules/@base-ui/utils/useControlled.mjs
 function useControlled({
   controlled,
   default: defaultProp,
@@ -605,13 +612,13 @@ function serializeToDevModeString(input) {
   }
 }
 
-// node_modules/@base-ui/utils/esm/safeReact.js
+// node_modules/@base-ui/utils/safeReact.mjs
 var React3 = __toESM(require_react(), 1);
 var SafeReact = {
   ...React3
 };
 
-// node_modules/@base-ui/utils/esm/useRefWithInit.js
+// node_modules/@base-ui/utils/useRefWithInit.mjs
 var React4 = __toESM(require_react(), 1);
 var UNINITIALIZED = {};
 function useRefWithInit(init, initArg) {
@@ -622,7 +629,7 @@ function useRefWithInit(init, initArg) {
   return ref;
 }
 
-// node_modules/@base-ui/utils/esm/useStableCallback.js
+// node_modules/@base-ui/utils/useStableCallback.mjs
 var useInsertionEffect = SafeReact.useInsertionEffect;
 var useSafeInsertionEffect = (
   // React 17 doesn't have useInsertionEffect.
@@ -655,13 +662,13 @@ function assertNotCalled() {
   }
 }
 
-// node_modules/@base-ui/utils/esm/useIsoLayoutEffect.js
+// node_modules/@base-ui/utils/useIsoLayoutEffect.mjs
 var React5 = __toESM(require_react(), 1);
 var noop = () => {
 };
 var useIsoLayoutEffect = typeof document !== "undefined" ? React5.useLayoutEffect : noop;
 
-// node_modules/@base-ui/utils/esm/warn.js
+// node_modules/@base-ui/utils/warn.mjs
 var set2;
 if (true) {
   set2 = /* @__PURE__ */ new Set();
@@ -676,19 +683,176 @@ function warn(...messages) {
   }
 }
 
-// node_modules/@base-ui/react/esm/internals/direction-context/DirectionContext.js
+// node_modules/@base-ui/react/internals/composite/list/CompositeList.mjs
+var React7 = __toESM(require_react(), 1);
+
+// node_modules/@base-ui/react/internals/composite/list/CompositeListContext.mjs
 var React6 = __toESM(require_react(), 1);
-var DirectionContext = /* @__PURE__ */ React6.createContext(void 0);
+var CompositeListContext = /* @__PURE__ */ React6.createContext({
+  register: () => {
+  },
+  unregister: () => {
+  },
+  subscribeMapChange: () => {
+    return () => {
+    };
+  },
+  elementsRef: {
+    current: []
+  },
+  nextIndexRef: {
+    current: 0
+  }
+});
+if (true) CompositeListContext.displayName = "CompositeListContext";
+function useCompositeListContext() {
+  return React6.useContext(CompositeListContext);
+}
+
+// node_modules/@base-ui/react/internals/composite/list/CompositeList.mjs
+var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
+function CompositeList(props) {
+  const {
+    children,
+    elementsRef,
+    labelsRef,
+    onMapChange: onMapChangeProp
+  } = props;
+  const onMapChange = useStableCallback(onMapChangeProp);
+  const nextIndexRef = React7.useRef(0);
+  const listeners = useRefWithInit(createListeners).current;
+  const map = useRefWithInit(createMap).current;
+  const [mapTick, setMapTick] = React7.useState(0);
+  const lastTickRef = React7.useRef(mapTick);
+  const register4 = useStableCallback((node, metadata) => {
+    map.set(node, metadata ?? null);
+    lastTickRef.current += 1;
+    setMapTick(lastTickRef.current);
+  });
+  const unregister = useStableCallback((node) => {
+    map.delete(node);
+    lastTickRef.current += 1;
+    setMapTick(lastTickRef.current);
+  });
+  const sortedMap = React7.useMemo(() => {
+    disableEslintWarning(mapTick);
+    const newMap = /* @__PURE__ */ new Map();
+    const sortedNodes = Array.from(map.keys()).filter((node) => node.isConnected).sort(sortByDocumentPosition);
+    sortedNodes.forEach((node, index2) => {
+      const metadata = map.get(node) ?? {};
+      newMap.set(node, {
+        ...metadata,
+        index: index2
+      });
+    });
+    return newMap;
+  }, [map, mapTick]);
+  useIsoLayoutEffect(() => {
+    if (typeof MutationObserver !== "function" || sortedMap.size === 0) {
+      return void 0;
+    }
+    const mutationObserver = new MutationObserver((entries) => {
+      const diff = /* @__PURE__ */ new Set();
+      const updateDiff = (node) => diff.has(node) ? diff.delete(node) : diff.add(node);
+      entries.forEach((entry) => {
+        entry.removedNodes.forEach(updateDiff);
+        entry.addedNodes.forEach(updateDiff);
+      });
+      if (diff.size === 0) {
+        lastTickRef.current += 1;
+        setMapTick(lastTickRef.current);
+      }
+    });
+    sortedMap.forEach((_, node) => {
+      if (node.parentElement) {
+        mutationObserver.observe(node.parentElement, {
+          childList: true
+        });
+      }
+    });
+    return () => {
+      mutationObserver.disconnect();
+    };
+  }, [sortedMap]);
+  useIsoLayoutEffect(() => {
+    const shouldUpdateLengths = lastTickRef.current === mapTick;
+    if (shouldUpdateLengths) {
+      if (elementsRef.current.length !== sortedMap.size) {
+        elementsRef.current.length = sortedMap.size;
+      }
+      if (labelsRef && labelsRef.current.length !== sortedMap.size) {
+        labelsRef.current.length = sortedMap.size;
+      }
+      nextIndexRef.current = sortedMap.size;
+    }
+    onMapChange(sortedMap);
+  }, [onMapChange, sortedMap, elementsRef, labelsRef, mapTick]);
+  useIsoLayoutEffect(() => {
+    return () => {
+      elementsRef.current = [];
+    };
+  }, [elementsRef]);
+  useIsoLayoutEffect(() => {
+    return () => {
+      if (labelsRef) {
+        labelsRef.current = [];
+      }
+    };
+  }, [labelsRef]);
+  const subscribeMapChange = useStableCallback((fn) => {
+    listeners.add(fn);
+    return () => {
+      listeners.delete(fn);
+    };
+  });
+  useIsoLayoutEffect(() => {
+    listeners.forEach((l2) => l2(sortedMap));
+  }, [listeners, sortedMap]);
+  const contextValue = React7.useMemo(() => ({
+    register: register4,
+    unregister,
+    subscribeMapChange,
+    elementsRef,
+    labelsRef,
+    nextIndexRef
+  }), [register4, unregister, subscribeMapChange, elementsRef, labelsRef, nextIndexRef]);
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CompositeListContext.Provider, {
+    value: contextValue,
+    children
+  });
+}
+function createMap() {
+  return /* @__PURE__ */ new Map();
+}
+function createListeners() {
+  return /* @__PURE__ */ new Set();
+}
+function sortByDocumentPosition(a2, b2) {
+  const position = a2.compareDocumentPosition(b2);
+  if (position & Node.DOCUMENT_POSITION_FOLLOWING || position & Node.DOCUMENT_POSITION_CONTAINED_BY) {
+    return -1;
+  }
+  if (position & Node.DOCUMENT_POSITION_PRECEDING || position & Node.DOCUMENT_POSITION_CONTAINS) {
+    return 1;
+  }
+  return 0;
+}
+function disableEslintWarning(_) {
+}
+
+// node_modules/@base-ui/react/internals/direction-context/DirectionContext.mjs
+var React8 = __toESM(require_react(), 1);
+var DirectionContext = /* @__PURE__ */ React8.createContext(void 0);
 if (true) DirectionContext.displayName = "DirectionContext";
 function useDirection() {
-  const context = React6.useContext(DirectionContext);
+  const context = React8.useContext(DirectionContext);
   return context?.direction ?? "ltr";
 }
 
-// node_modules/@base-ui/react/esm/internals/useRenderElement.js
-var React9 = __toESM(require_react(), 1);
+// node_modules/@base-ui/react/internals/useRenderElement.mjs
+var React11 = __toESM(require_react(), 1);
 
-// node_modules/@base-ui/utils/esm/useMergedRefs.js
+// node_modules/@base-ui/utils/useMergedRefs.mjs
 function useMergedRefs(a2, b2, c2, d2) {
   const forkRef = useRefWithInit(createForkRef).current;
   if (didChange(forkRef, a2, b2, c2, d2)) {
@@ -777,19 +941,19 @@ function update(forkRef, refs) {
   };
 }
 
-// node_modules/@base-ui/utils/esm/getReactElementRef.js
-var React8 = __toESM(require_react(), 1);
+// node_modules/@base-ui/utils/getReactElementRef.mjs
+var React10 = __toESM(require_react(), 1);
 
-// node_modules/@base-ui/utils/esm/reactVersion.js
-var React7 = __toESM(require_react(), 1);
-var majorVersion = parseInt(React7.version, 10);
+// node_modules/@base-ui/utils/reactVersion.mjs
+var React9 = __toESM(require_react(), 1);
+var majorVersion = parseInt(React9.version, 10);
 function isReactVersionAtLeast(reactVersionToCheck) {
   return majorVersion >= reactVersionToCheck;
 }
 
-// node_modules/@base-ui/utils/esm/getReactElementRef.js
+// node_modules/@base-ui/utils/getReactElementRef.mjs
 function getReactElementRef(element) {
-  if (!/* @__PURE__ */ React8.isValidElement(element)) {
+  if (!/* @__PURE__ */ React10.isValidElement(element)) {
     return null;
   }
   const reactElement = element;
@@ -797,7 +961,7 @@ function getReactElementRef(element) {
   return (isReactVersionAtLeast(19) ? propsWithRef?.ref : reactElement.ref) ?? null;
 }
 
-// node_modules/@base-ui/utils/esm/mergeObjects.js
+// node_modules/@base-ui/utils/mergeObjects.mjs
 function mergeObjects(a2, b2) {
   if (a2 && !b2) {
     return a2;
@@ -814,13 +978,13 @@ function mergeObjects(a2, b2) {
   return void 0;
 }
 
-// node_modules/@base-ui/utils/esm/empty.js
+// node_modules/@base-ui/utils/empty.mjs
 function NOOP() {
 }
 var EMPTY_ARRAY = Object.freeze([]);
 var EMPTY_OBJECT = Object.freeze({});
 
-// node_modules/@base-ui/react/esm/internals/getStateAttributesProps.js
+// node_modules/@base-ui/react/internals/getStateAttributesProps.mjs
 function getStateAttributesProps(state, customMapping) {
   const props = {};
   for (const key in state) {
@@ -841,17 +1005,17 @@ function getStateAttributesProps(state, customMapping) {
   return props;
 }
 
-// node_modules/@base-ui/react/esm/utils/resolveClassName.js
+// node_modules/@base-ui/react/utils/resolveClassName.mjs
 function resolveClassName(className, state) {
   return typeof className === "function" ? className(state) : className;
 }
 
-// node_modules/@base-ui/react/esm/utils/resolveStyle.js
+// node_modules/@base-ui/react/utils/resolveStyle.mjs
 function resolveStyle(style, state) {
   return typeof style === "function" ? style(state) : style;
 }
 
-// node_modules/@base-ui/react/esm/merge-props/mergeProps.js
+// node_modules/@base-ui/react/merge-props/mergeProps.mjs
 var EMPTY_PROPS = {};
 function mergeProps(a2, b2, c2, d2, e2) {
   if (!c2 && !d2 && !e2 && !a2) {
@@ -1006,7 +1170,7 @@ function isSyntheticEvent(event) {
   return event != null && typeof event === "object" && "nativeEvent" in event;
 }
 
-// node_modules/@base-ui/react/esm/internals/useRenderElement.js
+// node_modules/@base-ui/react/internals/useRenderElement.mjs
 var import_react = __toESM(require_react(), 1);
 function useRenderElement(element, componentProps, params = {}) {
   const renderProp = componentProps.render;
@@ -1027,12 +1191,12 @@ function useRenderElementProps(componentProps, params = {}) {
     state = EMPTY_OBJECT,
     ref,
     props,
-    stateAttributesMapping: stateAttributesMapping4,
+    stateAttributesMapping: stateAttributesMapping6,
     enabled = true
   } = params;
   const className = enabled ? resolveClassName(classNameProp, state) : void 0;
   const style = enabled ? resolveStyle(styleProp, state) : void 0;
-  const stateProps = enabled ? getStateAttributesProps(state, stateAttributesMapping4) : EMPTY_OBJECT;
+  const stateProps = enabled ? getStateAttributesProps(state, stateAttributesMapping6) : EMPTY_OBJECT;
   const resolvedProps = enabled && props ? resolveRenderFunctionProps(props) : void 0;
   const outProps = enabled ? mergeObjects(stateProps, resolvedProps) ?? {} : EMPTY_OBJECT;
   if (typeof document !== "undefined") {
@@ -1076,15 +1240,15 @@ function evaluateRenderProp(element, render4, props, state) {
     mergedProps.ref = props.ref;
     let newElement = render4;
     if (newElement?.$$typeof === REACT_LAZY_TYPE) {
-      const children = React9.Children.toArray(render4);
+      const children = React11.Children.toArray(render4);
       newElement = children[0];
     }
     if (true) {
-      if (!/* @__PURE__ */ React9.isValidElement(newElement)) {
+      if (!/* @__PURE__ */ React11.isValidElement(newElement)) {
         throw new Error(["Base UI: The `render` prop was provided an invalid React element as `React.isValidElement(render)` is `false`.", "A valid React element must be provided to the `render` prop because it is cloned with props to replace the default element.", "https://base-ui.com/r/invalid-render-prop"].join("\n"));
       }
     }
-    return /* @__PURE__ */ React9.cloneElement(newElement, mergedProps);
+    return /* @__PURE__ */ React11.cloneElement(newElement, mergedProps);
   }
   if (element) {
     if (typeof element === "string") {
@@ -1121,10 +1285,41 @@ function renderTag(Tag, props) {
       key: props.key
     });
   }
-  return /* @__PURE__ */ React9.createElement(Tag, props);
+  return /* @__PURE__ */ React11.createElement(Tag, props);
 }
 
-// node_modules/@base-ui/react/esm/internals/reason-parts.js
+// node_modules/@base-ui/utils/useId.mjs
+var React12 = __toESM(require_react(), 1);
+var globalId = 0;
+function useGlobalId(idOverride, prefix = "mui") {
+  const [defaultId, setDefaultId] = React12.useState(idOverride);
+  const id = idOverride || defaultId;
+  React12.useEffect(() => {
+    if (defaultId == null) {
+      globalId += 1;
+      setDefaultId(`${prefix}-${globalId}`);
+    }
+  }, [defaultId, prefix]);
+  return id;
+}
+var maybeReactUseId = SafeReact.useId;
+function useId(idOverride, prefix) {
+  if (maybeReactUseId !== void 0) {
+    const reactId = maybeReactUseId();
+    return idOverride ?? (prefix ? `${prefix}-${reactId}` : reactId);
+  }
+  return useGlobalId(idOverride, prefix);
+}
+
+// node_modules/@base-ui/react/internals/useBaseUiId.mjs
+function useBaseUiId(idOverride) {
+  return useId(idOverride, "base-ui");
+}
+
+// node_modules/@base-ui/react/collapsible/root/useCollapsibleRoot.mjs
+var React15 = __toESM(require_react(), 1);
+
+// node_modules/@base-ui/react/internals/reason-parts.mjs
 var reason_parts_exports = {};
 __export(reason_parts_exports, {
   cancelOpen: () => cancelOpen,
@@ -1199,7 +1394,7 @@ var imperativeAction = "imperative-action";
 var swipe = "swipe";
 var windowResize = "window-resize";
 
-// node_modules/@base-ui/react/esm/internals/createBaseUIEventDetails.js
+// node_modules/@base-ui/react/internals/createBaseUIEventDetails.mjs
 function createChangeEventDetails(reason, event, trigger, customProperties) {
   let canceled = false;
   let allowPropagation = false;
@@ -1225,48 +1420,17 @@ function createChangeEventDetails(reason, event, trigger, customProperties) {
   return details;
 }
 
-// node_modules/@base-ui/utils/esm/useId.js
-var React10 = __toESM(require_react(), 1);
-var globalId = 0;
-function useGlobalId(idOverride, prefix = "mui") {
-  const [defaultId, setDefaultId] = React10.useState(idOverride);
-  const id = idOverride || defaultId;
-  React10.useEffect(() => {
-    if (defaultId == null) {
-      globalId += 1;
-      setDefaultId(`${prefix}-${globalId}`);
-    }
-  }, [defaultId, prefix]);
-  return id;
-}
-var maybeReactUseId = SafeReact.useId;
-function useId(idOverride, prefix) {
-  if (maybeReactUseId !== void 0) {
-    const reactId = maybeReactUseId();
-    return idOverride ?? (prefix ? `${prefix}-${reactId}` : reactId);
-  }
-  return useGlobalId(idOverride, prefix);
-}
+// node_modules/@base-ui/react/internals/useTransitionStatus.mjs
+var React14 = __toESM(require_react(), 1);
 
-// node_modules/@base-ui/react/esm/internals/useBaseUiId.js
-function useBaseUiId(idOverride) {
-  return useId(idOverride, "base-ui");
-}
-
-// node_modules/@base-ui/react/esm/collapsible/root/useCollapsibleRoot.js
+// node_modules/@base-ui/utils/useOnMount.mjs
 var React13 = __toESM(require_react(), 1);
-
-// node_modules/@base-ui/react/esm/internals/useTransitionStatus.js
-var React12 = __toESM(require_react(), 1);
-
-// node_modules/@base-ui/utils/esm/useOnMount.js
-var React11 = __toESM(require_react(), 1);
 var EMPTY = [];
 function useOnMount(fn) {
-  React11.useEffect(fn, EMPTY);
+  React13.useEffect(fn, EMPTY);
 }
 
-// node_modules/@base-ui/utils/esm/useAnimationFrame.js
+// node_modules/@base-ui/utils/useAnimationFrame.mjs
 var EMPTY2 = null;
 var LAST_RAF = globalThis.requestAnimationFrame;
 var Scheduler = class {
@@ -1354,10 +1518,10 @@ function useAnimationFrame() {
   return timeout;
 }
 
-// node_modules/@base-ui/react/esm/internals/useTransitionStatus.js
+// node_modules/@base-ui/react/internals/useTransitionStatus.mjs
 function useTransitionStatus(open, enableIdleState = false, deferEndingState = false) {
-  const [transitionStatus, setTransitionStatus] = React12.useState(open && enableIdleState ? "idle" : void 0);
-  const [mounted, setMounted] = React12.useState(open);
+  const [transitionStatus, setTransitionStatus] = React14.useState(open && enableIdleState ? "idle" : void 0);
+  const [mounted, setMounted] = React14.useState(open);
   if (open && !mounted) {
     setMounted(true);
     setTransitionStatus("starting");
@@ -1411,7 +1575,7 @@ function useTransitionStatus(open, enableIdleState = false, deferEndingState = f
   };
 }
 
-// node_modules/@base-ui/react/esm/collapsible/root/useCollapsibleRoot.js
+// node_modules/@base-ui/react/collapsible/root/useCollapsibleRoot.mjs
 function useCollapsibleRoot(parameters) {
   const {
     open: openParam,
@@ -1431,7 +1595,7 @@ function useCollapsibleRoot(parameters) {
     transitionStatus
   } = useTransitionStatus(open, true, true);
   const defaultPanelId = useBaseUiId();
-  const [panelIdState, setPanelIdState] = React13.useState();
+  const [panelIdState, setPanelIdState] = React15.useState();
   const panelId = panelIdState ?? defaultPanelId;
   const handleTrigger = useStableCallback((event) => {
     const nextOpen = !open;
@@ -1442,7 +1606,7 @@ function useCollapsibleRoot(parameters) {
     }
     setOpen(nextOpen);
   });
-  return React13.useMemo(() => ({
+  return React15.useMemo(() => ({
     disabled: disabled2,
     handleTrigger,
     mounted,
@@ -1455,19 +1619,92 @@ function useCollapsibleRoot(parameters) {
   }), [disabled2, handleTrigger, mounted, open, panelId, setMounted, setOpen, setPanelIdState, transitionStatus]);
 }
 
-// node_modules/@base-ui/react/esm/collapsible/root/CollapsibleRootContext.js
-var React14 = __toESM(require_react(), 1);
-var CollapsibleRootContext = /* @__PURE__ */ React14.createContext(void 0);
+// node_modules/@base-ui/react/collapsible/root/CollapsibleRootContext.mjs
+var React16 = __toESM(require_react(), 1);
+var CollapsibleRootContext = /* @__PURE__ */ React16.createContext(void 0);
 if (true) CollapsibleRootContext.displayName = "CollapsibleRootContext";
 function useCollapsibleRootContext() {
-  const context = React14.useContext(CollapsibleRootContext);
+  const context = React16.useContext(CollapsibleRootContext);
   if (context === void 0) {
     throw new Error(true ? "Base UI: CollapsibleRootContext is missing. Collapsible parts must be placed within <Collapsible.Root>." : formatErrorMessage_default(15));
   }
   return context;
 }
 
-// node_modules/@base-ui/react/esm/internals/stateAttributesMapping.js
+// node_modules/@base-ui/react/internals/composite/list/useCompositeListItem.mjs
+var React17 = __toESM(require_react(), 1);
+var IndexGuessBehavior = /* @__PURE__ */ (function(IndexGuessBehavior2) {
+  IndexGuessBehavior2[IndexGuessBehavior2["None"] = 0] = "None";
+  IndexGuessBehavior2[IndexGuessBehavior2["GuessFromOrder"] = 1] = "GuessFromOrder";
+  return IndexGuessBehavior2;
+})({});
+function useCompositeListItem(params = {}) {
+  const {
+    label,
+    metadata,
+    textRef,
+    indexGuessBehavior,
+    index: externalIndex
+  } = params;
+  const {
+    register: register4,
+    unregister,
+    subscribeMapChange,
+    elementsRef,
+    labelsRef,
+    nextIndexRef
+  } = useCompositeListContext();
+  const indexRef = React17.useRef(-1);
+  const [index2, setIndex] = React17.useState(externalIndex ?? (indexGuessBehavior === IndexGuessBehavior.GuessFromOrder ? () => {
+    if (indexRef.current === -1) {
+      const newIndex = nextIndexRef.current;
+      nextIndexRef.current += 1;
+      indexRef.current = newIndex;
+    }
+    return indexRef.current;
+  } : -1));
+  const componentRef = React17.useRef(null);
+  const ref = React17.useCallback((node) => {
+    componentRef.current = node;
+    if (index2 !== -1 && node !== null) {
+      elementsRef.current[index2] = node;
+      if (labelsRef) {
+        const isLabelDefined = label !== void 0;
+        labelsRef.current[index2] = isLabelDefined ? label : textRef?.current?.textContent ?? node.textContent;
+      }
+    }
+  }, [index2, elementsRef, labelsRef, label, textRef]);
+  useIsoLayoutEffect(() => {
+    if (externalIndex != null) {
+      return void 0;
+    }
+    const node = componentRef.current;
+    if (node) {
+      register4(node, metadata);
+      return () => {
+        unregister(node);
+      };
+    }
+    return void 0;
+  }, [externalIndex, register4, unregister, metadata]);
+  useIsoLayoutEffect(() => {
+    if (externalIndex != null) {
+      return void 0;
+    }
+    return subscribeMapChange((map) => {
+      const i2 = componentRef.current ? map.get(componentRef.current)?.index : null;
+      if (i2 != null) {
+        setIndex(i2);
+      }
+    });
+  }, [externalIndex, subscribeMapChange, setIndex]);
+  return {
+    ref,
+    index: index2
+  };
+}
+
+// node_modules/@base-ui/react/internals/stateAttributesMapping.mjs
 var TransitionStatusDataAttributes = /* @__PURE__ */ (function(TransitionStatusDataAttributes2) {
   TransitionStatusDataAttributes2["startingStyle"] = "data-starting-style";
   TransitionStatusDataAttributes2["endingStyle"] = "data-ending-style";
@@ -1491,7 +1728,7 @@ var transitionStatusMapping = {
   }
 };
 
-// node_modules/@base-ui/react/esm/collapsible/panel/CollapsiblePanelDataAttributes.js
+// node_modules/@base-ui/react/collapsible/panel/CollapsiblePanelDataAttributes.mjs
 var CollapsiblePanelDataAttributes = (function(CollapsiblePanelDataAttributes2) {
   CollapsiblePanelDataAttributes2["open"] = "data-open";
   CollapsiblePanelDataAttributes2["closed"] = "data-closed";
@@ -1500,13 +1737,13 @@ var CollapsiblePanelDataAttributes = (function(CollapsiblePanelDataAttributes2) 
   return CollapsiblePanelDataAttributes2;
 })({});
 
-// node_modules/@base-ui/react/esm/collapsible/trigger/CollapsibleTriggerDataAttributes.js
+// node_modules/@base-ui/react/collapsible/trigger/CollapsibleTriggerDataAttributes.mjs
 var CollapsibleTriggerDataAttributes = /* @__PURE__ */ (function(CollapsibleTriggerDataAttributes2) {
   CollapsibleTriggerDataAttributes2["panelOpen"] = "data-panel-open";
   return CollapsibleTriggerDataAttributes2;
 })({});
 
-// node_modules/@base-ui/react/esm/utils/collapsibleOpenStateMapping.js
+// node_modules/@base-ui/react/utils/collapsibleOpenStateMapping.mjs
 var PANEL_OPEN_HOOK = {
   [CollapsiblePanelDataAttributes.open]: ""
 };
@@ -1532,8 +1769,8 @@ var collapsibleOpenStateMapping = {
   }
 };
 
-// node_modules/@base-ui/react/esm/internals/use-button/useButton.js
-var React17 = __toESM(require_react(), 1);
+// node_modules/@base-ui/react/internals/use-button/useButton.mjs
+var React20 = __toESM(require_react(), 1);
 
 // node_modules/@floating-ui/utils/dist/floating-ui.utils.dom.mjs
 function hasWindow() {
@@ -1691,20 +1928,20 @@ function getFrameElement(win) {
   return win.parent && Object.getPrototypeOf(win.parent) ? win.frameElement : null;
 }
 
-// node_modules/@base-ui/react/esm/internals/composite/root/CompositeRootContext.js
-var React15 = __toESM(require_react(), 1);
-var CompositeRootContext = /* @__PURE__ */ React15.createContext(void 0);
+// node_modules/@base-ui/react/internals/composite/root/CompositeRootContext.mjs
+var React18 = __toESM(require_react(), 1);
+var CompositeRootContext = /* @__PURE__ */ React18.createContext(void 0);
 if (true) CompositeRootContext.displayName = "CompositeRootContext";
 function useCompositeRootContext(optional = false) {
-  const context = React15.useContext(CompositeRootContext);
+  const context = React18.useContext(CompositeRootContext);
   if (context === void 0 && !optional) {
     throw new Error(true ? "Base UI: CompositeRootContext is missing. Composite parts must be placed within <Composite.Root>." : formatErrorMessage_default(16));
   }
   return context;
 }
 
-// node_modules/@base-ui/react/esm/utils/useFocusableWhenDisabled.js
-var React16 = __toESM(require_react(), 1);
+// node_modules/@base-ui/react/utils/useFocusableWhenDisabled.mjs
+var React19 = __toESM(require_react(), 1);
 function useFocusableWhenDisabled(parameters) {
   const {
     focusableWhenDisabled,
@@ -1715,7 +1952,7 @@ function useFocusableWhenDisabled(parameters) {
   } = parameters;
   const isFocusableComposite = composite && focusableWhenDisabled !== false;
   const isNonFocusableComposite = composite && focusableWhenDisabled === false;
-  const props = React16.useMemo(() => {
+  const props = React19.useMemo(() => {
     const additionalProps = {
       // allow Tabbing away from focusableWhenDisabled elements
       onKeyDown(event) {
@@ -1743,7 +1980,7 @@ function useFocusableWhenDisabled(parameters) {
   };
 }
 
-// node_modules/@base-ui/react/esm/internals/use-button/useButton.js
+// node_modules/@base-ui/react/internals/use-button/useButton.mjs
 function useButton(parameters = {}) {
   const {
     disabled: disabled2 = false,
@@ -1752,7 +1989,7 @@ function useButton(parameters = {}) {
     native: isNativeButton = true,
     composite: compositeProp
   } = parameters;
-  const elementRef = React17.useRef(null);
+  const elementRef = React20.useRef(null);
   const compositeRootContext = useCompositeRootContext(true);
   const isCompositeItem = compositeProp ?? compositeRootContext !== void 0;
   const {
@@ -1765,7 +2002,7 @@ function useButton(parameters = {}) {
     isNativeButton
   });
   if (true) {
-    React17.useEffect(() => {
+    React20.useEffect(() => {
       if (!elementRef.current) {
         return;
       }
@@ -1783,7 +2020,7 @@ function useButton(parameters = {}) {
       }
     }, [isNativeButton]);
   }
-  const updateDisabled = React17.useCallback(() => {
+  const updateDisabled = React20.useCallback(() => {
     const element = elementRef.current;
     if (!isButtonElement(element)) {
       return;
@@ -1793,7 +2030,7 @@ function useButton(parameters = {}) {
     }
   }, [disabled2, focusableWhenDisabledProps.disabled, isCompositeItem]);
   useIsoLayoutEffect(updateDisabled, [updateDisabled]);
-  const getButtonProps = React17.useCallback((externalProps = {}) => {
+  const getButtonProps = React20.useCallback((externalProps = {}) => {
     const {
       onClick: externalOnClick,
       onMouseDown: externalOnMouseDown,
@@ -1902,70 +2139,596 @@ function isValidLinkElement(elem) {
   return Boolean(elem?.tagName === "A" && elem?.href);
 }
 
-// node_modules/@base-ui/utils/esm/detectBrowser.js
-var hasNavigator = typeof navigator !== "undefined";
-var nav = getNavigatorData();
-var platform = getPlatform();
-var userAgent = getUserAgent();
-var isWebKit2 = typeof CSS === "undefined" || !CSS.supports ? false : CSS.supports("-webkit-backdrop-filter:none");
-var isIOS = (
-  // iPads can claim to be MacIntel
-  nav.platform === "MacIntel" && nav.maxTouchPoints > 1 ? true : /iP(hone|ad|od)|iOS/.test(nav.platform)
-);
-var isFirefox = hasNavigator && /firefox/i.test(userAgent);
-var isSafari = hasNavigator && /apple/i.test(navigator.vendor);
-var isEdge = hasNavigator && /Edg/i.test(userAgent);
-var isAndroid = hasNavigator && /android/i.test(platform) || /android/i.test(userAgent);
-var isMac = hasNavigator && platform.toLowerCase().startsWith("mac") && !navigator.maxTouchPoints;
-var isJSDOM = userAgent.includes("jsdom/");
-function getNavigatorData() {
-  if (!hasNavigator) {
-    return {
-      platform: "",
-      maxTouchPoints: -1
-    };
-  }
-  const uaData = navigator.userAgentData;
-  if (uaData?.platform) {
-    return {
-      platform: uaData.platform,
-      maxTouchPoints: navigator.maxTouchPoints
-    };
-  }
-  return {
-    platform: navigator.platform ?? "",
-    maxTouchPoints: navigator.maxTouchPoints ?? -1
+// node_modules/@base-ui/react/collapsible/panel/useCollapsiblePanel.mjs
+var React22 = __toESM(require_react(), 1);
+
+// node_modules/@base-ui/utils/addEventListener.mjs
+function addEventListener(target, type, listener, options) {
+  target.addEventListener(type, listener, options);
+  return () => {
+    target.removeEventListener(type, listener, options);
   };
 }
-function getUserAgent() {
-  if (!hasNavigator) {
-    return "";
-  }
-  const uaData = navigator.userAgentData;
-  if (uaData && Array.isArray(uaData.brands)) {
-    return uaData.brands.map(({
-      brand,
-      version: version2
-    }) => `${brand}/${version2}`).join(" ");
-  }
-  return navigator.userAgent;
+
+// node_modules/@base-ui/utils/useValueAsRef.mjs
+function useValueAsRef(value) {
+  const latest = useRefWithInit(createLatestRef, value).current;
+  latest.next = value;
+  useIsoLayoutEffect(latest.effect);
+  return latest;
 }
-function getPlatform() {
-  if (!hasNavigator) {
-    return "";
-  }
-  const uaData = navigator.userAgentData;
-  if (uaData?.platform) {
-    return uaData.platform;
-  }
-  return navigator.platform ?? "";
+function createLatestRef(value) {
+  const latest = {
+    current: value,
+    next: value,
+    effect: () => {
+      latest.current = latest.next;
+    }
+  };
+  return latest;
 }
 
-// node_modules/@base-ui/react/esm/floating-ui-react/utils/constants.js
+// node_modules/@base-ui/utils/owner.mjs
+function ownerDocument(node) {
+  return node?.ownerDocument || document;
+}
+
+// node_modules/@base-ui/react/internals/useOpenChangeComplete.mjs
+var React21 = __toESM(require_react(), 1);
+
+// node_modules/@base-ui/react/internals/useAnimationsFinished.mjs
+var ReactDOM = __toESM(require_react_dom(), 1);
+
+// node_modules/@base-ui/react/utils/resolveRef.mjs
+function resolveRef(maybeRef) {
+  if (maybeRef == null) {
+    return maybeRef;
+  }
+  return "current" in maybeRef ? maybeRef.current : maybeRef;
+}
+
+// node_modules/@base-ui/react/internals/useAnimationsFinished.mjs
+function useAnimationsFinished(elementOrRef, waitForStartingStyleRemoved = false, treatAbortedAsFinished = true) {
+  const frame = useAnimationFrame();
+  return useStableCallback((fnToExecute, signal = null) => {
+    frame.cancel();
+    const element = resolveRef(elementOrRef);
+    if (element == null) {
+      return;
+    }
+    const resolvedElement = element;
+    const done = () => {
+      ReactDOM.flushSync(fnToExecute);
+    };
+    if (typeof resolvedElement.getAnimations !== "function" || globalThis.BASE_UI_ANIMATIONS_DISABLED) {
+      fnToExecute();
+      return;
+    }
+    function exec() {
+      Promise.all(resolvedElement.getAnimations().map((animation) => animation.finished)).then(() => {
+        if (!signal?.aborted) {
+          done();
+        }
+      }).catch(() => {
+        if (treatAbortedAsFinished) {
+          if (!signal?.aborted) {
+            done();
+          }
+          return;
+        }
+        const currentAnimations = resolvedElement.getAnimations();
+        if (!signal?.aborted && currentAnimations.length > 0 && currentAnimations.some((animation) => animation.pending || animation.playState !== "finished")) {
+          exec();
+        }
+      });
+    }
+    if (waitForStartingStyleRemoved) {
+      const startingStyleAttribute = TransitionStatusDataAttributes.startingStyle;
+      if (!resolvedElement.hasAttribute(startingStyleAttribute)) {
+        frame.request(exec);
+        return;
+      }
+      const attributeObserver = new MutationObserver(() => {
+        if (!resolvedElement.hasAttribute(startingStyleAttribute)) {
+          attributeObserver.disconnect();
+          exec();
+        }
+      });
+      attributeObserver.observe(resolvedElement, {
+        attributes: true,
+        attributeFilter: [startingStyleAttribute]
+      });
+      signal?.addEventListener("abort", () => attributeObserver.disconnect(), {
+        once: true
+      });
+      return;
+    }
+    frame.request(exec);
+  });
+}
+
+// node_modules/@base-ui/react/internals/useOpenChangeComplete.mjs
+function useOpenChangeComplete(parameters) {
+  const {
+    enabled = true,
+    open,
+    ref,
+    onComplete: onCompleteParam
+  } = parameters;
+  const onComplete = useStableCallback(onCompleteParam);
+  const runOnceAnimationsFinish = useAnimationsFinished(ref, open, false);
+  React21.useEffect(() => {
+    if (!enabled) {
+      return void 0;
+    }
+    const abortController = new AbortController();
+    runOnceAnimationsFinish(onComplete, abortController.signal);
+    return () => {
+      abortController.abort();
+    };
+  }, [enabled, open, onComplete, runOnceAnimationsFinish]);
+}
+
+// node_modules/@base-ui/react/collapsible/panel/useCollapsiblePanel.mjs
+var EMPTY_DIMENSIONS = {
+  height: void 0,
+  width: void 0
+};
+function useCollapsiblePanel(parameters) {
+  const {
+    externalRef,
+    hiddenUntilFound,
+    id: idParam,
+    keepMounted,
+    mounted,
+    onOpenChange,
+    open,
+    setMounted,
+    setOpen,
+    transitionStatus
+  } = parameters;
+  const panelRef = React22.useRef(null);
+  const animationTypeRef = React22.useRef(null);
+  const [dimensions, setDimensionsUnwrapped] = React22.useState(EMPTY_DIMENSIONS);
+  const lastMeasuredDimensionsRef = React22.useRef(EMPTY_DIMENSIONS);
+  const shouldSkipNextOpenRef = React22.useRef(false);
+  const shouldPreventMountAnimationRef = React22.useRef(open);
+  const shouldPreventActivityResumeAnimationRef = React22.useRef(false);
+  const [forcePanelIdle, setForcePanelIdle] = React22.useState(false);
+  const pendingTemporaryStyleRestoreRef = React22.useRef(null);
+  const mergedPanelRef = useMergedRefs(externalRef, panelRef);
+  const latestStateRef = useValueAsRef({
+    mounted,
+    open
+  });
+  const runOnceCloseAnimationsFinish = useAnimationsFinished(panelRef, false, false);
+  const hidden = !open && !mounted;
+  const panelTransitionStatus = forcePanelIdle ? "idle" : transitionStatus;
+  const shouldPreventOpenAnimation = open && // These 2 refs are safe to read in render, they are only written from committed
+  // layout/effect paths and gate one-shot motion suppression for the next open
+  // lifecycle. They intentionally expose the last committed motion snapshot.
+  (shouldPreventMountAnimationRef.current || shouldPreventActivityResumeAnimationRef.current);
+  const renderedDimensions = !open && mounted && // These 2 refs are also safe to read in render, both hold the last committed
+  // animation mode and measurement. This fallback only restores a previously
+  // measured pixel size after the live dimensions state has been reset back to `auto`.
+  animationTypeRef.current === "css-animation" && dimensions.height === void 0 && dimensions.width === void 0 ? lastMeasuredDimensionsRef.current : dimensions;
+  const shouldPersistHiddenTransitionStyles = hiddenUntilFound && hidden && animationTypeRef.current !== "css-animation";
+  const setDimensions = useStableCallback((nextDimensions, shouldCacheMeasurement = true) => {
+    if (shouldCacheMeasurement) {
+      lastMeasuredDimensionsRef.current = nextDimensions;
+    }
+    setDimensionsUnwrapped(nextDimensions);
+  });
+  const restorePendingTemporaryStyle = useStableCallback(() => {
+    pendingTemporaryStyleRestoreRef.current?.();
+    pendingTemporaryStyleRestoreRef.current = null;
+  });
+  const setPendingTemporaryStyleRestore = useStableCallback((restore) => {
+    restorePendingTemporaryStyle();
+    pendingTemporaryStyleRestoreRef.current = () => {
+      pendingTemporaryStyleRestoreRef.current = null;
+      restore();
+    };
+  });
+  const markActivityResumeAnimationSuppressed = useStableCallback(() => {
+    if (open && mounted && animationTypeRef.current === "css-animation") {
+      shouldPreventActivityResumeAnimationRef.current = true;
+    }
+  });
+  useIsoLayoutEffect(() => {
+    if (!forcePanelIdle || transitionStatus === "starting") {
+      return;
+    }
+    setForcePanelIdle(false);
+  }, [forcePanelIdle, transitionStatus]);
+  React22.useEffect(() => {
+    return () => {
+      markActivityResumeAnimationSuppressed();
+      restorePendingTemporaryStyle();
+    };
+  }, [markActivityResumeAnimationSuppressed, restorePendingTemporaryStyle]);
+  useIsoLayoutEffect(() => {
+    const panel = panelRef.current;
+    if (!panel) {
+      return void 0;
+    }
+    if (!open && pendingTemporaryStyleRestoreRef.current) {
+      restorePendingTemporaryStyle();
+    }
+    const animationType = getAnimationType(panel, shouldPreventOpenAnimation);
+    animationTypeRef.current = animationType;
+    if (open && transitionStatus === "idle" && shouldPreventMountAnimationRef.current && animationType === "css-animation") {
+      lastMeasuredDimensionsRef.current = getDimensions(panel);
+      return void 0;
+    }
+    if (open && transitionStatus === "starting") {
+      const skipNextOpen = shouldSkipNextOpenRef.current;
+      shouldSkipNextOpenRef.current = false;
+      if (animationType === "none") {
+        setDimensions(getDimensions(panel));
+        setForcePanelIdle(true);
+        return void 0;
+      }
+      if (animationType === "css-transition") {
+        const restoreLayoutStyles = resetLayoutStyles(panel);
+        setDimensions(getDimensions(panel));
+        if (!skipNextOpen) {
+          return restoreLayoutStyles;
+        }
+        const restoreTransitionDuration = setTemporaryStyle(panel, "transition-duration", "0s");
+        setPendingTemporaryStyleRestore(restoreTransitionDuration);
+        setForcePanelIdle(true);
+        return restoreLayoutStyles;
+      }
+      if (animationType === "css-animation") {
+        setDimensions(getDimensions(panel));
+        if (!skipNextOpen) {
+          const restoreAnimationName2 = setTemporaryStyle(panel, "animation-name", "none");
+          restoreAnimationName2();
+          return void 0;
+        }
+        const restoreAnimationName = setTemporaryStyle(panel, "animation-name", "none");
+        const restoreAnimationDuration = setTemporaryStyle(panel, "animation-duration", "0s");
+        restoreAnimationName();
+        setPendingTemporaryStyleRestore(restoreAnimationDuration);
+        setForcePanelIdle(true);
+        return void 0;
+      }
+    }
+    if (!open && mounted && (transitionStatus === "idle" || transitionStatus === "starting")) {
+      shouldPreventMountAnimationRef.current = false;
+      shouldPreventActivityResumeAnimationRef.current = false;
+      if (animationType === "none") {
+        setDimensions(EMPTY_DIMENSIONS, false);
+        setMounted(false);
+        return void 0;
+      }
+      setDimensions(getDimensions(panel));
+      return void 0;
+    }
+    if (transitionStatus !== "ending") {
+      return void 0;
+    }
+    if (animationType === "none") {
+      setMounted(false);
+      return void 0;
+    }
+    const nextDimensions = getDimensions(panel);
+    const hasMeasuredSize = (nextDimensions.height ?? 0) > 0 || (nextDimensions.width ?? 0) > 0;
+    if (!hasMeasuredSize) {
+      setMounted(false);
+      return void 0;
+    }
+    setDimensions(nextDimensions);
+    if (animationType === "css-animation") {
+      const restoreAnimationName = setTemporaryStyle(panel, "animation-name", "none");
+      restoreAnimationName();
+    }
+    return void 0;
+  }, [mounted, open, restorePendingTemporaryStyle, setDimensions, setMounted, setPendingTemporaryStyleRestore, shouldPreventOpenAnimation, transitionStatus]);
+  useOpenChangeComplete({
+    enabled: open && mounted && panelTransitionStatus === "idle",
+    open: true,
+    ref: panelRef,
+    onComplete() {
+      if (!open) {
+        return;
+      }
+      setDimensions(EMPTY_DIMENSIONS, false);
+    }
+  });
+  React22.useEffect(() => {
+    if (open || !mounted || panelTransitionStatus !== "ending") {
+      return void 0;
+    }
+    const panel = panelRef.current;
+    if (!panel) {
+      return void 0;
+    }
+    const abortController = new AbortController();
+    let endingStyleFrame = -1;
+    function handleComplete() {
+      if (latestStateRef.current.open) {
+        return;
+      }
+      setMounted(false);
+      setDimensions(EMPTY_DIMENSIONS, false);
+    }
+    endingStyleFrame = AnimationFrame.request(() => {
+      if (!abortController.signal.aborted) {
+        runOnceCloseAnimationsFinish(handleComplete, abortController.signal);
+      }
+    });
+    return () => {
+      AnimationFrame.cancel(endingStyleFrame);
+      abortController.abort();
+    };
+  }, [latestStateRef, mounted, open, panelTransitionStatus, runOnceCloseAnimationsFinish, setDimensions, setMounted]);
+  useIsoLayoutEffect(() => {
+    const panel = panelRef.current;
+    if (!panel || !hiddenUntilFound || !hidden) {
+      return;
+    }
+    panel.setAttribute("hidden", "until-found");
+  }, [hidden, hiddenUntilFound]);
+  React22.useEffect(function registerBeforeMatchListener() {
+    const panel = panelRef.current;
+    if (!panel) {
+      return void 0;
+    }
+    function handleBeforeMatch(event) {
+      const eventDetails = createChangeEventDetails(reason_parts_exports.none, event);
+      onOpenChange(true, eventDetails);
+      if (eventDetails.isCanceled) {
+        return;
+      }
+      shouldSkipNextOpenRef.current = true;
+      setOpen(true);
+    }
+    return addEventListener(panel, "beforematch", handleBeforeMatch);
+  }, [onOpenChange, setOpen]);
+  const shouldRender = keepMounted || hiddenUntilFound || mounted || open;
+  return {
+    height: renderedDimensions.height,
+    props: {
+      ...shouldPersistHiddenTransitionStyles ? {
+        [CollapsiblePanelDataAttributes.startingStyle]: ""
+      } : void 0,
+      hidden,
+      id: idParam
+    },
+    ref: mergedPanelRef,
+    shouldPreventOpenAnimation,
+    shouldRender,
+    transitionStatus: panelTransitionStatus,
+    width: renderedDimensions.width
+  };
+}
+function getDimensions(element) {
+  return {
+    height: element.scrollHeight,
+    width: element.scrollWidth
+  };
+}
+function getAnimationType(element, hasSuppressedMountAnimation = false) {
+  const panelStyles = getWindow(element).getComputedStyle(element);
+  const hasAnimation = (panelStyles.animationName.split(",").map((name) => name.trim()).some((name) => name !== "" && name !== "none") || hasSuppressedMountAnimation) && hasNonZeroDuration(panelStyles.animationDuration);
+  const hasTransition = hasNonZeroDuration(panelStyles.transitionDuration);
+  if (hasAnimation && hasTransition) {
+    if (true) {
+      warn("CSS transitions and CSS animations both detected on Collapsible or Accordion panel.", "Only one of either animation type should be used.");
+    }
+    return "css-transition";
+  }
+  if (hasTransition) {
+    return "css-transition";
+  }
+  if (hasAnimation) {
+    return "css-animation";
+  }
+  return "none";
+}
+function hasNonZeroDuration(value) {
+  return value.split(",").map((part) => part.trim()).some((part) => part !== "" && Number.parseFloat(part) > 0);
+}
+function setTemporaryStyle(element, property, value) {
+  const previousValue = element.style.getPropertyValue(property);
+  const previousPriority = element.style.getPropertyPriority(property);
+  element.style.setProperty(property, value);
+  return () => {
+    if (previousValue === "") {
+      element.style.removeProperty(property);
+      return;
+    }
+    element.style.setProperty(property, previousValue, previousPriority);
+  };
+}
+function resetLayoutStyles(element) {
+  const originalLayoutStyles = {
+    "justify-content": element.style.justifyContent,
+    "align-items": element.style.alignItems,
+    "align-content": element.style.alignContent,
+    "justify-items": element.style.justifyItems
+  };
+  Object.keys(originalLayoutStyles).forEach((key) => {
+    element.style.setProperty(key, "initial", "important");
+  });
+  function restoreLayoutStyles() {
+    Object.entries(originalLayoutStyles).forEach(([key, value]) => {
+      if (value === "") {
+        element.style.removeProperty(key);
+        return;
+      }
+      element.style.setProperty(key, value);
+    });
+  }
+  const frame = AnimationFrame.request(restoreLayoutStyles);
+  return () => {
+    AnimationFrame.cancel(frame);
+    restoreLayoutStyles();
+  };
+}
+
+// node_modules/@base-ui/utils/useOnFirstRender.mjs
+var React23 = __toESM(require_react(), 1);
+function useOnFirstRender(fn) {
+  const ref = React23.useRef(true);
+  if (ref.current) {
+    ref.current = false;
+    fn();
+  }
+}
+
+// node_modules/@base-ui/utils/platform/parts.mjs
+var parts_exports = {};
+__export(parts_exports, {
+  engine: () => engine_exports,
+  env: () => env_exports,
+  os: () => os_exports,
+  screenReader: () => screen_reader_exports
+});
+
+// node_modules/@base-ui/utils/platform/os.mjs
+var os_exports = {};
+__export(os_exports, {
+  android: () => android,
+  apple: () => apple,
+  ios: () => ios,
+  linux: () => linux,
+  mac: () => mac,
+  windows: () => windows
+});
+
+// node_modules/@base-ui/utils/platform/shared.mjs
+function readRawData() {
+  if (typeof navigator === "undefined") {
+    return {
+      userAgent: "",
+      platform: "",
+      maxTouchPoints: 0
+    };
+  }
+  if (true) {
+    const uaData = navigator.userAgentData;
+    if (uaData && Array.isArray(uaData.brands)) {
+      return {
+        userAgent: uaData.brands.map(({
+          brand,
+          version: version2
+        }) => `${brand}/${version2}`).join(" "),
+        platform: uaData.platform ?? navigator.platform ?? "",
+        maxTouchPoints: navigator.maxTouchPoints ?? 0
+      };
+    }
+  }
+  return {
+    userAgent: navigator.userAgent,
+    platform: navigator.platform ?? "",
+    maxTouchPoints: navigator.maxTouchPoints ?? 0
+  };
+}
+var {
+  userAgent,
+  platform,
+  maxTouchPoints
+} = readRawData();
+var lowerUserAgent = userAgent.toLowerCase();
+var lowerPlatform = platform.toLowerCase();
+
+// node_modules/@base-ui/utils/platform/os.mjs
+var ios = /^i(os$|p)/.test(lowerPlatform) || lowerPlatform === "macintel" && maxTouchPoints > 1;
+var ANDROID_STRING = "android";
+var android = lowerPlatform === ANDROID_STRING || lowerUserAgent.includes(ANDROID_STRING);
+var mac = !ios && lowerPlatform.startsWith("mac");
+var windows = lowerPlatform.startsWith("win");
+var linux = !android && /^(linux|chrome os)/.test(lowerPlatform);
+var apple = mac || ios;
+
+// node_modules/@base-ui/utils/platform/engine.mjs
+var engine_exports = {};
+__export(engine_exports, {
+  blink: () => blink,
+  gecko: () => gecko,
+  webkit: () => webkit
+});
+var webkit = typeof CSS !== "undefined" && !!CSS.supports?.("-webkit-backdrop-filter:none");
+var gecko = !webkit && lowerUserAgent.includes("firefox");
+var blink = !webkit && lowerUserAgent.includes("chrom");
+
+// node_modules/@base-ui/utils/platform/screen-reader.mjs
+var screen_reader_exports = {};
+__export(screen_reader_exports, {
+  voiceOver: () => voiceOver
+});
+var voiceOver = apple;
+
+// node_modules/@base-ui/utils/platform/env.mjs
+var env_exports = {};
+__export(env_exports, {
+  jsdom: () => jsdom
+});
+var jsdom = /jsdom|happydom/.test(lowerUserAgent);
+
+// node_modules/@base-ui/utils/useTimeout.mjs
+var EMPTY3 = 0;
+var Timeout = class _Timeout {
+  static create() {
+    return new _Timeout();
+  }
+  currentId = EMPTY3;
+  /**
+   * Executes `fn` after `delay`, clearing any previously scheduled call.
+   */
+  start(delay, fn) {
+    this.clear();
+    this.currentId = setTimeout(() => {
+      this.currentId = EMPTY3;
+      fn();
+    }, delay);
+  }
+  isStarted() {
+    return this.currentId !== EMPTY3;
+  }
+  clear = () => {
+    if (this.currentId !== EMPTY3) {
+      clearTimeout(this.currentId);
+      this.currentId = EMPTY3;
+    }
+  };
+  disposeEffect = () => {
+    return this.clear;
+  };
+};
+function useTimeout() {
+  const timeout = useRefWithInit(Timeout.create).current;
+  useOnMount(timeout.disposeEffect);
+  return timeout;
+}
+
+// node_modules/@base-ui/react/floating-ui-react/components/FloatingDelayGroup.mjs
+var React24 = __toESM(require_react(), 1);
+
+// node_modules/@base-ui/react/floating-ui-react/utils/event.mjs
+function isReactEvent(event) {
+  return "nativeEvent" in event;
+}
+function isMouseLikePointerType(pointerType, strict) {
+  const values = ["mouse", "pen"];
+  if (!strict) {
+    values.push("", void 0);
+  }
+  return values.includes(pointerType);
+}
+function isClickLikeEvent(event) {
+  const type = event.type;
+  return type === "click" || type === "mousedown" || type === "keydown" || type === "keyup";
+}
+
+// node_modules/@base-ui/react/floating-ui-react/utils/constants.mjs
 var FOCUSABLE_ATTRIBUTE = "data-base-ui-focusable";
 var TYPEABLE_SELECTOR = "input:not([type='hidden']):not([disabled]),[contenteditable]:not([contenteditable='false']),textarea:not([disabled])";
 
-// node_modules/@base-ui/react/esm/internals/shadowDom.js
+// node_modules/@base-ui/react/internals/shadowDom.mjs
 function activeElement(doc) {
   let element = doc.activeElement;
   while (element?.shadowRoot?.activeElement != null) {
@@ -1999,7 +2762,7 @@ function getTarget(event) {
   return event.target;
 }
 
-// node_modules/@base-ui/react/esm/floating-ui-react/utils/element.js
+// node_modules/@base-ui/react/floating-ui-react/utils/element.mjs
 function isTargetInsideEnabledTrigger(target, triggerElements) {
   if (!isElement(target)) {
     return false;
@@ -2035,7 +2798,7 @@ function isInteractiveElement(element) {
   return element?.closest(`button,a[href],[role="button"],select,[tabindex]:not([tabindex="-1"]),${TYPEABLE_SELECTOR}`) != null;
 }
 function matchesFocusVisible(element) {
-  if (!element || isJSDOM) {
+  if (!element || parts_exports.env.jsdom) {
     return true;
   }
   try {
@@ -2045,27 +2808,263 @@ function matchesFocusVisible(element) {
   }
 }
 
-// node_modules/@base-ui/react/esm/floating-ui-react/utils/nodes.js
-function getNodeChildren(nodes, id, onlyOpenChildren = true) {
-  const directChildren = nodes.filter((node) => node.parentId === id);
-  return directChildren.flatMap((child) => [...!onlyOpenChildren || child.context?.open ? [child] : [], ...getNodeChildren(nodes, child.id, onlyOpenChildren)]);
+// node_modules/@base-ui/react/floating-ui-react/hooks/useHoverShared.mjs
+function resolveValue(value, pointerType) {
+  if (pointerType != null && !isMouseLikePointerType(pointerType)) {
+    return 0;
+  }
+  if (typeof value === "function") {
+    return value();
+  }
+  return value;
+}
+function getDelay(value, prop, pointerType) {
+  const result = resolveValue(value, pointerType);
+  if (typeof result === "number") {
+    return result;
+  }
+  return result?.[prop];
+}
+function getRestMs(value) {
+  if (typeof value === "function") {
+    return value();
+  }
+  return value;
+}
+function isClickLikeOpenEvent(openEventType, interactedInside) {
+  return interactedInside || openEventType === "click" || openEventType === "mousedown";
+}
+function isHoverOpenEvent(openEventType) {
+  return openEventType?.includes("mouse") && openEventType !== "mousedown";
 }
 
-// node_modules/@base-ui/react/esm/floating-ui-react/utils/event.js
-function isReactEvent(event) {
-  return "nativeEvent" in event;
-}
-function isMouseLikePointerType(pointerType, strict) {
-  const values = ["mouse", "pen"];
-  if (!strict) {
-    values.push("", void 0);
+// node_modules/@base-ui/react/floating-ui-react/components/FloatingDelayGroup.mjs
+var import_jsx_runtime2 = __toESM(require_jsx_runtime(), 1);
+var FloatingDelayGroupContext = /* @__PURE__ */ React24.createContext({
+  hasProvider: false,
+  timeoutMs: 0,
+  delayRef: {
+    current: 0
+  },
+  initialDelayRef: {
+    current: 0
+  },
+  timeout: new Timeout(),
+  currentIdRef: {
+    current: null
+  },
+  currentContextRef: {
+    current: null
   }
-  return values.includes(pointerType);
+});
+if (true) FloatingDelayGroupContext.displayName = "FloatingDelayGroupContext";
+function resetDelayRef(delayRef, initialDelayRef) {
+  delayRef.current = initialDelayRef.current;
 }
-function isClickLikeEvent(event) {
-  const type = event.type;
-  return type === "click" || type === "mousedown" || type === "keydown" || type === "keyup";
+function FloatingDelayGroup(props) {
+  const {
+    children,
+    delay,
+    timeoutMs = 0
+  } = props;
+  const delayRef = React24.useRef(delay);
+  const initialDelayRef = React24.useRef(delay);
+  const currentIdRef = React24.useRef(null);
+  const currentContextRef = React24.useRef(null);
+  const timeout = useTimeout();
+  useIsoLayoutEffect(() => {
+    initialDelayRef.current = delay;
+    if (!currentIdRef.current) {
+      delayRef.current = delay;
+      return;
+    }
+    delayRef.current = {
+      open: getDelay(delayRef.current, "open"),
+      close: getDelay(delay, "close")
+    };
+  }, [delay, currentIdRef, delayRef, initialDelayRef]);
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(FloatingDelayGroupContext.Provider, {
+    value: React24.useMemo(() => ({
+      hasProvider: true,
+      delayRef,
+      initialDelayRef,
+      currentIdRef,
+      timeoutMs,
+      currentContextRef,
+      timeout
+    }), [timeoutMs, timeout]),
+    children
+  });
 }
+function useDelayGroup(context, options = {
+  open: false
+}) {
+  const {
+    open
+  } = options;
+  const store3 = "rootStore" in context ? context.rootStore : context;
+  const floatingId = store3.useState("floatingId");
+  const groupContext = React24.useContext(FloatingDelayGroupContext);
+  const {
+    currentIdRef,
+    delayRef,
+    timeoutMs,
+    initialDelayRef,
+    currentContextRef,
+    hasProvider,
+    timeout
+  } = groupContext;
+  const [isInstantPhase, setIsInstantPhase] = React24.useState(false);
+  const openRef = React24.useRef(open);
+  const isUnmountedRef = React24.useRef(false);
+  useIsoLayoutEffect(() => {
+    openRef.current = open;
+  }, [open]);
+  useIsoLayoutEffect(() => {
+    return () => {
+      isUnmountedRef.current = true;
+    };
+  }, []);
+  useIsoLayoutEffect(() => {
+    function unset() {
+      if (!isUnmountedRef.current) {
+        setIsInstantPhase(false);
+      }
+      currentContextRef.current?.setIsInstantPhase(false);
+      currentIdRef.current = null;
+      currentContextRef.current = null;
+      delayRef.current = initialDelayRef.current;
+      timeout.clear();
+    }
+    if (!currentIdRef.current) {
+      return void 0;
+    }
+    if (!open && currentIdRef.current === floatingId) {
+      setIsInstantPhase(false);
+      if (timeoutMs) {
+        const closingId = floatingId;
+        timeout.start(timeoutMs, () => {
+          if (store3.select("open") || currentIdRef.current && currentIdRef.current !== closingId) {
+            return;
+          }
+          unset();
+        });
+        return () => {
+          if (openRef.current || currentIdRef.current !== closingId) {
+            timeout.clear();
+          }
+        };
+      }
+      unset();
+    }
+    return void 0;
+  }, [open, floatingId, currentIdRef, delayRef, timeoutMs, initialDelayRef, currentContextRef, timeout, store3]);
+  useIsoLayoutEffect(() => {
+    if (!open) {
+      return;
+    }
+    const prevContext = currentContextRef.current;
+    const prevId = currentIdRef.current;
+    timeout.clear();
+    currentContextRef.current = {
+      onOpenChange: store3.setOpen,
+      setIsInstantPhase
+    };
+    currentIdRef.current = floatingId;
+    delayRef.current = {
+      open: 0,
+      close: getDelay(initialDelayRef.current, "close")
+    };
+    if (prevId !== null && prevId !== floatingId) {
+      setIsInstantPhase(true);
+      prevContext?.setIsInstantPhase(true);
+      prevContext?.onOpenChange(false, createChangeEventDetails(reason_parts_exports.none));
+    } else {
+      setIsInstantPhase(false);
+      prevContext?.setIsInstantPhase(false);
+    }
+  }, [open, floatingId, store3, currentIdRef, delayRef, initialDelayRef, currentContextRef, timeout]);
+  useIsoLayoutEffect(() => {
+    return () => {
+      if (currentIdRef.current === floatingId) {
+        currentContextRef.current = null;
+        if (!openRef.current) {
+          return;
+        }
+        currentIdRef.current = null;
+        resetDelayRef(delayRef, initialDelayRef);
+        timeout.clear();
+      }
+    };
+  }, [currentContextRef, currentIdRef, delayRef, floatingId, initialDelayRef, timeout]);
+  return React24.useMemo(() => ({
+    hasProvider,
+    delayRef,
+    isInstantPhase
+  }), [hasProvider, delayRef, isInstantPhase]);
+}
+
+// node_modules/@base-ui/utils/mergeCleanups.mjs
+function mergeCleanups(...cleanups) {
+  return () => {
+    for (let i2 = 0; i2 < cleanups.length; i2 += 1) {
+      const cleanup = cleanups[i2];
+      if (cleanup) {
+        cleanup();
+      }
+    }
+  };
+}
+
+// node_modules/@base-ui/react/utils/FocusGuard.mjs
+var React25 = __toESM(require_react(), 1);
+
+// node_modules/@base-ui/utils/visuallyHidden.mjs
+var visuallyHiddenBase = {
+  clipPath: "inset(50%)",
+  overflow: "hidden",
+  whiteSpace: "nowrap",
+  border: 0,
+  padding: 0,
+  width: 1,
+  height: 1,
+  margin: -1
+};
+var visuallyHidden = {
+  ...visuallyHiddenBase,
+  position: "fixed",
+  top: 0,
+  left: 0
+};
+var visuallyHiddenInput = {
+  ...visuallyHiddenBase,
+  position: "absolute"
+};
+
+// node_modules/@base-ui/react/utils/FocusGuard.mjs
+var import_jsx_runtime3 = __toESM(require_jsx_runtime(), 1);
+var FocusGuard = /* @__PURE__ */ React25.forwardRef(function FocusGuard2(props, ref) {
+  const [role, setRole] = React25.useState();
+  useIsoLayoutEffect(() => {
+    if (parts_exports.screenReader.voiceOver && parts_exports.engine.webkit) {
+      setRole("button");
+    }
+  }, []);
+  const restProps = {
+    tabIndex: 0,
+    // Role is only for VoiceOver
+    role
+  };
+  return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", {
+    ...props,
+    ref,
+    style: visuallyHidden,
+    "aria-hidden": role ? void 0 : true,
+    ...restProps,
+    "data-base-ui-focus-guard": ""
+  });
+});
+if (true) FocusGuard.displayName = "FocusGuard";
 
 // node_modules/@floating-ui/utils/dist/floating-ui.utils.mjs
 var sides = ["top", "right", "bottom", "left"];
@@ -2196,7 +3195,48 @@ function rectToClientRect(rect) {
   };
 }
 
-// node_modules/@base-ui/react/esm/floating-ui-react/utils/composite.js
+// node_modules/@base-ui/react/floating-ui-react/utils/composite.mjs
+function isIndexOutOfListBounds(list, index2) {
+  return index2 < 0 || index2 >= list.length;
+}
+function getMinListIndex(listRef, disabledIndices) {
+  return findNonDisabledListIndex(listRef.current, {
+    disabledIndices
+  });
+}
+function getMaxListIndex(listRef, disabledIndices) {
+  return findNonDisabledListIndex(listRef.current, {
+    decrement: true,
+    startingIndex: listRef.current.length,
+    disabledIndices
+  });
+}
+function findNonDisabledListIndex(list, {
+  startingIndex = -1,
+  decrement = false,
+  disabledIndices,
+  amount = 1
+} = {}) {
+  let index2 = startingIndex;
+  do {
+    index2 += decrement ? -amount : amount;
+  } while (index2 >= 0 && index2 <= list.length - 1 && isListIndexDisabled(list, index2, disabledIndices));
+  return index2;
+}
+function isListIndexDisabled(list, index2, disabledIndices) {
+  const isExplicitlyDisabled = typeof disabledIndices === "function" ? disabledIndices(index2) : disabledIndices?.includes(index2) ?? false;
+  if (isExplicitlyDisabled) {
+    return true;
+  }
+  const element = list[index2];
+  if (!element) {
+    return false;
+  }
+  if (!isElementVisible(element)) {
+    return true;
+  }
+  return !disabledIndices && (element.hasAttribute("disabled") || element.getAttribute("aria-disabled") === "true");
+}
 function isHiddenByStyles(styles) {
   return styles.visibility === "hidden" || styles.visibility === "collapse";
 }
@@ -2210,12 +3250,7 @@ function isElementVisible(element, styles = element ? getComputedStyle2(element)
   return styles.display !== "none" && styles.display !== "contents";
 }
 
-// node_modules/@base-ui/utils/esm/owner.js
-function ownerDocument(node) {
-  return node?.ownerDocument || document;
-}
-
-// node_modules/@base-ui/react/esm/floating-ui-react/utils/tabbable.js
+// node_modules/@base-ui/react/floating-ui-react/utils/tabbable.mjs
 var CANDIDATE_SELECTOR = 'a[href],button,input,select,textarea,summary,details,iframe,object,embed,[tabindex],[contenteditable]:not([contenteditable="false"]),audio[controls],video[controls]';
 function getParentElement(element) {
   const assignedSlot = element.assignedSlot;
@@ -2383,709 +3418,22 @@ function enableFocusInside(container) {
   });
 }
 
-// node_modules/@base-ui/react/esm/collapsible/panel/useCollapsiblePanel.js
-var React19 = __toESM(require_react(), 1);
-
-// node_modules/@base-ui/utils/esm/addEventListener.js
-function addEventListener(target, type, listener, options) {
-  target.addEventListener(type, listener, options);
-  return () => {
-    target.removeEventListener(type, listener, options);
-  };
+// node_modules/@base-ui/react/floating-ui-react/utils/nodes.mjs
+function getNodeChildren(nodes, id, onlyOpenChildren = true) {
+  const directChildren = nodes.filter((node) => node.parentId === id);
+  return directChildren.flatMap((child) => [...!onlyOpenChildren || child.context?.open ? [child] : [], ...getNodeChildren(nodes, child.id, onlyOpenChildren)]);
 }
 
-// node_modules/@base-ui/utils/esm/useValueAsRef.js
-function useValueAsRef(value) {
-  const latest = useRefWithInit(createLatestRef, value).current;
-  latest.next = value;
-  useIsoLayoutEffect(latest.effect);
-  return latest;
-}
-function createLatestRef(value) {
-  const latest = {
-    current: value,
-    next: value,
-    effect: () => {
-      latest.current = latest.next;
-    }
-  };
-  return latest;
-}
-
-// node_modules/@base-ui/react/esm/internals/useOpenChangeComplete.js
-var React18 = __toESM(require_react(), 1);
-
-// node_modules/@base-ui/react/esm/internals/useAnimationsFinished.js
-var ReactDOM = __toESM(require_react_dom(), 1);
-
-// node_modules/@base-ui/react/esm/utils/resolveRef.js
-function resolveRef(maybeRef) {
-  if (maybeRef == null) {
-    return maybeRef;
-  }
-  return "current" in maybeRef ? maybeRef.current : maybeRef;
-}
-
-// node_modules/@base-ui/react/esm/internals/useAnimationsFinished.js
-function useAnimationsFinished(elementOrRef, waitForStartingStyleRemoved = false, treatAbortedAsFinished = true) {
-  const frame = useAnimationFrame();
-  return useStableCallback((fnToExecute, signal = null) => {
-    frame.cancel();
-    const element = resolveRef(elementOrRef);
-    if (element == null) {
-      return;
-    }
-    const resolvedElement = element;
-    const done = () => {
-      ReactDOM.flushSync(fnToExecute);
-    };
-    if (typeof resolvedElement.getAnimations !== "function" || globalThis.BASE_UI_ANIMATIONS_DISABLED) {
-      fnToExecute();
-      return;
-    }
-    function exec() {
-      Promise.all(resolvedElement.getAnimations().map((animation) => animation.finished)).then(() => {
-        if (!signal?.aborted) {
-          done();
-        }
-      }).catch(() => {
-        if (treatAbortedAsFinished) {
-          if (!signal?.aborted) {
-            done();
-          }
-          return;
-        }
-        const currentAnimations = resolvedElement.getAnimations();
-        if (!signal?.aborted && currentAnimations.length > 0 && currentAnimations.some((animation) => animation.pending || animation.playState !== "finished")) {
-          exec();
-        }
-      });
-    }
-    if (waitForStartingStyleRemoved) {
-      const startingStyleAttribute = TransitionStatusDataAttributes.startingStyle;
-      if (!resolvedElement.hasAttribute(startingStyleAttribute)) {
-        frame.request(exec);
-        return;
-      }
-      const attributeObserver = new MutationObserver(() => {
-        if (!resolvedElement.hasAttribute(startingStyleAttribute)) {
-          attributeObserver.disconnect();
-          exec();
-        }
-      });
-      attributeObserver.observe(resolvedElement, {
-        attributes: true,
-        attributeFilter: [startingStyleAttribute]
-      });
-      signal?.addEventListener("abort", () => attributeObserver.disconnect(), {
-        once: true
-      });
-      return;
-    }
-    frame.request(exec);
-  });
-}
-
-// node_modules/@base-ui/react/esm/internals/useOpenChangeComplete.js
-function useOpenChangeComplete(parameters) {
-  const {
-    enabled = true,
-    open,
-    ref,
-    onComplete: onCompleteParam
-  } = parameters;
-  const onComplete = useStableCallback(onCompleteParam);
-  const runOnceAnimationsFinish = useAnimationsFinished(ref, open, false);
-  React18.useEffect(() => {
-    if (!enabled) {
-      return void 0;
-    }
-    const abortController = new AbortController();
-    runOnceAnimationsFinish(onComplete, abortController.signal);
-    return () => {
-      abortController.abort();
-    };
-  }, [enabled, open, onComplete, runOnceAnimationsFinish]);
-}
-
-// node_modules/@base-ui/react/esm/collapsible/panel/useCollapsiblePanel.js
-var EMPTY_DIMENSIONS = {
-  height: void 0,
-  width: void 0
-};
-function useCollapsiblePanel(parameters) {
-  const {
-    externalRef,
-    hiddenUntilFound,
-    id: idParam,
-    keepMounted,
-    mounted,
-    onOpenChange,
-    open,
-    setMounted,
-    setOpen,
-    transitionStatus
-  } = parameters;
-  const panelRef = React19.useRef(null);
-  const animationTypeRef = React19.useRef(null);
-  const [dimensions, setDimensionsUnwrapped] = React19.useState(EMPTY_DIMENSIONS);
-  const lastMeasuredDimensionsRef = React19.useRef(EMPTY_DIMENSIONS);
-  const shouldSkipNextOpenRef = React19.useRef(false);
-  const shouldPreventMountAnimationRef = React19.useRef(open);
-  const shouldPreventActivityResumeAnimationRef = React19.useRef(false);
-  const [forcePanelIdle, setForcePanelIdle] = React19.useState(false);
-  const pendingTemporaryStyleRestoreRef = React19.useRef(null);
-  const mergedPanelRef = useMergedRefs(externalRef, panelRef);
-  const latestStateRef = useValueAsRef({
-    mounted,
-    open
-  });
-  const runOnceCloseAnimationsFinish = useAnimationsFinished(panelRef, false, false);
-  const hidden = !open && !mounted;
-  const panelTransitionStatus = forcePanelIdle ? "idle" : transitionStatus;
-  const shouldPreventOpenAnimation = open && // These 2 refs are safe to read in render, they are only written from committed
-  // layout/effect paths and gate one-shot motion suppression for the next open
-  // lifecycle. They intentionally expose the last committed motion snapshot.
-  (shouldPreventMountAnimationRef.current || shouldPreventActivityResumeAnimationRef.current);
-  const renderedDimensions = !open && mounted && // These 2 refs are also safe to read in render, both hold the last committed
-  // animation mode and measurement. This fallback only restores a previously
-  // measured pixel size after the live dimensions state has been reset back to `auto`.
-  animationTypeRef.current === "css-animation" && dimensions.height === void 0 && dimensions.width === void 0 ? lastMeasuredDimensionsRef.current : dimensions;
-  const shouldPersistHiddenTransitionStyles = hiddenUntilFound && hidden && animationTypeRef.current !== "css-animation";
-  const setDimensions = useStableCallback((nextDimensions, shouldCacheMeasurement = true) => {
-    if (shouldCacheMeasurement) {
-      lastMeasuredDimensionsRef.current = nextDimensions;
-    }
-    setDimensionsUnwrapped(nextDimensions);
-  });
-  const restorePendingTemporaryStyle = useStableCallback(() => {
-    pendingTemporaryStyleRestoreRef.current?.();
-    pendingTemporaryStyleRestoreRef.current = null;
-  });
-  const setPendingTemporaryStyleRestore = useStableCallback((restore) => {
-    restorePendingTemporaryStyle();
-    pendingTemporaryStyleRestoreRef.current = () => {
-      pendingTemporaryStyleRestoreRef.current = null;
-      restore();
-    };
-  });
-  const markActivityResumeAnimationSuppressed = useStableCallback(() => {
-    if (open && mounted && animationTypeRef.current === "css-animation") {
-      shouldPreventActivityResumeAnimationRef.current = true;
-    }
-  });
-  useIsoLayoutEffect(() => {
-    if (!forcePanelIdle || transitionStatus === "starting") {
-      return;
-    }
-    setForcePanelIdle(false);
-  }, [forcePanelIdle, transitionStatus]);
-  React19.useEffect(() => {
-    return () => {
-      markActivityResumeAnimationSuppressed();
-      restorePendingTemporaryStyle();
-    };
-  }, [markActivityResumeAnimationSuppressed, restorePendingTemporaryStyle]);
-  useIsoLayoutEffect(() => {
-    const panel = panelRef.current;
-    if (!panel) {
-      return void 0;
-    }
-    if (!open && pendingTemporaryStyleRestoreRef.current) {
-      restorePendingTemporaryStyle();
-    }
-    const animationType = getAnimationType(panel, shouldPreventOpenAnimation);
-    animationTypeRef.current = animationType;
-    if (open && transitionStatus === "idle" && shouldPreventMountAnimationRef.current && animationType === "css-animation") {
-      lastMeasuredDimensionsRef.current = getDimensions(panel);
-      return void 0;
-    }
-    if (open && transitionStatus === "starting") {
-      const skipNextOpen = shouldSkipNextOpenRef.current;
-      shouldSkipNextOpenRef.current = false;
-      if (animationType === "none") {
-        setDimensions(getDimensions(panel));
-        setForcePanelIdle(true);
-        return void 0;
-      }
-      if (animationType === "css-transition") {
-        const restoreLayoutStyles = resetLayoutStyles(panel);
-        setDimensions(getDimensions(panel));
-        if (!skipNextOpen) {
-          return restoreLayoutStyles;
-        }
-        const restoreTransitionDuration = setTemporaryStyle(panel, "transition-duration", "0s");
-        setPendingTemporaryStyleRestore(restoreTransitionDuration);
-        setForcePanelIdle(true);
-        return restoreLayoutStyles;
-      }
-      if (animationType === "css-animation") {
-        setDimensions(getDimensions(panel));
-        if (!skipNextOpen) {
-          const restoreAnimationName2 = setTemporaryStyle(panel, "animation-name", "none");
-          restoreAnimationName2();
-          return void 0;
-        }
-        const restoreAnimationName = setTemporaryStyle(panel, "animation-name", "none");
-        const restoreAnimationDuration = setTemporaryStyle(panel, "animation-duration", "0s");
-        restoreAnimationName();
-        setPendingTemporaryStyleRestore(restoreAnimationDuration);
-        setForcePanelIdle(true);
-        return void 0;
-      }
-    }
-    if (!open && mounted && (transitionStatus === "idle" || transitionStatus === "starting")) {
-      if (animationType === "none") {
-        setDimensions(EMPTY_DIMENSIONS, false);
-        setMounted(false);
-        return void 0;
-      }
-      if (animationType === "css-animation") {
-        shouldPreventMountAnimationRef.current = false;
-        shouldPreventActivityResumeAnimationRef.current = false;
-      }
-      setDimensions(getDimensions(panel));
-      return void 0;
-    }
-    if (transitionStatus !== "ending") {
-      return void 0;
-    }
-    if (animationType === "none") {
-      setMounted(false);
-      return void 0;
-    }
-    const nextDimensions = getDimensions(panel);
-    const hasMeasuredSize = (nextDimensions.height ?? 0) > 0 || (nextDimensions.width ?? 0) > 0;
-    if (!hasMeasuredSize) {
-      setMounted(false);
-      return void 0;
-    }
-    setDimensions(nextDimensions);
-    if (animationType === "css-animation") {
-      const restoreAnimationName = setTemporaryStyle(panel, "animation-name", "none");
-      restoreAnimationName();
-    }
-    return void 0;
-  }, [mounted, open, restorePendingTemporaryStyle, setDimensions, setMounted, setPendingTemporaryStyleRestore, shouldPreventOpenAnimation, transitionStatus]);
-  useOpenChangeComplete({
-    enabled: open && mounted && panelTransitionStatus === "idle",
-    open: true,
-    ref: panelRef,
-    onComplete() {
-      if (!open) {
-        return;
-      }
-      setDimensions(EMPTY_DIMENSIONS, false);
-    }
-  });
-  React19.useEffect(() => {
-    if (open || !mounted || panelTransitionStatus !== "ending") {
-      return void 0;
-    }
-    const panel = panelRef.current;
-    if (!panel) {
-      return void 0;
-    }
-    const abortController = new AbortController();
-    let endingStyleFrame = -1;
-    function handleComplete() {
-      if (latestStateRef.current.open) {
-        return;
-      }
-      setMounted(false);
-      setDimensions(EMPTY_DIMENSIONS, false);
-    }
-    endingStyleFrame = AnimationFrame.request(() => {
-      if (!abortController.signal.aborted) {
-        runOnceCloseAnimationsFinish(handleComplete, abortController.signal);
-      }
-    });
-    return () => {
-      AnimationFrame.cancel(endingStyleFrame);
-      abortController.abort();
-    };
-  }, [latestStateRef, mounted, open, panelTransitionStatus, runOnceCloseAnimationsFinish, setDimensions, setMounted]);
-  useIsoLayoutEffect(() => {
-    const panel = panelRef.current;
-    if (!panel || !hiddenUntilFound || !hidden) {
-      return;
-    }
-    panel.setAttribute("hidden", "until-found");
-  }, [hidden, hiddenUntilFound]);
-  React19.useEffect(function registerBeforeMatchListener() {
-    const panel = panelRef.current;
-    if (!panel) {
-      return void 0;
-    }
-    function handleBeforeMatch(event) {
-      shouldSkipNextOpenRef.current = true;
-      setOpen(true);
-      onOpenChange(true, createChangeEventDetails(reason_parts_exports.none, event));
-    }
-    return addEventListener(panel, "beforematch", handleBeforeMatch);
-  }, [onOpenChange, setOpen]);
-  const shouldRender = keepMounted || hiddenUntilFound || mounted || open;
-  return {
-    height: renderedDimensions.height,
-    props: {
-      ...shouldPersistHiddenTransitionStyles ? {
-        [CollapsiblePanelDataAttributes.startingStyle]: ""
-      } : void 0,
-      hidden,
-      id: idParam
-    },
-    ref: mergedPanelRef,
-    shouldPreventOpenAnimation,
-    shouldRender,
-    transitionStatus: panelTransitionStatus,
-    width: renderedDimensions.width
-  };
-}
-function getDimensions(element) {
-  return {
-    height: element.scrollHeight,
-    width: element.scrollWidth
-  };
-}
-function getAnimationType(element, hasSuppressedMountAnimation = false) {
-  const panelStyles = getWindow(element).getComputedStyle(element);
-  const hasAnimation = (panelStyles.animationName.split(",").map((name) => name.trim()).some((name) => name !== "" && name !== "none") || hasSuppressedMountAnimation) && hasNonZeroDuration(panelStyles.animationDuration);
-  const hasTransition = hasNonZeroDuration(panelStyles.transitionDuration);
-  if (hasAnimation && hasTransition) {
-    if (true) {
-      warn("CSS transitions and CSS animations both detected on Collapsible or Accordion panel.", "Only one of either animation type should be used.");
-    }
-    return "css-transition";
-  }
-  if (hasTransition) {
-    return "css-transition";
-  }
-  if (hasAnimation) {
-    return "css-animation";
-  }
-  return "none";
-}
-function hasNonZeroDuration(value) {
-  return value.split(",").map((part) => part.trim()).some((part) => part !== "" && Number.parseFloat(part) > 0);
-}
-function setTemporaryStyle(element, property, value) {
-  const previousValue = element.style.getPropertyValue(property);
-  const previousPriority = element.style.getPropertyPriority(property);
-  element.style.setProperty(property, value);
-  return () => {
-    if (previousValue === "") {
-      element.style.removeProperty(property);
-      return;
-    }
-    element.style.setProperty(property, previousValue, previousPriority);
-  };
-}
-function resetLayoutStyles(element) {
-  const originalLayoutStyles = {
-    "justify-content": element.style.justifyContent,
-    "align-items": element.style.alignItems,
-    "align-content": element.style.alignContent,
-    "justify-items": element.style.justifyItems
-  };
-  Object.keys(originalLayoutStyles).forEach((key) => {
-    element.style.setProperty(key, "initial", "important");
-  });
-  function restoreLayoutStyles() {
-    Object.entries(originalLayoutStyles).forEach(([key, value]) => {
-      if (value === "") {
-        element.style.removeProperty(key);
-        return;
-      }
-      element.style.setProperty(key, value);
-    });
-  }
-  const frame = AnimationFrame.request(restoreLayoutStyles);
-  return () => {
-    AnimationFrame.cancel(frame);
-    restoreLayoutStyles();
-  };
-}
-
-// node_modules/@base-ui/utils/esm/useOnFirstRender.js
-var React20 = __toESM(require_react(), 1);
-function useOnFirstRender(fn) {
-  const ref = React20.useRef(true);
-  if (ref.current) {
-    ref.current = false;
-    fn();
-  }
-}
-
-// node_modules/@base-ui/utils/esm/useTimeout.js
-var EMPTY3 = 0;
-var Timeout = class _Timeout {
-  static create() {
-    return new _Timeout();
-  }
-  currentId = EMPTY3;
-  /**
-   * Executes `fn` after `delay`, clearing any previously scheduled call.
-   */
-  start(delay, fn) {
-    this.clear();
-    this.currentId = setTimeout(() => {
-      this.currentId = EMPTY3;
-      fn();
-    }, delay);
-  }
-  isStarted() {
-    return this.currentId !== EMPTY3;
-  }
-  clear = () => {
-    if (this.currentId !== EMPTY3) {
-      clearTimeout(this.currentId);
-      this.currentId = EMPTY3;
-    }
-  };
-  disposeEffect = () => {
-    return this.clear;
-  };
-};
-function useTimeout() {
-  const timeout = useRefWithInit(Timeout.create).current;
-  useOnMount(timeout.disposeEffect);
-  return timeout;
-}
-
-// node_modules/@base-ui/react/esm/floating-ui-react/components/FloatingDelayGroup.js
-var React21 = __toESM(require_react(), 1);
-
-// node_modules/@base-ui/react/esm/floating-ui-react/hooks/useHoverShared.js
-function resolveValue(value, pointerType) {
-  if (pointerType != null && !isMouseLikePointerType(pointerType)) {
-    return 0;
-  }
-  if (typeof value === "function") {
-    return value();
-  }
-  return value;
-}
-function getDelay(value, prop, pointerType) {
-  const result = resolveValue(value, pointerType);
-  if (typeof result === "number") {
-    return result;
-  }
-  return result?.[prop];
-}
-function getRestMs(value) {
-  if (typeof value === "function") {
-    return value();
-  }
-  return value;
-}
-function isClickLikeOpenEvent(openEventType, interactedInside) {
-  return interactedInside || openEventType === "click" || openEventType === "mousedown";
-}
-function isHoverOpenEvent(openEventType) {
-  return openEventType?.includes("mouse") && openEventType !== "mousedown";
-}
-
-// node_modules/@base-ui/react/esm/floating-ui-react/components/FloatingDelayGroup.js
-var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
-var FloatingDelayGroupContext = /* @__PURE__ */ React21.createContext({
-  hasProvider: false,
-  timeoutMs: 0,
-  delayRef: {
-    current: 0
-  },
-  initialDelayRef: {
-    current: 0
-  },
-  timeout: new Timeout(),
-  currentIdRef: {
-    current: null
-  },
-  currentContextRef: {
-    current: null
-  }
-});
-if (true) FloatingDelayGroupContext.displayName = "FloatingDelayGroupContext";
-function FloatingDelayGroup(props) {
-  const {
-    children,
-    delay,
-    timeoutMs = 0
-  } = props;
-  const delayRef = React21.useRef(delay);
-  const initialDelayRef = React21.useRef(delay);
-  const currentIdRef = React21.useRef(null);
-  const currentContextRef = React21.useRef(null);
-  const timeout = useTimeout();
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FloatingDelayGroupContext.Provider, {
-    value: React21.useMemo(() => ({
-      hasProvider: true,
-      delayRef,
-      initialDelayRef,
-      currentIdRef,
-      timeoutMs,
-      currentContextRef,
-      timeout
-    }), [timeoutMs, timeout]),
-    children
-  });
-}
-function useDelayGroup(context, options = {
-  open: false
-}) {
-  const {
-    open
-  } = options;
-  const store3 = "rootStore" in context ? context.rootStore : context;
-  const floatingId = store3.useState("floatingId");
-  const groupContext = React21.useContext(FloatingDelayGroupContext);
-  const {
-    currentIdRef,
-    delayRef,
-    timeoutMs,
-    initialDelayRef,
-    currentContextRef,
-    hasProvider,
-    timeout
-  } = groupContext;
-  const [isInstantPhase, setIsInstantPhase] = React21.useState(false);
-  useIsoLayoutEffect(() => {
-    function unset() {
-      setIsInstantPhase(false);
-      currentContextRef.current?.setIsInstantPhase(false);
-      currentIdRef.current = null;
-      currentContextRef.current = null;
-      delayRef.current = initialDelayRef.current;
-    }
-    if (!currentIdRef.current) {
-      return void 0;
-    }
-    if (!open && currentIdRef.current === floatingId) {
-      setIsInstantPhase(false);
-      if (timeoutMs) {
-        const closingId = floatingId;
-        timeout.start(timeoutMs, () => {
-          if (store3.select("open") || currentIdRef.current && currentIdRef.current !== closingId) {
-            return;
-          }
-          unset();
-        });
-        return () => {
-          timeout.clear();
-        };
-      }
-      unset();
-    }
-    return void 0;
-  }, [open, floatingId, currentIdRef, delayRef, timeoutMs, initialDelayRef, currentContextRef, timeout, store3]);
-  useIsoLayoutEffect(() => {
-    if (!open) {
-      return;
-    }
-    const prevContext = currentContextRef.current;
-    const prevId = currentIdRef.current;
-    timeout.clear();
-    currentContextRef.current = {
-      onOpenChange: store3.setOpen,
-      setIsInstantPhase
-    };
-    currentIdRef.current = floatingId;
-    delayRef.current = {
-      open: 0,
-      close: getDelay(initialDelayRef.current, "close")
-    };
-    if (prevId !== null && prevId !== floatingId) {
-      setIsInstantPhase(true);
-      prevContext?.setIsInstantPhase(true);
-      prevContext?.onOpenChange(false, createChangeEventDetails(reason_parts_exports.none));
-    } else {
-      setIsInstantPhase(false);
-      prevContext?.setIsInstantPhase(false);
-    }
-  }, [open, floatingId, store3, currentIdRef, delayRef, initialDelayRef, currentContextRef, timeout]);
-  useIsoLayoutEffect(() => {
-    return () => {
-      currentContextRef.current = null;
-    };
-  }, [currentContextRef]);
-  return React21.useMemo(() => ({
-    hasProvider,
-    delayRef,
-    isInstantPhase
-  }), [hasProvider, delayRef, isInstantPhase]);
-}
-
-// node_modules/@base-ui/utils/esm/mergeCleanups.js
-function mergeCleanups(...cleanups) {
-  return () => {
-    for (let i2 = 0; i2 < cleanups.length; i2 += 1) {
-      const cleanup = cleanups[i2];
-      if (cleanup) {
-        cleanup();
-      }
-    }
-  };
-}
-
-// node_modules/@base-ui/react/esm/utils/FocusGuard.js
-var React22 = __toESM(require_react(), 1);
-
-// node_modules/@base-ui/utils/esm/visuallyHidden.js
-var visuallyHiddenBase = {
-  clipPath: "inset(50%)",
-  overflow: "hidden",
-  whiteSpace: "nowrap",
-  border: 0,
-  padding: 0,
-  width: 1,
-  height: 1,
-  margin: -1
-};
-var visuallyHidden = {
-  ...visuallyHiddenBase,
-  position: "fixed",
-  top: 0,
-  left: 0
-};
-var visuallyHiddenInput = {
-  ...visuallyHiddenBase,
-  position: "absolute"
-};
-
-// node_modules/@base-ui/react/esm/utils/FocusGuard.js
-var import_jsx_runtime2 = __toESM(require_jsx_runtime(), 1);
-var FocusGuard = /* @__PURE__ */ React22.forwardRef(function FocusGuard2(props, ref) {
-  const [role, setRole] = React22.useState();
-  useIsoLayoutEffect(() => {
-    if (isSafari) {
-      setRole("button");
-    }
-  }, []);
-  const restProps = {
-    tabIndex: 0,
-    // Role is only for VoiceOver
-    role
-  };
-  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", {
-    ...props,
-    ref,
-    style: visuallyHidden,
-    "aria-hidden": role ? void 0 : true,
-    ...restProps,
-    "data-base-ui-focus-guard": ""
-  });
-});
-if (true) FocusGuard.displayName = "FocusGuard";
-
-// node_modules/@base-ui/react/esm/floating-ui-react/utils/createAttribute.js
+// node_modules/@base-ui/react/floating-ui-react/utils/createAttribute.mjs
 function createAttribute(name) {
   return `data-base-ui-${name}`;
 }
 
-// node_modules/@base-ui/react/esm/floating-ui-react/components/FloatingPortal.js
-var React23 = __toESM(require_react(), 1);
+// node_modules/@base-ui/react/floating-ui-react/components/FloatingPortal.mjs
+var React26 = __toESM(require_react(), 1);
 var ReactDOM2 = __toESM(require_react_dom(), 1);
 
-// node_modules/@base-ui/react/esm/internals/constants.js
+// node_modules/@base-ui/react/internals/constants.mjs
 var DISABLED_TRANSITIONS_STYLE = {
   style: {
     transition: "none"
@@ -3105,11 +3453,11 @@ var ownerVisuallyHidden = {
   left: 0
 };
 
-// node_modules/@base-ui/react/esm/floating-ui-react/components/FloatingPortal.js
-var import_jsx_runtime3 = __toESM(require_jsx_runtime(), 1);
-var PortalContext = /* @__PURE__ */ React23.createContext(null);
+// node_modules/@base-ui/react/floating-ui-react/components/FloatingPortal.mjs
+var import_jsx_runtime4 = __toESM(require_jsx_runtime(), 1);
+var PortalContext = /* @__PURE__ */ React26.createContext(null);
 if (true) PortalContext.displayName = "PortalContext";
-var usePortalContext = () => React23.useContext(PortalContext);
+var usePortalContext = () => React26.useContext(PortalContext);
 var attr = createAttribute("portal");
 function useFloatingPortalNode(props = {}) {
   const {
@@ -3121,14 +3469,14 @@ function useFloatingPortalNode(props = {}) {
   const uniqueId = useId();
   const portalContext = usePortalContext();
   const parentPortalNode = portalContext?.portalNode;
-  const [containerElement, setContainerElement] = React23.useState(null);
-  const [portalNode, setPortalNode] = React23.useState(null);
+  const [containerElement, setContainerElement] = React26.useState(null);
+  const [portalNode, setPortalNode] = React26.useState(null);
   const setPortalNodeRef = useStableCallback((node) => {
     if (node !== null) {
       setPortalNode(node);
     }
   });
-  const containerRef = React23.useRef(null);
+  const containerRef = React26.useRef(null);
   useIsoLayoutEffect(() => {
     if (containerProp === null) {
       if (containerRef.current) {
@@ -3169,7 +3517,7 @@ function useFloatingPortalNode(props = {}) {
     portalSubtree
   };
 }
-var FloatingPortal = /* @__PURE__ */ React23.forwardRef(function FloatingPortal2(componentProps, forwardedRef) {
+var FloatingPortal = /* @__PURE__ */ React26.forwardRef(function FloatingPortal2(componentProps, forwardedRef) {
   const {
     render: render4,
     className,
@@ -3188,16 +3536,16 @@ var FloatingPortal = /* @__PURE__ */ React23.forwardRef(function FloatingPortal2
     componentProps,
     elementProps
   });
-  const beforeOutsideRef = React23.useRef(null);
-  const afterOutsideRef = React23.useRef(null);
-  const beforeInsideRef = React23.useRef(null);
-  const afterInsideRef = React23.useRef(null);
-  const [focusManagerState, setFocusManagerState] = React23.useState(null);
-  const focusInsideDisabledRef = React23.useRef(false);
+  const beforeOutsideRef = React26.useRef(null);
+  const afterOutsideRef = React26.useRef(null);
+  const beforeInsideRef = React26.useRef(null);
+  const afterInsideRef = React26.useRef(null);
+  const [focusManagerState, setFocusManagerState] = React26.useState(null);
+  const focusInsideDisabledRef = React26.useRef(false);
   const modal = focusManagerState?.modal;
   const open = focusManagerState?.open;
   const shouldRenderGuards = typeof renderGuards === "boolean" ? renderGuards : !!focusManagerState && !focusManagerState.modal && focusManagerState.open && !!portalNode;
-  React23.useEffect(() => {
+  React26.useEffect(() => {
     if (!portalNode || modal) {
       return void 0;
     }
@@ -3216,14 +3564,14 @@ var FloatingPortal = /* @__PURE__ */ React23.forwardRef(function FloatingPortal2
     }
     return mergeCleanups(addEventListener(portalNode, "focusin", onFocus, true), addEventListener(portalNode, "focusout", onFocus, true));
   }, [portalNode, modal]);
-  React23.useEffect(() => {
-    if (!portalNode || open !== false) {
+  useIsoLayoutEffect(() => {
+    if (!portalNode || open !== true || !focusInsideDisabledRef.current) {
       return;
     }
     enableFocusInside(portalNode);
     focusInsideDisabledRef.current = false;
   }, [open, portalNode]);
-  const portalContextValue = React23.useMemo(() => ({
+  const portalContextValue = React26.useMemo(() => ({
     beforeOutsideRef,
     afterOutsideRef,
     beforeInsideRef,
@@ -3231,10 +3579,10 @@ var FloatingPortal = /* @__PURE__ */ React23.forwardRef(function FloatingPortal2
     portalNode,
     setFocusManagerState
   }), [portalNode]);
-  return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(React23.Fragment, {
-    children: [portalSubtree, /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(PortalContext.Provider, {
+  return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(React26.Fragment, {
+    children: [portalSubtree, /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(PortalContext.Provider, {
       value: portalContextValue,
-      children: [shouldRenderGuards && portalNode && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(FocusGuard, {
+      children: [shouldRenderGuards && portalNode && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(FocusGuard, {
         "data-type": "outside",
         ref: beforeOutsideRef,
         onFocus: (event) => {
@@ -3246,10 +3594,10 @@ var FloatingPortal = /* @__PURE__ */ React23.forwardRef(function FloatingPortal2
             prevTabbable?.focus();
           }
         }
-      }), shouldRenderGuards && portalNode && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", {
+      }), shouldRenderGuards && portalNode && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", {
         "aria-owns": portalNode.id,
         style: ownerVisuallyHidden
-      }), portalNode && /* @__PURE__ */ ReactDOM2.createPortal(children, portalNode), shouldRenderGuards && portalNode && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(FocusGuard, {
+      }), portalNode && /* @__PURE__ */ ReactDOM2.createPortal(children, portalNode), shouldRenderGuards && portalNode && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(FocusGuard, {
         "data-type": "outside",
         ref: afterOutsideRef,
         onFocus: (event) => {
@@ -3270,10 +3618,10 @@ var FloatingPortal = /* @__PURE__ */ React23.forwardRef(function FloatingPortal2
 });
 if (true) FloatingPortal.displayName = "FloatingPortal";
 
-// node_modules/@base-ui/react/esm/floating-ui-react/components/FloatingTree.js
-var React24 = __toESM(require_react(), 1);
+// node_modules/@base-ui/react/floating-ui-react/components/FloatingTree.mjs
+var React27 = __toESM(require_react(), 1);
 
-// node_modules/@base-ui/react/esm/floating-ui-react/utils/createEventEmitter.js
+// node_modules/@base-ui/react/floating-ui-react/utils/createEventEmitter.mjs
 function createEventEmitter() {
   const map = /* @__PURE__ */ new Map();
   return {
@@ -3292,20 +3640,20 @@ function createEventEmitter() {
   };
 }
 
-// node_modules/@base-ui/react/esm/floating-ui-react/components/FloatingTree.js
-var import_jsx_runtime4 = __toESM(require_jsx_runtime(), 1);
-var FloatingNodeContext = /* @__PURE__ */ React24.createContext(null);
+// node_modules/@base-ui/react/floating-ui-react/components/FloatingTree.mjs
+var import_jsx_runtime5 = __toESM(require_jsx_runtime(), 1);
+var FloatingNodeContext = /* @__PURE__ */ React27.createContext(null);
 if (true) FloatingNodeContext.displayName = "FloatingNodeContext";
-var FloatingTreeContext = /* @__PURE__ */ React24.createContext(null);
+var FloatingTreeContext = /* @__PURE__ */ React27.createContext(null);
 if (true) FloatingTreeContext.displayName = "FloatingTreeContext";
-var useFloatingParentNodeId = () => React24.useContext(FloatingNodeContext)?.id || null;
+var useFloatingParentNodeId = () => React27.useContext(FloatingNodeContext)?.id || null;
 var useFloatingTree = (externalTree) => {
-  const contextTree = React24.useContext(FloatingTreeContext);
+  const contextTree = React27.useContext(FloatingTreeContext);
   return externalTree ?? contextTree;
 };
 
-// node_modules/@base-ui/react/esm/floating-ui-react/hooks/useClientPoint.js
-var React25 = __toESM(require_react(), 1);
+// node_modules/@base-ui/react/floating-ui-react/hooks/useClientPoint.mjs
+var React28 = __toESM(require_react(), 1);
 function createVirtualElement(domElement, data) {
   let offsetX = null;
   let offsetY = null;
@@ -3372,10 +3720,10 @@ function useClientPoint(context, props = {}) {
   const floating = store3.useState("floatingElement");
   const domReference = store3.useState("domReferenceElement");
   const dataRef = store3.context.dataRef;
-  const initialRef = React25.useRef(false);
-  const cleanupListenerRef = React25.useRef(null);
-  const [pointerType, setPointerType] = React25.useState();
-  const [reactive, setReactive] = React25.useState([]);
+  const initialRef = React28.useRef(false);
+  const cleanupListenerRef = React28.useRef(null);
+  const [pointerType, setPointerType] = React28.useState();
+  const [reactive, setReactive] = React28.useState([]);
   const resetReference = useStableCallback((reference2) => {
     store3.set("positionReference", reference2);
   });
@@ -3403,7 +3751,7 @@ function useClientPoint(context, props = {}) {
     }
   });
   const openCheck = isMouseLikePointerType(pointerType) ? floating : open;
-  React25.useEffect(() => {
+  React28.useEffect(() => {
     if (!enabled) {
       resetReference(domReference);
       return void 0;
@@ -3431,20 +3779,20 @@ function useClientPoint(context, props = {}) {
     }
     return cleanupListener;
   }, [openCheck, enabled, floating, dataRef, domReference, store3, setReference, resetReference, reactive]);
-  React25.useEffect(() => () => {
+  React28.useEffect(() => () => {
     store3.set("positionReference", null);
   }, [store3]);
-  React25.useEffect(() => {
+  React28.useEffect(() => {
     if (enabled && !floating) {
       initialRef.current = false;
     }
   }, [enabled, floating]);
-  React25.useEffect(() => {
+  React28.useEffect(() => {
     if (!enabled && open) {
       initialRef.current = true;
     }
   }, [enabled, open]);
-  const reference = React25.useMemo(() => {
+  const reference = React28.useMemo(() => {
     function setPointerTypeRef(event) {
       setPointerType(event.pointerType);
     }
@@ -3455,18 +3803,14 @@ function useClientPoint(context, props = {}) {
       onMouseEnter: handleReferenceEnterOrMove
     };
   }, [handleReferenceEnterOrMove]);
-  return React25.useMemo(() => enabled ? {
+  return React28.useMemo(() => enabled ? {
     reference,
     trigger: reference
   } : {}, [enabled, reference]);
 }
 
-// node_modules/@base-ui/react/esm/floating-ui-react/hooks/useDismiss.js
-var React26 = __toESM(require_react(), 1);
-var bubbleHandlerKeys = {
-  intentional: "onClick",
-  sloppy: "onPointerDown"
-};
+// node_modules/@base-ui/react/floating-ui-react/hooks/useDismiss.mjs
+var React29 = __toESM(require_react(), 1);
 function alwaysFalse() {
   return false;
 }
@@ -3483,7 +3827,6 @@ function useDismiss(context, props = {}) {
     outsidePress: outsidePressProp = true,
     outsidePressEvent = "sloppy",
     referencePress = alwaysFalse,
-    referencePressEvent = "sloppy",
     bubbles,
     externalTree
   } = props;
@@ -3502,12 +3845,12 @@ function useDismiss(context, props = {}) {
     escapeKey: escapeKeyBubbles,
     outsidePress: outsidePressBubbles
   } = normalizeProp(bubbles);
-  const pressStartedInsideRef = React26.useRef(false);
-  const pressStartPreventedRef = React26.useRef(false);
-  const suppressNextOutsideClickRef = React26.useRef(false);
-  const isComposingRef = React26.useRef(false);
-  const currentPointerTypeRef = React26.useRef("");
-  const touchStateRef = React26.useRef(null);
+  const pressStartedInsideRef = React29.useRef(false);
+  const pressStartPreventedRef = React29.useRef(false);
+  const suppressNextOutsideClickRef = React29.useRef(false);
+  const isComposingRef = React29.useRef(false);
+  const currentPointerTypeRef = React29.useRef("");
+  const touchStateRef = React29.useRef(null);
   const cancelDismissOnEndTimeout = useTimeout();
   const clearInsideReactTreeTimeout = useTimeout();
   const clearInsideReactTree = useStableCallback(() => {
@@ -3576,7 +3919,7 @@ function useDismiss(context, props = {}) {
       pressStartPreventedRef.current = true;
     }
   });
-  React26.useEffect(() => {
+  React29.useEffect(() => {
     if (!open || !enabled) {
       return void 0;
     }
@@ -3592,7 +3935,7 @@ function useDismiss(context, props = {}) {
       compositionTimeout.start(
         // 0ms or 1ms don't work in Safari. 5ms appears to consistently work.
         // Only apply to WebKit for the test to remain 0ms.
-        isWebKit() ? 5 : 0,
+        parts_exports.engine.webkit ? 5 : 0,
         () => {
           isComposingRef.current = false;
         }
@@ -3826,15 +4169,13 @@ function useDismiss(context, props = {}) {
       suppressNextOutsideClickRef.current = false;
     };
   }, [dataRef, floatingElement, escapeKey2, outsidePressEnabled, outsidePress2, open, enabled, escapeKeyBubbles, outsidePressBubbles, closeOnEscapeKeyDown, clearInsideReactTree, getOutsidePressEventProp, hasBlockingChild, isEventWithinOwnElements, tree, store3, cancelDismissOnEndTimeout]);
-  React26.useEffect(clearInsideReactTree, [outsidePress2, clearInsideReactTree]);
-  const reference = React26.useMemo(() => ({
+  React29.useEffect(clearInsideReactTree, [outsidePress2, clearInsideReactTree]);
+  const reference = React29.useMemo(() => ({
     onKeyDown: closeOnEscapeKeyDown,
-    [bubbleHandlerKeys[referencePressEvent]]: closeOnReferencePress,
-    ...referencePressEvent !== "intentional" && {
-      onClick: closeOnReferencePress
-    }
-  }), [closeOnEscapeKeyDown, closeOnReferencePress, referencePressEvent]);
-  const floating = React26.useMemo(() => ({
+    onPointerDown: closeOnReferencePress,
+    onClick: closeOnReferencePress
+  }), [closeOnEscapeKeyDown, closeOnReferencePress]);
+  const floating = React29.useMemo(() => ({
     onKeyDown: closeOnEscapeKeyDown,
     // `onMouseDown` may be blocked if `event.preventDefault()` is called in
     // `onPointerDown`, such as with <NumberField.ScrubArea>.
@@ -3854,15 +4195,15 @@ function useDismiss(context, props = {}) {
     onTouchEndCapture: markInsideReactTree,
     onTouchMoveCapture: markInsideReactTree
   }), [closeOnEscapeKeyDown, markInsideReactTree, markPressStartedInsideReactTree, markInsidePressStartPrevented]);
-  return React26.useMemo(() => enabled ? {
+  return React29.useMemo(() => enabled ? {
     reference,
     floating,
     trigger: reference
   } : {}, [enabled, reference, floating]);
 }
 
-// node_modules/@base-ui/react/esm/floating-ui-react/hooks/useFloating.js
-var React33 = __toESM(require_react(), 1);
+// node_modules/@base-ui/react/floating-ui-react/hooks/useFloating.mjs
+var React37 = __toESM(require_react(), 1);
 
 // node_modules/@floating-ui/core/dist/floating-ui.core.mjs
 function computeCoordsFromPlacement(_ref, placement, rtl) {
@@ -5133,8 +5474,8 @@ var computePosition2 = (reference, floating, options) => {
   });
 };
 
-// node_modules/@base-ui/react/node_modules/@floating-ui/react-dom/dist/floating-ui.react-dom.mjs
-var React27 = __toESM(require_react(), 1);
+// node_modules/@floating-ui/react-dom/dist/floating-ui.react-dom.mjs
+var React30 = __toESM(require_react(), 1);
 var import_react2 = __toESM(require_react(), 1);
 var ReactDOM3 = __toESM(require_react_dom(), 1);
 var isClient = typeof document !== "undefined";
@@ -5200,7 +5541,7 @@ function roundByDPR(element, value) {
   return Math.round(value * dpr) / dpr;
 }
 function useLatestRef(value) {
-  const ref = React27.useRef(value);
+  const ref = React30.useRef(value);
   index(() => {
     ref.current = value;
   });
@@ -5223,7 +5564,7 @@ function useFloating(options) {
     whileElementsMounted,
     open
   } = options;
-  const [data, setData] = React27.useState({
+  const [data, setData] = React30.useState({
     x: 0,
     y: 0,
     strategy,
@@ -5231,19 +5572,19 @@ function useFloating(options) {
     middlewareData: {},
     isPositioned: false
   });
-  const [latestMiddleware, setLatestMiddleware] = React27.useState(middleware);
+  const [latestMiddleware, setLatestMiddleware] = React30.useState(middleware);
   if (!deepEqual(latestMiddleware, middleware)) {
     setLatestMiddleware(middleware);
   }
-  const [_reference, _setReference] = React27.useState(null);
-  const [_floating, _setFloating] = React27.useState(null);
-  const setReference = React27.useCallback((node) => {
+  const [_reference, _setReference] = React30.useState(null);
+  const [_floating, _setFloating] = React30.useState(null);
+  const setReference = React30.useCallback((node) => {
     if (node !== referenceRef.current) {
       referenceRef.current = node;
       _setReference(node);
     }
   }, []);
-  const setFloating = React27.useCallback((node) => {
+  const setFloating = React30.useCallback((node) => {
     if (node !== floatingRef.current) {
       floatingRef.current = node;
       _setFloating(node);
@@ -5251,14 +5592,14 @@ function useFloating(options) {
   }, []);
   const referenceEl = externalReference || _reference;
   const floatingEl = externalFloating || _floating;
-  const referenceRef = React27.useRef(null);
-  const floatingRef = React27.useRef(null);
-  const dataRef = React27.useRef(data);
+  const referenceRef = React30.useRef(null);
+  const floatingRef = React30.useRef(null);
+  const dataRef = React30.useRef(data);
   const hasWhileElementsMounted = whileElementsMounted != null;
   const whileElementsMountedRef = useLatestRef(whileElementsMounted);
   const platformRef = useLatestRef(platform3);
   const openRef = useLatestRef(open);
-  const update2 = React27.useCallback(() => {
+  const update2 = React30.useCallback(() => {
     if (!referenceRef.current || !floatingRef.current) {
       return;
     }
@@ -5296,7 +5637,7 @@ function useFloating(options) {
       }));
     }
   }, [open]);
-  const isMountedRef = React27.useRef(false);
+  const isMountedRef = React30.useRef(false);
   index(() => {
     isMountedRef.current = true;
     return () => {
@@ -5313,17 +5654,17 @@ function useFloating(options) {
       update2();
     }
   }, [referenceEl, floatingEl, update2, whileElementsMountedRef, hasWhileElementsMounted]);
-  const refs = React27.useMemo(() => ({
+  const refs = React30.useMemo(() => ({
     reference: referenceRef,
     floating: floatingRef,
     setReference,
     setFloating
   }), [setReference, setFloating]);
-  const elements = React27.useMemo(() => ({
+  const elements = React30.useMemo(() => ({
     reference: referenceEl,
     floating: floatingEl
   }), [referenceEl, floatingEl]);
-  const floatingStyles = React27.useMemo(() => {
+  const floatingStyles = React30.useMemo(() => {
     const initialStyles = {
       position: strategy,
       left: 0,
@@ -5349,7 +5690,7 @@ function useFloating(options) {
       top: y2
     };
   }, [strategy, transform, elements.floating, data.x, data.y]);
-  return React27.useMemo(() => ({
+  return React30.useMemo(() => ({
     ...data,
     update: update2,
     refs,
@@ -5405,13 +5746,14 @@ var hide3 = (options, deps) => {
   };
 };
 
-// node_modules/@base-ui/react/esm/utils/popups/popupStoreUtils.js
-var React32 = __toESM(require_react(), 1);
+// node_modules/@base-ui/react/utils/popups/popupStoreUtils.mjs
+var React36 = __toESM(require_react(), 1);
+var ReactDOM4 = __toESM(require_react_dom(), 1);
 
-// node_modules/@base-ui/react/esm/floating-ui-react/hooks/useSyncedFloatingRootContext.js
-var React31 = __toESM(require_react(), 1);
+// node_modules/@base-ui/react/floating-ui-react/hooks/useSyncedFloatingRootContext.mjs
+var React35 = __toESM(require_react(), 1);
 
-// node_modules/@base-ui/utils/esm/store/createSelector.js
+// node_modules/@base-ui/utils/store/createSelector.mjs
 var createSelector = (a2, b2, c2, d2, e2, f2, ...other) => {
   if (other.length > 0) {
     throw new Error(true ? "Unsupported number of selectors" : formatErrorMessage_default(1));
@@ -5463,13 +5805,13 @@ var createSelector = (a2, b2, c2, d2, e2, f2, ...other) => {
   return selector;
 };
 
-// node_modules/@base-ui/utils/esm/store/useStore.js
-var React29 = __toESM(require_react(), 1);
+// node_modules/@base-ui/utils/store/useStore.mjs
+var React32 = __toESM(require_react(), 1);
 var import_shim = __toESM(require_shim(), 1);
 var import_with_selector = __toESM(require_with_selector(), 1);
 
-// node_modules/@base-ui/utils/esm/fastHooks.js
-var React28 = __toESM(require_react(), 1);
+// node_modules/@base-ui/utils/fastHooks.mjs
+var React31 = __toESM(require_react(), 1);
 var hooks = [];
 var currentInstance = void 0;
 function getInstance() {
@@ -5501,7 +5843,7 @@ function fastComponent(fn) {
   return FastComponent;
 }
 function fastComponentRef(fn) {
-  return /* @__PURE__ */ React28.forwardRef(fastComponent(fn));
+  return /* @__PURE__ */ React31.forwardRef(fastComponent(fn));
 }
 function createInstance() {
   return {
@@ -5509,14 +5851,14 @@ function createInstance() {
   };
 }
 
-// node_modules/@base-ui/utils/esm/store/useStore.js
+// node_modules/@base-ui/utils/store/useStore.mjs
 var canUseRawUseSyncExternalStore = isReactVersionAtLeast(19);
 var useStoreImplementation = canUseRawUseSyncExternalStore ? useStoreFast : useStoreLegacy;
 function useStore(store3, selector, a1, a2, a3) {
   return useStoreImplementation(store3, selector, a1, a2, a3);
 }
 function useStoreR19(store3, selector, a1, a2, a3) {
-  const getSelection = React29.useCallback(() => selector(store3.getSnapshot(), a1, a2, a3), [store3, selector, a1, a2, a3]);
+  const getSelection = React32.useCallback(() => selector(store3.getSnapshot(), a1, a2, a3), [store3, selector, a1, a2, a3]);
   return (0, import_shim.useSyncExternalStore)(store3.subscribe, getSelection, getSelection);
 }
 register({
@@ -5531,10 +5873,9 @@ register({
         for (let i2 = 0; i2 < instance.syncHooks.length; i2 += 1) {
           const hook = instance.syncHooks[i2];
           const value = hook.selector(hook.store.state, hook.a1, hook.a2, hook.a3);
-          if (hook.didChange || !Object.is(hook.value, value)) {
+          if (!Object.is(hook.value, value)) {
             didChange2 = true;
             hook.value = value;
-            hook.didChange = false;
           }
         }
         if (didChange2) {
@@ -5583,8 +5924,7 @@ function useStoreFast(store3, selector, a1, a2, a3) {
       a1,
       a2,
       a3,
-      value: selector(store3.getSnapshot(), a1, a2, a3),
-      didChange: false
+      value: selector(store3.getSnapshot(), a1, a2, a3)
     };
     instance.syncHooks.push(hook);
   } else {
@@ -5598,7 +5938,7 @@ function useStoreFast(store3, selector, a1, a2, a3) {
       hook.a1 = a1;
       hook.a2 = a2;
       hook.a3 = a3;
-      hook.didChange = true;
+      hook.value = selector(store3.getSnapshot(), a1, a2, a3);
     }
   }
   return hook.value;
@@ -5607,7 +5947,7 @@ function useStoreLegacy(store3, selector, a1, a2, a3) {
   return (0, import_with_selector.useSyncExternalStoreWithSelector)(store3.subscribe, store3.getSnapshot, store3.getSnapshot, (state) => selector(state, a1, a2, a3));
 }
 
-// node_modules/@base-ui/utils/esm/store/Store.js
+// node_modules/@base-ui/utils/store/Store.mjs
 var Store = class {
   /**
    * The current state of the store.
@@ -5704,8 +6044,8 @@ var Store = class {
   }
 };
 
-// node_modules/@base-ui/utils/esm/store/ReactStore.js
-var React30 = __toESM(require_react(), 1);
+// node_modules/@base-ui/utils/store/ReactStore.mjs
+var React33 = __toESM(require_react(), 1);
 var ReactStore = class extends Store {
   /**
    * Creates a new ReactStore instance.
@@ -5729,7 +6069,7 @@ var ReactStore = class extends Store {
    * by `useState` is updated before the next render (similarly to React's `useState`).
    */
   useSyncedValue(key, value) {
-    React30.useDebugValue(key);
+    React33.useDebugValue(key);
     const store3 = this;
     useIsoLayoutEffect(() => {
       if (store3.state[key] !== value) {
@@ -5764,8 +6104,8 @@ var ReactStore = class extends Store {
   useSyncedValues(statePart) {
     const store3 = this;
     if (true) {
-      React30.useDebugValue(statePart, (p2) => Object.keys(p2));
-      const keys = React30.useRef(Object.keys(statePart)).current;
+      React33.useDebugValue(statePart, (p2) => Object.keys(p2));
+      const keys = React33.useRef(Object.keys(statePart)).current;
       const nextKeys = Object.keys(statePart);
       if (keys.length !== nextKeys.length || keys.some((key, index2) => key !== nextKeys[index2])) {
         console.error("ReactStore.useSyncedValues expects the same prop keys on every render. Keys should be stable.");
@@ -5781,7 +6121,7 @@ var ReactStore = class extends Store {
    * is non-undefined, the store's state at `key` is updated to match `controlled`.
    */
   useControlledProp(key, controlled) {
-    React30.useDebugValue(key);
+    React33.useDebugValue(key);
     const store3 = this;
     const isControlled = controlled !== void 0;
     useIsoLayoutEffect(() => {
@@ -5819,7 +6159,7 @@ var ReactStore = class extends Store {
    * @param key Key of the selector to use.
    */
   useState(key, a1, a2, a3) {
-    React30.useDebugValue(key);
+    React33.useDebugValue(key);
     return useStore(this, this.selectors[key], a1, a2, a3);
   }
   /**
@@ -5830,7 +6170,7 @@ var ReactStore = class extends Store {
    * @param fn Function to assign.
    */
   useContextCallback(key, fn) {
-    React30.useDebugValue(key);
+    React33.useDebugValue(key);
     const stableFunction = useStableCallback(fn ?? NOOP);
     this.context[key] = stableFunction;
   }
@@ -5841,7 +6181,7 @@ var ReactStore = class extends Store {
    * @param key Key of the state to set.
    */
   useStateSetter(key) {
-    const ref = React30.useRef(void 0);
+    const ref = React33.useRef(void 0);
     if (ref.current === void 0) {
       ref.current = (value) => {
         this.set(key, value);
@@ -5875,7 +6215,16 @@ var ReactStore = class extends Store {
   }
 };
 
-// node_modules/@base-ui/react/esm/floating-ui-react/components/FloatingRootStore.js
+// node_modules/@base-ui/utils/useForcedRerendering.mjs
+var React34 = __toESM(require_react(), 1);
+function useForcedRerendering() {
+  const [, setState] = React34.useState({});
+  return React34.useCallback(() => {
+    setState({});
+  }, []);
+}
+
+// node_modules/@base-ui/react/floating-ui-react/components/FloatingRootStore.mjs
 var selectors = {
   open: createSelector((state) => state.open),
   transitionStatus: createSelector((state) => state.transitionStatus),
@@ -5948,7 +6297,7 @@ var FloatingRootStore = class extends ReactStore {
   };
 };
 
-// node_modules/@base-ui/react/esm/floating-ui-react/hooks/useSyncedFloatingRootContext.js
+// node_modules/@base-ui/react/floating-ui-react/hooks/useSyncedFloatingRootContext.mjs
 function useSyncedFloatingRootContext(options) {
   const {
     popupStore,
@@ -5963,7 +6312,7 @@ function useSyncedFloatingRootContext(options) {
   const floatingElement = popupStore.useState(treatPopupAsFloatingElement ? "popupElement" : "positionerElement");
   const triggerElements = popupStore.context.triggerElements;
   const handleOpenChange = onOpenChange;
-  const internalStoreRef = React31.useRef(null);
+  const internalStoreRef = React35.useRef(null);
   if (floatingRootContextProp === void 0 && internalStoreRef.current === null) {
     internalStoreRef.current = new FloatingRootStore({
       open,
@@ -5999,7 +6348,7 @@ function useSyncedFloatingRootContext(options) {
   return store3;
 }
 
-// node_modules/@base-ui/react/esm/utils/popups/popupStoreUtils.js
+// node_modules/@base-ui/react/utils/popups/popupStoreUtils.mjs
 var FOCUSABLE_POPUP_PROPS = {
   tabIndex: -1,
   [FOCUSABLE_ATTRIBUTE]: ""
@@ -6007,7 +6356,7 @@ var FOCUSABLE_POPUP_PROPS = {
 function usePopupStore(externalStore, createStore, treatPopupAsFloatingElement = false) {
   const floatingId = useId();
   const nested = useFloatingParentNodeId() != null;
-  const internalStoreRef = React32.useRef(null);
+  const internalStoreRef = React36.useRef(null);
   if (externalStore === void 0 && internalStoreRef.current === null) {
     internalStoreRef.current = createStore(floatingId, nested);
   }
@@ -6026,9 +6375,9 @@ function usePopupStore(externalStore, createStore, treatPopupAsFloatingElement =
   };
 }
 function useTriggerRegistration(id, store3) {
-  const registeredElementIdRef = React32.useRef(null);
-  const registeredElementRef = React32.useRef(null);
-  return React32.useCallback((element) => {
+  const registeredElementIdRef = React36.useRef(null);
+  const registeredElementRef = React36.useRef(null);
+  return React36.useCallback((element) => {
     if (id === void 0) {
       return;
     }
@@ -6058,12 +6407,69 @@ function useTriggerRegistration(id, store3) {
     }
   }, [store3, id]);
 }
-function setOpenTriggerState(state, open, trigger) {
+function setPopupOpenState(state, open, trigger, preventUnmountOnClose = false) {
+  if (open) {
+    state.preventUnmountingOnClose = false;
+  } else if (preventUnmountOnClose) {
+    state.preventUnmountingOnClose = true;
+  }
   const triggerId = trigger?.id ?? null;
   if (triggerId || open) {
     state.activeTriggerId = triggerId;
     state.activeTriggerElement = trigger ?? null;
   }
+}
+function attachPreventUnmountOnClose(eventDetails) {
+  let preventUnmountOnClose = false;
+  eventDetails.preventUnmountOnClose = () => {
+    preventUnmountOnClose = true;
+  };
+  return () => preventUnmountOnClose;
+}
+function applyPopupOpenChange(store3, nextOpen, eventDetails, options = {}) {
+  const reason = eventDetails.reason;
+  const isHover = reason === reason_parts_exports.triggerHover;
+  const isFocusOpen = nextOpen && reason === reason_parts_exports.triggerFocus;
+  const isDismissClose = !nextOpen && (reason === reason_parts_exports.triggerPress || reason === reason_parts_exports.escapeKey);
+  const shouldPreventUnmountOnClose = attachPreventUnmountOnClose(eventDetails);
+  store3.context.onOpenChange?.(nextOpen, eventDetails);
+  if (eventDetails.isCanceled) {
+    return;
+  }
+  options.onBeforeDispatch?.();
+  store3.state.floatingRootContext.dispatchOpenChange(nextOpen, eventDetails);
+  const changeState = () => {
+    const updatedState = {
+      ...options.extraState,
+      open: nextOpen
+    };
+    if (isFocusOpen) {
+      updatedState.instantType = "focus";
+    } else if (isDismissClose) {
+      updatedState.instantType = "dismiss";
+    } else if (isHover) {
+      updatedState.instantType = void 0;
+    }
+    setPopupOpenState(updatedState, nextOpen, eventDetails.trigger, shouldPreventUnmountOnClose());
+    store3.update(updatedState);
+  };
+  if (isHover) {
+    ReactDOM4.flushSync(changeState);
+  } else {
+    changeState();
+  }
+}
+function useInitialOpenSync(store3, openProp, defaultOpen, defaultTriggerId) {
+  useOnFirstRender(() => {
+    if (openProp === void 0 && store3.state.open === false && defaultOpen) {
+      store3.state = {
+        ...store3.state,
+        open: true,
+        activeTriggerId: defaultTriggerId,
+        preventUnmountingOnClose: false
+      };
+    }
+  });
 }
 function useTriggerDataForwarding(triggerId, triggerElementRef, store3, stateUpdates) {
   const isMountedByThisTrigger = store3.useState("isMountedByTrigger", triggerId);
@@ -6103,7 +6509,10 @@ function useTriggerDataForwarding(triggerId, triggerElementRef, store3, stateUpd
     isMountedByThisTrigger
   };
 }
-function useImplicitActiveTrigger(store3) {
+function useImplicitActiveTrigger(store3, options = {}) {
+  const {
+    closeOnActiveTriggerUnmount = false
+  } = options;
   const open = store3.useState("open");
   const reactiveTriggerCount = store3.useState("triggerCount");
   useIsoLayoutEffect(() => {
@@ -6118,7 +6527,17 @@ function useImplicitActiveTrigger(store3) {
     if (store3.state.triggerCount !== triggerCount) {
       stateUpdates.triggerCount = triggerCount;
     }
-    if (!store3.select("activeTriggerId") && triggerCount === 1) {
+    const activeTriggerId = store3.select("activeTriggerId");
+    let lostActiveTriggerId = null;
+    if (activeTriggerId) {
+      const activeTriggerElement = store3.context.triggerElements.getById(activeTriggerId);
+      if (!activeTriggerElement) {
+        lostActiveTriggerId = activeTriggerId;
+      } else if (activeTriggerElement !== store3.state.activeTriggerElement) {
+        stateUpdates.activeTriggerElement = activeTriggerElement;
+      }
+    }
+    if (!lostActiveTriggerId && !activeTriggerId && triggerCount === 1) {
       const iteratorResult = store3.context.triggerElements.entries().next();
       if (!iteratorResult.done) {
         const [implicitTriggerId, implicitTriggerElement] = iteratorResult.value;
@@ -6126,10 +6545,26 @@ function useImplicitActiveTrigger(store3) {
         stateUpdates.activeTriggerElement = implicitTriggerElement;
       }
     }
-    if (stateUpdates.triggerCount !== void 0 || stateUpdates.activeTriggerId !== void 0) {
+    if (stateUpdates.triggerCount !== void 0 || stateUpdates.activeTriggerId !== void 0 || stateUpdates.activeTriggerElement !== void 0) {
       store3.update(stateUpdates);
     }
-  }, [open, store3, reactiveTriggerCount]);
+    if (lostActiveTriggerId) {
+      if (closeOnActiveTriggerUnmount) {
+        queueMicrotask(() => {
+          if (store3.select("open") && store3.select("activeTriggerId") === lostActiveTriggerId && !store3.context.triggerElements.getById(lostActiveTriggerId)) {
+            const eventDetails = createChangeEventDetails(reason_parts_exports.none);
+            store3.setOpen(false, eventDetails);
+            if (!eventDetails.isCanceled) {
+              store3.update({
+                activeTriggerId: null,
+                activeTriggerElement: null
+              });
+            }
+          }
+        });
+      }
+    }
+  }, [open, store3, reactiveTriggerCount, closeOnActiveTriggerUnmount]);
 }
 function useOpenStateTransitions(open, store3, onUnmount) {
   const {
@@ -6137,9 +6572,12 @@ function useOpenStateTransitions(open, store3, onUnmount) {
     setMounted,
     transitionStatus
   } = useTransitionStatus(open);
+  const preventUnmountingOnClose = store3.useState("preventUnmountingOnClose");
+  const syncedPreventUnmountingOnClose = open ? false : preventUnmountingOnClose;
   store3.useSyncedValues({
     mounted,
-    transitionStatus
+    transitionStatus,
+    preventUnmountingOnClose: syncedPreventUnmountingOnClose
   });
   const forceUnmount = useStableCallback(() => {
     setMounted(false);
@@ -6152,9 +6590,8 @@ function useOpenStateTransitions(open, store3, onUnmount) {
     onUnmount?.();
     store3.context.onOpenChangeComplete?.(false);
   });
-  const preventUnmountingOnClose = store3.useState("preventUnmountingOnClose");
   useOpenChangeComplete({
-    enabled: mounted && !open && !preventUnmountingOnClose,
+    enabled: mounted && !open && !syncedPreventUnmountingOnClose,
     open,
     ref: store3.context.popupRef,
     onComplete() {
@@ -6179,7 +6616,7 @@ function usePopupInteractionProps(store3, statePart) {
   }, [store3]);
 }
 
-// node_modules/@base-ui/react/esm/utils/popups/popupTriggerMap.js
+// node_modules/@base-ui/react/utils/popups/popupTriggerMap.mjs
 var PopupTriggerMap = class {
   constructor() {
     this.elementsSet = /* @__PURE__ */ new Set();
@@ -6259,7 +6696,7 @@ var PopupTriggerMap = class {
   }
 };
 
-// node_modules/@base-ui/react/esm/floating-ui-react/utils/getEmptyRootContext.js
+// node_modules/@base-ui/react/floating-ui-react/utils/getEmptyRootContext.mjs
 function getEmptyRootContext() {
   return new FloatingRootStore({
     open: false,
@@ -6274,7 +6711,7 @@ function getEmptyRootContext() {
   });
 }
 
-// node_modules/@base-ui/react/esm/utils/popups/store.js
+// node_modules/@base-ui/react/utils/popups/store.mjs
 function createInitialPopupStoreState() {
   return {
     open: false,
@@ -6357,7 +6794,7 @@ var popupStoreSelectors = {
   positionerElement: createSelector((state) => state.positionerElement)
 };
 
-// node_modules/@base-ui/react/esm/floating-ui-react/hooks/useFloatingRootContext.js
+// node_modules/@base-ui/react/floating-ui-react/hooks/useFloatingRootContext.mjs
 function useFloatingRootContext(options) {
   const {
     open = false,
@@ -6402,7 +6839,7 @@ function useFloatingRootContext(options) {
   return store3;
 }
 
-// node_modules/@base-ui/react/esm/floating-ui-react/hooks/useFloating.js
+// node_modules/@base-ui/react/floating-ui-react/hooks/useFloating.mjs
 function useFloating2(options = {}) {
   const {
     nodeId,
@@ -6415,12 +6852,12 @@ function useFloating2(options = {}) {
   const domReferenceElement = store3.useState("domReferenceElement");
   const open = store3.useState("open");
   const floatingId = store3.useState("floatingId");
-  const [positionReference, setPositionReferenceRaw] = React33.useState(null);
-  const [localDomReference, setLocalDomReference] = React33.useState(void 0);
-  const [localFloatingElement, setLocalFloatingElement] = React33.useState(void 0);
-  const domReferenceRef = React33.useRef(null);
+  const [positionReference, setPositionReferenceRaw] = React37.useState(null);
+  const [localDomReference, setLocalDomReference] = React37.useState(void 0);
+  const [localFloatingElement, setLocalFloatingElement] = React37.useState(void 0);
+  const domReferenceRef = React37.useRef(null);
   const tree = useFloatingTree(externalTree);
-  const storeElements = React33.useMemo(() => ({
+  const storeElements = React37.useMemo(() => ({
     reference: referenceElement,
     floating: floatingElement,
     domReference: domReferenceElement
@@ -6439,7 +6876,7 @@ function useFloating2(options = {}) {
   store3.useSyncedValue("referenceElement", localDomReference ?? null);
   store3.useSyncedValue("domReferenceElement", localDomReference === void 0 ? domReferenceElement : localDomReferenceElement);
   store3.useSyncedValue("floatingElement", syncedFloatingElement);
-  const setPositionReference = React33.useCallback((node) => {
+  const setPositionReference = React37.useCallback((node) => {
     const computedPositionReference = isElement(node) ? {
       getBoundingClientRect: () => node.getBoundingClientRect(),
       getClientRects: () => node.getClientRects(),
@@ -6448,7 +6885,7 @@ function useFloating2(options = {}) {
     setPositionReferenceRaw(computedPositionReference);
     position.refs.setReference(computedPositionReference);
   }, [position.refs]);
-  const setReference = React33.useCallback((node) => {
+  const setReference = React37.useCallback((node) => {
     if (isElement(node) || node === null) {
       domReferenceRef.current = node;
       setLocalDomReference(node);
@@ -6460,22 +6897,22 @@ function useFloating2(options = {}) {
       position.refs.setReference(node);
     }
   }, [position.refs, setLocalDomReference]);
-  const setFloating = React33.useCallback((node) => {
+  const setFloating = React37.useCallback((node) => {
     setLocalFloatingElement(node);
     position.refs.setFloating(node);
   }, [position.refs]);
-  const refs = React33.useMemo(() => ({
+  const refs = React37.useMemo(() => ({
     ...position.refs,
     setReference,
     setFloating,
     setPositionReference,
     domReference: domReferenceRef
   }), [position.refs, setReference, setFloating, setPositionReference]);
-  const elements = React33.useMemo(() => ({
+  const elements = React37.useMemo(() => ({
     ...position.elements,
     domReference: domReferenceElement
   }), [position.elements, domReferenceElement]);
-  const context = React33.useMemo(() => ({
+  const context = React37.useMemo(() => ({
     ...position,
     dataRef: store3.context.dataRef,
     open,
@@ -6499,7 +6936,7 @@ function useFloating2(options = {}) {
       node.context = context;
     }
   });
-  return React33.useMemo(() => ({
+  return React37.useMemo(() => ({
     ...position,
     context,
     refs,
@@ -6508,9 +6945,9 @@ function useFloating2(options = {}) {
   }), [position, refs, elements, context, store3]);
 }
 
-// node_modules/@base-ui/react/esm/floating-ui-react/hooks/useFocus.js
-var React34 = __toESM(require_react(), 1);
-var isMacSafari = isMac && isSafari;
+// node_modules/@base-ui/react/floating-ui-react/hooks/useFocus.mjs
+var React38 = __toESM(require_react(), 1);
+var isMacSafari = parts_exports.os.mac && parts_exports.engine.webkit;
 function useFocus(context, props = {}) {
   const {
     enabled = true,
@@ -6521,11 +6958,11 @@ function useFocus(context, props = {}) {
     events,
     dataRef
   } = store3.context;
-  const blockFocusRef = React34.useRef(false);
-  const blockedReferenceRef = React34.useRef(null);
-  const keyboardModalityRef = React34.useRef(true);
+  const blockFocusRef = React38.useRef(false);
+  const blockedReferenceRef = React38.useRef(null);
+  const keyboardModalityRef = React38.useRef(true);
   const timeout = useTimeout();
-  React34.useEffect(() => {
+  React38.useEffect(() => {
     const domReference = store3.select("domReferenceElement");
     if (!enabled) {
       return void 0;
@@ -6545,7 +6982,7 @@ function useFocus(context, props = {}) {
     }
     return mergeCleanups(addEventListener(win, "blur", onBlur), isMacSafari && addEventListener(win, "keydown", onKeyDown, true), isMacSafari && addEventListener(win, "pointerdown", onPointerDown, true));
   }, [store3, enabled]);
-  React34.useEffect(() => {
+  React38.useEffect(() => {
     if (!enabled) {
       return void 0;
     }
@@ -6563,7 +7000,7 @@ function useFocus(context, props = {}) {
       events.off("openchange", onOpenChangeLocal);
     };
   }, [events, enabled, store3]);
-  const reference = React34.useMemo(() => {
+  const reference = React38.useMemo(() => {
     function resetBlockedFocus() {
       blockFocusRef.current = false;
       blockedReferenceRef.current = null;
@@ -6630,16 +7067,16 @@ function useFocus(context, props = {}) {
       }
     };
   }, [dataRef, delay, store3, timeout]);
-  return React34.useMemo(() => enabled ? {
+  return React38.useMemo(() => enabled ? {
     reference,
     trigger: reference
   } : {}, [enabled, reference]);
 }
 
-// node_modules/@base-ui/react/esm/floating-ui-react/hooks/useHoverFloatingInteraction.js
-var React35 = __toESM(require_react(), 1);
+// node_modules/@base-ui/react/floating-ui-react/hooks/useHoverFloatingInteraction.mjs
+var React39 = __toESM(require_react(), 1);
 
-// node_modules/@base-ui/react/esm/floating-ui-react/hooks/useHoverInteractionSharedState.js
+// node_modules/@base-ui/react/floating-ui-react/hooks/useHoverInteractionSharedState.mjs
 var HoverInteraction = class _HoverInteraction {
   constructor() {
     this.pointerType = void 0;
@@ -6713,7 +7150,7 @@ function useHoverInteractionSharedState(store3) {
   return data.hoverInteractionState;
 }
 
-// node_modules/@base-ui/react/esm/floating-ui-react/hooks/useHoverFloatingInteraction.js
+// node_modules/@base-ui/react/floating-ui-react/hooks/useHoverFloatingInteraction.mjs
 function useHoverFloatingInteraction(context, parameters = {}) {
   const {
     enabled = true,
@@ -6748,7 +7185,7 @@ function useHoverFloatingInteraction(context, parameters = {}) {
       clearPointerEvents();
     }
   }, [open, instance, clearPointerEvents]);
-  React35.useEffect(() => {
+  React39.useEffect(() => {
     return clearPointerEvents;
   }, [clearPointerEvents]);
   useIsoLayoutEffect(() => {
@@ -6777,7 +7214,7 @@ function useHoverFloatingInteraction(context, parameters = {}) {
     }
     return void 0;
   }, [enabled, open, domReferenceElement, floatingElement, instance, isHoverOpen, tree, parentId, clearPointerEvents]);
-  React35.useEffect(() => {
+  React39.useEffect(() => {
     if (!enabled) {
       return void 0;
     }
@@ -6830,7 +7267,7 @@ function useHoverFloatingInteraction(context, parameters = {}) {
         return;
       }
       clearPointerEvents();
-      if (!isClickLikeOpenEvent2()) {
+      if (isHoverOpen() && !isClickLikeOpenEvent2()) {
         closeWithDelay(event);
       }
     }
@@ -6848,12 +7285,12 @@ function useHoverFloatingInteraction(context, parameters = {}) {
     return mergeCleanups(floating && addEventListener(floating, "mouseenter", onFloatingMouseEnter), floating && addEventListener(floating, "mouseleave", onFloatingMouseLeave), floating && addEventListener(floating, "pointerdown", handleInteractInside, true), () => {
       tree?.events.off("floating.closed", onNodeClosed);
     });
-  }, [enabled, floatingElement, store3, dataRef, closeDelayProp, nodeIdProp, isClickLikeOpenEvent2, clearPointerEvents, instance, tree, parentId, childClosedTimeout]);
+  }, [enabled, floatingElement, store3, dataRef, closeDelayProp, nodeIdProp, isHoverOpen, isClickLikeOpenEvent2, clearPointerEvents, instance, tree, parentId, childClosedTimeout]);
 }
 
-// node_modules/@base-ui/react/esm/floating-ui-react/hooks/useHoverReferenceInteraction.js
-var React36 = __toESM(require_react(), 1);
-var ReactDOM4 = __toESM(require_react_dom(), 1);
+// node_modules/@base-ui/react/floating-ui-react/hooks/useHoverReferenceInteraction.mjs
+var React40 = __toESM(require_react(), 1);
+var ReactDOM5 = __toESM(require_react_dom(), 1);
 var EMPTY_REF = {
   current: null
 };
@@ -6879,7 +7316,7 @@ function useHoverReferenceInteraction(context, props = {}) {
   } = store3.context;
   const tree = useFloatingTree(externalTree);
   const instance = useHoverInteractionSharedState(store3);
-  const isHoverCloseActiveRef = React36.useRef(false);
+  const isHoverCloseActiveRef = React40.useRef(false);
   const handleCloseRef = useValueAsRef(handleClose);
   const delayRef = useValueAsRef(delay);
   const restMsRef = useValueAsRef(restMs);
@@ -6917,8 +7354,8 @@ function useHoverReferenceInteraction(context, props = {}) {
   if (isActiveTrigger) {
     instance.handleCloseOptions = handleCloseRef.current?.__options;
   }
-  React36.useEffect(() => cleanupMouseMoveHandler, [cleanupMouseMoveHandler]);
-  React36.useEffect(() => {
+  React40.useEffect(() => cleanupMouseMoveHandler, [cleanupMouseMoveHandler]);
+  React40.useEffect(() => {
     if (!enabled) {
       return void 0;
     }
@@ -6939,7 +7376,7 @@ function useHoverReferenceInteraction(context, props = {}) {
       events.off("openchange", onOpenChangeLocal);
     };
   }, [enabled, events, instance, cleanupMouseMoveHandler]);
-  React36.useEffect(() => {
+  React40.useEffect(() => {
     if (!enabled) {
       return void 0;
     }
@@ -7060,7 +7497,7 @@ function useHoverReferenceInteraction(context, props = {}) {
     }
     return mergeCleanups(addEventListener(trigger, "mouseenter", onMouseEnter), addEventListener(trigger, "mouseleave", onMouseLeave));
   }, [cleanupMouseMoveHandler, clearPointerEvents, dataRef, delayRef, store3, enabled, handleCloseRef, instance, isActiveTrigger, isOverInactiveTrigger, isClickLikeOpenEvent2, mouseOnly, move, restMsRef, triggerElementRef, tree, enabledRef, getHandleCloseContext, isClosingRef, checkShouldOpen]);
-  return React36.useMemo(() => {
+  return React40.useMemo(() => {
     if (!enabled) {
       return void 0;
     }
@@ -7111,7 +7548,7 @@ function useHoverReferenceInteraction(context, props = {}) {
           }
         }
         if (instance.pointerType === "touch") {
-          ReactDOM4.flushSync(() => {
+          ReactDOM5.flushSync(() => {
             handleMouseMove();
           });
         } else if (isOverInactive && currentOpen) {
@@ -7125,7 +7562,7 @@ function useHoverReferenceInteraction(context, props = {}) {
   }, [enabled, instance, isClickLikeOpenEvent2, isOverInactiveTrigger, mouseOnly, store3, restMsRef, checkShouldOpen]);
 }
 
-// node_modules/@base-ui/react/esm/floating-ui-react/safePolygon.js
+// node_modules/@base-ui/react/floating-ui-react/safePolygon.mjs
 var CURSOR_SPEED_THRESHOLD = 0.1;
 var CURSOR_SPEED_THRESHOLD_SQUARED = CURSOR_SPEED_THRESHOLD * CURSOR_SPEED_THRESHOLD;
 var POLYGON_BUFFER = 0.5;
@@ -7341,7 +7778,7 @@ function safePolygon(options = {}) {
   return fn;
 }
 
-// node_modules/@base-ui/react/esm/utils/popupStateMapping.js
+// node_modules/@base-ui/react/utils/popupStateMapping.mjs
 var CommonPopupDataAttributes = (function(CommonPopupDataAttributes2) {
   CommonPopupDataAttributes2["open"] = "data-open";
   CommonPopupDataAttributes2["closed"] = "data-closed";
@@ -7396,7 +7833,106 @@ var popupStateMapping = {
   }
 };
 
-// node_modules/@base-ui/utils/esm/inertValue.js
+// node_modules/@base-ui/react/internals/composite/composite.mjs
+var ARROW_UP = "ArrowUp";
+var ARROW_DOWN = "ArrowDown";
+var ARROW_LEFT = "ArrowLeft";
+var ARROW_RIGHT = "ArrowRight";
+var HOME = "Home";
+var END = "End";
+var HORIZONTAL_KEYS = /* @__PURE__ */ new Set([ARROW_LEFT, ARROW_RIGHT]);
+var HORIZONTAL_KEYS_WITH_EXTRA_KEYS = /* @__PURE__ */ new Set([ARROW_LEFT, ARROW_RIGHT, HOME, END]);
+var VERTICAL_KEYS = /* @__PURE__ */ new Set([ARROW_UP, ARROW_DOWN]);
+var VERTICAL_KEYS_WITH_EXTRA_KEYS = /* @__PURE__ */ new Set([ARROW_UP, ARROW_DOWN, HOME, END]);
+var ARROW_KEYS = /* @__PURE__ */ new Set([...HORIZONTAL_KEYS, ...VERTICAL_KEYS]);
+var COMPOSITE_KEYS = /* @__PURE__ */ new Set([...ARROW_KEYS, HOME, END]);
+var SHIFT = "Shift";
+var CONTROL = "Control";
+var ALT = "Alt";
+var META = "Meta";
+var MODIFIER_KEYS = /* @__PURE__ */ new Set([SHIFT, CONTROL, ALT, META]);
+function isInputElement(element) {
+  return isHTMLElement(element) && element.tagName === "INPUT";
+}
+function isNativeInput(element) {
+  if (isInputElement(element) && element.selectionStart != null) {
+    return true;
+  }
+  if (isHTMLElement(element) && element.tagName === "TEXTAREA") {
+    return true;
+  }
+  return false;
+}
+function scrollIntoViewIfNeeded(scrollContainer, element, direction, orientation) {
+  if (!scrollContainer || !element || !element.scrollTo) {
+    return;
+  }
+  let targetX = scrollContainer.scrollLeft;
+  let targetY = scrollContainer.scrollTop;
+  const isOverflowingX = scrollContainer.clientWidth < scrollContainer.scrollWidth;
+  const isOverflowingY = scrollContainer.clientHeight < scrollContainer.scrollHeight;
+  if (isOverflowingX && orientation !== "vertical") {
+    const elementOffsetLeft = getOffset(scrollContainer, element, "left");
+    const containerStyles = getStyles(scrollContainer);
+    const elementStyles = getStyles(element);
+    if (direction === "ltr") {
+      if (elementOffsetLeft + element.offsetWidth + elementStyles.scrollMarginRight > scrollContainer.scrollLeft + scrollContainer.clientWidth - containerStyles.scrollPaddingRight) {
+        targetX = elementOffsetLeft + element.offsetWidth + elementStyles.scrollMarginRight - scrollContainer.clientWidth + containerStyles.scrollPaddingRight;
+      } else if (elementOffsetLeft - elementStyles.scrollMarginLeft < scrollContainer.scrollLeft + containerStyles.scrollPaddingLeft) {
+        targetX = elementOffsetLeft - elementStyles.scrollMarginLeft - containerStyles.scrollPaddingLeft;
+      }
+    }
+    if (direction === "rtl") {
+      if (elementOffsetLeft - elementStyles.scrollMarginRight < scrollContainer.scrollLeft + containerStyles.scrollPaddingLeft) {
+        targetX = elementOffsetLeft - elementStyles.scrollMarginLeft - containerStyles.scrollPaddingLeft;
+      } else if (elementOffsetLeft + element.offsetWidth + elementStyles.scrollMarginRight > scrollContainer.scrollLeft + scrollContainer.clientWidth - containerStyles.scrollPaddingRight) {
+        targetX = elementOffsetLeft + element.offsetWidth + elementStyles.scrollMarginRight - scrollContainer.clientWidth + containerStyles.scrollPaddingRight;
+      }
+    }
+  }
+  if (isOverflowingY && orientation !== "horizontal") {
+    const elementOffsetTop = getOffset(scrollContainer, element, "top");
+    const containerStyles = getStyles(scrollContainer);
+    const elementStyles = getStyles(element);
+    if (elementOffsetTop - elementStyles.scrollMarginTop < scrollContainer.scrollTop + containerStyles.scrollPaddingTop) {
+      targetY = elementOffsetTop - elementStyles.scrollMarginTop - containerStyles.scrollPaddingTop;
+    } else if (elementOffsetTop + element.offsetHeight + elementStyles.scrollMarginBottom > scrollContainer.scrollTop + scrollContainer.clientHeight - containerStyles.scrollPaddingBottom) {
+      targetY = elementOffsetTop + element.offsetHeight + elementStyles.scrollMarginBottom - scrollContainer.clientHeight + containerStyles.scrollPaddingBottom;
+    }
+  }
+  scrollContainer.scrollTo({
+    left: targetX,
+    top: targetY,
+    behavior: "auto"
+  });
+}
+function getOffset(ancestor, element, side) {
+  const propName = side === "left" ? "offsetLeft" : "offsetTop";
+  let result = 0;
+  while (element.offsetParent) {
+    result += element[propName];
+    if (element.offsetParent === ancestor) {
+      break;
+    }
+    element = element.offsetParent;
+  }
+  return result;
+}
+function getStyles(element) {
+  const styles = getComputedStyle(element);
+  return {
+    scrollMarginTop: parseFloat(styles.scrollMarginTop) || 0,
+    scrollMarginRight: parseFloat(styles.scrollMarginRight) || 0,
+    scrollMarginBottom: parseFloat(styles.scrollMarginBottom) || 0,
+    scrollMarginLeft: parseFloat(styles.scrollMarginLeft) || 0,
+    scrollPaddingTop: parseFloat(styles.scrollPaddingTop) || 0,
+    scrollPaddingRight: parseFloat(styles.scrollPaddingRight) || 0,
+    scrollPaddingBottom: parseFloat(styles.scrollPaddingBottom) || 0,
+    scrollPaddingLeft: parseFloat(styles.scrollPaddingLeft) || 0
+  };
+}
+
+// node_modules/@base-ui/utils/inertValue.mjs
 function inertValue(value) {
   if (isReactVersionAtLeast(19)) {
     return value;
@@ -7404,10 +7940,10 @@ function inertValue(value) {
   return value ? "true" : void 0;
 }
 
-// node_modules/@base-ui/react/esm/utils/useAnchorPositioning.js
-var React37 = __toESM(require_react(), 1);
+// node_modules/@base-ui/react/utils/useAnchorPositioning.mjs
+var React41 = __toESM(require_react(), 1);
 
-// node_modules/@base-ui/react/esm/floating-ui-react/middleware/arrow.js
+// node_modules/@base-ui/react/floating-ui-react/middleware/arrow.mjs
 var baseArrow = (options) => ({
   name: "arrow",
   options,
@@ -7476,7 +8012,8 @@ var arrow4 = (options, deps) => ({
   options: [options, deps]
 });
 
-// node_modules/@base-ui/react/esm/utils/hideMiddleware.js
+// node_modules/@base-ui/react/utils/hideMiddleware.mjs
+var nativeHideFn = hide3().fn;
 var hide4 = {
   name: "hide",
   async fn(state) {
@@ -7487,7 +8024,7 @@ var hide4 = {
       y: y2
     } = state.rects.reference;
     const anchorHidden = width === 0 && height === 0 && x2 === 0 && y2 === 0;
-    const nativeHideResult = await hide3().fn(state);
+    const nativeHideResult = await nativeHideFn(state);
     return {
       data: {
         referenceHidden: nativeHideResult.data?.referenceHidden || anchorHidden
@@ -7496,7 +8033,7 @@ var hide4 = {
   }
 };
 
-// node_modules/@base-ui/react/esm/utils/adaptiveOriginMiddleware.js
+// node_modules/@base-ui/react/utils/adaptiveOriginMiddleware.mjs
 var DEFAULT_SIDES = {
   sideX: "left",
   sideY: "top"
@@ -7568,7 +8105,7 @@ var adaptiveOrigin = {
   }
 };
 
-// node_modules/@base-ui/react/esm/utils/useAnchorPositioning.js
+// node_modules/@base-ui/react/utils/useAnchorPositioning.mjs
 function getLogicalSide(sideParam, renderedSide, isRtl) {
   const isLogicalSideParam = sideParam === "inline-start" || sideParam === "inline-end";
   const logicalRight = isRtl ? "inline-start" : "inline-end";
@@ -7625,7 +8162,7 @@ function useAnchorPositioning(params) {
     lazyFlip = false,
     externalTree
   } = params;
-  const [mountSide, setMountSide] = React37.useState(null);
+  const [mountSide, setMountSide] = React41.useState(null);
   if (!mounted && mountSide !== null) {
     setMountSide(null);
   }
@@ -7673,7 +8210,7 @@ function useAnchorPositioning(params) {
     boundary: collisionBoundary === "clipping-ancestors" ? "clippingAncestors" : collisionBoundary,
     padding: collisionPadding
   };
-  const arrowRef = React37.useRef(null);
+  const arrowRef = React41.useRef(null);
   const sideOffsetRef = useValueAsRef(sideOffset);
   const alignOffsetRef = useValueAsRef(alignOffset);
   const sideOffsetDep = typeof sideOffset !== "function" ? sideOffset : 0;
@@ -7822,7 +8359,7 @@ function useAnchorPositioning(params) {
       });
     }
   }, [mounted, floatingRootContext]);
-  const autoUpdateOptions = React37.useMemo(() => ({
+  const autoUpdateOptions = React41.useMemo(() => ({
     elementResize: !disableAnchorTracking && typeof ResizeObserver !== "undefined",
     layoutShift: !disableAnchorTracking && typeof IntersectionObserver !== "undefined"
   }), [disableAnchorTracking]);
@@ -7852,7 +8389,7 @@ function useAnchorPositioning(params) {
     sideY
   } = middlewareData.adaptiveOrigin || DEFAULT_SIDES;
   const resolvedPosition = isPositioned ? positionMethod : "fixed";
-  const floatingStyles = React37.useMemo(() => {
+  const floatingStyles = React41.useMemo(() => {
     const base = adaptiveOrigin2 ? {
       position: resolvedPosition,
       [sideX]: x2,
@@ -7866,7 +8403,7 @@ function useAnchorPositioning(params) {
     }
     return base;
   }, [adaptiveOrigin2, resolvedPosition, sideX, x2, sideY, y2, originalFloatingStyles, isPositioned]);
-  const registeredPositionReferenceRef = React37.useRef(null);
+  const registeredPositionReferenceRef = React41.useRef(null);
   useIsoLayoutEffect(() => {
     if (!mounted) {
       return;
@@ -7880,7 +8417,7 @@ function useAnchorPositioning(params) {
       registeredPositionReferenceRef.current = finalAnchor;
     }
   }, [mounted, refs, anchorDep, anchorValueRef]);
-  React37.useEffect(() => {
+  React41.useEffect(() => {
     if (!mounted) {
       return;
     }
@@ -7893,9 +8430,9 @@ function useAnchorPositioning(params) {
       registeredPositionReferenceRef.current = anchorValue.current;
     }
   }, [mounted, refs, anchorDep, anchorValueRef]);
-  React37.useEffect(() => {
-    if (keepMounted && mounted && elements.domReference && elements.floating) {
-      return autoUpdate(elements.domReference, elements.floating, update2, autoUpdateOptions);
+  React41.useEffect(() => {
+    if (keepMounted && mounted && elements.reference && elements.floating) {
+      return autoUpdate(elements.reference, elements.floating, update2, autoUpdateOptions);
     }
     return void 0;
   }, [keepMounted, mounted, elements, update2, autoUpdateOptions]);
@@ -7908,13 +8445,13 @@ function useAnchorPositioning(params) {
       setMountSide(renderedSide);
     }
   }, [lazyFlip, mounted, isPositioned, renderedSide]);
-  const arrowStyles = React37.useMemo(() => ({
+  const arrowStyles = React41.useMemo(() => ({
     position: "absolute",
     top: middlewareData.arrow?.y,
     left: middlewareData.arrow?.x
   }), [middlewareData.arrow]);
   const arrowUncentered = middlewareData.arrow?.centerOffset !== 0;
-  return React37.useMemo(() => ({
+  return React41.useMemo(() => ({
     positionerStyles: floatingStyles,
     arrowStyles,
     arrowRef,
@@ -7933,12 +8470,12 @@ function isRef(param) {
   return param != null && "current" in param;
 }
 
-// node_modules/@base-ui/react/esm/utils/getDisabledMountTransitionStyles.js
+// node_modules/@base-ui/react/utils/getDisabledMountTransitionStyles.mjs
 function getDisabledMountTransitionStyles(transitionStatus) {
   return transitionStatus === "starting" ? DISABLED_TRANSITIONS_STYLE : EMPTY_OBJECT;
 }
 
-// node_modules/@base-ui/react/esm/utils/usePositioner.js
+// node_modules/@base-ui/react/utils/usePositioner.mjs
 function usePositioner(componentProps, state, {
   styles,
   transitionStatus,
@@ -7965,7 +8502,7 @@ function usePositioner(componentProps, state, {
   });
 }
 
-// node_modules/@base-ui/react/esm/collapsible/index.parts.js
+// node_modules/@base-ui/react/collapsible/index.parts.mjs
 var index_parts_exports = {};
 __export(index_parts_exports, {
   Panel: () => CollapsiblePanel,
@@ -7973,18 +8510,18 @@ __export(index_parts_exports, {
   Trigger: () => CollapsibleTrigger
 });
 
-// node_modules/@base-ui/react/esm/collapsible/root/CollapsibleRoot.js
-var React38 = __toESM(require_react(), 1);
+// node_modules/@base-ui/react/collapsible/root/CollapsibleRoot.mjs
+var React42 = __toESM(require_react(), 1);
 
-// node_modules/@base-ui/react/esm/collapsible/root/stateAttributesMapping.js
+// node_modules/@base-ui/react/collapsible/root/stateAttributesMapping.mjs
 var collapsibleStateAttributesMapping = {
   ...collapsibleOpenStateMapping,
   ...transitionStatusMapping
 };
 
-// node_modules/@base-ui/react/esm/collapsible/root/CollapsibleRoot.js
-var import_jsx_runtime5 = __toESM(require_jsx_runtime(), 1);
-var CollapsibleRoot = /* @__PURE__ */ React38.forwardRef(function CollapsibleRoot2(componentProps, forwardedRef) {
+// node_modules/@base-ui/react/collapsible/root/CollapsibleRoot.mjs
+var import_jsx_runtime6 = __toESM(require_jsx_runtime(), 1);
+var CollapsibleRoot = /* @__PURE__ */ React42.forwardRef(function CollapsibleRoot2(componentProps, forwardedRef) {
   const {
     render: render4,
     className,
@@ -8002,12 +8539,12 @@ var CollapsibleRoot = /* @__PURE__ */ React38.forwardRef(function CollapsibleRoo
     onOpenChange,
     disabled: disabled2
   });
-  const state = React38.useMemo(() => ({
+  const state = React42.useMemo(() => ({
     open: collapsible.open,
     disabled: collapsible.disabled,
     transitionStatus: collapsible.transitionStatus
   }), [collapsible.open, collapsible.disabled, collapsible.transitionStatus]);
-  const contextValue = React38.useMemo(() => ({
+  const contextValue = React42.useMemo(() => ({
     ...collapsible,
     onOpenChange,
     state
@@ -8018,20 +8555,20 @@ var CollapsibleRoot = /* @__PURE__ */ React38.forwardRef(function CollapsibleRoo
     props: elementProps,
     stateAttributesMapping: collapsibleStateAttributesMapping
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(CollapsibleRootContext.Provider, {
+  return /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(CollapsibleRootContext.Provider, {
     value: contextValue,
     children: element
   });
 });
 if (true) CollapsibleRoot.displayName = "CollapsibleRoot";
 
-// node_modules/@base-ui/react/esm/collapsible/trigger/CollapsibleTrigger.js
-var React39 = __toESM(require_react(), 1);
+// node_modules/@base-ui/react/collapsible/trigger/CollapsibleTrigger.mjs
+var React43 = __toESM(require_react(), 1);
 var stateAttributesMapping = {
   ...triggerOpenStateMapping,
   ...transitionStatusMapping
 };
-var CollapsibleTrigger = /* @__PURE__ */ React39.forwardRef(function CollapsibleTrigger2(componentProps, forwardedRef) {
+var CollapsibleTrigger = /* @__PURE__ */ React43.forwardRef(function CollapsibleTrigger2(componentProps, forwardedRef) {
   const {
     panelId,
     open,
@@ -8042,7 +8579,6 @@ var CollapsibleTrigger = /* @__PURE__ */ React39.forwardRef(function Collapsible
   const {
     className,
     disabled: disabled2 = contextDisabled,
-    id,
     render: render4,
     nativeButton = true,
     style,
@@ -8070,18 +8606,18 @@ var CollapsibleTrigger = /* @__PURE__ */ React39.forwardRef(function Collapsible
 });
 if (true) CollapsibleTrigger.displayName = "CollapsibleTrigger";
 
-// node_modules/@base-ui/react/esm/collapsible/panel/CollapsiblePanel.js
-var React40 = __toESM(require_react(), 1);
+// node_modules/@base-ui/react/collapsible/panel/CollapsiblePanel.mjs
+var React44 = __toESM(require_react(), 1);
 
-// node_modules/@base-ui/react/esm/collapsible/panel/CollapsiblePanelCssVars.js
+// node_modules/@base-ui/react/collapsible/panel/CollapsiblePanelCssVars.mjs
 var CollapsiblePanelCssVars = /* @__PURE__ */ (function(CollapsiblePanelCssVars2) {
   CollapsiblePanelCssVars2["collapsiblePanelHeight"] = "--collapsible-panel-height";
   CollapsiblePanelCssVars2["collapsiblePanelWidth"] = "--collapsible-panel-width";
   return CollapsiblePanelCssVars2;
 })({});
 
-// node_modules/@base-ui/react/esm/collapsible/panel/CollapsiblePanel.js
-var CollapsiblePanel = /* @__PURE__ */ React40.forwardRef(function CollapsiblePanel2(componentProps, forwardedRef) {
+// node_modules/@base-ui/react/collapsible/panel/CollapsiblePanel.mjs
+var CollapsiblePanel = /* @__PURE__ */ React44.forwardRef(function CollapsiblePanel2(componentProps, forwardedRef) {
   const {
     className,
     hiddenUntilFound: hiddenUntilFoundProp,
@@ -8180,14 +8716,52 @@ var CollapsiblePanel = /* @__PURE__ */ React40.forwardRef(function CollapsiblePa
 });
 if (true) CollapsiblePanel.displayName = "CollapsiblePanel";
 
-// node_modules/@base-ui/react/esm/utils/usePopupViewport.js
-var React43 = __toESM(require_react(), 1);
-var ReactDOM5 = __toESM(require_react_dom(), 1);
+// node_modules/@base-ui/react/internals/composite/item/useCompositeItem.mjs
+var React45 = __toESM(require_react(), 1);
+function useCompositeItem(params = {}) {
+  const {
+    highlightItemOnHover,
+    highlightedIndex,
+    onHighlightedIndexChange
+  } = useCompositeRootContext();
+  const {
+    ref,
+    index: index2
+  } = useCompositeListItem(params);
+  const isHighlighted = highlightedIndex === index2;
+  const itemRef = React45.useRef(null);
+  const mergedRef = useMergedRefs(ref, itemRef);
+  const compositeProps = {
+    tabIndex: isHighlighted ? 0 : -1,
+    onFocus() {
+      onHighlightedIndexChange(index2);
+    },
+    onMouseMove() {
+      const item = itemRef.current;
+      if (!highlightItemOnHover || !item) {
+        return;
+      }
+      const disabled2 = item.hasAttribute("disabled") || item.ariaDisabled === "true";
+      if (!isHighlighted && !disabled2) {
+        item.focus();
+      }
+    }
+  };
+  return {
+    compositeProps,
+    compositeRef: mergedRef,
+    index: index2
+  };
+}
 
-// node_modules/@base-ui/utils/esm/usePreviousValue.js
-var React41 = __toESM(require_react(), 1);
+// node_modules/@base-ui/react/utils/usePopupViewport.mjs
+var React48 = __toESM(require_react(), 1);
+var ReactDOM6 = __toESM(require_react_dom(), 1);
+
+// node_modules/@base-ui/utils/usePreviousValue.mjs
+var React46 = __toESM(require_react(), 1);
 function usePreviousValue(value) {
-  const [state, setState] = React41.useState({
+  const [state, setState] = React46.useState({
     current: value,
     previous: null
   });
@@ -8200,10 +8774,10 @@ function usePreviousValue(value) {
   return state.previous;
 }
 
-// node_modules/@base-ui/react/esm/utils/usePopupAutoResize.js
-var React42 = __toESM(require_react(), 1);
+// node_modules/@base-ui/react/utils/usePopupAutoResize.mjs
+var React47 = __toESM(require_react(), 1);
 
-// node_modules/@base-ui/react/esm/utils/getCssDimensions.js
+// node_modules/@base-ui/react/utils/getCssDimensions.mjs
 function getCssDimensions2(element) {
   const css = getComputedStyle2(element);
   let width = parseFloat(css.width) || 0;
@@ -8222,15 +8796,13 @@ function getCssDimensions2(element) {
   };
 }
 
-// node_modules/@base-ui/react/esm/utils/usePopupAutoResize.js
-var DEFAULT_ENABLED = () => true;
+// node_modules/@base-ui/react/utils/usePopupAutoResize.mjs
 function usePopupAutoResize(parameters) {
   const {
     popupElement,
     positionerElement,
     content,
     mounted,
-    enabled = DEFAULT_ENABLED,
     onMeasureLayout: onMeasureLayoutParam,
     onMeasureLayoutComplete: onMeasureLayoutCompleteParam,
     side,
@@ -8238,13 +8810,12 @@ function usePopupAutoResize(parameters) {
   } = parameters;
   const runOnceAnimationsFinish = useAnimationsFinished(popupElement, true, false);
   const animationFrame = useAnimationFrame();
-  const committedDimensionsRef = React42.useRef(null);
-  const liveDimensionsRef = React42.useRef(null);
-  const isInitialRenderRef = React42.useRef(true);
-  const restoreAnchoringStylesRef = React42.useRef(NOOP);
+  const committedDimensionsRef = React47.useRef(null);
+  const isInitialRenderRef = React47.useRef(true);
+  const restoreAnchoringStylesRef = React47.useRef(NOOP);
   const onMeasureLayout = useStableCallback(onMeasureLayoutParam);
   const onMeasureLayoutComplete = useStableCallback(onMeasureLayoutCompleteParam);
-  const anchoringStyles = React42.useMemo(() => {
+  const anchoringStyles = React47.useMemo(() => {
     let isOriginSide = side === "top";
     let isPhysicalLeft = side === "left";
     if (direction === "rtl") {
@@ -8261,27 +8832,16 @@ function usePopupAutoResize(parameters) {
     } : EMPTY_OBJECT;
   }, [side, direction]);
   useIsoLayoutEffect(() => {
-    if (!mounted || !enabled() || typeof ResizeObserver !== "function") {
+    if (!mounted) {
       restoreAnchoringStylesRef.current = NOOP;
       isInitialRenderRef.current = true;
       committedDimensionsRef.current = null;
-      liveDimensionsRef.current = null;
       return void 0;
     }
     if (!popupElement || !positionerElement) {
       return void 0;
     }
     restoreAnchoringStylesRef.current = applyElementStyles(popupElement, anchoringStyles);
-    const observer = new ResizeObserver((entries) => {
-      const entry = entries[0];
-      if (entry) {
-        liveDimensionsRef.current = {
-          width: Math.ceil(entry.borderBoxSize[0].inlineSize),
-          height: Math.ceil(entry.borderBoxSize[0].blockSize)
-        };
-      }
-    });
-    observer.observe(popupElement);
     setPopupCssSize(popupElement, "auto");
     const restorePopupPosition = overrideElementStyle(popupElement, "position", "static");
     const restorePopupTransform = overrideElementStyle(popupElement, "transform", "none");
@@ -8309,27 +8869,14 @@ function usePopupAutoResize(parameters) {
       onMeasureLayoutComplete?.(null, dimensions);
       isInitialRenderRef.current = false;
       return () => {
-        observer.disconnect();
         restoreAnchoringStylesRef.current();
         restoreAnchoringStylesRef.current = NOOP;
       };
     }
-    setPopupCssSize(popupElement, "auto");
     setPositionerCssSize(positionerElement, "max-content");
-    const previousDimensions = committedDimensionsRef.current ?? liveDimensionsRef.current;
+    const previousDimensions = committedDimensionsRef.current;
     const newDimensions = getCssDimensions2(popupElement);
     committedDimensionsRef.current = newDimensions;
-    if (!previousDimensions) {
-      setPositionerCssSize(positionerElement, newDimensions);
-      restoreMeasurementOverridesIncludingScale();
-      onMeasureLayoutComplete?.(null, newDimensions);
-      return () => {
-        observer.disconnect();
-        animationFrame.cancel();
-        restoreAnchoringStylesRef.current();
-        restoreAnchoringStylesRef.current = NOOP;
-      };
-    }
     setPopupCssSize(popupElement, previousDimensions);
     restoreMeasurementOverridesIncludingScale();
     onMeasureLayoutComplete?.(previousDimensions, newDimensions);
@@ -8343,13 +8890,12 @@ function usePopupAutoResize(parameters) {
       }, abortController.signal);
     });
     return () => {
-      observer.disconnect();
       abortController.abort();
       animationFrame.cancel();
       restoreAnchoringStylesRef.current();
       restoreAnchoringStylesRef.current = NOOP;
     };
-  }, [content, popupElement, positionerElement, runOnceAnimationsFinish, animationFrame, enabled, mounted, onMeasureLayout, onMeasureLayoutComplete, anchoringStyles]);
+  }, [content, popupElement, positionerElement, runOnceAnimationsFinish, animationFrame, mounted, onMeasureLayout, onMeasureLayoutComplete, anchoringStyles]);
 }
 function overrideElementStyle(element, property, value) {
   const originalValue = element.style.getPropertyValue(property);
@@ -8380,8 +8926,8 @@ function setPositionerCssSize(positionerElement, size4) {
   positionerElement.style.setProperty("--positioner-height", height);
 }
 
-// node_modules/@base-ui/react/esm/utils/usePopupViewport.js
-var import_jsx_runtime6 = __toESM(require_jsx_runtime(), 1);
+// node_modules/@base-ui/react/utils/usePopupViewport.mjs
+var import_jsx_runtime7 = __toESM(require_jsx_runtime(), 1);
 function usePopupViewport(parameters) {
   const {
     store: store3,
@@ -8399,15 +8945,15 @@ function usePopupViewport(parameters) {
   const positionerElement = store3.useState("positionerElement");
   const previousActiveTrigger = usePreviousValue(open ? activeTrigger : null);
   const currentContentKey = usePopupContentKey(activeTriggerId, payload);
-  const capturedNodeRef = React43.useRef(null);
-  const [previousContentNode, setPreviousContentNode] = React43.useState(null);
-  const [newTriggerOffset, setNewTriggerOffset] = React43.useState(null);
-  const currentContainerRef = React43.useRef(null);
-  const previousContainerRef = React43.useRef(null);
+  const capturedNodeRef = React48.useRef(null);
+  const [previousContentNode, setPreviousContentNode] = React48.useState(null);
+  const [newTriggerOffset, setNewTriggerOffset] = React48.useState(null);
+  const currentContainerRef = React48.useRef(null);
+  const previousContainerRef = React48.useRef(null);
   const onAnimationsFinished = useAnimationsFinished(currentContainerRef, true, false);
   const cleanupFrame = useAnimationFrame();
-  const [previousContentDimensions, setPreviousContentDimensions] = React43.useState(null);
-  const [showStartingStyleAttribute, setShowStartingStyleAttribute] = React43.useState(false);
+  const [previousContentDimensions, setPreviousContentDimensions] = React48.useState(null);
+  const [showStartingStyleAttribute, setShowStartingStyleAttribute] = React48.useState(false);
   useIsoLayoutEffect(() => {
     store3.set("hasViewport", true);
     return () => {
@@ -8427,7 +8973,12 @@ function usePopupViewport(parameters) {
       setPreviousContentDimensions(previousDimensions);
     }
   });
-  const lastHandledTriggerRef = React43.useRef(null);
+  const lastHandledTriggerRef = React48.useRef(null);
+  useIsoLayoutEffect(() => {
+    if (!open || !mounted) {
+      lastHandledTriggerRef.current = null;
+    }
+  }, [open, mounted]);
   useIsoLayoutEffect(() => {
     if (activeTrigger && previousActiveTrigger && activeTrigger !== previousActiveTrigger && lastHandledTriggerRef.current !== activeTrigger && capturedNodeRef.current) {
       setPreviousContentNode(capturedNodeRef.current);
@@ -8435,7 +8986,7 @@ function usePopupViewport(parameters) {
       const offset4 = calculateRelativePosition(previousActiveTrigger, activeTrigger);
       setNewTriggerOffset(offset4);
       cleanupFrame.request(() => {
-        ReactDOM5.flushSync(() => {
+        ReactDOM6.flushSync(() => {
           setShowStartingStyleAttribute(false);
         });
         onAnimationsFinished(() => {
@@ -8461,14 +9012,14 @@ function usePopupViewport(parameters) {
   const isTransitioning = previousContentNode != null;
   let childrenToRender;
   if (!isTransitioning) {
-    childrenToRender = /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", {
+    childrenToRender = /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", {
       "data-current": true,
       ref: currentContainerRef,
       children
     }, currentContentKey);
   } else {
-    childrenToRender = /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(React43.Fragment, {
-      children: [/* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", {
+    childrenToRender = /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(React48.Fragment, {
+      children: [/* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", {
         "data-previous": true,
         inert: inertValue(true),
         ref: previousContainerRef,
@@ -8480,7 +9031,7 @@ function usePopupViewport(parameters) {
           position: "absolute"
         },
         "data-ending-style": showStartingStyleAttribute ? void 0 : ""
-      }, "previous"), /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", {
+      }, "previous"), /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", {
         "data-current": true,
         ref: currentContainerRef,
         "data-starting-style": showStartingStyleAttribute ? "" : void 0,
@@ -8546,10 +9097,10 @@ function calculateRelativePosition(from, to) {
   };
 }
 function usePopupContentKey(activeTriggerId, payload) {
-  const [contentKey, setContentKey] = React43.useState(0);
-  const previousActiveTriggerIdRef = React43.useRef(activeTriggerId);
-  const previousPayloadRef = React43.useRef(payload);
-  const pendingPayloadUpdateRef = React43.useRef(false);
+  const [contentKey, setContentKey] = React48.useState(0);
+  const previousActiveTriggerIdRef = React48.useRef(activeTriggerId);
+  const previousPayloadRef = React48.useRef(payload);
+  const pendingPayloadUpdateRef = React48.useRef(false);
   useIsoLayoutEffect(() => {
     const previousActiveTriggerId = previousActiveTriggerIdRef.current;
     const previousPayload = previousPayloadRef.current;
@@ -8568,11 +9119,326 @@ function usePopupContentKey(activeTriggerId, payload) {
   return `${activeTriggerId ?? "current"}-${contentKey}`;
 }
 
-// node_modules/@base-ui/react/esm/utils/FloatingPortalLite.js
-var React44 = __toESM(require_react(), 1);
-var ReactDOM6 = __toESM(require_react_dom(), 1);
-var import_jsx_runtime7 = __toESM(require_jsx_runtime(), 1);
-var FloatingPortalLite = /* @__PURE__ */ React44.forwardRef(function FloatingPortalLite2(componentProps, forwardedRef) {
+// node_modules/@base-ui/utils/isElementDisabled.mjs
+function isElementDisabled(element) {
+  return element == null || element.hasAttribute("disabled") || element.getAttribute("aria-disabled") === "true";
+}
+
+// node_modules/@base-ui/react/internals/csp-context/CSPContext.mjs
+var React49 = __toESM(require_react(), 1);
+var CSPContext = /* @__PURE__ */ React49.createContext(void 0);
+if (true) CSPContext.displayName = "CSPContext";
+var DEFAULT_CSP_CONTEXT_VALUE = {
+  disableStyleElements: false
+};
+function useCSPContext() {
+  return React49.useContext(CSPContext) ?? DEFAULT_CSP_CONTEXT_VALUE;
+}
+
+// node_modules/@base-ui/react/internals/composite/root/CompositeRoot.mjs
+var React51 = __toESM(require_react(), 1);
+
+// node_modules/@base-ui/react/internals/composite/root/useCompositeRoot.mjs
+var React50 = __toESM(require_react(), 1);
+
+// node_modules/@base-ui/react/internals/composite/constants.mjs
+var ACTIVE_COMPOSITE_ITEM = "data-composite-item-active";
+
+// node_modules/@base-ui/react/internals/composite/root/useCompositeRoot.mjs
+var EMPTY_ARRAY2 = [];
+function useCompositeRoot(params) {
+  const {
+    loopFocus = true,
+    orientation = "both",
+    grid,
+    onLoop,
+    direction,
+    highlightedIndex: externalHighlightedIndex,
+    onHighlightedIndexChange: externalSetHighlightedIndex,
+    rootRef: externalRef,
+    enableHomeAndEndKeys = false,
+    stopEventPropagation = false,
+    disabledIndices,
+    modifierKeys = EMPTY_ARRAY2
+  } = params;
+  const [internalHighlightedIndex, internalSetHighlightedIndex] = React50.useState(0);
+  const isGrid = grid != null;
+  const rootRef = React50.useRef(null);
+  const mergedRef = useMergedRefs(rootRef, externalRef);
+  const elementsRef = React50.useRef([]);
+  const hasSetDefaultIndexRef = React50.useRef(false);
+  const highlightedIndex = externalHighlightedIndex ?? internalHighlightedIndex;
+  const onHighlightedIndexChange = useStableCallback((index2, shouldScrollIntoView = false) => {
+    (externalSetHighlightedIndex ?? internalSetHighlightedIndex)(index2);
+    if (shouldScrollIntoView) {
+      const newActiveItem = elementsRef.current[index2];
+      scrollIntoViewIfNeeded(rootRef.current, newActiveItem, direction, orientation);
+    }
+  });
+  const onMapChange = useStableCallback((map) => {
+    if (map.size === 0 || hasSetDefaultIndexRef.current) {
+      return;
+    }
+    hasSetDefaultIndexRef.current = true;
+    const sortedElements = Array.from(map.keys());
+    const activeItem = sortedElements.find((compositeElement) => compositeElement?.hasAttribute(ACTIVE_COMPOSITE_ITEM)) ?? null;
+    const activeIndex = activeItem ? sortedElements.indexOf(activeItem) : -1;
+    if (activeIndex !== -1) {
+      onHighlightedIndexChange(activeIndex);
+    } else if (isListIndexDisabled(sortedElements, highlightedIndex, disabledIndices)) {
+      const firstEnabledIndex = findNonDisabledListIndex(sortedElements, {
+        disabledIndices
+      });
+      if (!isIndexOutOfListBounds(sortedElements, firstEnabledIndex)) {
+        onHighlightedIndexChange(firstEnabledIndex);
+      }
+    }
+    scrollIntoViewIfNeeded(rootRef.current, activeItem, direction, orientation);
+  });
+  useIsoLayoutEffect(() => {
+    if (disabledIndices == null || externalHighlightedIndex != null || !hasSetDefaultIndexRef.current) {
+      return;
+    }
+    const elements = elementsRef.current;
+    if (isListIndexDisabled(elements, highlightedIndex, disabledIndices)) {
+      const firstEnabledIndex = findNonDisabledListIndex(elements, {
+        disabledIndices
+      });
+      if (!isIndexOutOfListBounds(elements, firstEnabledIndex)) {
+        onHighlightedIndexChange(firstEnabledIndex);
+      }
+    }
+  }, [disabledIndices, externalHighlightedIndex, highlightedIndex, elementsRef, onHighlightedIndexChange]);
+  const wrappedOnLoop = useStableCallback((event, prevIndex, nextIndex) => {
+    if (!onLoop) {
+      return nextIndex;
+    }
+    return onLoop(event, prevIndex, nextIndex, elementsRef);
+  });
+  const onKeyDown = useStableCallback((event) => {
+    const RELEVANT_KEYS = enableHomeAndEndKeys ? COMPOSITE_KEYS : ARROW_KEYS;
+    if (!RELEVANT_KEYS.has(event.key)) {
+      return;
+    }
+    if (isModifierKeySet(event, modifierKeys)) {
+      return;
+    }
+    const element = rootRef.current;
+    if (!element) {
+      return;
+    }
+    const isRtl = direction === "rtl";
+    const horizontalForwardKey = isRtl ? ARROW_LEFT : ARROW_RIGHT;
+    const forwardKey = {
+      horizontal: horizontalForwardKey,
+      vertical: ARROW_DOWN,
+      both: horizontalForwardKey
+    }[orientation];
+    const horizontalBackwardKey = isRtl ? ARROW_RIGHT : ARROW_LEFT;
+    const backwardKey = {
+      horizontal: horizontalBackwardKey,
+      vertical: ARROW_UP,
+      both: horizontalBackwardKey
+    }[orientation];
+    const target = getTarget(event.nativeEvent);
+    if (target != null && isNativeInput(target) && !isElementDisabled(target)) {
+      const selectionStart = target.selectionStart;
+      const selectionEnd = target.selectionEnd;
+      const textContent = target.value ?? "";
+      if (selectionStart == null || event.shiftKey || selectionStart !== selectionEnd) {
+        return;
+      }
+      if (event.key !== backwardKey && selectionStart < textContent.length) {
+        return;
+      }
+      if (event.key !== forwardKey && selectionStart > 0) {
+        return;
+      }
+    }
+    let nextIndex = highlightedIndex;
+    const minIndex = getMinListIndex(elementsRef, disabledIndices);
+    const maxIndex = getMaxListIndex(elementsRef, disabledIndices);
+    if (grid != null) {
+      nextIndex = grid({
+        disabledIndices,
+        elementsRef,
+        event,
+        highlightedIndex,
+        loopFocus,
+        maxIndex,
+        minIndex,
+        onLoop: wrappedOnLoop,
+        orientation,
+        rtl: isRtl
+      });
+    }
+    const forwardKeys = {
+      horizontal: [horizontalForwardKey],
+      vertical: [ARROW_DOWN],
+      both: [horizontalForwardKey, ARROW_DOWN]
+    }[orientation];
+    const backwardKeys = {
+      horizontal: [horizontalBackwardKey],
+      vertical: [ARROW_UP],
+      both: [horizontalBackwardKey, ARROW_UP]
+    }[orientation];
+    const preventedKeys = isGrid ? RELEVANT_KEYS : {
+      horizontal: enableHomeAndEndKeys ? HORIZONTAL_KEYS_WITH_EXTRA_KEYS : HORIZONTAL_KEYS,
+      vertical: enableHomeAndEndKeys ? VERTICAL_KEYS_WITH_EXTRA_KEYS : VERTICAL_KEYS,
+      both: RELEVANT_KEYS
+    }[orientation];
+    if (enableHomeAndEndKeys) {
+      if (event.key === HOME) {
+        nextIndex = minIndex;
+      } else if (event.key === END) {
+        nextIndex = maxIndex;
+      }
+    }
+    if (nextIndex === highlightedIndex && (forwardKeys.includes(event.key) || backwardKeys.includes(event.key))) {
+      if (loopFocus && nextIndex === maxIndex && forwardKeys.includes(event.key)) {
+        nextIndex = minIndex;
+        if (onLoop) {
+          nextIndex = onLoop(event, highlightedIndex, nextIndex, elementsRef);
+        }
+      } else if (loopFocus && nextIndex === minIndex && backwardKeys.includes(event.key)) {
+        nextIndex = maxIndex;
+        if (onLoop) {
+          nextIndex = onLoop(event, highlightedIndex, nextIndex, elementsRef);
+        }
+      } else {
+        nextIndex = findNonDisabledListIndex(elementsRef.current, {
+          startingIndex: nextIndex,
+          decrement: backwardKeys.includes(event.key),
+          disabledIndices
+        });
+      }
+    }
+    if (nextIndex !== highlightedIndex && !isIndexOutOfListBounds(elementsRef.current, nextIndex)) {
+      if (stopEventPropagation) {
+        event.stopPropagation();
+      }
+      if (preventedKeys.has(event.key)) {
+        event.preventDefault();
+      }
+      onHighlightedIndexChange(nextIndex, true);
+      queueMicrotask(() => {
+        elementsRef.current[nextIndex]?.focus();
+      });
+    }
+  });
+  const props = {
+    ref: mergedRef,
+    onFocus(event) {
+      const element = rootRef.current;
+      const target = getTarget(event.nativeEvent);
+      if (!element || target == null || !isNativeInput(target)) {
+        return;
+      }
+      target.setSelectionRange(0, target.value.length ?? 0);
+    },
+    onKeyDown
+  };
+  return {
+    props,
+    highlightedIndex,
+    onHighlightedIndexChange,
+    elementsRef,
+    disabledIndices,
+    onMapChange,
+    relayKeyboardEvent: onKeyDown
+  };
+}
+function isModifierKeySet(event, ignoredModifierKeys) {
+  for (const key of MODIFIER_KEYS.values()) {
+    if (ignoredModifierKeys.includes(key)) {
+      continue;
+    }
+    if (event.getModifierState(key)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+// node_modules/@base-ui/react/internals/composite/root/CompositeRoot.mjs
+var import_jsx_runtime8 = __toESM(require_jsx_runtime(), 1);
+function CompositeRoot(componentProps) {
+  const {
+    render: render4,
+    className,
+    style,
+    refs = EMPTY_ARRAY,
+    props = EMPTY_ARRAY,
+    state = EMPTY_OBJECT,
+    stateAttributesMapping: stateAttributesMapping6,
+    highlightedIndex: highlightedIndexProp,
+    onHighlightedIndexChange: onHighlightedIndexChangeProp,
+    orientation,
+    grid,
+    loopFocus,
+    onLoop,
+    enableHomeAndEndKeys,
+    onMapChange: onMapChangeProp,
+    stopEventPropagation = true,
+    rootRef,
+    disabledIndices,
+    modifierKeys,
+    highlightItemOnHover = false,
+    tag = "div",
+    ...elementProps
+  } = componentProps;
+  const direction = useDirection();
+  const {
+    props: defaultProps,
+    highlightedIndex,
+    onHighlightedIndexChange,
+    elementsRef,
+    onMapChange: onMapChangeUnwrapped,
+    relayKeyboardEvent
+  } = useCompositeRoot({
+    grid,
+    loopFocus,
+    onLoop,
+    orientation,
+    highlightedIndex: highlightedIndexProp,
+    onHighlightedIndexChange: onHighlightedIndexChangeProp,
+    rootRef,
+    stopEventPropagation,
+    enableHomeAndEndKeys,
+    direction,
+    disabledIndices,
+    modifierKeys
+  });
+  const element = useRenderElement(tag, componentProps, {
+    state,
+    ref: refs,
+    props: [defaultProps, ...props, elementProps],
+    stateAttributesMapping: stateAttributesMapping6
+  });
+  const contextValue = React51.useMemo(() => ({
+    highlightedIndex,
+    onHighlightedIndexChange,
+    highlightItemOnHover,
+    relayKeyboardEvent
+  }), [highlightedIndex, onHighlightedIndexChange, highlightItemOnHover, relayKeyboardEvent]);
+  return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(CompositeRootContext.Provider, {
+    value: contextValue,
+    children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(CompositeList, {
+      elementsRef,
+      onMapChange: (newMap) => {
+        onMapChangeProp?.(newMap);
+        onMapChangeUnwrapped(newMap);
+      },
+      children: element
+    })
+  });
+}
+
+// node_modules/@base-ui/react/utils/FloatingPortalLite.mjs
+var React52 = __toESM(require_react(), 1);
+var ReactDOM7 = __toESM(require_react_dom(), 1);
+var import_jsx_runtime9 = __toESM(require_jsx_runtime(), 1);
+var FloatingPortalLite = /* @__PURE__ */ React52.forwardRef(function FloatingPortalLite2(componentProps, forwardedRef) {
   const {
     children,
     container,
@@ -8593,15 +9459,847 @@ var FloatingPortalLite = /* @__PURE__ */ React44.forwardRef(function FloatingPor
   if (!portalSubtree && !portalNode) {
     return null;
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(React44.Fragment, {
-    children: [portalSubtree, portalNode && /* @__PURE__ */ ReactDOM6.createPortal(children, portalNode)]
+  return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(React52.Fragment, {
+    children: [portalSubtree, portalNode && /* @__PURE__ */ ReactDOM7.createPortal(children, portalNode)]
   });
 });
 if (true) FloatingPortalLite.displayName = "FloatingPortalLite";
 
-// node_modules/@base-ui/react/esm/tooltip/index.parts.js
+// node_modules/@base-ui/react/utils/useIsHydrating.mjs
+var import_shim2 = __toESM(require_shim(), 1);
+function subscribe() {
+  return NOOP;
+}
+function getSnapshot() {
+  return false;
+}
+function getServerSnapshot() {
+  return true;
+}
+function useIsHydrating() {
+  return (0, import_shim2.useSyncExternalStore)(subscribe, getSnapshot, getServerSnapshot);
+}
+
+// node_modules/@base-ui/react/tabs/index.parts.mjs
 var index_parts_exports2 = {};
 __export(index_parts_exports2, {
+  Indicator: () => TabsIndicator,
+  List: () => TabsList,
+  Panel: () => TabsPanel,
+  Root: () => TabsRoot,
+  Tab: () => TabsTab
+});
+
+// node_modules/@base-ui/react/tabs/root/TabsRoot.mjs
+var React54 = __toESM(require_react(), 1);
+
+// node_modules/@base-ui/react/tabs/root/TabsRootContext.mjs
+var React53 = __toESM(require_react(), 1);
+var TabsRootContext = /* @__PURE__ */ React53.createContext(void 0);
+if (true) TabsRootContext.displayName = "TabsRootContext";
+function useTabsRootContext() {
+  const context = React53.useContext(TabsRootContext);
+  if (context === void 0) {
+    throw new Error(true ? "Base UI: TabsRootContext is missing. Tabs parts must be placed within <Tabs.Root>." : formatErrorMessage_default(64));
+  }
+  return context;
+}
+
+// node_modules/@base-ui/react/tabs/root/TabsRootDataAttributes.mjs
+var TabsRootDataAttributes = /* @__PURE__ */ (function(TabsRootDataAttributes2) {
+  TabsRootDataAttributes2["activationDirection"] = "data-activation-direction";
+  TabsRootDataAttributes2["orientation"] = "data-orientation";
+  return TabsRootDataAttributes2;
+})({});
+
+// node_modules/@base-ui/react/tabs/root/stateAttributesMapping.mjs
+var tabsStateAttributesMapping = {
+  tabActivationDirection: (dir) => ({
+    [TabsRootDataAttributes.activationDirection]: dir
+  })
+};
+
+// node_modules/@base-ui/react/tabs/root/TabsRoot.mjs
+var import_jsx_runtime10 = __toESM(require_jsx_runtime(), 1);
+var TabsRoot = /* @__PURE__ */ React54.forwardRef(function TabsRoot2(componentProps, forwardedRef) {
+  const {
+    className,
+    defaultValue: defaultValueProp = 0,
+    onValueChange: onValueChangeProp,
+    orientation = "horizontal",
+    render: render4,
+    value: valueProp,
+    style,
+    ...elementProps
+  } = componentProps;
+  const hasExplicitDefaultValueProp = componentProps.defaultValue !== void 0;
+  const tabPanelRefs = React54.useRef([]);
+  const [mountedTabPanels, setMountedTabPanels] = React54.useState(() => /* @__PURE__ */ new Map());
+  const [value, setValue] = useControlled({
+    controlled: valueProp,
+    default: defaultValueProp,
+    name: "Tabs",
+    state: "value"
+  });
+  const isControlled = valueProp !== void 0;
+  const [tabMap, setTabMap] = React54.useState(() => /* @__PURE__ */ new Map());
+  const lastKnownTabElementRef = React54.useRef(void 0);
+  const getTabElementBySelectedValue = React54.useCallback((selectedValue) => {
+    if (selectedValue === void 0) {
+      return null;
+    }
+    for (const [tabElement, tabMetadata] of tabMap.entries()) {
+      if (tabMetadata != null && selectedValue === (tabMetadata.value ?? tabMetadata.index)) {
+        return tabElement;
+      }
+    }
+    return null;
+  }, [tabMap]);
+  const [activationDirectionState, setActivationDirectionState] = React54.useState(() => ({
+    previousValue: value,
+    tabActivationDirection: "none"
+  }));
+  const {
+    previousValue,
+    tabActivationDirection: committedTabActivationDirection
+  } = activationDirectionState;
+  let tabActivationDirection = committedTabActivationDirection;
+  let directionComputationIncomplete = false;
+  if (previousValue !== value) {
+    tabActivationDirection = computeActivationDirection(previousValue, value, orientation, tabMap);
+    directionComputationIncomplete = previousValue != null && value != null && getTabElementBySelectedValue(value) == null;
+  }
+  const nextPreviousValue = directionComputationIncomplete ? previousValue : value;
+  const shouldSyncActivationDirectionState = previousValue !== nextPreviousValue || committedTabActivationDirection !== tabActivationDirection;
+  useIsoLayoutEffect(() => {
+    if (!shouldSyncActivationDirectionState) {
+      return;
+    }
+    setActivationDirectionState({
+      previousValue: nextPreviousValue,
+      tabActivationDirection
+    });
+  }, [nextPreviousValue, shouldSyncActivationDirectionState, tabActivationDirection]);
+  const onValueChange = useStableCallback((newValue, eventDetails) => {
+    const activationDirection = computeActivationDirection(value, newValue, orientation, tabMap);
+    eventDetails.activationDirection = activationDirection;
+    onValueChangeProp?.(newValue, eventDetails);
+    if (eventDetails.isCanceled) {
+      return;
+    }
+    setValue(newValue);
+  });
+  const notifyAutomaticValueChange = useStableCallback((nextValue, reason) => {
+    onValueChangeProp?.(nextValue, createChangeEventDetails(reason, void 0, void 0, {
+      activationDirection: "none"
+    }));
+  });
+  const registerMountedTabPanel = useStableCallback((panelValue, panelId) => {
+    setMountedTabPanels((prev) => {
+      if (prev.get(panelValue) === panelId) {
+        return prev;
+      }
+      const next = new Map(prev);
+      next.set(panelValue, panelId);
+      return next;
+    });
+  });
+  const unregisterMountedTabPanel = useStableCallback((panelValue, panelId) => {
+    setMountedTabPanels((prev) => {
+      if (!prev.has(panelValue) || prev.get(panelValue) !== panelId) {
+        return prev;
+      }
+      const next = new Map(prev);
+      next.delete(panelValue);
+      return next;
+    });
+  });
+  const getTabPanelIdByValue = React54.useCallback((tabValue) => {
+    return mountedTabPanels.get(tabValue);
+  }, [mountedTabPanels]);
+  const getTabIdByPanelValue = React54.useCallback((tabPanelValue) => {
+    for (const tabMetadata of tabMap.values()) {
+      if (tabPanelValue === tabMetadata?.value) {
+        return tabMetadata?.id;
+      }
+    }
+    return void 0;
+  }, [tabMap]);
+  const tabsContextValue = React54.useMemo(() => ({
+    getTabElementBySelectedValue,
+    getTabIdByPanelValue,
+    getTabPanelIdByValue,
+    onValueChange,
+    orientation,
+    registerMountedTabPanel,
+    setTabMap,
+    unregisterMountedTabPanel,
+    tabActivationDirection,
+    value
+  }), [getTabElementBySelectedValue, getTabIdByPanelValue, getTabPanelIdByValue, onValueChange, orientation, registerMountedTabPanel, setTabMap, unregisterMountedTabPanel, tabActivationDirection, value]);
+  const selectedTabMetadata = React54.useMemo(() => {
+    for (const tabMetadata of tabMap.values()) {
+      if (tabMetadata != null && tabMetadata.value === value) {
+        return tabMetadata;
+      }
+    }
+    return void 0;
+  }, [tabMap, value]);
+  const firstEnabledTabValue = React54.useMemo(() => {
+    for (const tabMetadata of tabMap.values()) {
+      if (tabMetadata != null && !tabMetadata.disabled) {
+        return tabMetadata.value;
+      }
+    }
+    return void 0;
+  }, [tabMap]);
+  const shouldNotifyInitialValueChangeRef = React54.useRef(!hasExplicitDefaultValueProp);
+  const initialDefaultValueRef = React54.useRef(defaultValueProp);
+  const shouldHonorDisabledDefaultValueRef = React54.useRef(hasExplicitDefaultValueProp);
+  const didRegisterTabsRef = React54.useRef(false);
+  useIsoLayoutEffect(() => {
+    if (isControlled) {
+      return;
+    }
+    function commitAutomaticValueChange(fallbackValue, fallbackReason) {
+      setValue(fallbackValue);
+      setActivationDirectionState((prev) => {
+        if (prev.previousValue === fallbackValue && prev.tabActivationDirection === "none") {
+          return prev;
+        }
+        return {
+          previousValue: fallbackValue,
+          tabActivationDirection: "none"
+        };
+      });
+      notifyAutomaticValueChange(fallbackValue, fallbackReason);
+      shouldNotifyInitialValueChangeRef.current = false;
+    }
+    if (tabMap.size === 0) {
+      if (didRegisterTabsRef.current && value !== null && !lastKnownTabElementRef.current?.isConnected) {
+        commitAutomaticValueChange(null, reason_parts_exports.missing);
+      }
+      return;
+    }
+    didRegisterTabsRef.current = true;
+    lastKnownTabElementRef.current = tabMap.keys().next().value;
+    const selectionIsDisabled = selectedTabMetadata?.disabled;
+    const selectionIsMissing = selectedTabMetadata == null && value !== null;
+    if (!selectionIsDisabled && value === initialDefaultValueRef.current) {
+      shouldHonorDisabledDefaultValueRef.current = false;
+    }
+    if (shouldHonorDisabledDefaultValueRef.current && selectionIsDisabled && value === initialDefaultValueRef.current) {
+      return;
+    }
+    const shouldNotifyInitialValueChange = shouldNotifyInitialValueChangeRef.current;
+    if (selectionIsDisabled || selectionIsMissing) {
+      const fallbackValue = firstEnabledTabValue ?? null;
+      if (value === fallbackValue) {
+        shouldNotifyInitialValueChangeRef.current = false;
+        return;
+      }
+      let fallbackReason = reason_parts_exports.missing;
+      if (shouldNotifyInitialValueChange) {
+        fallbackReason = reason_parts_exports.initial;
+      } else if (selectionIsDisabled) {
+        fallbackReason = reason_parts_exports.disabled;
+      }
+      commitAutomaticValueChange(fallbackValue, fallbackReason);
+      return;
+    }
+    if (shouldNotifyInitialValueChange && selectedTabMetadata != null) {
+      notifyAutomaticValueChange(value, reason_parts_exports.initial);
+      shouldNotifyInitialValueChangeRef.current = false;
+    }
+  }, [firstEnabledTabValue, isControlled, notifyAutomaticValueChange, selectedTabMetadata, setValue, tabMap, value]);
+  const state = {
+    orientation,
+    tabActivationDirection
+  };
+  const element = useRenderElement("div", componentProps, {
+    state,
+    ref: forwardedRef,
+    props: elementProps,
+    stateAttributesMapping: tabsStateAttributesMapping
+  });
+  return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(TabsRootContext.Provider, {
+    value: tabsContextValue,
+    children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(CompositeList, {
+      elementsRef: tabPanelRefs,
+      children: element
+    })
+  });
+});
+if (true) TabsRoot.displayName = "TabsRoot";
+function computeActivationDirection(oldValue, newValue, orientation, tabMap) {
+  if (oldValue == null || newValue == null) {
+    return "none";
+  }
+  let oldTab = null;
+  let newTab = null;
+  for (const [tabElement, tabMetadata] of tabMap.entries()) {
+    if (tabMetadata == null) {
+      continue;
+    }
+    const tabValue = tabMetadata.value ?? tabMetadata.index;
+    if (oldValue === tabValue) {
+      oldTab = tabElement;
+    }
+    if (newValue === tabValue) {
+      newTab = tabElement;
+    }
+    if (oldTab != null && newTab != null) {
+      break;
+    }
+  }
+  if (oldTab == null || newTab == null) {
+    if (oldTab !== newTab && (typeof oldValue === "number" || typeof oldValue === "string") && typeof oldValue === typeof newValue) {
+      if (orientation === "horizontal") {
+        return newValue > oldValue ? "right" : "left";
+      }
+      return newValue > oldValue ? "down" : "up";
+    }
+    return "none";
+  }
+  const oldRect = oldTab.getBoundingClientRect();
+  const newRect = newTab.getBoundingClientRect();
+  if (orientation === "horizontal") {
+    if (newRect.left < oldRect.left) {
+      return "left";
+    }
+    if (newRect.left > oldRect.left) {
+      return "right";
+    }
+  } else {
+    if (newRect.top < oldRect.top) {
+      return "up";
+    }
+    if (newRect.top > oldRect.top) {
+      return "down";
+    }
+  }
+  return "none";
+}
+
+// node_modules/@base-ui/react/tabs/tab/TabsTab.mjs
+var React56 = __toESM(require_react(), 1);
+
+// node_modules/@base-ui/react/tabs/list/TabsListContext.mjs
+var React55 = __toESM(require_react(), 1);
+var TabsListContext = /* @__PURE__ */ React55.createContext(void 0);
+if (true) TabsListContext.displayName = "TabsListContext";
+function useTabsListContext() {
+  const context = React55.useContext(TabsListContext);
+  if (context === void 0) {
+    throw new Error(true ? "Base UI: TabsListContext is missing. TabsList parts must be placed within <Tabs.List>." : formatErrorMessage_default(65));
+  }
+  return context;
+}
+
+// node_modules/@base-ui/react/tabs/tab/TabsTab.mjs
+var TabsTab = /* @__PURE__ */ React56.forwardRef(function TabsTab2(componentProps, forwardedRef) {
+  const {
+    className,
+    disabled: disabled2 = false,
+    render: render4,
+    value,
+    id: idProp,
+    nativeButton = true,
+    style,
+    ...elementProps
+  } = componentProps;
+  const {
+    value: activeTabValue,
+    getTabPanelIdByValue,
+    orientation,
+    tabActivationDirection
+  } = useTabsRootContext();
+  const {
+    activateOnFocus,
+    highlightedTabIndex,
+    onTabActivation,
+    registerTabResizeObserverElement,
+    setHighlightedTabIndex,
+    tabsListElement
+  } = useTabsListContext();
+  const id = useBaseUiId(idProp);
+  const tabMetadata = React56.useMemo(() => ({
+    disabled: disabled2,
+    id,
+    value
+  }), [disabled2, id, value]);
+  const {
+    compositeProps,
+    compositeRef,
+    index: index2
+    // hook is used instead of the CompositeItem component
+    // because the index is needed for Tab internals
+  } = useCompositeItem({
+    metadata: tabMetadata
+  });
+  const active = value === activeTabValue;
+  const isNavigatingRef = React56.useRef(false);
+  const tabElementRef = React56.useRef(null);
+  useIsoLayoutEffect(() => {
+    const tabElement = tabElementRef.current;
+    if (!tabElement) {
+      return void 0;
+    }
+    return registerTabResizeObserverElement(tabElement);
+  }, [registerTabResizeObserverElement]);
+  useIsoLayoutEffect(() => {
+    if (isNavigatingRef.current) {
+      isNavigatingRef.current = false;
+      return;
+    }
+    if (!(active && index2 > -1 && highlightedTabIndex !== index2)) {
+      return;
+    }
+    const listElement = tabsListElement;
+    if (listElement != null) {
+      const activeEl = activeElement(ownerDocument(listElement));
+      if (activeEl && contains(listElement, activeEl)) {
+        return;
+      }
+    }
+    if (!disabled2) {
+      setHighlightedTabIndex(index2);
+    }
+  }, [active, index2, highlightedTabIndex, setHighlightedTabIndex, disabled2, tabsListElement]);
+  const {
+    getButtonProps,
+    buttonRef
+  } = useButton({
+    disabled: disabled2,
+    native: nativeButton,
+    focusableWhenDisabled: true
+  });
+  const tabPanelId = getTabPanelIdByValue(value);
+  const isPressingRef = React56.useRef(false);
+  const isMainButtonRef = React56.useRef(false);
+  function onClick(event) {
+    if (active || disabled2) {
+      return;
+    }
+    onTabActivation(value, createChangeEventDetails(reason_parts_exports.none, event.nativeEvent, void 0, {
+      activationDirection: "none"
+    }));
+  }
+  function onFocus(event) {
+    if (active) {
+      return;
+    }
+    if (index2 > -1 && !disabled2) {
+      setHighlightedTabIndex(index2);
+    }
+    if (disabled2) {
+      return;
+    }
+    if (activateOnFocus && (!isPressingRef.current || // keyboard or touch focus
+    isPressingRef.current && isMainButtonRef.current)) {
+      onTabActivation(value, createChangeEventDetails(reason_parts_exports.none, event.nativeEvent, void 0, {
+        activationDirection: "none"
+      }));
+    }
+  }
+  function onPointerDown(event) {
+    if (active || disabled2) {
+      return;
+    }
+    isPressingRef.current = true;
+    function handlePointerUp() {
+      isPressingRef.current = false;
+      isMainButtonRef.current = false;
+    }
+    if (!event.button || event.button === 0) {
+      isMainButtonRef.current = true;
+      const doc = ownerDocument(event.currentTarget);
+      doc.addEventListener("pointerup", handlePointerUp, {
+        once: true
+      });
+    }
+  }
+  const state = {
+    disabled: disabled2,
+    active,
+    orientation,
+    tabActivationDirection
+  };
+  const element = useRenderElement("button", componentProps, {
+    state,
+    ref: [forwardedRef, buttonRef, compositeRef, tabElementRef],
+    props: [compositeProps, {
+      role: "tab",
+      "aria-controls": tabPanelId,
+      "aria-selected": active,
+      id,
+      onClick,
+      onFocus,
+      onPointerDown,
+      [ACTIVE_COMPOSITE_ITEM]: active ? "" : void 0,
+      onKeyDownCapture() {
+        isNavigatingRef.current = true;
+      }
+    }, elementProps, getButtonProps],
+    stateAttributesMapping: tabsStateAttributesMapping
+  });
+  return element;
+});
+if (true) TabsTab.displayName = "TabsTab";
+
+// node_modules/@base-ui/react/tabs/indicator/TabsIndicator.mjs
+var React57 = __toESM(require_react(), 1);
+
+// node_modules/@base-ui/react/tabs/indicator/prehydrationScript.min.mjs
+var script = '!function(){const t=document.currentScript.previousElementSibling;if(!t)return;const e=t.closest(\'[role="tablist"]\');if(!e)return;const i=e.querySelector("[data-active]");if(!i)return;if(0===i.offsetWidth||0===e.offsetWidth)return;let o=0,n=0,h=0,l=0,r=0,f=0;function s(t){const e=getComputedStyle(t);let i=parseFloat(e.width)||0,o=parseFloat(e.height)||0;return(Math.round(i)!==t.offsetWidth||Math.round(o)!==t.offsetHeight)&&(i=t.offsetWidth,o=t.offsetHeight),{width:i,height:o}}if(null!=i&&null!=e){const{width:t,height:c}=s(i),{width:u,height:d}=s(e),a=i.getBoundingClientRect(),g=e.getBoundingClientRect(),p=u>0?g.width/u:1,b=d>0?g.height/d:1;if(Math.abs(p)>Number.EPSILON&&Math.abs(b)>Number.EPSILON){const t=a.left-g.left,i=a.top-g.top;o=t/p+e.scrollLeft-e.clientLeft,h=i/b+e.scrollTop-e.clientTop}else o=i.offsetLeft,h=i.offsetTop;r=t,f=c,n=e.scrollWidth-o-r,l=e.scrollHeight-h-f}function c(e,i){t.style.setProperty(`--active-tab-${e}`,`${i}px`)}c("left",o),c("right",n),c("top",h),c("bottom",l),c("width",r),c("height",f),r>0&&f>0&&t.removeAttribute("hidden")}();';
+
+// node_modules/@base-ui/react/tabs/indicator/TabsIndicatorCssVars.mjs
+var TabsIndicatorCssVars = /* @__PURE__ */ (function(TabsIndicatorCssVars2) {
+  TabsIndicatorCssVars2["activeTabLeft"] = "--active-tab-left";
+  TabsIndicatorCssVars2["activeTabRight"] = "--active-tab-right";
+  TabsIndicatorCssVars2["activeTabTop"] = "--active-tab-top";
+  TabsIndicatorCssVars2["activeTabBottom"] = "--active-tab-bottom";
+  TabsIndicatorCssVars2["activeTabWidth"] = "--active-tab-width";
+  TabsIndicatorCssVars2["activeTabHeight"] = "--active-tab-height";
+  return TabsIndicatorCssVars2;
+})({});
+
+// node_modules/@base-ui/react/tabs/indicator/TabsIndicator.mjs
+var import_jsx_runtime11 = __toESM(require_jsx_runtime(), 1);
+var stateAttributesMapping2 = {
+  ...tabsStateAttributesMapping,
+  activeTabPosition: () => null,
+  activeTabSize: () => null
+};
+var TabsIndicator = /* @__PURE__ */ React57.forwardRef(function TabsIndicator2(componentProps, forwardedRef) {
+  const {
+    className,
+    render: render4,
+    renderBeforeHydration = false,
+    style: styleProp,
+    ...elementProps
+  } = componentProps;
+  const {
+    nonce
+  } = useCSPContext();
+  const {
+    getTabElementBySelectedValue,
+    orientation,
+    tabActivationDirection,
+    value
+  } = useTabsRootContext();
+  const {
+    tabsListElement,
+    registerIndicatorUpdateListener
+  } = useTabsListContext();
+  const isHydrating = useIsHydrating();
+  const rerender = useForcedRerendering();
+  React57.useEffect(() => {
+    return registerIndicatorUpdateListener(rerender);
+  }, [registerIndicatorUpdateListener, rerender]);
+  let left = 0;
+  let right = 0;
+  let top = 0;
+  let bottom = 0;
+  let width = 0;
+  let height = 0;
+  let isTabSelected = false;
+  if (value != null && tabsListElement != null) {
+    const activeTab = getTabElementBySelectedValue(value);
+    if (activeTab != null) {
+      isTabSelected = true;
+      const {
+        width: computedWidth,
+        height: computedHeight
+      } = getCssDimensions2(activeTab);
+      const {
+        width: tabListWidth,
+        height: tabListHeight
+      } = getCssDimensions2(tabsListElement);
+      const tabRect = activeTab.getBoundingClientRect();
+      const tabsListRect = tabsListElement.getBoundingClientRect();
+      const scaleX = tabListWidth > 0 ? tabsListRect.width / tabListWidth : 1;
+      const scaleY = tabListHeight > 0 ? tabsListRect.height / tabListHeight : 1;
+      const hasNonZeroScale = Math.abs(scaleX) > Number.EPSILON && Math.abs(scaleY) > Number.EPSILON;
+      if (hasNonZeroScale) {
+        const tabLeftDelta = tabRect.left - tabsListRect.left;
+        const tabTopDelta = tabRect.top - tabsListRect.top;
+        left = tabLeftDelta / scaleX + tabsListElement.scrollLeft - tabsListElement.clientLeft;
+        top = tabTopDelta / scaleY + tabsListElement.scrollTop - tabsListElement.clientTop;
+      } else {
+        left = activeTab.offsetLeft;
+        top = activeTab.offsetTop;
+      }
+      width = computedWidth;
+      height = computedHeight;
+      right = tabsListElement.scrollWidth - left - width;
+      bottom = tabsListElement.scrollHeight - top - height;
+    }
+  }
+  const activeTabPosition = isTabSelected ? {
+    left,
+    right,
+    top,
+    bottom
+  } : null;
+  const activeTabSize = isTabSelected ? {
+    width,
+    height
+  } : null;
+  const style = isTabSelected ? {
+    [TabsIndicatorCssVars.activeTabLeft]: `${left}px`,
+    [TabsIndicatorCssVars.activeTabRight]: `${right}px`,
+    [TabsIndicatorCssVars.activeTabTop]: `${top}px`,
+    [TabsIndicatorCssVars.activeTabBottom]: `${bottom}px`,
+    [TabsIndicatorCssVars.activeTabWidth]: `${width}px`,
+    [TabsIndicatorCssVars.activeTabHeight]: `${height}px`
+  } : void 0;
+  const displayIndicator = isTabSelected && width > 0 && height > 0;
+  const state = {
+    orientation,
+    activeTabPosition,
+    activeTabSize,
+    tabActivationDirection
+  };
+  const element = useRenderElement("span", componentProps, {
+    state,
+    ref: forwardedRef,
+    props: [{
+      role: "presentation",
+      style,
+      hidden: !displayIndicator
+      // do not display the indicator before the layout is settled
+    }, elementProps, {
+      suppressHydrationWarning: true
+    }],
+    stateAttributesMapping: stateAttributesMapping2
+  });
+  if (value == null) {
+    return null;
+  }
+  return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(React57.Fragment, {
+    children: [element, isHydrating && renderBeforeHydration && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("script", {
+      nonce,
+      dangerouslySetInnerHTML: {
+        __html: script
+      },
+      suppressHydrationWarning: true
+    })]
+  });
+});
+if (true) TabsIndicator.displayName = "TabsIndicator";
+
+// node_modules/@base-ui/react/tabs/panel/TabsPanel.mjs
+var React58 = __toESM(require_react(), 1);
+
+// node_modules/@base-ui/react/tabs/panel/TabsPanelDataAttributes.mjs
+var TabsPanelDataAttributes = (function(TabsPanelDataAttributes2) {
+  TabsPanelDataAttributes2["index"] = "data-index";
+  TabsPanelDataAttributes2["activationDirection"] = "data-activation-direction";
+  TabsPanelDataAttributes2["orientation"] = "data-orientation";
+  TabsPanelDataAttributes2["hidden"] = "data-hidden";
+  TabsPanelDataAttributes2[TabsPanelDataAttributes2["startingStyle"] = TransitionStatusDataAttributes.startingStyle] = "startingStyle";
+  TabsPanelDataAttributes2[TabsPanelDataAttributes2["endingStyle"] = TransitionStatusDataAttributes.endingStyle] = "endingStyle";
+  return TabsPanelDataAttributes2;
+})({});
+
+// node_modules/@base-ui/react/tabs/panel/TabsPanel.mjs
+var stateAttributesMapping3 = {
+  ...tabsStateAttributesMapping,
+  ...transitionStatusMapping
+};
+var TabsPanel = /* @__PURE__ */ React58.forwardRef(function TabsPanel2(componentProps, forwardedRef) {
+  const {
+    className,
+    value,
+    render: render4,
+    keepMounted = false,
+    style,
+    ...elementProps
+  } = componentProps;
+  const {
+    value: selectedValue,
+    getTabIdByPanelValue,
+    orientation,
+    tabActivationDirection,
+    registerMountedTabPanel,
+    unregisterMountedTabPanel
+  } = useTabsRootContext();
+  const id = useBaseUiId();
+  const metadata = React58.useMemo(() => ({
+    id,
+    value
+  }), [id, value]);
+  const {
+    ref: listItemRef,
+    index: index2
+  } = useCompositeListItem({
+    metadata
+  });
+  const open = value === selectedValue;
+  const {
+    mounted,
+    transitionStatus,
+    setMounted
+  } = useTransitionStatus(open);
+  const hidden = !mounted;
+  const correspondingTabId = getTabIdByPanelValue(value);
+  const state = {
+    hidden,
+    orientation,
+    tabActivationDirection,
+    transitionStatus
+  };
+  const panelRef = React58.useRef(null);
+  const element = useRenderElement("div", componentProps, {
+    state,
+    ref: [forwardedRef, listItemRef, panelRef],
+    props: [{
+      "aria-labelledby": correspondingTabId,
+      hidden,
+      id,
+      role: "tabpanel",
+      tabIndex: open ? 0 : -1,
+      inert: inertValue(!open),
+      [TabsPanelDataAttributes.index]: index2
+    }, elementProps],
+    stateAttributesMapping: stateAttributesMapping3
+  });
+  useOpenChangeComplete({
+    open,
+    ref: panelRef,
+    onComplete() {
+      if (!open) {
+        setMounted(false);
+      }
+    }
+  });
+  useIsoLayoutEffect(() => {
+    if (hidden && !keepMounted) {
+      return void 0;
+    }
+    if (id == null) {
+      return void 0;
+    }
+    registerMountedTabPanel(value, id);
+    return () => {
+      unregisterMountedTabPanel(value, id);
+    };
+  }, [hidden, keepMounted, value, id, registerMountedTabPanel, unregisterMountedTabPanel]);
+  const shouldRender = keepMounted || mounted;
+  if (!shouldRender) {
+    return null;
+  }
+  return element;
+});
+if (true) TabsPanel.displayName = "TabsPanel";
+
+// node_modules/@base-ui/react/tabs/list/TabsList.mjs
+var React59 = __toESM(require_react(), 1);
+var import_jsx_runtime12 = __toESM(require_jsx_runtime(), 1);
+var TabsList = /* @__PURE__ */ React59.forwardRef(function TabsList2(componentProps, forwardedRef) {
+  const {
+    activateOnFocus = false,
+    className,
+    loopFocus = true,
+    render: render4,
+    style,
+    ...elementProps
+  } = componentProps;
+  const {
+    onValueChange,
+    orientation,
+    value,
+    setTabMap,
+    tabActivationDirection
+  } = useTabsRootContext();
+  const [highlightedTabIndex, setHighlightedTabIndex] = React59.useState(0);
+  const [tabsListElement, setTabsListElement] = React59.useState(null);
+  const indicatorUpdateListenersRef = React59.useRef(/* @__PURE__ */ new Set());
+  const tabResizeObserverElementsRef = React59.useRef(/* @__PURE__ */ new Set());
+  const resizeObserverRef = React59.useRef(null);
+  useIsoLayoutEffect(() => {
+    if (typeof ResizeObserver === "undefined") {
+      return void 0;
+    }
+    const resizeObserver = new ResizeObserver(() => {
+      indicatorUpdateListenersRef.current.forEach((listener) => {
+        listener();
+      });
+    });
+    resizeObserverRef.current = resizeObserver;
+    if (tabsListElement) {
+      resizeObserver.observe(tabsListElement);
+    }
+    tabResizeObserverElementsRef.current.forEach((element) => {
+      resizeObserver.observe(element);
+    });
+    return () => {
+      resizeObserver.disconnect();
+      resizeObserverRef.current = null;
+    };
+  }, [tabsListElement]);
+  const registerIndicatorUpdateListener = useStableCallback((listener) => {
+    indicatorUpdateListenersRef.current.add(listener);
+    return () => {
+      indicatorUpdateListenersRef.current.delete(listener);
+    };
+  });
+  const registerTabResizeObserverElement = useStableCallback((element) => {
+    tabResizeObserverElementsRef.current.add(element);
+    resizeObserverRef.current?.observe(element);
+    return () => {
+      tabResizeObserverElementsRef.current.delete(element);
+      resizeObserverRef.current?.unobserve(element);
+    };
+  });
+  const onTabActivation = useStableCallback((newValue, eventDetails) => {
+    if (newValue !== value) {
+      onValueChange(newValue, eventDetails);
+    }
+  });
+  const state = {
+    orientation,
+    tabActivationDirection
+  };
+  const defaultProps = {
+    "aria-orientation": orientation === "vertical" ? "vertical" : void 0,
+    role: "tablist"
+  };
+  const tabsListContextValue = React59.useMemo(() => ({
+    activateOnFocus,
+    highlightedTabIndex,
+    registerIndicatorUpdateListener,
+    registerTabResizeObserverElement,
+    onTabActivation,
+    setHighlightedTabIndex,
+    tabsListElement
+  }), [activateOnFocus, highlightedTabIndex, registerIndicatorUpdateListener, registerTabResizeObserverElement, onTabActivation, setHighlightedTabIndex, tabsListElement]);
+  return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(TabsListContext.Provider, {
+    value: tabsListContextValue,
+    children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(CompositeRoot, {
+      render: render4,
+      className,
+      style,
+      state,
+      refs: [forwardedRef, setTabsListElement],
+      props: [defaultProps, elementProps],
+      stateAttributesMapping: tabsStateAttributesMapping,
+      highlightedIndex: highlightedTabIndex,
+      enableHomeAndEndKeys: true,
+      loopFocus,
+      orientation,
+      onHighlightedIndexChange: setHighlightedTabIndex,
+      onMapChange: setTabMap,
+      disabledIndices: EMPTY_ARRAY
+    })
+  });
+});
+if (true) TabsList.displayName = "TabsList";
+
+// node_modules/@base-ui/react/tooltip/index.parts.mjs
+var index_parts_exports3 = {};
+__export(index_parts_exports3, {
   Arrow: () => TooltipArrow,
   Handle: () => TooltipHandle,
   Popup: () => TooltipPopup,
@@ -8614,24 +10312,23 @@ __export(index_parts_exports2, {
   createHandle: () => createTooltipHandle
 });
 
-// node_modules/@base-ui/react/esm/tooltip/root/TooltipRoot.js
-var React47 = __toESM(require_react(), 1);
+// node_modules/@base-ui/react/tooltip/root/TooltipRoot.mjs
+var React62 = __toESM(require_react(), 1);
 
-// node_modules/@base-ui/react/esm/tooltip/root/TooltipRootContext.js
-var React45 = __toESM(require_react(), 1);
-var TooltipRootContext = /* @__PURE__ */ React45.createContext(void 0);
+// node_modules/@base-ui/react/tooltip/root/TooltipRootContext.mjs
+var React60 = __toESM(require_react(), 1);
+var TooltipRootContext = /* @__PURE__ */ React60.createContext(void 0);
 if (true) TooltipRootContext.displayName = "TooltipRootContext";
 function useTooltipRootContext(optional) {
-  const context = React45.useContext(TooltipRootContext);
+  const context = React60.useContext(TooltipRootContext);
   if (context === void 0 && !optional) {
     throw new Error(true ? "Base UI: TooltipRootContext is missing. Tooltip parts must be placed within <Tooltip.Root>." : formatErrorMessage_default(72));
   }
   return context;
 }
 
-// node_modules/@base-ui/react/esm/tooltip/store/TooltipStore.js
-var React46 = __toESM(require_react(), 1);
-var ReactDOM7 = __toESM(require_react_dom(), 1);
+// node_modules/@base-ui/react/tooltip/store/TooltipStore.mjs
+var React61 = __toESM(require_react(), 1);
 var selectors2 = {
   ...popupStoreSelectors,
   disabled: createSelector((state) => state.disabled),
@@ -8653,45 +10350,18 @@ var TooltipStore = class _TooltipStore extends ReactStore {
     };
     state.floatingRootContext = createPopupFloatingRootContext(triggerElements, floatingId, nested);
     super(state, {
-      popupRef: /* @__PURE__ */ React46.createRef(),
+      popupRef: /* @__PURE__ */ React61.createRef(),
       onOpenChange: void 0,
       onOpenChangeComplete: void 0,
       triggerElements
     }, selectors2);
   }
   setOpen = (nextOpen, eventDetails) => {
-    const reason = eventDetails.reason;
-    const isHover = reason === reason_parts_exports.triggerHover;
-    const isFocusOpen = nextOpen && reason === reason_parts_exports.triggerFocus;
-    const isDismissClose = !nextOpen && (reason === reason_parts_exports.triggerPress || reason === reason_parts_exports.escapeKey);
-    eventDetails.preventUnmountOnClose = () => {
-      this.set("preventUnmountingOnClose", true);
-    };
-    this.context.onOpenChange?.(nextOpen, eventDetails);
-    if (eventDetails.isCanceled) {
-      return;
-    }
-    this.state.floatingRootContext.dispatchOpenChange(nextOpen, eventDetails);
-    const changeState = () => {
-      const updatedState = {
-        open: nextOpen,
-        openChangeReason: reason
-      };
-      if (isFocusOpen) {
-        updatedState.instantType = "focus";
-      } else if (isDismissClose) {
-        updatedState.instantType = "dismiss";
-      } else if (reason === reason_parts_exports.triggerHover) {
-        updatedState.instantType = void 0;
+    applyPopupOpenChange(this, nextOpen, eventDetails, {
+      extraState: {
+        openChangeReason: eventDetails.reason
       }
-      setOpenTriggerState(updatedState, nextOpen, eventDetails.trigger);
-      this.update(updatedState);
-    };
-    if (isHover) {
-      ReactDOM7.flushSync(changeState);
-    } else {
-      changeState();
-    }
+    });
   };
   // Used by trigger clicks to clear a delayed hover open without reporting a public open-state change.
   cancelPendingOpen(event) {
@@ -8717,8 +10387,8 @@ function createInitialState() {
   };
 }
 
-// node_modules/@base-ui/react/esm/tooltip/root/TooltipRoot.js
-var import_jsx_runtime8 = __toESM(require_jsx_runtime(), 1);
+// node_modules/@base-ui/react/tooltip/root/TooltipRoot.mjs
+var import_jsx_runtime13 = __toESM(require_jsx_runtime(), 1);
 var TooltipRoot = fastComponent(function TooltipRoot2(props) {
   const {
     disabled: disabled2 = false,
@@ -8740,14 +10410,7 @@ var TooltipRoot = fastComponent(function TooltipRoot2(props) {
     activeTriggerId: defaultTriggerIdProp,
     triggerIdProp
   });
-  useOnFirstRender(() => {
-    if (openProp === void 0 && store3.state.open === false && defaultOpen === true) {
-      store3.update({
-        open: true,
-        activeTriggerId: defaultTriggerIdProp
-      });
-    }
-  });
+  useInitialOpenSync(store3, openProp, defaultOpen, defaultTriggerIdProp);
   store3.useControlledProp("openProp", openProp);
   store3.useControlledProp("triggerIdProp", triggerIdProp);
   store3.useContextCallback("onOpenChange", onOpenChange);
@@ -8762,7 +10425,9 @@ var TooltipRoot = fastComponent(function TooltipRoot2(props) {
     disableHoverablePopup
   });
   store3.useSyncedValue("disabled", disabled2);
-  useImplicitActiveTrigger(store3);
+  useImplicitActiveTrigger(store3, {
+    closeOnActiveTriggerUnmount: true
+  });
   const {
     forceUnmount,
     transitionStatus
@@ -8770,7 +10435,7 @@ var TooltipRoot = fastComponent(function TooltipRoot2(props) {
   const isInstantPhase = store3.useState("isInstantPhase");
   const instantType = store3.useState("instantType");
   const lastOpenChangeReason = store3.useState("lastOpenChangeReason");
-  const previousInstantTypeRef = React47.useRef(null);
+  const previousInstantTypeRef = React62.useRef(null);
   useIsoLayoutEffect(() => {
     if (openState && disabled2) {
       store3.setOpen(false, createChangeEventDetails(reason_parts_exports.disabled));
@@ -8794,17 +10459,17 @@ var TooltipRoot = fastComponent(function TooltipRoot2(props) {
       }
     }
   }, [store3, activeTriggerId, open]);
-  const handleImperativeClose = React47.useCallback(() => {
+  const handleImperativeClose = React62.useCallback(() => {
     store3.setOpen(false, createChangeEventDetails(reason_parts_exports.imperativeAction));
   }, [store3]);
-  React47.useImperativeHandle(actionsRef, () => ({
+  React62.useImperativeHandle(actionsRef, () => ({
     unmount: forceUnmount,
     close: handleImperativeClose
   }), [forceUnmount, handleImperativeClose]);
   const shouldRenderInteractions = open || mounted || !disabled2 && trackCursorAxis !== "none";
-  return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(TooltipRootContext.Provider, {
+  return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(TooltipRootContext.Provider, {
     value: store3,
-    children: [shouldRenderInteractions && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(TooltipInteractions, {
+    children: [shouldRenderInteractions && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(TooltipInteractions, {
       store: store3,
       disabled: disabled2,
       trackCursorAxis
@@ -8828,9 +10493,9 @@ function TooltipInteractions({
     enabled: !disabled2 && trackCursorAxis !== "none",
     axis: trackCursorAxis === "none" ? void 0 : trackCursorAxis
   });
-  const activeTriggerProps = React47.useMemo(() => mergeProps(clientPoint.reference, dismiss.reference), [clientPoint.reference, dismiss.reference]);
-  const inactiveTriggerProps = React47.useMemo(() => mergeProps(clientPoint.trigger, dismiss.trigger), [clientPoint.trigger, dismiss.trigger]);
-  const popupProps = React47.useMemo(() => mergeProps(FOCUSABLE_POPUP_PROPS, clientPoint.floating, dismiss.floating), [clientPoint.floating, dismiss.floating]);
+  const activeTriggerProps = React62.useMemo(() => mergeProps(clientPoint.reference, dismiss.reference), [clientPoint.reference, dismiss.reference]);
+  const inactiveTriggerProps = React62.useMemo(() => mergeProps(clientPoint.trigger, dismiss.trigger), [clientPoint.trigger, dismiss.trigger]);
+  const popupProps = React62.useMemo(() => mergeProps(FOCUSABLE_POPUP_PROPS, clientPoint.floating, dismiss.floating), [clientPoint.floating, dismiss.floating]);
   usePopupInteractionProps(store3, {
     activeTriggerProps,
     inactiveTriggerProps,
@@ -8839,28 +10504,28 @@ function TooltipInteractions({
   return null;
 }
 
-// node_modules/@base-ui/react/esm/tooltip/trigger/TooltipTrigger.js
-var React49 = __toESM(require_react(), 1);
+// node_modules/@base-ui/react/tooltip/trigger/TooltipTrigger.mjs
+var React64 = __toESM(require_react(), 1);
 
-// node_modules/@base-ui/react/esm/tooltip/provider/TooltipProviderContext.js
-var React48 = __toESM(require_react(), 1);
-var TooltipProviderContext = /* @__PURE__ */ React48.createContext(void 0);
+// node_modules/@base-ui/react/tooltip/provider/TooltipProviderContext.mjs
+var React63 = __toESM(require_react(), 1);
+var TooltipProviderContext = /* @__PURE__ */ React63.createContext(void 0);
 if (true) TooltipProviderContext.displayName = "TooltipProviderContext";
 function useTooltipProviderContext() {
-  return React48.useContext(TooltipProviderContext);
+  return React63.useContext(TooltipProviderContext);
 }
 
-// node_modules/@base-ui/react/esm/tooltip/trigger/TooltipTriggerDataAttributes.js
+// node_modules/@base-ui/react/tooltip/trigger/TooltipTriggerDataAttributes.mjs
 var TooltipTriggerDataAttributes = (function(TooltipTriggerDataAttributes2) {
   TooltipTriggerDataAttributes2[TooltipTriggerDataAttributes2["popupOpen"] = CommonTriggerDataAttributes.popupOpen] = "popupOpen";
   TooltipTriggerDataAttributes2["triggerDisabled"] = "data-trigger-disabled";
   return TooltipTriggerDataAttributes2;
 })({});
 
-// node_modules/@base-ui/react/esm/tooltip/utils/constants.js
+// node_modules/@base-ui/react/tooltip/utils/constants.mjs
 var OPEN_DELAY = 600;
 
-// node_modules/@base-ui/react/esm/tooltip/trigger/TooltipTrigger.js
+// node_modules/@base-ui/react/tooltip/trigger/TooltipTrigger.mjs
 var TOOLTIP_TRIGGER_IDENTIFIER = "data-base-ui-tooltip-trigger";
 function getTargetElement(event) {
   if ("composedPath" in event) {
@@ -8917,7 +10582,7 @@ var TooltipTrigger = fastComponentRef(function TooltipTrigger2(componentProps, f
   const isTriggerActive = store3.useState("isTriggerActive", thisTriggerId);
   const isOpenedByThisTrigger = store3.useState("isOpenedByTrigger", thisTriggerId);
   const floatingRootContext = store3.useState("floatingRootContext");
-  const triggerElementRef = React49.useRef(null);
+  const triggerElementRef = React64.useRef(null);
   const delayWithDefault = delay ?? OPEN_DELAY;
   const closeDelayWithDefault = closeDelay ?? 0;
   const {
@@ -8943,9 +10608,9 @@ var TooltipTrigger = fastComponentRef(function TooltipTrigger2(componentProps, f
   const disabledRef = useValueAsRef(disabled2);
   const trackCursorAxis = store3.useState("trackCursorAxis");
   const disableHoverablePopup = store3.useState("disableHoverablePopup");
-  const isNestedTriggerHoveredRef = React49.useRef(false);
+  const isNestedTriggerHoveredRef = React64.useRef(false);
   const nestedTriggerOpenTimeout = useTimeout();
-  const pointerTypeRef = React49.useRef(void 0);
+  const pointerTypeRef = React64.useRef(void 0);
   function getOpenDelay() {
     const providerDelay = providerContext?.delay;
     const groupOpenValue = typeof delayRef.current === "object" ? delayRef.current.open : void 0;
@@ -9077,24 +10742,24 @@ var TooltipTrigger = fastComponentRef(function TooltipTrigger2(componentProps, f
 });
 if (true) TooltipTrigger.displayName = "TooltipTrigger";
 
-// node_modules/@base-ui/react/esm/tooltip/portal/TooltipPortal.js
-var React51 = __toESM(require_react(), 1);
+// node_modules/@base-ui/react/tooltip/portal/TooltipPortal.mjs
+var React66 = __toESM(require_react(), 1);
 
-// node_modules/@base-ui/react/esm/tooltip/portal/TooltipPortalContext.js
-var React50 = __toESM(require_react(), 1);
-var TooltipPortalContext = /* @__PURE__ */ React50.createContext(void 0);
+// node_modules/@base-ui/react/tooltip/portal/TooltipPortalContext.mjs
+var React65 = __toESM(require_react(), 1);
+var TooltipPortalContext = /* @__PURE__ */ React65.createContext(void 0);
 if (true) TooltipPortalContext.displayName = "TooltipPortalContext";
 function useTooltipPortalContext() {
-  const value = React50.useContext(TooltipPortalContext);
+  const value = React65.useContext(TooltipPortalContext);
   if (value === void 0) {
     throw new Error(true ? "Base UI: <Tooltip.Portal> is missing." : formatErrorMessage_default(70));
   }
   return value;
 }
 
-// node_modules/@base-ui/react/esm/tooltip/portal/TooltipPortal.js
-var import_jsx_runtime9 = __toESM(require_jsx_runtime(), 1);
-var TooltipPortal = /* @__PURE__ */ React51.forwardRef(function TooltipPortal2(props, forwardedRef) {
+// node_modules/@base-ui/react/tooltip/portal/TooltipPortal.mjs
+var import_jsx_runtime14 = __toESM(require_jsx_runtime(), 1);
+var TooltipPortal = /* @__PURE__ */ React66.forwardRef(function TooltipPortal2(props, forwardedRef) {
   const {
     keepMounted = false,
     ...portalProps
@@ -9105,9 +10770,9 @@ var TooltipPortal = /* @__PURE__ */ React51.forwardRef(function TooltipPortal2(p
   if (!shouldRender) {
     return null;
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(TooltipPortalContext.Provider, {
+  return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(TooltipPortalContext.Provider, {
     value: keepMounted,
-    children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(FloatingPortalLite, {
+    children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(FloatingPortalLite, {
       ref: forwardedRef,
       ...portalProps
     })
@@ -9115,24 +10780,24 @@ var TooltipPortal = /* @__PURE__ */ React51.forwardRef(function TooltipPortal2(p
 });
 if (true) TooltipPortal.displayName = "TooltipPortal";
 
-// node_modules/@base-ui/react/esm/tooltip/positioner/TooltipPositioner.js
-var React53 = __toESM(require_react(), 1);
+// node_modules/@base-ui/react/tooltip/positioner/TooltipPositioner.mjs
+var React68 = __toESM(require_react(), 1);
 
-// node_modules/@base-ui/react/esm/tooltip/positioner/TooltipPositionerContext.js
-var React52 = __toESM(require_react(), 1);
-var TooltipPositionerContext = /* @__PURE__ */ React52.createContext(void 0);
+// node_modules/@base-ui/react/tooltip/positioner/TooltipPositionerContext.mjs
+var React67 = __toESM(require_react(), 1);
+var TooltipPositionerContext = /* @__PURE__ */ React67.createContext(void 0);
 if (true) TooltipPositionerContext.displayName = "TooltipPositionerContext";
 function useTooltipPositionerContext() {
-  const context = React52.useContext(TooltipPositionerContext);
+  const context = React67.useContext(TooltipPositionerContext);
   if (context === void 0) {
     throw new Error(true ? "Base UI: TooltipPositionerContext is missing. TooltipPositioner parts must be placed within <Tooltip.Positioner>." : formatErrorMessage_default(71));
   }
   return context;
 }
 
-// node_modules/@base-ui/react/esm/tooltip/positioner/TooltipPositioner.js
-var import_jsx_runtime10 = __toESM(require_jsx_runtime(), 1);
-var TooltipPositioner = /* @__PURE__ */ React53.forwardRef(function TooltipPositioner2(componentProps, forwardedRef) {
+// node_modules/@base-ui/react/tooltip/positioner/TooltipPositioner.mjs
+var import_jsx_runtime15 = __toESM(require_jsx_runtime(), 1);
+var TooltipPositioner = /* @__PURE__ */ React68.forwardRef(function TooltipPositioner2(componentProps, forwardedRef) {
   const {
     render: render4,
     className,
@@ -9179,7 +10844,7 @@ var TooltipPositioner = /* @__PURE__ */ React53.forwardRef(function TooltipPosit
     collisionAvoidance,
     adaptiveOrigin: hasViewport ? adaptiveOrigin : void 0
   });
-  const state = React53.useMemo(() => ({
+  const state = React68.useMemo(() => ({
     open,
     side: positioning.side,
     align: positioning.align,
@@ -9194,20 +10859,20 @@ var TooltipPositioner = /* @__PURE__ */ React53.forwardRef(function TooltipPosit
     hidden: !mounted,
     inert: !open || trackCursorAxis === "both" || disableHoverablePopup
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(TooltipPositionerContext.Provider, {
+  return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(TooltipPositionerContext.Provider, {
     value: positioning,
     children: element
   });
 });
 if (true) TooltipPositioner.displayName = "TooltipPositioner";
 
-// node_modules/@base-ui/react/esm/tooltip/popup/TooltipPopup.js
-var React54 = __toESM(require_react(), 1);
-var stateAttributesMapping2 = {
+// node_modules/@base-ui/react/tooltip/popup/TooltipPopup.mjs
+var React69 = __toESM(require_react(), 1);
+var stateAttributesMapping4 = {
   ...popupStateMapping,
   ...transitionStatusMapping
 };
-var TooltipPopup = /* @__PURE__ */ React54.forwardRef(function TooltipPopup2(componentProps, forwardedRef) {
+var TooltipPopup = /* @__PURE__ */ React69.forwardRef(function TooltipPopup2(componentProps, forwardedRef) {
   const {
     render: render4,
     className,
@@ -9251,15 +10916,15 @@ var TooltipPopup = /* @__PURE__ */ React54.forwardRef(function TooltipPopup2(com
     state,
     ref: [forwardedRef, store3.context.popupRef, setPopupElement],
     props: [popupProps, getDisabledMountTransitionStyles(transitionStatus), elementProps],
-    stateAttributesMapping: stateAttributesMapping2
+    stateAttributesMapping: stateAttributesMapping4
   });
   return element;
 });
 if (true) TooltipPopup.displayName = "TooltipPopup";
 
-// node_modules/@base-ui/react/esm/tooltip/arrow/TooltipArrow.js
-var React55 = __toESM(require_react(), 1);
-var TooltipArrow = /* @__PURE__ */ React55.forwardRef(function TooltipArrow2(componentProps, forwardedRef) {
+// node_modules/@base-ui/react/tooltip/arrow/TooltipArrow.mjs
+var React70 = __toESM(require_react(), 1);
+var TooltipArrow = /* @__PURE__ */ React70.forwardRef(function TooltipArrow2(componentProps, forwardedRef) {
   const {
     render: render4,
     className,
@@ -9296,26 +10961,26 @@ var TooltipArrow = /* @__PURE__ */ React55.forwardRef(function TooltipArrow2(com
 });
 if (true) TooltipArrow.displayName = "TooltipArrow";
 
-// node_modules/@base-ui/react/esm/tooltip/provider/TooltipProvider.js
-var React56 = __toESM(require_react(), 1);
-var import_jsx_runtime11 = __toESM(require_jsx_runtime(), 1);
+// node_modules/@base-ui/react/tooltip/provider/TooltipProvider.mjs
+var React71 = __toESM(require_react(), 1);
+var import_jsx_runtime16 = __toESM(require_jsx_runtime(), 1);
 var TooltipProvider = function TooltipProvider2(props) {
   const {
     delay,
     closeDelay,
     timeout = 400
   } = props;
-  const contextValue = React56.useMemo(() => ({
+  const contextValue = React71.useMemo(() => ({
     delay,
     closeDelay
   }), [delay, closeDelay]);
-  const delayValue = React56.useMemo(() => ({
+  const delayValue = React71.useMemo(() => ({
     open: delay,
     close: closeDelay
   }), [delay, closeDelay]);
-  return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(TooltipProviderContext.Provider, {
+  return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(TooltipProviderContext.Provider, {
     value: contextValue,
-    children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(FloatingDelayGroup, {
+    children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(FloatingDelayGroup, {
       delay: delayValue,
       timeoutMs: timeout,
       children: props.children
@@ -9324,23 +10989,23 @@ var TooltipProvider = function TooltipProvider2(props) {
 };
 if (true) TooltipProvider.displayName = "TooltipProvider";
 
-// node_modules/@base-ui/react/esm/tooltip/viewport/TooltipViewport.js
-var React57 = __toESM(require_react(), 1);
+// node_modules/@base-ui/react/tooltip/viewport/TooltipViewport.mjs
+var React72 = __toESM(require_react(), 1);
 
-// node_modules/@base-ui/react/esm/tooltip/viewport/TooltipViewportCssVars.js
+// node_modules/@base-ui/react/tooltip/viewport/TooltipViewportCssVars.mjs
 var TooltipViewportCssVars = /* @__PURE__ */ (function(TooltipViewportCssVars2) {
   TooltipViewportCssVars2["popupWidth"] = "--popup-width";
   TooltipViewportCssVars2["popupHeight"] = "--popup-height";
   return TooltipViewportCssVars2;
 })({});
 
-// node_modules/@base-ui/react/esm/tooltip/viewport/TooltipViewport.js
-var stateAttributesMapping3 = {
+// node_modules/@base-ui/react/tooltip/viewport/TooltipViewport.mjs
+var stateAttributesMapping5 = {
   activationDirection: (value) => value ? {
     "data-activation-direction": value
   } : null
 };
-var TooltipViewport = /* @__PURE__ */ React57.forwardRef(function TooltipViewport2(componentProps, forwardedRef) {
+var TooltipViewport = /* @__PURE__ */ React72.forwardRef(function TooltipViewport2(componentProps, forwardedRef) {
   const {
     render: render4,
     className,
@@ -9371,12 +11036,12 @@ var TooltipViewport = /* @__PURE__ */ React57.forwardRef(function TooltipViewpor
     props: [elementProps, {
       children: childrenToRender
     }],
-    stateAttributesMapping: stateAttributesMapping3
+    stateAttributesMapping: stateAttributesMapping5
   });
 });
 if (true) TooltipViewport.displayName = "TooltipViewport";
 
-// node_modules/@base-ui/react/esm/tooltip/store/TooltipHandle.js
+// node_modules/@base-ui/react/tooltip/store/TooltipHandle.mjs
 var TooltipHandle = class {
   /**
    * Internal store holding the tooltip state.
@@ -9417,7 +11082,7 @@ function createTooltipHandle() {
   return new TooltipHandle();
 }
 
-// node_modules/@base-ui/react/esm/use-render/useRender.js
+// node_modules/@base-ui/react/use-render/useRender.mjs
 function useRender(params) {
   return useRenderElement(params.defaultTagName ?? "div", params, params);
 }
@@ -9505,11 +11170,11 @@ function registerStyle(hash, css) {
   }
 }
 if (typeof process === "undefined" || true) {
-  registerStyle("0c5702ddca", '@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._83ed8a8da5dd50ea__text{margin:0}._14437cfb77831647__heading-2xl{--_gcd-heading-font-size:var(--wpds-typography-font-size-2xl,32px);--_gcd-heading-font-weight:var(--wpds-typography-font-weight-medium,499);--_gcd-p-font-size:var(--wpds-typography-font-size-2xl,32px);--_gcd-p-line-height:var(--wpds-typography-line-height-2xl,40px);font-size:var(--wpds-typography-font-size-2xl,32px);line-height:var(--wpds-typography-line-height-2xl,40px)}._14437cfb77831647__heading-2xl,._3c78b7fa9b4072dd__heading-xl{font-family:var(--wpds-typography-font-family-heading,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-weight:var(--wpds-typography-font-weight-medium,499)}._3c78b7fa9b4072dd__heading-xl{--_gcd-heading-font-size:var(--wpds-typography-font-size-xl,20px);--_gcd-heading-font-weight:var(--wpds-typography-font-weight-medium,499);--_gcd-p-font-size:var(--wpds-typography-font-size-xl,20px);--_gcd-p-line-height:var(--wpds-typography-line-height-md,24px);font-size:var(--wpds-typography-font-size-xl,20px);line-height:var(--wpds-typography-line-height-md,24px)}.aa58f227716bcde2__heading-lg{--_gcd-heading-font-size:var(--wpds-typography-font-size-lg,15px);--_gcd-heading-font-weight:var(--wpds-typography-font-weight-medium,499);--_gcd-p-font-size:var(--wpds-typography-font-size-lg,15px);--_gcd-p-line-height:var(--wpds-typography-line-height-sm,20px);font-size:var(--wpds-typography-font-size-lg,15px)}.aa58f227716bcde2__heading-lg,.fc4da56d8dfe52c4__heading-md{font-family:var(--wpds-typography-font-family-heading,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-weight:var(--wpds-typography-font-weight-medium,499);line-height:var(--wpds-typography-line-height-sm,20px)}.fc4da56d8dfe52c4__heading-md{--_gcd-heading-font-size:var(--wpds-typography-font-size-md,13px);--_gcd-heading-font-weight:var(--wpds-typography-font-weight-medium,499);--_gcd-p-font-size:var(--wpds-typography-font-size-md,13px);--_gcd-p-line-height:var(--wpds-typography-line-height-sm,20px);font-size:var(--wpds-typography-font-size-md,13px)}.a9b78c7c82e8dff7__heading-sm{--_gcd-heading-font-size:var(--wpds-typography-font-size-xs,11px);--_gcd-heading-font-weight:var(--wpds-typography-font-weight-medium,499);--_gcd-p-font-size:var(--wpds-typography-font-size-xs,11px);--_gcd-p-line-height:var(--wpds-typography-line-height-xs,16px);font-family:var(--wpds-typography-font-family-heading,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-size:var(--wpds-typography-font-size-xs,11px);font-weight:var(--wpds-typography-font-weight-medium,499);line-height:var(--wpds-typography-line-height-xs,16px);text-transform:uppercase}._305ff559e52180d5__body-xl{--_gcd-heading-font-size:var(--wpds-typography-font-size-xl,20px);--_gcd-heading-font-weight:var(--wpds-typography-font-weight-regular,400);--_gcd-p-font-size:var(--wpds-typography-font-size-xl,20px);--_gcd-p-line-height:var(--wpds-typography-line-height-xl,32px);font-size:var(--wpds-typography-font-size-xl,20px);line-height:var(--wpds-typography-line-height-xl,32px)}._305ff559e52180d5__body-xl,.ca1aa3fc2029e958__body-lg{font-family:var(--wpds-typography-font-family-body,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-weight:var(--wpds-typography-font-weight-regular,400)}.ca1aa3fc2029e958__body-lg{--_gcd-heading-font-size:var(--wpds-typography-font-size-lg,15px);--_gcd-heading-font-weight:var(--wpds-typography-font-weight-regular,400);--_gcd-p-font-size:var(--wpds-typography-font-size-lg,15px);--_gcd-p-line-height:var(--wpds-typography-line-height-md,24px);font-size:var(--wpds-typography-font-size-lg,15px);line-height:var(--wpds-typography-line-height-md,24px)}._131101940be12424__body-md{--_gcd-heading-font-size:var(--wpds-typography-font-size-md,13px);--_gcd-heading-font-weight:var(--wpds-typography-font-weight-regular,400);--_gcd-p-font-size:var(--wpds-typography-font-size-md,13px);--_gcd-p-line-height:var(--wpds-typography-line-height-sm,20px);font-size:var(--wpds-typography-font-size-md,13px);line-height:var(--wpds-typography-line-height-sm,20px)}._0e8d87a42c1f75fa__body-sm,._131101940be12424__body-md{font-family:var(--wpds-typography-font-family-body,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-weight:var(--wpds-typography-font-weight-regular,400)}._0e8d87a42c1f75fa__body-sm{--_gcd-heading-font-size:var(--wpds-typography-font-size-sm,12px);--_gcd-heading-font-weight:var(--wpds-typography-font-weight-regular,400);--_gcd-p-font-size:var(--wpds-typography-font-size-sm,12px);--_gcd-p-line-height:var(--wpds-typography-line-height-xs,16px);font-size:var(--wpds-typography-font-size-sm,12px);line-height:var(--wpds-typography-line-height-xs,16px)}}}');
+  registerStyle("a495f9d138", '@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._83ed8a8da5dd50ea__text{margin:0}._14437cfb77831647__heading-2xl{--_gcd-heading-font-size:var(--wpds-typography-font-size-2xl,32px);--_gcd-heading-font-weight:var(--wpds-typography-font-weight-emphasis,600);--_gcd-p-font-size:var(--wpds-typography-font-size-2xl,32px);--_gcd-p-line-height:var(--wpds-typography-line-height-2xl,40px);font-size:var(--wpds-typography-font-size-2xl,32px);line-height:var(--wpds-typography-line-height-2xl,40px)}._14437cfb77831647__heading-2xl,._3c78b7fa9b4072dd__heading-xl{font-family:var(--wpds-typography-font-family-heading,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-weight:var(--wpds-typography-font-weight-emphasis,600)}._3c78b7fa9b4072dd__heading-xl{--_gcd-heading-font-size:var(--wpds-typography-font-size-xl,20px);--_gcd-heading-font-weight:var(--wpds-typography-font-weight-emphasis,600);--_gcd-p-font-size:var(--wpds-typography-font-size-xl,20px);--_gcd-p-line-height:var(--wpds-typography-line-height-md,24px);font-size:var(--wpds-typography-font-size-xl,20px);line-height:var(--wpds-typography-line-height-md,24px)}.aa58f227716bcde2__heading-lg{--_gcd-heading-font-size:var(--wpds-typography-font-size-lg,15px);--_gcd-heading-font-weight:var(--wpds-typography-font-weight-emphasis,600);--_gcd-p-font-size:var(--wpds-typography-font-size-lg,15px);--_gcd-p-line-height:var(--wpds-typography-line-height-sm,20px);font-size:var(--wpds-typography-font-size-lg,15px)}.aa58f227716bcde2__heading-lg,.fc4da56d8dfe52c4__heading-md{font-family:var(--wpds-typography-font-family-heading,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-weight:var(--wpds-typography-font-weight-emphasis,600);line-height:var(--wpds-typography-line-height-sm,20px)}.fc4da56d8dfe52c4__heading-md{--_gcd-heading-font-size:var(--wpds-typography-font-size-md,13px);--_gcd-heading-font-weight:var(--wpds-typography-font-weight-emphasis,600);--_gcd-p-font-size:var(--wpds-typography-font-size-md,13px);--_gcd-p-line-height:var(--wpds-typography-line-height-sm,20px);font-size:var(--wpds-typography-font-size-md,13px)}.a9b78c7c82e8dff7__heading-sm{--_gcd-heading-font-size:var(--wpds-typography-font-size-xs,11px);--_gcd-heading-font-weight:var(--wpds-typography-font-weight-emphasis,600);--_gcd-p-font-size:var(--wpds-typography-font-size-xs,11px);--_gcd-p-line-height:var(--wpds-typography-line-height-xs,16px);font-family:var(--wpds-typography-font-family-heading,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-size:var(--wpds-typography-font-size-xs,11px);font-weight:var(--wpds-typography-font-weight-emphasis,600);line-height:var(--wpds-typography-line-height-xs,16px);text-transform:uppercase}._305ff559e52180d5__body-xl{--_gcd-heading-font-size:var(--wpds-typography-font-size-xl,20px);--_gcd-heading-font-weight:var(--wpds-typography-font-weight-default,400);--_gcd-p-font-size:var(--wpds-typography-font-size-xl,20px);--_gcd-p-line-height:var(--wpds-typography-line-height-xl,32px);font-size:var(--wpds-typography-font-size-xl,20px);line-height:var(--wpds-typography-line-height-xl,32px)}._305ff559e52180d5__body-xl,.ca1aa3fc2029e958__body-lg{font-family:var(--wpds-typography-font-family-body,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-weight:var(--wpds-typography-font-weight-default,400)}.ca1aa3fc2029e958__body-lg{--_gcd-heading-font-size:var(--wpds-typography-font-size-lg,15px);--_gcd-heading-font-weight:var(--wpds-typography-font-weight-default,400);--_gcd-p-font-size:var(--wpds-typography-font-size-lg,15px);--_gcd-p-line-height:var(--wpds-typography-line-height-md,24px);font-size:var(--wpds-typography-font-size-lg,15px);line-height:var(--wpds-typography-line-height-md,24px)}._131101940be12424__body-md{--_gcd-heading-font-size:var(--wpds-typography-font-size-md,13px);--_gcd-heading-font-weight:var(--wpds-typography-font-weight-default,400);--_gcd-p-font-size:var(--wpds-typography-font-size-md,13px);--_gcd-p-line-height:var(--wpds-typography-line-height-sm,20px);font-size:var(--wpds-typography-font-size-md,13px);line-height:var(--wpds-typography-line-height-sm,20px)}._0e8d87a42c1f75fa__body-sm,._131101940be12424__body-md{font-family:var(--wpds-typography-font-family-body,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-weight:var(--wpds-typography-font-weight-default,400)}._0e8d87a42c1f75fa__body-sm{--_gcd-heading-font-size:var(--wpds-typography-font-size-sm,12px);--_gcd-heading-font-weight:var(--wpds-typography-font-weight-default,400);--_gcd-p-font-size:var(--wpds-typography-font-size-sm,12px);--_gcd-p-line-height:var(--wpds-typography-line-height-xs,16px);font-size:var(--wpds-typography-font-size-sm,12px);line-height:var(--wpds-typography-line-height-xs,16px)}}}');
 }
 var style_default = { "text": "_83ed8a8da5dd50ea__text", "heading-2xl": "_14437cfb77831647__heading-2xl", "heading-xl": "_3c78b7fa9b4072dd__heading-xl", "heading-lg": "aa58f227716bcde2__heading-lg", "heading-md": "fc4da56d8dfe52c4__heading-md", "heading-sm": "a9b78c7c82e8dff7__heading-sm", "body-xl": "_305ff559e52180d5__body-xl", "body-lg": "ca1aa3fc2029e958__body-lg", "body-md": "_131101940be12424__body-md", "body-sm": "_0e8d87a42c1f75fa__body-sm" };
 if (typeof process === "undefined" || true) {
-  registerStyle("d390e935a7", "._6defc79820e382c6__button{box-sizing:var(--_gcd-button-box-sizing,border-box);font-family:var(--_gcd-button-font-family,inherit);font-size:var(--_gcd-button-font-size,inherit);font-weight:var(--_gcd-button-font-weight,inherit)}.d2cff2e5dea83bd1__input{box-sizing:var(--_gcd-input-box-sizing,border-box);font-family:var(--_gcd-input-font-family,inherit);font-size:var(--_gcd-input-font-size,inherit);font-weight:var(--_gcd-input-font-weight,inherit);margin:var(--_gcd-input-margin,0);&:is(textarea,[type=text],[type=password],[type=color],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){background-color:var(--_gcd-input-background-color,transparent);border:var(--_gcd-input-border,none);border-radius:var(--_gcd-input-border-radius,0);box-shadow:var(--_gcd-input-box-shadow,0 0 0 transparent);color:var(--_gcd-input-color,var(--wpds-color-foreground-interactive-neutral,#1e1e1e));&:focus{border-color:var(--_gcd-input-border-color-focus,var(--wp-admin-theme-color));box-shadow:var(--_gcd-input-box-shadow-focus,none);outline:var(--_gcd-input-outline-focus,none)}&:disabled{background:var(--_gcd-input-background-disabled,transparent);border-color:var(--_gcd-input-border-color-disabled,transparent);box-shadow:var(--_gcd-input-box-shadow-disabled,none);color:var(--_gcd-input-color-disabled,var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d))}&::placeholder{color:var(--_gcd-input-placeholder-color,var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d))}}&:is(textarea,[type=text],[type=password],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){line-height:var(--_gcd-input-line-height,inherit);min-height:var(--_gcd-input-min-height,auto);padding:var(--_gcd-input-padding,0)}}._547d86373d02e108__textarea{box-sizing:var(--_gcd-textarea-box-sizing,border-box);overflow:var(--_gcd-textarea-overflow,auto);resize:var(--_gcd-textarea-resize,block)}._8c15fd0ed9f28ba4__div{outline:var(--_gcd-div-outline,0 solid transparent)}p._43cec3e1eec1066d__p{font-size:var(--_gcd-p-font-size,13px);line-height:var(--_gcd-p-line-height,1.5);margin:var(--_gcd-p-margin,0)}:is(h1,h2,h3,h4,h5,h6).e97669c6d9a38497__heading{color:var(--_gcd-heading-color,var(--wpds-color-foreground-content-neutral,#1e1e1e));font-size:var(--_gcd-heading-font-size,inherit);font-weight:var(--_gcd-heading-font-weight,var(--wpds-typography-font-weight-medium,499));margin:var(--_gcd-heading-margin,0)}._2c0831b0499dbd6e__a,._2c0831b0499dbd6e__a:is(:hover,:focus,:active){border-radius:var(--_gcd-a-border-radius,0);box-shadow:var(--_gcd-a-box-shadow,none);color:var(--_gcd-a-color,inherit);outline:var(--_gcd-a-outline,0 solid transparent);transition:var(--_gcd-a-transition,none)}");
+  registerStyle("af6d9984a6", "._6defc79820e382c6__button{box-sizing:var(--_gcd-button-box-sizing,border-box);font-family:var(--_gcd-button-font-family,inherit);font-size:var(--_gcd-button-font-size,inherit);font-weight:var(--_gcd-button-font-weight,inherit)}.d2cff2e5dea83bd1__input{box-sizing:var(--_gcd-input-box-sizing,border-box);font-family:var(--_gcd-input-font-family,inherit);font-size:var(--_gcd-input-font-size,inherit);font-weight:var(--_gcd-input-font-weight,inherit);margin:var(--_gcd-input-margin,0);&:is(textarea,[type=text],[type=password],[type=color],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){background-color:var(--_gcd-input-background-color,transparent);border:var(--_gcd-input-border,none);border-radius:var(--_gcd-input-border-radius,0);box-shadow:var(--_gcd-input-box-shadow,0 0 0 transparent);color:var(--_gcd-input-color,var(--wpds-color-foreground-interactive-neutral,#1e1e1e));&:focus{border-color:var(--_gcd-input-border-color-focus,var(--wp-admin-theme-color));box-shadow:var(--_gcd-input-box-shadow-focus,none);outline:var(--_gcd-input-outline-focus,none)}&:disabled{background:var(--_gcd-input-background-disabled,transparent);border-color:var(--_gcd-input-border-color-disabled,transparent);box-shadow:var(--_gcd-input-box-shadow-disabled,none);color:var(--_gcd-input-color-disabled,var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d))}&::placeholder{color:var(--_gcd-input-placeholder-color,var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d))}}&:is(textarea,[type=text],[type=password],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){line-height:var(--_gcd-input-line-height,inherit);min-height:var(--_gcd-input-min-height,auto);padding:var(--_gcd-input-padding,0)}}._547d86373d02e108__textarea{box-sizing:var(--_gcd-textarea-box-sizing,border-box);overflow:var(--_gcd-textarea-overflow,auto);resize:var(--_gcd-textarea-resize,block)}._8c15fd0ed9f28ba4__div{outline:var(--_gcd-div-outline,0 solid transparent)}p._43cec3e1eec1066d__p{font-size:var(--_gcd-p-font-size,13px);line-height:var(--_gcd-p-line-height,1.5);margin:var(--_gcd-p-margin,0)}:is(h1,h2,h3,h4,h5,h6).e97669c6d9a38497__heading{color:var(--_gcd-heading-color,var(--wpds-color-foreground-content-neutral,#1e1e1e));font-size:var(--_gcd-heading-font-size,inherit);font-weight:var(--_gcd-heading-font-weight,var(--wpds-typography-font-weight-emphasis,600));margin:var(--_gcd-heading-margin,0)}._2c0831b0499dbd6e__a,._2c0831b0499dbd6e__a:is(:hover,:focus,:active){border-radius:var(--_gcd-a-border-radius,0);box-shadow:var(--_gcd-a-box-shadow,none);color:var(--_gcd-a-color,inherit);outline:var(--_gcd-a-outline,0 solid transparent);transition:var(--_gcd-a-transition,none)}");
 }
 var global_css_defense_default = { "button": "_6defc79820e382c6__button", "input": "d2cff2e5dea83bd1__input", "textarea": "_547d86373d02e108__textarea", "div": "_8c15fd0ed9f28ba4__div", "p": "_43cec3e1eec1066d__p", "heading": "e97669c6d9a38497__heading", "a": "_2c0831b0499dbd6e__a" };
 var Text = (0, import_element10.forwardRef)(function Text2({ variant = "body-md", render: render4, className, ...props }, ref) {
@@ -9531,7 +11196,7 @@ var Text = (0, import_element10.forwardRef)(function Text2({ variant = "body-md"
 });
 
 // packages/ui/build-module/badge/badge.mjs
-var import_jsx_runtime12 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime17 = __toESM(require_jsx_runtime(), 1);
 var STYLE_HASH_ATTRIBUTE2 = "data-wp-hash";
 function getRuntime2() {
   const globalScope = globalThis;
@@ -9617,7 +11282,7 @@ if (typeof process === "undefined" || true) {
 }
 var style_default2 = { "badge": "_96e6251aad1a6136__badge", "is-high-intent": "_99f7158cb520f750__is-high-intent", "is-medium-intent": "c20ebef2365bc8b7__is-medium-intent", "is-low-intent": "_365e1626c6202e52__is-low-intent", "is-stable-intent": "_33f8198127ddf4ef__is-stable-intent", "is-informational-intent": "_04c1aca8fc449412__is-informational-intent", "is-draft-intent": "_90726e69d495ec19__is-draft-intent", "is-none-intent": "_898f4a544993bd39__is-none-intent" };
 var Badge = (0, import_element11.forwardRef)(function Badge2({ intent = "none", className, ...props }, ref) {
-  return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
     Text,
     {
       ref,
@@ -9635,9 +11300,9 @@ var Badge = (0, import_element11.forwardRef)(function Badge2({ intent = "none", 
 // packages/ui/build-module/icon/icon.mjs
 var import_element12 = __toESM(require_element(), 1);
 var import_primitives = __toESM(require_primitives(), 1);
-var import_jsx_runtime13 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime18 = __toESM(require_jsx_runtime(), 1);
 var Icon = (0, import_element12.forwardRef)(function Icon2({ icon, size: size4 = 24, ...restProps }, ref) {
-  return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
     import_primitives.SVG,
     {
       ref,
@@ -10059,11 +11724,11 @@ var FullBleed = (0, import_element16.forwardRef)(
 
 // packages/ui/build-module/card/title.mjs
 var import_element17 = __toESM(require_element(), 1);
-var import_jsx_runtime14 = __toESM(require_jsx_runtime(), 1);
-var DEFAULT_TAG = /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", {});
+var import_jsx_runtime19 = __toESM(require_jsx_runtime(), 1);
+var DEFAULT_TAG = /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", {});
 var Title = (0, import_element17.forwardRef)(
   function CardTitle({ render: render4 = DEFAULT_TAG, children, ...props }, ref) {
-    return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
       Text,
       {
         ref,
@@ -10078,28 +11743,28 @@ var Title = (0, import_element17.forwardRef)(
 
 // packages/ui/build-module/collapsible/panel.mjs
 var import_element18 = __toESM(require_element(), 1);
-var import_jsx_runtime15 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime20 = __toESM(require_jsx_runtime(), 1);
 var Panel = (0, import_element18.forwardRef)(
   function CollapsiblePanel3(props, forwardedRef) {
-    return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(index_parts_exports.Panel, { ref: forwardedRef, ...props });
+    return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(index_parts_exports.Panel, { ref: forwardedRef, ...props });
   }
 );
 
 // packages/ui/build-module/collapsible/root.mjs
 var import_element19 = __toESM(require_element(), 1);
-var import_jsx_runtime16 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime21 = __toESM(require_jsx_runtime(), 1);
 var Root2 = (0, import_element19.forwardRef)(
   function CollapsibleRoot3(props, forwardedRef) {
-    return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(index_parts_exports.Root, { ref: forwardedRef, ...props });
+    return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(index_parts_exports.Root, { ref: forwardedRef, ...props });
   }
 );
 
 // packages/ui/build-module/collapsible/trigger.mjs
 var import_element20 = __toESM(require_element(), 1);
-var import_jsx_runtime17 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime22 = __toESM(require_jsx_runtime(), 1);
 var Trigger = (0, import_element20.forwardRef)(
   function CollapsibleTrigger3(props, forwardedRef) {
-    return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(index_parts_exports.Trigger, { ref: forwardedRef, ...props });
+    return /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(index_parts_exports.Trigger, { ref: forwardedRef, ...props });
   }
 );
 
@@ -10114,14 +11779,14 @@ __export(collapsible_card_exports, {
 
 // packages/ui/build-module/collapsible-card/root.mjs
 var import_element21 = __toESM(require_element(), 1);
-var import_jsx_runtime18 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime23 = __toESM(require_jsx_runtime(), 1);
 var Root3 = (0, import_element21.forwardRef)(
   function CollapsibleCardRoot({ render: render4, ...restProps }, ref) {
-    return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
       Root2,
       {
         ref,
-        render: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(Root, { render: render4 }),
+        render: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Root, { render: render4 }),
         ...restProps
       }
     );
@@ -10133,126 +11798,131 @@ var import_element23 = __toESM(require_element(), 1);
 
 // packages/icons/build-module/library/aspect-ratio.mjs
 var import_primitives2 = __toESM(require_primitives(), 1);
-var import_jsx_runtime19 = __toESM(require_jsx_runtime(), 1);
-var aspect_ratio_default = /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_primitives2.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_primitives2.Path, { d: "M18.5 5.5h-13c-1.1 0-2 .9-2 2v9c0 1.1.9 2 2 2h13c1.1 0 2-.9 2-2v-9c0-1.1-.9-2-2-2zm.5 11c0 .3-.2.5-.5.5h-13c-.3 0-.5-.2-.5-.5v-9c0-.3.2-.5.5-.5h13c.3 0 .5.2.5.5v9zM6.5 12H8v-2h2V8.5H6.5V12zm9.5 2h-2v1.5h3.5V12H16v2z" }) });
+var import_jsx_runtime24 = __toESM(require_jsx_runtime(), 1);
+var aspect_ratio_default = /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(import_primitives2.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(import_primitives2.Path, { d: "M18.5 5.5h-13c-1.1 0-2 .9-2 2v9c0 1.1.9 2 2 2h13c1.1 0 2-.9 2-2v-9c0-1.1-.9-2-2-2zm.5 11c0 .3-.2.5-.5.5h-13c-.3 0-.5-.2-.5-.5v-9c0-.3.2-.5.5-.5h13c.3 0 .5.2.5.5v9zM6.5 12H8v-2h2V8.5H6.5V12zm9.5 2h-2v1.5h3.5V12H16v2z" }) });
 
 // packages/icons/build-module/library/check.mjs
 var import_primitives3 = __toESM(require_primitives(), 1);
-var import_jsx_runtime20 = __toESM(require_jsx_runtime(), 1);
-var check_default = /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(import_primitives3.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(import_primitives3.Path, { d: "M16.5 7.5 10 13.9l-2.5-2.4-1 1 3.5 3.6 7.5-7.6z" }) });
+var import_jsx_runtime25 = __toESM(require_jsx_runtime(), 1);
+var check_default = /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(import_primitives3.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(import_primitives3.Path, { d: "M16.5 7.5 10 13.9l-2.5-2.4-1 1 3.5 3.6 7.5-7.6z" }) });
 
 // packages/icons/build-module/library/chevron-down.mjs
 var import_primitives4 = __toESM(require_primitives(), 1);
-var import_jsx_runtime21 = __toESM(require_jsx_runtime(), 1);
-var chevron_down_default = /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(import_primitives4.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(import_primitives4.Path, { d: "M17.5 11.6L12 16l-5.5-4.4.9-1.2L12 14l4.5-3.6 1 1.2z" }) });
+var import_jsx_runtime26 = __toESM(require_jsx_runtime(), 1);
+var chevron_down_default = /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(import_primitives4.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(import_primitives4.Path, { d: "M17.5 11.6L12 16l-5.5-4.4.9-1.2L12 14l4.5-3.6 1 1.2z" }) });
+
+// packages/icons/build-module/library/chevron-right.mjs
+var import_primitives5 = __toESM(require_primitives(), 1);
+var import_jsx_runtime27 = __toESM(require_jsx_runtime(), 1);
+var chevron_right_default = /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(import_primitives5.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(import_primitives5.Path, { d: "M10.6 6L9.4 7l4.6 5-4.6 5 1.2 1 5.4-6z" }) });
 
 // packages/icons/build-module/library/close-small.mjs
-var import_primitives5 = __toESM(require_primitives(), 1);
-var import_jsx_runtime22 = __toESM(require_jsx_runtime(), 1);
-var close_small_default = /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(import_primitives5.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(import_primitives5.Path, { d: "M12 13.06l3.712 3.713 1.061-1.06L13.061 12l3.712-3.712-1.06-1.06L12 10.938 8.288 7.227l-1.061 1.06L10.939 12l-3.712 3.712 1.06 1.061L12 13.061z" }) });
+var import_primitives6 = __toESM(require_primitives(), 1);
+var import_jsx_runtime28 = __toESM(require_jsx_runtime(), 1);
+var close_small_default = /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(import_primitives6.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(import_primitives6.Path, { d: "M12 13.06l3.712 3.713 1.061-1.06L13.061 12l3.712-3.712-1.06-1.06L12 10.938 8.288 7.227l-1.061 1.06L10.939 12l-3.712 3.712 1.06 1.061L12 13.061z" }) });
 
 // packages/icons/build-module/library/close.mjs
-var import_primitives6 = __toESM(require_primitives(), 1);
-var import_jsx_runtime23 = __toESM(require_jsx_runtime(), 1);
-var close_default = /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(import_primitives6.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(import_primitives6.Path, { d: "m13.06 12 6.47-6.47-1.06-1.06L12 10.94 5.53 4.47 4.47 5.53 10.94 12l-6.47 6.47 1.06 1.06L12 13.06l6.47 6.47 1.06-1.06L13.06 12Z" }) });
+var import_primitives7 = __toESM(require_primitives(), 1);
+var import_jsx_runtime29 = __toESM(require_jsx_runtime(), 1);
+var close_default = /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(import_primitives7.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(import_primitives7.Path, { d: "m13.06 12 6.47-6.47-1.06-1.06L12 10.94 5.53 4.47 4.47 5.53 10.94 12l-6.47 6.47 1.06 1.06L12 13.06l6.47 6.47 1.06-1.06L13.06 12Z" }) });
 
 // packages/icons/build-module/library/drawer-right.mjs
-var import_primitives7 = __toESM(require_primitives(), 1);
-var import_jsx_runtime24 = __toESM(require_jsx_runtime(), 1);
-var drawer_right_default = /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(import_primitives7.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(import_primitives7.Path, { fillRule: "evenodd", clipRule: "evenodd", d: "M18 4H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-4 14.5H6c-.3 0-.5-.2-.5-.5V6c0-.3.2-.5.5-.5h8v13zm4.5-.5c0 .3-.2.5-.5.5h-2.5v-13H18c.3 0 .5.2.5.5v12z" }) });
+var import_primitives8 = __toESM(require_primitives(), 1);
+var import_jsx_runtime30 = __toESM(require_jsx_runtime(), 1);
+var drawer_right_default = /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(import_primitives8.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(import_primitives8.Path, { fillRule: "evenodd", clipRule: "evenodd", d: "M18 4H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-4 14.5H6c-.3 0-.5-.2-.5-.5V6c0-.3.2-.5.5-.5h8v13zm4.5-.5c0 .3-.2.5-.5.5h-2.5v-13H18c.3 0 .5.2.5.5v12z" }) });
 
 // packages/icons/build-module/library/envelope.mjs
-var import_primitives8 = __toESM(require_primitives(), 1);
-var import_jsx_runtime25 = __toESM(require_jsx_runtime(), 1);
-var envelope_default = /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(import_primitives8.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(import_primitives8.Path, { fillRule: "evenodd", clipRule: "evenodd", d: "M3 7c0-1.1.9-2 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Zm2-.5h14c.3 0 .5.2.5.5v1L12 13.5 4.5 7.9V7c0-.3.2-.5.5-.5Zm-.5 3.3V17c0 .3.2.5.5.5h14c.3 0 .5-.2.5-.5V9.8L12 15.4 4.5 9.8Z" }) });
+var import_primitives9 = __toESM(require_primitives(), 1);
+var import_jsx_runtime31 = __toESM(require_jsx_runtime(), 1);
+var envelope_default = /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(import_primitives9.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(import_primitives9.Path, { fillRule: "evenodd", clipRule: "evenodd", d: "M3 7c0-1.1.9-2 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Zm2-.5h14c.3 0 .5.2.5.5v1L12 13.5 4.5 7.9V7c0-.3.2-.5.5-.5Zm-.5 3.3V17c0 .3.2.5.5.5h14c.3 0 .5-.2.5-.5V9.8L12 15.4 4.5 9.8Z" }) });
 
 // packages/icons/build-module/library/error.mjs
-var import_primitives9 = __toESM(require_primitives(), 1);
-var import_jsx_runtime26 = __toESM(require_jsx_runtime(), 1);
-var error_default = /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(import_primitives9.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(import_primitives9.Path, { fillRule: "evenodd", clipRule: "evenodd", d: "M12.218 5.377a.25.25 0 0 0-.436 0l-7.29 12.96a.25.25 0 0 0 .218.373h14.58a.25.25 0 0 0 .218-.372l-7.29-12.96Zm-1.743-.735c.669-1.19 2.381-1.19 3.05 0l7.29 12.96a1.75 1.75 0 0 1-1.525 2.608H4.71a1.75 1.75 0 0 1-1.525-2.608l7.29-12.96ZM12.75 17.46h-1.5v-1.5h1.5v1.5Zm-1.5-3h1.5v-5h-1.5v5Z" }) });
+var import_primitives10 = __toESM(require_primitives(), 1);
+var import_jsx_runtime32 = __toESM(require_jsx_runtime(), 1);
+var error_default = /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(import_primitives10.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(import_primitives10.Path, { fillRule: "evenodd", clipRule: "evenodd", d: "M12.218 5.377a.25.25 0 0 0-.436 0l-7.29 12.96a.25.25 0 0 0 .218.373h14.58a.25.25 0 0 0 .218-.372l-7.29-12.96Zm-1.743-.735c.669-1.19 2.381-1.19 3.05 0l7.29 12.96a1.75 1.75 0 0 1-1.525 2.608H4.71a1.75 1.75 0 0 1-1.525-2.608l7.29-12.96ZM12.75 17.46h-1.5v-1.5h1.5v1.5Zm-1.5-3h1.5v-5h-1.5v5Z" }) });
 
 // packages/icons/build-module/library/flip-horizontal.mjs
-var import_primitives10 = __toESM(require_primitives(), 1);
-var import_jsx_runtime27 = __toESM(require_jsx_runtime(), 1);
-var flip_horizontal_default = /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(import_primitives10.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(import_primitives10.Path, { d: "M4 6v12c0 1.1.9 2 2 2h3v-1.5H6c-.3 0-.5-.2-.5-.5V6c0-.3.2-.5.5-.5h3V4H6c-1.1 0-2 .9-2 2zm7.2 16h1.5V2h-1.5v20zM15 5.5h1.5V4H15v1.5zm3.5.5H20c0-1.1-.9-2-2-2v1.5c.3 0 .5.2.5.5zm0 10.5H20v-2h-1.5v2zm0-3.5H20v-2h-1.5v2zm-.5 5.5V20c1.1 0 2-.9 2-2h-1.5c0 .3-.2.5-.5.5zM15 20h1.5v-1.5H15V20zm3.5-10.5H20v-2h-1.5v2z" }) });
+var import_primitives11 = __toESM(require_primitives(), 1);
+var import_jsx_runtime33 = __toESM(require_jsx_runtime(), 1);
+var flip_horizontal_default = /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(import_primitives11.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(import_primitives11.Path, { d: "M4 6v12c0 1.1.9 2 2 2h3v-1.5H6c-.3 0-.5-.2-.5-.5V6c0-.3.2-.5.5-.5h3V4H6c-1.1 0-2 .9-2 2zm7.2 16h1.5V2h-1.5v20zM15 5.5h1.5V4H15v1.5zm3.5.5H20c0-1.1-.9-2-2-2v1.5c.3 0 .5.2.5.5zm0 10.5H20v-2h-1.5v2zm0-3.5H20v-2h-1.5v2zm-.5 5.5V20c1.1 0 2-.9 2-2h-1.5c0 .3-.2.5-.5.5zM15 20h1.5v-1.5H15V20zm3.5-10.5H20v-2h-1.5v2z" }) });
 
 // packages/icons/build-module/library/flip-vertical.mjs
-var import_primitives11 = __toESM(require_primitives(), 1);
-var import_jsx_runtime28 = __toESM(require_jsx_runtime(), 1);
-var flip_vertical_default = /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(import_primitives11.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(import_primitives11.Path, { d: "M2 11.2v1.5h20v-1.5H2zM5.5 6c0-.3.2-.5.5-.5h12c.3 0 .5.2.5.5v3H20V6c0-1.1-.9-2-2-2H6c-1.1 0-2 .9-2 2v3h1.5V6zm2 14h2v-1.5h-2V20zm3.5 0h2v-1.5h-2V20zm7-1.5V20c1.1 0 2-.9 2-2h-1.5c0 .3-.2.5-.5.5zm.5-2H20V15h-1.5v1.5zM5.5 18H4c0 1.1.9 2 2 2v-1.5c-.3 0-.5-.2-.5-.5zm0-3H4v1.5h1.5V15zm9 5h2v-1.5h-2V20z" }) });
+var import_primitives12 = __toESM(require_primitives(), 1);
+var import_jsx_runtime34 = __toESM(require_jsx_runtime(), 1);
+var flip_vertical_default = /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(import_primitives12.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(import_primitives12.Path, { d: "M2 11.2v1.5h20v-1.5H2zM5.5 6c0-.3.2-.5.5-.5h12c.3 0 .5.2.5.5v3H20V6c0-1.1-.9-2-2-2H6c-1.1 0-2 .9-2 2v3h1.5V6zm2 14h2v-1.5h-2V20zm3.5 0h2v-1.5h-2V20zm7-1.5V20c1.1 0 2-.9 2-2h-1.5c0 .3-.2.5-.5.5zm.5-2H20V15h-1.5v1.5zM5.5 18H4c0 1.1.9 2 2 2v-1.5c-.3 0-.5-.2-.5-.5zm0-3H4v1.5h1.5V15zm9 5h2v-1.5h-2V20z" }) });
 
 // packages/icons/build-module/library/keyboard.mjs
-var import_primitives12 = __toESM(require_primitives(), 1);
-var import_jsx_runtime29 = __toESM(require_jsx_runtime(), 1);
-var keyboard_default = /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)(import_primitives12.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: [
-  /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(import_primitives12.Path, { d: "m16 15.5h-8v-1.5h8zm-7.5-2.5h-2v-2h2zm3 0h-2v-2h2zm3 0h-2v-2h2zm3 0h-2v-2h2zm-9-3h-2v-2h2zm3 0h-2v-2h2zm3 0h-2v-2h2zm3 0h-2v-2h2z" }),
-  /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(import_primitives12.Path, { d: "m18.5 6.5h-13a.5.5 0 0 0 -.5.5v9.5a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9.5a.5.5 0 0 0 -.5-.5zm-13-1.5h13a2 2 0 0 1 2 2v9.5a2 2 0 0 1 -2 2h-13a2 2 0 0 1 -2-2v-9.5a2 2 0 0 1 2-2z" })
+var import_primitives13 = __toESM(require_primitives(), 1);
+var import_jsx_runtime35 = __toESM(require_jsx_runtime(), 1);
+var keyboard_default = /* @__PURE__ */ (0, import_jsx_runtime35.jsxs)(import_primitives13.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: [
+  /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(import_primitives13.Path, { d: "m16 15.5h-8v-1.5h8zm-7.5-2.5h-2v-2h2zm3 0h-2v-2h2zm3 0h-2v-2h2zm3 0h-2v-2h2zm-9-3h-2v-2h2zm3 0h-2v-2h2zm3 0h-2v-2h2zm3 0h-2v-2h2z" }),
+  /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(import_primitives13.Path, { d: "m18.5 6.5h-13a.5.5 0 0 0 -.5.5v9.5a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9.5a.5.5 0 0 0 -.5-.5zm-13-1.5h13a2 2 0 0 1 2 2v9.5a2 2 0 0 1 -2 2h-13a2 2 0 0 1 -2-2v-9.5a2 2 0 0 1 2-2z" })
 ] });
 
 // packages/icons/build-module/library/line-solid.mjs
-var import_primitives13 = __toESM(require_primitives(), 1);
-var import_jsx_runtime30 = __toESM(require_jsx_runtime(), 1);
-var line_solid_default = /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(import_primitives13.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(import_primitives13.Path, { d: "M5 11.25h14v1.5H5z" }) });
+var import_primitives14 = __toESM(require_primitives(), 1);
+var import_jsx_runtime36 = __toESM(require_jsx_runtime(), 1);
+var line_solid_default = /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(import_primitives14.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(import_primitives14.Path, { d: "M5 11.25h14v1.5H5z" }) });
 
 // packages/icons/build-module/library/link.mjs
-var import_primitives14 = __toESM(require_primitives(), 1);
-var import_jsx_runtime31 = __toESM(require_jsx_runtime(), 1);
-var link_default = /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(import_primitives14.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(import_primitives14.Path, { d: "M10 17.389H8.444A5.194 5.194 0 1 1 8.444 7H10v1.5H8.444a3.694 3.694 0 0 0 0 7.389H10v1.5ZM14 7h1.556a5.194 5.194 0 0 1 0 10.39H14v-1.5h1.556a3.694 3.694 0 0 0 0-7.39H14V7Zm-4.5 6h5v-1.5h-5V13Z" }) });
+var import_primitives15 = __toESM(require_primitives(), 1);
+var import_jsx_runtime37 = __toESM(require_jsx_runtime(), 1);
+var link_default = /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(import_primitives15.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(import_primitives15.Path, { d: "M10 17.389H8.444A5.194 5.194 0 1 1 8.444 7H10v1.5H8.444a3.694 3.694 0 0 0 0 7.389H10v1.5ZM14 7h1.556a5.194 5.194 0 0 1 0 10.39H14v-1.5h1.556a3.694 3.694 0 0 0 0-7.39H14V7Zm-4.5 6h5v-1.5h-5V13Z" }) });
 
 // packages/icons/build-module/library/mobile.mjs
-var import_primitives15 = __toESM(require_primitives(), 1);
-var import_jsx_runtime32 = __toESM(require_jsx_runtime(), 1);
-var mobile_default = /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(import_primitives15.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(import_primitives15.Path, { d: "M15 4H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm.5 14c0 .3-.2.5-.5.5H9c-.3 0-.5-.2-.5-.5V6c0-.3.2-.5.5-.5h6c.3 0 .5.2.5.5v12zm-4.5-.5h2V16h-2v1.5z" }) });
+var import_primitives16 = __toESM(require_primitives(), 1);
+var import_jsx_runtime38 = __toESM(require_jsx_runtime(), 1);
+var mobile_default = /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(import_primitives16.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(import_primitives16.Path, { d: "M15 4H9c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm.5 14c0 .3-.2.5-.5.5H9c-.3 0-.5-.2-.5-.5V6c0-.3.2-.5.5-.5h6c.3 0 .5.2.5.5v12zm-4.5-.5h2V16h-2v1.5z" }) });
 
 // packages/icons/build-module/library/pencil.mjs
-var import_primitives16 = __toESM(require_primitives(), 1);
-var import_jsx_runtime33 = __toESM(require_jsx_runtime(), 1);
-var pencil_default = /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(import_primitives16.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(import_primitives16.Path, { d: "m19 7-3-3-8.5 8.5-1 4 4-1L19 7Zm-7 11.5H5V20h7v-1.5Z" }) });
+var import_primitives17 = __toESM(require_primitives(), 1);
+var import_jsx_runtime39 = __toESM(require_jsx_runtime(), 1);
+var pencil_default = /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(import_primitives17.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(import_primitives17.Path, { d: "m19 7-3-3-8.5 8.5-1 4 4-1L19 7Zm-7 11.5H5V20h7v-1.5Z" }) });
 
 // packages/icons/build-module/library/plus.mjs
-var import_primitives17 = __toESM(require_primitives(), 1);
-var import_jsx_runtime34 = __toESM(require_jsx_runtime(), 1);
-var plus_default = /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(import_primitives17.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(import_primitives17.Path, { d: "M11 12.5V17.5H12.5V12.5H17.5V11H12.5V6H11V11H6V12.5H11Z" }) });
+var import_primitives18 = __toESM(require_primitives(), 1);
+var import_jsx_runtime40 = __toESM(require_jsx_runtime(), 1);
+var plus_default = /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(import_primitives18.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(import_primitives18.Path, { d: "M11 12.5V17.5H12.5V12.5H17.5V11H12.5V6H11V11H6V12.5H11Z" }) });
 
 // packages/icons/build-module/library/redo.mjs
-var import_primitives18 = __toESM(require_primitives(), 1);
-var import_jsx_runtime35 = __toESM(require_jsx_runtime(), 1);
-var redo_default = /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(import_primitives18.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(import_primitives18.Path, { d: "M15.6 6.5l-1.1 1 2.9 3.3H8c-.9 0-1.7.3-2.3.9-1.4 1.5-1.4 4.2-1.4 5.6v.2h1.5v-.3c0-1.1 0-3.5 1-4.5.3-.3.7-.5 1.3-.5h9.2L14.5 15l1.1 1.1 4.6-4.6-4.6-5z" }) });
+var import_primitives19 = __toESM(require_primitives(), 1);
+var import_jsx_runtime41 = __toESM(require_jsx_runtime(), 1);
+var redo_default = /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(import_primitives19.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(import_primitives19.Path, { d: "M15.6 6.5l-1.1 1 2.9 3.3H8c-.9 0-1.7.3-2.3.9-1.4 1.5-1.4 4.2-1.4 5.6v.2h1.5v-.3c0-1.1 0-3.5 1-4.5.3-.3.7-.5 1.3-.5h9.2L14.5 15l1.1 1.1 4.6-4.6-4.6-5z" }) });
 
 // packages/icons/build-module/library/rotate-left.mjs
-var import_primitives19 = __toESM(require_primitives(), 1);
-var import_jsx_runtime36 = __toESM(require_jsx_runtime(), 1);
-var rotate_left_default = /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(import_primitives19.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(import_primitives19.Path, { d: "M12 4V2.2L9 4.8l3 2.5V5.5c3.6 0 6.5 2.9 6.5 6.5 0 2.9-1.9 5.3-4.5 6.2v.2l-.1-.2c-.4.1-.7.2-1.1.2l.2 1.5c.3 0 .6-.1 1-.2 3.5-.9 6-4 6-7.7 0-4.4-3.6-8-8-8zm-7.9 7l1.5.2c.1-1.2.5-2.3 1.2-3.2l-1.1-.9C4.8 8.2 4.3 9.6 4.1 11zm1.5 1.8l-1.5.2c.1.7.3 1.4.5 2 .3.7.6 1.3 1 1.8l1.2-.8c-.3-.5-.6-1-.8-1.5s-.4-1.1-.4-1.7zm1.5 5.5c1.1.9 2.4 1.4 3.8 1.6l.2-1.5c-1.1-.1-2.2-.5-3.1-1.2l-.9 1.1z" }) });
+var import_primitives20 = __toESM(require_primitives(), 1);
+var import_jsx_runtime42 = __toESM(require_jsx_runtime(), 1);
+var rotate_left_default = /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(import_primitives20.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(import_primitives20.Path, { d: "M12 4V2.2L9 4.8l3 2.5V5.5c3.6 0 6.5 2.9 6.5 6.5 0 2.9-1.9 5.3-4.5 6.2v.2l-.1-.2c-.4.1-.7.2-1.1.2l.2 1.5c.3 0 .6-.1 1-.2 3.5-.9 6-4 6-7.7 0-4.4-3.6-8-8-8zm-7.9 7l1.5.2c.1-1.2.5-2.3 1.2-3.2l-1.1-.9C4.8 8.2 4.3 9.6 4.1 11zm1.5 1.8l-1.5.2c.1.7.3 1.4.5 2 .3.7.6 1.3 1 1.8l1.2-.8c-.3-.5-.6-1-.8-1.5s-.4-1.1-.4-1.7zm1.5 5.5c1.1.9 2.4 1.4 3.8 1.6l.2-1.5c-1.1-.1-2.2-.5-3.1-1.2l-.9 1.1z" }) });
 
 // packages/icons/build-module/library/rotate-right.mjs
-var import_primitives20 = __toESM(require_primitives(), 1);
-var import_jsx_runtime37 = __toESM(require_jsx_runtime(), 1);
-var rotate_right_default = /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(import_primitives20.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(import_primitives20.Path, { d: "M15.1 4.8l-3-2.5V4c-4.4 0-8 3.6-8 8 0 3.7 2.5 6.9 6 7.7.3.1.6.1 1 .2l.2-1.5c-.4 0-.7-.1-1.1-.2l-.1.2v-.2c-2.6-.8-4.5-3.3-4.5-6.2 0-3.6 2.9-6.5 6.5-6.5v1.8l3-2.5zM20 11c-.2-1.4-.7-2.7-1.6-3.8l-1.2.8c.7.9 1.1 2 1.3 3.1L20 11zm-1.5 1.8c-.1.5-.2 1.1-.4 1.6s-.5 1-.8 1.5l1.2.9c.4-.5.8-1.1 1-1.8s.5-1.3.5-2l-1.5-.2zm-5.6 5.6l.2 1.5c1.4-.2 2.7-.7 3.8-1.6l-.9-1.1c-.9.7-2 1.1-3.1 1.2z" }) });
+var import_primitives21 = __toESM(require_primitives(), 1);
+var import_jsx_runtime43 = __toESM(require_jsx_runtime(), 1);
+var rotate_right_default = /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(import_primitives21.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(import_primitives21.Path, { d: "M15.1 4.8l-3-2.5V4c-4.4 0-8 3.6-8 8 0 3.7 2.5 6.9 6 7.7.3.1.6.1 1 .2l.2-1.5c-.4 0-.7-.1-1.1-.2l-.1.2v-.2c-2.6-.8-4.5-3.3-4.5-6.2 0-3.6 2.9-6.5 6.5-6.5v1.8l3-2.5zM20 11c-.2-1.4-.7-2.7-1.6-3.8l-1.2.8c.7.9 1.1 2 1.3 3.1L20 11zm-1.5 1.8c-.1.5-.2 1.1-.4 1.6s-.5 1-.8 1.5l1.2.9c.4-.5.8-1.1 1-1.8s.5-1.3.5-2l-1.5-.2zm-5.6 5.6l.2 1.5c1.4-.2 2.7-.7 3.8-1.6l-.9-1.1c-.9.7-2 1.1-3.1 1.2z" }) });
 
 // packages/icons/build-module/library/seen.mjs
-var import_primitives21 = __toESM(require_primitives(), 1);
-var import_jsx_runtime38 = __toESM(require_jsx_runtime(), 1);
-var seen_default = /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(import_primitives21.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(import_primitives21.Path, { d: "M3.99961 13C4.67043 13.3354 4.6703 13.3357 4.67017 13.3359L4.67298 13.3305C4.67621 13.3242 4.68184 13.3135 4.68988 13.2985C4.70595 13.2686 4.7316 13.2218 4.76695 13.1608C4.8377 13.0385 4.94692 12.8592 5.09541 12.6419C5.39312 12.2062 5.84436 11.624 6.45435 11.0431C7.67308 9.88241 9.49719 8.75 11.9996 8.75C14.502 8.75 16.3261 9.88241 17.5449 11.0431C18.1549 11.624 18.6061 12.2062 18.9038 12.6419C19.0523 12.8592 19.1615 13.0385 19.2323 13.1608C19.2676 13.2218 19.2933 13.2686 19.3093 13.2985C19.3174 13.3135 19.323 13.3242 19.3262 13.3305L19.3291 13.3359C19.3289 13.3357 19.3288 13.3354 19.9996 13C20.6704 12.6646 20.6703 12.6643 20.6701 12.664L20.6697 12.6632L20.6688 12.6614L20.6662 12.6563L20.6583 12.6408C20.6517 12.6282 20.6427 12.6108 20.631 12.5892C20.6078 12.5459 20.5744 12.4852 20.5306 12.4096C20.4432 12.2584 20.3141 12.0471 20.1423 11.7956C19.7994 11.2938 19.2819 10.626 18.5794 9.9569C17.1731 8.61759 14.9972 7.25 11.9996 7.25C9.00203 7.25 6.82614 8.61759 5.41987 9.9569C4.71736 10.626 4.19984 11.2938 3.85694 11.7956C3.68511 12.0471 3.55605 12.2584 3.4686 12.4096C3.42484 12.4852 3.39142 12.5459 3.36818 12.5892C3.35656 12.6108 3.34748 12.6282 3.34092 12.6408L3.33297 12.6563L3.33041 12.6614L3.32948 12.6632L3.32911 12.664C3.32894 12.6643 3.32879 12.6646 3.99961 13ZM11.9996 16C13.9326 16 15.4996 14.433 15.4996 12.5C15.4996 10.567 13.9326 9 11.9996 9C10.0666 9 8.49961 10.567 8.49961 12.5C8.49961 14.433 10.0666 16 11.9996 16Z" }) });
+var import_primitives22 = __toESM(require_primitives(), 1);
+var import_jsx_runtime44 = __toESM(require_jsx_runtime(), 1);
+var seen_default = /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(import_primitives22.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(import_primitives22.Path, { d: "M3.99961 13C4.67043 13.3354 4.6703 13.3357 4.67017 13.3359L4.67298 13.3305C4.67621 13.3242 4.68184 13.3135 4.68988 13.2985C4.70595 13.2686 4.7316 13.2218 4.76695 13.1608C4.8377 13.0385 4.94692 12.8592 5.09541 12.6419C5.39312 12.2062 5.84436 11.624 6.45435 11.0431C7.67308 9.88241 9.49719 8.75 11.9996 8.75C14.502 8.75 16.3261 9.88241 17.5449 11.0431C18.1549 11.624 18.6061 12.2062 18.9038 12.6419C19.0523 12.8592 19.1615 13.0385 19.2323 13.1608C19.2676 13.2218 19.2933 13.2686 19.3093 13.2985C19.3174 13.3135 19.323 13.3242 19.3262 13.3305L19.3291 13.3359C19.3289 13.3357 19.3288 13.3354 19.9996 13C20.6704 12.6646 20.6703 12.6643 20.6701 12.664L20.6697 12.6632L20.6688 12.6614L20.6662 12.6563L20.6583 12.6408C20.6517 12.6282 20.6427 12.6108 20.631 12.5892C20.6078 12.5459 20.5744 12.4852 20.5306 12.4096C20.4432 12.2584 20.3141 12.0471 20.1423 11.7956C19.7994 11.2938 19.2819 10.626 18.5794 9.9569C17.1731 8.61759 14.9972 7.25 11.9996 7.25C9.00203 7.25 6.82614 8.61759 5.41987 9.9569C4.71736 10.626 4.19984 11.2938 3.85694 11.7956C3.68511 12.0471 3.55605 12.2584 3.4686 12.4096C3.42484 12.4852 3.39142 12.5459 3.36818 12.5892C3.35656 12.6108 3.34748 12.6282 3.34092 12.6408L3.33297 12.6563L3.33041 12.6614L3.32948 12.6632L3.32911 12.664C3.32894 12.6643 3.32879 12.6646 3.99961 13ZM11.9996 16C13.9326 16 15.4996 14.433 15.4996 12.5C15.4996 10.567 13.9326 9 11.9996 9C10.0666 9 8.49961 10.567 8.49961 12.5C8.49961 14.433 10.0666 16 11.9996 16Z" }) });
 
 // packages/icons/build-module/library/star-empty.mjs
-var import_primitives22 = __toESM(require_primitives(), 1);
-var import_jsx_runtime39 = __toESM(require_jsx_runtime(), 1);
-var star_empty_default = /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(import_primitives22.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(import_primitives22.Path, { fillRule: "evenodd", clipRule: "evenodd", d: "M9.706 8.646a.25.25 0 01-.188.137l-4.626.672a.25.25 0 00-.139.427l3.348 3.262a.25.25 0 01.072.222l-.79 4.607a.25.25 0 00.362.264l4.138-2.176a.25.25 0 01.233 0l4.137 2.175a.25.25 0 00.363-.263l-.79-4.607a.25.25 0 01.072-.222l3.347-3.262a.25.25 0 00-.139-.427l-4.626-.672a.25.25 0 01-.188-.137l-2.069-4.192a.25.25 0 00-.448 0L9.706 8.646zM12 7.39l-.948 1.921a1.75 1.75 0 01-1.317.957l-2.12.308 1.534 1.495c.412.402.6.982.503 1.55l-.362 2.11 1.896-.997a1.75 1.75 0 011.629 0l1.895.997-.362-2.11a1.75 1.75 0 01.504-1.55l1.533-1.495-2.12-.308a1.75 1.75 0 01-1.317-.957L12 7.39z" }) });
+var import_primitives23 = __toESM(require_primitives(), 1);
+var import_jsx_runtime45 = __toESM(require_jsx_runtime(), 1);
+var star_empty_default = /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(import_primitives23.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(import_primitives23.Path, { fillRule: "evenodd", clipRule: "evenodd", d: "M9.706 8.646a.25.25 0 01-.188.137l-4.626.672a.25.25 0 00-.139.427l3.348 3.262a.25.25 0 01.072.222l-.79 4.607a.25.25 0 00.362.264l4.138-2.176a.25.25 0 01.233 0l4.137 2.175a.25.25 0 00.363-.263l-.79-4.607a.25.25 0 01.072-.222l3.347-3.262a.25.25 0 00-.139-.427l-4.626-.672a.25.25 0 01-.188-.137l-2.069-4.192a.25.25 0 00-.448 0L9.706 8.646zM12 7.39l-.948 1.921a1.75 1.75 0 01-1.317.957l-2.12.308 1.534 1.495c.412.402.6.982.503 1.55l-.362 2.11 1.896-.997a1.75 1.75 0 011.629 0l1.895.997-.362-2.11a1.75 1.75 0 01.504-1.55l1.533-1.495-2.12-.308a1.75 1.75 0 01-1.317-.957L12 7.39z" }) });
 
 // packages/icons/build-module/library/star-filled.mjs
-var import_primitives23 = __toESM(require_primitives(), 1);
-var import_jsx_runtime40 = __toESM(require_jsx_runtime(), 1);
-var star_filled_default = /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(import_primitives23.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(import_primitives23.Path, { d: "M11.776 4.454a.25.25 0 01.448 0l2.069 4.192a.25.25 0 00.188.137l4.626.672a.25.25 0 01.139.426l-3.348 3.263a.25.25 0 00-.072.222l.79 4.607a.25.25 0 01-.362.263l-4.138-2.175a.25.25 0 00-.232 0l-4.138 2.175a.25.25 0 01-.363-.263l.79-4.607a.25.25 0 00-.071-.222L4.754 9.881a.25.25 0 01.139-.426l4.626-.672a.25.25 0 00.188-.137l2.069-4.192z" }) });
+var import_primitives24 = __toESM(require_primitives(), 1);
+var import_jsx_runtime46 = __toESM(require_jsx_runtime(), 1);
+var star_filled_default = /* @__PURE__ */ (0, import_jsx_runtime46.jsx)(import_primitives24.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime46.jsx)(import_primitives24.Path, { d: "M11.776 4.454a.25.25 0 01.448 0l2.069 4.192a.25.25 0 00.188.137l4.626.672a.25.25 0 01.139.426l-3.348 3.263a.25.25 0 00-.072.222l.79 4.607a.25.25 0 01-.362.263l-4.138-2.175a.25.25 0 00-.232 0l-4.138 2.175a.25.25 0 01-.363-.263l.79-4.607a.25.25 0 00-.071-.222L4.754 9.881a.25.25 0 01.139-.426l4.626-.672a.25.25 0 00.188-.137l2.069-4.192z" }) });
 
 // packages/icons/build-module/library/undo.mjs
-var import_primitives24 = __toESM(require_primitives(), 1);
-var import_jsx_runtime41 = __toESM(require_jsx_runtime(), 1);
-var undo_default = /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(import_primitives24.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(import_primitives24.Path, { d: "M18.3 11.7c-.6-.6-1.4-.9-2.3-.9H6.7l2.9-3.3-1.1-1-4.5 5L8.5 16l1-1-2.7-2.7H16c.5 0 .9.2 1.3.5 1 1 1 3.4 1 4.5v.3h1.5v-.2c0-1.5 0-4.3-1.5-5.7z" }) });
+var import_primitives25 = __toESM(require_primitives(), 1);
+var import_jsx_runtime47 = __toESM(require_jsx_runtime(), 1);
+var undo_default = /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(import_primitives25.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(import_primitives25.Path, { d: "M18.3 11.7c-.6-.6-1.4-.9-2.3-.9H6.7l2.9-3.3-1.1-1-4.5 5L8.5 16l1-1-2.7-2.7H16c.5 0 .9.2 1.3.5 1 1 1 3.4 1 4.5v.3h1.5v-.2c0-1.5 0-4.3-1.5-5.7z" }) });
 
 // packages/icons/build-module/library/unseen.mjs
-var import_primitives25 = __toESM(require_primitives(), 1);
-var import_jsx_runtime42 = __toESM(require_jsx_runtime(), 1);
-var unseen_default = /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(import_primitives25.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(import_primitives25.Path, { d: "M20.7 12.7s0-.1-.1-.2c0-.2-.2-.4-.4-.6-.3-.5-.9-1.2-1.6-1.8-.7-.6-1.5-1.3-2.6-1.8l-.6 1.4c.9.4 1.6 1 2.1 1.5.6.6 1.1 1.2 1.4 1.6.1.2.3.4.3.5v.1l.7-.3.7-.3Zm-5.2-9.3-1.8 4c-.5-.1-1.1-.2-1.7-.2-3 0-5.2 1.4-6.6 2.7-.7.7-1.2 1.3-1.6 1.8-.2.3-.3.5-.4.6 0 0 0 .1-.1.2s0 0 .7.3l.7.3V13c0-.1.2-.3.3-.5.3-.4.7-1 1.4-1.6 1.2-1.2 3-2.3 5.5-2.3H13v.3c-.4 0-.8-.1-1.1-.1-1.9 0-3.5 1.6-3.5 3.5s.6 2.3 1.6 2.9l-2 4.4.9.4 7.6-16.2-.9-.4Zm-3 12.6c1.7-.2 3-1.7 3-3.5s-.2-1.4-.6-1.9L12.4 16Z" }) });
+var import_primitives26 = __toESM(require_primitives(), 1);
+var import_jsx_runtime48 = __toESM(require_jsx_runtime(), 1);
+var unseen_default = /* @__PURE__ */ (0, import_jsx_runtime48.jsx)(import_primitives26.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime48.jsx)(import_primitives26.Path, { d: "M20.7 12.7s0-.1-.1-.2c0-.2-.2-.4-.4-.6-.3-.5-.9-1.2-1.6-1.8-.7-.6-1.5-1.3-2.6-1.8l-.6 1.4c.9.4 1.6 1 2.1 1.5.6.6 1.1 1.2 1.4 1.6.1.2.3.4.3.5v.1l.7-.3.7-.3Zm-5.2-9.3-1.8 4c-.5-.1-1.1-.2-1.7-.2-3 0-5.2 1.4-6.6 2.7-.7.7-1.2 1.3-1.6 1.8-.2.3-.3.5-.4.6 0 0 0 .1-.1.2s0 0 .7.3l.7.3V13c0-.1.2-.3.3-.5.3-.4.7-1 1.4-1.6 1.2-1.2 3-2.3 5.5-2.3H13v.3c-.4 0-.8-.1-1.1-.1-1.9 0-3.5 1.6-3.5 3.5s.6 2.3 1.6 2.9l-2 4.4.9.4 7.6-16.2-.9-.4Zm-3 12.6c1.7-.2 3-1.7 3-3.5s-.2-1.4-.6-1.9L12.4 16Z" }) });
 
 // packages/ui/build-module/collapsible-card/context.mjs
 var import_element22 = __toESM(require_element(), 1);
@@ -10262,7 +11932,7 @@ var HeaderDescriptionIdContext = (0, import_element22.createContext)({
 });
 
 // packages/ui/build-module/collapsible-card/header.mjs
-var import_jsx_runtime43 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime49 = __toESM(require_jsx_runtime(), 1);
 var STYLE_HASH_ATTRIBUTE7 = "data-wp-hash";
 function getRuntime7() {
   const globalScope = globalThis;
@@ -10344,11 +12014,11 @@ function registerStyle7(hash, css) {
   }
 }
 if (typeof process === "undefined" || true) {
-  registerStyle7("ee46794e90", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._626190151275d6d3__heading-wrapper{--_gcd-heading-color:inherit;--_gcd-heading-font-size:inherit;--_gcd-heading-font-weight:inherit;--_gcd-heading-margin:0;font-family:inherit;line-height:inherit}.cab17c7a373cb60d__header-content{flex:1;min-width:0}.dd89d27c4f15912d__header-trigger-positioner{align-self:center;flex-shrink:0;max-height:0;overflow:visible}.bcfab5f2448bafef__header-trigger-wrapper{border-radius:var(--wpds-border-radius-sm,2px);display:flex;translate:0 -50%}._3106f8d2b0330faa__header-trigger{@media not (prefers-reduced-motion){transition:rotate .15s ease-out}}._5d2dfcb4085c6d0f__header[data-panel-open] ._3106f8d2b0330faa__header-trigger{rotate:180deg}._5d2dfcb4085c6d0f__header[data-disabled] ._3106f8d2b0330faa__header-trigger{color:var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d)}.e34cf37ccd0d81e0__content{height:var(--collapsible-panel-height);margin-block-start:var(--wp-ui-card-header-content-margin);overflow:hidden;&._165c4572592944b2__overflowVisible{overflow:visible}&[hidden]:not([hidden=until-found]){display:none}&[data-ending-style],&[data-starting-style]{height:0}@media not (prefers-reduced-motion){transition:all .15s ease-out}}}@layer compositions{._41bfdbf7b6c087c2__content-inner{padding-block-start:0}._5d2dfcb4085c6d0f__header{align-items:stretch;display:flex;flex-direction:row;gap:var(--wpds-dimension-gap-sm,8px);outline:none;&:not([data-disabled]){cursor:var(--wpds-cursor-control,pointer)}}}}");
+  registerStyle7("78199613cf", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._626190151275d6d3__heading-wrapper{--_gcd-heading-color:inherit;--_gcd-heading-font-size:inherit;--_gcd-heading-font-weight:inherit;--_gcd-heading-margin:0;font-family:inherit;line-height:inherit}.cab17c7a373cb60d__header-content{flex:1;min-width:0}.dd89d27c4f15912d__header-trigger-positioner{align-self:center;flex-shrink:0;max-height:0;overflow:visible}.bcfab5f2448bafef__header-trigger-wrapper{border-radius:var(--wpds-border-radius-sm,2px);display:flex;translate:0 -50%}._3106f8d2b0330faa__header-trigger{@media not (prefers-reduced-motion){transition:rotate .15s ease-out}}._5d2dfcb4085c6d0f__header[data-panel-open] ._3106f8d2b0330faa__header-trigger{rotate:180deg}._5d2dfcb4085c6d0f__header[data-disabled] ._3106f8d2b0330faa__header-trigger{color:var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d)}.e34cf37ccd0d81e0__content{height:var(--collapsible-panel-height);margin-block-start:var(--wp-ui-card-header-content-margin);overflow:hidden;&._03cfdbcd710393c9__overflow-visible{overflow:visible}&[hidden]:not([hidden=until-found]){display:none}&[data-ending-style],&[data-starting-style]{height:0}@media not (prefers-reduced-motion){transition:all .15s ease-out}}}@layer compositions{._41bfdbf7b6c087c2__content-inner{padding-block-start:0}._5d2dfcb4085c6d0f__header{align-items:stretch;display:flex;flex-direction:row;gap:var(--wpds-dimension-gap-sm,8px);outline:none;&:not([data-disabled]){cursor:var(--wpds-cursor-control,pointer)}}}}");
 }
-var style_default7 = { "heading-wrapper": "_626190151275d6d3__heading-wrapper", "header-content": "cab17c7a373cb60d__header-content", "header-trigger-positioner": "dd89d27c4f15912d__header-trigger-positioner", "header-trigger-wrapper": "bcfab5f2448bafef__header-trigger-wrapper", "header-trigger": "_3106f8d2b0330faa__header-trigger", "header": "_5d2dfcb4085c6d0f__header", "content": "e34cf37ccd0d81e0__content", "overflowVisible": "_165c4572592944b2__overflowVisible", "content-inner": "_41bfdbf7b6c087c2__content-inner" };
+var style_default7 = { "heading-wrapper": "_626190151275d6d3__heading-wrapper", "header-content": "cab17c7a373cb60d__header-content", "header-trigger-positioner": "dd89d27c4f15912d__header-trigger-positioner", "header-trigger-wrapper": "bcfab5f2448bafef__header-trigger-wrapper", "header-trigger": "_3106f8d2b0330faa__header-trigger", "header": "_5d2dfcb4085c6d0f__header", "content": "e34cf37ccd0d81e0__content", "overflow-visible": "_03cfdbcd710393c9__overflow-visible", "content-inner": "_41bfdbf7b6c087c2__content-inner" };
 if (typeof process === "undefined" || true) {
-  registerStyle7("d390e935a7", "._6defc79820e382c6__button{box-sizing:var(--_gcd-button-box-sizing,border-box);font-family:var(--_gcd-button-font-family,inherit);font-size:var(--_gcd-button-font-size,inherit);font-weight:var(--_gcd-button-font-weight,inherit)}.d2cff2e5dea83bd1__input{box-sizing:var(--_gcd-input-box-sizing,border-box);font-family:var(--_gcd-input-font-family,inherit);font-size:var(--_gcd-input-font-size,inherit);font-weight:var(--_gcd-input-font-weight,inherit);margin:var(--_gcd-input-margin,0);&:is(textarea,[type=text],[type=password],[type=color],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){background-color:var(--_gcd-input-background-color,transparent);border:var(--_gcd-input-border,none);border-radius:var(--_gcd-input-border-radius,0);box-shadow:var(--_gcd-input-box-shadow,0 0 0 transparent);color:var(--_gcd-input-color,var(--wpds-color-foreground-interactive-neutral,#1e1e1e));&:focus{border-color:var(--_gcd-input-border-color-focus,var(--wp-admin-theme-color));box-shadow:var(--_gcd-input-box-shadow-focus,none);outline:var(--_gcd-input-outline-focus,none)}&:disabled{background:var(--_gcd-input-background-disabled,transparent);border-color:var(--_gcd-input-border-color-disabled,transparent);box-shadow:var(--_gcd-input-box-shadow-disabled,none);color:var(--_gcd-input-color-disabled,var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d))}&::placeholder{color:var(--_gcd-input-placeholder-color,var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d))}}&:is(textarea,[type=text],[type=password],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){line-height:var(--_gcd-input-line-height,inherit);min-height:var(--_gcd-input-min-height,auto);padding:var(--_gcd-input-padding,0)}}._547d86373d02e108__textarea{box-sizing:var(--_gcd-textarea-box-sizing,border-box);overflow:var(--_gcd-textarea-overflow,auto);resize:var(--_gcd-textarea-resize,block)}._8c15fd0ed9f28ba4__div{outline:var(--_gcd-div-outline,0 solid transparent)}p._43cec3e1eec1066d__p{font-size:var(--_gcd-p-font-size,13px);line-height:var(--_gcd-p-line-height,1.5);margin:var(--_gcd-p-margin,0)}:is(h1,h2,h3,h4,h5,h6).e97669c6d9a38497__heading{color:var(--_gcd-heading-color,var(--wpds-color-foreground-content-neutral,#1e1e1e));font-size:var(--_gcd-heading-font-size,inherit);font-weight:var(--_gcd-heading-font-weight,var(--wpds-typography-font-weight-medium,499));margin:var(--_gcd-heading-margin,0)}._2c0831b0499dbd6e__a,._2c0831b0499dbd6e__a:is(:hover,:focus,:active){border-radius:var(--_gcd-a-border-radius,0);box-shadow:var(--_gcd-a-box-shadow,none);color:var(--_gcd-a-color,inherit);outline:var(--_gcd-a-outline,0 solid transparent);transition:var(--_gcd-a-transition,none)}");
+  registerStyle7("af6d9984a6", "._6defc79820e382c6__button{box-sizing:var(--_gcd-button-box-sizing,border-box);font-family:var(--_gcd-button-font-family,inherit);font-size:var(--_gcd-button-font-size,inherit);font-weight:var(--_gcd-button-font-weight,inherit)}.d2cff2e5dea83bd1__input{box-sizing:var(--_gcd-input-box-sizing,border-box);font-family:var(--_gcd-input-font-family,inherit);font-size:var(--_gcd-input-font-size,inherit);font-weight:var(--_gcd-input-font-weight,inherit);margin:var(--_gcd-input-margin,0);&:is(textarea,[type=text],[type=password],[type=color],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){background-color:var(--_gcd-input-background-color,transparent);border:var(--_gcd-input-border,none);border-radius:var(--_gcd-input-border-radius,0);box-shadow:var(--_gcd-input-box-shadow,0 0 0 transparent);color:var(--_gcd-input-color,var(--wpds-color-foreground-interactive-neutral,#1e1e1e));&:focus{border-color:var(--_gcd-input-border-color-focus,var(--wp-admin-theme-color));box-shadow:var(--_gcd-input-box-shadow-focus,none);outline:var(--_gcd-input-outline-focus,none)}&:disabled{background:var(--_gcd-input-background-disabled,transparent);border-color:var(--_gcd-input-border-color-disabled,transparent);box-shadow:var(--_gcd-input-box-shadow-disabled,none);color:var(--_gcd-input-color-disabled,var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d))}&::placeholder{color:var(--_gcd-input-placeholder-color,var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d))}}&:is(textarea,[type=text],[type=password],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){line-height:var(--_gcd-input-line-height,inherit);min-height:var(--_gcd-input-min-height,auto);padding:var(--_gcd-input-padding,0)}}._547d86373d02e108__textarea{box-sizing:var(--_gcd-textarea-box-sizing,border-box);overflow:var(--_gcd-textarea-overflow,auto);resize:var(--_gcd-textarea-resize,block)}._8c15fd0ed9f28ba4__div{outline:var(--_gcd-div-outline,0 solid transparent)}p._43cec3e1eec1066d__p{font-size:var(--_gcd-p-font-size,13px);line-height:var(--_gcd-p-line-height,1.5);margin:var(--_gcd-p-margin,0)}:is(h1,h2,h3,h4,h5,h6).e97669c6d9a38497__heading{color:var(--_gcd-heading-color,var(--wpds-color-foreground-content-neutral,#1e1e1e));font-size:var(--_gcd-heading-font-size,inherit);font-weight:var(--_gcd-heading-font-weight,var(--wpds-typography-font-weight-emphasis,600));margin:var(--_gcd-heading-margin,0)}._2c0831b0499dbd6e__a,._2c0831b0499dbd6e__a:is(:hover,:focus,:active){border-radius:var(--_gcd-a-border-radius,0);box-shadow:var(--_gcd-a-box-shadow,none);color:var(--_gcd-a-color,inherit);outline:var(--_gcd-a-outline,0 solid transparent);transition:var(--_gcd-a-transition,none)}");
 }
 var global_css_defense_default2 = { "button": "_6defc79820e382c6__button", "input": "d2cff2e5dea83bd1__input", "textarea": "_547d86373d02e108__textarea", "div": "_8c15fd0ed9f28ba4__div", "p": "_43cec3e1eec1066d__p", "heading": "e97669c6d9a38497__heading", "a": "_2c0831b0499dbd6e__a" };
 if (typeof process === "undefined" || true) {
@@ -10372,22 +12042,22 @@ var Header2 = (0, import_element23.forwardRef)(
           style_default7["heading-wrapper"],
           className
         ),
-        children: /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(HeaderDescriptionIdContext.Provider, { value: contextValue, children: /* @__PURE__ */ (0, import_jsx_runtime43.jsxs)(
+        children: /* @__PURE__ */ (0, import_jsx_runtime49.jsx)(HeaderDescriptionIdContext.Provider, { value: contextValue, children: /* @__PURE__ */ (0, import_jsx_runtime49.jsxs)(
           Trigger,
           {
             className: style_default7.header,
-            render: /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(Header, {}),
+            render: /* @__PURE__ */ (0, import_jsx_runtime49.jsx)(Header, {}),
             nativeButton: false,
             "aria-describedby": descriptionId,
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime43.jsx)("div", { className: style_default7["header-content"], children }),
-              /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime49.jsx)("div", { className: style_default7["header-content"], children }),
+              /* @__PURE__ */ (0, import_jsx_runtime49.jsx)(
                 "div",
                 {
                   className: clsx_default(
                     style_default7["header-trigger-positioner"]
                   ),
-                  children: /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(
+                  children: /* @__PURE__ */ (0, import_jsx_runtime49.jsx)(
                     "div",
                     {
                       className: clsx_default(
@@ -10398,7 +12068,7 @@ var Header2 = (0, import_element23.forwardRef)(
                         // emulate it being the button.
                         focus_default["outset-ring--focus-parent-visible"]
                       ),
-                      children: /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(
+                      children: /* @__PURE__ */ (0, import_jsx_runtime49.jsx)(
                         Icon,
                         {
                           icon: chevron_down_default,
@@ -10419,7 +12089,7 @@ var Header2 = (0, import_element23.forwardRef)(
 
 // packages/ui/build-module/collapsible-card/header-description.mjs
 var import_element24 = __toESM(require_element(), 1);
-var import_jsx_runtime44 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime50 = __toESM(require_jsx_runtime(), 1);
 var HeaderDescription = (0, import_element24.forwardRef)(function CollapsibleCardHeaderDescription({ children, className, ...restProps }, ref) {
   const descriptionId = (0, import_element24.useId)();
   const { setDescriptionId } = (0, import_element24.useContext)(HeaderDescriptionIdContext);
@@ -10427,7 +12097,7 @@ var HeaderDescription = (0, import_element24.forwardRef)(function CollapsibleCar
     setDescriptionId(descriptionId);
     return () => setDescriptionId(void 0);
   }, [descriptionId, setDescriptionId]);
-  return /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime50.jsx)(
     "div",
     {
       ref,
@@ -10442,7 +12112,7 @@ var HeaderDescription = (0, import_element24.forwardRef)(function CollapsibleCar
 
 // packages/ui/build-module/collapsible-card/content.mjs
 var import_element25 = __toESM(require_element(), 1);
-var import_jsx_runtime45 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime51 = __toESM(require_jsx_runtime(), 1);
 var STYLE_HASH_ATTRIBUTE8 = "data-wp-hash";
 function getRuntime8() {
   const globalScope = globalThis;
@@ -10524,23 +12194,23 @@ function registerStyle8(hash, css) {
   }
 }
 if (typeof process === "undefined" || true) {
-  registerStyle8("ee46794e90", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._626190151275d6d3__heading-wrapper{--_gcd-heading-color:inherit;--_gcd-heading-font-size:inherit;--_gcd-heading-font-weight:inherit;--_gcd-heading-margin:0;font-family:inherit;line-height:inherit}.cab17c7a373cb60d__header-content{flex:1;min-width:0}.dd89d27c4f15912d__header-trigger-positioner{align-self:center;flex-shrink:0;max-height:0;overflow:visible}.bcfab5f2448bafef__header-trigger-wrapper{border-radius:var(--wpds-border-radius-sm,2px);display:flex;translate:0 -50%}._3106f8d2b0330faa__header-trigger{@media not (prefers-reduced-motion){transition:rotate .15s ease-out}}._5d2dfcb4085c6d0f__header[data-panel-open] ._3106f8d2b0330faa__header-trigger{rotate:180deg}._5d2dfcb4085c6d0f__header[data-disabled] ._3106f8d2b0330faa__header-trigger{color:var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d)}.e34cf37ccd0d81e0__content{height:var(--collapsible-panel-height);margin-block-start:var(--wp-ui-card-header-content-margin);overflow:hidden;&._165c4572592944b2__overflowVisible{overflow:visible}&[hidden]:not([hidden=until-found]){display:none}&[data-ending-style],&[data-starting-style]{height:0}@media not (prefers-reduced-motion){transition:all .15s ease-out}}}@layer compositions{._41bfdbf7b6c087c2__content-inner{padding-block-start:0}._5d2dfcb4085c6d0f__header{align-items:stretch;display:flex;flex-direction:row;gap:var(--wpds-dimension-gap-sm,8px);outline:none;&:not([data-disabled]){cursor:var(--wpds-cursor-control,pointer)}}}}");
+  registerStyle8("78199613cf", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._626190151275d6d3__heading-wrapper{--_gcd-heading-color:inherit;--_gcd-heading-font-size:inherit;--_gcd-heading-font-weight:inherit;--_gcd-heading-margin:0;font-family:inherit;line-height:inherit}.cab17c7a373cb60d__header-content{flex:1;min-width:0}.dd89d27c4f15912d__header-trigger-positioner{align-self:center;flex-shrink:0;max-height:0;overflow:visible}.bcfab5f2448bafef__header-trigger-wrapper{border-radius:var(--wpds-border-radius-sm,2px);display:flex;translate:0 -50%}._3106f8d2b0330faa__header-trigger{@media not (prefers-reduced-motion){transition:rotate .15s ease-out}}._5d2dfcb4085c6d0f__header[data-panel-open] ._3106f8d2b0330faa__header-trigger{rotate:180deg}._5d2dfcb4085c6d0f__header[data-disabled] ._3106f8d2b0330faa__header-trigger{color:var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d)}.e34cf37ccd0d81e0__content{height:var(--collapsible-panel-height);margin-block-start:var(--wp-ui-card-header-content-margin);overflow:hidden;&._03cfdbcd710393c9__overflow-visible{overflow:visible}&[hidden]:not([hidden=until-found]){display:none}&[data-ending-style],&[data-starting-style]{height:0}@media not (prefers-reduced-motion){transition:all .15s ease-out}}}@layer compositions{._41bfdbf7b6c087c2__content-inner{padding-block-start:0}._5d2dfcb4085c6d0f__header{align-items:stretch;display:flex;flex-direction:row;gap:var(--wpds-dimension-gap-sm,8px);outline:none;&:not([data-disabled]){cursor:var(--wpds-cursor-control,pointer)}}}}");
 }
-var style_default8 = { "heading-wrapper": "_626190151275d6d3__heading-wrapper", "header-content": "cab17c7a373cb60d__header-content", "header-trigger-positioner": "dd89d27c4f15912d__header-trigger-positioner", "header-trigger-wrapper": "bcfab5f2448bafef__header-trigger-wrapper", "header-trigger": "_3106f8d2b0330faa__header-trigger", "header": "_5d2dfcb4085c6d0f__header", "content": "e34cf37ccd0d81e0__content", "overflowVisible": "_165c4572592944b2__overflowVisible", "content-inner": "_41bfdbf7b6c087c2__content-inner" };
+var style_default8 = { "heading-wrapper": "_626190151275d6d3__heading-wrapper", "header-content": "cab17c7a373cb60d__header-content", "header-trigger-positioner": "dd89d27c4f15912d__header-trigger-positioner", "header-trigger-wrapper": "bcfab5f2448bafef__header-trigger-wrapper", "header-trigger": "_3106f8d2b0330faa__header-trigger", "header": "_5d2dfcb4085c6d0f__header", "content": "e34cf37ccd0d81e0__content", "overflow-visible": "_03cfdbcd710393c9__overflow-visible", "content-inner": "_41bfdbf7b6c087c2__content-inner" };
 var Content2 = (0, import_element25.forwardRef)(
   function CollapsibleCardContent({ className, render: render4, children, hiddenUntilFound = true, ...restProps }, ref) {
-    return /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime51.jsx)(
       Panel,
       {
         ref,
         className: (state) => clsx_default(
           style_default8.content,
-          state.open && state.transitionStatus === "idle" && style_default8.overflowVisible,
+          state.open && state.transitionStatus === "idle" && style_default8["overflow-visible"],
           className
         ),
         hiddenUntilFound,
         ...restProps,
-        children: /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(
+        children: /* @__PURE__ */ (0, import_jsx_runtime51.jsx)(
           Content,
           {
             className: style_default8["content-inner"],
@@ -10813,6 +12483,10 @@ function isInWordPressEnvironment() {
   return typeof wp?.components === "object" && wp.components !== null;
 }
 var cachedSlot = null;
+function ensureSlotIsAccessible(element) {
+  element.setAttribute("aria-hidden", "false");
+  return element;
+}
 function createSlot(ownerDocument2) {
   const element = ownerDocument2.createElement("div");
   element.setAttribute(WP_COMPAT_OVERLAY_SLOT_ATTRIBUTE, "");
@@ -10834,28 +12508,28 @@ function getWpCompatOverlaySlot() {
     return void 0;
   }
   if (cachedSlot && cachedSlot.ownerDocument === ownerDocument2 && cachedSlot.isConnected) {
-    return cachedSlot;
+    return ensureSlotIsAccessible(cachedSlot);
   }
   const existing = ownerDocument2.querySelector(
     `[${WP_COMPAT_OVERLAY_SLOT_ATTRIBUTE}]`
   );
   if (existing instanceof HTMLDivElement) {
-    cachedSlot = existing;
-    return existing;
+    cachedSlot = ensureSlotIsAccessible(existing);
+    return cachedSlot;
   }
   if (cachedSlot?.isConnected) {
     cachedSlot.remove();
   }
-  cachedSlot = createSlot(ownerDocument2);
+  cachedSlot = ensureSlotIsAccessible(createSlot(ownerDocument2));
   return cachedSlot;
 }
 
 // packages/ui/build-module/tooltip/portal.mjs
-var import_jsx_runtime46 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime52 = __toESM(require_jsx_runtime(), 1);
 var Portal = (0, import_element28.forwardRef)(
   function TooltipPortal3({ container, ...restProps }, ref) {
-    return /* @__PURE__ */ (0, import_jsx_runtime46.jsx)(
-      index_parts_exports2.Portal,
+    return /* @__PURE__ */ (0, import_jsx_runtime52.jsx)(
+      index_parts_exports3.Portal,
       {
         container: container ?? getWpCompatOverlaySlot(),
         ...restProps,
@@ -10867,7 +12541,7 @@ var Portal = (0, import_element28.forwardRef)(
 
 // packages/ui/build-module/tooltip/positioner.mjs
 var import_element29 = __toESM(require_element(), 1);
-var import_jsx_runtime47 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime53 = __toESM(require_jsx_runtime(), 1);
 var STYLE_HASH_ATTRIBUTE11 = "data-wp-hash";
 function getRuntime11() {
   const globalScope = globalThis;
@@ -10953,13 +12627,13 @@ if (typeof process === "undefined" || true) {
 }
 var resets_default2 = { "box-sizing": "_336cd3e4e743482f__box-sizing" };
 if (typeof process === "undefined" || true) {
-  registerStyle11("789467362f", '@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._480b748dd3510e64__positioner{z-index:var(--wp-ui-tooltip-z-index,initial)}._50096b232db7709d__popup{background-color:var(--wpds-color-background-surface-neutral-strong,#fff);border-radius:var(--wpds-border-radius-md,4px);box-shadow:var(--wpds-elevation-sm,0 1px 2px 0 #0000000d,0 2px 3px 0 #0000000a,0 6px 6px 0 #00000008,0 8px 8px 0 #00000005);color:var(--wpds-color-foreground-content-neutral,#1e1e1e);font-family:var(--wpds-typography-font-family-body,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-size:var(--wpds-typography-font-size-sm,12px);line-height:1.4;padding:var(--wpds-dimension-padding-xs,4px) var(--wpds-dimension-padding-sm,8px);@media (forced-colors:active){border-bottom-color:CanvasText;border-bottom-style:solid;border-bottom-width:1px;border-left-color:CanvasText;border-left-style:solid;border-left-width:1px;border-right-color:CanvasText;border-right-style:solid;border-right-width:1px;border-top-color:CanvasText;border-top-style:solid;border-top-width:1px}}}}');
+  registerStyle11("19fcc06039", '@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._480b748dd3510e64__positioner{z-index:var(--wp-ui-tooltip-z-index,initial)}._50096b232db7709d__popup{--_wp-ui-elevation-sm:0 1px 2px rgba(0,0,0,.05),0 2px 3px rgba(0,0,0,.04),0 6px 6px rgba(0,0,0,.03),0 8px 8px rgba(0,0,0,.02);background-color:var(--wpds-color-background-surface-neutral-strong,#fff);border-radius:var(--wpds-border-radius-md,4px);box-shadow:var(--_wp-ui-elevation-sm);color:var(--wpds-color-foreground-content-neutral,#1e1e1e);font-family:var(--wpds-typography-font-family-body,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-size:var(--wpds-typography-font-size-sm,12px);line-height:1.4;padding:var(--wpds-dimension-padding-xs,4px) var(--wpds-dimension-padding-sm,8px);@media (forced-colors:active){border-bottom-color:CanvasText;border-bottom-style:solid;border-bottom-width:1px;border-left-color:CanvasText;border-left-style:solid;border-left-width:1px;border-right-color:CanvasText;border-right-style:solid;border-right-width:1px;border-top-color:CanvasText;border-top-style:solid;border-top-width:1px}}}}');
 }
 var style_default10 = { "positioner": "_480b748dd3510e64__positioner", "popup": "_50096b232db7709d__popup" };
 var Positioner = (0, import_element29.forwardRef)(
   function TooltipPositioner3({ align = "center", className, side = "top", sideOffset = 4, ...props }, ref) {
-    return /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(
-      index_parts_exports2.Positioner,
+    return /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(
+      index_parts_exports3.Positioner,
       {
         ref,
         align,
@@ -10977,7 +12651,7 @@ var Positioner = (0, import_element29.forwardRef)(
 );
 
 // packages/ui/build-module/tooltip/popup.mjs
-var import_jsx_runtime48 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime54 = __toESM(require_jsx_runtime(), 1);
 var STYLE_HASH_ATTRIBUTE12 = "data-wp-hash";
 function getRuntime12() {
   const globalScope = globalThis;
@@ -11059,13 +12733,13 @@ function registerStyle12(hash, css) {
   }
 }
 if (typeof process === "undefined" || true) {
-  registerStyle12("789467362f", '@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._480b748dd3510e64__positioner{z-index:var(--wp-ui-tooltip-z-index,initial)}._50096b232db7709d__popup{background-color:var(--wpds-color-background-surface-neutral-strong,#fff);border-radius:var(--wpds-border-radius-md,4px);box-shadow:var(--wpds-elevation-sm,0 1px 2px 0 #0000000d,0 2px 3px 0 #0000000a,0 6px 6px 0 #00000008,0 8px 8px 0 #00000005);color:var(--wpds-color-foreground-content-neutral,#1e1e1e);font-family:var(--wpds-typography-font-family-body,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-size:var(--wpds-typography-font-size-sm,12px);line-height:1.4;padding:var(--wpds-dimension-padding-xs,4px) var(--wpds-dimension-padding-sm,8px);@media (forced-colors:active){border-bottom-color:CanvasText;border-bottom-style:solid;border-bottom-width:1px;border-left-color:CanvasText;border-left-style:solid;border-left-width:1px;border-right-color:CanvasText;border-right-style:solid;border-right-width:1px;border-top-color:CanvasText;border-top-style:solid;border-top-width:1px}}}}');
+  registerStyle12("19fcc06039", '@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._480b748dd3510e64__positioner{z-index:var(--wp-ui-tooltip-z-index,initial)}._50096b232db7709d__popup{--_wp-ui-elevation-sm:0 1px 2px rgba(0,0,0,.05),0 2px 3px rgba(0,0,0,.04),0 6px 6px rgba(0,0,0,.03),0 8px 8px rgba(0,0,0,.02);background-color:var(--wpds-color-background-surface-neutral-strong,#fff);border-radius:var(--wpds-border-radius-md,4px);box-shadow:var(--_wp-ui-elevation-sm);color:var(--wpds-color-foreground-content-neutral,#1e1e1e);font-family:var(--wpds-typography-font-family-body,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-size:var(--wpds-typography-font-size-sm,12px);line-height:1.4;padding:var(--wpds-dimension-padding-xs,4px) var(--wpds-dimension-padding-sm,8px);@media (forced-colors:active){border-bottom-color:CanvasText;border-bottom-style:solid;border-bottom-width:1px;border-left-color:CanvasText;border-left-style:solid;border-left-width:1px;border-right-color:CanvasText;border-right-style:solid;border-right-width:1px;border-top-color:CanvasText;border-top-style:solid;border-top-width:1px}}}}');
 }
 var style_default11 = { "positioner": "_480b748dd3510e64__positioner", "popup": "_50096b232db7709d__popup" };
 var POPUP_COLOR = { background: "#1e1e1e" };
 var Popup = (0, import_element30.forwardRef)(function TooltipPopup3({ portal, positioner, children, className, ...props }, ref) {
-  const popupContent = /* @__PURE__ */ (0, import_jsx_runtime48.jsx)(ThemeProvider, { color: POPUP_COLOR, children: /* @__PURE__ */ (0, import_jsx_runtime48.jsx)(
-    index_parts_exports2.Popup,
+  const popupContent = /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(ThemeProvider, { color: POPUP_COLOR, children: /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(
+    index_parts_exports3.Popup,
     {
       ref,
       className: clsx_default(style_default11.popup, className),
@@ -11075,35 +12749,66 @@ var Popup = (0, import_element30.forwardRef)(function TooltipPopup3({ portal, po
   ) });
   const positionedPopup = renderSlotWithChildren(
     positioner,
-    /* @__PURE__ */ (0, import_jsx_runtime48.jsx)(Positioner, {}),
+    /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(Positioner, {}),
     popupContent
   );
-  return renderSlotWithChildren(portal, /* @__PURE__ */ (0, import_jsx_runtime48.jsx)(Portal, {}), positionedPopup);
+  return renderSlotWithChildren(portal, /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(Portal, {}), positionedPopup);
 });
 
 // packages/ui/build-module/tooltip/trigger.mjs
 var import_element31 = __toESM(require_element(), 1);
-var import_jsx_runtime49 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime55 = __toESM(require_jsx_runtime(), 1);
 var Trigger2 = (0, import_element31.forwardRef)(
   function TooltipTrigger3(props, ref) {
-    return /* @__PURE__ */ (0, import_jsx_runtime49.jsx)(index_parts_exports2.Trigger, { ref, ...props });
+    return /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(index_parts_exports3.Trigger, { ref, ...props });
   }
 );
 
 // packages/ui/build-module/tooltip/root.mjs
-var import_jsx_runtime50 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime56 = __toESM(require_jsx_runtime(), 1);
 function Root4(props) {
-  return /* @__PURE__ */ (0, import_jsx_runtime50.jsx)(index_parts_exports2.Root, { ...props });
+  return /* @__PURE__ */ (0, import_jsx_runtime56.jsx)(index_parts_exports3.Root, { ...props });
 }
 
 // packages/ui/build-module/tooltip/provider.mjs
-var import_jsx_runtime51 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime57 = __toESM(require_jsx_runtime(), 1);
 function Provider({ ...props }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime51.jsx)(index_parts_exports2.Provider, { ...props });
+  return /* @__PURE__ */ (0, import_jsx_runtime57.jsx)(index_parts_exports3.Provider, { ...props });
+}
+
+// packages/ui/build-module/utils/use-schedule-validation.mjs
+var import_element32 = __toESM(require_element(), 1);
+function useScheduleValidation(validate) {
+  const validateRef = (0, import_element32.useRef)(validate);
+  validateRef.current = validate;
+  const timerRef = (0, import_element32.useRef)(null);
+  const unmountedRef = (0, import_element32.useRef)(false);
+  const scheduleValidation = (0, import_element32.useCallback)(() => {
+    if (unmountedRef.current) {
+      return;
+    }
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+    timerRef.current = setTimeout(() => {
+      validateRef.current();
+      timerRef.current = null;
+    }, 0);
+  }, []);
+  (0, import_element32.useEffect)(() => {
+    unmountedRef.current = false;
+    return () => {
+      unmountedRef.current = true;
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, []);
+  return scheduleValidation;
 }
 
 // packages/ui/build-module/visually-hidden/visually-hidden.mjs
-var import_element32 = __toESM(require_element(), 1);
+var import_element33 = __toESM(require_element(), 1);
 var STYLE_HASH_ATTRIBUTE13 = "data-wp-hash";
 function getRuntime13() {
   const globalScope = globalThis;
@@ -11188,7 +12893,7 @@ if (typeof process === "undefined" || true) {
   registerStyle13("fa606a57ae", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{.f37b9e2e191ebd66__visually-hidden{word-wrap:normal;border:0;clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-break:normal}}}");
 }
 var style_default12 = { "visually-hidden": "f37b9e2e191ebd66__visually-hidden" };
-var VisuallyHidden = (0, import_element32.forwardRef)(
+var VisuallyHidden = (0, import_element33.forwardRef)(
   function VisuallyHidden2({ render: render4, ...restProps }, ref) {
     const element = useRender({
       render: render4,
@@ -11207,9 +12912,9 @@ var VisuallyHidden = (0, import_element32.forwardRef)(
 );
 
 // packages/ui/build-module/link/link.mjs
-var import_element33 = __toESM(require_element(), 1);
+var import_element34 = __toESM(require_element(), 1);
 var import_i18n = __toESM(require_i18n(), 1);
-var import_jsx_runtime52 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime58 = __toESM(require_jsx_runtime(), 1);
 var STYLE_HASH_ATTRIBUTE14 = "data-wp-hash";
 function getRuntime14() {
   const globalScope = globalThis;
@@ -11299,14 +13004,14 @@ if (typeof process === "undefined" || true) {
 }
 var focus_default2 = { "outset-ring--focus": "_08e8a2e44959f892__outset-ring--focus", "outset-ring--focus-except-active": "e25b2bdd7aa21721__outset-ring--focus-except-active", "outset-ring--focus-visible": "d0541bc9dd9dc7b6__outset-ring--focus-visible", "outset-ring--focus-within": "cd83dfc2126a0846__outset-ring--focus-within", "outset-ring--focus-within-except-active": "_970d04df7376df67__outset-ring--focus-within-except-active", "outset-ring--focus-within-visible": "c5cb3ee4bddaa8e4__outset-ring--focus-within-visible", "outset-ring--focus-parent-visible": "ecadb9e080e2dfa5__outset-ring--focus-parent-visible" };
 if (typeof process === "undefined" || true) {
-  registerStyle14("7e0119b657", '@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{.d4250949359b05ce__link{text-decoration-thickness:from-font;text-underline-offset:.2em}.c6055659b8e2cd2c__is-brand,.c6055659b8e2cd2c__is-brand:visited{--_gcd-a-color:var(--wpds-color-foreground-interactive-brand,var(--wp-admin-theme-color,#3858e9));color:var(--wpds-color-foreground-interactive-brand,var(--wp-admin-theme-color,#3858e9))}.c6055659b8e2cd2c__is-brand:active,.c6055659b8e2cd2c__is-brand:hover{--_gcd-a-color:var(--wpds-color-foreground-interactive-brand-active,color-mix(in oklch,var(--wp-admin-theme-color,#3858e9) 52%,#000));color:var(--wpds-color-foreground-interactive-brand-active,color-mix(in oklch,var(--wp-admin-theme-color,#3858e9) 52%,#000))}._92e0dfcaeee15b88__is-neutral,._92e0dfcaeee15b88__is-neutral:visited{--_gcd-a-color:var(--wpds-color-foreground-interactive-neutral,#1e1e1e);color:var(--wpds-color-foreground-interactive-neutral,#1e1e1e);text-decoration-color:var(--wpds-color-stroke-interactive-neutral,#8d8d8d)}._92e0dfcaeee15b88__is-neutral:active,._92e0dfcaeee15b88__is-neutral:hover{--_gcd-a-color:var(--wpds-color-foreground-interactive-neutral-active,#1e1e1e);color:var(--wpds-color-foreground-interactive-neutral-active,#1e1e1e)}.cf122a9bf1035d42__is-unstyled{--_gcd-a-color:inherit;color:inherit;text-decoration:none}._0cb411afac4c86c7__link-icon{display:inline-block;font-weight:var(--wpds-typography-font-weight-regular,400);line-height:1;margin-inline-start:var(--wpds-dimension-padding-xs,4px);text-decoration:none}._0cb411afac4c86c7__link-icon:after{content:"\\2197"}._0cb411afac4c86c7__link-icon:dir(rtl):after{content:"\\2196"}}}');
+  registerStyle14("e8e6a9be37", '@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{.d4250949359b05ce__link{text-decoration-thickness:from-font;text-underline-offset:.2em}.c6055659b8e2cd2c__is-brand,.c6055659b8e2cd2c__is-brand:visited{--_gcd-a-color:var(--wpds-color-foreground-interactive-brand,var(--wp-admin-theme-color,#3858e9));color:var(--wpds-color-foreground-interactive-brand,var(--wp-admin-theme-color,#3858e9))}.c6055659b8e2cd2c__is-brand:active,.c6055659b8e2cd2c__is-brand:hover{--_gcd-a-color:var(--wpds-color-foreground-interactive-brand-active,color-mix(in oklch,var(--wp-admin-theme-color,#3858e9) 52%,#000));color:var(--wpds-color-foreground-interactive-brand-active,color-mix(in oklch,var(--wp-admin-theme-color,#3858e9) 52%,#000))}._92e0dfcaeee15b88__is-neutral,._92e0dfcaeee15b88__is-neutral:visited{--_gcd-a-color:var(--wpds-color-foreground-interactive-neutral,#1e1e1e);color:var(--wpds-color-foreground-interactive-neutral,#1e1e1e);text-decoration-color:var(--wpds-color-stroke-interactive-neutral,#8d8d8d)}._92e0dfcaeee15b88__is-neutral:active,._92e0dfcaeee15b88__is-neutral:hover{--_gcd-a-color:var(--wpds-color-foreground-interactive-neutral-active,#1e1e1e);color:var(--wpds-color-foreground-interactive-neutral-active,#1e1e1e)}.cf122a9bf1035d42__is-unstyled{--_gcd-a-color:inherit;color:inherit;text-decoration:none}._0cb411afac4c86c7__link-icon{display:inline-block;font-weight:var(--wpds-typography-font-weight-default,400);line-height:1;margin-inline-start:var(--wpds-dimension-padding-xs,4px);text-decoration:none}._0cb411afac4c86c7__link-icon:after{content:"\\2197"}._0cb411afac4c86c7__link-icon:dir(rtl):after{content:"\\2196"}}}');
 }
 var style_default13 = { "link": "d4250949359b05ce__link", "is-brand": "c6055659b8e2cd2c__is-brand", "is-neutral": "_92e0dfcaeee15b88__is-neutral", "is-unstyled": "cf122a9bf1035d42__is-unstyled", "link-icon": "_0cb411afac4c86c7__link-icon" };
 if (typeof process === "undefined" || true) {
-  registerStyle14("d390e935a7", "._6defc79820e382c6__button{box-sizing:var(--_gcd-button-box-sizing,border-box);font-family:var(--_gcd-button-font-family,inherit);font-size:var(--_gcd-button-font-size,inherit);font-weight:var(--_gcd-button-font-weight,inherit)}.d2cff2e5dea83bd1__input{box-sizing:var(--_gcd-input-box-sizing,border-box);font-family:var(--_gcd-input-font-family,inherit);font-size:var(--_gcd-input-font-size,inherit);font-weight:var(--_gcd-input-font-weight,inherit);margin:var(--_gcd-input-margin,0);&:is(textarea,[type=text],[type=password],[type=color],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){background-color:var(--_gcd-input-background-color,transparent);border:var(--_gcd-input-border,none);border-radius:var(--_gcd-input-border-radius,0);box-shadow:var(--_gcd-input-box-shadow,0 0 0 transparent);color:var(--_gcd-input-color,var(--wpds-color-foreground-interactive-neutral,#1e1e1e));&:focus{border-color:var(--_gcd-input-border-color-focus,var(--wp-admin-theme-color));box-shadow:var(--_gcd-input-box-shadow-focus,none);outline:var(--_gcd-input-outline-focus,none)}&:disabled{background:var(--_gcd-input-background-disabled,transparent);border-color:var(--_gcd-input-border-color-disabled,transparent);box-shadow:var(--_gcd-input-box-shadow-disabled,none);color:var(--_gcd-input-color-disabled,var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d))}&::placeholder{color:var(--_gcd-input-placeholder-color,var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d))}}&:is(textarea,[type=text],[type=password],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){line-height:var(--_gcd-input-line-height,inherit);min-height:var(--_gcd-input-min-height,auto);padding:var(--_gcd-input-padding,0)}}._547d86373d02e108__textarea{box-sizing:var(--_gcd-textarea-box-sizing,border-box);overflow:var(--_gcd-textarea-overflow,auto);resize:var(--_gcd-textarea-resize,block)}._8c15fd0ed9f28ba4__div{outline:var(--_gcd-div-outline,0 solid transparent)}p._43cec3e1eec1066d__p{font-size:var(--_gcd-p-font-size,13px);line-height:var(--_gcd-p-line-height,1.5);margin:var(--_gcd-p-margin,0)}:is(h1,h2,h3,h4,h5,h6).e97669c6d9a38497__heading{color:var(--_gcd-heading-color,var(--wpds-color-foreground-content-neutral,#1e1e1e));font-size:var(--_gcd-heading-font-size,inherit);font-weight:var(--_gcd-heading-font-weight,var(--wpds-typography-font-weight-medium,499));margin:var(--_gcd-heading-margin,0)}._2c0831b0499dbd6e__a,._2c0831b0499dbd6e__a:is(:hover,:focus,:active){border-radius:var(--_gcd-a-border-radius,0);box-shadow:var(--_gcd-a-box-shadow,none);color:var(--_gcd-a-color,inherit);outline:var(--_gcd-a-outline,0 solid transparent);transition:var(--_gcd-a-transition,none)}");
+  registerStyle14("af6d9984a6", "._6defc79820e382c6__button{box-sizing:var(--_gcd-button-box-sizing,border-box);font-family:var(--_gcd-button-font-family,inherit);font-size:var(--_gcd-button-font-size,inherit);font-weight:var(--_gcd-button-font-weight,inherit)}.d2cff2e5dea83bd1__input{box-sizing:var(--_gcd-input-box-sizing,border-box);font-family:var(--_gcd-input-font-family,inherit);font-size:var(--_gcd-input-font-size,inherit);font-weight:var(--_gcd-input-font-weight,inherit);margin:var(--_gcd-input-margin,0);&:is(textarea,[type=text],[type=password],[type=color],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){background-color:var(--_gcd-input-background-color,transparent);border:var(--_gcd-input-border,none);border-radius:var(--_gcd-input-border-radius,0);box-shadow:var(--_gcd-input-box-shadow,0 0 0 transparent);color:var(--_gcd-input-color,var(--wpds-color-foreground-interactive-neutral,#1e1e1e));&:focus{border-color:var(--_gcd-input-border-color-focus,var(--wp-admin-theme-color));box-shadow:var(--_gcd-input-box-shadow-focus,none);outline:var(--_gcd-input-outline-focus,none)}&:disabled{background:var(--_gcd-input-background-disabled,transparent);border-color:var(--_gcd-input-border-color-disabled,transparent);box-shadow:var(--_gcd-input-box-shadow-disabled,none);color:var(--_gcd-input-color-disabled,var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d))}&::placeholder{color:var(--_gcd-input-placeholder-color,var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d))}}&:is(textarea,[type=text],[type=password],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){line-height:var(--_gcd-input-line-height,inherit);min-height:var(--_gcd-input-min-height,auto);padding:var(--_gcd-input-padding,0)}}._547d86373d02e108__textarea{box-sizing:var(--_gcd-textarea-box-sizing,border-box);overflow:var(--_gcd-textarea-overflow,auto);resize:var(--_gcd-textarea-resize,block)}._8c15fd0ed9f28ba4__div{outline:var(--_gcd-div-outline,0 solid transparent)}p._43cec3e1eec1066d__p{font-size:var(--_gcd-p-font-size,13px);line-height:var(--_gcd-p-line-height,1.5);margin:var(--_gcd-p-margin,0)}:is(h1,h2,h3,h4,h5,h6).e97669c6d9a38497__heading{color:var(--_gcd-heading-color,var(--wpds-color-foreground-content-neutral,#1e1e1e));font-size:var(--_gcd-heading-font-size,inherit);font-weight:var(--_gcd-heading-font-weight,var(--wpds-typography-font-weight-emphasis,600));margin:var(--_gcd-heading-margin,0)}._2c0831b0499dbd6e__a,._2c0831b0499dbd6e__a:is(:hover,:focus,:active){border-radius:var(--_gcd-a-border-radius,0);box-shadow:var(--_gcd-a-box-shadow,none);color:var(--_gcd-a-color,inherit);outline:var(--_gcd-a-outline,0 solid transparent);transition:var(--_gcd-a-transition,none)}");
 }
 var global_css_defense_default3 = { "button": "_6defc79820e382c6__button", "input": "d2cff2e5dea83bd1__input", "textarea": "_547d86373d02e108__textarea", "div": "_8c15fd0ed9f28ba4__div", "p": "_43cec3e1eec1066d__p", "heading": "e97669c6d9a38497__heading", "a": "_2c0831b0499dbd6e__a" };
-var Link = (0, import_element33.forwardRef)(function Link2({
+var Link = (0, import_element34.forwardRef)(function Link2({
   children,
   variant = "default",
   tone = "brand",
@@ -11323,16 +13028,16 @@ var Link = (0, import_element33.forwardRef)(function Link2({
       className: clsx_default(
         global_css_defense_default3.a,
         resets_default3["box-sizing"],
-        focus_default2["outset-ring--focus"],
+        focus_default2["outset-ring--focus-except-active"],
         variant !== "unstyled" && style_default13.link,
         variant !== "unstyled" && style_default13[`is-${tone}`],
         variant === "unstyled" && style_default13["is-unstyled"],
         className
       ),
       target: openInNewTab ? "_blank" : void 0,
-      children: /* @__PURE__ */ (0, import_jsx_runtime52.jsxs)(import_jsx_runtime52.Fragment, { children: [
+      children: /* @__PURE__ */ (0, import_jsx_runtime58.jsxs)(import_jsx_runtime58.Fragment, { children: [
         children,
-        openInNewTab && /* @__PURE__ */ (0, import_jsx_runtime52.jsx)(
+        openInNewTab && /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(
           "span",
           {
             className: style_default13["link-icon"],
@@ -11349,8 +13054,19 @@ var Link = (0, import_element33.forwardRef)(function Link2({
   return element;
 });
 
-// packages/admin-ui/build-module/breadcrumbs/index.mjs
-var import_jsx_runtime53 = __toESM(require_jsx_runtime(), 1);
+// packages/ui/build-module/tabs/index.mjs
+var tabs_exports = {};
+__export(tabs_exports, {
+  List: () => List,
+  Panel: () => Panel2,
+  Root: () => Root5,
+  Tab: () => Tab
+});
+
+// packages/ui/build-module/tabs/list.mjs
+var import_element35 = __toESM(require_element(), 1);
+var import_compose = __toESM(require_compose(), 1);
+var import_jsx_runtime59 = __toESM(require_jsx_runtime(), 1);
 var STYLE_HASH_ATTRIBUTE15 = "data-wp-hash";
 function getRuntime15() {
   const globalScope = globalThis;
@@ -11432,112 +13148,192 @@ function registerStyle15(hash, css) {
   }
 }
 if (typeof process === "undefined" || true) {
-  registerStyle15("846edc217c", "._5f4053eba32ce092__list{list-style:none;margin:0;padding:0}._5f4053eba32ce092__list>li{flex-shrink:0}._5f4053eba32ce092__list>li:last-child{flex-shrink:1;min-width:0}.d1978551971a3360__current{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}._6d9152063d443376__separator{color:var(--wpds-color-stroke-surface-neutral,#dbdbdb);margin:0 var(--wpds-dimension-gap-sm,8px);user-select:none}");
+  registerStyle15("bb8cbb8f31", '@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._7313adbc8a112e90__tablist{--direction-factor:1;--direction-start:left;--direction-end:right;align-items:stretch;display:flex;overflow-inline:auto;overscroll-behavior-inline:none;position:relative;&:dir(rtl){--direction-factor:-1;--direction-start:right;--direction-end:left}&[data-orientation=horizontal]{--fade-width:4rem;--fade-gradient-base:transparent 0%,#000 var(--fade-width);--fade-gradient-composed:var(--fade-gradient-base),#000 60%,transparent 50%;width:fit-content;&._9f2ac729c68a735a__is-overflowing-first{mask-image:linear-gradient(to var(--direction-end),var(--fade-gradient-base))}&._81c799c1f3cdd261__is-overflowing-last{mask-image:linear-gradient(to var(--direction-start),var(--fade-gradient-base))}&._9f2ac729c68a735a__is-overflowing-first._81c799c1f3cdd261__is-overflowing-last{mask-image:linear-gradient(to right,var(--fade-gradient-composed)),linear-gradient(to left,var(--fade-gradient-composed))}&._59228b5227f38a99__is-minimal-variant{gap:1rem}}&[data-orientation=vertical]{flex-direction:column}}._1c37dcfaa1ad8cda__indicator{@media not (prefers-reduced-motion){transition-duration:.2s;transition-property:translate,width,height,border-radius,border-block;transition-timing-function:ease-out}outline:2px solid transparent;outline-offset:-1px;pointer-events:none;position:absolute;&[data-orientation=horizontal]{background-color:var(--wpds-color-stroke-interactive-neutral-strong,#6e6e6e);bottom:0;height:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px));left:0;translate:var(--active-tab-left) 0;width:var(--active-tab-width);z-index:1}&[data-orientation=vertical]{background-color:var(--wpds-color-background-interactive-neutral-weak-active,#ededed);border-radius:var(--wpds-border-radius-sm,2px);height:var(--active-tab-height);left:50%;top:0;translate:-50% var(--active-tab-top);width:100%;z-index:0}._7313adbc8a112e90__tablist[data-select-on-move=true]:has(:focus-visible)\n			&[data-orientation=vertical]{border:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9));box-sizing:border-box}}.a5fd8814f195aa5e__tab{align-items:center;background:transparent;border:none;border-radius:0;box-shadow:none;color:var(--wpds-color-foreground-interactive-neutral,#1e1e1e);cursor:var(--wpds-cursor-control,pointer);display:flex;flex:1 0 auto;font-family:var(--wpds-typography-font-family-body,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-size:var(--wpds-typography-font-size-md,13px);font-weight:400;line-height:1.2;outline:none;padding:0;position:relative;white-space:nowrap;z-index:1;&[data-disabled]{color:var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d);cursor:default;@media (forced-colors:active){color:GrayText}}&:not([data-disabled]):is(:hover,:focus-visible){color:var(--wpds-color-foreground-interactive-neutral-active,#1e1e1e)}&:after{border-radius:var(--wpds-border-radius-sm,2px);opacity:0;outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9));pointer-events:none;position:absolute;z-index:-1;@media not (prefers-reduced-motion){transition:opacity .1s linear}}&:focus-visible:after{opacity:1}[data-orientation=horizontal] &{height:48px;padding-inline:var(--wpds-dimension-padding-lg,16px);scroll-margin:24px;&:after{content:"";inset:var(--wpds-dimension-padding-md,12px)}}._59228b5227f38a99__is-minimal-variant[data-orientation=horizontal] &{padding-inline:0;&:after{inset-inline:round(up,var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)),1px)}}[data-orientation=vertical] &{min-height:var(--wpds-dimension-size-lg,40px);padding:var(--wpds-dimension-padding-sm,8px) var(--wpds-dimension-padding-md,12px)}[data-orientation=vertical][data-select-on-move=false] &:after{content:"";inset:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px))}}._5dfc77e6edd345d4__tab-children{align-items:center;display:flex;flex-grow:1;[data-orientation=horizontal] &{justify-content:center}[data-orientation=vertical] &{justify-content:start}}._4a20e969d15e5ac1__tab-chevron{flex-shrink:0;margin-inline-end:calc(var(--wpds-dimension-gap-xs, 4px)*-1);opacity:0;[data-orientation=horizontal] &{display:none}[role=tab]:is([aria-selected=true],:focus-visible,:hover) &{opacity:1}@media not (prefers-reduced-motion){[data-select-on-move=true]\n				[role=tab]:is([aria-selected=true])\n				&{transition:opacity .15s linear .15s}}&:dir(rtl){rotate:180deg}}}}');
 }
-var style_default14 = { "list": "_5f4053eba32ce092__list", "current": "d1978551971a3360__current", "separator": "_6d9152063d443376__separator" };
-var Breadcrumbs = ({ items }) => {
-  if (!items.length) {
-    return null;
-  }
-  const precedingItems = items.slice(0, -1);
-  const lastItem = items[items.length - 1];
-  if (true) {
-    const invalidItem = precedingItems.find((item) => !item.to);
-    if (invalidItem) {
-      throw new Error(
-        `Breadcrumbs: item "${invalidItem.label}" is missing a \`to\` prop. All items except the last one must have a \`to\` prop.`
+var style_default14 = { "tablist": "_7313adbc8a112e90__tablist", "is-overflowing-first": "_9f2ac729c68a735a__is-overflowing-first", "is-overflowing-last": "_81c799c1f3cdd261__is-overflowing-last", "is-minimal-variant": "_59228b5227f38a99__is-minimal-variant", "indicator": "_1c37dcfaa1ad8cda__indicator", "tab": "a5fd8814f195aa5e__tab", "tab-children": "_5dfc77e6edd345d4__tab-children", "tab-chevron": "_4a20e969d15e5ac1__tab-chevron" };
+var SCROLL_EPSILON = 1;
+var List = (0, import_element35.forwardRef)(
+  function TabList({
+    children,
+    variant = "default",
+    className,
+    activateOnFocus,
+    ...otherProps
+  }, forwardedRef) {
+    const [listEl, setListEl] = (0, import_element35.useState)(null);
+    const [overflow, setOverflow] = (0, import_element35.useState)({
+      first: false,
+      last: false,
+      isScrolling: false
+    });
+    (0, import_element35.useEffect)(() => {
+      if (!listEl) {
+        return;
+      }
+      const measureOverflow = () => {
+        const { scrollWidth, clientWidth, scrollLeft } = listEl;
+        const maxScroll = Math.max(scrollWidth - clientWidth, 0);
+        const direction = listEl.dir || (typeof window !== "undefined" ? window.getComputedStyle(listEl).direction : "ltr");
+        const scrollFromStart = direction === "rtl" && scrollLeft < 0 ? (
+          // In RTL layouts, scrollLeft is typically 0 at the visual "start"
+          // (right edge) and becomes negative toward the "end" (left edge).
+          // Normalize value for correct first/last detection logic.
+          -scrollLeft
+        ) : scrollLeft;
+        const next = {
+          first: scrollFromStart > SCROLL_EPSILON,
+          last: scrollFromStart < maxScroll - SCROLL_EPSILON,
+          isScrolling: scrollWidth > clientWidth
+        };
+        setOverflow(
+          (prev) => prev.first === next.first && prev.last === next.last && prev.isScrolling === next.isScrolling ? prev : next
+        );
+      };
+      const resizeObserver = new ResizeObserver(measureOverflow);
+      const observeTabs = () => {
+        resizeObserver.disconnect();
+        resizeObserver.observe(listEl);
+        listEl.querySelectorAll('[role="tab"]').forEach((tab) => resizeObserver.observe(tab));
+      };
+      const mutationObserver = new MutationObserver(observeTabs);
+      mutationObserver.observe(listEl, {
+        childList: true,
+        subtree: true
+      });
+      let scrollTick = false;
+      const throttleMeasureOverflowOnScroll = () => {
+        if (!scrollTick) {
+          requestAnimationFrame(() => {
+            measureOverflow();
+            scrollTick = false;
+          });
+          scrollTick = true;
+        }
+      };
+      listEl.addEventListener(
+        "scroll",
+        throttleMeasureOverflowOnScroll,
+        { passive: true }
       );
-    }
-  }
-  return /* @__PURE__ */ (0, import_jsx_runtime53.jsx)("nav", { "aria-label": (0, import_i18n2.__)("Breadcrumbs"), children: /* @__PURE__ */ (0, import_jsx_runtime53.jsxs)(
-    Stack,
-    {
-      render: /* @__PURE__ */ (0, import_jsx_runtime53.jsx)("ul", {}),
-      direction: "row",
-      align: "center",
-      className: style_default14.list,
-      children: [
-        precedingItems.map((item, index2) => /* @__PURE__ */ (0, import_jsx_runtime53.jsxs)("li", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(
-            Text,
-            {
-              variant: "body-lg",
-              render: /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(
-                Link,
-                {
-                  tone: "neutral",
-                  render: /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(RouterLink, { to: item.to })
-                }
-              ),
-              children: item.label
-            }
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(
-            Text,
-            {
-              variant: "body-lg",
-              "aria-hidden": "true",
-              className: style_default14.separator,
-              children: "/"
-            }
-          )
-        ] }, index2)),
-        /* @__PURE__ */ (0, import_jsx_runtime53.jsx)("li", { children: lastItem.to ? /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(
-          Text,
-          {
-            variant: "body-lg",
-            render: /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(
-              Link,
-              {
-                tone: "neutral",
-                render: /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(RouterLink, { to: lastItem.to })
-              }
-            ),
-            children: lastItem.label
-          }
-        ) : /* @__PURE__ */ (0, import_jsx_runtime53.jsx)(
-          Text,
-          {
-            variant: "heading-lg",
-            render: /* @__PURE__ */ (0, import_jsx_runtime53.jsx)("h1", {}),
-            className: style_default14.current,
-            children: lastItem.label
-          }
-        ) })
-      ]
-    }
-  ) });
-};
-var breadcrumbs_default = Breadcrumbs;
-
-// packages/admin-ui/build-module/navigable-region/index.mjs
-var import_element34 = __toESM(require_element(), 1);
-var import_jsx_runtime54 = __toESM(require_jsx_runtime(), 1);
-var NavigableRegion = (0, import_element34.forwardRef)(
-  ({ children, className, ariaLabel, as: Tag = "div", ...props }, ref) => {
-    return /* @__PURE__ */ (0, import_jsx_runtime54.jsx)(
-      Tag,
+      observeTabs();
+      measureOverflow();
+      return () => {
+        listEl.removeEventListener(
+          "scroll",
+          throttleMeasureOverflowOnScroll
+        );
+        resizeObserver.disconnect();
+        mutationObserver.disconnect();
+      };
+    }, [listEl]);
+    const mergedListRef = (0, import_compose.useMergeRefs)([
+      forwardedRef,
+      (el) => setListEl(el)
+    ]);
+    return /* @__PURE__ */ (0, import_jsx_runtime59.jsxs)(
+      index_parts_exports2.List,
       {
-        ref,
-        className: clsx_default("admin-ui-navigable-region", className),
-        "aria-label": ariaLabel,
-        role: "region",
-        tabIndex: "-1",
-        ...props,
-        children
+        ref: mergedListRef,
+        activateOnFocus,
+        "data-select-on-move": activateOnFocus ? "true" : "false",
+        className: clsx_default(
+          style_default14.tablist,
+          overflow.first && style_default14["is-overflowing-first"],
+          overflow.last && style_default14["is-overflowing-last"],
+          style_default14[`is-${variant}-variant`],
+          className
+        ),
+        ...otherProps,
+        tabIndex: otherProps.tabIndex ?? (overflow.isScrolling ? -1 : void 0),
+        children: [
+          children,
+          /* @__PURE__ */ (0, import_jsx_runtime59.jsx)(index_parts_exports2.Indicator, { className: style_default14.indicator })
+        ]
       }
     );
   }
 );
-NavigableRegion.displayName = "NavigableRegion";
-var navigable_region_default = NavigableRegion;
 
-// packages/admin-ui/build-module/page/sidebar-toggle-slot.mjs
-var import_components = __toESM(require_components(), 1);
-var { Fill: SidebarToggleFill, Slot: SidebarToggleSlot } = (0, import_components.createSlotFill)("SidebarToggle");
+// packages/ui/build-module/tabs/panel.mjs
+var import_element37 = __toESM(require_element(), 1);
 
-// packages/admin-ui/build-module/page/header.mjs
-var import_jsx_runtime55 = __toESM(require_jsx_runtime(), 1);
+// packages/ui/build-module/tabs/context.mjs
+var import_element36 = __toESM(require_element(), 1);
+var import_jsx_runtime60 = __toESM(require_jsx_runtime(), 1);
+var VALIDATION_ENABLED = true;
+var TabsValidationContext = VALIDATION_ENABLED ? (0, import_element36.createContext)(null) : null;
+function useRegisterTabDev() {
+  const context = (0, import_element36.useContext)(TabsValidationContext);
+  (0, import_element36.useEffect)(() => {
+    if (context) {
+      return context.registerTab();
+    }
+    return void 0;
+  }, [context]);
+}
+function useRegisterTabProd() {
+}
+var useRegisterTab = VALIDATION_ENABLED ? useRegisterTabDev : useRegisterTabProd;
+function useRegisterPanelDev() {
+  const context = (0, import_element36.useContext)(TabsValidationContext);
+  (0, import_element36.useEffect)(() => {
+    if (context) {
+      return context.registerPanel();
+    }
+    return void 0;
+  }, [context]);
+}
+function useRegisterPanelProd() {
+}
+var useRegisterPanel = VALIDATION_ENABLED ? useRegisterPanelDev : useRegisterPanelProd;
+function TabsValidationProviderDev({
+  children
+}) {
+  const tabCountRef = (0, import_element36.useRef)(0);
+  const panelCountRef = (0, import_element36.useRef)(0);
+  const scheduleValidation = useScheduleValidation(() => {
+    const tabCount = tabCountRef.current;
+    const panelCount = panelCountRef.current;
+    if (tabCount !== panelCount) {
+      throw new Error(
+        `Tabs: Tab/Panel count mismatch (${tabCount} Tabs, ${panelCount} Panels). Each Tab must be associated with exactly one Panel. Mismatched or missing associations can break screen reader navigation and violate WAI-ARIA Tabs pattern requirements.`
+      );
+    }
+  });
+  const registerTab = (0, import_element36.useCallback)(() => {
+    tabCountRef.current += 1;
+    scheduleValidation();
+    return () => {
+      tabCountRef.current -= 1;
+      scheduleValidation();
+    };
+  }, [scheduleValidation]);
+  const registerPanel = (0, import_element36.useCallback)(() => {
+    panelCountRef.current += 1;
+    scheduleValidation();
+    return () => {
+      panelCountRef.current -= 1;
+      scheduleValidation();
+    };
+  }, [scheduleValidation]);
+  const contextValue = (0, import_element36.useMemo)(
+    () => ({
+      registerTab,
+      registerPanel
+    }),
+    [registerTab, registerPanel]
+  );
+  return /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(TabsValidationContext.Provider, { value: contextValue, children });
+}
+function TabsValidationProviderProd({
+  children
+}) {
+  return /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(import_jsx_runtime60.Fragment, { children });
+}
+var TabsValidationProvider = VALIDATION_ENABLED ? TabsValidationProviderDev : TabsValidationProviderProd;
+
+// packages/ui/build-module/tabs/panel.mjs
+var import_jsx_runtime61 = __toESM(require_jsx_runtime(), 1);
 var STYLE_HASH_ATTRIBUTE16 = "data-wp-hash";
 function getRuntime16() {
   const globalScope = globalThis;
@@ -11619,84 +13415,43 @@ function registerStyle16(hash, css) {
   }
 }
 if (typeof process === "undefined" || true) {
-  registerStyle16("ddd9aab364", "._956b6df0898efed0__page{text-wrap:pretty;background-color:var(--wpds-color-background-surface-neutral,#fcfcfc);color:var(--wpds-color-foreground-content-neutral,#1e1e1e);display:flex;flex-flow:column;height:100%;position:relative;z-index:1}._0625b55e82a0d93d__header{background:var(--wpds-color-background-surface-neutral-strong,#fff);border-block-end:var(--wpds-border-width-xs,1px) solid var(--wpds-color-stroke-surface-neutral-weak,#f0f0f0);inset-block-start:0;padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px);position:sticky;z-index:1}.a43c44d5ae28b2e8__header-content{min-height:var(--wpds-dimension-size-md,32px)}.b7cb5b9daf3a3b25__header-actions{flex-shrink:0}._8113be94e7caf73c__header-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}._9a776c7f70996f61__header-visual{display:grid;flex-shrink:0;grid-template-columns:1fr;grid-template-rows:1fr;height:var(--wpds-dimension-size-sm,24px);width:var(--wpds-dimension-size-sm,24px);>*{grid-column:1/-1;grid-row:1/-1;max-height:100%;max-width:100%}}.d5e0920cd15d35bc__sidebar-toggle-slot:empty{display:none}._60fea2f6bf5319cd__header-subtitle{color:var(--wpds-color-foreground-content-neutral-weak,#707070);padding-block-end:var(--wpds-dimension-padding-xs,4px)}.be5e57d029ec4036__content{display:flex;flex-direction:column;flex-grow:1;overflow:auto;&._128806d0b26e3a50__has-padding{padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px)}}");
+  registerStyle16("af6d9984a6", "._6defc79820e382c6__button{box-sizing:var(--_gcd-button-box-sizing,border-box);font-family:var(--_gcd-button-font-family,inherit);font-size:var(--_gcd-button-font-size,inherit);font-weight:var(--_gcd-button-font-weight,inherit)}.d2cff2e5dea83bd1__input{box-sizing:var(--_gcd-input-box-sizing,border-box);font-family:var(--_gcd-input-font-family,inherit);font-size:var(--_gcd-input-font-size,inherit);font-weight:var(--_gcd-input-font-weight,inherit);margin:var(--_gcd-input-margin,0);&:is(textarea,[type=text],[type=password],[type=color],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){background-color:var(--_gcd-input-background-color,transparent);border:var(--_gcd-input-border,none);border-radius:var(--_gcd-input-border-radius,0);box-shadow:var(--_gcd-input-box-shadow,0 0 0 transparent);color:var(--_gcd-input-color,var(--wpds-color-foreground-interactive-neutral,#1e1e1e));&:focus{border-color:var(--_gcd-input-border-color-focus,var(--wp-admin-theme-color));box-shadow:var(--_gcd-input-box-shadow-focus,none);outline:var(--_gcd-input-outline-focus,none)}&:disabled{background:var(--_gcd-input-background-disabled,transparent);border-color:var(--_gcd-input-border-color-disabled,transparent);box-shadow:var(--_gcd-input-box-shadow-disabled,none);color:var(--_gcd-input-color-disabled,var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d))}&::placeholder{color:var(--_gcd-input-placeholder-color,var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d))}}&:is(textarea,[type=text],[type=password],[type=date],[type=datetime],[type=datetime-local],[type=email],[type=month],[type=number],[type=search],[type=tel],[type=time],[type=url],[type=week]){line-height:var(--_gcd-input-line-height,inherit);min-height:var(--_gcd-input-min-height,auto);padding:var(--_gcd-input-padding,0)}}._547d86373d02e108__textarea{box-sizing:var(--_gcd-textarea-box-sizing,border-box);overflow:var(--_gcd-textarea-overflow,auto);resize:var(--_gcd-textarea-resize,block)}._8c15fd0ed9f28ba4__div{outline:var(--_gcd-div-outline,0 solid transparent)}p._43cec3e1eec1066d__p{font-size:var(--_gcd-p-font-size,13px);line-height:var(--_gcd-p-line-height,1.5);margin:var(--_gcd-p-margin,0)}:is(h1,h2,h3,h4,h5,h6).e97669c6d9a38497__heading{color:var(--_gcd-heading-color,var(--wpds-color-foreground-content-neutral,#1e1e1e));font-size:var(--_gcd-heading-font-size,inherit);font-weight:var(--_gcd-heading-font-weight,var(--wpds-typography-font-weight-emphasis,600));margin:var(--_gcd-heading-margin,0)}._2c0831b0499dbd6e__a,._2c0831b0499dbd6e__a:is(:hover,:focus,:active){border-radius:var(--_gcd-a-border-radius,0);box-shadow:var(--_gcd-a-box-shadow,none);color:var(--_gcd-a-color,inherit);outline:var(--_gcd-a-outline,0 solid transparent);transition:var(--_gcd-a-transition,none)}");
 }
-var style_default15 = { "page": "_956b6df0898efed0__page", "header": "_0625b55e82a0d93d__header", "header-content": "a43c44d5ae28b2e8__header-content", "header-actions": "b7cb5b9daf3a3b25__header-actions", "header-title": "_8113be94e7caf73c__header-title", "header-visual": "_9a776c7f70996f61__header-visual", "sidebar-toggle-slot": "d5e0920cd15d35bc__sidebar-toggle-slot", "header-subtitle": "_60fea2f6bf5319cd__header-subtitle", "content": "be5e57d029ec4036__content", "has-padding": "_128806d0b26e3a50__has-padding" };
-function Header3({
-  headingLevel = 1,
-  breadcrumbs,
-  badges,
-  visual,
-  title,
-  subTitle,
-  actions,
-  showSidebarToggle = true
-}) {
-  const HeadingTag = `h${headingLevel}`;
-  return /* @__PURE__ */ (0, import_jsx_runtime55.jsxs)(Stack, { direction: "column", className: style_default15.header, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime55.jsxs)(
-      Stack,
-      {
-        className: style_default15["header-content"],
-        direction: "row",
-        gap: "sm",
-        justify: "space-between",
-        children: [
-          /* @__PURE__ */ (0, import_jsx_runtime55.jsxs)(Stack, { direction: "row", gap: "sm", align: "center", justify: "start", children: [
-            showSidebarToggle && /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(
-              SidebarToggleSlot,
-              {
-                bubblesVirtually: true,
-                className: style_default15["sidebar-toggle-slot"]
-              }
-            ),
-            visual && /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(
-              "div",
-              {
-                className: style_default15["header-visual"],
-                "aria-hidden": "true",
-                children: visual
-              }
-            ),
-            title && /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(
-              Text,
-              {
-                className: style_default15["header-title"],
-                render: /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(HeadingTag, {}),
-                variant: "heading-lg",
-                children: title
-              }
-            ),
-            breadcrumbs,
-            badges
-          ] }),
-          actions && /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(
-            Stack,
-            {
-              align: "center",
-              className: style_default15["header-actions"],
-              direction: "row",
-              gap: "sm",
-              children: actions
-            }
-          )
-        ]
-      }
-    ),
-    subTitle && /* @__PURE__ */ (0, import_jsx_runtime55.jsx)(
-      Text,
-      {
-        render: /* @__PURE__ */ (0, import_jsx_runtime55.jsx)("p", {}),
-        variant: "body-md",
-        className: style_default15["header-subtitle"],
-        children: subTitle
-      }
-    )
-  ] });
+var global_css_defense_default4 = { "button": "_6defc79820e382c6__button", "input": "d2cff2e5dea83bd1__input", "textarea": "_547d86373d02e108__textarea", "div": "_8c15fd0ed9f28ba4__div", "p": "_43cec3e1eec1066d__p", "heading": "e97669c6d9a38497__heading", "a": "_2c0831b0499dbd6e__a" };
+if (typeof process === "undefined" || true) {
+  registerStyle16("5f8e7aa0bc", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer utilities{._08e8a2e44959f892__outset-ring--focus:focus,._970d04df7376df67__outset-ring--focus-within-except-active:focus-within:not(:has(:active)),.c5cb3ee4bddaa8e4__outset-ring--focus-within-visible:focus-within:has(:focus-visible),.cd83dfc2126a0846__outset-ring--focus-within:focus-within,.d0541bc9dd9dc7b6__outset-ring--focus-visible:focus-visible,.e25b2bdd7aa21721__outset-ring--focus-except-active:focus:not(:active),:focus-visible .ecadb9e080e2dfa5__outset-ring--focus-parent-visible{--_gcd-a-outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9));--_gcd-div-outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9));outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9));outline-offset:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px))}}}");
 }
+var focus_default3 = { "outset-ring--focus": "_08e8a2e44959f892__outset-ring--focus", "outset-ring--focus-except-active": "e25b2bdd7aa21721__outset-ring--focus-except-active", "outset-ring--focus-visible": "d0541bc9dd9dc7b6__outset-ring--focus-visible", "outset-ring--focus-within": "cd83dfc2126a0846__outset-ring--focus-within", "outset-ring--focus-within-except-active": "_970d04df7376df67__outset-ring--focus-within-except-active", "outset-ring--focus-within-visible": "c5cb3ee4bddaa8e4__outset-ring--focus-within-visible", "outset-ring--focus-parent-visible": "ecadb9e080e2dfa5__outset-ring--focus-parent-visible" };
+var Panel2 = (0, import_element37.forwardRef)(
+  function TabPanel({ className, ...otherProps }, forwardedRef) {
+    useRegisterPanel();
+    return /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(
+      index_parts_exports2.Panel,
+      {
+        ref: forwardedRef,
+        className: clsx_default(
+          global_css_defense_default4.div,
+          focus_default3["outset-ring--focus-visible"],
+          className
+        ),
+        ...otherProps
+      }
+    );
+  }
+);
 
-// packages/admin-ui/build-module/page/index.mjs
-var import_jsx_runtime56 = __toESM(require_jsx_runtime(), 1);
+// packages/ui/build-module/tabs/root.mjs
+var import_element38 = __toESM(require_element(), 1);
+var import_jsx_runtime62 = __toESM(require_jsx_runtime(), 1);
+var Root5 = (0, import_element38.forwardRef)(
+  function TabsRoot3({ ...otherProps }, forwardedRef) {
+    return /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(TabsValidationProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(index_parts_exports2.Root, { ref: forwardedRef, ...otherProps }) });
+  }
+);
+
+// packages/ui/build-module/tabs/tab.mjs
+var import_element39 = __toESM(require_element(), 1);
+var import_jsx_runtime63 = __toESM(require_jsx_runtime(), 1);
 var STYLE_HASH_ATTRIBUTE17 = "data-wp-hash";
 function getRuntime17() {
   const globalScope = globalThis;
@@ -11778,9 +13533,457 @@ function registerStyle17(hash, css) {
   }
 }
 if (typeof process === "undefined" || true) {
-  registerStyle17("ddd9aab364", "._956b6df0898efed0__page{text-wrap:pretty;background-color:var(--wpds-color-background-surface-neutral,#fcfcfc);color:var(--wpds-color-foreground-content-neutral,#1e1e1e);display:flex;flex-flow:column;height:100%;position:relative;z-index:1}._0625b55e82a0d93d__header{background:var(--wpds-color-background-surface-neutral-strong,#fff);border-block-end:var(--wpds-border-width-xs,1px) solid var(--wpds-color-stroke-surface-neutral-weak,#f0f0f0);inset-block-start:0;padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px);position:sticky;z-index:1}.a43c44d5ae28b2e8__header-content{min-height:var(--wpds-dimension-size-md,32px)}.b7cb5b9daf3a3b25__header-actions{flex-shrink:0}._8113be94e7caf73c__header-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}._9a776c7f70996f61__header-visual{display:grid;flex-shrink:0;grid-template-columns:1fr;grid-template-rows:1fr;height:var(--wpds-dimension-size-sm,24px);width:var(--wpds-dimension-size-sm,24px);>*{grid-column:1/-1;grid-row:1/-1;max-height:100%;max-width:100%}}.d5e0920cd15d35bc__sidebar-toggle-slot:empty{display:none}._60fea2f6bf5319cd__header-subtitle{color:var(--wpds-color-foreground-content-neutral-weak,#707070);padding-block-end:var(--wpds-dimension-padding-xs,4px)}.be5e57d029ec4036__content{display:flex;flex-direction:column;flex-grow:1;overflow:auto;&._128806d0b26e3a50__has-padding{padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px)}}");
+  registerStyle17("bb8cbb8f31", '@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._7313adbc8a112e90__tablist{--direction-factor:1;--direction-start:left;--direction-end:right;align-items:stretch;display:flex;overflow-inline:auto;overscroll-behavior-inline:none;position:relative;&:dir(rtl){--direction-factor:-1;--direction-start:right;--direction-end:left}&[data-orientation=horizontal]{--fade-width:4rem;--fade-gradient-base:transparent 0%,#000 var(--fade-width);--fade-gradient-composed:var(--fade-gradient-base),#000 60%,transparent 50%;width:fit-content;&._9f2ac729c68a735a__is-overflowing-first{mask-image:linear-gradient(to var(--direction-end),var(--fade-gradient-base))}&._81c799c1f3cdd261__is-overflowing-last{mask-image:linear-gradient(to var(--direction-start),var(--fade-gradient-base))}&._9f2ac729c68a735a__is-overflowing-first._81c799c1f3cdd261__is-overflowing-last{mask-image:linear-gradient(to right,var(--fade-gradient-composed)),linear-gradient(to left,var(--fade-gradient-composed))}&._59228b5227f38a99__is-minimal-variant{gap:1rem}}&[data-orientation=vertical]{flex-direction:column}}._1c37dcfaa1ad8cda__indicator{@media not (prefers-reduced-motion){transition-duration:.2s;transition-property:translate,width,height,border-radius,border-block;transition-timing-function:ease-out}outline:2px solid transparent;outline-offset:-1px;pointer-events:none;position:absolute;&[data-orientation=horizontal]{background-color:var(--wpds-color-stroke-interactive-neutral-strong,#6e6e6e);bottom:0;height:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px));left:0;translate:var(--active-tab-left) 0;width:var(--active-tab-width);z-index:1}&[data-orientation=vertical]{background-color:var(--wpds-color-background-interactive-neutral-weak-active,#ededed);border-radius:var(--wpds-border-radius-sm,2px);height:var(--active-tab-height);left:50%;top:0;translate:-50% var(--active-tab-top);width:100%;z-index:0}._7313adbc8a112e90__tablist[data-select-on-move=true]:has(:focus-visible)\n			&[data-orientation=vertical]{border:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9));box-sizing:border-box}}.a5fd8814f195aa5e__tab{align-items:center;background:transparent;border:none;border-radius:0;box-shadow:none;color:var(--wpds-color-foreground-interactive-neutral,#1e1e1e);cursor:var(--wpds-cursor-control,pointer);display:flex;flex:1 0 auto;font-family:var(--wpds-typography-font-family-body,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-size:var(--wpds-typography-font-size-md,13px);font-weight:400;line-height:1.2;outline:none;padding:0;position:relative;white-space:nowrap;z-index:1;&[data-disabled]{color:var(--wpds-color-foreground-interactive-neutral-disabled,#8d8d8d);cursor:default;@media (forced-colors:active){color:GrayText}}&:not([data-disabled]):is(:hover,:focus-visible){color:var(--wpds-color-foreground-interactive-neutral-active,#1e1e1e)}&:after{border-radius:var(--wpds-border-radius-sm,2px);opacity:0;outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9));pointer-events:none;position:absolute;z-index:-1;@media not (prefers-reduced-motion){transition:opacity .1s linear}}&:focus-visible:after{opacity:1}[data-orientation=horizontal] &{height:48px;padding-inline:var(--wpds-dimension-padding-lg,16px);scroll-margin:24px;&:after{content:"";inset:var(--wpds-dimension-padding-md,12px)}}._59228b5227f38a99__is-minimal-variant[data-orientation=horizontal] &{padding-inline:0;&:after{inset-inline:round(up,var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)),1px)}}[data-orientation=vertical] &{min-height:var(--wpds-dimension-size-lg,40px);padding:var(--wpds-dimension-padding-sm,8px) var(--wpds-dimension-padding-md,12px)}[data-orientation=vertical][data-select-on-move=false] &:after{content:"";inset:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px))}}._5dfc77e6edd345d4__tab-children{align-items:center;display:flex;flex-grow:1;[data-orientation=horizontal] &{justify-content:center}[data-orientation=vertical] &{justify-content:start}}._4a20e969d15e5ac1__tab-chevron{flex-shrink:0;margin-inline-end:calc(var(--wpds-dimension-gap-xs, 4px)*-1);opacity:0;[data-orientation=horizontal] &{display:none}[role=tab]:is([aria-selected=true],:focus-visible,:hover) &{opacity:1}@media not (prefers-reduced-motion){[data-select-on-move=true]\n				[role=tab]:is([aria-selected=true])\n				&{transition:opacity .15s linear .15s}}&:dir(rtl){rotate:180deg}}}}');
 }
-var style_default16 = { "page": "_956b6df0898efed0__page", "header": "_0625b55e82a0d93d__header", "header-content": "a43c44d5ae28b2e8__header-content", "header-actions": "b7cb5b9daf3a3b25__header-actions", "header-title": "_8113be94e7caf73c__header-title", "header-visual": "_9a776c7f70996f61__header-visual", "sidebar-toggle-slot": "d5e0920cd15d35bc__sidebar-toggle-slot", "header-subtitle": "_60fea2f6bf5319cd__header-subtitle", "content": "be5e57d029ec4036__content", "has-padding": "_128806d0b26e3a50__has-padding" };
+var style_default15 = { "tablist": "_7313adbc8a112e90__tablist", "is-overflowing-first": "_9f2ac729c68a735a__is-overflowing-first", "is-overflowing-last": "_81c799c1f3cdd261__is-overflowing-last", "is-minimal-variant": "_59228b5227f38a99__is-minimal-variant", "indicator": "_1c37dcfaa1ad8cda__indicator", "tab": "a5fd8814f195aa5e__tab", "tab-children": "_5dfc77e6edd345d4__tab-children", "tab-chevron": "_4a20e969d15e5ac1__tab-chevron" };
+var Tab = (0, import_element39.forwardRef)(function Tab2({ className, children, ...otherProps }, forwardedRef) {
+  useRegisterTab();
+  return /* @__PURE__ */ (0, import_jsx_runtime63.jsxs)(
+    index_parts_exports2.Tab,
+    {
+      ref: forwardedRef,
+      className: clsx_default(style_default15.tab, className),
+      ...otherProps,
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime63.jsx)("span", { className: style_default15["tab-children"], children }),
+        /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(Icon, { icon: chevron_right_default, className: style_default15["tab-chevron"] })
+      ]
+    }
+  );
+});
+
+// packages/admin-ui/build-module/breadcrumbs/index.mjs
+var import_jsx_runtime64 = __toESM(require_jsx_runtime(), 1);
+var STYLE_HASH_ATTRIBUTE18 = "data-wp-hash";
+function getRuntime18() {
+  const globalScope = globalThis;
+  if (globalScope.__wpStyleRuntime) {
+    return globalScope.__wpStyleRuntime;
+  }
+  globalScope.__wpStyleRuntime = {
+    documents: /* @__PURE__ */ new Map(),
+    styles: /* @__PURE__ */ new Map(),
+    injectedStyles: /* @__PURE__ */ new WeakMap()
+  };
+  if (typeof document !== "undefined") {
+    registerDocument18(document);
+  }
+  return globalScope.__wpStyleRuntime;
+}
+function documentContainsStyleHash18(targetDocument, hash) {
+  if (!targetDocument.head) {
+    return false;
+  }
+  for (const style of targetDocument.head.querySelectorAll(
+    `style[${STYLE_HASH_ATTRIBUTE18}]`
+  )) {
+    if (style.getAttribute(STYLE_HASH_ATTRIBUTE18) === hash) {
+      return true;
+    }
+  }
+  return false;
+}
+function injectStyle18(targetDocument, hash, css) {
+  if (!targetDocument.head) {
+    return;
+  }
+  const runtime = getRuntime18();
+  let injectedStyles = runtime.injectedStyles.get(targetDocument);
+  if (!injectedStyles) {
+    injectedStyles = /* @__PURE__ */ new Set();
+    runtime.injectedStyles.set(targetDocument, injectedStyles);
+  }
+  if (injectedStyles.has(hash)) {
+    return;
+  }
+  if (documentContainsStyleHash18(targetDocument, hash)) {
+    injectedStyles.add(hash);
+    return;
+  }
+  const style = targetDocument.createElement("style");
+  style.setAttribute(STYLE_HASH_ATTRIBUTE18, hash);
+  style.appendChild(targetDocument.createTextNode(css));
+  targetDocument.head.appendChild(style);
+  injectedStyles.add(hash);
+}
+function registerDocument18(targetDocument) {
+  const runtime = getRuntime18();
+  runtime.documents.set(
+    targetDocument,
+    (runtime.documents.get(targetDocument) ?? 0) + 1
+  );
+  for (const [hash, css] of runtime.styles) {
+    injectStyle18(targetDocument, hash, css);
+  }
+  return () => {
+    const count = runtime.documents.get(targetDocument);
+    if (count === void 0) {
+      return;
+    }
+    if (count <= 1) {
+      runtime.documents.delete(targetDocument);
+      return;
+    }
+    runtime.documents.set(targetDocument, count - 1);
+  };
+}
+function registerStyle18(hash, css) {
+  const runtime = getRuntime18();
+  runtime.styles.set(hash, css);
+  for (const targetDocument of runtime.documents.keys()) {
+    injectStyle18(targetDocument, hash, css);
+  }
+}
+if (typeof process === "undefined" || true) {
+  registerStyle18("846edc217c", "._5f4053eba32ce092__list{list-style:none;margin:0;padding:0}._5f4053eba32ce092__list>li{flex-shrink:0}._5f4053eba32ce092__list>li:last-child{flex-shrink:1;min-width:0}.d1978551971a3360__current{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}._6d9152063d443376__separator{color:var(--wpds-color-stroke-surface-neutral,#dbdbdb);margin:0 var(--wpds-dimension-gap-sm,8px);user-select:none}");
+}
+var style_default16 = { "list": "_5f4053eba32ce092__list", "current": "d1978551971a3360__current", "separator": "_6d9152063d443376__separator" };
+var Breadcrumbs = ({ items }) => {
+  if (!items.length) {
+    return null;
+  }
+  const precedingItems = items.slice(0, -1);
+  const lastItem = items[items.length - 1];
+  if (true) {
+    const invalidItem = precedingItems.find((item) => !item.to);
+    if (invalidItem) {
+      throw new Error(
+        `Breadcrumbs: item "${invalidItem.label}" is missing a \`to\` prop. All items except the last one must have a \`to\` prop.`
+      );
+    }
+  }
+  return /* @__PURE__ */ (0, import_jsx_runtime64.jsx)("nav", { "aria-label": (0, import_i18n2.__)("Breadcrumbs"), children: /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)(
+    Stack,
+    {
+      render: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)("ul", {}),
+      direction: "row",
+      align: "center",
+      className: style_default16.list,
+      children: [
+        precedingItems.map((item, index2) => /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)("li", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+            Text,
+            {
+              variant: "body-lg",
+              render: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+                Link,
+                {
+                  tone: "neutral",
+                  render: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(RouterLink, { to: item.to })
+                }
+              ),
+              children: item.label
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+            Text,
+            {
+              variant: "body-lg",
+              "aria-hidden": "true",
+              className: style_default16.separator,
+              children: "/"
+            }
+          )
+        ] }, index2)),
+        /* @__PURE__ */ (0, import_jsx_runtime64.jsx)("li", { children: lastItem.to ? /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+          Text,
+          {
+            variant: "body-lg",
+            render: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+              Link,
+              {
+                tone: "neutral",
+                render: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(RouterLink, { to: lastItem.to })
+              }
+            ),
+            children: lastItem.label
+          }
+        ) : /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+          Text,
+          {
+            variant: "heading-lg",
+            render: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)("h1", {}),
+            className: style_default16.current,
+            children: lastItem.label
+          }
+        ) })
+      ]
+    }
+  ) });
+};
+var breadcrumbs_default = Breadcrumbs;
+
+// packages/admin-ui/build-module/navigable-region/index.mjs
+var import_element40 = __toESM(require_element(), 1);
+var import_jsx_runtime65 = __toESM(require_jsx_runtime(), 1);
+var NavigableRegion = (0, import_element40.forwardRef)(
+  ({ children, className, ariaLabel, as: Tag = "div", ...props }, ref) => {
+    return /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
+      Tag,
+      {
+        ref,
+        className: clsx_default("admin-ui-navigable-region", className),
+        "aria-label": ariaLabel,
+        role: "region",
+        tabIndex: "-1",
+        ...props,
+        children
+      }
+    );
+  }
+);
+NavigableRegion.displayName = "NavigableRegion";
+var navigable_region_default = NavigableRegion;
+
+// packages/admin-ui/build-module/page/sidebar-toggle-slot.mjs
+var import_components = __toESM(require_components(), 1);
+var { Fill: SidebarToggleFill, Slot: SidebarToggleSlot } = (0, import_components.createSlotFill)("SidebarToggle");
+
+// packages/admin-ui/build-module/page/header.mjs
+var import_jsx_runtime66 = __toESM(require_jsx_runtime(), 1);
+var STYLE_HASH_ATTRIBUTE19 = "data-wp-hash";
+function getRuntime19() {
+  const globalScope = globalThis;
+  if (globalScope.__wpStyleRuntime) {
+    return globalScope.__wpStyleRuntime;
+  }
+  globalScope.__wpStyleRuntime = {
+    documents: /* @__PURE__ */ new Map(),
+    styles: /* @__PURE__ */ new Map(),
+    injectedStyles: /* @__PURE__ */ new WeakMap()
+  };
+  if (typeof document !== "undefined") {
+    registerDocument19(document);
+  }
+  return globalScope.__wpStyleRuntime;
+}
+function documentContainsStyleHash19(targetDocument, hash) {
+  if (!targetDocument.head) {
+    return false;
+  }
+  for (const style of targetDocument.head.querySelectorAll(
+    `style[${STYLE_HASH_ATTRIBUTE19}]`
+  )) {
+    if (style.getAttribute(STYLE_HASH_ATTRIBUTE19) === hash) {
+      return true;
+    }
+  }
+  return false;
+}
+function injectStyle19(targetDocument, hash, css) {
+  if (!targetDocument.head) {
+    return;
+  }
+  const runtime = getRuntime19();
+  let injectedStyles = runtime.injectedStyles.get(targetDocument);
+  if (!injectedStyles) {
+    injectedStyles = /* @__PURE__ */ new Set();
+    runtime.injectedStyles.set(targetDocument, injectedStyles);
+  }
+  if (injectedStyles.has(hash)) {
+    return;
+  }
+  if (documentContainsStyleHash19(targetDocument, hash)) {
+    injectedStyles.add(hash);
+    return;
+  }
+  const style = targetDocument.createElement("style");
+  style.setAttribute(STYLE_HASH_ATTRIBUTE19, hash);
+  style.appendChild(targetDocument.createTextNode(css));
+  targetDocument.head.appendChild(style);
+  injectedStyles.add(hash);
+}
+function registerDocument19(targetDocument) {
+  const runtime = getRuntime19();
+  runtime.documents.set(
+    targetDocument,
+    (runtime.documents.get(targetDocument) ?? 0) + 1
+  );
+  for (const [hash, css] of runtime.styles) {
+    injectStyle19(targetDocument, hash, css);
+  }
+  return () => {
+    const count = runtime.documents.get(targetDocument);
+    if (count === void 0) {
+      return;
+    }
+    if (count <= 1) {
+      runtime.documents.delete(targetDocument);
+      return;
+    }
+    runtime.documents.set(targetDocument, count - 1);
+  };
+}
+function registerStyle19(hash, css) {
+  const runtime = getRuntime19();
+  runtime.styles.set(hash, css);
+  for (const targetDocument of runtime.documents.keys()) {
+    injectStyle19(targetDocument, hash, css);
+  }
+}
+if (typeof process === "undefined" || true) {
+  registerStyle19("ddd9aab364", "._956b6df0898efed0__page{text-wrap:pretty;background-color:var(--wpds-color-background-surface-neutral,#fcfcfc);color:var(--wpds-color-foreground-content-neutral,#1e1e1e);display:flex;flex-flow:column;height:100%;position:relative;z-index:1}._0625b55e82a0d93d__header{background:var(--wpds-color-background-surface-neutral-strong,#fff);border-block-end:var(--wpds-border-width-xs,1px) solid var(--wpds-color-stroke-surface-neutral-weak,#f0f0f0);inset-block-start:0;padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px);position:sticky;z-index:1}.a43c44d5ae28b2e8__header-content{min-height:var(--wpds-dimension-size-md,32px)}.b7cb5b9daf3a3b25__header-actions{flex-shrink:0}._8113be94e7caf73c__header-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}._9a776c7f70996f61__header-visual{display:grid;flex-shrink:0;grid-template-columns:1fr;grid-template-rows:1fr;height:var(--wpds-dimension-size-sm,24px);width:var(--wpds-dimension-size-sm,24px);>*{grid-column:1/-1;grid-row:1/-1;max-height:100%;max-width:100%}}.d5e0920cd15d35bc__sidebar-toggle-slot:empty{display:none}._60fea2f6bf5319cd__header-subtitle{color:var(--wpds-color-foreground-content-neutral-weak,#707070);padding-block-end:var(--wpds-dimension-padding-xs,4px)}.be5e57d029ec4036__content{display:flex;flex-direction:column;flex-grow:1;overflow:auto;&._128806d0b26e3a50__has-padding{padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px)}}");
+}
+var style_default17 = { "page": "_956b6df0898efed0__page", "header": "_0625b55e82a0d93d__header", "header-content": "a43c44d5ae28b2e8__header-content", "header-actions": "b7cb5b9daf3a3b25__header-actions", "header-title": "_8113be94e7caf73c__header-title", "header-visual": "_9a776c7f70996f61__header-visual", "sidebar-toggle-slot": "d5e0920cd15d35bc__sidebar-toggle-slot", "header-subtitle": "_60fea2f6bf5319cd__header-subtitle", "content": "be5e57d029ec4036__content", "has-padding": "_128806d0b26e3a50__has-padding" };
+function Header3({
+  headingLevel = 1,
+  breadcrumbs,
+  badges,
+  visual,
+  title,
+  subTitle,
+  actions,
+  showSidebarToggle = true
+}) {
+  const HeadingTag = `h${headingLevel}`;
+  return /* @__PURE__ */ (0, import_jsx_runtime66.jsxs)(Stack, { direction: "column", className: style_default17.header, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime66.jsxs)(
+      Stack,
+      {
+        className: style_default17["header-content"],
+        direction: "row",
+        gap: "sm",
+        justify: "space-between",
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime66.jsxs)(Stack, { direction: "row", gap: "sm", align: "center", justify: "start", children: [
+            showSidebarToggle && /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(
+              SidebarToggleSlot,
+              {
+                bubblesVirtually: true,
+                className: style_default17["sidebar-toggle-slot"]
+              }
+            ),
+            visual && /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(
+              "div",
+              {
+                className: style_default17["header-visual"],
+                "aria-hidden": "true",
+                children: visual
+              }
+            ),
+            title && /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(
+              Text,
+              {
+                className: style_default17["header-title"],
+                render: /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(HeadingTag, {}),
+                variant: "heading-lg",
+                children: title
+              }
+            ),
+            breadcrumbs,
+            badges
+          ] }),
+          actions && /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(
+            Stack,
+            {
+              align: "center",
+              className: style_default17["header-actions"],
+              direction: "row",
+              gap: "sm",
+              children: actions
+            }
+          )
+        ]
+      }
+    ),
+    subTitle && /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(
+      Text,
+      {
+        render: /* @__PURE__ */ (0, import_jsx_runtime66.jsx)("p", {}),
+        variant: "body-md",
+        className: style_default17["header-subtitle"],
+        children: subTitle
+      }
+    )
+  ] });
+}
+
+// packages/admin-ui/build-module/page/index.mjs
+var import_jsx_runtime67 = __toESM(require_jsx_runtime(), 1);
+var STYLE_HASH_ATTRIBUTE20 = "data-wp-hash";
+function getRuntime20() {
+  const globalScope = globalThis;
+  if (globalScope.__wpStyleRuntime) {
+    return globalScope.__wpStyleRuntime;
+  }
+  globalScope.__wpStyleRuntime = {
+    documents: /* @__PURE__ */ new Map(),
+    styles: /* @__PURE__ */ new Map(),
+    injectedStyles: /* @__PURE__ */ new WeakMap()
+  };
+  if (typeof document !== "undefined") {
+    registerDocument20(document);
+  }
+  return globalScope.__wpStyleRuntime;
+}
+function documentContainsStyleHash20(targetDocument, hash) {
+  if (!targetDocument.head) {
+    return false;
+  }
+  for (const style of targetDocument.head.querySelectorAll(
+    `style[${STYLE_HASH_ATTRIBUTE20}]`
+  )) {
+    if (style.getAttribute(STYLE_HASH_ATTRIBUTE20) === hash) {
+      return true;
+    }
+  }
+  return false;
+}
+function injectStyle20(targetDocument, hash, css) {
+  if (!targetDocument.head) {
+    return;
+  }
+  const runtime = getRuntime20();
+  let injectedStyles = runtime.injectedStyles.get(targetDocument);
+  if (!injectedStyles) {
+    injectedStyles = /* @__PURE__ */ new Set();
+    runtime.injectedStyles.set(targetDocument, injectedStyles);
+  }
+  if (injectedStyles.has(hash)) {
+    return;
+  }
+  if (documentContainsStyleHash20(targetDocument, hash)) {
+    injectedStyles.add(hash);
+    return;
+  }
+  const style = targetDocument.createElement("style");
+  style.setAttribute(STYLE_HASH_ATTRIBUTE20, hash);
+  style.appendChild(targetDocument.createTextNode(css));
+  targetDocument.head.appendChild(style);
+  injectedStyles.add(hash);
+}
+function registerDocument20(targetDocument) {
+  const runtime = getRuntime20();
+  runtime.documents.set(
+    targetDocument,
+    (runtime.documents.get(targetDocument) ?? 0) + 1
+  );
+  for (const [hash, css] of runtime.styles) {
+    injectStyle20(targetDocument, hash, css);
+  }
+  return () => {
+    const count = runtime.documents.get(targetDocument);
+    if (count === void 0) {
+      return;
+    }
+    if (count <= 1) {
+      runtime.documents.delete(targetDocument);
+      return;
+    }
+    runtime.documents.set(targetDocument, count - 1);
+  };
+}
+function registerStyle20(hash, css) {
+  const runtime = getRuntime20();
+  runtime.styles.set(hash, css);
+  for (const targetDocument of runtime.documents.keys()) {
+    injectStyle20(targetDocument, hash, css);
+  }
+}
+if (typeof process === "undefined" || true) {
+  registerStyle20("ddd9aab364", "._956b6df0898efed0__page{text-wrap:pretty;background-color:var(--wpds-color-background-surface-neutral,#fcfcfc);color:var(--wpds-color-foreground-content-neutral,#1e1e1e);display:flex;flex-flow:column;height:100%;position:relative;z-index:1}._0625b55e82a0d93d__header{background:var(--wpds-color-background-surface-neutral-strong,#fff);border-block-end:var(--wpds-border-width-xs,1px) solid var(--wpds-color-stroke-surface-neutral-weak,#f0f0f0);inset-block-start:0;padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px);position:sticky;z-index:1}.a43c44d5ae28b2e8__header-content{min-height:var(--wpds-dimension-size-md,32px)}.b7cb5b9daf3a3b25__header-actions{flex-shrink:0}._8113be94e7caf73c__header-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}._9a776c7f70996f61__header-visual{display:grid;flex-shrink:0;grid-template-columns:1fr;grid-template-rows:1fr;height:var(--wpds-dimension-size-sm,24px);width:var(--wpds-dimension-size-sm,24px);>*{grid-column:1/-1;grid-row:1/-1;max-height:100%;max-width:100%}}.d5e0920cd15d35bc__sidebar-toggle-slot:empty{display:none}._60fea2f6bf5319cd__header-subtitle{color:var(--wpds-color-foreground-content-neutral-weak,#707070);padding-block-end:var(--wpds-dimension-padding-xs,4px)}.be5e57d029ec4036__content{display:flex;flex-direction:column;flex-grow:1;overflow:auto;&._128806d0b26e3a50__has-padding{padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px)}}");
+}
+var style_default18 = { "page": "_956b6df0898efed0__page", "header": "_0625b55e82a0d93d__header", "header-content": "a43c44d5ae28b2e8__header-content", "header-actions": "b7cb5b9daf3a3b25__header-actions", "header-title": "_8113be94e7caf73c__header-title", "header-visual": "_9a776c7f70996f61__header-visual", "sidebar-toggle-slot": "d5e0920cd15d35bc__sidebar-toggle-slot", "header-subtitle": "_60fea2f6bf5319cd__header-subtitle", "content": "be5e57d029ec4036__content", "has-padding": "_128806d0b26e3a50__has-padding" };
 function Page({
   headingLevel,
   breadcrumbs,
@@ -11795,10 +13998,10 @@ function Page({
   hasPadding = false,
   showSidebarToggle = true
 }) {
-  const classes = clsx_default(style_default16.page, className);
+  const classes = clsx_default(style_default18.page, className);
   const effectiveAriaLabel = ariaLabel ?? (typeof title === "string" ? title : "");
-  return /* @__PURE__ */ (0, import_jsx_runtime56.jsxs)(navigable_region_default, { className: classes, ariaLabel: effectiveAriaLabel, children: [
-    (title || breadcrumbs || badges || actions || visual) && /* @__PURE__ */ (0, import_jsx_runtime56.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime67.jsxs)(navigable_region_default, { className: classes, ariaLabel: effectiveAriaLabel, children: [
+    (title || breadcrumbs || badges || actions || visual) && /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(
       Header3,
       {
         headingLevel,
@@ -11811,12 +14014,12 @@ function Page({
         showSidebarToggle
       }
     ),
-    hasPadding ? /* @__PURE__ */ (0, import_jsx_runtime56.jsx)(
+    hasPadding ? /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(
       "div",
       {
         className: clsx_default(
-          style_default16.content,
-          style_default16["has-padding"]
+          style_default18.content,
+          style_default18["has-padding"]
         ),
         children
       }
@@ -11834,9 +14037,9 @@ var import_html_entities = __toESM(require_html_entities());
 var import_i18n39 = __toESM(require_i18n());
 
 // packages/media-editor/build-module/components/media-editor-provider/index.mjs
-var import_element35 = __toESM(require_element(), 1);
-var import_jsx_runtime57 = __toESM(require_jsx_runtime(), 1);
-var MediaEditorContext = (0, import_element35.createContext)(
+var import_element41 = __toESM(require_element(), 1);
+var import_jsx_runtime68 = __toESM(require_jsx_runtime(), 1);
+var MediaEditorContext = (0, import_element41.createContext)(
   void 0
 );
 function MediaEditorProvider({
@@ -11850,10 +14053,10 @@ function MediaEditorProvider({
     onChange,
     fields: settings.fields || []
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime57.jsx)(MediaEditorContext.Provider, { value: contextValue, children });
+  return /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(MediaEditorContext.Provider, { value: contextValue, children });
 }
 function useMediaEditorContext() {
-  const context = (0, import_element35.useContext)(MediaEditorContext);
+  const context = (0, import_element41.useContext)(MediaEditorContext);
   if (!context) {
     throw new Error(
       "useMediaEditorContext must be used within MediaEditorProvider"
@@ -11864,7 +14067,7 @@ function useMediaEditorContext() {
 
 // packages/media-editor/build-module/components/media-preview/index.mjs
 var import_components2 = __toESM(require_components(), 1);
-var import_element36 = __toESM(require_element(), 1);
+var import_element42 = __toESM(require_element(), 1);
 var import_i18n3 = __toESM(require_i18n(), 1);
 
 // packages/media-editor/build-module/utils/get-media-type.mjs
@@ -11885,7 +14088,7 @@ function getMediaTypeFromMimeType(mimeType) {
 }
 
 // packages/media-editor/build-module/components/media-preview/index.mjs
-var import_jsx_runtime58 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime69 = __toESM(require_jsx_runtime(), 1);
 function MediaPreviewContent({
   mediaType,
   mediaUrl,
@@ -11898,7 +14101,7 @@ function MediaPreviewContent({
 }) {
   switch (mediaType.type) {
     case "image":
-      return /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(
+      return /* @__PURE__ */ (0, import_jsx_runtime69.jsx)(
         "img",
         {
           className: loadingState === "loaded" ? "loaded" : "",
@@ -11909,14 +14112,14 @@ function MediaPreviewContent({
         }
       );
     case "video":
-      return /* @__PURE__ */ (0, import_jsx_runtime58.jsx)("video", { src: mediaUrl, controls: true, onError, children: displayTitle });
+      return /* @__PURE__ */ (0, import_jsx_runtime69.jsx)("video", { src: mediaUrl, controls: true, onError, children: displayTitle });
     case "audio":
-      return /* @__PURE__ */ (0, import_jsx_runtime58.jsx)("audio", { src: mediaUrl, controls: true, onError, children: displayTitle });
+      return /* @__PURE__ */ (0, import_jsx_runtime69.jsx)("audio", { src: mediaUrl, controls: true, onError, children: displayTitle });
     default:
-      return /* @__PURE__ */ (0, import_jsx_runtime58.jsxs)("div", { className: "media-editor-preview__file-info", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime58.jsx)("p", { className: "media-editor-preview__file-name", children: displayTitle }),
-        /* @__PURE__ */ (0, import_jsx_runtime58.jsx)("p", { className: "media-editor-preview__mime-type", children: mimeType }),
-        /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(
+      return /* @__PURE__ */ (0, import_jsx_runtime69.jsxs)("div", { className: "media-editor-preview__file-info", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime69.jsx)("p", { className: "media-editor-preview__file-name", children: displayTitle }),
+        /* @__PURE__ */ (0, import_jsx_runtime69.jsx)("p", { className: "media-editor-preview__mime-type", children: mimeType }),
+        /* @__PURE__ */ (0, import_jsx_runtime69.jsx)(
           "a",
           {
             href: mediaUrl,
@@ -11930,7 +14133,7 @@ function MediaPreviewContent({
   }
 }
 function MediaPreview(props) {
-  const [loadingState, setLoadingState] = (0, import_element36.useState)("loading");
+  const [loadingState, setLoadingState] = (0, import_element42.useState)("loading");
   const { media } = useMediaEditorContext();
   const {
     source_url: mediaUrl,
@@ -11940,23 +14143,23 @@ function MediaPreview(props) {
   } = media || {};
   const mediaType = getMediaTypeFromMimeType(mimeType);
   if (!mediaUrl) {
-    return /* @__PURE__ */ (0, import_jsx_runtime58.jsx)("div", { className: "media-editor-preview media-editor-preview--empty", children: /* @__PURE__ */ (0, import_jsx_runtime58.jsx)("p", { children: (0, import_i18n3.__)("No media file available.") }) });
+    return /* @__PURE__ */ (0, import_jsx_runtime69.jsx)("div", { className: "media-editor-preview media-editor-preview--empty", children: /* @__PURE__ */ (0, import_jsx_runtime69.jsx)("p", { children: (0, import_i18n3.__)("No media file available.") }) });
   }
   if (loadingState === "error") {
-    return /* @__PURE__ */ (0, import_jsx_runtime58.jsxs)("div", { className: "media-editor-preview media-editor-preview--error", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime58.jsx)("p", { children: (0, import_i18n3.__)("Failed to load media file.") }),
-      /* @__PURE__ */ (0, import_jsx_runtime58.jsx)("p", { className: "media-editor-preview__url", children: mediaUrl })
+    return /* @__PURE__ */ (0, import_jsx_runtime69.jsxs)("div", { className: "media-editor-preview media-editor-preview--error", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime69.jsx)("p", { children: (0, import_i18n3.__)("Failed to load media file.") }),
+      /* @__PURE__ */ (0, import_jsx_runtime69.jsx)("p", { className: "media-editor-preview__url", children: mediaUrl })
     ] });
   }
   const displayTitle = typeof title === "string" ? title : title?.rendered || title?.raw;
-  return /* @__PURE__ */ (0, import_jsx_runtime58.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime69.jsxs)(
     "div",
     {
       ...props,
       className: `media-editor-preview media-editor-preview--${mediaType.type}`,
       children: [
-        mediaType.type === "image" && loadingState === "loading" && /* @__PURE__ */ (0, import_jsx_runtime58.jsx)("div", { className: "media-editor-preview__spinner", children: /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(import_components2.Spinner, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(
+        mediaType.type === "image" && loadingState === "loading" && /* @__PURE__ */ (0, import_jsx_runtime69.jsx)("div", { className: "media-editor-preview__spinner", children: /* @__PURE__ */ (0, import_jsx_runtime69.jsx)(import_components2.Spinner, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime69.jsx)(
           MediaPreviewContent,
           {
             mediaType,
@@ -12011,16 +14214,16 @@ var { lock: lock2, unlock: unlock2 } = (0, import_private_apis2.__dangerousOptIn
 );
 
 // packages/dataviews/build-module/hooks/use-elements.mjs
-var import_element37 = __toESM(require_element(), 1);
-var EMPTY_ARRAY2 = [];
+var import_element43 = __toESM(require_element(), 1);
+var EMPTY_ARRAY3 = [];
 function useElements({
   elements,
   getElements
 }) {
-  const staticElements = Array.isArray(elements) && elements.length > 0 ? elements : EMPTY_ARRAY2;
-  const [records, setRecords] = (0, import_element37.useState)(staticElements);
-  const [isLoading, setIsLoading] = (0, import_element37.useState)(false);
-  (0, import_element37.useEffect)(() => {
+  const staticElements = Array.isArray(elements) && elements.length > 0 ? elements : EMPTY_ARRAY3;
+  const [records, setRecords] = (0, import_element43.useState)(staticElements);
+  const [isLoading, setIsLoading] = (0, import_element43.useState)(false);
+  (0, import_element43.useEffect)(() => {
     if (!getElements) {
       setRecords(staticElements);
       return;
@@ -13692,12 +15895,12 @@ function subYears(date, amount, options) {
 
 // packages/dataviews/build-module/utils/operators.mjs
 var import_i18n5 = __toESM(require_i18n(), 1);
-var import_element38 = __toESM(require_element(), 1);
+var import_element44 = __toESM(require_element(), 1);
 var import_date = __toESM(require_date(), 1);
-var import_jsx_runtime59 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime70 = __toESM(require_jsx_runtime(), 1);
 var filterTextWrappers = {
-  Name: /* @__PURE__ */ (0, import_jsx_runtime59.jsx)("span", { className: "dataviews-filters__summary-filter-text-name" }),
-  Value: /* @__PURE__ */ (0, import_jsx_runtime59.jsx)("span", { className: "dataviews-filters__summary-filter-text-value" })
+  Name: /* @__PURE__ */ (0, import_jsx_runtime70.jsx)("span", { className: "dataviews-filters__summary-filter-text-name" }),
+  Value: /* @__PURE__ */ (0, import_jsx_runtime70.jsx)("span", { className: "dataviews-filters__summary-filter-text-value" })
 };
 function getRelativeDate(value, unit) {
   switch (unit) {
@@ -13716,7 +15919,7 @@ function getRelativeDate(value, unit) {
 var isNoneOperatorDefinition = {
   /* translators: DataViews operator name */
   label: (0, import_i18n5.__)("Is none of"),
-  filterText: (filter, activeElements) => (0, import_element38.createInterpolateElement)(
+  filterText: (filter, activeElements) => (0, import_element44.createInterpolateElement)(
     (0, import_i18n5.sprintf)(
       /* translators: 1: Filter name (e.g. "Author"). 2: Filter value (e.g. "Admin"): "Author is none of: Admin, Editor". */
       (0, import_i18n5.__)("<Name>%1$s is none of: </Name><Value>%2$s</Value>"),
@@ -13746,7 +15949,7 @@ var OPERATORS = [
     name: OPERATOR_IS_ANY,
     /* translators: DataViews operator name */
     label: (0, import_i18n5.__)("Includes"),
-    filterText: (filter, activeElements) => (0, import_element38.createInterpolateElement)(
+    filterText: (filter, activeElements) => (0, import_element44.createInterpolateElement)(
       (0, import_i18n5.sprintf)(
         /* translators: 1: Filter name (e.g. "Author"). 2: Filter value (e.g. "Admin"): "Author is any: Admin, Editor". */
         (0, import_i18n5.__)("<Name>%1$s includes: </Name><Value>%2$s</Value>"),
@@ -13779,7 +15982,7 @@ var OPERATORS = [
     name: OPERATOR_IS_ALL,
     /* translators: DataViews operator name */
     label: (0, import_i18n5.__)("Includes all"),
-    filterText: (filter, activeElements) => (0, import_element38.createInterpolateElement)(
+    filterText: (filter, activeElements) => (0, import_element44.createInterpolateElement)(
       (0, import_i18n5.sprintf)(
         /* translators: 1: Filter name (e.g. "Author"). 2: Filter value (e.g. "Admin"): "Author includes all: Admin, Editor". */
         (0, import_i18n5.__)("<Name>%1$s includes all: </Name><Value>%2$s</Value>"),
@@ -13806,7 +16009,7 @@ var OPERATORS = [
     name: OPERATOR_BETWEEN,
     /* translators: DataViews operator name */
     label: (0, import_i18n5.__)("Between (inc)"),
-    filterText: (filter, activeElements) => (0, import_element38.createInterpolateElement)(
+    filterText: (filter, activeElements) => (0, import_element44.createInterpolateElement)(
       (0, import_i18n5.sprintf)(
         /* translators: 1: Filter name (e.g. "Item count"). 2: Filter value min. 3: Filter value max. e.g.: "Item count between (inc): 10 and 180". */
         (0, import_i18n5.__)(
@@ -13834,7 +16037,7 @@ var OPERATORS = [
     name: OPERATOR_IN_THE_PAST,
     /* translators: DataViews operator name */
     label: (0, import_i18n5.__)("In the past"),
-    filterText: (filter, activeElements) => (0, import_element38.createInterpolateElement)(
+    filterText: (filter, activeElements) => (0, import_element44.createInterpolateElement)(
       (0, import_i18n5.sprintf)(
         /* translators: 1: Filter name (e.g. "Date"). 2: Filter value (e.g. "7 days"): "Date is in the past: 7 days". */
         (0, import_i18n5.__)(
@@ -13862,7 +16065,7 @@ var OPERATORS = [
     name: OPERATOR_OVER,
     /* translators: DataViews operator name */
     label: (0, import_i18n5.__)("Over"),
-    filterText: (filter, activeElements) => (0, import_element38.createInterpolateElement)(
+    filterText: (filter, activeElements) => (0, import_element44.createInterpolateElement)(
       (0, import_i18n5.sprintf)(
         /* translators: 1: Filter name (e.g. "Date"). 2: Filter value (e.g. "7 days"): "Date is over: 7 days". */
         (0, import_i18n5.__)("<Name>%1$s is over: </Name><Value>%2$s</Value>"),
@@ -13888,7 +16091,7 @@ var OPERATORS = [
     name: OPERATOR_IS,
     /* translators: DataViews operator name */
     label: (0, import_i18n5.__)("Is"),
-    filterText: (filter, activeElements) => (0, import_element38.createInterpolateElement)(
+    filterText: (filter, activeElements) => (0, import_element44.createInterpolateElement)(
       (0, import_i18n5.sprintf)(
         /* translators: 1: Filter name (e.g. "Author"). 2: Filter value (e.g. "Admin"): "Author is: Admin". */
         (0, import_i18n5.__)("<Name>%1$s is: </Name><Value>%2$s</Value>"),
@@ -13906,7 +16109,7 @@ var OPERATORS = [
     name: OPERATOR_IS_NOT,
     /* translators: DataViews operator name */
     label: (0, import_i18n5.__)("Is not"),
-    filterText: (filter, activeElements) => (0, import_element38.createInterpolateElement)(
+    filterText: (filter, activeElements) => (0, import_element44.createInterpolateElement)(
       (0, import_i18n5.sprintf)(
         /* translators: 1: Filter name (e.g. "Author"). 2: Filter value (e.g. "Admin"): "Author is not: Admin". */
         (0, import_i18n5.__)("<Name>%1$s is not: </Name><Value>%2$s</Value>"),
@@ -13924,7 +16127,7 @@ var OPERATORS = [
     name: OPERATOR_LESS_THAN,
     /* translators: DataViews operator name */
     label: (0, import_i18n5.__)("Less than"),
-    filterText: (filter, activeElements) => (0, import_element38.createInterpolateElement)(
+    filterText: (filter, activeElements) => (0, import_element44.createInterpolateElement)(
       (0, import_i18n5.sprintf)(
         /* translators: 1: Filter name (e.g. "Count"). 2: Filter value (e.g. "10"): "Count is less than: 10". */
         (0, import_i18n5.__)("<Name>%1$s is less than: </Name><Value>%2$s</Value>"),
@@ -13946,7 +16149,7 @@ var OPERATORS = [
     name: OPERATOR_GREATER_THAN,
     /* translators: DataViews operator name */
     label: (0, import_i18n5.__)("Greater than"),
-    filterText: (filter, activeElements) => (0, import_element38.createInterpolateElement)(
+    filterText: (filter, activeElements) => (0, import_element44.createInterpolateElement)(
       (0, import_i18n5.sprintf)(
         /* translators: 1: Filter name (e.g. "Count"). 2: Filter value (e.g. "10"): "Count is greater than: 10". */
         (0, import_i18n5.__)(
@@ -13970,7 +16173,7 @@ var OPERATORS = [
     name: OPERATOR_LESS_THAN_OR_EQUAL,
     /* translators: DataViews operator name */
     label: (0, import_i18n5.__)("Less than or equal"),
-    filterText: (filter, activeElements) => (0, import_element38.createInterpolateElement)(
+    filterText: (filter, activeElements) => (0, import_element44.createInterpolateElement)(
       (0, import_i18n5.sprintf)(
         /* translators: 1: Filter name (e.g. "Count"). 2: Filter value (e.g. "10"): "Count is less than or equal to: 10". */
         (0, import_i18n5.__)(
@@ -13994,7 +16197,7 @@ var OPERATORS = [
     name: OPERATOR_GREATER_THAN_OR_EQUAL,
     /* translators: DataViews operator name */
     label: (0, import_i18n5.__)("Greater than or equal"),
-    filterText: (filter, activeElements) => (0, import_element38.createInterpolateElement)(
+    filterText: (filter, activeElements) => (0, import_element44.createInterpolateElement)(
       (0, import_i18n5.sprintf)(
         /* translators: 1: Filter name (e.g. "Count"). 2: Filter value (e.g. "10"): "Count is greater than or equal to: 10". */
         (0, import_i18n5.__)(
@@ -14018,7 +16221,7 @@ var OPERATORS = [
     name: OPERATOR_BEFORE,
     /* translators: DataViews operator name */
     label: (0, import_i18n5.__)("Before"),
-    filterText: (filter, activeElements) => (0, import_element38.createInterpolateElement)(
+    filterText: (filter, activeElements) => (0, import_element44.createInterpolateElement)(
       (0, import_i18n5.sprintf)(
         /* translators: 1: Filter name (e.g. "Date"). 2: Filter value (e.g. "2024-01-01"): "Date is before: 2024-01-01". */
         (0, import_i18n5.__)("<Name>%1$s is before: </Name><Value>%2$s</Value>"),
@@ -14041,7 +16244,7 @@ var OPERATORS = [
     name: OPERATOR_AFTER,
     /* translators: DataViews operator name */
     label: (0, import_i18n5.__)("After"),
-    filterText: (filter, activeElements) => (0, import_element38.createInterpolateElement)(
+    filterText: (filter, activeElements) => (0, import_element44.createInterpolateElement)(
       (0, import_i18n5.sprintf)(
         /* translators: 1: Filter name (e.g. "Date"). 2: Filter value (e.g. "2024-01-01"): "Date is after: 2024-01-01". */
         (0, import_i18n5.__)("<Name>%1$s is after: </Name><Value>%2$s</Value>"),
@@ -14064,7 +16267,7 @@ var OPERATORS = [
     name: OPERATOR_BEFORE_INC,
     /* translators: DataViews operator name */
     label: (0, import_i18n5.__)("Before (inc)"),
-    filterText: (filter, activeElements) => (0, import_element38.createInterpolateElement)(
+    filterText: (filter, activeElements) => (0, import_element44.createInterpolateElement)(
       (0, import_i18n5.sprintf)(
         /* translators: 1: Filter name (e.g. "Date"). 2: Filter value (e.g. "2024-01-01"): "Date is on or before: 2024-01-01". */
         (0, import_i18n5.__)(
@@ -14089,7 +16292,7 @@ var OPERATORS = [
     name: OPERATOR_AFTER_INC,
     /* translators: DataViews operator name */
     label: (0, import_i18n5.__)("After (inc)"),
-    filterText: (filter, activeElements) => (0, import_element38.createInterpolateElement)(
+    filterText: (filter, activeElements) => (0, import_element44.createInterpolateElement)(
       (0, import_i18n5.sprintf)(
         /* translators: 1: Filter name (e.g. "Date"). 2: Filter value (e.g. "2024-01-01"): "Date is on or after: 2024-01-01". */
         (0, import_i18n5.__)(
@@ -14114,7 +16317,7 @@ var OPERATORS = [
     name: OPERATOR_CONTAINS,
     /* translators: DataViews operator name */
     label: (0, import_i18n5.__)("Contains"),
-    filterText: (filter, activeElements) => (0, import_element38.createInterpolateElement)(
+    filterText: (filter, activeElements) => (0, import_element44.createInterpolateElement)(
       (0, import_i18n5.sprintf)(
         /* translators: 1: Filter name (e.g. "Title"). 2: Filter value (e.g. "Hello"): "Title contains: Hello". */
         (0, import_i18n5.__)("<Name>%1$s contains: </Name><Value>%2$s</Value>"),
@@ -14136,7 +16339,7 @@ var OPERATORS = [
     name: OPERATOR_NOT_CONTAINS,
     /* translators: DataViews operator name */
     label: (0, import_i18n5.__)("Doesn't contain"),
-    filterText: (filter, activeElements) => (0, import_element38.createInterpolateElement)(
+    filterText: (filter, activeElements) => (0, import_element44.createInterpolateElement)(
       (0, import_i18n5.sprintf)(
         /* translators: 1: Filter name (e.g. "Title"). 2: Filter value (e.g. "Hello"): "Title doesn't contain: Hello". */
         (0, import_i18n5.__)(
@@ -14160,7 +16363,7 @@ var OPERATORS = [
     name: OPERATOR_STARTS_WITH,
     /* translators: DataViews operator name */
     label: (0, import_i18n5.__)("Starts with"),
-    filterText: (filter, activeElements) => (0, import_element38.createInterpolateElement)(
+    filterText: (filter, activeElements) => (0, import_element44.createInterpolateElement)(
       (0, import_i18n5.sprintf)(
         /* translators: 1: Filter name (e.g. "Title"). 2: Filter value (e.g. "Hello"): "Title starts with: Hello". */
         (0, import_i18n5.__)("<Name>%1$s starts with: </Name><Value>%2$s</Value>"),
@@ -14182,7 +16385,7 @@ var OPERATORS = [
     name: OPERATOR_ON,
     /* translators: DataViews operator name */
     label: (0, import_i18n5.__)("On"),
-    filterText: (filter, activeElements) => (0, import_element38.createInterpolateElement)(
+    filterText: (filter, activeElements) => (0, import_element44.createInterpolateElement)(
       (0, import_i18n5.sprintf)(
         /* translators: 1: Filter name (e.g. "Date"). 2: Filter value (e.g. "2024-01-01"): "Date is: 2024-01-01". */
         (0, import_i18n5.__)("<Name>%1$s is: </Name><Value>%2$s</Value>"),
@@ -14205,7 +16408,7 @@ var OPERATORS = [
     name: OPERATOR_NOT_ON,
     /* translators: DataViews operator name */
     label: (0, import_i18n5.__)("Not on"),
-    filterText: (filter, activeElements) => (0, import_element38.createInterpolateElement)(
+    filterText: (filter, activeElements) => (0, import_element44.createInterpolateElement)(
       (0, import_i18n5.sprintf)(
         /* translators: 1: Filter name (e.g. "Date"). 2: Filter value (e.g. "2024-01-01"): "Date is not: 2024-01-01". */
         (0, import_i18n5.__)("<Name>%1$s is not: </Name><Value>%2$s</Value>"),
@@ -14230,7 +16433,7 @@ var getAllOperatorNames = () => OPERATORS.map((op) => op.name);
 
 // packages/dataviews/build-module/components/dataform-controls/checkbox.mjs
 var import_components3 = __toESM(require_components(), 1);
-var import_element39 = __toESM(require_element(), 1);
+var import_element45 = __toESM(require_element(), 1);
 
 // packages/dataviews/build-module/components/dataform-controls/utils/get-custom-validity.mjs
 function getCustomValidity(isValid2, validity) {
@@ -14256,7 +16459,7 @@ function getCustomValidity(isValid2, validity) {
 }
 
 // packages/dataviews/build-module/components/dataform-controls/checkbox.mjs
-var import_jsx_runtime60 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime71 = __toESM(require_jsx_runtime(), 1);
 var { ValidatedCheckboxControl } = unlock2(import_components3.privateApis);
 function Checkbox({
   field,
@@ -14268,12 +16471,12 @@ function Checkbox({
 }) {
   const { getValue, setValue, label, description, isValid: isValid2 } = field;
   const disabled2 = field.isDisabled({ item: data, field });
-  const onChangeControl = (0, import_element39.useCallback)(() => {
+  const onChangeControl = (0, import_element45.useCallback)(() => {
     onChange(
       setValue({ item: data, value: !getValue({ item: data }) })
     );
   }, [data, getValue, onChange, setValue]);
-  return /* @__PURE__ */ (0, import_jsx_runtime60.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(
     ValidatedCheckboxControl,
     {
       required: !!field.isValid?.required,
@@ -14291,8 +16494,8 @@ function Checkbox({
 
 // packages/dataviews/build-module/components/dataform-controls/combobox.mjs
 var import_components4 = __toESM(require_components(), 1);
-var import_element40 = __toESM(require_element(), 1);
-var import_jsx_runtime61 = __toESM(require_jsx_runtime(), 1);
+var import_element46 = __toESM(require_element(), 1);
+var import_jsx_runtime72 = __toESM(require_jsx_runtime(), 1);
 var { ValidatedComboboxControl } = unlock2(import_components4.privateApis);
 function Combobox({
   data,
@@ -14303,7 +16506,7 @@ function Combobox({
 }) {
   const { label, description, placeholder, getValue, setValue, isValid: isValid2 } = field;
   const value = getValue({ item: data }) ?? "";
-  const onChangeControl = (0, import_element40.useCallback)(
+  const onChangeControl = (0, import_element46.useCallback)(
     (newValue) => onChange(setValue({ item: data, value: newValue ?? "" })),
     [data, onChange, setValue]
   );
@@ -14312,9 +16515,9 @@ function Combobox({
     getElements: field.getElements
   });
   if (isLoading) {
-    return /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(import_components4.Spinner, {});
+    return /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(import_components4.Spinner, {});
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime61.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(
     ValidatedComboboxControl,
     {
       required: !!field.isValid?.required,
@@ -14334,15 +16537,15 @@ function Combobox({
 
 // packages/dataviews/build-module/components/dataform-controls/datetime.mjs
 var import_components6 = __toESM(require_components(), 1);
-var import_element43 = __toESM(require_element(), 1);
+var import_element49 = __toESM(require_element(), 1);
 var import_i18n7 = __toESM(require_i18n(), 1);
 var import_date3 = __toESM(require_date(), 1);
 
 // packages/dataviews/build-module/components/dataform-controls/utils/relative-date-control.mjs
 var import_components5 = __toESM(require_components(), 1);
-var import_element41 = __toESM(require_element(), 1);
+var import_element47 = __toESM(require_element(), 1);
 var import_i18n6 = __toESM(require_i18n(), 1);
-var import_jsx_runtime62 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime73 = __toESM(require_jsx_runtime(), 1);
 var TIME_UNITS_OPTIONS = {
   [OPERATOR_IN_THE_PAST]: [
     { value: "days", label: (0, import_i18n6.__)("Days") },
@@ -14370,7 +16573,7 @@ function RelativeDateControl({
   const disabled2 = field.isDisabled({ item: data, field });
   const fieldValue = getValue({ item: data });
   const { value: relValue = "", unit = options[0].value } = fieldValue && typeof fieldValue === "object" ? fieldValue : {};
-  const onChangeValue = (0, import_element41.useCallback)(
+  const onChangeValue = (0, import_element47.useCallback)(
     (newValue) => onChange(
       setValue({
         item: data,
@@ -14379,7 +16582,7 @@ function RelativeDateControl({
     ),
     [onChange, setValue, data, unit]
   );
-  const onChangeUnit = (0, import_element41.useCallback)(
+  const onChangeUnit = (0, import_element47.useCallback)(
     (newUnit) => onChange(
       setValue({
         item: data,
@@ -14388,7 +16591,7 @@ function RelativeDateControl({
     ),
     [onChange, setValue, data, relValue]
   );
-  return /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(
     import_components5.BaseControl,
     {
       id,
@@ -14396,11 +16599,10 @@ function RelativeDateControl({
       label,
       hideLabelFromVision,
       help: description,
-      children: /* @__PURE__ */ (0, import_jsx_runtime62.jsxs)(Stack, { direction: "row", gap: "sm", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(
+      children: /* @__PURE__ */ (0, import_jsx_runtime73.jsxs)(Stack, { direction: "row", gap: "sm", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(
           import_components5.__experimentalNumberControl,
           {
-            __next40pxDefaultSize: true,
             className: "dataviews-controls__relative-date-number",
             spinControls: "none",
             min: 1,
@@ -14410,11 +16612,10 @@ function RelativeDateControl({
             disabled: disabled2
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime62.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(
           import_components5.SelectControl,
           {
             className: "dataviews-controls__relative-date-unit",
-            __next40pxDefaultSize: true,
             label: (0, import_i18n6.__)("Unit"),
             value: unit,
             options,
@@ -14429,11 +16630,11 @@ function RelativeDateControl({
 }
 
 // packages/dataviews/build-module/components/dataform-controls/utils/use-disabled-date-matchers.mjs
-var import_element42 = __toESM(require_element(), 1);
+var import_element48 = __toESM(require_element(), 1);
 function useDisabledDateMatchers(isValid2, parseDateFn) {
   const minConstraint = typeof isValid2.min?.constraint === "string" ? isValid2.min.constraint : void 0;
   const maxConstraint = typeof isValid2.max?.constraint === "string" ? isValid2.max.constraint : void 0;
-  const disabledMatchers = (0, import_element42.useMemo)(() => {
+  const disabledMatchers = (0, import_element48.useMemo)(() => {
     const matchers = [];
     if (minConstraint) {
       const minDate = parseDateFn(minConstraint);
@@ -14463,7 +16664,7 @@ function parseDateTime(dateTimeString) {
 }
 
 // packages/dataviews/build-module/components/dataform-controls/datetime.mjs
-var import_jsx_runtime63 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime74 = __toESM(require_jsx_runtime(), 1);
 var { DateCalendar, ValidatedInputControl } = unlock2(import_components6.privateApis);
 var formatDateTime = (value) => {
   if (!value) {
@@ -14485,26 +16686,26 @@ function CalendarDateTimeControl({
   const disabled2 = field.isDisabled({ item: data, field });
   const fieldValue = getValue({ item: data });
   const value = typeof fieldValue === "string" ? fieldValue : void 0;
-  const [calendarMonth, setCalendarMonth] = (0, import_element43.useState)(() => {
+  const [calendarMonth, setCalendarMonth] = (0, import_element49.useState)(() => {
     const parsedDate = parseDateTime(value);
     return parsedDate || /* @__PURE__ */ new Date();
   });
-  const inputControlRef = (0, import_element43.useRef)(null);
-  const validationTimeoutRef = (0, import_element43.useRef)(void 0);
-  const previousFocusRef = (0, import_element43.useRef)(null);
+  const inputControlRef = (0, import_element49.useRef)(null);
+  const validationTimeoutRef = (0, import_element49.useRef)(void 0);
+  const previousFocusRef = (0, import_element49.useRef)(null);
   const { minConstraint, maxConstraint, disabledMatchers } = useDisabledDateMatchers(isValid2, parseDateTime);
-  const onChangeCallback = (0, import_element43.useCallback)(
+  const onChangeCallback = (0, import_element49.useCallback)(
     (newValue) => onChange(setValue({ item: data, value: newValue })),
     [data, onChange, setValue]
   );
-  (0, import_element43.useEffect)(() => {
+  (0, import_element49.useEffect)(() => {
     return () => {
       if (validationTimeoutRef.current) {
         clearTimeout(validationTimeoutRef.current);
       }
     };
   }, []);
-  const onSelectDate = (0, import_element43.useCallback)(
+  const onSelectDate = (0, import_element49.useCallback)(
     (newDate) => {
       let dateTimeValue;
       if (newDate) {
@@ -14538,7 +16739,7 @@ function CalendarDateTimeControl({
     },
     [onChangeCallback, value]
   );
-  const handleManualDateTimeChange = (0, import_element43.useCallback)(
+  const handleManualDateTimeChange = (0, import_element49.useCallback)(
     (newValue) => {
       if (newValue) {
         const dateTime = (0, import_date3.getDate)(newValue);
@@ -14564,19 +16765,18 @@ function CalendarDateTimeControl({
   } else if (!isValid2?.required && markWhenOptional && !hideLabelFromVision) {
     displayLabel = `${label} (${(0, import_i18n7.__)("Optional")})`;
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(
     import_components6.BaseControl,
     {
       id,
       label: displayLabel,
       help: description,
       hideLabelFromVision,
-      children: /* @__PURE__ */ (0, import_jsx_runtime63.jsxs)(Stack, { direction: "column", gap: "lg", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(
+      children: /* @__PURE__ */ (0, import_jsx_runtime74.jsxs)(Stack, { direction: "column", gap: "lg", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(
           ValidatedInputControl,
           {
             ref: inputControlRef,
-            __next40pxDefaultSize: true,
             required: !!isValid2?.required,
             customValidity: getCustomValidity(isValid2, validity),
             type: "datetime-local",
@@ -14589,7 +16789,7 @@ function CalendarDateTimeControl({
             max: maxConstraint ? formatDateTime(maxConstraint) : void 0
           }
         ),
-        !compact && /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(
+        !compact && /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(
           DateCalendar,
           {
             style: { width: "100%" },
@@ -14617,7 +16817,7 @@ function DateTime({
   config
 }) {
   if (operator === OPERATOR_IN_THE_PAST || operator === OPERATOR_OVER) {
-    return /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(
       RelativeDateControl,
       {
         className: "dataviews-controls__datetime",
@@ -14629,7 +16829,7 @@ function DateTime({
       }
     );
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime63.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(
     CalendarDateTimeControl,
     {
       data,
@@ -14645,10 +16845,11 @@ function DateTime({
 
 // packages/dataviews/build-module/components/dataform-controls/date.mjs
 var import_components7 = __toESM(require_components(), 1);
-var import_element44 = __toESM(require_element(), 1);
+var import_element50 = __toESM(require_element(), 1);
 var import_i18n8 = __toESM(require_i18n(), 1);
 var import_date4 = __toESM(require_date(), 1);
-var import_jsx_runtime64 = __toESM(require_jsx_runtime(), 1);
+import { speak } from "@wordpress/a11y";
+var import_jsx_runtime75 = __toESM(require_jsx_runtime(), 1);
 var { DateCalendar: DateCalendar2, DateRangeCalendar } = unlock2(import_components7.privateApis);
 var DATE_PRESETS = [
   {
@@ -14745,8 +16946,8 @@ function ValidatedDateControl({
   children
 }) {
   const { isValid: isValid2 } = field;
-  const [customValidity, setCustomValidity] = (0, import_element44.useState)(void 0);
-  const validateRefs = (0, import_element44.useCallback)(() => {
+  const [customValidity, setCustomValidity] = (0, import_element50.useState)(void 0);
+  const validateRefs = (0, import_element50.useCallback)(() => {
     const refs = Array.isArray(inputRefs) ? inputRefs : [inputRefs];
     for (const ref of refs) {
       const input = ref.current;
@@ -14760,7 +16961,7 @@ function ValidatedDateControl({
     }
     setCustomValidity(void 0);
   }, [inputRefs]);
-  (0, import_element44.useEffect)(() => {
+  (0, import_element50.useEffect)(() => {
     const refs = Array.isArray(inputRefs) ? inputRefs : [inputRefs];
     const result = validity ? getCustomValidity(isValid2, validity) : void 0;
     for (const ref of refs) {
@@ -14772,7 +16973,7 @@ function ValidatedDateControl({
       }
     }
   }, [inputRefs, isValid2, validity]);
-  (0, import_element44.useEffect)(() => {
+  (0, import_element50.useEffect)(() => {
     const refs = Array.isArray(inputRefs) ? inputRefs : [inputRefs];
     const handleInvalid = (event) => {
       event.preventDefault();
@@ -14787,7 +16988,7 @@ function ValidatedDateControl({
       }
     };
   }, [inputRefs, setIsTouched]);
-  (0, import_element44.useEffect)(() => {
+  (0, import_element50.useEffect)(() => {
     if (!isTouched) {
       return;
     }
@@ -14798,6 +16999,11 @@ function ValidatedDateControl({
       validateRefs();
     }
   }, [isTouched, isValid2, validity, validateRefs]);
+  (0, import_element50.useEffect)(() => {
+    if (isTouched && customValidity?.message) {
+      speak(customValidity.message);
+    }
+  }, [isTouched, customValidity?.message]);
   const onBlur = (event) => {
     if (isTouched) {
       return;
@@ -14806,9 +17012,9 @@ function ValidatedDateControl({
       setIsTouched(true);
     }
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)("div", { onBlur, children: [
+  return /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)("div", { onBlur, children: [
     children,
-    /* @__PURE__ */ (0, import_jsx_runtime64.jsx)("div", { "aria-live": "polite", children: customValidity && /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)(
+    customValidity && /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)(
       "p",
       {
         className: clsx_default(
@@ -14816,7 +17022,7 @@ function ValidatedDateControl({
           customValidity.type === "invalid" ? "is-invalid" : void 0
         ),
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
             import_components7.Icon,
             {
               className: "components-validated-control__indicator-icon",
@@ -14828,7 +17034,7 @@ function ValidatedDateControl({
           customValidity.message
         ]
       }
-    ) })
+    )
   ] });
 }
 function CalendarDateControl({
@@ -14849,24 +17055,24 @@ function CalendarDateControl({
     format: fieldFormat
   } = field;
   const disabled2 = field.isDisabled({ item: data, field });
-  const [selectedPresetId, setSelectedPresetId] = (0, import_element44.useState)(
+  const [selectedPresetId, setSelectedPresetId] = (0, import_element50.useState)(
     null
   );
   const weekStartsOn = fieldFormat.weekStartsOn ?? (0, import_date4.getSettings)().l10n.startOfWeek;
   const fieldValue = getValue({ item: data });
   const value = typeof fieldValue === "string" ? fieldValue : void 0;
-  const [calendarMonth, setCalendarMonth] = (0, import_element44.useState)(() => {
+  const [calendarMonth, setCalendarMonth] = (0, import_element50.useState)(() => {
     const parsedDate = parseDate(value);
     return parsedDate || /* @__PURE__ */ new Date();
   });
-  const [isTouched, setIsTouched] = (0, import_element44.useState)(false);
-  const validityTargetRef = (0, import_element44.useRef)(null);
+  const [isTouched, setIsTouched] = (0, import_element50.useState)(false);
+  const validityTargetRef = (0, import_element50.useRef)(null);
   const { minConstraint, maxConstraint, disabledMatchers } = useDisabledDateMatchers(isValid2, parseDate);
-  const onChangeCallback = (0, import_element44.useCallback)(
+  const onChangeCallback = (0, import_element50.useCallback)(
     (newValue) => onChange(setValue({ item: data, value: newValue })),
     [data, onChange, setValue]
   );
-  const onSelectDate = (0, import_element44.useCallback)(
+  const onSelectDate = (0, import_element50.useCallback)(
     (newDate) => {
       const dateValue = newDate ? format(newDate, "yyyy-MM-dd") : void 0;
       onChangeCallback(dateValue);
@@ -14875,7 +17081,7 @@ function CalendarDateControl({
     },
     [onChangeCallback]
   );
-  const handlePresetClick = (0, import_element44.useCallback)(
+  const handlePresetClick = (0, import_element50.useCallback)(
     (preset) => {
       const presetDate = preset.getValue();
       const dateValue = formatDate(presetDate);
@@ -14886,7 +17092,7 @@ function CalendarDateControl({
     },
     [onChangeCallback]
   );
-  const handleManualDateChange = (0, import_element44.useCallback)(
+  const handleManualDateChange = (0, import_element50.useCallback)(
     (newValue) => {
       onChangeCallback(newValue);
       if (newValue) {
@@ -14909,7 +17115,7 @@ function CalendarDateControl({
   } else if (!isValid2?.required && markWhenOptional) {
     displayLabel = `${label} (${(0, import_i18n8.__)("Optional")})`;
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
     ValidatedDateControl,
     {
       field,
@@ -14917,7 +17123,7 @@ function CalendarDateControl({
       inputRefs: validityTargetRef,
       isTouched,
       setIsTouched,
-      children: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+      children: /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
         import_components7.BaseControl,
         {
           id,
@@ -14925,8 +17131,8 @@ function CalendarDateControl({
           label: displayLabel,
           help: description,
           hideLabelFromVision,
-          children: /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)(Stack, { direction: "column", gap: "lg", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)(
+          children: /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)(Stack, { direction: "column", gap: "lg", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)(
               Stack,
               {
                 direction: "row",
@@ -14936,7 +17142,7 @@ function CalendarDateControl({
                 children: [
                   DATE_PRESETS.map((preset) => {
                     const isSelected = selectedPresetId === preset.id;
-                    return /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+                    return /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
                       import_components7.Button,
                       {
                         className: "dataviews-controls__date-preset",
@@ -14951,7 +17157,7 @@ function CalendarDateControl({
                       preset.id
                     );
                   }),
-                  /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+                  /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
                     import_components7.Button,
                     {
                       className: "dataviews-controls__date-preset",
@@ -14966,10 +17172,9 @@ function CalendarDateControl({
                 ]
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
               import_components7.__experimentalInputControl,
               {
-                __next40pxDefaultSize: true,
                 ref: validityTargetRef,
                 type: "date",
                 label: (0, import_i18n8.__)("Date"),
@@ -14982,7 +17187,7 @@ function CalendarDateControl({
                 max: maxConstraint
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
               DateCalendar2,
               {
                 style: { width: "100%" },
@@ -15027,7 +17232,7 @@ function CalendarDateRangeControl({
   }
   const weekStartsOn = fieldFormat.weekStartsOn ?? (0, import_date4.getSettings)().l10n.startOfWeek;
   const { minConstraint, maxConstraint, disabledMatchers } = useDisabledDateMatchers(isValid2, parseDate);
-  const onChangeCallback = (0, import_element44.useCallback)(
+  const onChangeCallback = (0, import_element50.useCallback)(
     (newValue) => {
       onChange(
         setValue({
@@ -15038,10 +17243,10 @@ function CalendarDateRangeControl({
     },
     [data, onChange, setValue]
   );
-  const [selectedPresetId, setSelectedPresetId] = (0, import_element44.useState)(
+  const [selectedPresetId, setSelectedPresetId] = (0, import_element50.useState)(
     null
   );
-  const selectedRange = (0, import_element44.useMemo)(() => {
+  const selectedRange = (0, import_element50.useMemo)(() => {
     if (!value) {
       return { from: void 0, to: void 0 };
     }
@@ -15051,13 +17256,13 @@ function CalendarDateRangeControl({
       to: parseDate(to) || void 0
     };
   }, [value]);
-  const [calendarMonth, setCalendarMonth] = (0, import_element44.useState)(() => {
+  const [calendarMonth, setCalendarMonth] = (0, import_element50.useState)(() => {
     return selectedRange.from || /* @__PURE__ */ new Date();
   });
-  const [isTouched, setIsTouched] = (0, import_element44.useState)(false);
-  const fromInputRef = (0, import_element44.useRef)(null);
-  const toInputRef = (0, import_element44.useRef)(null);
-  const updateDateRange = (0, import_element44.useCallback)(
+  const [isTouched, setIsTouched] = (0, import_element50.useState)(false);
+  const fromInputRef = (0, import_element50.useRef)(null);
+  const toInputRef = (0, import_element50.useRef)(null);
+  const updateDateRange = (0, import_element50.useCallback)(
     (fromDate, toDate2) => {
       if (fromDate && toDate2) {
         onChangeCallback([
@@ -15070,7 +17275,7 @@ function CalendarDateRangeControl({
     },
     [onChangeCallback]
   );
-  const onSelectCalendarRange = (0, import_element44.useCallback)(
+  const onSelectCalendarRange = (0, import_element50.useCallback)(
     (newRange) => {
       updateDateRange(newRange?.from, newRange?.to);
       setSelectedPresetId(null);
@@ -15078,7 +17283,7 @@ function CalendarDateRangeControl({
     },
     [updateDateRange]
   );
-  const handlePresetClick = (0, import_element44.useCallback)(
+  const handlePresetClick = (0, import_element50.useCallback)(
     (preset) => {
       const [startDate, endDate] = preset.getValue();
       setCalendarMonth(startDate);
@@ -15088,7 +17293,7 @@ function CalendarDateRangeControl({
     },
     [updateDateRange]
   );
-  const handleManualDateChange = (0, import_element44.useCallback)(
+  const handleManualDateChange = (0, import_element50.useCallback)(
     (fromOrTo, newValue) => {
       const [currentFrom, currentTo] = value || [
         void 0,
@@ -15115,7 +17320,7 @@ function CalendarDateRangeControl({
   } else if (!field.isValid?.required && markWhenOptional) {
     displayLabel = `${label} (${(0, import_i18n8.__)("Optional")})`;
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
     ValidatedDateControl,
     {
       field,
@@ -15123,7 +17328,7 @@ function CalendarDateRangeControl({
       inputRefs: [fromInputRef, toInputRef],
       isTouched,
       setIsTouched,
-      children: /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+      children: /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
         import_components7.BaseControl,
         {
           id,
@@ -15131,8 +17336,8 @@ function CalendarDateRangeControl({
           label: displayLabel,
           help: description,
           hideLabelFromVision,
-          children: /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)(Stack, { direction: "column", gap: "lg", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)(
+          children: /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)(Stack, { direction: "column", gap: "lg", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)(
               Stack,
               {
                 direction: "row",
@@ -15142,7 +17347,7 @@ function CalendarDateRangeControl({
                 children: [
                   DATE_RANGE_PRESETS.map((preset) => {
                     const isSelected = selectedPresetId === preset.id;
-                    return /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+                    return /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
                       import_components7.Button,
                       {
                         className: "dataviews-controls__date-preset",
@@ -15157,7 +17362,7 @@ function CalendarDateRangeControl({
                       preset.id
                     );
                   }),
-                  /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+                  /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
                     import_components7.Button,
                     {
                       className: "dataviews-controls__date-preset",
@@ -15172,7 +17377,7 @@ function CalendarDateRangeControl({
                 ]
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime64.jsxs)(
+            /* @__PURE__ */ (0, import_jsx_runtime75.jsxs)(
               Stack,
               {
                 direction: "row",
@@ -15180,10 +17385,9 @@ function CalendarDateRangeControl({
                 justify: "space-between",
                 className: "dataviews-controls__date-range-inputs",
                 children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+                  /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
                     import_components7.__experimentalInputControl,
                     {
-                      __next40pxDefaultSize: true,
                       ref: fromInputRef,
                       type: "date",
                       label: (0, import_i18n8.__)("From"),
@@ -15196,10 +17400,9 @@ function CalendarDateRangeControl({
                       max: maxConstraint
                     }
                   ),
-                  /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+                  /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
                     import_components7.__experimentalInputControl,
                     {
-                      __next40pxDefaultSize: true,
                       ref: toInputRef,
                       type: "date",
                       label: (0, import_i18n8.__)("To"),
@@ -15215,7 +17418,7 @@ function CalendarDateRangeControl({
                 ]
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
               DateRangeCalendar,
               {
                 style: { width: "100%" },
@@ -15244,7 +17447,7 @@ function DateControl({
   validity
 }) {
   if (operator === OPERATOR_IN_THE_PAST || operator === OPERATOR_OVER) {
-    return /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
       RelativeDateControl,
       {
         className: "dataviews-controls__date",
@@ -15257,7 +17460,7 @@ function DateControl({
     );
   }
   if (operator === OPERATOR_BETWEEN) {
-    return /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
       CalendarDateRangeControl,
       {
         data,
@@ -15269,7 +17472,7 @@ function DateControl({
       }
     );
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime64.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
     CalendarDateControl,
     {
       data,
@@ -15284,8 +17487,8 @@ function DateControl({
 
 // packages/dataviews/build-module/components/dataform-controls/select.mjs
 var import_components8 = __toESM(require_components(), 1);
-var import_element45 = __toESM(require_element(), 1);
-var import_jsx_runtime65 = __toESM(require_jsx_runtime(), 1);
+var import_element51 = __toESM(require_element(), 1);
+var import_jsx_runtime76 = __toESM(require_jsx_runtime(), 1);
 var { ValidatedSelectControl } = unlock2(import_components8.privateApis);
 function Select({
   data,
@@ -15299,7 +17502,7 @@ function Select({
   const disabled2 = field.isDisabled({ item: data, field });
   const isMultiple = type === "array";
   const value = getValue({ item: data }) ?? (isMultiple ? [] : "");
-  const onChangeControl = (0, import_element45.useCallback)(
+  const onChangeControl = (0, import_element51.useCallback)(
     (newValue) => onChange(setValue({ item: data, value: newValue })),
     [data, onChange, setValue]
   );
@@ -15308,9 +17511,9 @@ function Select({
     getElements: field.getElements
   });
   if (isLoading) {
-    return /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(import_components8.Spinner, {});
+    return /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(import_components8.Spinner, {});
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
     ValidatedSelectControl,
     {
       required: !!field.isValid?.required,
@@ -15321,7 +17524,6 @@ function Select({
       help: description,
       options: elements,
       onChange: onChangeControl,
-      __next40pxDefaultSize: true,
       hideLabelFromVision,
       multiple: isMultiple,
       disabled: disabled2
@@ -15330,7 +17532,7 @@ function Select({
 }
 
 // packages/dataviews/build-module/components/dataform-controls/adaptive-select.mjs
-var import_jsx_runtime66 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime77 = __toESM(require_jsx_runtime(), 1);
 var ELEMENTS_THRESHOLD = 10;
 function AdaptiveSelect(props) {
   const { field } = props;
@@ -15339,9 +17541,9 @@ function AdaptiveSelect(props) {
     getElements: field.getElements
   });
   if (elements.length >= ELEMENTS_THRESHOLD) {
-    return /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(Combobox, { ...props });
+    return /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(Combobox, { ...props });
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(Select, { ...props });
+  return /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(Select, { ...props });
 }
 
 // packages/dataviews/build-module/components/dataform-controls/email.mjs
@@ -15349,8 +17551,8 @@ var import_components10 = __toESM(require_components(), 1);
 
 // packages/dataviews/build-module/components/dataform-controls/utils/validated-input.mjs
 var import_components9 = __toESM(require_components(), 1);
-var import_element46 = __toESM(require_element(), 1);
-var import_jsx_runtime67 = __toESM(require_jsx_runtime(), 1);
+var import_element52 = __toESM(require_element(), 1);
+var import_jsx_runtime78 = __toESM(require_jsx_runtime(), 1);
 var { ValidatedInputControl: ValidatedInputControl2 } = unlock2(import_components9.privateApis);
 function ValidatedText({
   data,
@@ -15366,7 +17568,7 @@ function ValidatedText({
   const { label, placeholder, description, getValue, setValue, isValid: isValid2 } = field;
   const value = getValue({ item: data });
   const disabled2 = field.isDisabled({ item: data, field });
-  const onChangeControl = (0, import_element46.useCallback)(
+  const onChangeControl = (0, import_element52.useCallback)(
     (newValue) => onChange(
       setValue({
         item: data,
@@ -15375,7 +17577,7 @@ function ValidatedText({
     ),
     [data, setValue, onChange]
   );
-  return /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime78.jsx)(
     ValidatedInputControl2,
     {
       required: !!isValid2.required,
@@ -15393,14 +17595,13 @@ function ValidatedText({
       disabled: disabled2,
       pattern: isValid2.pattern ? isValid2.pattern.constraint : void 0,
       minLength: isValid2.minLength ? isValid2.minLength.constraint : void 0,
-      maxLength: isValid2.maxLength ? isValid2.maxLength.constraint : void 0,
-      __next40pxDefaultSize: true
+      maxLength: isValid2.maxLength ? isValid2.maxLength.constraint : void 0
     }
   );
 }
 
 // packages/dataviews/build-module/components/dataform-controls/email.mjs
-var import_jsx_runtime68 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime79 = __toESM(require_jsx_runtime(), 1);
 function Email({
   data,
   field,
@@ -15409,7 +17610,7 @@ function Email({
   markWhenOptional,
   validity
 }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime79.jsx)(
     ValidatedText,
     {
       ...{
@@ -15420,7 +17621,7 @@ function Email({
         markWhenOptional,
         validity,
         type: "email",
-        prefix: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(import_components10.__experimentalInputControlPrefixWrapper, { variant: "icon", children: /* @__PURE__ */ (0, import_jsx_runtime68.jsx)(import_components10.Icon, { icon: envelope_default }) })
+        prefix: /* @__PURE__ */ (0, import_jsx_runtime79.jsx)(import_components10.__experimentalInputControlPrefixWrapper, { variant: "icon", children: /* @__PURE__ */ (0, import_jsx_runtime79.jsx)(import_components10.Icon, { icon: envelope_default }) })
       }
     }
   );
@@ -15428,7 +17629,7 @@ function Email({
 
 // packages/dataviews/build-module/components/dataform-controls/telephone.mjs
 var import_components11 = __toESM(require_components(), 1);
-var import_jsx_runtime69 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime80 = __toESM(require_jsx_runtime(), 1);
 function Telephone({
   data,
   field,
@@ -15437,7 +17638,7 @@ function Telephone({
   markWhenOptional,
   validity
 }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime69.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(
     ValidatedText,
     {
       ...{
@@ -15448,7 +17649,7 @@ function Telephone({
         markWhenOptional,
         validity,
         type: "tel",
-        prefix: /* @__PURE__ */ (0, import_jsx_runtime69.jsx)(import_components11.__experimentalInputControlPrefixWrapper, { variant: "icon", children: /* @__PURE__ */ (0, import_jsx_runtime69.jsx)(import_components11.Icon, { icon: mobile_default }) })
+        prefix: /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(import_components11.__experimentalInputControlPrefixWrapper, { variant: "icon", children: /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(import_components11.Icon, { icon: mobile_default }) })
       }
     }
   );
@@ -15456,7 +17657,7 @@ function Telephone({
 
 // packages/dataviews/build-module/components/dataform-controls/url.mjs
 var import_components12 = __toESM(require_components(), 1);
-var import_jsx_runtime70 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime81 = __toESM(require_jsx_runtime(), 1);
 function Url({
   data,
   field,
@@ -15465,7 +17666,7 @@ function Url({
   markWhenOptional,
   validity
 }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime70.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime81.jsx)(
     ValidatedText,
     {
       ...{
@@ -15476,7 +17677,7 @@ function Url({
         markWhenOptional,
         validity,
         type: "url",
-        prefix: /* @__PURE__ */ (0, import_jsx_runtime70.jsx)(import_components12.__experimentalInputControlPrefixWrapper, { variant: "icon", children: /* @__PURE__ */ (0, import_jsx_runtime70.jsx)(import_components12.Icon, { icon: link_default }) })
+        prefix: /* @__PURE__ */ (0, import_jsx_runtime81.jsx)(import_components12.__experimentalInputControlPrefixWrapper, { variant: "icon", children: /* @__PURE__ */ (0, import_jsx_runtime81.jsx)(import_components12.Icon, { icon: link_default }) })
       }
     }
   );
@@ -15484,9 +17685,9 @@ function Url({
 
 // packages/dataviews/build-module/components/dataform-controls/utils/validated-number.mjs
 var import_components13 = __toESM(require_components(), 1);
-var import_element47 = __toESM(require_element(), 1);
+var import_element53 = __toESM(require_element(), 1);
 var import_i18n9 = __toESM(require_i18n(), 1);
-var import_jsx_runtime71 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime82 = __toESM(require_jsx_runtime(), 1);
 var { ValidatedNumberControl } = unlock2(import_components13.privateApis);
 function toNumberOrEmpty(value) {
   if (value === "" || value === void 0) {
@@ -15502,39 +17703,37 @@ function BetweenControls({
   step
 }) {
   const [min3 = "", max3 = ""] = value;
-  const onChangeMin = (0, import_element47.useCallback)(
+  const onChangeMin = (0, import_element53.useCallback)(
     (newValue) => onChange([toNumberOrEmpty(newValue), max3]),
     [onChange, max3]
   );
-  const onChangeMax = (0, import_element47.useCallback)(
+  const onChangeMax = (0, import_element53.useCallback)(
     (newValue) => onChange([min3, toNumberOrEmpty(newValue)]),
     [onChange, min3]
   );
-  return /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime82.jsx)(
     import_components13.BaseControl,
     {
       help: (0, import_i18n9.__)("The max. value must be greater than the min. value."),
-      children: /* @__PURE__ */ (0, import_jsx_runtime71.jsxs)(import_components13.Flex, { direction: "row", gap: 4, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(
+      children: /* @__PURE__ */ (0, import_jsx_runtime82.jsxs)(import_components13.Flex, { direction: "row", gap: 4, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime82.jsx)(
           import_components13.__experimentalNumberControl,
           {
             label: (0, import_i18n9.__)("Min."),
             value: min3,
             max: max3 ? Number(max3) - step : void 0,
             onChange: onChangeMin,
-            __next40pxDefaultSize: true,
             hideLabelFromVision,
             step
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime82.jsx)(
           import_components13.__experimentalNumberControl,
           {
             label: (0, import_i18n9.__)("Max."),
             value: max3,
             min: min3 ? Number(min3) + step : void 0,
             onChange: onChangeMax,
-            __next40pxDefaultSize: true,
             hideLabelFromVision,
             step
           }
@@ -15557,7 +17756,7 @@ function ValidatedNumber({
   const { label, description, getValue, setValue, isValid: isValid2 } = field;
   const value = getValue({ item: data }) ?? "";
   const disabled2 = field.isDisabled({ item: data, field });
-  const onChangeControl = (0, import_element47.useCallback)(
+  const onChangeControl = (0, import_element53.useCallback)(
     (newValue) => {
       onChange(
         setValue({
@@ -15571,7 +17770,7 @@ function ValidatedNumber({
     },
     [data, onChange, setValue]
   );
-  const onChangeBetweenControls = (0, import_element47.useCallback)(
+  const onChangeBetweenControls = (0, import_element53.useCallback)(
     (newValue) => {
       onChange(
         setValue({
@@ -15589,7 +17788,7 @@ function ValidatedNumber({
     )) {
       valueBetween = value;
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime82.jsx)(
       BetweenControls,
       {
         value: valueBetween,
@@ -15599,7 +17798,7 @@ function ValidatedNumber({
       }
     );
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime71.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime82.jsx)(
     ValidatedNumberControl,
     {
       required: !!isValid2.required,
@@ -15609,7 +17808,6 @@ function ValidatedNumber({
       help: description,
       value,
       onChange: onChangeControl,
-      __next40pxDefaultSize: true,
       hideLabelFromVision,
       step,
       min: isValid2.min ? isValid2.min.constraint : void 0,
@@ -15620,21 +17818,21 @@ function ValidatedNumber({
 }
 
 // packages/dataviews/build-module/components/dataform-controls/integer.mjs
-var import_jsx_runtime72 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime83 = __toESM(require_jsx_runtime(), 1);
 function Integer(props) {
-  return /* @__PURE__ */ (0, import_jsx_runtime72.jsx)(ValidatedNumber, { ...props });
+  return /* @__PURE__ */ (0, import_jsx_runtime83.jsx)(ValidatedNumber, { ...props });
 }
 
 // packages/dataviews/build-module/components/dataform-controls/number.mjs
-var import_jsx_runtime73 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime84 = __toESM(require_jsx_runtime(), 1);
 function Number2(props) {
-  return /* @__PURE__ */ (0, import_jsx_runtime73.jsx)(ValidatedNumber, { ...props });
+  return /* @__PURE__ */ (0, import_jsx_runtime84.jsx)(ValidatedNumber, { ...props });
 }
 
 // packages/dataviews/build-module/components/dataform-controls/radio.mjs
 var import_components14 = __toESM(require_components(), 1);
-var import_element48 = __toESM(require_element(), 1);
-var import_jsx_runtime74 = __toESM(require_jsx_runtime(), 1);
+var import_element54 = __toESM(require_element(), 1);
+var import_jsx_runtime85 = __toESM(require_jsx_runtime(), 1);
 var { ValidatedRadioControl } = unlock2(import_components14.privateApis);
 function Radio({
   data,
@@ -15651,14 +17849,14 @@ function Radio({
     getElements: field.getElements
   });
   const value = getValue({ item: data });
-  const onChangeControl = (0, import_element48.useCallback)(
+  const onChangeControl = (0, import_element54.useCallback)(
     (newValue) => onChange(setValue({ item: data, value: newValue })),
     [data, onChange, setValue]
   );
   if (isLoading) {
-    return /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(import_components14.Spinner, {});
+    return /* @__PURE__ */ (0, import_jsx_runtime85.jsx)(import_components14.Spinner, {});
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime74.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime85.jsx)(
     ValidatedRadioControl,
     {
       required: !!field.isValid?.required,
@@ -15676,8 +17874,8 @@ function Radio({
 }
 
 // packages/dataviews/build-module/components/dataform-controls/text.mjs
-var import_element49 = __toESM(require_element(), 1);
-var import_jsx_runtime75 = __toESM(require_jsx_runtime(), 1);
+var import_element55 = __toESM(require_element(), 1);
+var import_jsx_runtime86 = __toESM(require_jsx_runtime(), 1);
 function Text3({
   data,
   field,
@@ -15688,7 +17886,7 @@ function Text3({
   validity
 }) {
   const { prefix, suffix } = config || {};
-  return /* @__PURE__ */ (0, import_jsx_runtime75.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime86.jsx)(
     ValidatedText,
     {
       ...{
@@ -15698,8 +17896,8 @@ function Text3({
         hideLabelFromVision,
         markWhenOptional,
         validity,
-        prefix: prefix ? (0, import_element49.createElement)(prefix) : void 0,
-        suffix: suffix ? (0, import_element49.createElement)(suffix) : void 0
+        prefix: prefix ? (0, import_element55.createElement)(prefix) : void 0,
+        suffix: suffix ? (0, import_element55.createElement)(suffix) : void 0
       }
     }
   );
@@ -15707,8 +17905,8 @@ function Text3({
 
 // packages/dataviews/build-module/components/dataform-controls/toggle.mjs
 var import_components15 = __toESM(require_components(), 1);
-var import_element50 = __toESM(require_element(), 1);
-var import_jsx_runtime76 = __toESM(require_jsx_runtime(), 1);
+var import_element56 = __toESM(require_element(), 1);
+var import_jsx_runtime87 = __toESM(require_jsx_runtime(), 1);
 var { ValidatedToggleControl } = unlock2(import_components15.privateApis);
 function Toggle({
   field,
@@ -15720,12 +17918,12 @@ function Toggle({
 }) {
   const { label, description, getValue, setValue, isValid: isValid2 } = field;
   const disabled2 = field.isDisabled({ item: data, field });
-  const onChangeControl = (0, import_element50.useCallback)(() => {
+  const onChangeControl = (0, import_element56.useCallback)(() => {
     onChange(
       setValue({ item: data, value: !getValue({ item: data }) })
     );
   }, [onChange, setValue, data, getValue]);
-  return /* @__PURE__ */ (0, import_jsx_runtime76.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime87.jsx)(
     ValidatedToggleControl,
     {
       required: !!isValid2.required,
@@ -15743,8 +17941,8 @@ function Toggle({
 
 // packages/dataviews/build-module/components/dataform-controls/textarea.mjs
 var import_components16 = __toESM(require_components(), 1);
-var import_element51 = __toESM(require_element(), 1);
-var import_jsx_runtime77 = __toESM(require_jsx_runtime(), 1);
+var import_element57 = __toESM(require_element(), 1);
+var import_jsx_runtime88 = __toESM(require_jsx_runtime(), 1);
 var { ValidatedTextareaControl } = unlock2(import_components16.privateApis);
 function Textarea({
   data,
@@ -15759,11 +17957,11 @@ function Textarea({
   const disabled2 = field.isDisabled({ item: data, field });
   const { label, placeholder, description, setValue, isValid: isValid2 } = field;
   const value = field.getValue({ item: data });
-  const onChangeControl = (0, import_element51.useCallback)(
+  const onChangeControl = (0, import_element57.useCallback)(
     (newValue) => onChange(setValue({ item: data, value: newValue })),
     [data, onChange, setValue]
   );
-  return /* @__PURE__ */ (0, import_jsx_runtime77.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime88.jsx)(
     ValidatedTextareaControl,
     {
       required: !!isValid2.required,
@@ -15784,11 +17982,384 @@ function Textarea({
   );
 }
 
-// packages/dataviews/build-module/components/dataform-controls/toggle-group.mjs
+// packages/dataviews/build-module/components/dataform-controls/richtext/index.mjs
+var import_element59 = __toESM(require_element(), 1);
+
+// packages/dataviews/build-module/components/dataform-controls/richtext/control.mjs
 var import_components17 = __toESM(require_components(), 1);
-var import_element52 = __toESM(require_element(), 1);
-var import_jsx_runtime78 = __toESM(require_jsx_runtime(), 1);
-var { ValidatedToggleGroupControl } = unlock2(import_components17.privateApis);
+var import_compose2 = __toESM(require_compose(), 1);
+var import_element58 = __toESM(require_element(), 1);
+var import_rich_text2 = __toESM(require_rich_text(), 1);
+
+// packages/dataviews/build-module/components/dataform-controls/richtext/utils.mjs
+var EMPTY_ARRAY4 = [];
+function getAllowedFormats({
+  allowedFormats,
+  disableFormats
+}) {
+  if (disableFormats) {
+    return EMPTY_ARRAY4;
+  }
+  return allowedFormats;
+}
+
+// packages/dataviews/build-module/components/dataform-controls/richtext/format-edit.mjs
+var import_rich_text = __toESM(require_rich_text(), 1);
+var import_jsx_runtime89 = __toESM(require_jsx_runtime(), 1);
+var import_react12 = __toESM(require_react(), 1);
+var EMPTY_CONTEXT = {};
+function Edit({
+  onChange,
+  onFocus,
+  value,
+  forwardedRef,
+  settings,
+  isVisible
+}) {
+  const { name, edit: EditFunction } = settings;
+  if (!EditFunction) {
+    return null;
+  }
+  const activeFormat = (0, import_rich_text.getActiveFormat)(value, name);
+  const isActive = activeFormat !== void 0;
+  const activeObject = (0, import_rich_text.getActiveObject)(value);
+  const isObjectActive = activeObject !== void 0 && activeObject.type === name;
+  return /* @__PURE__ */ (0, import_jsx_runtime89.jsx)(
+    EditFunction,
+    {
+      isActive,
+      isVisible,
+      activeAttributes: isActive ? activeFormat.attributes || {} : {},
+      isObjectActive,
+      activeObjectAttributes: isObjectActive ? activeObject.attributes || {} : {},
+      value,
+      onChange,
+      onFocus,
+      contentRef: forwardedRef,
+      context: EMPTY_CONTEXT
+    },
+    name
+  );
+}
+function FormatEdit({
+  formatTypes,
+  ...props
+}) {
+  return formatTypes.map((settings) => /* @__PURE__ */ (0, import_react12.createElement)(Edit, { settings, ...props, key: settings.name }));
+}
+
+// packages/dataviews/build-module/components/dataform-controls/richtext/control.mjs
+var import_jsx_runtime90 = __toESM(require_jsx_runtime(), 1);
+var {
+  ValidatedContentEditableControl: RichTextControlShell,
+  withIgnoreIMEEvents
+} = unlock2(import_components17.privateApis);
+var {
+  useRichText,
+  KeyboardShortcutContext,
+  InputEventContext,
+  shortcutsListener,
+  inputEventsListener
+} = unlock2(import_rich_text2.privateApis);
+var EMPTY_COMPLETERS = [];
+function RichTextControl({
+  label,
+  value: attrValue,
+  onChange,
+  placeholder,
+  id,
+  clientId,
+  className,
+  hideLabelFromVision,
+  help,
+  disabled: disabled2,
+  required,
+  markWhenOptional,
+  customValidity,
+  allowedFormats,
+  disableFormats,
+  withoutInteractiveFormatting,
+  preserveWhiteSpace,
+  disableLineBreaks,
+  focusOnMount,
+  completers = EMPTY_COMPLETERS
+}) {
+  const [selection, setSelection] = (0, import_element58.useState)({
+    start: void 0,
+    end: void 0
+  });
+  const [isSelected, setIsSelected] = (0, import_element58.useState)(false);
+  const anchorRef = (0, import_element58.useRef)(void 0);
+  const inputEvents = (0, import_element58.useRef)(/* @__PURE__ */ new Set());
+  const keyboardShortcuts = (0, import_element58.useRef)(
+    /* @__PURE__ */ new Set()
+  );
+  const focusOutside = (0, import_compose2.__experimentalUseFocusOutside)(() => setIsSelected(false));
+  const adjustedAllowedFormats = getAllowedFormats({
+    allowedFormats,
+    disableFormats
+  });
+  const {
+    value,
+    onChange: onRichTextChange,
+    ref: richTextRef,
+    formatTypes,
+    getValue
+  } = useRichText({
+    value: attrValue,
+    onChange,
+    selectionStart: selection.start,
+    selectionEnd: selection.end,
+    onSelectionChange: (start, end) => setSelection({ start, end }),
+    __unstableIsSelected: isSelected,
+    preserveWhiteSpace: !!preserveWhiteSpace,
+    placeholder,
+    __unstableDisableFormats: disableFormats,
+    allowedFormats: adjustedAllowedFormats,
+    withoutInteractiveFormatting,
+    __unstableFormatTypeHandlerContext: (0, import_element58.useMemo)(
+      () => ({
+        richTextIdentifier: id,
+        blockClientId: clientId
+      }),
+      [id, clientId]
+    )
+  });
+  function onFocus() {
+    anchorRef.current?.focus();
+  }
+  const eventListenersPropsRef = (0, import_element58.useRef)({
+    keyboardShortcuts,
+    inputEvents
+  });
+  const inputRulePropsRef = (0, import_element58.useRef)({
+    formatTypes,
+    getValue,
+    onChange: onRichTextChange
+  });
+  (0, import_element58.useInsertionEffect)(() => {
+    inputRulePropsRef.current = {
+      formatTypes,
+      getValue,
+      onChange: onRichTextChange
+    };
+  });
+  const enterRef = (0, import_compose2.useRefEffect)(
+    (element) => {
+      if (disabled2) {
+        return;
+      }
+      const onKeyDown = withIgnoreIMEEvents((event) => {
+        if (event.key !== "Enter" || event.defaultPrevented || event.metaKey || event.ctrlKey) {
+          return;
+        }
+        event.preventDefault();
+        if (disableLineBreaks) {
+          return;
+        }
+        const { getValue: getCurrentValue, onChange: handleChange } = inputRulePropsRef.current;
+        const current = getCurrentValue();
+        handleChange(
+          (0, import_rich_text2.insert)(
+            current,
+            "\n",
+            current.start ?? current.text.length,
+            current.end ?? current.text.length
+          )
+        );
+      });
+      element.addEventListener("keydown", onKeyDown);
+      return () => element.removeEventListener("keydown", onKeyDown);
+    },
+    [disableLineBreaks, disabled2]
+  );
+  const eventListenersRef = (0, import_compose2.useRefEffect)(
+    (element) => {
+      if (!isSelected) {
+        return;
+      }
+      const cleanupShortcuts = shortcutsListener(
+        eventListenersPropsRef
+      )(element);
+      const cleanupInputEvents = inputEventsListener(
+        eventListenersPropsRef
+      )(element);
+      function onFormatInput(event) {
+        if (event.inputType !== "insertText" && event.type !== "compositionend") {
+          return;
+        }
+        const {
+          formatTypes: types,
+          getValue: getCurrentValue,
+          onChange: handleChange
+        } = inputRulePropsRef.current;
+        const current = getCurrentValue();
+        const transformed = types.reduce(
+          (accumulator, {
+            __unstableInputRule
+          }) => __unstableInputRule ? __unstableInputRule(accumulator) : accumulator,
+          current
+        );
+        if (transformed !== current) {
+          handleChange({
+            ...transformed,
+            activeFormats: current.activeFormats
+          });
+        }
+      }
+      element.addEventListener("input", onFormatInput);
+      element.addEventListener("compositionend", onFormatInput);
+      return () => {
+        cleanupShortcuts();
+        cleanupInputEvents();
+        element.removeEventListener("input", onFormatInput);
+        element.removeEventListener("compositionend", onFormatInput);
+      };
+    },
+    [isSelected]
+  );
+  const { ref: autocompleteRef, ...autocompleteProps } = (0, import_components17.__unstableUseAutocompleteProps)(
+    {
+      completers,
+      record: value,
+      onChange: onRichTextChange,
+      // This control's completers insert their completion into the value;
+      // none replace the whole value, so the required `onReplace` is a
+      // no-op here.
+      onReplace: () => {
+      }
+    }
+  );
+  const focusOnMountRef = (0, import_compose2.useRefEffect)(
+    (element) => {
+      if (focusOnMount && !disabled2) {
+        element.focus();
+      }
+    },
+    [focusOnMount, disabled2]
+  );
+  const editableRef = (0, import_compose2.useMergeRefs)([
+    richTextRef,
+    anchorRef,
+    eventListenersRef,
+    enterRef,
+    focusOnMountRef,
+    autocompleteRef
+  ]);
+  return (
+    // Focus boundary for the field's selection: `onFocus` selects on entry;
+    // the spread `useFocusOutside` handlers deselect once focus leaves.
+    /* @__PURE__ */ (0, import_jsx_runtime90.jsx)(
+      "div",
+      {
+        ...focusOutside,
+        onFocus: (event) => {
+          setIsSelected(true);
+          focusOutside.onFocus(event);
+        },
+        children: /* @__PURE__ */ (0, import_jsx_runtime90.jsxs)(import_components17.SlotFillProvider, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime90.jsx)(
+            RichTextControlShell,
+            {
+              label,
+              id,
+              className: clsx_default(
+                "dataviews-controls__richtext",
+                className
+              ),
+              placeholder,
+              hideLabelFromVision,
+              help,
+              disabled: disabled2,
+              required,
+              markWhenOptional,
+              customValidity,
+              value: value.text,
+              "aria-multiline": !disableLineBreaks,
+              ...autocompleteProps,
+              ref: editableRef
+            }
+          ),
+          isSelected && !disabled2 && /* @__PURE__ */ (0, import_jsx_runtime90.jsx)(
+            KeyboardShortcutContext.Provider,
+            {
+              value: keyboardShortcuts,
+              children: /* @__PURE__ */ (0, import_jsx_runtime90.jsx)(InputEventContext.Provider, { value: inputEvents, children: /* @__PURE__ */ (0, import_jsx_runtime90.jsx)(
+                FormatEdit,
+                {
+                  value,
+                  onChange: onRichTextChange,
+                  onFocus,
+                  formatTypes,
+                  forwardedRef: anchorRef,
+                  isVisible: true
+                }
+              ) })
+            }
+          )
+        ] })
+      }
+    )
+  );
+}
+
+// packages/dataviews/build-module/components/dataform-controls/richtext/index.mjs
+var import_jsx_runtime91 = __toESM(require_jsx_runtime(), 1);
+function RichText({
+  data,
+  field,
+  onChange,
+  hideLabelFromVision,
+  markWhenOptional,
+  config,
+  validity
+}) {
+  const {
+    className,
+    clientId,
+    allowedFormats,
+    disableFormats,
+    withoutInteractiveFormatting,
+    preserveWhiteSpace,
+    disableLineBreaks
+  } = config || {};
+  const disabled2 = field.isDisabled({ item: data, field });
+  const { label, placeholder, description, id, setValue, isValid: isValid2 } = field;
+  const value = field.getValue({ item: data }) ?? "";
+  const onChangeControl = (0, import_element59.useCallback)(
+    (newValue) => onChange(setValue({ item: data, value: newValue })),
+    [data, onChange, setValue]
+  );
+  return /* @__PURE__ */ (0, import_jsx_runtime91.jsx)(
+    RichTextControl,
+    {
+      label,
+      value,
+      onChange: onChangeControl,
+      placeholder,
+      id,
+      hideLabelFromVision,
+      help: description,
+      disabled: disabled2,
+      required: !!isValid2.required,
+      markWhenOptional,
+      customValidity: getCustomValidity(isValid2, validity),
+      className,
+      clientId,
+      allowedFormats,
+      disableFormats,
+      withoutInteractiveFormatting,
+      preserveWhiteSpace,
+      disableLineBreaks
+    }
+  );
+}
+
+// packages/dataviews/build-module/components/dataform-controls/toggle-group.mjs
+var import_components18 = __toESM(require_components(), 1);
+var import_element60 = __toESM(require_element(), 1);
+var import_jsx_runtime92 = __toESM(require_jsx_runtime(), 1);
+var { ValidatedToggleGroupControl } = unlock2(import_components18.privateApis);
 function ToggleGroup({
   data,
   field,
@@ -15800,7 +18371,7 @@ function ToggleGroup({
   const { getValue, setValue, isValid: isValid2 } = field;
   const disabled2 = field.isDisabled({ item: data, field });
   const value = getValue({ item: data });
-  const onChangeControl = (0, import_element52.useCallback)(
+  const onChangeControl = (0, import_element60.useCallback)(
     (newValue) => onChange(setValue({ item: data, value: newValue })),
     [data, onChange, setValue]
   );
@@ -15809,27 +18380,26 @@ function ToggleGroup({
     getElements: field.getElements
   });
   if (isLoading) {
-    return /* @__PURE__ */ (0, import_jsx_runtime78.jsx)(import_components17.Spinner, {});
+    return /* @__PURE__ */ (0, import_jsx_runtime92.jsx)(import_components18.Spinner, {});
   }
   if (elements.length === 0) {
     return null;
   }
   const selectedOption = elements.find((el) => el.value === value);
-  return /* @__PURE__ */ (0, import_jsx_runtime78.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime92.jsx)(
     ValidatedToggleGroupControl,
     {
       required: !!field.isValid?.required,
       markWhenOptional,
       customValidity: getCustomValidity(isValid2, validity),
-      __next40pxDefaultSize: true,
       isBlock: true,
       label: field.label,
       help: selectedOption?.description || field.description,
       onChange: onChangeControl,
       value,
       hideLabelFromVision,
-      children: elements.map((el) => /* @__PURE__ */ (0, import_jsx_runtime78.jsx)(
-        import_components17.__experimentalToggleGroupControlOption,
+      children: elements.map((el) => /* @__PURE__ */ (0, import_jsx_runtime92.jsx)(
+        import_components18.__experimentalToggleGroupControlOption,
         {
           label: el.label,
           value: el.value,
@@ -15842,10 +18412,10 @@ function ToggleGroup({
 }
 
 // packages/dataviews/build-module/components/dataform-controls/array.mjs
-var import_components18 = __toESM(require_components(), 1);
-var import_element53 = __toESM(require_element(), 1);
-var import_jsx_runtime79 = __toESM(require_jsx_runtime(), 1);
-var { ValidatedFormTokenField } = unlock2(import_components18.privateApis);
+var import_components19 = __toESM(require_components(), 1);
+var import_element61 = __toESM(require_element(), 1);
+var import_jsx_runtime93 = __toESM(require_jsx_runtime(), 1);
+var { ValidatedFormTokenField } = unlock2(import_components19.privateApis);
 function ArrayControl({
   data,
   field,
@@ -15861,7 +18431,7 @@ function ArrayControl({
     elements: field.elements,
     getElements: field.getElements
   });
-  const arrayValueAsElements = (0, import_element53.useMemo)(
+  const arrayValueAsElements = (0, import_element61.useMemo)(
     () => Array.isArray(value) ? value.map((token) => {
       const element = elements?.find(
         (suggestion) => suggestion.value === token
@@ -15870,7 +18440,7 @@ function ArrayControl({
     }) : [],
     [value, elements]
   );
-  const onChangeControl = (0, import_element53.useCallback)(
+  const onChangeControl = (0, import_element61.useCallback)(
     (tokens) => {
       const valueTokens = tokens.map((token) => {
         if (typeof token === "object" && "value" in token) {
@@ -15883,9 +18453,9 @@ function ArrayControl({
     [onChange, setValue, data]
   );
   if (isLoading) {
-    return /* @__PURE__ */ (0, import_jsx_runtime79.jsx)(import_components18.Spinner, {});
+    return /* @__PURE__ */ (0, import_jsx_runtime93.jsx)(import_components19.Spinner, {});
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime79.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime93.jsx)(
     ValidatedFormTokenField,
     {
       required: !!isValid2?.required,
@@ -15924,9 +18494,9 @@ function ArrayControl({
           const element = elements.find(
             (el) => el.value === item
           );
-          return /* @__PURE__ */ (0, import_jsx_runtime79.jsx)("span", { children: element?.label || item });
+          return /* @__PURE__ */ (0, import_jsx_runtime93.jsx)("span", { children: element?.label || item });
         }
-        return /* @__PURE__ */ (0, import_jsx_runtime79.jsx)("span", { children: item });
+        return /* @__PURE__ */ (0, import_jsx_runtime93.jsx)("span", { children: item });
       }
     }
   );
@@ -16091,35 +18661,35 @@ var w = function(r3) {
 };
 
 // packages/dataviews/build-module/components/dataform-controls/color.mjs
-var import_components19 = __toESM(require_components(), 1);
-var import_element54 = __toESM(require_element(), 1);
+var import_components20 = __toESM(require_components(), 1);
+var import_element62 = __toESM(require_element(), 1);
 var import_i18n10 = __toESM(require_i18n(), 1);
-var import_jsx_runtime80 = __toESM(require_jsx_runtime(), 1);
-var { ValidatedInputControl: ValidatedInputControl3 } = unlock2(import_components19.privateApis);
+var import_jsx_runtime94 = __toESM(require_jsx_runtime(), 1);
+var { ValidatedInputControl: ValidatedInputControl3 } = unlock2(import_components20.privateApis);
 var ColorPickerDropdown = ({
   color,
   onColorChange,
   disabled: disabled2
 }) => {
   const validColor = color && w(color).isValid() ? color : "#ffffff";
-  return /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(
-    import_components19.Dropdown,
+  return /* @__PURE__ */ (0, import_jsx_runtime94.jsx)(
+    import_components20.Dropdown,
     {
       className: "dataviews-controls__color-picker-dropdown",
       popoverProps: { resize: false },
-      renderToggle: ({ onToggle }) => /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(
-        import_components19.Button,
+      renderToggle: ({ onToggle }) => /* @__PURE__ */ (0, import_jsx_runtime94.jsx)(
+        import_components20.Button,
         {
           onClick: onToggle,
           "aria-label": (0, import_i18n10.__)("Open color picker"),
           size: "small",
           disabled: disabled2,
           accessibleWhenDisabled: true,
-          icon: () => /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(import_components19.ColorIndicator, { colorValue: validColor })
+          icon: () => /* @__PURE__ */ (0, import_jsx_runtime94.jsx)(import_components20.ColorIndicator, { colorValue: validColor })
         }
       ),
-      renderContent: () => /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(import_components19.__experimentalDropdownContentWrapper, { paddingSize: "none", children: /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(
-        import_components19.ColorPicker,
+      renderContent: () => /* @__PURE__ */ (0, import_jsx_runtime94.jsx)(import_components20.__experimentalDropdownContentWrapper, { paddingSize: "none", children: /* @__PURE__ */ (0, import_jsx_runtime94.jsx)(
+        import_components20.ColorPicker,
         {
           color: validColor,
           onChange: onColorChange,
@@ -16140,19 +18710,19 @@ function Color({
   const { label, placeholder, description, setValue, isValid: isValid2 } = field;
   const disabled2 = field.isDisabled({ item: data, field });
   const value = field.getValue({ item: data }) || "";
-  const handleColorChange = (0, import_element54.useCallback)(
+  const handleColorChange = (0, import_element62.useCallback)(
     (newColor) => {
       onChange(setValue({ item: data, value: newColor }));
     },
     [data, onChange, setValue]
   );
-  const handleInputChange = (0, import_element54.useCallback)(
+  const handleInputChange = (0, import_element62.useCallback)(
     (newValue) => {
       onChange(setValue({ item: data, value: newValue || "" }));
     },
     [data, onChange, setValue]
   );
-  return /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime94.jsx)(
     ValidatedInputControl3,
     {
       required: !!field.isValid?.required,
@@ -16166,7 +18736,7 @@ function Color({
       hideLabelFromVision,
       type: "text",
       disabled: disabled2,
-      prefix: /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(import_components19.__experimentalInputControlPrefixWrapper, { variant: "control", children: /* @__PURE__ */ (0, import_jsx_runtime80.jsx)(
+      prefix: /* @__PURE__ */ (0, import_jsx_runtime94.jsx)(import_components20.__experimentalInputControlPrefixWrapper, { variant: "control", children: /* @__PURE__ */ (0, import_jsx_runtime94.jsx)(
         ColorPickerDropdown,
         {
           color: value,
@@ -16179,10 +18749,10 @@ function Color({
 }
 
 // packages/dataviews/build-module/components/dataform-controls/password.mjs
-var import_components20 = __toESM(require_components(), 1);
-var import_element55 = __toESM(require_element(), 1);
+var import_components21 = __toESM(require_components(), 1);
+var import_element63 = __toESM(require_element(), 1);
 var import_i18n11 = __toESM(require_i18n(), 1);
-var import_jsx_runtime81 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime95 = __toESM(require_jsx_runtime(), 1);
 function Password({
   data,
   field,
@@ -16191,12 +18761,12 @@ function Password({
   markWhenOptional,
   validity
 }) {
-  const [isVisible, setIsVisible] = (0, import_element55.useState)(false);
+  const [isVisible, setIsVisible] = (0, import_element63.useState)(false);
   const disabled2 = field.isDisabled({ item: data, field });
-  const toggleVisibility = (0, import_element55.useCallback)(() => {
+  const toggleVisibility = (0, import_element63.useCallback)(() => {
     setIsVisible((prev) => !prev);
   }, []);
-  return /* @__PURE__ */ (0, import_jsx_runtime81.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime95.jsx)(
     ValidatedText,
     {
       ...{
@@ -16207,8 +18777,8 @@ function Password({
         markWhenOptional,
         validity,
         type: isVisible ? "text" : "password",
-        suffix: /* @__PURE__ */ (0, import_jsx_runtime81.jsx)(import_components20.__experimentalInputControlSuffixWrapper, { variant: "control", children: /* @__PURE__ */ (0, import_jsx_runtime81.jsx)(
-          import_components20.Button,
+        suffix: /* @__PURE__ */ (0, import_jsx_runtime95.jsx)(import_components21.__experimentalInputControlSuffixWrapper, { variant: "control", children: /* @__PURE__ */ (0, import_jsx_runtime95.jsx)(
+          import_components21.Button,
           {
             icon: isVisible ? unseen_default : seen_default,
             onClick: toggleVisibility,
@@ -16229,7 +18799,7 @@ function hasElements(field) {
 }
 
 // packages/dataviews/build-module/components/dataform-controls/index.mjs
-var import_jsx_runtime82 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime96 = __toESM(require_jsx_runtime(), 1);
 var FORM_CONTROLS = {
   adaptiveSelect: AdaptiveSelect,
   array: ArrayControl,
@@ -16249,6 +18819,7 @@ var FORM_CONTROLS = {
   text: Text3,
   toggle: Toggle,
   textarea: Textarea,
+  richtext: RichText,
   toggleGroup: ToggleGroup
 };
 function isEditConfig(value) {
@@ -16261,7 +18832,7 @@ function createConfiguredControl(config) {
     return null;
   }
   return function ConfiguredControl(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime82.jsx)(BaseControlType, { ...props, config: controlConfig });
+    return /* @__PURE__ */ (0, import_jsx_runtime96.jsx)(BaseControlType, { ...props, config: controlConfig });
   };
 }
 function getControl(field, fallback) {
@@ -16359,13 +18930,13 @@ function RenderFromElements({
 }
 
 // packages/dataviews/build-module/field-types/utils/render-default.mjs
-var import_jsx_runtime83 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime97 = __toESM(require_jsx_runtime(), 1);
 function render({
   item,
   field
 }) {
   if (field.hasElements) {
-    return /* @__PURE__ */ (0, import_jsx_runtime83.jsx)(RenderFromElements, { item, field });
+    return /* @__PURE__ */ (0, import_jsx_runtime97.jsx)(RenderFromElements, { item, field });
   }
   return field.getValueFormatted({ item, field });
 }
@@ -17082,17 +19653,17 @@ var telephone_default = {
 
 // packages/dataviews/build-module/field-types/color.mjs
 var import_i18n17 = __toESM(require_i18n(), 1);
-var import_jsx_runtime84 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime98 = __toESM(require_jsx_runtime(), 1);
 function render3({ item, field }) {
   if (field.hasElements) {
-    return /* @__PURE__ */ (0, import_jsx_runtime84.jsx)(RenderFromElements, { item, field });
+    return /* @__PURE__ */ (0, import_jsx_runtime98.jsx)(RenderFromElements, { item, field });
   }
   const value = get_value_formatted_default_default({ item, field });
   if (!value || !w(value).isValid()) {
     return value;
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime84.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "8px" }, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime84.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime98.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: "8px" }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime98.jsx)(
       "div",
       {
         style: {
@@ -17105,7 +19676,7 @@ function render3({ item, field }) {
         }
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime84.jsx)("span", { children: value })
+    /* @__PURE__ */ (0, import_jsx_runtime98.jsx)("span", { children: value })
   ] });
 }
 function isValidCustom6(item, field) {
@@ -17373,12 +19944,12 @@ function normalizeFields(fields) {
 }
 
 // packages/dataviews/build-module/dataform/index.mjs
-var import_element67 = __toESM(require_element(), 1);
+var import_element75 = __toESM(require_element(), 1);
 
 // packages/dataviews/build-module/components/dataform-context/index.mjs
-var import_element56 = __toESM(require_element(), 1);
-var import_jsx_runtime85 = __toESM(require_jsx_runtime(), 1);
-var DataFormContext = (0, import_element56.createContext)({
+var import_element64 = __toESM(require_element(), 1);
+var import_jsx_runtime99 = __toESM(require_jsx_runtime(), 1);
+var DataFormContext = (0, import_element64.createContext)({
   fields: []
 });
 DataFormContext.displayName = "DataFormContext";
@@ -17386,16 +19957,16 @@ function DataFormProvider({
   fields,
   children
 }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime85.jsx)(DataFormContext.Provider, { value: { fields }, children });
+  return /* @__PURE__ */ (0, import_jsx_runtime99.jsx)(DataFormContext.Provider, { value: { fields }, children });
 }
 var dataform_context_default = DataFormContext;
 
 // packages/dataviews/build-module/components/dataform-layouts/data-form-layout.mjs
-var import_element66 = __toESM(require_element(), 1);
+var import_element74 = __toESM(require_element(), 1);
 
 // packages/dataviews/build-module/components/dataform-layouts/regular/index.mjs
-var import_element57 = __toESM(require_element(), 1);
-var import_components21 = __toESM(require_components(), 1);
+var import_element65 = __toESM(require_element(), 1);
+var import_components22 = __toESM(require_components(), 1);
 
 // packages/dataviews/build-module/components/dataform-layouts/normalize-form.mjs
 var import_i18n18 = __toESM(require_i18n(), 1);
@@ -17516,15 +20087,15 @@ function normalizeForm(form) {
 var normalize_form_default = normalizeForm;
 
 // packages/dataviews/build-module/components/dataform-layouts/regular/index.mjs
-var import_jsx_runtime86 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime100 = __toESM(require_jsx_runtime(), 1);
 function Header4({ title }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime86.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime100.jsx)(
     Stack,
     {
       direction: "column",
       className: "dataforms-layouts-regular__header",
       gap: "lg",
-      children: /* @__PURE__ */ (0, import_jsx_runtime86.jsx)(Stack, { direction: "row", align: "center", children: /* @__PURE__ */ (0, import_jsx_runtime86.jsx)(import_components21.__experimentalHeading, { level: 2, size: 13, children: title }) })
+      children: /* @__PURE__ */ (0, import_jsx_runtime100.jsx)(Stack, { direction: "row", align: "center", children: /* @__PURE__ */ (0, import_jsx_runtime100.jsx)(import_components22.__experimentalHeading, { level: 2, size: 13, children: title }) })
     }
   );
 }
@@ -17536,9 +20107,9 @@ function FormRegularField({
   markWhenOptional,
   validity
 }) {
-  const { fields } = (0, import_element57.useContext)(dataform_context_default);
+  const { fields } = (0, import_element65.useContext)(dataform_context_default);
   const layout = field.layout;
-  const form = (0, import_element57.useMemo)(
+  const form = (0, import_element65.useMemo)(
     () => ({
       layout: DEFAULT_LAYOUT,
       fields: !!field.children ? field.children : []
@@ -17546,9 +20117,9 @@ function FormRegularField({
     [field]
   );
   if (!!field.children) {
-    return /* @__PURE__ */ (0, import_jsx_runtime86.jsxs)(import_jsx_runtime86.Fragment, { children: [
-      !hideLabelFromVision && field.label && /* @__PURE__ */ (0, import_jsx_runtime86.jsx)(Header4, { title: field.label }),
-      /* @__PURE__ */ (0, import_jsx_runtime86.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime100.jsxs)(import_jsx_runtime100.Fragment, { children: [
+      !hideLabelFromVision && field.label && /* @__PURE__ */ (0, import_jsx_runtime100.jsx)(Header4, { title: field.label }),
+      /* @__PURE__ */ (0, import_jsx_runtime100.jsx)(
         DataFormLayout,
         {
           data,
@@ -17567,30 +20138,30 @@ function FormRegularField({
     return null;
   }
   if (labelPosition === "side") {
-    return /* @__PURE__ */ (0, import_jsx_runtime86.jsxs)(
+    return /* @__PURE__ */ (0, import_jsx_runtime100.jsxs)(
       Stack,
       {
         direction: "row",
         className: "dataforms-layouts-regular__field",
         gap: "sm",
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime86.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime100.jsx)(
             "div",
             {
               className: clsx_default(
                 "dataforms-layouts-regular__field-label",
                 `dataforms-layouts-regular__field-label--label-position-${labelPosition}`
               ),
-              children: /* @__PURE__ */ (0, import_jsx_runtime86.jsx)(import_components21.BaseControl.VisualLabel, { children: fieldDefinition.label })
+              children: /* @__PURE__ */ (0, import_jsx_runtime100.jsx)(import_components22.BaseControl.VisualLabel, { children: fieldDefinition.label })
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime86.jsx)("div", { className: "dataforms-layouts-regular__field-control", children: fieldDefinition.readOnly === true ? /* @__PURE__ */ (0, import_jsx_runtime86.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime100.jsx)("div", { className: "dataforms-layouts-regular__field-control", children: fieldDefinition.readOnly === true ? /* @__PURE__ */ (0, import_jsx_runtime100.jsx)(
             fieldDefinition.render,
             {
               item: data,
               field: fieldDefinition
             }
-          ) : /* @__PURE__ */ (0, import_jsx_runtime86.jsx)(
+          ) : /* @__PURE__ */ (0, import_jsx_runtime100.jsx)(
             fieldDefinition.Edit,
             {
               data,
@@ -17606,16 +20177,16 @@ function FormRegularField({
       }
     );
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime86.jsx)("div", { className: "dataforms-layouts-regular__field", children: fieldDefinition.readOnly === true ? /* @__PURE__ */ (0, import_jsx_runtime86.jsx)(import_jsx_runtime86.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime86.jsxs)(import_jsx_runtime86.Fragment, { children: [
-    !hideLabelFromVision && labelPosition !== "none" && /* @__PURE__ */ (0, import_jsx_runtime86.jsx)(import_components21.BaseControl.VisualLabel, { children: fieldDefinition.label }),
-    /* @__PURE__ */ (0, import_jsx_runtime86.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime100.jsx)("div", { className: "dataforms-layouts-regular__field", children: fieldDefinition.readOnly === true ? /* @__PURE__ */ (0, import_jsx_runtime100.jsx)(import_jsx_runtime100.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime100.jsxs)(import_jsx_runtime100.Fragment, { children: [
+    !hideLabelFromVision && labelPosition !== "none" && /* @__PURE__ */ (0, import_jsx_runtime100.jsx)(import_components22.BaseControl.VisualLabel, { children: fieldDefinition.label }),
+    /* @__PURE__ */ (0, import_jsx_runtime100.jsx)(
       fieldDefinition.render,
       {
         item: data,
         field: fieldDefinition
       }
     )
-  ] }) }) : /* @__PURE__ */ (0, import_jsx_runtime86.jsx)(
+  ] }) }) : /* @__PURE__ */ (0, import_jsx_runtime100.jsx)(
     fieldDefinition.Edit,
     {
       data,
@@ -17630,15 +20201,15 @@ function FormRegularField({
 
 // packages/dataviews/build-module/components/dataform-layouts/panel/modal.mjs
 var import_deepmerge2 = __toESM(require_cjs(), 1);
-var import_components24 = __toESM(require_components(), 1);
-var import_element62 = __toESM(require_element(), 1);
-var import_compose2 = __toESM(require_compose(), 1);
+var import_components25 = __toESM(require_components(), 1);
+var import_element70 = __toESM(require_element(), 1);
+var import_compose4 = __toESM(require_compose(), 1);
 
 // packages/dataviews/build-module/components/dataform-layouts/panel/summary-button.mjs
-var import_components23 = __toESM(require_components(), 1);
+var import_components24 = __toESM(require_components(), 1);
 var import_i18n19 = __toESM(require_i18n(), 1);
-var import_compose = __toESM(require_compose(), 1);
-var import_element58 = __toESM(require_element(), 1);
+var import_compose3 = __toESM(require_compose(), 1);
+var import_element66 = __toESM(require_element(), 1);
 
 // packages/dataviews/build-module/components/dataform-layouts/panel/utils/get-label-classname.mjs
 function getLabelClassName(labelPosition, showError) {
@@ -17651,16 +20222,16 @@ function getLabelClassName(labelPosition, showError) {
 var get_label_classname_default = getLabelClassName;
 
 // packages/dataviews/build-module/components/dataform-layouts/panel/utils/get-label-content.mjs
-var import_components22 = __toESM(require_components(), 1);
-var import_jsx_runtime87 = __toESM(require_jsx_runtime(), 1);
+var import_components23 = __toESM(require_components(), 1);
+var import_jsx_runtime101 = __toESM(require_jsx_runtime(), 1);
 function getLabelContent(showError, errorMessage, fieldLabel) {
-  return showError ? /* @__PURE__ */ (0, import_jsx_runtime87.jsxs)(tooltip_exports.Root, { children: [
-    /* @__PURE__ */ (0, import_jsx_runtime87.jsx)(
+  return showError ? /* @__PURE__ */ (0, import_jsx_runtime101.jsxs)(tooltip_exports.Root, { children: [
+    /* @__PURE__ */ (0, import_jsx_runtime101.jsx)(
       tooltip_exports.Trigger,
       {
-        render: /* @__PURE__ */ (0, import_jsx_runtime87.jsxs)("span", { className: "dataforms-layouts-panel__field-label-error-content", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime87.jsx)(import_components22.Icon, { icon: error_default, size: 16 }),
-          /* @__PURE__ */ (0, import_jsx_runtime87.jsxs)(VisuallyHidden, { children: [
+        render: /* @__PURE__ */ (0, import_jsx_runtime101.jsxs)("span", { className: "dataforms-layouts-panel__field-label-error-content", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime101.jsx)(import_components23.Icon, { icon: error_default, size: 16 }),
+          /* @__PURE__ */ (0, import_jsx_runtime101.jsxs)(VisuallyHidden, { children: [
             errorMessage,
             ": "
           ] }),
@@ -17668,7 +20239,7 @@ function getLabelContent(showError, errorMessage, fieldLabel) {
         ] })
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime87.jsx)(tooltip_exports.Popup, { children: errorMessage })
+    /* @__PURE__ */ (0, import_jsx_runtime101.jsx)(tooltip_exports.Popup, { children: errorMessage })
   ] }) : fieldLabel;
 }
 var get_label_content_default = getLabelContent;
@@ -17709,7 +20280,7 @@ function getFirstValidationError(validity) {
 var get_first_validation_error_default = getFirstValidationError;
 
 // packages/dataviews/build-module/components/dataform-layouts/panel/summary-button.mjs
-var import_jsx_runtime88 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime102 = __toESM(require_jsx_runtime(), 1);
 function SummaryButton({
   data,
   field,
@@ -17734,7 +20305,7 @@ function SummaryButton({
       "dataforms-layouts-panel__field-trigger--edit-always": editVisibility === "always"
     }
   );
-  const controlId = (0, import_compose.useInstanceId)(
+  const controlId = (0, import_compose3.useInstanceId)(
     SummaryButton,
     "dataforms-layouts-panel__field-control"
   );
@@ -17747,8 +20318,8 @@ function SummaryButton({
     (0, import_i18n19._x)("Edit %s", "field"),
     fieldLabel || ""
   );
-  const rowRef = (0, import_element58.useRef)(null);
-  const editButtonRef = (0, import_element58.useRef)(null);
+  const rowRef = (0, import_element66.useRef)(null);
+  const editButtonRef = (0, import_element66.useRef)(null);
   const handleRowClick = (event) => {
     if (!isOpen2 && event.detail < 2 && !editButtonRef.current?.contains(event.target) && rowRef.current?.ownerDocument.defaultView?.getSelection()?.toString()) {
       return;
@@ -17761,7 +20332,7 @@ function SummaryButton({
       onClick();
     }
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime88.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime102.jsxs)(
     "div",
     {
       ref: rowRef,
@@ -17769,30 +20340,30 @@ function SummaryButton({
       onClick: !disabled2 ? handleRowClick : void 0,
       onKeyDown: !disabled2 ? handleKeyDown : void 0,
       children: [
-        labelPosition !== "none" && /* @__PURE__ */ (0, import_jsx_runtime88.jsx)("span", { className: labelClassName, children: labelContent }),
-        labelPosition === "none" && showError && /* @__PURE__ */ (0, import_jsx_runtime88.jsxs)(tooltip_exports.Root, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime88.jsx)(
+        labelPosition !== "none" && /* @__PURE__ */ (0, import_jsx_runtime102.jsx)("span", { className: labelClassName, children: labelContent }),
+        labelPosition === "none" && showError && /* @__PURE__ */ (0, import_jsx_runtime102.jsxs)(tooltip_exports.Root, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime102.jsx)(
             tooltip_exports.Trigger,
             {
-              render: /* @__PURE__ */ (0, import_jsx_runtime88.jsx)(
+              render: /* @__PURE__ */ (0, import_jsx_runtime102.jsx)(
                 "span",
                 {
                   className: "dataforms-layouts-panel__field-label-error-content",
                   role: "img",
                   "aria-label": errorMessage,
-                  children: /* @__PURE__ */ (0, import_jsx_runtime88.jsx)(import_components23.Icon, { icon: error_default, size: 16 })
+                  children: /* @__PURE__ */ (0, import_jsx_runtime102.jsx)(import_components24.Icon, { icon: error_default, size: 16 })
                 }
               )
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime88.jsx)(tooltip_exports.Popup, { children: errorMessage })
+          /* @__PURE__ */ (0, import_jsx_runtime102.jsx)(tooltip_exports.Popup, { children: errorMessage })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime88.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime102.jsx)(
           "span",
           {
             id: `${controlId}`,
             className: "dataforms-layouts-panel__field-control",
-            children: summaryFields.length > 1 ? /* @__PURE__ */ (0, import_jsx_runtime88.jsx)(
+            children: summaryFields.length > 1 ? /* @__PURE__ */ (0, import_jsx_runtime102.jsx)(
               "span",
               {
                 style: {
@@ -17802,11 +20373,11 @@ function SummaryButton({
                   width: "100%",
                   gap: "2px"
                 },
-                children: summaryFields.map((summaryField) => /* @__PURE__ */ (0, import_jsx_runtime88.jsx)(
+                children: summaryFields.map((summaryField) => /* @__PURE__ */ (0, import_jsx_runtime102.jsx)(
                   "span",
                   {
                     style: { width: "100%" },
-                    children: /* @__PURE__ */ (0, import_jsx_runtime88.jsx)(
+                    children: /* @__PURE__ */ (0, import_jsx_runtime102.jsx)(
                       summaryField.render,
                       {
                         item: data,
@@ -17817,7 +20388,7 @@ function SummaryButton({
                   summaryField.id
                 ))
               }
-            ) : summaryFields.map((summaryField) => /* @__PURE__ */ (0, import_jsx_runtime88.jsx)(
+            ) : summaryFields.map((summaryField) => /* @__PURE__ */ (0, import_jsx_runtime102.jsx)(
               summaryField.render,
               {
                 item: data,
@@ -17827,8 +20398,8 @@ function SummaryButton({
             ))
           }
         ),
-        !disabled2 && /* @__PURE__ */ (0, import_jsx_runtime88.jsx)(
-          import_components23.Button,
+        !disabled2 && /* @__PURE__ */ (0, import_jsx_runtime102.jsx)(
+          import_components24.Button,
           {
             ref: editButtonRef,
             className: "dataforms-layouts-panel__field-trigger-icon",
@@ -17848,7 +20419,7 @@ function SummaryButton({
 // packages/dataviews/build-module/hooks/use-form-validity.mjs
 var import_deepmerge = __toESM(require_cjs(), 1);
 var import_es6 = __toESM(require_es6(), 1);
-var import_element59 = __toESM(require_element(), 1);
+var import_element67 = __toESM(require_element(), 1);
 var import_i18n20 = __toESM(require_i18n(), 1);
 function isFormValid(formValidity) {
   if (!formValidity) {
@@ -18270,11 +20841,11 @@ function getFormFieldValue(formField, item) {
   };
 }
 function useFormValidity(item, fields, form) {
-  const [formValidity, setFormValidity] = (0, import_element59.useState)();
-  const customCounterRef = (0, import_element59.useRef)({});
-  const elementsCounterRef = (0, import_element59.useRef)({});
-  const previousValuesRef = (0, import_element59.useRef)({});
-  const validate = (0, import_element59.useCallback)(() => {
+  const [formValidity, setFormValidity] = (0, import_element67.useState)();
+  const customCounterRef = (0, import_element67.useRef)({});
+  const elementsCounterRef = (0, import_element67.useRef)({});
+  const previousValuesRef = (0, import_element67.useRef)({});
+  const validate = (0, import_element67.useCallback)(() => {
     const promiseHandler = {
       customCounterRef,
       elementsCounterRef,
@@ -18332,7 +20903,7 @@ function useFormValidity(item, fields, form) {
       return validity;
     });
   }, [item, fields, form]);
-  (0, import_element59.useEffect)(() => {
+  (0, import_element67.useEffect)(() => {
     validate();
   }, [validate]);
   return {
@@ -18343,9 +20914,9 @@ function useFormValidity(item, fields, form) {
 var use_form_validity_default = useFormValidity;
 
 // packages/dataviews/build-module/hooks/use-report-validity.mjs
-var import_element60 = __toESM(require_element(), 1);
+var import_element68 = __toESM(require_element(), 1);
 function useReportValidity(ref, shouldReport) {
-  (0, import_element60.useEffect)(() => {
+  (0, import_element68.useEffect)(() => {
     if (shouldReport && ref.current) {
       const inputs = ref.current.querySelectorAll(
         "input, textarea, select"
@@ -18358,7 +20929,7 @@ function useReportValidity(ref, shouldReport) {
 }
 
 // packages/dataviews/build-module/components/dataform-layouts/panel/utils/use-field-from-form-field.mjs
-var import_element61 = __toESM(require_element(), 1);
+var import_element69 = __toESM(require_element(), 1);
 
 // packages/dataviews/build-module/components/dataform-layouts/get-summary-fields.mjs
 function extractSummaryIds(summary) {
@@ -18399,7 +20970,7 @@ var getFieldDefinition = (field, fields) => {
   return fieldDefinition;
 };
 function useFieldFromFormField(field) {
-  const { fields } = (0, import_element61.useContext)(dataform_context_default);
+  const { fields } = (0, import_element69.useContext)(dataform_context_default);
   const layout = field.layout;
   const summaryFields = getSummaryFields(layout.summary, fields);
   const fieldDefinition = getFieldDefinition(field, fields);
@@ -18420,7 +20991,7 @@ function useFieldFromFormField(field) {
 var use_field_from_form_field_default = useFieldFromFormField;
 
 // packages/dataviews/build-module/components/dataform-layouts/panel/modal.mjs
-var import_jsx_runtime89 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime103 = __toESM(require_jsx_runtime(), 1);
 function ModalContent({
   data,
   field,
@@ -18431,14 +21002,14 @@ function ModalContent({
 }) {
   const { openAs } = field.layout;
   const { applyLabel, cancelLabel } = openAs;
-  const { fields } = (0, import_element62.useContext)(dataform_context_default);
-  const [changes, setChanges] = (0, import_element62.useState)({});
-  const modalData = (0, import_element62.useMemo)(() => {
+  const { fields } = (0, import_element70.useContext)(dataform_context_default);
+  const [changes, setChanges] = (0, import_element70.useState)({});
+  const modalData = (0, import_element70.useMemo)(() => {
     return (0, import_deepmerge2.default)(data, changes, {
       arrayMerge: (target, source) => source
     });
   }, [data, changes]);
-  const form = (0, import_element62.useMemo)(
+  const form = (0, import_element70.useMemo)(
     () => ({
       layout: DEFAULT_LAYOUT,
       fields: !!field.children ? field.children : (
@@ -18473,12 +21044,12 @@ function ModalContent({
       })
     );
   };
-  const focusOnMountRef = (0, import_compose2.useFocusOnMount)("firstInputElement");
-  const contentRef = (0, import_element62.useRef)(null);
-  const mergedRef = (0, import_compose2.useMergeRefs)([focusOnMountRef, contentRef]);
+  const focusOnMountRef = (0, import_compose4.useFocusOnMount)("firstInputElement");
+  const contentRef = (0, import_element70.useRef)(null);
+  const mergedRef = (0, import_compose4.useMergeRefs)([focusOnMountRef, contentRef]);
   useReportValidity(contentRef, touched);
-  return /* @__PURE__ */ (0, import_jsx_runtime89.jsxs)(
-    import_components24.Modal,
+  return /* @__PURE__ */ (0, import_jsx_runtime103.jsxs)(
+    import_components25.Modal,
     {
       className: "dataforms-layouts-panel__modal",
       onRequestClose: onClose,
@@ -18486,14 +21057,14 @@ function ModalContent({
       title: fieldLabel,
       size: "medium",
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime89.jsx)("div", { ref: mergedRef, children: /* @__PURE__ */ (0, import_jsx_runtime89.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime103.jsx)("div", { ref: mergedRef, children: /* @__PURE__ */ (0, import_jsx_runtime103.jsx)(
           DataFormLayout,
           {
             data: modalData,
             form,
             onChange: handleOnChange,
             validity,
-            children: (FieldLayout, childField, childFieldValidity, markWhenOptional) => /* @__PURE__ */ (0, import_jsx_runtime89.jsx)(
+            children: (FieldLayout, childField, childFieldValidity, markWhenOptional) => /* @__PURE__ */ (0, import_jsx_runtime103.jsx)(
               FieldLayout,
               {
                 data: modalData,
@@ -18507,16 +21078,16 @@ function ModalContent({
             )
           }
         ) }),
-        /* @__PURE__ */ (0, import_jsx_runtime89.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime103.jsxs)(
           Stack,
           {
             direction: "row",
             className: "dataforms-layouts-panel__modal-footer",
             gap: "md",
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime89.jsx)(import_components24.__experimentalSpacer, { style: { flex: 1 } }),
-              /* @__PURE__ */ (0, import_jsx_runtime89.jsx)(
-                import_components24.Button,
+              /* @__PURE__ */ (0, import_jsx_runtime103.jsx)(import_components25.__experimentalSpacer, { style: { flex: 1 } }),
+              /* @__PURE__ */ (0, import_jsx_runtime103.jsx)(
+                import_components25.Button,
                 {
                   variant: "tertiary",
                   onClick: onClose,
@@ -18524,8 +21095,8 @@ function ModalContent({
                   children: cancelLabel
                 }
               ),
-              /* @__PURE__ */ (0, import_jsx_runtime89.jsx)(
-                import_components24.Button,
+              /* @__PURE__ */ (0, import_jsx_runtime103.jsx)(
+                import_components25.Button,
                 {
                   variant: "primary",
                   onClick: onApply,
@@ -18546,8 +21117,8 @@ function PanelModal({
   onChange,
   validity
 }) {
-  const [touched, setTouched] = (0, import_element62.useState)(false);
-  const [isOpen2, setIsOpen] = (0, import_element62.useState)(false);
+  const [touched, setTouched] = (0, import_element70.useState)(false);
+  const [isOpen2, setIsOpen] = (0, import_element70.useState)(false);
   const { fieldDefinition, fieldLabel, summaryFields } = use_field_from_form_field_default(field);
   if (!fieldDefinition) {
     return null;
@@ -18556,8 +21127,8 @@ function PanelModal({
     setIsOpen(false);
     setTouched(true);
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime89.jsxs)(import_jsx_runtime89.Fragment, { children: [
-    /* @__PURE__ */ (0, import_jsx_runtime89.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime103.jsxs)(import_jsx_runtime103.Fragment, { children: [
+    /* @__PURE__ */ (0, import_jsx_runtime103.jsx)(
       SummaryButton,
       {
         data,
@@ -18571,7 +21142,7 @@ function PanelModal({
         isOpen: isOpen2
       }
     ),
-    isOpen2 && /* @__PURE__ */ (0, import_jsx_runtime89.jsx)(
+    isOpen2 && /* @__PURE__ */ (0, import_jsx_runtime103.jsx)(
       ModalContent,
       {
         data,
@@ -18587,26 +21158,26 @@ function PanelModal({
 var modal_default = PanelModal;
 
 // packages/dataviews/build-module/components/dataform-layouts/panel/dropdown.mjs
-var import_components25 = __toESM(require_components(), 1);
+var import_components26 = __toESM(require_components(), 1);
 var import_i18n21 = __toESM(require_i18n(), 1);
-var import_element63 = __toESM(require_element(), 1);
-var import_compose3 = __toESM(require_compose(), 1);
-var import_jsx_runtime90 = __toESM(require_jsx_runtime(), 1);
+var import_element71 = __toESM(require_element(), 1);
+var import_compose5 = __toESM(require_compose(), 1);
+var import_jsx_runtime104 = __toESM(require_jsx_runtime(), 1);
 function DropdownHeader({
   title,
   onClose
 }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime90.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime104.jsx)(
     Stack,
     {
       direction: "column",
       className: "dataforms-layouts-panel__dropdown-header",
       gap: "lg",
-      children: /* @__PURE__ */ (0, import_jsx_runtime90.jsxs)(Stack, { direction: "row", gap: "sm", align: "center", children: [
-        title && /* @__PURE__ */ (0, import_jsx_runtime90.jsx)(import_components25.__experimentalHeading, { level: 2, size: 13, children: title }),
-        /* @__PURE__ */ (0, import_jsx_runtime90.jsx)(import_components25.__experimentalSpacer, { style: { flex: 1 } }),
-        onClose && /* @__PURE__ */ (0, import_jsx_runtime90.jsx)(
-          import_components25.Button,
+      children: /* @__PURE__ */ (0, import_jsx_runtime104.jsxs)(Stack, { direction: "row", gap: "sm", align: "center", children: [
+        title && /* @__PURE__ */ (0, import_jsx_runtime104.jsx)(import_components26.__experimentalHeading, { level: 2, size: 13, children: title }),
+        /* @__PURE__ */ (0, import_jsx_runtime104.jsx)(import_components26.__experimentalSpacer, { style: { flex: 1 } }),
+        onClose && /* @__PURE__ */ (0, import_jsx_runtime104.jsx)(
+          import_components26.Button,
           {
             label: (0, import_i18n21.__)("Close"),
             icon: close_small_default,
@@ -18622,9 +21193,9 @@ function DropdownContentWithValidation({
   touched,
   children
 }) {
-  const ref = (0, import_element63.useRef)(null);
+  const ref = (0, import_element71.useRef)(null);
   useReportValidity(ref, touched);
-  return /* @__PURE__ */ (0, import_jsx_runtime90.jsx)("div", { ref, children });
+  return /* @__PURE__ */ (0, import_jsx_runtime104.jsx)("div", { ref, children });
 }
 function PanelDropdown({
   data,
@@ -18632,11 +21203,11 @@ function PanelDropdown({
   onChange,
   validity
 }) {
-  const [touched, setTouched] = (0, import_element63.useState)(false);
-  const [popoverAnchor, setPopoverAnchor] = (0, import_element63.useState)(
+  const [touched, setTouched] = (0, import_element71.useState)(false);
+  const [popoverAnchor, setPopoverAnchor] = (0, import_element71.useState)(
     null
   );
-  const popoverProps = (0, import_element63.useMemo)(
+  const popoverProps = (0, import_element71.useMemo)(
     () => ({
       // Anchor the popover to the middle of the entire row so that it doesn't
       // move around when the label changes.
@@ -18647,10 +21218,10 @@ function PanelDropdown({
     }),
     [popoverAnchor]
   );
-  const [dialogRef, dialogProps] = (0, import_compose3.__experimentalUseDialog)({
+  const [dialogRef, dialogProps] = (0, import_compose5.__experimentalUseDialog)({
     focusOnMount: "firstInputElement"
   });
-  const form = (0, import_element63.useMemo)(
+  const form = (0, import_element71.useMemo)(
     () => ({
       layout: DEFAULT_LAYOUT,
       fields: !!field.children ? field.children : (
@@ -18660,7 +21231,7 @@ function PanelDropdown({
     }),
     [field]
   );
-  const formValidity = (0, import_element63.useMemo)(() => {
+  const formValidity = (0, import_element71.useMemo)(() => {
     if (validity === void 0) {
       return void 0;
     }
@@ -18673,13 +21244,13 @@ function PanelDropdown({
   if (!fieldDefinition) {
     return null;
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime90.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime104.jsx)(
     "div",
     {
       ref: setPopoverAnchor,
       className: "dataforms-layouts-panel__field-dropdown-anchor",
-      children: /* @__PURE__ */ (0, import_jsx_runtime90.jsx)(
-        import_components25.Dropdown,
+      children: /* @__PURE__ */ (0, import_jsx_runtime104.jsx)(
+        import_components26.Dropdown,
         {
           contentClassName: "dataforms-layouts-panel__field-dropdown",
           popoverProps,
@@ -18689,7 +21260,7 @@ function PanelDropdown({
               setTouched(true);
             }
           },
-          renderToggle: ({ isOpen: isOpen2, onToggle }) => /* @__PURE__ */ (0, import_jsx_runtime90.jsx)(
+          renderToggle: ({ isOpen: isOpen2, onToggle }) => /* @__PURE__ */ (0, import_jsx_runtime104.jsx)(
             SummaryButton,
             {
               data,
@@ -18703,22 +21274,22 @@ function PanelDropdown({
               onClick: onToggle
             }
           ),
-          renderContent: ({ onClose }) => /* @__PURE__ */ (0, import_jsx_runtime90.jsx)(DropdownContentWithValidation, { touched, children: /* @__PURE__ */ (0, import_jsx_runtime90.jsxs)("div", { ref: dialogRef, ...dialogProps, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime90.jsx)(
+          renderContent: ({ onClose }) => /* @__PURE__ */ (0, import_jsx_runtime104.jsx)(DropdownContentWithValidation, { touched, children: /* @__PURE__ */ (0, import_jsx_runtime104.jsxs)("div", { ref: dialogRef, ...dialogProps, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime104.jsx)(
               DropdownHeader,
               {
                 title: fieldLabel,
                 onClose
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime90.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime104.jsx)(
               DataFormLayout,
               {
                 data,
                 form,
                 onChange,
                 validity: formValidity,
-                children: (FieldLayout, childField, childFieldValidity, markWhenOptional) => /* @__PURE__ */ (0, import_jsx_runtime90.jsx)(
+                children: (FieldLayout, childField, childFieldValidity, markWhenOptional) => /* @__PURE__ */ (0, import_jsx_runtime104.jsx)(
                   FieldLayout,
                   {
                     data,
@@ -18741,7 +21312,7 @@ function PanelDropdown({
 var dropdown_default = PanelDropdown;
 
 // packages/dataviews/build-module/components/dataform-layouts/panel/index.mjs
-var import_jsx_runtime91 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime105 = __toESM(require_jsx_runtime(), 1);
 function FormPanelField({
   data,
   field,
@@ -18750,7 +21321,7 @@ function FormPanelField({
 }) {
   const layout = field.layout;
   if (layout.openAs.type === "modal") {
-    return /* @__PURE__ */ (0, import_jsx_runtime91.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime105.jsx)(
       modal_default,
       {
         data,
@@ -18760,7 +21331,7 @@ function FormPanelField({
       }
     );
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime91.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime105.jsx)(
     dropdown_default,
     {
       data,
@@ -18772,11 +21343,11 @@ function FormPanelField({
 }
 
 // packages/dataviews/build-module/components/dataform-layouts/card/index.mjs
-var import_element64 = __toESM(require_element(), 1);
+var import_element72 = __toESM(require_element(), 1);
 
 // packages/dataviews/build-module/components/dataform-layouts/validation-badge.mjs
 var import_i18n22 = __toESM(require_i18n(), 1);
-var import_jsx_runtime92 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime106 = __toESM(require_jsx_runtime(), 1);
 function countInvalidFields(validity) {
   if (!validity) {
     return 0;
@@ -18805,7 +21376,7 @@ function ValidationBadge({
   if (invalidCount === 0) {
     return null;
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime92.jsx)(Badge, { intent: "high", children: (0, import_i18n22.sprintf)(
+  return /* @__PURE__ */ (0, import_jsx_runtime106.jsx)(Badge, { intent: "high", children: (0, import_i18n22.sprintf)(
     /* translators: %d: Number of fields that need attention */
     (0, import_i18n22._n)(
       "%d field needs attention",
@@ -18817,7 +21388,7 @@ function ValidationBadge({
 }
 
 // packages/dataviews/build-module/components/dataform-layouts/card/index.mjs
-var import_jsx_runtime93 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime107 = __toESM(require_jsx_runtime(), 1);
 function isSummaryFieldVisible(summaryField, summaryConfig, isOpen2) {
   if (!summaryConfig || Array.isArray(summaryConfig) && summaryConfig.length === 0) {
     return false;
@@ -18858,17 +21429,17 @@ function HeaderContent({
   );
   const hasBadge = touched && layout.isCollapsible;
   const hasSummary = visibleSummaryFields.length > 0 && layout.withHeader;
-  return /* @__PURE__ */ (0, import_jsx_runtime93.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime107.jsxs)(
     Stack,
     {
       align: "center",
       justify: "space-between",
       className: "dataforms-layouts-card__field-header-content",
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime93.jsx)(card_exports.Title, { children: label }),
-        (hasBadge || hasSummary) && /* @__PURE__ */ (0, import_jsx_runtime93.jsxs)(collapsible_card_exports.HeaderDescription, { className: "dataforms-layouts-card__field-header-content-description", children: [
-          hasBadge && /* @__PURE__ */ (0, import_jsx_runtime93.jsx)(ValidationBadge, { validity }),
-          hasSummary && /* @__PURE__ */ (0, import_jsx_runtime93.jsx)("div", { className: "dataforms-layouts-card__field-summary", children: visibleSummaryFields.map((summaryField) => /* @__PURE__ */ (0, import_jsx_runtime93.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime107.jsx)(card_exports.Title, { children: label }),
+        (hasBadge || hasSummary) && /* @__PURE__ */ (0, import_jsx_runtime107.jsxs)(collapsible_card_exports.HeaderDescription, { className: "dataforms-layouts-card__field-header-content-description", children: [
+          hasBadge && /* @__PURE__ */ (0, import_jsx_runtime107.jsx)(ValidationBadge, { validity }),
+          hasSummary && /* @__PURE__ */ (0, import_jsx_runtime107.jsx)("div", { className: "dataforms-layouts-card__field-summary", children: visibleSummaryFields.map((summaryField) => /* @__PURE__ */ (0, import_jsx_runtime107.jsx)(
             summaryField.render,
             {
               item: data,
@@ -18892,9 +21463,9 @@ function BodyContent({
   withHeader
 }) {
   if (field.children) {
-    return /* @__PURE__ */ (0, import_jsx_runtime93.jsxs)(import_jsx_runtime93.Fragment, { children: [
-      field.description && /* @__PURE__ */ (0, import_jsx_runtime93.jsx)("div", { className: "dataforms-layouts-card__field-description", children: field.description }),
-      /* @__PURE__ */ (0, import_jsx_runtime93.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime107.jsxs)(import_jsx_runtime107.Fragment, { children: [
+      field.description && /* @__PURE__ */ (0, import_jsx_runtime107.jsx)("div", { className: "dataforms-layouts-card__field-description", children: field.description }),
+      /* @__PURE__ */ (0, import_jsx_runtime107.jsx)(
         DataFormLayout,
         {
           data,
@@ -18909,7 +21480,7 @@ function BodyContent({
   if (!SingleFieldLayout) {
     return null;
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime93.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime107.jsx)(
     SingleFieldLayout,
     {
       data,
@@ -18929,10 +21500,10 @@ function FormCardField({
   markWhenOptional,
   validity
 }) {
-  const { fields } = (0, import_element64.useContext)(dataform_context_default);
+  const { fields } = (0, import_element72.useContext)(dataform_context_default);
   const layout = field.layout;
-  const contentRef = (0, import_element64.useRef)(null);
-  const form = (0, import_element64.useMemo)(
+  const contentRef = (0, import_element72.useRef)(null);
+  const form = (0, import_element72.useMemo)(
     () => ({
       layout: DEFAULT_LAYOUT,
       fields: field.children ?? []
@@ -18940,18 +21511,18 @@ function FormCardField({
     [field]
   );
   const { isOpened, isCollapsible } = layout;
-  const [isOpen2, setIsOpen] = (0, import_element64.useState)(isOpened);
-  const [touched, setTouched] = (0, import_element64.useState)(false);
-  (0, import_element64.useEffect)(() => {
+  const [isOpen2, setIsOpen] = (0, import_element72.useState)(isOpened);
+  const [touched, setTouched] = (0, import_element72.useState)(false);
+  (0, import_element72.useEffect)(() => {
     setIsOpen(isOpened);
   }, [isOpened]);
-  const handleOpenChange = (0, import_element64.useCallback)((open) => {
+  const handleOpenChange = (0, import_element72.useCallback)((open) => {
     if (!open) {
       setTouched(true);
     }
     setIsOpen(open);
   }, []);
-  const handleBlur = (0, import_element64.useCallback)(() => {
+  const handleBlur = (0, import_element72.useCallback)(() => {
     setTouched(true);
   }, []);
   useReportValidity(
@@ -18972,7 +21543,7 @@ function FormCardField({
     label = fieldDefinition.label;
     withHeader = !!label && layout.withHeader;
   }
-  const bodyContent = /* @__PURE__ */ (0, import_jsx_runtime93.jsx)(
+  const bodyContent = /* @__PURE__ */ (0, import_jsx_runtime107.jsx)(
     BodyContent,
     {
       data,
@@ -18985,7 +21556,7 @@ function FormCardField({
       withHeader
     }
   );
-  const headerContent = /* @__PURE__ */ (0, import_jsx_runtime93.jsx)(
+  const headerContent = /* @__PURE__ */ (0, import_jsx_runtime107.jsx)(
     HeaderContent,
     {
       data,
@@ -18998,15 +21569,15 @@ function FormCardField({
     }
   );
   if (withHeader && isCollapsible) {
-    return /* @__PURE__ */ (0, import_jsx_runtime93.jsxs)(
+    return /* @__PURE__ */ (0, import_jsx_runtime107.jsxs)(
       collapsible_card_exports.Root,
       {
         className: "dataforms-layouts-card__field",
         open: isOpen2,
         onOpenChange: handleOpenChange,
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime93.jsx)(collapsible_card_exports.Header, { children: headerContent }),
-          /* @__PURE__ */ (0, import_jsx_runtime93.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime107.jsx)(collapsible_card_exports.Header, { children: headerContent }),
+          /* @__PURE__ */ (0, import_jsx_runtime107.jsx)(
             collapsible_card_exports.Content,
             {
               ref: contentRef,
@@ -19018,27 +21589,27 @@ function FormCardField({
       }
     );
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime93.jsxs)(card_exports.Root, { className: "dataforms-layouts-card__field", children: [
-    withHeader && /* @__PURE__ */ (0, import_jsx_runtime93.jsx)(card_exports.Header, { children: headerContent }),
-    /* @__PURE__ */ (0, import_jsx_runtime93.jsx)(card_exports.Content, { ref: contentRef, onBlur: handleBlur, children: bodyContent })
+  return /* @__PURE__ */ (0, import_jsx_runtime107.jsxs)(card_exports.Root, { className: "dataforms-layouts-card__field", children: [
+    withHeader && /* @__PURE__ */ (0, import_jsx_runtime107.jsx)(card_exports.Header, { children: headerContent }),
+    /* @__PURE__ */ (0, import_jsx_runtime107.jsx)(card_exports.Content, { ref: contentRef, onBlur: handleBlur, children: bodyContent })
   ] });
 }
 
 // packages/dataviews/build-module/components/dataform-layouts/row/index.mjs
-var import_components26 = __toESM(require_components(), 1);
-var import_jsx_runtime94 = __toESM(require_jsx_runtime(), 1);
+var import_components27 = __toESM(require_components(), 1);
+var import_jsx_runtime108 = __toESM(require_jsx_runtime(), 1);
 function Header5({ title }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime94.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime108.jsx)(
     Stack,
     {
       direction: "column",
       className: "dataforms-layouts-row__header",
       gap: "lg",
-      children: /* @__PURE__ */ (0, import_jsx_runtime94.jsx)(Stack, { direction: "row", align: "center", children: /* @__PURE__ */ (0, import_jsx_runtime94.jsx)(import_components26.__experimentalHeading, { level: 2, size: 13, children: title }) })
+      children: /* @__PURE__ */ (0, import_jsx_runtime108.jsx)(Stack, { direction: "row", align: "center", children: /* @__PURE__ */ (0, import_jsx_runtime108.jsx)(import_components27.__experimentalHeading, { level: 2, size: 13, children: title }) })
     }
   );
 }
-var EMPTY_WRAPPER = ({ children }) => /* @__PURE__ */ (0, import_jsx_runtime94.jsx)(import_jsx_runtime94.Fragment, { children });
+var EMPTY_WRAPPER = ({ children }) => /* @__PURE__ */ (0, import_jsx_runtime108.jsx)(import_jsx_runtime108.Fragment, { children });
 function FormRowField({
   data,
   field,
@@ -19053,9 +21624,9 @@ function FormRowField({
       layout: DEFAULT_LAYOUT,
       fields: field.children
     };
-    return /* @__PURE__ */ (0, import_jsx_runtime94.jsxs)("div", { className: "dataforms-layouts-row__field", children: [
-      !hideLabelFromVision && field.label && /* @__PURE__ */ (0, import_jsx_runtime94.jsx)(Header5, { title: field.label }),
-      /* @__PURE__ */ (0, import_jsx_runtime94.jsx)(Stack, { direction: "row", align: layout.alignment, gap: "lg", children: /* @__PURE__ */ (0, import_jsx_runtime94.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime108.jsxs)("div", { className: "dataforms-layouts-row__field", children: [
+      !hideLabelFromVision && field.label && /* @__PURE__ */ (0, import_jsx_runtime108.jsx)(Header5, { title: field.label }),
+      /* @__PURE__ */ (0, import_jsx_runtime108.jsx)(Stack, { direction: "row", align: layout.alignment, gap: "lg", children: /* @__PURE__ */ (0, import_jsx_runtime108.jsx)(
         DataFormLayout,
         {
           data,
@@ -19063,12 +21634,12 @@ function FormRowField({
           onChange,
           validity: validity?.children,
           as: EMPTY_WRAPPER,
-          children: (FieldLayout, childField, childFieldValidity) => /* @__PURE__ */ (0, import_jsx_runtime94.jsx)(
+          children: (FieldLayout, childField, childFieldValidity) => /* @__PURE__ */ (0, import_jsx_runtime108.jsx)(
             "div",
             {
               className: "dataforms-layouts-row__field-control",
               style: layout.styles[childField.id],
-              children: /* @__PURE__ */ (0, import_jsx_runtime94.jsx)(
+              children: /* @__PURE__ */ (0, import_jsx_runtime108.jsx)(
                 FieldLayout,
                 {
                   data,
@@ -19090,7 +21661,7 @@ function FormRowField({
   if (!RegularLayout) {
     return null;
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime94.jsx)(import_jsx_runtime94.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime94.jsx)("div", { className: "dataforms-layouts-row__field-control", children: /* @__PURE__ */ (0, import_jsx_runtime94.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime108.jsx)(import_jsx_runtime108.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime108.jsx)("div", { className: "dataforms-layouts-row__field-control", children: /* @__PURE__ */ (0, import_jsx_runtime108.jsx)(
     RegularLayout,
     {
       data,
@@ -19103,28 +21674,28 @@ function FormRowField({
 }
 
 // packages/dataviews/build-module/components/dataform-layouts/details/index.mjs
-var import_element65 = __toESM(require_element(), 1);
+var import_element73 = __toESM(require_element(), 1);
 var import_i18n23 = __toESM(require_i18n(), 1);
-var import_jsx_runtime95 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime109 = __toESM(require_jsx_runtime(), 1);
 function FormDetailsField({
   data,
   field,
   onChange,
   validity
 }) {
-  const { fields } = (0, import_element65.useContext)(dataform_context_default);
-  const detailsRef = (0, import_element65.useRef)(null);
-  const contentRef = (0, import_element65.useRef)(null);
-  const [touched, setTouched] = (0, import_element65.useState)(false);
-  const [isOpen2, setIsOpen] = (0, import_element65.useState)(false);
-  const form = (0, import_element65.useMemo)(
+  const { fields } = (0, import_element73.useContext)(dataform_context_default);
+  const detailsRef = (0, import_element73.useRef)(null);
+  const contentRef = (0, import_element73.useRef)(null);
+  const [touched, setTouched] = (0, import_element73.useState)(false);
+  const [isOpen2, setIsOpen] = (0, import_element73.useState)(false);
+  const form = (0, import_element73.useMemo)(
     () => ({
       layout: DEFAULT_LAYOUT,
       fields: field.children ?? []
     }),
     [field]
   );
-  (0, import_element65.useEffect)(() => {
+  (0, import_element73.useEffect)(() => {
     const details = detailsRef.current;
     if (!details) {
       return;
@@ -19142,7 +21713,7 @@ function FormDetailsField({
     };
   }, []);
   useReportValidity(contentRef, isOpen2 && touched);
-  const handleBlur = (0, import_element65.useCallback)(() => {
+  const handleBlur = (0, import_element73.useCallback)(() => {
     setTouched(true);
   }, []);
   if (!field.children) {
@@ -19152,17 +21723,17 @@ function FormDetailsField({
   const summaryField = summaryFieldId ? fields.find((fieldDef) => fieldDef.id === summaryFieldId) : void 0;
   let summaryContent;
   if (summaryField && summaryField.render) {
-    summaryContent = /* @__PURE__ */ (0, import_jsx_runtime95.jsx)(summaryField.render, { item: data, field: summaryField });
+    summaryContent = /* @__PURE__ */ (0, import_jsx_runtime109.jsx)(summaryField.render, { item: data, field: summaryField });
   } else {
     summaryContent = field.label || (0, import_i18n23.__)("More details");
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime95.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime109.jsxs)(
     "details",
     {
       ref: detailsRef,
       className: "dataforms-layouts-details__details",
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime95.jsx)("summary", { className: "dataforms-layouts-details__summary", children: /* @__PURE__ */ (0, import_jsx_runtime95.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime109.jsx)("summary", { className: "dataforms-layouts-details__summary", children: /* @__PURE__ */ (0, import_jsx_runtime109.jsxs)(
           Stack,
           {
             direction: "row",
@@ -19171,17 +21742,17 @@ function FormDetailsField({
             className: "dataforms-layouts-details__summary-content",
             children: [
               summaryContent,
-              touched && /* @__PURE__ */ (0, import_jsx_runtime95.jsx)(ValidationBadge, { validity })
+              touched && /* @__PURE__ */ (0, import_jsx_runtime109.jsx)(ValidationBadge, { validity })
             ]
           }
         ) }),
-        /* @__PURE__ */ (0, import_jsx_runtime95.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime109.jsx)(
           "div",
           {
             ref: contentRef,
             className: "dataforms-layouts-details__content",
             onBlur: handleBlur,
-            children: /* @__PURE__ */ (0, import_jsx_runtime95.jsx)(
+            children: /* @__PURE__ */ (0, import_jsx_runtime109.jsx)(
               DataFormLayout,
               {
                 data,
@@ -19198,12 +21769,12 @@ function FormDetailsField({
 }
 
 // packages/dataviews/build-module/components/dataform-layouts/index.mjs
-var import_jsx_runtime96 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime110 = __toESM(require_jsx_runtime(), 1);
 var FORM_FIELD_LAYOUTS = [
   {
     type: "regular",
     component: FormRegularField,
-    wrapper: ({ children }) => /* @__PURE__ */ (0, import_jsx_runtime96.jsx)(
+    wrapper: ({ children }) => /* @__PURE__ */ (0, import_jsx_runtime110.jsx)(
       Stack,
       {
         direction: "column",
@@ -19216,7 +21787,7 @@ var FORM_FIELD_LAYOUTS = [
   {
     type: "panel",
     component: FormPanelField,
-    wrapper: ({ children }) => /* @__PURE__ */ (0, import_jsx_runtime96.jsx)(
+    wrapper: ({ children }) => /* @__PURE__ */ (0, import_jsx_runtime110.jsx)(
       Stack,
       {
         direction: "column",
@@ -19229,7 +21800,7 @@ var FORM_FIELD_LAYOUTS = [
   {
     type: "card",
     component: FormCardField,
-    wrapper: ({ children }) => /* @__PURE__ */ (0, import_jsx_runtime96.jsx)(
+    wrapper: ({ children }) => /* @__PURE__ */ (0, import_jsx_runtime110.jsx)(
       Stack,
       {
         direction: "column",
@@ -19245,13 +21816,13 @@ var FORM_FIELD_LAYOUTS = [
     wrapper: ({
       children,
       layout
-    }) => /* @__PURE__ */ (0, import_jsx_runtime96.jsx)(
+    }) => /* @__PURE__ */ (0, import_jsx_runtime110.jsx)(
       Stack,
       {
         direction: "column",
         className: "dataforms-layouts__wrapper",
         gap: "lg",
-        children: /* @__PURE__ */ (0, import_jsx_runtime96.jsx)("div", { className: "dataforms-layouts-row__field", children: /* @__PURE__ */ (0, import_jsx_runtime96.jsx)(
+        children: /* @__PURE__ */ (0, import_jsx_runtime110.jsx)("div", { className: "dataforms-layouts-row__field", children: /* @__PURE__ */ (0, import_jsx_runtime110.jsx)(
           Stack,
           {
             direction: "row",
@@ -19273,8 +21844,8 @@ function getFormFieldLayout(type) {
 }
 
 // packages/dataviews/build-module/components/dataform-layouts/data-form-layout.mjs
-var import_jsx_runtime97 = __toESM(require_jsx_runtime(), 1);
-var DEFAULT_WRAPPER = ({ children }) => /* @__PURE__ */ (0, import_jsx_runtime97.jsx)(Stack, { direction: "column", className: "dataforms-layouts__wrapper", gap: "lg", children });
+var import_jsx_runtime111 = __toESM(require_jsx_runtime(), 1);
+var DEFAULT_WRAPPER = ({ children }) => /* @__PURE__ */ (0, import_jsx_runtime111.jsx)(Stack, { direction: "column", className: "dataforms-layouts__wrapper", gap: "lg", children });
 function DataFormLayout({
   data,
   form,
@@ -19283,8 +21854,8 @@ function DataFormLayout({
   children,
   as
 }) {
-  const { fields: fieldDefinitions } = (0, import_element66.useContext)(dataform_context_default);
-  const markWhenOptional = (0, import_element66.useMemo)(() => {
+  const { fields: fieldDefinitions } = (0, import_element74.useContext)(dataform_context_default);
+  const markWhenOptional = (0, import_element74.useMemo)(() => {
     const requiredCount = fieldDefinitions.filter(
       (f2) => !!f2.isValid?.required
     ).length;
@@ -19297,7 +21868,7 @@ function DataFormLayout({
     );
   }
   const Wrapper = as ?? getFormFieldLayout(form.layout.type)?.wrapper ?? DEFAULT_WRAPPER;
-  return /* @__PURE__ */ (0, import_jsx_runtime97.jsx)(Wrapper, { layout: form.layout, children: form.fields.map((formField) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime111.jsx)(Wrapper, { layout: form.layout, children: form.fields.map((formField) => {
     const FieldLayout = getFormFieldLayout(formField.layout.type)?.component;
     if (!FieldLayout) {
       return null;
@@ -19314,7 +21885,7 @@ function DataFormLayout({
         markWhenOptional
       );
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime97.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime111.jsx)(
       FieldLayout,
       {
         data,
@@ -19329,7 +21900,7 @@ function DataFormLayout({
 }
 
 // packages/dataviews/build-module/dataform/index.mjs
-var import_jsx_runtime98 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime112 = __toESM(require_jsx_runtime(), 1);
 function DataForm({
   data,
   form,
@@ -19337,15 +21908,15 @@ function DataForm({
   onChange,
   validity
 }) {
-  const normalizedForm = (0, import_element67.useMemo)(() => normalize_form_default(form), [form]);
-  const normalizedFields = (0, import_element67.useMemo)(
+  const normalizedForm = (0, import_element75.useMemo)(() => normalize_form_default(form), [form]);
+  const normalizedFields = (0, import_element75.useMemo)(
     () => normalizeFields(fields),
     [fields]
   );
   if (!form.fields) {
     return null;
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime98.jsx)(DataFormProvider, { fields: normalizedFields, children: /* @__PURE__ */ (0, import_jsx_runtime98.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime112.jsx)(DataFormProvider, { fields: normalizedFields, children: /* @__PURE__ */ (0, import_jsx_runtime112.jsx)(
     DataFormLayout,
     {
       data,
@@ -19357,16 +21928,16 @@ function DataForm({
 }
 
 // packages/media-editor/build-module/components/media-form/index.mjs
-var import_components27 = __toESM(require_components(), 1);
+var import_components28 = __toESM(require_components(), 1);
 var import_i18n24 = __toESM(require_i18n(), 1);
-var import_jsx_runtime99 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime113 = __toESM(require_jsx_runtime(), 1);
 function MediaForm({
   form: formOverrides,
   header
 }) {
   const { media, fields, onChange } = useMediaEditorContext();
   if (!media || !onChange) {
-    return /* @__PURE__ */ (0, import_jsx_runtime99.jsx)("div", { className: "media-editor-form media-editor-form--loading", children: /* @__PURE__ */ (0, import_jsx_runtime99.jsx)(import_components27.Spinner, {}) });
+    return /* @__PURE__ */ (0, import_jsx_runtime113.jsx)("div", { className: "media-editor-form media-editor-form--loading", children: /* @__PURE__ */ (0, import_jsx_runtime113.jsx)(import_components28.Spinner, {}) });
   }
   const regularFieldIds = ["title", "alt_text", "caption", "description"];
   const sortedFields = [
@@ -19395,10 +21966,10 @@ function MediaForm({
     })
   };
   const form = formOverrides || defaultForm;
-  return /* @__PURE__ */ (0, import_jsx_runtime99.jsx)("div", { className: "media-editor-form", children: /* @__PURE__ */ (0, import_jsx_runtime99.jsxs)(import_components27.__experimentalVStack, { spacing: 4, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime99.jsx)(VisuallyHidden, { render: /* @__PURE__ */ (0, import_jsx_runtime99.jsx)("h2", {}), children: (0, import_i18n24.__)("Media details") }),
+  return /* @__PURE__ */ (0, import_jsx_runtime113.jsx)("div", { className: "media-editor-form", children: /* @__PURE__ */ (0, import_jsx_runtime113.jsxs)(import_components28.__experimentalVStack, { spacing: 4, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime113.jsx)(VisuallyHidden, { render: /* @__PURE__ */ (0, import_jsx_runtime113.jsx)("h2", {}), children: (0, import_i18n24.__)("Media details") }),
     header,
-    /* @__PURE__ */ (0, import_jsx_runtime99.jsx)(
+    /* @__PURE__ */ (0, import_jsx_runtime113.jsx)(
       DataForm,
       {
         data: media,
@@ -19499,34 +22070,34 @@ var store = (0, import_data.createReduxStore)(STORE_NAME, {
 (0, import_data.register)(store);
 
 // packages/media-editor/build-module/components/media-editor-modal/index.mjs
-var import_components40 = __toESM(require_components(), 1);
+var import_components41 = __toESM(require_components(), 1);
 var import_data9 = __toESM(require_data(), 1);
 var import_i18n38 = __toESM(require_i18n(), 1);
 var import_keyboard_shortcuts = __toESM(require_keyboard_shortcuts(), 1);
 var import_notices3 = __toESM(require_notices(), 1);
 
 // packages/media-editor/build-module/components/media-editor/index.mjs
-var import_components39 = __toESM(require_components(), 1);
-var import_compose6 = __toESM(require_compose(), 1);
+var import_components40 = __toESM(require_components(), 1);
+var import_compose8 = __toESM(require_compose(), 1);
 var import_data8 = __toESM(require_data(), 1);
 var import_core_data2 = __toESM(require_core_data(), 1);
-var import_element88 = __toESM(require_element(), 1);
+var import_element96 = __toESM(require_element(), 1);
 var import_i18n37 = __toESM(require_i18n(), 1);
 var import_keycodes2 = __toESM(require_keycodes(), 1);
 var import_notices2 = __toESM(require_notices(), 1);
 
 // packages/interface/build-module/components/complementary-area/index.mjs
-var import_components32 = __toESM(require_components(), 1);
+var import_components33 = __toESM(require_components(), 1);
 var import_data6 = __toESM(require_data(), 1);
 var import_i18n25 = __toESM(require_i18n(), 1);
-var import_element69 = __toESM(require_element(), 1);
+var import_element77 = __toESM(require_element(), 1);
 var import_viewport = __toESM(require_viewport(), 1);
 var import_preferences3 = __toESM(require_preferences(), 1);
-var import_compose4 = __toESM(require_compose(), 1);
+var import_compose6 = __toESM(require_compose(), 1);
 var import_plugins2 = __toESM(require_plugins(), 1);
 
 // packages/interface/build-module/components/complementary-area-toggle/index.mjs
-var import_components28 = __toESM(require_components(), 1);
+var import_components29 = __toESM(require_components(), 1);
 var import_data5 = __toESM(require_data(), 1);
 var import_plugins = __toESM(require_plugins(), 1);
 
@@ -19796,7 +22367,7 @@ var store2 = (0, import_data4.createReduxStore)(STORE_NAME2, {
 (0, import_data4.register)(store2);
 
 // packages/interface/build-module/components/complementary-area-toggle/index.mjs
-var import_jsx_runtime100 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime114 = __toESM(require_jsx_runtime(), 1);
 function roleSupportsCheckedState(role) {
   return [
     "checkbox",
@@ -19809,7 +22380,7 @@ function roleSupportsCheckedState(role) {
   ].includes(role);
 }
 function ComplementaryAreaToggle({
-  as = import_components28.Button,
+  as = import_components29.Button,
   scope,
   identifier: identifierProp,
   icon: iconProp,
@@ -19827,7 +22398,7 @@ function ComplementaryAreaToggle({
     [identifier, scope]
   );
   const { enableComplementaryArea: enableComplementaryArea2, disableComplementaryArea: disableComplementaryArea2 } = (0, import_data5.useDispatch)(store2);
-  return /* @__PURE__ */ (0, import_jsx_runtime100.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime114.jsx)(
     ComponentToUse,
     {
       icon: selectedIcon && isSelected ? selectedIcon : icon,
@@ -19847,14 +22418,14 @@ function ComplementaryAreaToggle({
 }
 
 // packages/interface/build-module/components/complementary-area-header/index.mjs
-var import_jsx_runtime101 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime115 = __toESM(require_jsx_runtime(), 1);
 var ComplementaryAreaHeader = ({
   children,
   className,
   toggleButtonProps
 }) => {
-  const toggleButton = /* @__PURE__ */ (0, import_jsx_runtime101.jsx)(ComplementaryAreaToggle, { icon: close_small_default, ...toggleButtonProps });
-  return /* @__PURE__ */ (0, import_jsx_runtime101.jsxs)(
+  const toggleButton = /* @__PURE__ */ (0, import_jsx_runtime115.jsx)(ComplementaryAreaToggle, { icon: close_small_default, ...toggleButtonProps });
+  return /* @__PURE__ */ (0, import_jsx_runtime115.jsxs)(
     "div",
     {
       className: clsx_default(
@@ -19873,33 +22444,33 @@ var ComplementaryAreaHeader = ({
 var complementary_area_header_default = ComplementaryAreaHeader;
 
 // packages/interface/build-module/components/complementary-area-more-menu-item/index.mjs
-var import_components30 = __toESM(require_components(), 1);
+var import_components31 = __toESM(require_components(), 1);
 
 // packages/interface/build-module/components/action-item/index.mjs
-var import_components29 = __toESM(require_components(), 1);
-var import_element68 = __toESM(require_element(), 1);
-var import_jsx_runtime102 = __toESM(require_jsx_runtime(), 1);
+var import_components30 = __toESM(require_components(), 1);
+var import_element76 = __toESM(require_element(), 1);
+var import_jsx_runtime116 = __toESM(require_jsx_runtime(), 1);
 var noop4 = () => {
 };
 function ActionItemSlot({
   name,
-  as: Component = import_components29.MenuGroup,
+  as: Component = import_components30.MenuGroup,
   fillProps = {},
   bubblesVirtually,
   ...props
 }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime102.jsx)(
-    import_components29.Slot,
+  return /* @__PURE__ */ (0, import_jsx_runtime116.jsx)(
+    import_components30.Slot,
     {
       name,
       bubblesVirtually,
       fillProps,
       children: (fills) => {
-        if (!import_element68.Children.toArray(fills).length) {
+        if (!import_element76.Children.toArray(fills).length) {
           return null;
         }
         const initializedByPlugins = [];
-        import_element68.Children.forEach(
+        import_element76.Children.forEach(
           fills,
           ({
             props: { __unstableExplicitMenuItem, __unstableTarget }
@@ -19909,7 +22480,7 @@ function ActionItemSlot({
             }
           }
         );
-        const children = import_element68.Children.map(fills, (child) => {
+        const children = import_element76.Children.map(fills, (child) => {
           if (!child.props.__unstableExplicitMenuItem && initializedByPlugins.includes(
             child.props.__unstableTarget
           )) {
@@ -19917,14 +22488,14 @@ function ActionItemSlot({
           }
           return child;
         });
-        return /* @__PURE__ */ (0, import_jsx_runtime102.jsx)(Component, { ...props, children });
+        return /* @__PURE__ */ (0, import_jsx_runtime116.jsx)(Component, { ...props, children });
       }
     }
   );
 }
-function ActionItem({ name, as: Component = import_components29.Button, onClick, ...props }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime102.jsx)(import_components29.Fill, { name, children: ({ onClick: fpOnClick }) => {
-    return /* @__PURE__ */ (0, import_jsx_runtime102.jsx)(
+function ActionItem({ name, as: Component = import_components30.Button, onClick, ...props }) {
+  return /* @__PURE__ */ (0, import_jsx_runtime116.jsx)(import_components30.Fill, { name, children: ({ onClick: fpOnClick }) => {
+    return /* @__PURE__ */ (0, import_jsx_runtime116.jsx)(
       Component,
       {
         onClick: onClick || fpOnClick ? (...args) => {
@@ -19940,7 +22511,7 @@ ActionItem.Slot = ActionItemSlot;
 var action_item_default = ActionItem;
 
 // packages/interface/build-module/components/complementary-area-more-menu-item/index.mjs
-var import_jsx_runtime103 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime117 = __toESM(require_jsx_runtime(), 1);
 var PluginsMenuItem = ({
   // Menu item is marked with unstable prop for backward compatibility.
   // They are removed so they don't leak to DOM elements.
@@ -19948,18 +22519,18 @@ var PluginsMenuItem = ({
   __unstableExplicitMenuItem,
   __unstableTarget,
   ...restProps
-}) => /* @__PURE__ */ (0, import_jsx_runtime103.jsx)(import_components30.MenuItem, { ...restProps });
+}) => /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(import_components31.MenuItem, { ...restProps });
 function ComplementaryAreaMoreMenuItem({
   scope,
   target,
   __unstableExplicitMenuItem,
   ...props
 }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime103.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(
     ComplementaryAreaToggle,
     {
       as: (toggleProps) => {
-        return /* @__PURE__ */ (0, import_jsx_runtime103.jsx)(
+        return /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(
           action_item_default,
           {
             __unstableExplicitMenuItem,
@@ -19980,13 +22551,13 @@ function ComplementaryAreaMoreMenuItem({
 }
 
 // packages/interface/build-module/components/pinned-items/index.mjs
-var import_components31 = __toESM(require_components(), 1);
-var import_jsx_runtime104 = __toESM(require_jsx_runtime(), 1);
+var import_components32 = __toESM(require_components(), 1);
+var import_jsx_runtime118 = __toESM(require_jsx_runtime(), 1);
 function PinnedItems({ scope, ...props }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime104.jsx)(import_components31.Fill, { name: `PinnedItems/${scope}`, ...props });
+  return /* @__PURE__ */ (0, import_jsx_runtime118.jsx)(import_components32.Fill, { name: `PinnedItems/${scope}`, ...props });
 }
 function PinnedItemsSlot({ scope, className, ...props }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime104.jsx)(import_components31.Slot, { name: `PinnedItems/${scope}`, ...props, children: (fills) => fills?.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime104.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime118.jsx)(import_components32.Slot, { name: `PinnedItems/${scope}`, ...props, children: (fills) => fills?.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime118.jsx)(
     "div",
     {
       className: clsx_default(
@@ -20001,10 +22572,10 @@ PinnedItems.Slot = PinnedItemsSlot;
 var pinned_items_default = PinnedItems;
 
 // packages/interface/build-module/components/complementary-area/index.mjs
-var import_jsx_runtime105 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime119 = __toESM(require_jsx_runtime(), 1);
 var ANIMATION_DURATION = 0.3;
 function ComplementaryAreaSlot({ scope, ...props }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime105.jsx)(import_components32.Slot, { name: `ComplementaryArea/${scope}`, ...props });
+  return /* @__PURE__ */ (0, import_jsx_runtime119.jsx)(import_components33.Slot, { name: `ComplementaryArea/${scope}`, ...props });
 }
 var SIDEBAR_WIDTH = 280;
 var variants = {
@@ -20020,12 +22591,12 @@ function ComplementaryAreaFill({
   className,
   id
 }) {
-  const disableMotion = (0, import_compose4.useReducedMotion)();
-  const isMobileViewport = (0, import_compose4.useViewportMatch)("medium", "<");
-  const previousActiveArea = (0, import_compose4.usePrevious)(activeArea);
-  const previousIsActive = (0, import_compose4.usePrevious)(isActive);
-  const [, setState] = (0, import_element69.useState)({});
-  (0, import_element69.useEffect)(() => {
+  const disableMotion = (0, import_compose6.useReducedMotion)();
+  const isMobileViewport = (0, import_compose6.useViewportMatch)("medium", "<");
+  const previousActiveArea = (0, import_compose6.usePrevious)(activeArea);
+  const previousIsActive = (0, import_compose6.usePrevious)(isActive);
+  const [, setState] = (0, import_element77.useState)({});
+  (0, import_element77.useEffect)(() => {
     setState({});
   }, [isActive]);
   const transition = {
@@ -20033,8 +22604,8 @@ function ComplementaryAreaFill({
     duration: disableMotion || isMobileViewport || !!previousActiveArea && !!activeArea && activeArea !== previousActiveArea ? 0 : ANIMATION_DURATION,
     ease: [0.6, 0, 0.4, 1]
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime105.jsx)(import_components32.Fill, { name: `ComplementaryArea/${scope}`, children: /* @__PURE__ */ (0, import_jsx_runtime105.jsx)(import_components32.__unstableAnimatePresence, { initial: false, children: (previousIsActive || isActive) && /* @__PURE__ */ (0, import_jsx_runtime105.jsx)(
-    import_components32.__unstableMotion.div,
+  return /* @__PURE__ */ (0, import_jsx_runtime119.jsx)(import_components33.Fill, { name: `ComplementaryArea/${scope}`, children: /* @__PURE__ */ (0, import_jsx_runtime119.jsx)(import_components33.__unstableAnimatePresence, { initial: false, children: (previousIsActive || isActive) && /* @__PURE__ */ (0, import_jsx_runtime119.jsx)(
+    import_components33.__unstableMotion.div,
     {
       variants,
       initial: "closed",
@@ -20042,7 +22613,7 @@ function ComplementaryAreaFill({
       exit: "closed",
       transition,
       className: "interface-complementary-area__fill",
-      children: /* @__PURE__ */ (0, import_jsx_runtime105.jsx)(
+      children: /* @__PURE__ */ (0, import_jsx_runtime119.jsx)(
         "div",
         {
           id,
@@ -20057,10 +22628,10 @@ function ComplementaryAreaFill({
   ) }) });
 }
 function useAdjustComplementaryListener(scope, identifier, activeArea, isActive, isSmall) {
-  const previousIsSmallRef = (0, import_element69.useRef)(false);
-  const shouldOpenWhenNotSmallRef = (0, import_element69.useRef)(false);
+  const previousIsSmallRef = (0, import_element77.useRef)(false);
+  const shouldOpenWhenNotSmallRef = (0, import_element77.useRef)(false);
   const { enableComplementaryArea: enableComplementaryArea2, disableComplementaryArea: disableComplementaryArea2 } = (0, import_data6.useDispatch)(store2);
-  (0, import_element69.useEffect)(() => {
+  (0, import_element77.useEffect)(() => {
     if (isActive && isSmall && !previousIsSmallRef.current) {
       disableComplementaryArea2(scope);
       shouldOpenWhenNotSmallRef.current = true;
@@ -20112,7 +22683,7 @@ function ComplementaryArea({
   const context = (0, import_plugins2.usePluginContext)();
   const icon = iconProp || context.icon;
   const identifier = identifierProp || `${context.name}/${name}`;
-  const [isReady, setIsReady] = (0, import_element69.useState)(false);
+  const [isReady, setIsReady] = (0, import_element77.useState)(false);
   const {
     isLoading,
     isActive,
@@ -20142,7 +22713,7 @@ function ComplementaryArea({
     },
     [identifier, scope]
   );
-  const isMobileViewport = (0, import_compose4.useViewportMatch)("medium", "<");
+  const isMobileViewport = (0, import_compose6.useViewportMatch)("medium", "<");
   useAdjustComplementaryListener(
     scope,
     identifier,
@@ -20156,7 +22727,7 @@ function ComplementaryArea({
     pinItem: pinItem2,
     unpinItem: unpinItem2
   } = (0, import_data6.useDispatch)(store2);
-  (0, import_element69.useEffect)(() => {
+  (0, import_element77.useEffect)(() => {
     if (isActiveByDefault && activeArea === void 0 && !isSmall) {
       enableComplementaryArea2(scope, identifier);
     } else if (activeArea === void 0 && isSmall) {
@@ -20175,8 +22746,8 @@ function ComplementaryArea({
   if (!isReady) {
     return;
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime105.jsxs)(import_jsx_runtime105.Fragment, { children: [
-    isPinnable && /* @__PURE__ */ (0, import_jsx_runtime105.jsx)(pinned_items_default, { scope, children: isPinned && /* @__PURE__ */ (0, import_jsx_runtime105.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime119.jsxs)(import_jsx_runtime119.Fragment, { children: [
+    isPinnable && /* @__PURE__ */ (0, import_jsx_runtime119.jsx)(pinned_items_default, { scope, children: isPinned && /* @__PURE__ */ (0, import_jsx_runtime119.jsx)(
       ComplementaryAreaToggle,
       {
         scope,
@@ -20192,7 +22763,7 @@ function ComplementaryArea({
         shortcut: toggleShortcut
       }
     ) }),
-    name && isPinnable && /* @__PURE__ */ (0, import_jsx_runtime105.jsx)(
+    name && isPinnable && /* @__PURE__ */ (0, import_jsx_runtime119.jsx)(
       ComplementaryAreaMoreMenuItem,
       {
         target: name,
@@ -20202,7 +22773,7 @@ function ComplementaryArea({
         children: title
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime105.jsxs)(
+    /* @__PURE__ */ (0, import_jsx_runtime119.jsxs)(
       ComplementaryAreaFill,
       {
         activeArea,
@@ -20211,7 +22782,7 @@ function ComplementaryArea({
         scope,
         id: identifier.replace("/", ":"),
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime105.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime119.jsx)(
             complementary_area_header_default,
             {
               className: headerClassName,
@@ -20224,10 +22795,10 @@ function ComplementaryArea({
                 scope,
                 identifier
               },
-              children: header || /* @__PURE__ */ (0, import_jsx_runtime105.jsxs)(import_jsx_runtime105.Fragment, { children: [
-                /* @__PURE__ */ (0, import_jsx_runtime105.jsx)("h2", { className: "interface-complementary-area-header__title", children: title }),
-                isPinnable && !isMobileViewport && /* @__PURE__ */ (0, import_jsx_runtime105.jsx)(
-                  import_components32.Button,
+              children: header || /* @__PURE__ */ (0, import_jsx_runtime119.jsxs)(import_jsx_runtime119.Fragment, { children: [
+                /* @__PURE__ */ (0, import_jsx_runtime119.jsx)("h2", { className: "interface-complementary-area-header__title", children: title }),
+                isPinnable && !isMobileViewport && /* @__PURE__ */ (0, import_jsx_runtime119.jsx)(
+                  import_components33.Button,
                   {
                     className: "interface-complementary-area__pin-unpin-item",
                     icon: isPinned ? star_filled_default : star_empty_default,
@@ -20244,7 +22815,7 @@ function ComplementaryArea({
               ] })
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime105.jsx)(import_components32.Panel, { className: panelClassName, children })
+          /* @__PURE__ */ (0, import_jsx_runtime119.jsx)(import_components33.Panel, { className: panelClassName, children })
         ]
       }
     )
@@ -20254,11 +22825,11 @@ ComplementaryArea.Slot = ComplementaryAreaSlot;
 var complementary_area_default = ComplementaryArea;
 
 // packages/interface/build-module/components/interface-skeleton/index.mjs
-var import_element70 = __toESM(require_element(), 1);
-var import_components33 = __toESM(require_components(), 1);
+var import_element78 = __toESM(require_element(), 1);
+var import_components34 = __toESM(require_components(), 1);
 var import_i18n26 = __toESM(require_i18n(), 1);
-var import_compose5 = __toESM(require_compose(), 1);
-var import_jsx_runtime106 = __toESM(require_jsx_runtime(), 1);
+var import_compose7 = __toESM(require_compose(), 1);
+var import_jsx_runtime120 = __toESM(require_jsx_runtime(), 1);
 var ANIMATION_DURATION2 = 0.25;
 var commonTransition = {
   type: "tween",
@@ -20266,7 +22837,7 @@ var commonTransition = {
   ease: [0.6, 0, 0.4, 1]
 };
 function useHTMLClass(className) {
-  (0, import_element70.useEffect)(() => {
+  (0, import_element78.useEffect)(() => {
     const element = document && document.querySelector(`html:not(.${className})`);
     if (!element) {
       return;
@@ -20315,9 +22886,9 @@ function InterfaceSkeleton({
   labels,
   className
 }, ref) {
-  const [secondarySidebarResizeListener, secondarySidebarSize] = (0, import_compose5.useResizeObserver)();
-  const isMobileViewport = (0, import_compose5.useViewportMatch)("medium", "<");
-  const disableMotion = (0, import_compose5.useReducedMotion)();
+  const [secondarySidebarResizeListener, secondarySidebarSize] = (0, import_compose7.useResizeObserver)();
+  const isMobileViewport = (0, import_compose7.useViewportMatch)("medium", "<");
+  const disableMotion = (0, import_compose7.useReducedMotion)();
   const defaultTransition = {
     type: "tween",
     duration: disableMotion ? 0 : ANIMATION_DURATION2,
@@ -20339,7 +22910,7 @@ function InterfaceSkeleton({
     footer: (0, import_i18n26.__)("Footer")
   };
   const mergedLabels = { ...defaultLabels, ...labels };
-  return /* @__PURE__ */ (0, import_jsx_runtime106.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)(
     "div",
     {
       ref,
@@ -20349,11 +22920,11 @@ function InterfaceSkeleton({
         !!footer && "has-footer"
       ),
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime106.jsxs)("div", { className: "interface-interface-skeleton__editor", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime106.jsx)(import_components33.__unstableAnimatePresence, { initial: false, children: !!header && /* @__PURE__ */ (0, import_jsx_runtime106.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)("div", { className: "interface-interface-skeleton__editor", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(import_components34.__unstableAnimatePresence, { initial: false, children: !!header && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
             navigable_region_default,
             {
-              as: import_components33.__unstableMotion.div,
+              as: import_components34.__unstableMotion.div,
               className: "interface-interface-skeleton__header",
               ariaLabel: mergedLabels.header,
               initial: isDistractionFree && !isMobileViewport ? "distractionFreeHidden" : "hidden",
@@ -20365,14 +22936,14 @@ function InterfaceSkeleton({
               children: header
             }
           ) }),
-          isDistractionFree && /* @__PURE__ */ (0, import_jsx_runtime106.jsx)("div", { className: "interface-interface-skeleton__header", children: editorNotices }),
-          /* @__PURE__ */ (0, import_jsx_runtime106.jsxs)("div", { className: "interface-interface-skeleton__body", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime106.jsx)(import_components33.__unstableAnimatePresence, { initial: false, children: !!secondarySidebar && /* @__PURE__ */ (0, import_jsx_runtime106.jsx)(
+          isDistractionFree && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)("div", { className: "interface-interface-skeleton__header", children: editorNotices }),
+          /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)("div", { className: "interface-interface-skeleton__body", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(import_components34.__unstableAnimatePresence, { initial: false, children: !!secondarySidebar && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
               navigable_region_default,
               {
                 className: "interface-interface-skeleton__secondary-sidebar",
                 ariaLabel: mergedLabels.secondarySidebar,
-                as: import_components33.__unstableMotion.div,
+                as: import_components34.__unstableMotion.div,
                 initial: "closed",
                 animate: "open",
                 exit: "closed",
@@ -20381,8 +22952,8 @@ function InterfaceSkeleton({
                   closed: { width: 0 }
                 },
                 transition: defaultTransition,
-                children: /* @__PURE__ */ (0, import_jsx_runtime106.jsxs)(
-                  import_components33.__unstableMotion.div,
+                children: /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)(
+                  import_components34.__unstableMotion.div,
                   {
                     style: {
                       position: "absolute",
@@ -20403,7 +22974,7 @@ function InterfaceSkeleton({
                 )
               }
             ) }),
-            /* @__PURE__ */ (0, import_jsx_runtime106.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
               navigable_region_default,
               {
                 className: "interface-interface-skeleton__content",
@@ -20411,7 +22982,7 @@ function InterfaceSkeleton({
                 children: content
               }
             ),
-            !!sidebar && /* @__PURE__ */ (0, import_jsx_runtime106.jsx)(
+            !!sidebar && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
               navigable_region_default,
               {
                 className: "interface-interface-skeleton__sidebar",
@@ -20419,7 +22990,7 @@ function InterfaceSkeleton({
                 children: sidebar
               }
             ),
-            !!actions && /* @__PURE__ */ (0, import_jsx_runtime106.jsx)(
+            !!actions && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
               navigable_region_default,
               {
                 className: "interface-interface-skeleton__actions",
@@ -20429,7 +23000,7 @@ function InterfaceSkeleton({
             )
           ] })
         ] }),
-        !!footer && /* @__PURE__ */ (0, import_jsx_runtime106.jsx)(
+        !!footer && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
           navigable_region_default,
           {
             className: "interface-interface-skeleton__footer",
@@ -20441,11 +23012,11 @@ function InterfaceSkeleton({
     }
   );
 }
-var interface_skeleton_default = (0, import_element70.forwardRef)(InterfaceSkeleton);
+var interface_skeleton_default = (0, import_element78.forwardRef)(InterfaceSkeleton);
 
 // packages/media-editor/build-module/components/media-editor-canvas/index.mjs
-var import_element81 = __toESM(require_element(), 1);
-var import_components35 = __toESM(require_components(), 1);
+var import_element89 = __toESM(require_element(), 1);
+var import_components36 = __toESM(require_components(), 1);
 var import_i18n31 = __toESM(require_i18n(), 1);
 
 // packages/media-editor/build-module/image-editor/core/constants.mjs
@@ -21882,7 +24453,7 @@ function buildCropperSetters(dispatchCropperAction, getCropperState) {
 }
 
 // packages/media-editor/build-module/image-editor/react/components/cropper.mjs
-var import_element78 = __toESM(require_element(), 1);
+var import_element86 = __toESM(require_element(), 1);
 var import_i18n30 = __toESM(require_i18n(), 1);
 
 // packages/media-editor/build-module/image-editor/core/crop-rect.mjs
@@ -22085,7 +24656,7 @@ function computeShiftLockedResizeRect(drag2, clientX, clientY, imageSize, bounds
 }
 
 // packages/media-editor/build-module/image-editor/react/hooks/use-interaction.mjs
-var import_element71 = __toESM(require_element(), 1);
+var import_element79 = __toESM(require_element(), 1);
 
 // packages/media-editor/build-module/image-editor/core/interaction-controller.mjs
 var DOUBLE_TAP_TIME = 300;
@@ -22728,30 +25299,30 @@ function isHandledKeyboardZoom(event) {
   }
 }
 function useInteraction(state, actions, containerSize, imageSize, options) {
-  const [isDragging, setIsDragging] = (0, import_element71.useState)(false);
-  const [isZooming, setIsZooming] = (0, import_element71.useState)(false);
-  const [isGestureActive, setIsGestureActive] = (0, import_element71.useState)(false);
-  const [isKeyboardPanning, setIsKeyboardPanning] = (0, import_element71.useState)(false);
-  const keyboardInteractionTimerRef = (0, import_element71.useRef)();
-  const isKeyboardGestureActiveRef = (0, import_element71.useRef)(false);
-  const stateRef = (0, import_element71.useRef)(state);
+  const [isDragging, setIsDragging] = (0, import_element79.useState)(false);
+  const [isZooming, setIsZooming] = (0, import_element79.useState)(false);
+  const [isGestureActive, setIsGestureActive] = (0, import_element79.useState)(false);
+  const [isKeyboardPanning, setIsKeyboardPanning] = (0, import_element79.useState)(false);
+  const keyboardInteractionTimerRef = (0, import_element79.useRef)();
+  const isKeyboardGestureActiveRef = (0, import_element79.useRef)(false);
+  const stateRef = (0, import_element79.useRef)(state);
   stateRef.current = state;
-  const containerSizeRef = (0, import_element71.useRef)(containerSize);
+  const containerSizeRef = (0, import_element79.useRef)(containerSize);
   containerSizeRef.current = containerSize;
-  const imageSizeRef = (0, import_element71.useRef)(imageSize);
+  const imageSizeRef = (0, import_element79.useRef)(imageSize);
   imageSizeRef.current = imageSize;
-  const optionsRef = (0, import_element71.useRef)(options);
+  const optionsRef = (0, import_element79.useRef)(options);
   optionsRef.current = options;
-  const actionsRef = (0, import_element71.useRef)(actions);
+  const actionsRef = (0, import_element79.useRef)(actions);
   actionsRef.current = actions;
-  const controllerRef = (0, import_element71.useRef)(null);
-  const startPlacementGesture = (0, import_element71.useCallback)(() => {
+  const controllerRef = (0, import_element79.useRef)(null);
+  const startPlacementGesture = (0, import_element79.useCallback)(() => {
     setIsGestureActive(true);
   }, []);
-  const stopPlacementGesture = (0, import_element71.useCallback)(() => {
+  const stopPlacementGesture = (0, import_element79.useCallback)(() => {
     setIsGestureActive(false);
   }, []);
-  const signalKeyboardGesture = (0, import_element71.useCallback)(() => {
+  const signalKeyboardGesture = (0, import_element79.useCallback)(() => {
     if (!isKeyboardGestureActiveRef.current) {
       isKeyboardGestureActiveRef.current = true;
       optionsRef.current?.onGestureStart?.();
@@ -22763,12 +25334,12 @@ function useInteraction(state, actions, containerSize, imageSize, options) {
       optionsRef.current?.onGestureEnd?.();
     }, KEYBOARD_INTERACTION_IDLE_MS);
   }, []);
-  (0, import_element71.useEffect)(() => {
+  (0, import_element79.useEffect)(() => {
     return () => {
       clearTimeout(keyboardInteractionTimerRef.current);
     };
   }, []);
-  (0, import_element71.useEffect)(() => {
+  (0, import_element79.useEffect)(() => {
     const controller = new InteractionController({
       getState: () => stateRef.current,
       actions: {
@@ -22814,11 +25385,11 @@ function useInteraction(state, actions, containerSize, imageSize, options) {
       controllerRef.current = null;
     };
   }, [startPlacementGesture, stopPlacementGesture]);
-  const onPointerDown = (0, import_element71.useCallback)((e2) => {
+  const onPointerDown = (0, import_element79.useCallback)((e2) => {
     const el = e2.currentTarget;
     controllerRef.current?.handlePointerDown(e2.nativeEvent, el);
   }, []);
-  const onTouchStart = (0, import_element71.useCallback)((e2) => {
+  const onTouchStart = (0, import_element79.useCallback)((e2) => {
     const el = e2.currentTarget;
     const rect = el.getBoundingClientRect();
     controllerRef.current?.handleTouchStart(
@@ -22827,7 +25398,7 @@ function useInteraction(state, actions, containerSize, imageSize, options) {
       el.ownerDocument
     );
   }, []);
-  const onKeyDown = (0, import_element71.useCallback)(
+  const onKeyDown = (0, import_element79.useCallback)(
     (e2) => {
       if (isHandledKeyboardPan(e2.nativeEvent)) {
         setIsKeyboardPanning(true);
@@ -22839,7 +25410,7 @@ function useInteraction(state, actions, containerSize, imageSize, options) {
     },
     [signalKeyboardGesture]
   );
-  const onWheelNative = (0, import_element71.useCallback)((e2) => {
+  const onWheelNative = (0, import_element79.useCallback)((e2) => {
     controllerRef.current?.handleWheel(e2);
   }, []);
   return {
@@ -22856,7 +25427,7 @@ function useInteraction(state, actions, containerSize, imageSize, options) {
 }
 
 // packages/media-editor/build-module/image-editor/react/hooks/use-transform-style.mjs
-var import_element72 = __toESM(require_element(), 1);
+var import_element80 = __toESM(require_element(), 1);
 
 // packages/media-editor/build-module/image-editor/core/transform-style.mjs
 var IDENTITY_MATRIX_STYLE = "matrix(1, 0, 0, 1, 0, 0)";
@@ -22882,742 +25453,16 @@ function computeTransformStyle(state, imageSize) {
 
 // packages/media-editor/build-module/image-editor/react/hooks/use-transform-style.mjs
 function useTransformStyle(state, imageSize) {
-  return (0, import_element72.useMemo)(
+  return (0, import_element80.useMemo)(
     () => computeTransformStyle(state, imageSize),
     [state, imageSize]
   );
 }
 
 // packages/media-editor/build-module/image-editor/react/hooks/use-aria-announcer.mjs
-var import_element73 = __toESM(require_element(), 1);
+var import_element81 = __toESM(require_element(), 1);
 var import_i18n28 = __toESM(require_i18n(), 1);
-var ARIA_DEBOUNCE_MS = 300;
-function buildFlipAnnouncement(state) {
-  const { horizontal, vertical } = state.flip;
-  if (horizontal && vertical) {
-    return (0, import_i18n28.__)("Flipped horizontally and vertically");
-  }
-  if (horizontal) {
-    return (0, import_i18n28.__)("Flipped horizontally");
-  }
-  if (vertical) {
-    return (0, import_i18n28.__)("Flipped vertically");
-  }
-  return (0, import_i18n28.__)("Flip removed");
-}
-function buildAnnouncement(state, previousState) {
-  if (previousState && (previousState.flip.horizontal !== state.flip.horizontal || previousState.flip.vertical !== state.flip.vertical)) {
-    return buildFlipAnnouncement(state);
-  }
-  const parts = [];
-  parts.push(
-    (0, import_i18n28.sprintf)(
-      /* translators: %d: zoom level as a percentage. */
-      (0, import_i18n28.__)("Zoom %d%%"),
-      Math.round(state.zoom * 100)
-    )
-  );
-  if (state.rotation !== 0) {
-    parts.push(
-      (0, import_i18n28.sprintf)(
-        /* translators: %d: rotation angle in degrees. */
-        (0, import_i18n28.__)("Rotation %d degrees"),
-        Math.round(state.rotation)
-      )
-    );
-  }
-  const cropW = Math.round(state.cropRect.width * 100);
-  const cropH = Math.round(state.cropRect.height * 100);
-  parts.push(
-    (0, import_i18n28.sprintf)(
-      /* translators: 1: crop width as a percentage, 2: crop height as a percentage. */
-      (0, import_i18n28.__)("Crop %1$d%% by %2$d%%"),
-      cropW,
-      cropH
-    )
-  );
-  if (state.flip.horizontal || state.flip.vertical) {
-    parts.push(buildFlipAnnouncement(state));
-  }
-  return parts.join(", ");
-}
-function useAriaAnnouncer(state) {
-  const [ariaMessage, setAriaMessage] = (0, import_element73.useState)("");
-  const timerRef = (0, import_element73.useRef)();
-  const prevMessageRef = (0, import_element73.useRef)("");
-  const prevStateRef = (0, import_element73.useRef)(null);
-  const latestStateRef = (0, import_element73.useRef)(state);
-  (0, import_element73.useLayoutEffect)(() => {
-    latestStateRef.current = state;
-  }, [state]);
-  (0, import_element73.useEffect)(() => {
-    clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => {
-      const current = latestStateRef.current;
-      const msg = buildAnnouncement(current, prevStateRef.current);
-      prevStateRef.current = current;
-      if (msg !== prevMessageRef.current) {
-        prevMessageRef.current = msg;
-        setAriaMessage(msg);
-      }
-    }, ARIA_DEBOUNCE_MS);
-    return () => {
-      clearTimeout(timerRef.current);
-    };
-  }, [
-    state.zoom,
-    state.rotation,
-    state.cropRect.width,
-    state.cropRect.height,
-    state.flip.horizontal,
-    state.flip.vertical
-  ]);
-  return ariaMessage;
-}
-
-// packages/media-editor/build-module/image-editor/react/components/stencils/rectangle-stencil.mjs
-var import_element74 = __toESM(require_element(), 1);
-var import_i18n29 = __toESM(require_i18n(), 1);
-
-// packages/media-editor/build-module/image-editor/react/visually-hidden-style.mjs
-var VISUALLY_HIDDEN_STYLE = {
-  position: "absolute",
-  width: 1,
-  height: 1,
-  padding: 0,
-  margin: -1,
-  overflow: "hidden",
-  clip: "rect(0, 0, 0, 0)",
-  whiteSpace: "nowrap",
-  border: 0
-};
-
-// packages/media-editor/build-module/image-editor/react/components/stencils/rectangle-stencil.mjs
-var import_jsx_runtime107 = __toESM(require_jsx_runtime(), 1);
-var CORNER_POSITIONS = ["nw", "ne", "se", "sw"];
-var ALL_POSITIONS = [
-  "nw",
-  "n",
-  "ne",
-  "e",
-  "se",
-  "s",
-  "sw",
-  "w"
-];
-function getHandleLabel(pos) {
-  switch (pos) {
-    case "n":
-      return (0, import_i18n29.__)("Resize top edge");
-    case "s":
-      return (0, import_i18n29.__)("Resize bottom edge");
-    case "e":
-      return (0, import_i18n29.__)("Resize right edge");
-    case "w":
-      return (0, import_i18n29.__)("Resize left edge");
-    case "nw":
-      return (0, import_i18n29.__)("Resize top-left corner");
-    case "ne":
-      return (0, import_i18n29.__)("Resize top-right corner");
-    case "sw":
-      return (0, import_i18n29.__)("Resize bottom-left corner");
-    case "se":
-      return (0, import_i18n29.__)("Resize bottom-right corner");
-  }
-}
-var KEYBOARD_SETTLE_DELAY = 500;
-function RectangleStencil({
-  cropRect,
-  containerSize,
-  imageSize,
-  onCropChange,
-  onResizeStart,
-  onResizeEnd,
-  aspectRatio,
-  freeformCrop = false,
-  isResizeDisabled = false,
-  stencilTransition,
-  cropBounds,
-  onEscape,
-  minCropSize,
-  snapCropRect,
-  keyboardResizeStep
-}) {
-  const boundsMinX = cropBounds?.minX ?? 0;
-  const boundsMinY = cropBounds?.minY ?? 0;
-  const boundsMaxX = cropBounds?.maxX ?? 1;
-  const boundsMaxY = cropBounds?.maxY ?? 1;
-  const bounds = (0, import_element74.useMemo)(
-    () => ({
-      minX: boundsMinX,
-      minY: boundsMinY,
-      maxX: boundsMaxX,
-      maxY: boundsMaxY
-    }),
-    [boundsMinX, boundsMinY, boundsMaxX, boundsMaxY]
-  );
-  const keyboardSettleTimerRef = (0, import_element74.useRef)();
-  const keyboardResizeActiveRef = (0, import_element74.useRef)(false);
-  const resizeHandleDescriptionId = (0, import_element74.useId)();
-  const hasLockedRatio = !!(aspectRatio && aspectRatio > 0);
-  const activePointerResizeRef = (0, import_element74.useRef)(null);
-  (0, import_element74.useEffect)(() => {
-    return () => {
-      clearTimeout(keyboardSettleTimerRef.current);
-      keyboardResizeActiveRef.current = false;
-      activePointerResizeRef.current?.cancel(false);
-    };
-  }, []);
-  (0, import_element74.useEffect)(() => {
-    if (isResizeDisabled) {
-      activePointerResizeRef.current?.cancel();
-    }
-  }, [isResizeDisabled]);
-  const latestHandlersRef = (0, import_element74.useRef)(null);
-  const normalizedRatio = (0, import_element74.useMemo)(() => {
-    if (!hasLockedRatio || imageSize.width === 0) {
-      return 0;
-    }
-    return aspectRatio * imageSize.height / imageSize.width;
-  }, [aspectRatio, hasLockedRatio, imageSize.width, imageSize.height]);
-  const offsetX = (containerSize.width - imageSize.width) / 2;
-  const offsetY = (containerSize.height - imageSize.height) / 2;
-  const left = offsetX + cropRect.x * imageSize.width;
-  const top = offsetY + cropRect.y * imageSize.height;
-  const width = cropRect.width * imageSize.width;
-  const height = cropRect.height * imageSize.height;
-  const handlePointerDown = (0, import_element74.useCallback)(
-    (handle, event) => {
-      if (isResizeDisabled || event.pointerType === "touch" && event.isPrimary === false) {
-        event.preventDefault();
-        event.stopPropagation();
-        return;
-      }
-      if (event.button !== 0) {
-        return;
-      }
-      event.preventDefault();
-      event.stopPropagation();
-      const ownerDoc = event.currentTarget.ownerDocument;
-      if (ownerDoc.activeElement instanceof HTMLElement) {
-        ownerDoc.activeElement.blur();
-      }
-      const el = event.currentTarget;
-      el.setPointerCapture(event.pointerId);
-      const drag2 = {
-        handle,
-        startX: event.clientX,
-        startY: event.clientY,
-        startRect: { ...cropRect }
-      };
-      let rafId = 0;
-      let latestX = event.clientX;
-      let latestY = event.clientY;
-      let latestShift = event.shiftKey;
-      const onMove = (e2) => {
-        const pe = e2;
-        latestX = pe.clientX;
-        latestY = pe.clientY;
-        latestShift = pe.shiftKey;
-        if (rafId) {
-          return;
-        }
-        rafId = requestAnimationFrame(() => {
-          rafId = 0;
-          const h2 = latestHandlersRef.current;
-          if (!h2) {
-            return;
-          }
-          let newRect;
-          if (h2.hasLockedRatio) {
-            newRect = h2.computeLockedRect(drag2, latestX, latestY);
-          } else if (latestShift) {
-            newRect = h2.computeShiftLockedRect(
-              drag2,
-              latestX,
-              latestY
-            );
-          } else {
-            newRect = h2.computeFreeRect(drag2, latestX, latestY);
-            newRect = h2.snapCropRect?.(newRect, drag2.handle) ?? newRect;
-          }
-          h2.onCropChange(newRect);
-        });
-      };
-      let ended = false;
-      const endResize = (notifyResizeEnd = true, restoreFocus = true) => {
-        if (ended) {
-          return;
-        }
-        ended = true;
-        if (rafId) {
-          cancelAnimationFrame(rafId);
-          rafId = 0;
-        }
-        el.removeEventListener("pointermove", onMove);
-        el.removeEventListener("pointerup", onEnd);
-        el.removeEventListener("lostpointercapture", onEnd);
-        activePointerResizeRef.current = null;
-        if (notifyResizeEnd) {
-          latestHandlersRef.current?.onResizeEnd?.();
-        }
-        if (restoreFocus) {
-          el.focus({ preventScroll: true });
-        }
-      };
-      const cancelResize = (notifyResizeEnd = true) => endResize(notifyResizeEnd, false);
-      const onEnd = () => endResize();
-      el.addEventListener("pointermove", onMove);
-      el.addEventListener("pointerup", onEnd);
-      el.addEventListener("lostpointercapture", onEnd);
-      activePointerResizeRef.current = { cancel: cancelResize };
-      onResizeStart?.(handle);
-      clearTimeout(keyboardSettleTimerRef.current);
-      keyboardResizeActiveRef.current = false;
-    },
-    [cropRect, isResizeDisabled, onResizeStart]
-  );
-  const computeFreeRect = (0, import_element74.useCallback)(
-    (drag2, clientX, clientY) => computeFreeResizeRect(
-      drag2,
-      clientX,
-      clientY,
-      imageSize,
-      bounds,
-      minCropSize
-    ),
-    [imageSize, bounds, minCropSize]
-  );
-  const computeLockedRect = (0, import_element74.useCallback)(
-    (drag2, clientX, clientY, driverAxis) => computeLockedResizeRect(
-      drag2,
-      clientX,
-      clientY,
-      imageSize,
-      bounds,
-      normalizedRatio,
-      minCropSize,
-      driverAxis
-    ),
-    [imageSize, bounds, normalizedRatio, minCropSize]
-  );
-  const computeShiftLockedRect = (0, import_element74.useCallback)(
-    (drag2, clientX, clientY) => computeShiftLockedResizeRect(
-      drag2,
-      clientX,
-      clientY,
-      imageSize,
-      bounds,
-      minCropSize
-    ),
-    [imageSize, bounds, minCropSize]
-  );
-  latestHandlersRef.current = {
-    hasLockedRatio,
-    computeLockedRect,
-    computeFreeRect,
-    computeShiftLockedRect,
-    onCropChange,
-    onResizeEnd,
-    snapCropRect
-  };
-  const handleKeyDown = (0, import_element74.useCallback)(
-    (handle, event) => {
-      const key = event.key;
-      if (isResizeDisabled) {
-        return;
-      }
-      if (key === "Escape") {
-        event.preventDefault();
-        event.stopPropagation();
-        onEscape?.();
-        return;
-      }
-      if (key !== "ArrowUp" && key !== "ArrowDown" && key !== "ArrowLeft" && key !== "ArrowRight") {
-        return;
-      }
-      event.preventDefault();
-      event.stopPropagation();
-      if (!keyboardResizeActiveRef.current) {
-        keyboardResizeActiveRef.current = true;
-        onResizeStart?.(handle);
-      }
-      const scheduleKeyboardResizeEnd = () => {
-        clearTimeout(keyboardSettleTimerRef.current);
-        keyboardSettleTimerRef.current = setTimeout(() => {
-          keyboardResizeActiveRef.current = false;
-          onResizeEnd?.();
-        }, KEYBOARD_SETTLE_DELAY);
-      };
-      const stepMultiplier = event.shiftKey ? KEYBOARD_SHIFT_STEP_MULTIPLIER : 1;
-      const stepX = keyboardResizeStep?.width ?? DEFAULT_KEYBOARD_STEP;
-      const stepY = keyboardResizeStep?.height ?? DEFAULT_KEYBOARD_STEP;
-      const adjustedStepX = stepX * stepMultiplier;
-      const adjustedStepY = stepY * stepMultiplier;
-      let dx = 0;
-      let dy = 0;
-      if (key === "ArrowLeft") {
-        dx = -adjustedStepX;
-      }
-      if (key === "ArrowRight") {
-        dx = adjustedStepX;
-      }
-      if (key === "ArrowUp") {
-        dy = -adjustedStepY;
-      }
-      if (key === "ArrowDown") {
-        dy = adjustedStepY;
-      }
-      const keyboardDriverAxis = dx !== 0 ? "width" : "height";
-      if (hasLockedRatio) {
-        const syntheticDrag = {
-          handle,
-          startX: 0,
-          startY: 0,
-          startRect: { ...cropRect }
-        };
-        const clientX = dx * imageSize.width;
-        const clientY = dy * imageSize.height;
-        onCropChange(
-          computeLockedRect(
-            syntheticDrag,
-            clientX,
-            clientY,
-            keyboardDriverAxis
-          )
-        );
-        scheduleKeyboardResizeEnd();
-      } else {
-        const syntheticDrag = {
-          handle,
-          startX: 0,
-          startY: 0,
-          startRect: { ...cropRect }
-        };
-        const clientX = dx * imageSize.width;
-        const clientY = dy * imageSize.height;
-        const rect = computeFreeRect(syntheticDrag, clientX, clientY);
-        onCropChange(snapCropRect?.(rect, handle) ?? rect);
-        scheduleKeyboardResizeEnd();
-      }
-    },
-    [
-      cropRect,
-      hasLockedRatio,
-      imageSize.width,
-      imageSize.height,
-      computeLockedRect,
-      computeFreeRect,
-      onCropChange,
-      onResizeStart,
-      onResizeEnd,
-      onEscape,
-      keyboardResizeStep,
-      snapCropRect,
-      isResizeDisabled
-    ]
-  );
-  if (containerSize.width === 0 || containerSize.height === 0) {
-    return null;
-  }
-  const handles = hasLockedRatio ? CORNER_POSITIONS : ALL_POSITIONS;
-  return /* @__PURE__ */ (0, import_jsx_runtime107.jsxs)(
-    "div",
-    {
-      className: "wp-media-editor-image-editor__stencil",
-      "data-testid": "cropper-stencil",
-      style: {
-        left,
-        top,
-        width,
-        height,
-        transition: stencilTransition
-      },
-      children: [
-        freeformCrop && /* @__PURE__ */ (0, import_jsx_runtime107.jsx)(
-          "div",
-          {
-            id: resizeHandleDescriptionId,
-            style: VISUALLY_HIDDEN_STYLE,
-            children: (0, import_i18n29.__)(
-              "Use arrow keys to resize the crop area. Hold Shift for larger steps."
-            )
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime107.jsx)(
-          "div",
-          {
-            className: "wp-media-editor-image-editor__stencil-rect",
-            style: {
-              width: "100%",
-              height: "100%",
-              top: 0,
-              left: 0
-            }
-          }
-        ),
-        freeformCrop && handles.map((pos) => /* @__PURE__ */ (0, import_jsx_runtime107.jsx)(
-          "button",
-          {
-            type: "button",
-            className: `wp-media-editor-image-editor__handle wp-media-editor-image-editor__handle--${pos}`,
-            onPointerDown: (event) => handlePointerDown(pos, event),
-            onTouchStart: (event) => {
-              if (event.touches.length < 2) {
-                event.stopPropagation();
-              }
-            },
-            onKeyDown: (event) => handleKeyDown(pos, event),
-            "aria-label": getHandleLabel(pos),
-            "aria-describedby": resizeHandleDescriptionId
-          },
-          pos
-        ))
-      ]
-    }
-  );
-}
-
-// packages/media-editor/build-module/image-editor/react/components/overlays/dimming-overlay.mjs
-var import_jsx_runtime108 = __toESM(require_jsx_runtime(), 1);
-function DimmingOverlay({
-  cropRect,
-  containerSize,
-  imageSize,
-  transition
-}) {
-  if (containerSize.width === 0 || containerSize.height === 0) {
-    return null;
-  }
-  const offsetX = (containerSize.width - imageSize.width) / 2;
-  const offsetY = (containerSize.height - imageSize.height) / 2;
-  const left = offsetX + cropRect.x * imageSize.width;
-  const top = offsetY + cropRect.y * imageSize.height;
-  const width = cropRect.width * imageSize.width;
-  const height = cropRect.height * imageSize.height;
-  const composedTransition = transition ? `${transition}, box-shadow 0.15s ease` : void 0;
-  return /* @__PURE__ */ (0, import_jsx_runtime108.jsx)(
-    "div",
-    {
-      className: "wp-media-editor-image-editor__dimming",
-      "data-testid": "cropper-dimming",
-      style: {
-        left,
-        top,
-        width,
-        height,
-        transition: composedTransition
-      }
-    }
-  );
-}
-
-// packages/media-editor/build-module/image-editor/react/components/overlays/grid-overlay.mjs
-var import_jsx_runtime109 = __toESM(require_jsx_runtime(), 1);
-function GridOverlay({
-  cropRect,
-  containerSize,
-  imageSize
-}) {
-  if (containerSize.width === 0 || containerSize.height === 0) {
-    return null;
-  }
-  const offsetX = (containerSize.width - imageSize.width) / 2;
-  const offsetY = (containerSize.height - imageSize.height) / 2;
-  const left = offsetX + cropRect.x * imageSize.width;
-  const top = offsetY + cropRect.y * imageSize.height;
-  const width = cropRect.width * imageSize.width;
-  const height = cropRect.height * imageSize.height;
-  const thirdW = width / 3;
-  const thirdH = height / 3;
-  return /* @__PURE__ */ (0, import_jsx_runtime109.jsxs)(
-    "div",
-    {
-      className: "wp-media-editor-image-editor__grid",
-      "data-testid": "cropper-grid",
-      style: {
-        left,
-        top,
-        width,
-        height
-      },
-      children: [
-        /* @__PURE__ */ (0, import_jsx_runtime109.jsx)(
-          "div",
-          {
-            className: "wp-media-editor-image-editor__grid-line wp-media-editor-image-editor__grid-line--horizontal",
-            style: { top: thirdH }
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime109.jsx)(
-          "div",
-          {
-            className: "wp-media-editor-image-editor__grid-line wp-media-editor-image-editor__grid-line--horizontal",
-            style: { top: thirdH * 2 }
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime109.jsx)(
-          "div",
-          {
-            className: "wp-media-editor-image-editor__grid-line wp-media-editor-image-editor__grid-line--vertical",
-            style: { left: thirdW }
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime109.jsx)(
-          "div",
-          {
-            className: "wp-media-editor-image-editor__grid-line wp-media-editor-image-editor__grid-line--vertical",
-            style: { left: thirdW * 2 }
-          }
-        )
-      ]
-    }
-  );
-}
-
-// packages/media-editor/build-module/image-editor/react/components/overlays/dimensions-overlay.mjs
-var import_element75 = __toESM(require_element(), 1);
-var import_jsx_runtime110 = __toESM(require_jsx_runtime(), 1);
-var HANDLE_GAP_PX = 12;
-var TRANSLATE_PERCENT = {
-  before: "-100%",
-  center: "-50%",
-  after: "0"
-};
-var GAP_DIRECTION = {
-  before: -1,
-  center: 0,
-  after: 1
-};
-var OPPOSITE_SIDE = {
-  before: "after",
-  center: "center",
-  after: "before"
-};
-function preferredAnchor(handle) {
-  let x2 = "center";
-  if (handle.includes("w")) {
-    x2 = "before";
-  } else if (handle.includes("e")) {
-    x2 = "after";
-  }
-  let y2 = "center";
-  if (handle.includes("n")) {
-    y2 = "before";
-  } else if (handle.includes("s")) {
-    y2 = "after";
-  }
-  return { x: x2, y: y2 };
-}
-function sideStart(side, handlePos, length2) {
-  if (side === "before") {
-    return handlePos - HANDLE_GAP_PX - length2;
-  }
-  if (side === "after") {
-    return handlePos + HANDLE_GAP_PX;
-  }
-  return handlePos - length2 / 2;
-}
-function fittingSide(preferred, handlePos, length2, containerLength) {
-  const fits = (side) => {
-    const start = sideStart(side, handlePos, length2);
-    return start >= 0 && start + length2 <= containerLength;
-  };
-  if (fits(preferred)) {
-    return preferred;
-  }
-  const opposite = OPPOSITE_SIDE[preferred];
-  if (opposite !== preferred && fits(opposite)) {
-    return opposite;
-  }
-  if (preferred !== "center" && fits("center")) {
-    return "center";
-  }
-  const overflow = (side) => {
-    const start = sideStart(side, handlePos, length2);
-    return Math.max(0, -start) + Math.max(0, start + length2 - containerLength);
-  };
-  const candidates = [preferred, opposite, "center"];
-  return candidates.reduce(
-    (best, side) => overflow(side) < overflow(best) ? side : best
-  );
-}
-function DimensionsOverlay({
-  cropRect,
-  containerSize,
-  imageSize,
-  activeHandle,
-  outputWidth,
-  outputHeight
-}) {
-  const tooltipRef = (0, import_element75.useRef)(null);
-  const [tooltipSize, setTooltipSize] = (0, import_element75.useState)(null);
-  (0, import_element75.useLayoutEffect)(() => {
-    if (!tooltipRef.current) {
-      return;
-    }
-    const rect = tooltipRef.current.getBoundingClientRect();
-    setTooltipSize((prev) => {
-      if (prev && prev.width === rect.width && prev.height === rect.height) {
-        return prev;
-      }
-      return { width: rect.width, height: rect.height };
-    });
-  }, [outputWidth, outputHeight]);
-  if (!activeHandle || containerSize.width === 0 || containerSize.height === 0) {
-    return null;
-  }
-  const offsetX = (containerSize.width - imageSize.width) / 2;
-  const offsetY = (containerSize.height - imageSize.height) / 2;
-  const left = offsetX + cropRect.x * imageSize.width;
-  const top = offsetY + cropRect.y * imageSize.height;
-  const width = cropRect.width * imageSize.width;
-  const height = cropRect.height * imageSize.height;
-  let handleX = left + width / 2;
-  if (activeHandle.includes("w")) {
-    handleX = left;
-  } else if (activeHandle.includes("e")) {
-    handleX = left + width;
-  }
-  let handleY = top + height / 2;
-  if (activeHandle.includes("n")) {
-    handleY = top;
-  } else if (activeHandle.includes("s")) {
-    handleY = top + height;
-  }
-  const preferred = preferredAnchor(activeHandle);
-  const anchor = tooltipSize ? {
-    x: fittingSide(
-      preferred.x,
-      handleX,
-      tooltipSize.width,
-      containerSize.width
-    ),
-    y: fittingSide(
-      preferred.y,
-      handleY,
-      tooltipSize.height,
-      containerSize.height
-    )
-  } : preferred;
-  return /* @__PURE__ */ (0, import_jsx_runtime110.jsx)(
-    "div",
-    {
-      ref: tooltipRef,
-      className: "wp-media-editor-image-editor__dimensions-tooltip",
-      "data-testid": "cropper-dimensions-tooltip",
-      style: {
-        left: handleX + GAP_DIRECTION[anchor.x] * HANDLE_GAP_PX,
-        top: handleY + GAP_DIRECTION[anchor.y] * HANDLE_GAP_PX,
-        transform: `translate(${TRANSLATE_PERCENT[anchor.x]}, ${TRANSLATE_PERCENT[anchor.y]})`
-      },
-      "aria-hidden": "true",
-      children: `W: ${Math.round(outputWidth)}px H: ${Math.round(
-        outputHeight
-      )}px`
-    }
-  );
-}
+import { speak as speak2 } from "@wordpress/a11y";
 
 // packages/media-editor/build-module/image-editor/core/source-region.mjs
 function getSourceRegion(state, imageSize) {
@@ -23775,11 +25620,781 @@ function snapCropRectEdgesToSourcePixels(state, imageSize, cropRect, edges) {
   };
 }
 
+// packages/media-editor/build-module/image-editor/react/hooks/use-aria-announcer.mjs
+var ARIA_DEBOUNCE_MS = 300;
+function getFlipAnnouncement(state, previousState) {
+  if (!previousState || previousState.flip.horizontal === state.flip.horizontal && previousState.flip.vertical === state.flip.vertical) {
+    return void 0;
+  }
+  const { horizontal, vertical } = state.flip;
+  if (horizontal && vertical) {
+    return (0, import_i18n28.__)("Flipped horizontally and vertically");
+  }
+  if (horizontal) {
+    return (0, import_i18n28.__)("Flipped horizontally");
+  }
+  if (vertical) {
+    return (0, import_i18n28.__)("Flipped vertically");
+  }
+  return (0, import_i18n28.__)("Flip removed");
+}
+function getRotationAnnouncement(state, previousState) {
+  if (previousState && Math.round(previousState.rotation) === Math.round(state.rotation)) {
+    return void 0;
+  }
+  const singleFlip = state.flip.horizontal !== state.flip.vertical;
+  const visualDir = singleFlip ? -1 : 1;
+  let visualRotation = Math.round(state.rotation) * visualDir % 360;
+  if (visualRotation > 180) {
+    visualRotation -= 360;
+  }
+  if (visualRotation <= -180) {
+    visualRotation += 360;
+  }
+  if (visualRotation === 0) {
+    return previousState ? (0, import_i18n28.__)("Rotation 0 degrees") : void 0;
+  }
+  if (visualRotation > 0) {
+    return (0, import_i18n28.sprintf)(
+      /* translators: %d: rotation angle in degrees. */
+      (0, import_i18n28.__)("Rotated %d degrees clockwise"),
+      visualRotation
+    );
+  }
+  return (0, import_i18n28.sprintf)(
+    /* translators: %d: rotation angle in degrees. */
+    (0, import_i18n28.__)("Rotated %d degrees counterclockwise"),
+    Math.abs(visualRotation)
+  );
+}
+function getCropAnnouncement(state, previousState) {
+  if (!state.image) {
+    return void 0;
+  }
+  const imageSize = {
+    width: state.image.naturalWidth,
+    height: state.image.naturalHeight
+  };
+  const region = getSourceRegion(state, imageSize);
+  if (previousState?.image) {
+    const previousRegion = getSourceRegion(
+      { ...state, cropRect: previousState.cropRect },
+      imageSize
+    );
+    if (Math.round(previousRegion.width) === Math.round(region.width) && Math.round(previousRegion.height) === Math.round(region.height)) {
+      return void 0;
+    }
+  }
+  return (0, import_i18n28.sprintf)(
+    /* translators: 1: crop width in pixels, 2: crop height in pixels. */
+    (0, import_i18n28.__)("Crop %1$d by %2$d pixels"),
+    Math.round(region.width),
+    Math.round(region.height)
+  );
+}
+function getZoomAnnouncement(state, previousState) {
+  if (previousState && Math.round(previousState.zoom * 100) === Math.round(state.zoom * 100)) {
+    return void 0;
+  }
+  return (0, import_i18n28.sprintf)(
+    /* translators: %d: zoom level as a percentage. */
+    (0, import_i18n28.__)("Zoom %d%%"),
+    Math.round(state.zoom * 100)
+  );
+}
+function buildAnnouncement(state, previousState) {
+  const flip4 = getFlipAnnouncement(state, previousState);
+  if (flip4) {
+    return flip4;
+  }
+  const parts = [
+    getRotationAnnouncement(state, previousState),
+    getZoomAnnouncement(state, previousState),
+    getCropAnnouncement(state, previousState)
+  ].filter((part) => part !== void 0);
+  return parts.join(", ");
+}
+function useAriaAnnouncer(state) {
+  const timerRef = (0, import_element81.useRef)();
+  const prevMessageRef = (0, import_element81.useRef)("");
+  const prevStateRef = (0, import_element81.useRef)(null);
+  const latestStateRef = (0, import_element81.useRef)(state);
+  (0, import_element81.useLayoutEffect)(() => {
+    latestStateRef.current = state;
+  }, [state]);
+  (0, import_element81.useEffect)(() => {
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
+      const current = latestStateRef.current;
+      const msg = buildAnnouncement(current, prevStateRef.current);
+      prevStateRef.current = current;
+      if (msg !== prevMessageRef.current) {
+        prevMessageRef.current = msg;
+        speak2(msg);
+      }
+    }, ARIA_DEBOUNCE_MS);
+    return () => {
+      clearTimeout(timerRef.current);
+    };
+  }, [
+    state.zoom,
+    state.rotation,
+    state.cropRect.width,
+    state.cropRect.height,
+    state.flip.horizontal,
+    state.flip.vertical
+  ]);
+}
+
+// packages/media-editor/build-module/image-editor/react/components/stencils/rectangle-stencil.mjs
+var import_element82 = __toESM(require_element(), 1);
+var import_i18n29 = __toESM(require_i18n(), 1);
+
+// packages/media-editor/build-module/image-editor/react/visually-hidden-style.mjs
+var VISUALLY_HIDDEN_STYLE = {
+  position: "absolute",
+  width: 1,
+  height: 1,
+  padding: 0,
+  margin: -1,
+  overflow: "hidden",
+  clip: "rect(0, 0, 0, 0)",
+  whiteSpace: "nowrap",
+  border: 0
+};
+
+// packages/media-editor/build-module/image-editor/react/components/stencils/rectangle-stencil.mjs
+var import_jsx_runtime121 = __toESM(require_jsx_runtime(), 1);
+var CORNER_POSITIONS = ["nw", "ne", "se", "sw"];
+var ALL_POSITIONS = [
+  "nw",
+  "n",
+  "ne",
+  "e",
+  "se",
+  "s",
+  "sw",
+  "w"
+];
+function getHandleLabel(pos) {
+  switch (pos) {
+    case "n":
+      return (0, import_i18n29.__)("Resize from top edge");
+    case "s":
+      return (0, import_i18n29.__)("Resize from bottom edge");
+    case "e":
+      return (0, import_i18n29.__)("Resize from right edge");
+    case "w":
+      return (0, import_i18n29.__)("Resize from left edge");
+    case "nw":
+      return (0, import_i18n29.__)("Resize from top-left corner");
+    case "ne":
+      return (0, import_i18n29.__)("Resize from top-right corner");
+    case "sw":
+      return (0, import_i18n29.__)("Resize from bottom-left corner");
+    case "se":
+      return (0, import_i18n29.__)("Resize from bottom-right corner");
+  }
+}
+var KEYBOARD_SETTLE_DELAY = 500;
+function RectangleStencil({
+  cropRect,
+  containerSize,
+  imageSize,
+  onCropChange,
+  onResizeStart,
+  onResizeEnd,
+  aspectRatio,
+  freeformCrop = false,
+  isResizeDisabled = false,
+  stencilTransition,
+  cropBounds,
+  onEscape,
+  minCropSize,
+  snapCropRect,
+  keyboardResizeStep
+}) {
+  const boundsMinX = cropBounds?.minX ?? 0;
+  const boundsMinY = cropBounds?.minY ?? 0;
+  const boundsMaxX = cropBounds?.maxX ?? 1;
+  const boundsMaxY = cropBounds?.maxY ?? 1;
+  const bounds = (0, import_element82.useMemo)(
+    () => ({
+      minX: boundsMinX,
+      minY: boundsMinY,
+      maxX: boundsMaxX,
+      maxY: boundsMaxY
+    }),
+    [boundsMinX, boundsMinY, boundsMaxX, boundsMaxY]
+  );
+  const keyboardSettleTimerRef = (0, import_element82.useRef)();
+  const keyboardResizeActiveRef = (0, import_element82.useRef)(false);
+  const resizeHandleDescriptionId = (0, import_element82.useId)();
+  const hasLockedRatio = !!(aspectRatio && aspectRatio > 0);
+  const activePointerResizeRef = (0, import_element82.useRef)(null);
+  (0, import_element82.useEffect)(() => {
+    return () => {
+      clearTimeout(keyboardSettleTimerRef.current);
+      keyboardResizeActiveRef.current = false;
+      activePointerResizeRef.current?.cancel(false);
+    };
+  }, []);
+  (0, import_element82.useEffect)(() => {
+    if (isResizeDisabled) {
+      activePointerResizeRef.current?.cancel();
+    }
+  }, [isResizeDisabled]);
+  const latestHandlersRef = (0, import_element82.useRef)(null);
+  const normalizedRatio = (0, import_element82.useMemo)(() => {
+    if (!hasLockedRatio || imageSize.width === 0) {
+      return 0;
+    }
+    return aspectRatio * imageSize.height / imageSize.width;
+  }, [aspectRatio, hasLockedRatio, imageSize.width, imageSize.height]);
+  const offsetX = (containerSize.width - imageSize.width) / 2;
+  const offsetY = (containerSize.height - imageSize.height) / 2;
+  const left = offsetX + cropRect.x * imageSize.width;
+  const top = offsetY + cropRect.y * imageSize.height;
+  const width = cropRect.width * imageSize.width;
+  const height = cropRect.height * imageSize.height;
+  const handlePointerDown = (0, import_element82.useCallback)(
+    (handle, event) => {
+      if (isResizeDisabled || event.pointerType === "touch" && event.isPrimary === false) {
+        event.preventDefault();
+        event.stopPropagation();
+        return;
+      }
+      if (event.button !== 0) {
+        return;
+      }
+      event.preventDefault();
+      event.stopPropagation();
+      const ownerDoc = event.currentTarget.ownerDocument;
+      if (ownerDoc.activeElement instanceof HTMLElement) {
+        ownerDoc.activeElement.blur();
+      }
+      const el = event.currentTarget;
+      el.setPointerCapture(event.pointerId);
+      const drag2 = {
+        handle,
+        startX: event.clientX,
+        startY: event.clientY,
+        startRect: { ...cropRect }
+      };
+      let rafId = 0;
+      let latestX = event.clientX;
+      let latestY = event.clientY;
+      let latestShift = event.shiftKey;
+      const onMove = (e2) => {
+        const pe = e2;
+        latestX = pe.clientX;
+        latestY = pe.clientY;
+        latestShift = pe.shiftKey;
+        if (rafId) {
+          return;
+        }
+        rafId = requestAnimationFrame(() => {
+          rafId = 0;
+          const h2 = latestHandlersRef.current;
+          if (!h2) {
+            return;
+          }
+          let newRect;
+          if (h2.hasLockedRatio) {
+            newRect = h2.computeLockedRect(drag2, latestX, latestY);
+          } else if (latestShift) {
+            newRect = h2.computeShiftLockedRect(
+              drag2,
+              latestX,
+              latestY
+            );
+          } else {
+            newRect = h2.computeFreeRect(drag2, latestX, latestY);
+            newRect = h2.snapCropRect?.(newRect, drag2.handle) ?? newRect;
+          }
+          h2.onCropChange(newRect);
+        });
+      };
+      let ended = false;
+      const endResize = (notifyResizeEnd = true, restoreFocus = true) => {
+        if (ended) {
+          return;
+        }
+        ended = true;
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+          rafId = 0;
+        }
+        el.removeEventListener("pointermove", onMove);
+        el.removeEventListener("pointerup", onEnd);
+        el.removeEventListener("lostpointercapture", onEnd);
+        activePointerResizeRef.current = null;
+        if (notifyResizeEnd) {
+          latestHandlersRef.current?.onResizeEnd?.();
+        }
+        if (restoreFocus) {
+          el.focus({ preventScroll: true });
+        }
+      };
+      const cancelResize = (notifyResizeEnd = true) => endResize(notifyResizeEnd, false);
+      const onEnd = () => endResize();
+      el.addEventListener("pointermove", onMove);
+      el.addEventListener("pointerup", onEnd);
+      el.addEventListener("lostpointercapture", onEnd);
+      activePointerResizeRef.current = { cancel: cancelResize };
+      onResizeStart?.(handle);
+      clearTimeout(keyboardSettleTimerRef.current);
+      keyboardResizeActiveRef.current = false;
+    },
+    [cropRect, isResizeDisabled, onResizeStart]
+  );
+  const computeFreeRect = (0, import_element82.useCallback)(
+    (drag2, clientX, clientY) => computeFreeResizeRect(
+      drag2,
+      clientX,
+      clientY,
+      imageSize,
+      bounds,
+      minCropSize
+    ),
+    [imageSize, bounds, minCropSize]
+  );
+  const computeLockedRect = (0, import_element82.useCallback)(
+    (drag2, clientX, clientY, driverAxis) => computeLockedResizeRect(
+      drag2,
+      clientX,
+      clientY,
+      imageSize,
+      bounds,
+      normalizedRatio,
+      minCropSize,
+      driverAxis
+    ),
+    [imageSize, bounds, normalizedRatio, minCropSize]
+  );
+  const computeShiftLockedRect = (0, import_element82.useCallback)(
+    (drag2, clientX, clientY) => computeShiftLockedResizeRect(
+      drag2,
+      clientX,
+      clientY,
+      imageSize,
+      bounds,
+      minCropSize
+    ),
+    [imageSize, bounds, minCropSize]
+  );
+  latestHandlersRef.current = {
+    hasLockedRatio,
+    computeLockedRect,
+    computeFreeRect,
+    computeShiftLockedRect,
+    onCropChange,
+    onResizeEnd,
+    snapCropRect
+  };
+  const handleKeyDown = (0, import_element82.useCallback)(
+    (handle, event) => {
+      const key = event.key;
+      if (isResizeDisabled) {
+        return;
+      }
+      if (key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+        onEscape?.();
+        return;
+      }
+      if (key !== "ArrowUp" && key !== "ArrowDown" && key !== "ArrowLeft" && key !== "ArrowRight") {
+        return;
+      }
+      event.preventDefault();
+      event.stopPropagation();
+      if (!keyboardResizeActiveRef.current) {
+        keyboardResizeActiveRef.current = true;
+        onResizeStart?.(handle);
+      }
+      const scheduleKeyboardResizeEnd = () => {
+        clearTimeout(keyboardSettleTimerRef.current);
+        keyboardSettleTimerRef.current = setTimeout(() => {
+          keyboardResizeActiveRef.current = false;
+          onResizeEnd?.();
+        }, KEYBOARD_SETTLE_DELAY);
+      };
+      const stepMultiplier = event.shiftKey ? KEYBOARD_SHIFT_STEP_MULTIPLIER : 1;
+      const stepX = keyboardResizeStep?.width ?? DEFAULT_KEYBOARD_STEP;
+      const stepY = keyboardResizeStep?.height ?? DEFAULT_KEYBOARD_STEP;
+      const adjustedStepX = stepX * stepMultiplier;
+      const adjustedStepY = stepY * stepMultiplier;
+      let dx = 0;
+      let dy = 0;
+      if (key === "ArrowLeft") {
+        dx = -adjustedStepX;
+      }
+      if (key === "ArrowRight") {
+        dx = adjustedStepX;
+      }
+      if (key === "ArrowUp") {
+        dy = -adjustedStepY;
+      }
+      if (key === "ArrowDown") {
+        dy = adjustedStepY;
+      }
+      const keyboardDriverAxis = dx !== 0 ? "width" : "height";
+      if (hasLockedRatio) {
+        const syntheticDrag = {
+          handle,
+          startX: 0,
+          startY: 0,
+          startRect: { ...cropRect }
+        };
+        const clientX = dx * imageSize.width;
+        const clientY = dy * imageSize.height;
+        onCropChange(
+          computeLockedRect(
+            syntheticDrag,
+            clientX,
+            clientY,
+            keyboardDriverAxis
+          )
+        );
+        scheduleKeyboardResizeEnd();
+      } else {
+        const syntheticDrag = {
+          handle,
+          startX: 0,
+          startY: 0,
+          startRect: { ...cropRect }
+        };
+        const clientX = dx * imageSize.width;
+        const clientY = dy * imageSize.height;
+        const rect = computeFreeRect(syntheticDrag, clientX, clientY);
+        onCropChange(snapCropRect?.(rect, handle) ?? rect);
+        scheduleKeyboardResizeEnd();
+      }
+    },
+    [
+      cropRect,
+      hasLockedRatio,
+      imageSize.width,
+      imageSize.height,
+      computeLockedRect,
+      computeFreeRect,
+      onCropChange,
+      onResizeStart,
+      onResizeEnd,
+      onEscape,
+      keyboardResizeStep,
+      snapCropRect,
+      isResizeDisabled
+    ]
+  );
+  if (containerSize.width === 0 || containerSize.height === 0) {
+    return null;
+  }
+  const handles = hasLockedRatio ? CORNER_POSITIONS : ALL_POSITIONS;
+  return /* @__PURE__ */ (0, import_jsx_runtime121.jsxs)(
+    "div",
+    {
+      className: "wp-media-editor-image-editor__stencil",
+      "data-testid": "cropper-stencil",
+      style: {
+        left,
+        top,
+        width,
+        height,
+        transition: stencilTransition
+      },
+      children: [
+        freeformCrop && /* @__PURE__ */ (0, import_jsx_runtime121.jsx)(
+          "div",
+          {
+            id: resizeHandleDescriptionId,
+            style: VISUALLY_HIDDEN_STYLE,
+            children: (0, import_i18n29.__)(
+              "Use arrow keys to resize the crop area. Hold Shift for larger steps."
+            )
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime121.jsx)(
+          "div",
+          {
+            className: "wp-media-editor-image-editor__stencil-rect",
+            style: {
+              width: "100%",
+              height: "100%",
+              top: 0,
+              left: 0
+            }
+          }
+        ),
+        freeformCrop && handles.map((pos) => /* @__PURE__ */ (0, import_jsx_runtime121.jsx)(
+          "button",
+          {
+            type: "button",
+            className: `wp-media-editor-image-editor__handle wp-media-editor-image-editor__handle--${pos}`,
+            onPointerDown: (event) => handlePointerDown(pos, event),
+            onTouchStart: (event) => {
+              if (event.touches.length < 2) {
+                event.stopPropagation();
+              }
+            },
+            onKeyDown: (event) => handleKeyDown(pos, event),
+            "aria-label": getHandleLabel(pos),
+            "aria-describedby": resizeHandleDescriptionId
+          },
+          pos
+        ))
+      ]
+    }
+  );
+}
+
+// packages/media-editor/build-module/image-editor/react/components/overlays/dimming-overlay.mjs
+var import_jsx_runtime122 = __toESM(require_jsx_runtime(), 1);
+function DimmingOverlay({
+  cropRect,
+  containerSize,
+  imageSize,
+  transition
+}) {
+  if (containerSize.width === 0 || containerSize.height === 0) {
+    return null;
+  }
+  const offsetX = (containerSize.width - imageSize.width) / 2;
+  const offsetY = (containerSize.height - imageSize.height) / 2;
+  const left = offsetX + cropRect.x * imageSize.width;
+  const top = offsetY + cropRect.y * imageSize.height;
+  const width = cropRect.width * imageSize.width;
+  const height = cropRect.height * imageSize.height;
+  const composedTransition = transition ? `${transition}, box-shadow 0.15s ease` : void 0;
+  return /* @__PURE__ */ (0, import_jsx_runtime122.jsx)(
+    "div",
+    {
+      className: "wp-media-editor-image-editor__dimming",
+      "data-testid": "cropper-dimming",
+      style: {
+        left,
+        top,
+        width,
+        height,
+        transition: composedTransition
+      }
+    }
+  );
+}
+
+// packages/media-editor/build-module/image-editor/react/components/overlays/grid-overlay.mjs
+var import_jsx_runtime123 = __toESM(require_jsx_runtime(), 1);
+function GridOverlay({
+  cropRect,
+  containerSize,
+  imageSize
+}) {
+  if (containerSize.width === 0 || containerSize.height === 0) {
+    return null;
+  }
+  const offsetX = (containerSize.width - imageSize.width) / 2;
+  const offsetY = (containerSize.height - imageSize.height) / 2;
+  const left = offsetX + cropRect.x * imageSize.width;
+  const top = offsetY + cropRect.y * imageSize.height;
+  const width = cropRect.width * imageSize.width;
+  const height = cropRect.height * imageSize.height;
+  const thirdW = width / 3;
+  const thirdH = height / 3;
+  return /* @__PURE__ */ (0, import_jsx_runtime123.jsxs)(
+    "div",
+    {
+      className: "wp-media-editor-image-editor__grid",
+      "data-testid": "cropper-grid",
+      style: {
+        left,
+        top,
+        width,
+        height
+      },
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime123.jsx)(
+          "div",
+          {
+            className: "wp-media-editor-image-editor__grid-line wp-media-editor-image-editor__grid-line--horizontal",
+            style: { top: thirdH }
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime123.jsx)(
+          "div",
+          {
+            className: "wp-media-editor-image-editor__grid-line wp-media-editor-image-editor__grid-line--horizontal",
+            style: { top: thirdH * 2 }
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime123.jsx)(
+          "div",
+          {
+            className: "wp-media-editor-image-editor__grid-line wp-media-editor-image-editor__grid-line--vertical",
+            style: { left: thirdW }
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime123.jsx)(
+          "div",
+          {
+            className: "wp-media-editor-image-editor__grid-line wp-media-editor-image-editor__grid-line--vertical",
+            style: { left: thirdW * 2 }
+          }
+        )
+      ]
+    }
+  );
+}
+
+// packages/media-editor/build-module/image-editor/react/components/overlays/dimensions-overlay.mjs
+var import_element83 = __toESM(require_element(), 1);
+var import_jsx_runtime124 = __toESM(require_jsx_runtime(), 1);
+var HANDLE_GAP_PX = 12;
+var TRANSLATE_PERCENT = {
+  before: "-100%",
+  center: "-50%",
+  after: "0"
+};
+var GAP_DIRECTION = {
+  before: -1,
+  center: 0,
+  after: 1
+};
+var OPPOSITE_SIDE = {
+  before: "after",
+  center: "center",
+  after: "before"
+};
+function preferredAnchor(handle) {
+  let x2 = "center";
+  if (handle.includes("w")) {
+    x2 = "before";
+  } else if (handle.includes("e")) {
+    x2 = "after";
+  }
+  let y2 = "center";
+  if (handle.includes("n")) {
+    y2 = "before";
+  } else if (handle.includes("s")) {
+    y2 = "after";
+  }
+  return { x: x2, y: y2 };
+}
+function sideStart(side, handlePos, length2) {
+  if (side === "before") {
+    return handlePos - HANDLE_GAP_PX - length2;
+  }
+  if (side === "after") {
+    return handlePos + HANDLE_GAP_PX;
+  }
+  return handlePos - length2 / 2;
+}
+function fittingSide(preferred, handlePos, length2, containerLength) {
+  const fits = (side) => {
+    const start = sideStart(side, handlePos, length2);
+    return start >= 0 && start + length2 <= containerLength;
+  };
+  if (fits(preferred)) {
+    return preferred;
+  }
+  const opposite = OPPOSITE_SIDE[preferred];
+  if (opposite !== preferred && fits(opposite)) {
+    return opposite;
+  }
+  if (preferred !== "center" && fits("center")) {
+    return "center";
+  }
+  const overflow = (side) => {
+    const start = sideStart(side, handlePos, length2);
+    return Math.max(0, -start) + Math.max(0, start + length2 - containerLength);
+  };
+  const candidates = [preferred, opposite, "center"];
+  return candidates.reduce(
+    (best, side) => overflow(side) < overflow(best) ? side : best
+  );
+}
+function DimensionsOverlay({
+  cropRect,
+  containerSize,
+  imageSize,
+  activeHandle,
+  outputWidth,
+  outputHeight
+}) {
+  const tooltipRef = (0, import_element83.useRef)(null);
+  const [tooltipSize, setTooltipSize] = (0, import_element83.useState)(null);
+  (0, import_element83.useLayoutEffect)(() => {
+    if (!tooltipRef.current) {
+      return;
+    }
+    const rect = tooltipRef.current.getBoundingClientRect();
+    setTooltipSize((prev) => {
+      if (prev && prev.width === rect.width && prev.height === rect.height) {
+        return prev;
+      }
+      return { width: rect.width, height: rect.height };
+    });
+  }, [outputWidth, outputHeight]);
+  if (!activeHandle || containerSize.width === 0 || containerSize.height === 0) {
+    return null;
+  }
+  const offsetX = (containerSize.width - imageSize.width) / 2;
+  const offsetY = (containerSize.height - imageSize.height) / 2;
+  const left = offsetX + cropRect.x * imageSize.width;
+  const top = offsetY + cropRect.y * imageSize.height;
+  const width = cropRect.width * imageSize.width;
+  const height = cropRect.height * imageSize.height;
+  let handleX = left + width / 2;
+  if (activeHandle.includes("w")) {
+    handleX = left;
+  } else if (activeHandle.includes("e")) {
+    handleX = left + width;
+  }
+  let handleY = top + height / 2;
+  if (activeHandle.includes("n")) {
+    handleY = top;
+  } else if (activeHandle.includes("s")) {
+    handleY = top + height;
+  }
+  const preferred = preferredAnchor(activeHandle);
+  const anchor = tooltipSize ? {
+    x: fittingSide(
+      preferred.x,
+      handleX,
+      tooltipSize.width,
+      containerSize.width
+    ),
+    y: fittingSide(
+      preferred.y,
+      handleY,
+      tooltipSize.height,
+      containerSize.height
+    )
+  } : preferred;
+  return /* @__PURE__ */ (0, import_jsx_runtime124.jsx)(
+    "div",
+    {
+      ref: tooltipRef,
+      className: "wp-media-editor-image-editor__dimensions-tooltip",
+      "data-testid": "cropper-dimensions-tooltip",
+      style: {
+        left: handleX + GAP_DIRECTION[anchor.x] * HANDLE_GAP_PX,
+        top: handleY + GAP_DIRECTION[anchor.y] * HANDLE_GAP_PX,
+        transform: `translate(${TRANSLATE_PERCENT[anchor.x]}, ${TRANSLATE_PERCENT[anchor.y]})`
+      },
+      "aria-hidden": "true",
+      children: `W: ${Math.round(outputWidth)}px H: ${Math.round(
+        outputHeight
+      )}px`
+    }
+  );
+}
+
 // packages/media-editor/build-module/image-editor/react/components/viewport-provider.mjs
-var import_element77 = __toESM(require_element(), 1);
+var import_element85 = __toESM(require_element(), 1);
 
 // packages/media-editor/build-module/image-editor/react/hooks/use-viewport-state.mjs
-var import_element76 = __toESM(require_element(), 1);
+var import_element84 = __toESM(require_element(), 1);
 
 // packages/media-editor/build-module/image-editor/core/viewport-state.mjs
 var DEFAULT_VIEWPORT_STATE = {
@@ -23803,36 +26418,36 @@ function viewportReducer(state, action) {
 
 // packages/media-editor/build-module/image-editor/react/hooks/use-viewport-state.mjs
 function useViewportState() {
-  const [viewport, dispatch] = (0, import_element76.useReducer)(
+  const [viewport, dispatch] = (0, import_element84.useReducer)(
     viewportReducer,
     DEFAULT_VIEWPORT_STATE
   );
-  const setViewportZoom = (0, import_element76.useCallback)((zoom) => {
+  const setViewportZoom = (0, import_element84.useCallback)((zoom) => {
     dispatch({ type: "SET_VIEWPORT_ZOOM", payload: zoom });
   }, []);
-  const setViewportPan = (0, import_element76.useCallback)((pan) => {
+  const setViewportPan = (0, import_element84.useCallback)((pan) => {
     dispatch({ type: "SET_VIEWPORT_PAN", payload: pan });
   }, []);
-  const resetViewport = (0, import_element76.useCallback)(() => {
+  const resetViewport = (0, import_element84.useCallback)(() => {
     dispatch({ type: "RESET_VIEWPORT" });
   }, []);
-  return (0, import_element76.useMemo)(
+  return (0, import_element84.useMemo)(
     () => ({ viewport, setViewportZoom, setViewportPan, resetViewport }),
     [viewport, setViewportZoom, setViewportPan, resetViewport]
   );
 }
 
 // packages/media-editor/build-module/image-editor/react/components/viewport-provider.mjs
-var import_jsx_runtime111 = __toESM(require_jsx_runtime(), 1);
-var ViewportContext = (0, import_element77.createContext)(null);
+var import_jsx_runtime125 = __toESM(require_jsx_runtime(), 1);
+var ViewportContext = (0, import_element85.createContext)(null);
 function ViewportProvider({
   children
 }) {
   const viewportState = useViewportState();
-  return /* @__PURE__ */ (0, import_jsx_runtime111.jsx)(ViewportContext.Provider, { value: viewportState, children });
+  return /* @__PURE__ */ (0, import_jsx_runtime125.jsx)(ViewportContext.Provider, { value: viewportState, children });
 }
 function useViewport() {
-  const context = (0, import_element77.useContext)(ViewportContext);
+  const context = (0, import_element85.useContext)(ViewportContext);
   if (!context) {
     throw new Error(
       "useViewport must be used within a ViewportProvider."
@@ -23842,7 +26457,7 @@ function useViewport() {
 }
 
 // packages/media-editor/build-module/image-editor/react/components/cropper.mjs
-var import_jsx_runtime112 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime126 = __toESM(require_jsx_runtime(), 1);
 var CROP_RECT_EPSILON = 1e-6;
 var CARDINAL_ROTATION_EPSILON2 = 1e-6;
 var SETTLE_TRANSITION_DURATION_MS = 200;
@@ -23886,20 +26501,20 @@ function CropperInner({
     setViewportPan,
     resetViewport
   } = useViewport();
-  const canvasRef = (0, import_element78.useRef)(null);
-  const cropAreaDescriptionId = (0, import_element78.useId)();
-  const [isCropAreaFocused, setIsCropAreaFocused] = (0, import_element78.useState)(focusOnMount);
-  const [isFocusVisible, setIsFocusVisible] = (0, import_element78.useState)(false);
-  const [canvasSize, setCanvasSize] = (0, import_element78.useState)({
+  const canvasRef = (0, import_element86.useRef)(null);
+  const cropAreaDescriptionId = (0, import_element86.useId)();
+  const [isCropAreaFocused, setIsCropAreaFocused] = (0, import_element86.useState)(focusOnMount);
+  const [isFocusVisible, setIsFocusVisible] = (0, import_element86.useState)(false);
+  const [canvasSize, setCanvasSize] = (0, import_element86.useState)({
     width: 0,
     height: 0
   });
-  (0, import_element78.useLayoutEffect)(() => {
+  (0, import_element86.useLayoutEffect)(() => {
     if (focusOnMount) {
       canvasRef.current?.focus({ preventScroll: true });
     }
   }, [focusOnMount]);
-  const handleCropAreaFocus = (0, import_element78.useCallback)(
+  const handleCropAreaFocus = (0, import_element86.useCallback)(
     (event) => {
       const target = event.target;
       if (target === event.currentTarget) {
@@ -23911,7 +26526,7 @@ function CropperInner({
     },
     []
   );
-  const handleCropAreaBlur = (0, import_element78.useCallback)(
+  const handleCropAreaBlur = (0, import_element86.useCallback)(
     (event) => {
       if (event.target === event.currentTarget) {
         setIsCropAreaFocused(false);
@@ -23924,7 +26539,7 @@ function CropperInner({
     },
     []
   );
-  (0, import_element78.useEffect)(() => {
+  (0, import_element86.useEffect)(() => {
     const element = canvasRef.current;
     if (!element) {
       return;
@@ -23945,13 +26560,13 @@ function CropperInner({
       observer.disconnect();
     };
   }, []);
-  (0, import_element78.useEffect)(() => {
+  (0, import_element86.useEffect)(() => {
     onStateChange?.(state);
   }, [state, onStateChange]);
-  const ariaMessage = useAriaAnnouncer(state);
+  useAriaAnnouncer(state);
   const naturalWidth = state.image?.naturalWidth ?? 0;
   const naturalHeight = state.image?.naturalHeight ?? 0;
-  const { elementSize, visualSize } = (0, import_element78.useMemo)(
+  const { elementSize, visualSize } = (0, import_element86.useMemo)(
     () => getImageFit(
       canvasSize,
       { width: naturalWidth, height: naturalHeight },
@@ -23959,10 +26574,10 @@ function CropperInner({
     ),
     [canvasSize, naturalWidth, naturalHeight, state.rotation]
   );
-  (0, import_element78.useEffect)(() => {
+  (0, import_element86.useEffect)(() => {
     setVisualSize(visualSize);
   }, [visualSize, setVisualSize]);
-  (0, import_element78.useEffect)(() => {
+  (0, import_element86.useEffect)(() => {
     if (freeformCrop || visualSize.width === 0 || visualSize.height === 0 || !aspectRatio || aspectRatio <= 0) {
       return;
     }
@@ -23979,8 +26594,8 @@ function CropperInner({
     adjustCropRectForViewport,
     state.cropRect
   ]);
-  const prevAspectRatioRef = (0, import_element78.useRef)(aspectRatio);
-  (0, import_element78.useEffect)(() => {
+  const prevAspectRatioRef = (0, import_element86.useRef)(aspectRatio);
+  (0, import_element86.useEffect)(() => {
     if (prevAspectRatioRef.current === aspectRatio) {
       return;
     }
@@ -24001,26 +26616,26 @@ function CropperInner({
     adjustCropRectForViewport,
     state.cropRect
   ]);
-  const cropBounds = (0, import_element78.useMemo)(() => {
+  const cropBounds = (0, import_element86.useMemo)(() => {
     if (!state.image || elementSize.width === 0) {
       return void 0;
     }
     return getImageCropBounds(state, elementSize, visualSize);
   }, [state, elementSize, visualSize]);
   const effectiveMinZoom = minZoom !== void 0 ? minZoom : getMinZoom(state);
-  const [isResizing, setIsResizing] = (0, import_element78.useState)(false);
-  const isResizingRef = (0, import_element78.useRef)(false);
-  const isSettlingRef = (0, import_element78.useRef)(false);
-  const [isTouchPinching, setIsTouchPinchingState] = (0, import_element78.useState)(false);
-  const isTouchPinchingRef = (0, import_element78.useRef)(false);
-  const setTouchPinching = (0, import_element78.useCallback)((isPinching) => {
+  const [isResizing, setIsResizing] = (0, import_element86.useState)(false);
+  const isResizingRef = (0, import_element86.useRef)(false);
+  const isSettlingRef = (0, import_element86.useRef)(false);
+  const [isTouchPinching, setIsTouchPinchingState] = (0, import_element86.useState)(false);
+  const isTouchPinchingRef = (0, import_element86.useRef)(false);
+  const setTouchPinching = (0, import_element86.useCallback)((isPinching) => {
     isTouchPinchingRef.current = isPinching;
     setIsTouchPinchingState(isPinching);
   }, []);
-  const [activeHandle, setActiveHandle] = (0, import_element78.useState)(
+  const [activeHandle, setActiveHandle] = (0, import_element86.useState)(
     null
   );
-  const viewScaleRest = (0, import_element78.useMemo)(
+  const viewScaleRest = (0, import_element86.useMemo)(
     () => getViewScale(
       state.cropRect,
       canvasSize,
@@ -24030,9 +26645,9 @@ function CropperInner({
     ),
     [state.cropRect, canvasSize, visualSize]
   );
-  const [frozenViewScale, setFrozenViewScale] = (0, import_element78.useState)(1);
+  const [frozenViewScale, setFrozenViewScale] = (0, import_element86.useState)(1);
   const viewScale = isResizing ? frozenViewScale : viewScaleRest;
-  const scaledVisualSize = (0, import_element78.useMemo)(
+  const scaledVisualSize = (0, import_element86.useMemo)(
     () => ({
       width: visualSize.width * viewScale,
       height: visualSize.height * viewScale
@@ -24040,7 +26655,7 @@ function CropperInner({
     [visualSize.width, visualSize.height, viewScale]
   );
   const displayScale = naturalWidth > 0 ? elementSize.width / naturalWidth * state.zoom * viewScale : 0;
-  const keyboardResizeStep = (0, import_element78.useMemo)(() => {
+  const keyboardResizeStep = (0, import_element86.useMemo)(() => {
     if (displayScale < PIXEL_SNAP_DISPLAY_SCALE || aspectRatio && aspectRatio > 0 || naturalWidth <= 0 || naturalHeight <= 0) {
       return void 0;
     }
@@ -24068,7 +26683,7 @@ function CropperInner({
     state.rotation,
     state.zoom
   ]);
-  const minCropSize = (0, import_element78.useMemo)(() => {
+  const minCropSize = (0, import_element86.useMemo)(() => {
     if (naturalWidth <= 0 || naturalHeight <= 0) {
       return void 0;
     }
@@ -24090,7 +26705,7 @@ function CropperInner({
     state.zoom,
     displayScale
   ]);
-  const snapCropRect = (0, import_element78.useCallback)(
+  const snapCropRect = (0, import_element86.useCallback)(
     (rect, handle) => {
       if (displayScale < PIXEL_SNAP_DISPLAY_SCALE || naturalWidth <= 0 || naturalHeight <= 0) {
         return rect;
@@ -24104,8 +26719,8 @@ function CropperInner({
     },
     [displayScale, naturalWidth, naturalHeight, state]
   );
-  const wasPixelSnapEnabledRef = (0, import_element78.useRef)(false);
-  (0, import_element78.useEffect)(() => {
+  const wasPixelSnapEnabledRef = (0, import_element86.useRef)(false);
+  (0, import_element86.useEffect)(() => {
     const isPixelSnapEnabled = freeformCrop && (!aspectRatio || aspectRatio <= 0) && displayScale >= PIXEL_SNAP_DISPLAY_SCALE && naturalWidth > 0 && naturalHeight > 0;
     const wasPixelSnapEnabled = wasPixelSnapEnabledRef.current;
     wasPixelSnapEnabledRef.current = isPixelSnapEnabled;
@@ -24182,7 +26797,7 @@ function CropperInner({
       setIsFocusVisible(false);
     }
   };
-  (0, import_element78.useEffect)(() => {
+  (0, import_element86.useEffect)(() => {
     const el = canvasRef.current;
     if (!el) {
       return;
@@ -24202,7 +26817,7 @@ function CropperInner({
     };
   }, [onWheelNative]);
   const transformString = useTransformStyle(state, visualSize);
-  const handleImageLoad = (0, import_element78.useCallback)(
+  const handleImageLoad = (0, import_element86.useCallback)(
     (event) => {
       const img = event.currentTarget;
       const size4 = {
@@ -24218,7 +26833,7 @@ function CropperInner({
     },
     [src, setImage, onImageLoaded]
   );
-  const handleCropChange = (0, import_element78.useCallback)(
+  const handleCropChange = (0, import_element86.useCallback)(
     (rect) => {
       if (isTouchPinchingRef.current) {
         return;
@@ -24251,21 +26866,21 @@ function CropperInner({
     },
     [setCropRect, setViewportPan, canvasSize, scaledVisualSize]
   );
-  const [settling, setSettling] = (0, import_element78.useState)(false);
-  const settleTimerRef = (0, import_element78.useRef)();
-  const finishSettling = (0, import_element78.useCallback)(() => {
+  const [settling, setSettling] = (0, import_element86.useState)(false);
+  const settleTimerRef = (0, import_element86.useRef)();
+  const finishSettling = (0, import_element86.useCallback)(() => {
     clearTimeout(settleTimerRef.current);
     isSettlingRef.current = false;
     setSettling(false);
   }, []);
-  (0, import_element78.useEffect)(() => {
+  (0, import_element86.useEffect)(() => {
     return () => {
       clearTimeout(settleTimerRef.current);
     };
   }, []);
   const isInteractiveGrid = showGrid === "interactive";
   const showInteractiveGrid = isInteractiveGrid && (isInteractionPlacementActive || isResizing || isPlacementActive);
-  const outputSize = (0, import_element78.useMemo)(() => {
+  const outputSize = (0, import_element86.useMemo)(() => {
     if (!showDimensions || !activeHandle || !state.image) {
       return null;
     }
@@ -24275,11 +26890,11 @@ function CropperInner({
     });
     return { width: region.width, height: region.height };
   }, [showDimensions, activeHandle, state]);
-  const handleEscape = (0, import_element78.useCallback)(() => {
+  const handleEscape = (0, import_element86.useCallback)(() => {
     setIsFocusVisible(true);
     canvasRef.current?.focus({ preventScroll: true });
   }, []);
-  const handleResizeStart = (0, import_element78.useCallback)(
+  const handleResizeStart = (0, import_element86.useCallback)(
     (handle) => {
       if (isTouchPinchingRef.current) {
         return;
@@ -24294,7 +26909,7 @@ function CropperInner({
     },
     [finishSettling, onGestureStart, resetViewport, viewScaleRest]
   );
-  const handleResizeEnd = (0, import_element78.useCallback)(() => {
+  const handleResizeEnd = (0, import_element86.useCallback)(() => {
     const isCancellingForPinch = isTouchPinchingRef.current;
     isResizingRef.current = false;
     setIsResizing(false);
@@ -24315,7 +26930,7 @@ function CropperInner({
       SETTLE_TRANSITION_FALLBACK_MS
     );
   }, [finishSettling, settleCrop, onGestureEnd, resetViewport]);
-  const handleSettleTransitionEnd = (0, import_element78.useCallback)(
+  const handleSettleTransitionEnd = (0, import_element86.useCallback)(
     (event) => {
       if (!isSettlingRef.current || event.propertyName !== "transform") {
         return;
@@ -24331,7 +26946,7 @@ function CropperInner({
     imageTransition = "transform 150ms linear";
   }
   const settleStencilTransition = settling ? SETTLE_STENCIL_TRANSITION : void 0;
-  const imageStyle = (0, import_element78.useMemo)(() => {
+  const imageStyle = (0, import_element86.useMemo)(() => {
     if (elementSize.width === 0 || elementSize.height === 0) {
       return {};
     }
@@ -24378,7 +26993,7 @@ function CropperInner({
       willChange
     };
   }
-  const setContainerRef = (0, import_element78.useCallback)(
+  const setContainerRef = (0, import_element86.useCallback)(
     (element) => {
       if (typeof ref === "function") {
         ref(element);
@@ -24388,7 +27003,7 @@ function CropperInner({
     },
     [ref]
   );
-  return /* @__PURE__ */ (0, import_jsx_runtime112.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime126.jsx)(
     "div",
     {
       ref: setContainerRef,
@@ -24397,7 +27012,7 @@ function CropperInner({
         isDragging && "wp-media-editor-image-editor--dragging",
         className
       ),
-      children: /* @__PURE__ */ (0, import_jsx_runtime112.jsxs)(
+      children: /* @__PURE__ */ (0, import_jsx_runtime126.jsxs)(
         "div",
         {
           ref: canvasRef,
@@ -24421,7 +27036,7 @@ function CropperInner({
           onBlur: handleCropAreaBlur,
           ...canvasHandlers,
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime112.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime126.jsx)(
               "div",
               {
                 id: cropAreaDescriptionId,
@@ -24431,7 +27046,7 @@ function CropperInner({
                 )
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime112.jsxs)(
+            /* @__PURE__ */ (0, import_jsx_runtime126.jsxs)(
               "div",
               {
                 className: "wp-media-editor-image-editor__stage",
@@ -24439,7 +27054,7 @@ function CropperInner({
                 style: stageStyle,
                 onTransitionEnd: handleSettleTransitionEnd,
                 children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime112.jsx)(
+                  /* @__PURE__ */ (0, import_jsx_runtime126.jsx)(
                     "img",
                     {
                       className: "wp-media-editor-image-editor__image",
@@ -24451,7 +27066,7 @@ function CropperInner({
                       draggable: false
                     }
                   ),
-                  showDimming && /* @__PURE__ */ (0, import_jsx_runtime112.jsx)(
+                  showDimming && /* @__PURE__ */ (0, import_jsx_runtime126.jsx)(
                     DimmingOverlay,
                     {
                       cropRect: state.cropRect,
@@ -24460,7 +27075,7 @@ function CropperInner({
                       transition: settleStencilTransition
                     }
                   ),
-                  /* @__PURE__ */ (0, import_jsx_runtime112.jsx)(
+                  /* @__PURE__ */ (0, import_jsx_runtime126.jsx)(
                     StencilComponent,
                     {
                       cropRect: state.cropRect,
@@ -24480,7 +27095,7 @@ function CropperInner({
                       keyboardResizeStep
                     }
                   ),
-                  (showGrid === true || isInteractiveGrid) && /* @__PURE__ */ (0, import_jsx_runtime112.jsx)(
+                  (showGrid === true || isInteractiveGrid) && /* @__PURE__ */ (0, import_jsx_runtime126.jsx)(
                     GridOverlay,
                     {
                       cropRect: state.cropRect,
@@ -24488,7 +27103,7 @@ function CropperInner({
                       imageSize: scaledVisualSize
                     }
                   ),
-                  activeHandle && outputSize && /* @__PURE__ */ (0, import_jsx_runtime112.jsx)(
+                  activeHandle && outputSize && /* @__PURE__ */ (0, import_jsx_runtime126.jsx)(
                     DimensionsOverlay,
                     {
                       cropRect: state.cropRect,
@@ -24501,16 +27116,6 @@ function CropperInner({
                   )
                 ]
               }
-            ),
-            /* @__PURE__ */ (0, import_jsx_runtime112.jsx)(
-              "div",
-              {
-                "aria-live": "polite",
-                "aria-atomic": "true",
-                className: "wp-media-editor-image-editor__aria-live",
-                style: VISUALLY_HIDDEN_STYLE,
-                children: ariaMessage
-              }
             )
           ]
         }
@@ -24518,15 +27123,15 @@ function CropperInner({
     }
   );
 }
-var CropperInnerWithRef = (0, import_element78.forwardRef)(
+var CropperInnerWithRef = (0, import_element86.forwardRef)(
   CropperInner
 );
-var Cropper = (0, import_element78.forwardRef)(
-  (props, ref) => /* @__PURE__ */ (0, import_jsx_runtime112.jsx)(ViewportProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime112.jsx)(CropperInnerWithRef, { ...props, ref }) })
+var Cropper = (0, import_element86.forwardRef)(
+  (props, ref) => /* @__PURE__ */ (0, import_jsx_runtime126.jsx)(ViewportProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime126.jsx)(CropperInnerWithRef, { ...props, ref }) })
 );
 
 // packages/media-editor/build-module/state/use-media-editor-state.mjs
-var import_element79 = __toESM(require_element(), 1);
+var import_element87 = __toESM(require_element(), 1);
 
 // packages/media-editor/build-module/state/types.mjs
 var DEFAULT_CROP_OPTIONS = {
@@ -24623,7 +27228,7 @@ function areCropperImagesEqual(a2, b2) {
   return a2?.src === b2?.src && a2?.naturalWidth === b2?.naturalWidth && a2?.naturalHeight === b2?.naturalHeight;
 }
 function useMediaEditorState(initialState) {
-  const [state, dispatch] = (0, import_element79.useReducer)(
+  const [state, dispatch] = (0, import_element87.useReducer)(
     mediaEditorReducer,
     null,
     () => buildInitialMediaEditorState(
@@ -24634,16 +27239,16 @@ function useMediaEditorState(initialState) {
       initialState?.cropOptions
     )
   );
-  const [initialBaseline, setInitialBaseline] = (0, import_element79.useState)(() => state);
-  const stateRef = (0, import_element79.useRef)(state);
-  const visualSizeRef = (0, import_element79.useRef)({ width: 0, height: 0 });
-  const historyRef = (0, import_element79.useRef)([]);
-  const redoStackRef = (0, import_element79.useRef)([]);
-  const [hasUndo, setHasUndo] = (0, import_element79.useState)(false);
-  const [hasRedo, setHasRedo] = (0, import_element79.useState)(false);
-  const isGestureOpenRef = (0, import_element79.useRef)(false);
-  const gestureSnapshotRef = (0, import_element79.useRef)(null);
-  const pushSnapshot = (0, import_element79.useCallback)((snapshot) => {
+  const [initialBaseline, setInitialBaseline] = (0, import_element87.useState)(() => state);
+  const stateRef = (0, import_element87.useRef)(state);
+  const visualSizeRef = (0, import_element87.useRef)({ width: 0, height: 0 });
+  const historyRef = (0, import_element87.useRef)([]);
+  const redoStackRef = (0, import_element87.useRef)([]);
+  const [hasUndo, setHasUndo] = (0, import_element87.useState)(false);
+  const [hasRedo, setHasRedo] = (0, import_element87.useState)(false);
+  const isGestureOpenRef = (0, import_element87.useRef)(false);
+  const gestureSnapshotRef = (0, import_element87.useRef)(null);
+  const pushSnapshot = (0, import_element87.useCallback)((snapshot) => {
     const last = historyRef.current[historyRef.current.length - 1];
     if (last && areMediaEditorStatesEqual(last, snapshot)) {
       return;
@@ -24653,7 +27258,7 @@ function useMediaEditorState(initialState) {
     setHasUndo(true);
     setHasRedo(false);
   }, []);
-  const dispatchWithHistory = (0, import_element79.useCallback)(
+  const dispatchWithHistory = (0, import_element87.useCallback)(
     (action, recordHistory = true) => {
       const preState = stateRef.current;
       const postState = mediaEditorReducer(preState, action);
@@ -24673,14 +27278,14 @@ function useMediaEditorState(initialState) {
     },
     [pushSnapshot]
   );
-  const beginGesture = (0, import_element79.useCallback)(() => {
+  const beginGesture = (0, import_element87.useCallback)(() => {
     if (isGestureOpenRef.current) {
       return;
     }
     isGestureOpenRef.current = true;
     gestureSnapshotRef.current = null;
   }, []);
-  const endGesture = (0, import_element79.useCallback)(() => {
+  const endGesture = (0, import_element87.useCallback)(() => {
     const snapshot = gestureSnapshotRef.current;
     if (snapshot && !areMediaEditorStatesEqual(snapshot, stateRef.current)) {
       pushSnapshot(snapshot);
@@ -24688,20 +27293,20 @@ function useMediaEditorState(initialState) {
     gestureSnapshotRef.current = null;
     isGestureOpenRef.current = false;
   }, [pushSnapshot]);
-  const dispatchCropperAction = (0, import_element79.useCallback)(
+  const dispatchCropperAction = (0, import_element87.useCallback)(
     (action) => {
       dispatchWithHistory({ type: "CROPPER", action });
     },
     [dispatchWithHistory]
   );
-  const cropperSetters = (0, import_element79.useMemo)(
+  const cropperSetters = (0, import_element87.useMemo)(
     () => buildCropperSetters(
       dispatchCropperAction,
       () => stateRef.current.cropper
     ),
     [dispatchCropperAction]
   );
-  const setImage = (0, import_element79.useCallback)((image) => {
+  const setImage = (0, import_element87.useCallback)((image) => {
     if (areCropperImagesEqual(stateRef.current.cropper.image, image)) {
       return;
     }
@@ -24720,7 +27325,7 @@ function useMediaEditorState(initialState) {
     setHasUndo(false);
     setHasRedo(false);
   }, []);
-  const reset = (0, import_element79.useCallback)(
+  const reset = (0, import_element87.useCallback)(
     (resetState) => {
       dispatchWithHistory({
         type: "CROPPER",
@@ -24729,7 +27334,7 @@ function useMediaEditorState(initialState) {
     },
     [dispatchWithHistory]
   );
-  const setAspectRatioValue = (0, import_element79.useCallback)(
+  const setAspectRatioValue = (0, import_element87.useCallback)(
     (presetKey) => {
       const resolved = resolveAspectRatio(
         presetKey,
@@ -24746,10 +27351,10 @@ function useMediaEditorState(initialState) {
     },
     [dispatchWithHistory]
   );
-  const resetCropOptions = (0, import_element79.useCallback)(() => {
+  const resetCropOptions = (0, import_element87.useCallback)(() => {
     dispatchWithHistory({ type: "RESET_CROP_OPTIONS" });
   }, [dispatchWithHistory]);
-  const undo = (0, import_element79.useCallback)(() => {
+  const undo = (0, import_element87.useCallback)(() => {
     endGesture();
     const prev = historyRef.current[historyRef.current.length - 1];
     if (!prev) {
@@ -24762,7 +27367,7 @@ function useMediaEditorState(initialState) {
     stateRef.current = prev;
     dispatch({ type: "RESTORE_SNAPSHOT", payload: prev });
   }, [endGesture]);
-  const redo = (0, import_element79.useCallback)(() => {
+  const redo = (0, import_element87.useCallback)(() => {
     endGesture();
     const next = redoStackRef.current[0];
     if (!next) {
@@ -24775,10 +27380,10 @@ function useMediaEditorState(initialState) {
     stateRef.current = next;
     dispatch({ type: "RESTORE_SNAPSHOT", payload: next });
   }, [endGesture]);
-  const setVisualSize = (0, import_element79.useCallback)((size4) => {
+  const setVisualSize = (0, import_element87.useCallback)((size4) => {
     visualSizeRef.current = size4;
   }, []);
-  const adjustCropRectForViewport = (0, import_element79.useCallback)(
+  const adjustCropRectForViewport = (0, import_element87.useCallback)(
     (rect) => {
       dispatchWithHistory(
         { type: "VIEWPORT_ADJUST_CROP_RECT", payload: rect },
@@ -24792,7 +27397,7 @@ function useMediaEditorState(initialState) {
     state.cropper,
     initialBaseline.cropper
   );
-  const getCroppedImage = (0, import_element79.useCallback)(
+  const getCroppedImage = (0, import_element87.useCallback)(
     (mimeType, quality) => {
       if (!state.cropper.image) {
         return Promise.reject(
@@ -24808,7 +27413,7 @@ function useMediaEditorState(initialState) {
     },
     [state.cropper]
   );
-  const controller = (0, import_element79.useMemo)(
+  const controller = (0, import_element87.useMemo)(
     () => ({
       // CropperController surface (state is the cropper slice so a
       // <Cropper> takes this controller as-is).
@@ -24857,9 +27462,9 @@ function useMediaEditorState(initialState) {
 }
 
 // packages/media-editor/build-module/state/media-editor-state-provider.mjs
-var import_element80 = __toESM(require_element(), 1);
-var import_jsx_runtime113 = __toESM(require_jsx_runtime(), 1);
-var MediaEditorStateContext = (0, import_element80.createContext)(
+var import_element88 = __toESM(require_element(), 1);
+var import_jsx_runtime127 = __toESM(require_jsx_runtime(), 1);
+var MediaEditorStateContext = (0, import_element88.createContext)(
   null
 );
 function MediaEditorStateProvider({
@@ -24871,10 +27476,10 @@ function MediaEditorStateProvider({
     cropper: initialCropperState,
     cropOptions: initialCropOptions
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime113.jsx)(MediaEditorStateContext.Provider, { value: controller, children });
+  return /* @__PURE__ */ (0, import_jsx_runtime127.jsx)(MediaEditorStateContext.Provider, { value: controller, children });
 }
 function useMediaEditor() {
-  const context = (0, import_element80.useContext)(MediaEditorStateContext);
+  const context = (0, import_element88.useContext)(MediaEditorStateContext);
   if (!context) {
     throw new Error(
       "useMediaEditor must be used within a MediaEditorStateProvider."
@@ -24884,7 +27489,7 @@ function useMediaEditor() {
 }
 
 // packages/media-editor/build-module/components/media-editor-canvas/index.mjs
-var import_jsx_runtime114 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime128 = __toESM(require_jsx_runtime(), 1);
 function MediaEditorCanvas({
   focusOnMount,
   isPlacementActive = false,
@@ -24896,18 +27501,18 @@ function MediaEditorCanvas({
   const { aspectRatioValue } = controller.cropOptions;
   const cropperImage = controller.state.image;
   const { beginGesture, endGesture, setImage } = controller;
-  const [status, setStatus] = (0, import_element81.useState)(
+  const [status, setStatus] = (0, import_element89.useState)(
     "loading"
   );
-  const aspectRatio = (0, import_element81.useMemo)(
+  const aspectRatio = (0, import_element89.useMemo)(
     () => resolveAspectRatio(aspectRatioValue, cropperImage),
     [aspectRatioValue, cropperImage]
   );
-  const handleGestureStart = (0, import_element81.useCallback)(() => {
+  const handleGestureStart = (0, import_element89.useCallback)(() => {
     beginGesture();
     onGestureStart?.();
   }, [beginGesture, onGestureStart]);
-  const handleGestureEnd = (0, import_element81.useCallback)(() => {
+  const handleGestureEnd = (0, import_element89.useCallback)(() => {
     endGesture();
     onGestureEnd?.();
   }, [endGesture, onGestureEnd]);
@@ -24915,7 +27520,7 @@ function MediaEditorCanvas({
   const mediaType = getMediaTypeFromMimeType(media?.mime_type);
   const mediaWidth = Number(media?.media_details?.width);
   const mediaHeight = Number(media?.media_details?.height);
-  (0, import_element81.useEffect)(() => {
+  (0, import_element89.useEffect)(() => {
     if (cropperImage || !mediaUrl || !Number.isFinite(mediaWidth) || !Number.isFinite(mediaHeight) || mediaWidth <= 0 || mediaHeight <= 0) {
       return;
     }
@@ -24926,7 +27531,7 @@ function MediaEditorCanvas({
     });
   }, [cropperImage, mediaUrl, mediaWidth, mediaHeight, setImage]);
   const isImage = mediaType.type === "image";
-  (0, import_element81.useEffect)(() => {
+  (0, import_element89.useEffect)(() => {
     if (!mediaUrl || !isImage) {
       return;
     }
@@ -24947,17 +27552,17 @@ function MediaEditorCanvas({
     return null;
   }
   if (status === "error") {
-    return /* @__PURE__ */ (0, import_jsx_runtime114.jsx)("div", { className: "media-editor-canvas", children: /* @__PURE__ */ (0, import_jsx_runtime114.jsx)("div", { className: "media-editor-canvas__error", role: "alert", children: /* @__PURE__ */ (0, import_jsx_runtime114.jsx)("p", { children: (0, import_i18n31.__)("Failed to load image.") }) }) });
+    return /* @__PURE__ */ (0, import_jsx_runtime128.jsx)("div", { className: "media-editor-canvas", children: /* @__PURE__ */ (0, import_jsx_runtime128.jsx)("div", { className: "media-editor-canvas__error", role: "alert", children: /* @__PURE__ */ (0, import_jsx_runtime128.jsx)("p", { children: (0, import_i18n31.__)("Failed to load image.") }) }) });
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime114.jsxs)("div", { className: "media-editor-canvas", children: [
-    status === "loading" && /* @__PURE__ */ (0, import_jsx_runtime114.jsx)("div", { className: "media-editor-canvas__spinner", children: /* @__PURE__ */ (0, import_jsx_runtime114.jsx)(import_components35.Spinner, {}) }),
-    /* @__PURE__ */ (0, import_jsx_runtime114.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime128.jsxs)("div", { className: "media-editor-canvas", children: [
+    status === "loading" && /* @__PURE__ */ (0, import_jsx_runtime128.jsx)("div", { className: "media-editor-canvas__spinner", children: /* @__PURE__ */ (0, import_jsx_runtime128.jsx)(import_components36.Spinner, {}) }),
+    /* @__PURE__ */ (0, import_jsx_runtime128.jsx)(
       "div",
       {
         className: clsx_default("media-editor-canvas__cropper", {
           "is-loaded": status === "loaded"
         }),
-        children: /* @__PURE__ */ (0, import_jsx_runtime114.jsx)(
+        children: /* @__PURE__ */ (0, import_jsx_runtime128.jsx)(
           Cropper,
           {
             src: mediaUrl,
@@ -24980,38 +27585,38 @@ function MediaEditorCanvas({
 var import_i18n32 = __toESM(require_i18n(), 1);
 
 // packages/media-editor/build-module/hooks/use-crop-gesture-handlers.mjs
-var import_element82 = __toESM(require_element(), 1);
+var import_element90 = __toESM(require_element(), 1);
 var CROP_CONTROL_ATTR = "data-crop-control";
 var KEYBOARD_GESTURE_IDLE_MS = 300;
 function useCropGestureHandlers(options = {}) {
   const { commitOnKeyUp = true } = options;
   const { beginGesture, endGesture } = useMediaEditor();
-  const keyboardTimerRef = (0, import_element82.useRef)();
-  const clearKeyboardTimer = (0, import_element82.useCallback)(() => {
+  const keyboardTimerRef = (0, import_element90.useRef)();
+  const clearKeyboardTimer = (0, import_element90.useCallback)(() => {
     clearTimeout(keyboardTimerRef.current);
   }, []);
-  const scheduleKeyboardEnd = (0, import_element82.useCallback)(() => {
+  const scheduleKeyboardEnd = (0, import_element90.useCallback)(() => {
     clearKeyboardTimer();
     keyboardTimerRef.current = setTimeout(() => {
       endGesture();
     }, KEYBOARD_GESTURE_IDLE_MS);
   }, [clearKeyboardTimer, endGesture]);
-  (0, import_element82.useEffect)(() => clearKeyboardTimer, [clearKeyboardTimer]);
-  const handlePointerDownCapture = (0, import_element82.useCallback)(() => {
+  (0, import_element90.useEffect)(() => clearKeyboardTimer, [clearKeyboardTimer]);
+  const handlePointerDownCapture = (0, import_element90.useCallback)(() => {
     clearKeyboardTimer();
     beginGesture();
   }, [beginGesture, clearKeyboardTimer]);
-  const handlePointerEnd = (0, import_element82.useCallback)(() => {
+  const handlePointerEnd = (0, import_element90.useCallback)(() => {
     clearKeyboardTimer();
     endGesture();
   }, [clearKeyboardTimer, endGesture]);
-  const handleKeyDownCapture = (0, import_element82.useCallback)(() => {
+  const handleKeyDownCapture = (0, import_element90.useCallback)(() => {
     beginGesture();
     if (!commitOnKeyUp) {
       scheduleKeyboardEnd();
     }
   }, [beginGesture, commitOnKeyUp, scheduleKeyboardEnd]);
-  const handleKeyUp = (0, import_element82.useCallback)(() => {
+  const handleKeyUp = (0, import_element90.useCallback)(() => {
     if (commitOnKeyUp) {
       endGesture();
       return;
@@ -25029,10 +27634,10 @@ function useCropGestureHandlers(options = {}) {
 }
 
 // packages/media-editor/build-module/components/rotation-ruler/index.mjs
-var import_element84 = __toESM(require_element(), 1);
+var import_element92 = __toESM(require_element(), 1);
 
 // packages/media-editor/build-module/components/rotation-ruler/use-ruler-drag.mjs
-var import_element83 = __toESM(require_element(), 1);
+var import_element91 = __toESM(require_element(), 1);
 function pxToValueDelta(deltaPx, pixelsPerStep, step) {
   return -deltaPx / pixelsPerStep * step;
 }
@@ -25059,7 +27664,7 @@ function useRulerDrag(options) {
     disabled: disabled2,
     onPointerDownStart
   } = options;
-  const latestRef = (0, import_element83.useRef)({
+  const latestRef = (0, import_element91.useRef)({
     value,
     startX: 0,
     startValue: 0,
@@ -25069,10 +27674,10 @@ function useRulerDrag(options) {
     capturePointerId: 0,
     windowPointerUp: null
   });
-  (0, import_element83.useEffect)(() => {
+  (0, import_element91.useEffect)(() => {
     latestRef.current.value = value;
   }, [value]);
-  const endDrag = (0, import_element83.useCallback)(() => {
+  const endDrag = (0, import_element91.useCallback)(() => {
     const state = latestRef.current;
     if (!state.dragging) {
       return;
@@ -25093,8 +27698,8 @@ function useRulerDrag(options) {
       state.windowPointerUp = null;
     }
   }, []);
-  (0, import_element83.useEffect)(() => endDrag, [endDrag]);
-  const onPointerDown = (0, import_element83.useCallback)(
+  (0, import_element91.useEffect)(() => endDrag, [endDrag]);
+  const onPointerDown = (0, import_element91.useCallback)(
     (event) => {
       if (disabled2 || event.button !== 0) {
         return;
@@ -25115,7 +27720,7 @@ function useRulerDrag(options) {
     },
     [disabled2, onPointerDownStart, endDrag, step]
   );
-  const onPointerMove = (0, import_element83.useCallback)(
+  const onPointerMove = (0, import_element91.useCallback)(
     (event) => {
       const state = latestRef.current;
       if (!state.dragging) {
@@ -25152,7 +27757,7 @@ function useRulerDrag(options) {
 }
 
 // packages/media-editor/build-module/components/rotation-ruler/index.mjs
-var import_jsx_runtime115 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime129 = __toESM(require_jsx_runtime(), 1);
 var STRIP_HEIGHT = 32;
 var LABEL_BASELINE_Y = 11;
 var MAJOR_INTERVAL = 15;
@@ -25160,7 +27765,7 @@ var TICK_HEIGHT_MINOR = 4;
 var TICK_HEIGHT_MID = 8;
 var TICK_HEIGHT_MAJOR = 14;
 function useTicks(min3, max3) {
-  return (0, import_element84.useMemo)(() => {
+  return (0, import_element92.useMemo)(() => {
     const out = [];
     for (let v2 = Math.ceil(min3); v2 <= Math.floor(max3); v2 += 1) {
       let kind = "minor";
@@ -25195,8 +27800,8 @@ function RotationRuler(props) {
     id,
     disabled: disabled2 = false
   } = props;
-  const inputRef = (0, import_element84.useRef)(null);
-  const generatedId = (0, import_element84.useId)();
+  const inputRef = (0, import_element92.useRef)(null);
+  const generatedId = (0, import_element92.useId)();
   const inputId = id ?? generatedId;
   const dragHandlers = useRulerDrag({
     value,
@@ -25228,7 +27833,7 @@ function RotationRuler(props) {
   const display = `${formatValue(value)}${unit}`;
   const ticks = useTicks(min3, max3);
   const pxPerUnit = pixelsPerStep / step;
-  const stripStyle = (0, import_element84.useMemo)(() => {
+  const stripStyle = (0, import_element92.useMemo)(() => {
     const offset4 = -value * pxPerUnit;
     return {
       transform: `translateX(calc(-50% + ${offset4}px))`
@@ -25240,7 +27845,7 @@ function RotationRuler(props) {
   const isNegative = numberText.startsWith("-");
   const digits = isNegative ? numberText.slice(1) : numberText;
   const majorTicks = ticks.filter((tick) => tick.kind === "major");
-  return /* @__PURE__ */ (0, import_jsx_runtime115.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime129.jsxs)(
     "div",
     {
       className: clsx_default("rotation-ruler", className),
@@ -25248,7 +27853,7 @@ function RotationRuler(props) {
       "data-disabled": disabled2 || void 0,
       ...dragHandlers,
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime115.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime129.jsx)(
           "input",
           {
             ref: inputRef,
@@ -25268,7 +27873,7 @@ function RotationRuler(props) {
             onKeyDown: handleKeyDown
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime115.jsx)("div", { className: "rotation-ruler__strip", "aria-hidden": "true", children: /* @__PURE__ */ (0, import_jsx_runtime115.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime129.jsx)("div", { className: "rotation-ruler__strip", "aria-hidden": "true", children: /* @__PURE__ */ (0, import_jsx_runtime129.jsxs)(
           "svg",
           {
             className: "rotation-ruler__ticks",
@@ -25278,7 +27883,7 @@ function RotationRuler(props) {
             viewBox: `${min3 * pxPerUnit} 0 ${(max3 - min3) * pxPerUnit} ${STRIP_HEIGHT}`,
             preserveAspectRatio: "xMidYMid meet",
             children: [
-              ticks.map((tick) => /* @__PURE__ */ (0, import_jsx_runtime115.jsx)(
+              ticks.map((tick) => /* @__PURE__ */ (0, import_jsx_runtime129.jsx)(
                 "line",
                 {
                   x1: tick.value * pxPerUnit,
@@ -25289,7 +27894,7 @@ function RotationRuler(props) {
                 },
                 tick.value
               )),
-              majorTicks.map((tick) => /* @__PURE__ */ (0, import_jsx_runtime115.jsxs)(
+              majorTicks.map((tick) => /* @__PURE__ */ (0, import_jsx_runtime129.jsxs)(
                 "text",
                 {
                   x: tick.value * pxPerUnit,
@@ -25306,19 +27911,19 @@ function RotationRuler(props) {
             ]
           }
         ) }),
-        /* @__PURE__ */ (0, import_jsx_runtime115.jsx)("div", { className: "rotation-ruler__active-label", "aria-hidden": "true", children: /* @__PURE__ */ (0, import_jsx_runtime115.jsxs)("span", { className: "rotation-ruler__active-label-number", children: [
-          isNegative && /* @__PURE__ */ (0, import_jsx_runtime115.jsx)("span", { className: "rotation-ruler__active-label-sign", children: "-" }),
+        /* @__PURE__ */ (0, import_jsx_runtime129.jsx)("div", { className: "rotation-ruler__active-label", "aria-hidden": "true", children: /* @__PURE__ */ (0, import_jsx_runtime129.jsxs)("span", { className: "rotation-ruler__active-label-number", children: [
+          isNegative && /* @__PURE__ */ (0, import_jsx_runtime129.jsx)("span", { className: "rotation-ruler__active-label-sign", children: "-" }),
           digits,
-          /* @__PURE__ */ (0, import_jsx_runtime115.jsx)("span", { className: "rotation-ruler__active-label-unit", children: unit })
+          /* @__PURE__ */ (0, import_jsx_runtime129.jsx)("span", { className: "rotation-ruler__active-label-unit", children: unit })
         ] }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime115.jsx)("div", { className: "rotation-ruler__pointer", "aria-hidden": "true" })
+        /* @__PURE__ */ (0, import_jsx_runtime129.jsx)("div", { className: "rotation-ruler__pointer", "aria-hidden": "true" })
       ]
     }
   );
 }
 
 // packages/media-editor/build-module/components/media-editor-fine-rotation/index.mjs
-var import_jsx_runtime116 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime130 = __toESM(require_jsx_runtime(), 1);
 function MediaEditorFineRotation({
   onPlacementControlInteraction
 }) {
@@ -25339,13 +27944,13 @@ function MediaEditorFineRotation({
     onPlacementControlInteraction?.();
     setRotation(baseAngle + clamped * visualDir);
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime116.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime130.jsx)(
     "div",
     {
       role: "presentation",
       className: "media-editor-fine-rotation",
       ...rotationGestureHandlers,
-      children: /* @__PURE__ */ (0, import_jsx_runtime116.jsx)(
+      children: /* @__PURE__ */ (0, import_jsx_runtime130.jsx)(
         RotationRuler,
         {
           label: (0, import_i18n32.__)("Fine rotation"),
@@ -25360,11 +27965,11 @@ function MediaEditorFineRotation({
 }
 
 // packages/media-editor/build-module/components/media-editor-image-controls/index.mjs
-var import_components36 = __toESM(require_components(), 1);
+var import_components37 = __toESM(require_components(), 1);
 var import_i18n33 = __toESM(require_i18n(), 1);
 
 // packages/media-editor/build-module/components/media-editor/use-crop-options.mjs
-var import_element85 = __toESM(require_element(), 1);
+var import_element93 = __toESM(require_element(), 1);
 function getAspectRatioOptions(aspectRatioPresets) {
   return [
     ...DEFAULT_ASPECT_RATIOS.filter((preset) => preset.value <= 0),
@@ -25377,11 +27982,11 @@ function useCropOptions({
   const controller = useMediaEditor();
   const { aspectRatioValue } = controller.cropOptions;
   const cropperImage = controller.state.image;
-  const aspectRatioOptions = (0, import_element85.useMemo)(
+  const aspectRatioOptions = (0, import_element93.useMemo)(
     () => getAspectRatioOptions(aspectRatioPresets),
     [aspectRatioPresets]
   );
-  const resolvedAspectRatio = (0, import_element85.useMemo)(
+  const resolvedAspectRatio = (0, import_element93.useMemo)(
     () => resolveAspectRatio(aspectRatioValue, cropperImage),
     [aspectRatioValue, cropperImage]
   );
@@ -25395,7 +28000,7 @@ function useCropOptions({
 }
 
 // packages/media-editor/build-module/components/media-editor-image-controls/index.mjs
-var import_jsx_runtime117 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime131 = __toESM(require_jsx_runtime(), 1);
 var DEFAULT_ZOOM_FACTOR = 1.2;
 function MediaEditorImageControls({
   withLabels = false,
@@ -25412,9 +28017,9 @@ function MediaEditorImageControls({
       Math.min(MAX_ZOOM, Math.max(minZoom, state.zoom * factor))
     );
   };
-  const rotateButtons = /* @__PURE__ */ (0, import_jsx_runtime117.jsxs)(import_jsx_runtime117.Fragment, { children: [
-    /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(
-      import_components36.Button,
+  const rotateButtons = /* @__PURE__ */ (0, import_jsx_runtime131.jsxs)(import_jsx_runtime131.Fragment, { children: [
+    /* @__PURE__ */ (0, import_jsx_runtime131.jsx)(
+      import_components37.Button,
       {
         size: "compact",
         icon: rotate_left_default,
@@ -25423,8 +28028,8 @@ function MediaEditorImageControls({
         onClick: () => snapRotate90(-1)
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(
-      import_components36.Button,
+    /* @__PURE__ */ (0, import_jsx_runtime131.jsx)(
+      import_components37.Button,
       {
         size: "compact",
         icon: rotate_right_default,
@@ -25434,9 +28039,9 @@ function MediaEditorImageControls({
       }
     )
   ] });
-  const flipButtons = /* @__PURE__ */ (0, import_jsx_runtime117.jsxs)(import_jsx_runtime117.Fragment, { children: [
-    /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(
-      import_components36.Button,
+  const flipButtons = /* @__PURE__ */ (0, import_jsx_runtime131.jsxs)(import_jsx_runtime131.Fragment, { children: [
+    /* @__PURE__ */ (0, import_jsx_runtime131.jsx)(
+      import_components37.Button,
       {
         size: "compact",
         icon: flip_horizontal_default,
@@ -25449,8 +28054,8 @@ function MediaEditorImageControls({
         })
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(
-      import_components36.Button,
+    /* @__PURE__ */ (0, import_jsx_runtime131.jsx)(
+      import_components37.Button,
       {
         size: "compact",
         icon: flip_vertical_default,
@@ -25464,9 +28069,9 @@ function MediaEditorImageControls({
       }
     )
   ] });
-  const zoomButtons = /* @__PURE__ */ (0, import_jsx_runtime117.jsxs)(import_jsx_runtime117.Fragment, { children: [
-    /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(
-      import_components36.Button,
+  const zoomButtons = /* @__PURE__ */ (0, import_jsx_runtime131.jsxs)(import_jsx_runtime131.Fragment, { children: [
+    /* @__PURE__ */ (0, import_jsx_runtime131.jsx)(
+      import_components37.Button,
       {
         size: "compact",
         icon: plus_default,
@@ -25477,8 +28082,8 @@ function MediaEditorImageControls({
         onClick: () => zoomByFactor(zoomFactor)
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(
-      import_components36.Button,
+    /* @__PURE__ */ (0, import_jsx_runtime131.jsx)(
+      import_components37.Button,
       {
         size: "compact",
         icon: line_solid_default,
@@ -25490,18 +28095,18 @@ function MediaEditorImageControls({
       }
     )
   ] });
-  const aspectRatioDropdown = hasAspectRatioControl ? /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(
-    import_components36.DropdownMenu,
+  const aspectRatioDropdown = hasAspectRatioControl ? /* @__PURE__ */ (0, import_jsx_runtime131.jsx)(
+    import_components37.DropdownMenu,
     {
       icon: aspect_ratio_default,
       label: (0, import_i18n33.__)("Aspect ratio"),
       popoverProps: { placement: "top" },
       toggleProps: { size: "compact" },
-      children: ({ onClose }) => /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(import_components36.MenuGroup, { label: (0, import_i18n33.__)("Aspect ratio"), children: aspectRatioOptions.map((preset) => {
+      children: ({ onClose }) => /* @__PURE__ */ (0, import_jsx_runtime131.jsx)(import_components37.MenuGroup, { label: (0, import_i18n33.__)("Aspect ratio"), children: aspectRatioOptions.map((preset) => {
         const value = preset.value.toString();
         const isSelected = value === aspectRatioValue;
-        return /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(
-          import_components36.MenuItem,
+        return /* @__PURE__ */ (0, import_jsx_runtime131.jsx)(
+          import_components37.MenuItem,
           {
             role: "menuitemradio",
             isSelected,
@@ -25518,16 +28123,16 @@ function MediaEditorImageControls({
     }
   ) : null;
   if (withLabels) {
-    return /* @__PURE__ */ (0, import_jsx_runtime117.jsxs)("div", { className: "media-editor-image-controls is-stacked", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime117.jsxs)("div", { className: "media-editor-image-controls__transforms", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime117.jsxs)(
+    return /* @__PURE__ */ (0, import_jsx_runtime131.jsxs)("div", { className: "media-editor-image-controls is-stacked", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime131.jsxs)("div", { className: "media-editor-image-controls__transforms", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime131.jsxs)(
           "div",
           {
             className: "media-editor-image-controls__group",
             role: "group",
             "aria-label": (0, import_i18n33.__)("Rotate"),
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime131.jsx)(
                 "span",
                 {
                   className: "media-editor-image-controls__label",
@@ -25535,18 +28140,18 @@ function MediaEditorImageControls({
                   children: (0, import_i18n33.__)("Rotate")
                 }
               ),
-              /* @__PURE__ */ (0, import_jsx_runtime117.jsx)("div", { className: "media-editor-image-controls__buttons", children: rotateButtons })
+              /* @__PURE__ */ (0, import_jsx_runtime131.jsx)("div", { className: "media-editor-image-controls__buttons", children: rotateButtons })
             ]
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime117.jsxs)(
+        /* @__PURE__ */ (0, import_jsx_runtime131.jsxs)(
           "div",
           {
             className: "media-editor-image-controls__group",
             role: "group",
             "aria-label": (0, import_i18n33.__)("Flip"),
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime131.jsx)(
                 "span",
                 {
                   className: "media-editor-image-controls__label",
@@ -25554,19 +28159,19 @@ function MediaEditorImageControls({
                   children: (0, import_i18n33.__)("Flip")
                 }
               ),
-              /* @__PURE__ */ (0, import_jsx_runtime117.jsx)("div", { className: "media-editor-image-controls__buttons", children: flipButtons })
+              /* @__PURE__ */ (0, import_jsx_runtime131.jsx)("div", { className: "media-editor-image-controls__buttons", children: flipButtons })
             ]
           }
         )
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime117.jsxs)(
+      /* @__PURE__ */ (0, import_jsx_runtime131.jsxs)(
         "div",
         {
           className: "media-editor-image-controls__group",
           role: "group",
           "aria-label": (0, import_i18n33.__)("Zoom"),
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime117.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime131.jsx)(
               "span",
               {
                 className: "media-editor-image-controls__label",
@@ -25574,13 +28179,13 @@ function MediaEditorImageControls({
                 children: (0, import_i18n33.__)("Zoom")
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime117.jsx)("div", { className: "media-editor-image-controls__buttons", children: zoomButtons })
+            /* @__PURE__ */ (0, import_jsx_runtime131.jsx)("div", { className: "media-editor-image-controls__buttons", children: zoomButtons })
           ]
         }
       )
     ] });
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime117.jsxs)("div", { className: "media-editor-image-controls", children: [
+  return /* @__PURE__ */ (0, import_jsx_runtime131.jsxs)("div", { className: "media-editor-image-controls", children: [
     rotateButtons,
     flipButtons,
     zoomButtons,
@@ -25589,9 +28194,9 @@ function MediaEditorImageControls({
 }
 
 // packages/media-editor/build-module/components/media-editor-crop-panel/index.mjs
-var import_components37 = __toESM(require_components(), 1);
+var import_components38 = __toESM(require_components(), 1);
 var import_i18n34 = __toESM(require_i18n(), 1);
-var import_jsx_runtime118 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime132 = __toESM(require_jsx_runtime(), 1);
 function MediaEditorCropPanel({
   aspectRatioValue,
   onAspectRatioChange,
@@ -25602,19 +28207,18 @@ function MediaEditorCropPanel({
     // Tag the whole panel as a crop-control region so the modal's
     // Cmd+Z handler doesn't mistake the SelectControl input for a
     // metadata field (which would suppress undo).
-    /* @__PURE__ */ (0, import_jsx_runtime118.jsxs)(
+    /* @__PURE__ */ (0, import_jsx_runtime132.jsxs)(
       Stack,
       {
         direction: "column",
         gap: "xl",
         ...{ [CROP_CONTROL_ATTR]: true },
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime118.jsx)(VisuallyHidden, { render: /* @__PURE__ */ (0, import_jsx_runtime118.jsx)("h2", {}), children: (0, import_i18n34.__)("Crop options") }),
-          showTransformControls && /* @__PURE__ */ (0, import_jsx_runtime118.jsx)(MediaEditorImageControls, { withLabels: true }),
-          /* @__PURE__ */ (0, import_jsx_runtime118.jsx)(
-            import_components37.SelectControl,
+          /* @__PURE__ */ (0, import_jsx_runtime132.jsx)(VisuallyHidden, { render: /* @__PURE__ */ (0, import_jsx_runtime132.jsx)("h2", {}), children: (0, import_i18n34.__)("Crop options") }),
+          showTransformControls && /* @__PURE__ */ (0, import_jsx_runtime132.jsx)(MediaEditorImageControls, { withLabels: true }),
+          /* @__PURE__ */ (0, import_jsx_runtime132.jsx)(
+            import_components38.SelectControl,
             {
-              __next40pxDefaultSize: true,
               label: (0, import_i18n34.__)("Aspect ratio"),
               value: aspectRatioValue,
               onChange: onAspectRatioChange,
@@ -25631,11 +28235,11 @@ function MediaEditorCropPanel({
 }
 
 // packages/media-editor/build-module/components/media-editor-keyboard-shortcuts-modal/index.mjs
-var import_components38 = __toESM(require_components(), 1);
-var import_element86 = __toESM(require_element(), 1);
+var import_components39 = __toESM(require_components(), 1);
+var import_element94 = __toESM(require_element(), 1);
 var import_i18n35 = __toESM(require_i18n(), 1);
 var import_keycodes = __toESM(require_keycodes(), 1);
-var import_jsx_runtime119 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime133 = __toESM(require_jsx_runtime(), 1);
 var SHORTCUTS = [
   {
     description: (0, import_i18n35.__)("Undo"),
@@ -25709,13 +28313,13 @@ function KeyCombinationDisplay({
   } else {
     label = charString;
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime119.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime133.jsx)(
     "kbd",
     {
       className: "media-editor-keyboard-shortcuts-modal__shortcut-term",
       "aria-label": label,
       children: keys.map(
-        (key, index2) => key === "+" && modifier ? /* @__PURE__ */ (0, import_jsx_runtime119.jsx)(import_element86.Fragment, { children: key }, index2) : /* @__PURE__ */ (0, import_jsx_runtime119.jsx)(
+        (key, index2) => key === "+" && modifier ? /* @__PURE__ */ (0, import_jsx_runtime133.jsx)(import_element94.Fragment, { children: key }, index2) : /* @__PURE__ */ (0, import_jsx_runtime133.jsx)(
           "kbd",
           {
             className: "media-editor-keyboard-shortcuts-modal__shortcut-key",
@@ -25730,28 +28334,28 @@ function KeyCombinationDisplay({
 function MediaEditorKeyboardShortcutsModal({
   onClose
 }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime119.jsxs)(
-    import_components38.Modal,
+  return /* @__PURE__ */ (0, import_jsx_runtime133.jsxs)(
+    import_components39.Modal,
     {
       className: "media-editor-keyboard-shortcuts-modal",
       title: (0, import_i18n35.__)("Keyboard shortcuts"),
       onRequestClose: onClose,
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime119.jsx)("p", { className: "media-editor-keyboard-shortcuts-modal__note", children: (0, import_i18n35.__)(
+        /* @__PURE__ */ (0, import_jsx_runtime133.jsx)("p", { className: "media-editor-keyboard-shortcuts-modal__note", children: (0, import_i18n35.__)(
           "These shortcuts work when the image editor has focus."
         ) }),
-        /* @__PURE__ */ (0, import_jsx_runtime119.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime133.jsx)(
           "ul",
           {
             className: "media-editor-keyboard-shortcuts-modal__shortcut-list",
             role: "list",
-            children: SHORTCUTS.map(({ description, keyCombination }, index2) => /* @__PURE__ */ (0, import_jsx_runtime119.jsxs)(
+            children: SHORTCUTS.map(({ description, keyCombination }, index2) => /* @__PURE__ */ (0, import_jsx_runtime133.jsxs)(
               "li",
               {
                 className: "media-editor-keyboard-shortcuts-modal__shortcut",
                 children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime119.jsx)("span", { className: "media-editor-keyboard-shortcuts-modal__shortcut-description", children: description }),
-                  /* @__PURE__ */ (0, import_jsx_runtime119.jsx)(
+                  /* @__PURE__ */ (0, import_jsx_runtime133.jsx)("span", { className: "media-editor-keyboard-shortcuts-modal__shortcut-description", children: description }),
+                  /* @__PURE__ */ (0, import_jsx_runtime133.jsx)(
                     KeyCombinationDisplay,
                     {
                       keyCombination
@@ -25772,7 +28376,7 @@ function MediaEditorKeyboardShortcutsModal({
 var import_api_fetch = __toESM(require_api_fetch(), 1);
 var import_data7 = __toESM(require_data(), 1);
 var import_core_data = __toESM(require_core_data(), 1);
-var import_element87 = __toESM(require_element(), 1);
+var import_element95 = __toESM(require_element(), 1);
 var import_i18n36 = __toESM(require_i18n(), 1);
 var import_notices = __toESM(require_notices(), 1);
 
@@ -25882,8 +28486,8 @@ function useSaveMediaEditor({
     saveEditedEntityRecord
   } = (0, import_data7.useDispatch)(import_core_data.store);
   const { createErrorNotice, removeAllNotices } = (0, import_data7.useDispatch)(import_notices.store);
-  const [isSaving, setIsSaving] = (0, import_element87.useState)(false);
-  const save = (0, import_element87.useCallback)(async () => {
+  const [isSaving, setIsSaving] = (0, import_element95.useState)(false);
+  const save = (0, import_element95.useCallback)(async () => {
     removeAllNotices("snackbar", MEDIA_EDITOR_NOTICES_CONTEXT);
     setIsSaving(true);
     try {
@@ -25977,13 +28581,11 @@ function useSaveMediaEditor({
 }
 
 // packages/media-editor/build-module/components/media-editor/index.mjs
-var import_jsx_runtime120 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime134 = __toESM(require_jsx_runtime(), 1);
 var ATTACHMENT_EMBED_QUERY = { _embed: "author,wp:attached-to" };
 var PLACEMENT_CONTROL_IDLE_MS = 300;
-var { Tabs } = unlock3(import_components39.privateApis);
 function MediaEditorSidebar({ tabs }) {
-  const tabsContextValue = (0, import_element88.useContext)(Tabs.Context);
-  return /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(
     complementary_area_default,
     {
       scope: "media-editor",
@@ -25995,16 +28597,8 @@ function MediaEditorSidebar({ tabs }) {
       panelClassName: "media-editor__sidebar-panel",
       headerClassName: "media-editor__sidebar-header",
       closeLabel: (0, import_i18n37.__)("Close media panel"),
-      header: /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(Tabs.Context.Provider, { value: tabsContextValue, children: /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(Tabs.TabList, { children: tabs.map((tab) => /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(Tabs.Tab, { tabId: tab.id, children: tab.title }, tab.id)) }) }),
-      children: /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(Tabs.Context.Provider, { value: tabsContextValue, children: tabs.map((tab) => /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
-        Tabs.TabPanel,
-        {
-          tabId: tab.id,
-          focusable: false,
-          children: tab.panel
-        },
-        tab.id
-      )) })
+      header: /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(tabs_exports.List, { variant: "minimal", children: tabs.map((tab) => /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(tabs_exports.Tab, { value: tab.id, children: tab.title }, tab.id)) }),
+      children: tabs.map((tab) => /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(tabs_exports.Panel, { value: tab.id, tabIndex: -1, children: tab.panel }, tab.id))
     }
   );
 }
@@ -26014,17 +28608,17 @@ function HeaderActions({
   showCloseButton = false,
   onCancel
 }) {
-  const [isShortcutsModalOpen, setIsShortcutsModalOpen] = (0, import_element88.useState)(false);
-  return /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)(
-    import_components39.Flex,
+  const [isShortcutsModalOpen, setIsShortcutsModalOpen] = (0, import_element96.useState)(false);
+  return /* @__PURE__ */ (0, import_jsx_runtime134.jsxs)(
+    import_components40.Flex,
     {
       className: "media-editor__header-actions",
       justify: "flex-end",
       expanded: false,
       gap: 2,
       children: [
-        isImage && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
-          import_components39.Button,
+        isImage && /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(
+          import_components40.Button,
           {
             size: "compact",
             icon: keyboard_default,
@@ -26032,9 +28626,9 @@ function HeaderActions({
             onClick: () => setIsShortcutsModalOpen(true)
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(pinned_items_default.Slot, { scope: "media-editor" }),
-        showCloseButton && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
-          import_components39.Button,
+        /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(pinned_items_default.Slot, { scope: "media-editor" }),
+        showCloseButton && /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(
+          import_components40.Button,
           {
             size: "compact",
             icon: close_default,
@@ -26044,7 +28638,7 @@ function HeaderActions({
             accessibleWhenDisabled: true
           }
         ),
-        isShortcutsModalOpen && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
+        isShortcutsModalOpen && /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(
           MediaEditorKeyboardShortcutsModal,
           {
             onClose: () => setIsShortcutsModalOpen(false)
@@ -26086,15 +28680,15 @@ function HistoryActions({
     onReset();
     endGesture();
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)(
-    import_components39.Flex,
+  return /* @__PURE__ */ (0, import_jsx_runtime134.jsxs)(
+    import_components40.Flex,
     {
       className: "media-editor__history-actions",
       expanded: false,
       gap: 2,
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
-          import_components39.Button,
+        /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(
+          import_components40.Button,
           {
             size: "compact",
             variant: "tertiary",
@@ -26104,8 +28698,8 @@ function HistoryActions({
             children: (0, import_i18n37.__)("Reset")
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
-          import_components39.Button,
+        /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(
+          import_components40.Button,
           {
             size: "compact",
             icon: undo_default,
@@ -26117,8 +28711,8 @@ function HistoryActions({
             onClick: handleUndo
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
-          import_components39.Button,
+        /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(
+          import_components40.Button,
           {
             size: "compact",
             icon: redo_default,
@@ -26142,16 +28736,16 @@ function FooterActions({
   onSave
 }) {
   const saveDisabled = isSaving || !hasMedia || !hasChanges;
-  return /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)(
-    import_components39.Flex,
+  return /* @__PURE__ */ (0, import_jsx_runtime134.jsxs)(
+    import_components40.Flex,
     {
       className: "media-editor__footer-actions",
       justify: "flex-end",
       expanded: false,
       gap: 2,
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
-          import_components39.Button,
+        /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(
+          import_components40.Button,
           {
             __next40pxDefaultSize: true,
             variant: "tertiary",
@@ -26161,8 +28755,8 @@ function FooterActions({
             children: (0, import_i18n37.__)("Cancel")
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
-          import_components39.Button,
+        /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(
+          import_components40.Button,
           {
             __next40pxDefaultSize: true,
             variant: "primary",
@@ -26190,7 +28784,7 @@ function MediaEditorContent({
   shouldCloseOnEsc = false
 }) {
   const cropper = useMediaEditor();
-  const isPanelLayout = (0, import_compose6.useViewportMatch)("small");
+  const isPanelLayout = (0, import_compose8.useViewportMatch)("small");
   const footerLayout = isPanelLayout ? "wide" : "narrow";
   const { media, hasEdits } = (0, import_data8.useSelect)(
     (select) => {
@@ -26223,34 +28817,34 @@ function MediaEditorContent({
   const hasChanges = cropper.isCropperDirty || hasEdits;
   const { clearEntityRecordEdits, editEntityRecord, invalidateResolution } = (0, import_data8.useDispatch)(import_core_data2.store);
   const { removeAllNotices } = (0, import_data8.useDispatch)(import_notices2.store);
-  const [isDiscardDialogOpen, setIsDiscardDialogOpen] = (0, import_element88.useState)(false);
-  const [isPlacementActive, setIsPlacementActive] = (0, import_element88.useState)(false);
-  const [isCanvasGestureActive, setIsCanvasGestureActive] = (0, import_element88.useState)(false);
-  const placementControlTimerRef = (0, import_element88.useRef)();
-  const signalPlacementControlInteraction = (0, import_element88.useCallback)(() => {
+  const [isDiscardDialogOpen, setIsDiscardDialogOpen] = (0, import_element96.useState)(false);
+  const [isPlacementActive, setIsPlacementActive] = (0, import_element96.useState)(false);
+  const [isCanvasGestureActive, setIsCanvasGestureActive] = (0, import_element96.useState)(false);
+  const placementControlTimerRef = (0, import_element96.useRef)();
+  const signalPlacementControlInteraction = (0, import_element96.useCallback)(() => {
     setIsPlacementActive(true);
     clearTimeout(placementControlTimerRef.current);
     placementControlTimerRef.current = setTimeout(() => {
       setIsPlacementActive(false);
     }, PLACEMENT_CONTROL_IDLE_MS);
   }, []);
-  const handleCanvasGestureStart = (0, import_element88.useCallback)(() => {
+  const handleCanvasGestureStart = (0, import_element96.useCallback)(() => {
     setIsCanvasGestureActive(true);
   }, []);
-  const handleCanvasGestureEnd = (0, import_element88.useCallback)(() => {
+  const handleCanvasGestureEnd = (0, import_element96.useCallback)(() => {
     setIsCanvasGestureActive(false);
   }, []);
   const isCropInteractionActive = isPlacementActive || isCanvasGestureActive;
-  (0, import_element88.useEffect)(() => {
+  (0, import_element96.useEffect)(() => {
     return () => {
       clearTimeout(placementControlTimerRef.current);
     };
   }, []);
-  (0, import_element88.useEffect)(() => {
+  (0, import_element96.useEffect)(() => {
     setIsPlacementActive(false);
     setIsCanvasGestureActive(false);
   }, [id]);
-  (0, import_element88.useEffect)(() => {
+  (0, import_element96.useEffect)(() => {
     invalidateResolution("getEntityRecord", [
       "postType",
       "attachment",
@@ -26275,17 +28869,17 @@ function MediaEditorContent({
     media,
     onSaved
   });
-  const tabs = (0, import_element88.useMemo)(() => {
+  const tabs = (0, import_element96.useMemo)(() => {
     const detailsTab = {
       id: "details",
       title: (0, import_i18n37.__)("Details"),
-      panel: /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
+      panel: /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(
         Stack,
         {
           className: "media-editor__panel",
           direction: "column",
           gap: "lg",
-          children: /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(MediaForm, {})
+          children: /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(MediaForm, {})
         }
       )
     };
@@ -26296,13 +28890,13 @@ function MediaEditorContent({
       {
         id: "crop",
         title: (0, import_i18n37.__)("Crop"),
-        panel: /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
+        panel: /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(
           Stack,
           {
             className: "media-editor__panel",
             direction: "column",
             gap: "lg",
-            children: /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
+            children: /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(
               MediaEditorCropPanel,
               {
                 aspectRatioValue,
@@ -26323,6 +28917,8 @@ function MediaEditorContent({
     aspectRatioOptions,
     isPanelLayout
   ]);
+  const [selectedTabId, setSelectedTabId] = (0, import_element96.useState)();
+  const activeTabId = selectedTabId ?? tabs[0]?.id;
   const handleChange = (updates) => {
     editEntityRecord("postType", "attachment", id, updates);
   };
@@ -26373,54 +28969,62 @@ function MediaEditorContent({
       }
     }
   };
-  const snackbar = /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
+  const snackbar = /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(
     import_notices2.SnackbarNotices,
     {
       className: noticesClassName,
       context: MEDIA_EDITOR_NOTICES_CONTEXT
     }
   );
-  const ruler = isImage ? /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
+  const ruler = isImage ? /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(
     MediaEditorFineRotation,
     {
       onPlacementControlInteraction: signalPlacementControlInteraction
     }
   ) : null;
-  const children = /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)(
+  const children = /* @__PURE__ */ (0, import_jsx_runtime134.jsxs)(
     MediaEditorProvider,
     {
       value: media ?? void 0,
       onChange: handleChange,
       settings: { fields },
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime120.jsx)("div", { className: "media-editor", children: !media ? /* @__PURE__ */ (0, import_jsx_runtime120.jsx)("div", { className: "media-editor__loading", children: /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(import_components39.Spinner, {}) }) : /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)(import_jsx_runtime120.Fragment, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(Tabs, { children: /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(MediaEditorSidebar, { tabs }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
-            interface_skeleton_default,
-            {
-              className: "media-editor__skeleton",
-              labels: {
-                body: isImage ? (0, import_i18n37.__)("Image editor") : (0, import_i18n37.__)("Media preview"),
-                sidebar: (0, import_i18n37.__)("Media details")
-              },
-              content: /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)("div", { className: "media-editor__content", children: [
-                /* @__PURE__ */ (0, import_jsx_runtime120.jsx)("div", { className: "media-editor__canvas-area", children: isImage ? /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
-                  MediaEditorCanvas,
-                  {
-                    focusOnMount: true,
-                    isPlacementActive,
-                    onGestureStart: handleCanvasGestureStart,
-                    onGestureEnd: handleCanvasGestureEnd
-                  }
-                ) : /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(MediaPreview, {}) }),
-                isImage && /* @__PURE__ */ (0, import_jsx_runtime120.jsx)("div", { className: "media-editor__canvas-toolbar", children: ruler })
-              ] }),
-              sidebar: /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(complementary_area_default.Slot, { scope: "media-editor" })
-            }
-          )
-        ] }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
-          import_components39.__experimentalConfirmDialog,
+        !media ? /* @__PURE__ */ (0, import_jsx_runtime134.jsx)("div", { className: "media-editor", children: /* @__PURE__ */ (0, import_jsx_runtime134.jsx)("div", { className: "media-editor__loading", children: /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(import_components40.Spinner, {}) }) }) : /* @__PURE__ */ (0, import_jsx_runtime134.jsxs)(
+          tabs_exports.Root,
+          {
+            className: "media-editor",
+            value: activeTabId,
+            onValueChange: (value) => setSelectedTabId(value),
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(MediaEditorSidebar, { tabs }),
+              /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(
+                interface_skeleton_default,
+                {
+                  className: "media-editor__skeleton",
+                  labels: {
+                    body: isImage ? (0, import_i18n37.__)("Image editor") : (0, import_i18n37.__)("Media preview"),
+                    sidebar: (0, import_i18n37.__)("Media details")
+                  },
+                  content: /* @__PURE__ */ (0, import_jsx_runtime134.jsxs)("div", { className: "media-editor__content", children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime134.jsx)("div", { className: "media-editor__canvas-area", children: isImage ? /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(
+                      MediaEditorCanvas,
+                      {
+                        focusOnMount: true,
+                        isPlacementActive,
+                        onGestureStart: handleCanvasGestureStart,
+                        onGestureEnd: handleCanvasGestureEnd
+                      }
+                    ) : /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(MediaPreview, {}) }),
+                    isImage && /* @__PURE__ */ (0, import_jsx_runtime134.jsx)("div", { className: "media-editor__canvas-toolbar", children: ruler })
+                  ] }),
+                  sidebar: /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(complementary_area_default.Slot, { scope: "media-editor" })
+                }
+              )
+            ]
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(
+          import_components40.__experimentalConfirmDialog,
           {
             isOpen: isDiscardDialogOpen,
             confirmButtonText: (0, import_i18n37.__)("Discard"),
@@ -26435,25 +29039,25 @@ function MediaEditorContent({
             )
           }
         ),
-        noticesPortalElement ? (0, import_element88.createPortal)(snackbar, noticesPortalElement) : snackbar
+        noticesPortalElement ? (0, import_element96.createPortal)(snackbar, noticesPortalElement) : snackbar
       ]
     }
   );
-  const history = isImage ? /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
+  const history = isImage ? /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(
     HistoryActions,
     {
       isUndoRedoDisabled: isCropInteractionActive,
       onReset: resetCropOptions
     }
   ) : null;
-  const imageControls = isImage ? /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
+  const imageControls = isImage ? /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(
     MediaEditorImageControls,
     {
       showAspectRatioControl: true,
       aspectRatioPresets
     }
   ) : null;
-  const actions = /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
+  const actions = /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(
     FooterActions,
     {
       isSaving,
@@ -26465,14 +29069,14 @@ function MediaEditorContent({
   );
   let footerActions;
   if (footerLayout === "wide") {
-    footerActions = /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)(import_jsx_runtime120.Fragment, { children: [
+    footerActions = /* @__PURE__ */ (0, import_jsx_runtime134.jsxs)(import_jsx_runtime134.Fragment, { children: [
       history,
       actions
     ] });
   } else {
-    footerActions = /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)(import_jsx_runtime120.Fragment, { children: [
+    footerActions = /* @__PURE__ */ (0, import_jsx_runtime134.jsxs)(import_jsx_runtime134.Fragment, { children: [
       imageControls,
-      /* @__PURE__ */ (0, import_jsx_runtime120.jsxs)("div", { className: "media-editor-modal__footer-row", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime134.jsxs)("div", { className: "media-editor-modal__footer-row", children: [
         history,
         actions
       ] })
@@ -26480,7 +29084,7 @@ function MediaEditorContent({
   }
   return renderFrame({
     children,
-    headerActions: /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(
+    headerActions: /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(
       HeaderActions,
       {
         isSaving,
@@ -26500,12 +29104,12 @@ function MediaEditorContent({
   });
 }
 function MediaEditor(props) {
-  return /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(MediaEditorStateProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime120.jsx)(MediaEditorContent, { ...props }) }, props.id);
+  return /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(MediaEditorStateProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime134.jsx)(MediaEditorContent, { ...props }) }, props.id);
 }
 var media_editor_default = MediaEditor;
 
 // packages/media-editor/build-module/components/media-editor-modal/index.mjs
-var import_jsx_runtime121 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime135 = __toESM(require_jsx_runtime(), 1);
 function MediaEditorModal({
   fields = [],
   aspectRatioPresets
@@ -26532,7 +29136,7 @@ function MediaEditorModal({
     closeMediaEditorModal2();
     onClose?.();
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime121.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime135.jsx)(
     media_editor_default,
     {
       id,
@@ -26577,13 +29181,13 @@ function MediaEditorModal({
         onRequestClose,
         onKeyDown,
         shouldCloseOnClickOutside
-      }) => /* @__PURE__ */ (0, import_jsx_runtime121.jsx)(
+      }) => /* @__PURE__ */ (0, import_jsx_runtime135.jsx)(
         import_keyboard_shortcuts.ShortcutProvider,
         {
           className: "media-editor-modal__shortcut-scope",
           onKeyDown: stopKeyDownPropagation,
-          children: /* @__PURE__ */ (0, import_jsx_runtime121.jsxs)(
-            import_components40.Modal,
+          children: /* @__PURE__ */ (0, import_jsx_runtime135.jsxs)(
+            import_components41.Modal,
             {
               className: "media-editor-modal",
               title: (0, import_i18n38.__)("Edit media"),
@@ -26595,7 +29199,7 @@ function MediaEditorModal({
               headerActions,
               children: [
                 children,
-                /* @__PURE__ */ (0, import_jsx_runtime121.jsx)(
+                /* @__PURE__ */ (0, import_jsx_runtime135.jsx)(
                   "div",
                   {
                     className: `media-editor-modal__footer is-${footerLayout}`,
@@ -26632,10 +29236,10 @@ var { lock: lock4, unlock: unlock4 } = (0, import_private_apis5.__dangerousOptIn
 );
 
 // routes/media-editor/style.scss
-if (typeof document !== "undefined" && true && !document.head.querySelector("style[data-wp-hash='6cbd1949e9']")) {
+if (typeof document !== "undefined" && true && !document.head.querySelector("style[data-wp-hash='95aef1d85d']")) {
   const style = document.createElement("style");
-  style.setAttribute("data-wp-hash", "6cbd1949e9");
-  style.appendChild(document.createTextNode('.media-editor-preview{align-items:center;box-sizing:border-box;display:flex;justify-content:center;min-height:100%;padding:32px;position:relative}.media-editor-preview__spinner{left:50%;position:absolute;top:50%;transform:translate(-50%,-50%)}.media-editor-preview--loading{height:100%;width:100%}.media-editor-preview--image img{height:auto;max-height:100%;max-width:100%;-o-object-fit:contain;object-fit:contain;opacity:0;width:auto}@media not (prefers-reduced-motion){.media-editor-preview--image img.loaded{animation:__wp-base-styles-fade-in .08s linear 0s;animation-fill-mode:forwards}}.media-editor-preview--video video{height:auto;max-height:100%;max-width:100%;-o-object-fit:contain;object-fit:contain;width:auto}.media-editor-preview--audio audio{max-width:100%}.media-editor-preview--file{text-align:center}.media-editor-preview__file-info{background:#f0f0f0;border-radius:2px;padding:24px}.media-editor-preview__file-name{font-weight:600;margin-bottom:8px}.media-editor-preview__mime-type{color:#757575;font-size:.9em;margin-bottom:16px}.media-editor-preview__download-link{display:inline-block;margin-top:8px}.media-editor-preview--empty,.media-editor-preview--error{color:#757575;text-align:center}.media-editor-preview__url{color:#949494;font-size:.9em;margin-top:8px;word-break:break-all}.wp-media-editor-image-editor{cursor:grab;height:100%;overflow:hidden;position:relative;touch-action:none;-webkit-user-select:none;-moz-user-select:none;user-select:none;width:100%}.wp-media-editor-image-editor__canvas{inset:24px;min-height:100px;min-width:100px;position:absolute}.wp-media-editor-image-editor__canvas:focus{outline:none}.wp-media-editor-image-editor__stage{inset:0;position:absolute}.wp-media-editor-image-editor--dragging{cursor:grabbing}.wp-media-editor-image-editor__image{left:0;position:absolute;top:0;transform-origin:center center;will-change:transform}.wp-media-editor-image-editor__stencil{pointer-events:none;position:absolute}.wp-media-editor-image-editor__dimming{box-shadow:0 0 0 9999px hsla(0,0%,88%,.6);pointer-events:none;position:absolute;transition:box-shadow .15s ease}.wp-media-editor-image-editor--dragging .wp-media-editor-image-editor__dimming{box-shadow:0 0 0 9999px hsla(0,0%,88%,.4)}.wp-media-editor-image-editor__grid{overflow:hidden;pointer-events:none;position:absolute;transition:opacity .15s ease}.wp-media-editor-image-editor__canvas--grid-interactive .wp-media-editor-image-editor__grid{opacity:0;transition-delay:.1s}.wp-media-editor-image-editor__canvas--show-grid .wp-media-editor-image-editor__grid{opacity:1;transition-delay:0s}.wp-media-editor-image-editor__canvas--settling .wp-media-editor-image-editor__grid{opacity:0;transition:none}.wp-media-editor-image-editor__grid-line{background:hsla(0,0%,100%,.4);position:absolute}.wp-media-editor-image-editor__grid-line--horizontal{height:1px;left:0;width:100%}.wp-media-editor-image-editor__grid-line--vertical{height:100%;top:0;width:1px}.wp-media-editor-image-editor__dimensions-tooltip{background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.08);color:#1e1e1e;font-size:11px;font-variant-numeric:tabular-nums;line-height:1.4;padding:2px 6px;pointer-events:none;position:absolute;white-space:nowrap;z-index:2}.wp-media-editor-image-editor__stencil-rect{border:1px solid #1e1e1e;box-sizing:border-box;pointer-events:none;position:absolute;transition:border-color .15s ease,box-shadow .15s ease}.wp-media-editor-image-editor__canvas--focus-visible:focus .wp-media-editor-image-editor__stencil-rect{border-color:var(--wp-image-editor-focus-color,var(--wp-admin-theme-color,#007cba));box-shadow:0 0 0 1px var(--wp-image-editor-focus-color,var(--wp-admin-theme-color,#007cba))}.wp-media-editor-image-editor__handle{-webkit-appearance:none;-moz-appearance:none;appearance:none;background:#fff;border:1px solid var(--wp-admin-theme-color,#007cba);border-radius:50%;box-sizing:border-box;cursor:default;font:inherit;height:12px;margin:0;padding:0;pointer-events:auto;position:absolute;transition:background-color .15s ease,box-shadow .15s ease;width:12px}.wp-media-editor-image-editor__handle:focus{outline:none}.wp-media-editor-image-editor__canvas--focus-visible .wp-media-editor-image-editor__handle:focus{background:var(--wp-image-editor-focus-color,var(--wp-admin-theme-color,#007cba));border-color:transparent;box-shadow:0 0 0 2px #fff,0 0 0 4px var(--wp-image-editor-focus-color,var(--wp-admin-theme-color,#007cba))}.wp-media-editor-image-editor__handle:before{content:"";height:44px;left:50%;position:absolute;top:50%;transform:translate(-50%,-50%);width:44px}.wp-media-editor-image-editor__handle--n{cursor:ns-resize;left:50%;margin-left:-6px;top:-6px}.wp-media-editor-image-editor__handle--s{bottom:-6px;cursor:ns-resize;left:50%;margin-left:-6px}.wp-media-editor-image-editor__handle--e{cursor:ew-resize;margin-top:-6px;right:-6px;top:50%}.wp-media-editor-image-editor__handle--w{cursor:ew-resize;left:-6px;margin-top:-6px;top:50%}.wp-media-editor-image-editor__handle--nw{cursor:nwse-resize;left:-6px;top:-6px}.wp-media-editor-image-editor__handle--ne{cursor:nesw-resize;right:-6px;top:-6px}.wp-media-editor-image-editor__handle--sw{bottom:-6px;cursor:nesw-resize;left:-6px}.wp-media-editor-image-editor__handle--se{bottom:-6px;cursor:nwse-resize;right:-6px}.media-editor{display:flex;flex:1;flex-direction:column;height:100%;min-height:0}.media-editor .media-editor__loading{align-items:center;display:flex;height:100%;justify-content:center}.media-editor .interface-interface-skeleton{bottom:auto;flex:1;flex-direction:column;height:100%;left:auto;max-height:none;position:relative;right:auto;top:auto}.media-editor-modal .media-editor .interface-interface-skeleton.interface-interface-skeleton{top:auto}.media-editor .interface-interface-skeleton__editor{flex:1;min-width:0}.media-editor .media-editor__content{border-radius:8px;display:flex;flex:1;flex-direction:column;margin:0 24px;min-height:0;overflow:hidden}.media-editor .media-editor__canvas-toolbar{background:#e0e0e0;display:flex;flex-shrink:0;justify-content:center;padding:8px 16px}.media-editor .media-editor__canvas-toolbar .media-editor-fine-rotation{flex:0 1 360px;min-width:0}.media-editor .media-editor__canvas-area{align-items:center;background:#e0e0e0;display:flex;flex:1;justify-content:center;min-height:0;overflow:auto}.media-editor .media-editor__canvas-area .media-editor-preview{height:100%}.media-editor .media-editor__canvas-area img,.media-editor .media-editor__canvas-area video{max-height:100%;max-width:100%;-o-object-fit:contain;object-fit:contain}.media-editor .media-editor__sidebar{box-sizing:border-box}.media-editor .media-editor__sidebar *,.media-editor .media-editor__sidebar :after,.media-editor .media-editor__sidebar :before{box-sizing:inherit}@media (min-width:600px){.media-editor .media-editor__sidebar{padding-left:1px}}.media-editor .media-editor__sidebar-panel{padding-bottom:24px}.media-editor .interface-interface-skeleton__sidebar{border-top:0;box-shadow:none;outline:1px solid transparent}.media-editor .media-editor__panel{padding:16px}@media (min-width:600px){.media-editor .media-editor__panel{padding:16px 24px 0 0}}.media-editor .components-panel__header.media-editor__sidebar-header{margin-right:0;padding-left:0;padding-right:8px}@media (min-width:600px){.media-editor .components-panel__header.media-editor__sidebar-header{margin-right:24px}}.media-editor .components-panel__header.media-editor__sidebar-header .components-button.has-icon{padding:0}@media (min-width:600px){.media-editor .components-panel__header.media-editor__sidebar-header .components-button.has-icon{display:flex}}@media (min-width:600px) and (max-width:781px){.media-editor .interface-interface-skeleton__sidebar:has(.interface-complementary-area__fill){position:relative!important}.media-editor .interface-complementary-area,.media-editor .interface-complementary-area__fill{width:280px!important}}@media (max-width:599px){.media-editor .interface-interface-skeleton__sidebar:has(.interface-complementary-area__fill){width:100%}.media-editor .interface-complementary-area,.media-editor .interface-complementary-area__fill{width:100%!important}}.media-editor__snackbar{bottom:24px;box-sizing:border-box;display:flex;flex-direction:column;left:0;padding-inline:16px;pointer-events:none;position:fixed;right:0}.media-editor__snackbar .components-snackbar{margin-inline:auto}.media-editor-form .dataforms-layouts-panel__field-control{text-wrap:pretty}.media-editor-modal.components-modal__frame .components-modal__content{display:flex;flex-direction:column;margin-bottom:0;min-height:0;padding:0}.media-editor-modal.components-modal__frame .components-modal__children-container{display:flex;flex:1;flex-direction:column;min-height:0}.media-editor-modal.components-modal__frame .media-editor-modal__footer{background:#fff;display:flex;flex-shrink:0;gap:16px;padding:16px 32px 24px;z-index:1000001}.media-editor-modal.components-modal__frame .media-editor-modal__footer.is-wide{align-items:center;flex-direction:row}.media-editor-modal.components-modal__frame .media-editor-modal__footer.is-wide .media-editor__footer-actions{margin-left:auto}.media-editor-modal.components-modal__frame .media-editor-modal__footer.is-narrow{flex-direction:column}.media-editor-modal.components-modal__frame .media-editor-modal__footer.is-narrow>.media-editor-image-controls{align-self:center}.media-editor-modal__footer-row{align-items:center;display:flex;flex-wrap:wrap;gap:16px}.media-editor-modal__footer-row .media-editor-image-controls,.media-editor-modal__footer-row .media-editor__footer-actions{margin-left:auto}.media-editor__history-actions .components-button.has-icon:not([aria-disabled=true]){color:var(--wp-admin-theme-color)}.media-editor-modal,.media-editor-modal__snackbar{display:flex;flex-direction:column}.media-editor-modal__snackbar{bottom:24px;box-sizing:border-box;left:0;padding-inline:16px;pointer-events:none;position:fixed;right:0}.media-editor-modal__snackbar .components-snackbar{margin-inline:auto}.media-editor-modal__snackbar{z-index:1000001}.media-editor-canvas{height:100%;position:relative;width:100%}.media-editor-canvas__cropper{height:100%;opacity:0;pointer-events:none;width:100%}.media-editor-canvas__cropper.is-loaded{opacity:1;pointer-events:auto}@keyframes __wp-base-styles-fade-in{0%{opacity:0}to{opacity:1}}@media not (prefers-reduced-motion){.media-editor-canvas__cropper.is-loaded{animation:__wp-base-styles-fade-in .2s linear 0s;animation-fill-mode:forwards}}.media-editor-canvas__spinner{left:50%;position:absolute;top:50%;transform:translate(-50%,-50%)}.media-editor-canvas__error{align-items:center;color:#757575;display:flex;height:100%;justify-content:center;text-align:center;width:100%}.media-editor-image-controls{align-items:center;display:flex;flex-wrap:nowrap;gap:8px}.media-editor-image-controls.is-stacked{align-items:flex-start;flex-direction:column;gap:24px}.media-editor-image-controls__transforms{display:flex;gap:48px}.media-editor-image-controls__group{display:flex;flex-direction:column;gap:4px}.media-editor-image-controls__label{font-size:11px;font-weight:500;line-height:1.4;text-transform:uppercase}.media-editor-image-controls__buttons{display:flex;gap:8px;padding-inline:2px 0}.media-editor-keyboard-shortcuts-modal{min-width:280px}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__note{color:#757575;font-size:13px;margin:0 0 16px}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut-list{list-style:none;margin:0;padding:0}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut{align-items:baseline;border-top:1px solid #ddd;display:flex;margin-bottom:0;padding:.6rem 0}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut:last-child{border-bottom:1px solid #ddd}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut-description{flex:1;margin:0}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut-term{background:none;font-weight:600;margin:0 0 0 1rem;padding:0;text-align:right}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut-key{border-radius:8%;margin:0 .2rem;padding:.25rem .5rem}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut-key:last-child{margin:0 0 0 .2rem}.rotation-ruler{box-sizing:border-box;color:#1e1e1e;container-type:inline-size;cursor:ew-resize;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif;height:32px;min-width:180px;padding:0 8px;position:relative;touch-action:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.rotation-ruler[data-disabled]{cursor:default;opacity:.5;pointer-events:none}.rotation-ruler:has(.rotation-ruler__input:focus-visible){border-radius:4px;outline:2px solid var(--wp-admin-theme-color,#3858e9);outline-offset:2px}.rotation-ruler__input{clip:rect(0 0 0 0);border:0;height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;white-space:nowrap;width:1px}.rotation-ruler__pointer{background:var(--wp-admin-theme-color,#3858e9);border-radius:1px;bottom:0;height:18px;left:50%;pointer-events:none;position:absolute;transform:translateX(-50%);width:2px}.rotation-ruler__strip{inset:0;mask-image:linear-gradient(90deg,transparent 0,#000 8px,#000 calc(100% - 8px),transparent);-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 8px,#000 calc(100% - 8px),transparent);overflow:hidden;position:absolute}.rotation-ruler__ticks{display:block;left:50%;overflow:visible;position:absolute;top:0}.rotation-ruler__tick{stroke:currentColor;stroke-width:1}.rotation-ruler__tick--minor{opacity:.35}.rotation-ruler__tick--mid{opacity:.6}.rotation-ruler__tick--major{opacity:1}.rotation-ruler__label{fill:currentColor;font-size:10px;font-weight:400;opacity:.45}.rotation-ruler__active-label{color:#1e1e1e;font-size:12px;font-weight:600;height:14px;left:50%;line-height:14px;pointer-events:none;position:absolute;top:0;transform:translateX(-50%)}.rotation-ruler__active-label:before{background:linear-gradient(90deg,transparent 0,#e0e0e0 12px,#e0e0e0 calc(100% - 12px),transparent);content:"";height:100%;left:50%;position:absolute;top:0;transform:translateX(-50%);width:60px}.rotation-ruler__active-label-number{display:inline-block;position:relative}.rotation-ruler__active-label-sign{position:absolute;right:100%;top:0}.rotation-ruler__active-label-unit{left:100%;position:absolute;top:0}@container (max-width: 220px){.rotation-ruler__tick--minor{opacity:0}}@media (prefers-reduced-motion:reduce){.rotation-ruler__ticks{transition:none}}.media-editor-route__content{display:flex;flex:1;min-height:0;overflow:hidden}'));
+  style.setAttribute("data-wp-hash", "95aef1d85d");
+  style.appendChild(document.createTextNode('.media-editor-preview{align-items:center;box-sizing:border-box;display:flex;justify-content:center;min-height:100%;padding:32px;position:relative}.media-editor-preview__spinner{left:50%;position:absolute;top:50%;transform:translate(-50%,-50%)}.media-editor-preview--loading{height:100%;width:100%}.media-editor-preview--image img{height:auto;max-height:100%;max-width:100%;-o-object-fit:contain;object-fit:contain;opacity:0;width:auto}@media not (prefers-reduced-motion){.media-editor-preview--image img.loaded{animation:__wp-base-styles-fade-in .08s linear 0s;animation-fill-mode:forwards}}.media-editor-preview--video video{height:auto;max-height:100%;max-width:100%;-o-object-fit:contain;object-fit:contain;width:auto}.media-editor-preview--audio audio{max-width:100%}.media-editor-preview--file{text-align:center}.media-editor-preview__file-info{background:#f0f0f0;border-radius:2px;padding:24px}.media-editor-preview__file-name{font-weight:var(--wpds-typography-font-weight-emphasis,600);margin-bottom:8px}.media-editor-preview__mime-type{color:#757575;font-size:.9em;margin-bottom:16px}.media-editor-preview__download-link{display:inline-block;margin-top:8px}.media-editor-preview--empty,.media-editor-preview--error{color:#757575;text-align:center}.media-editor-preview__url{color:#949494;font-size:.9em;margin-top:8px;word-break:break-all}.wp-media-editor-image-editor{cursor:grab;height:100%;overflow:hidden;position:relative;touch-action:none;-webkit-user-select:none;-moz-user-select:none;user-select:none;width:100%}.wp-media-editor-image-editor__canvas{inset:24px;min-height:100px;min-width:100px;position:absolute}.wp-media-editor-image-editor__canvas:focus{outline:none}.wp-media-editor-image-editor__stage{inset:0;position:absolute}.wp-media-editor-image-editor--dragging{cursor:grabbing}.wp-media-editor-image-editor__image{left:0;position:absolute;top:0;transform-origin:center center;will-change:transform}.wp-media-editor-image-editor__stencil{pointer-events:none;position:absolute}.wp-media-editor-image-editor__dimming{box-shadow:0 0 0 9999px hsla(0,0%,88%,.6);pointer-events:none;position:absolute;transition:box-shadow .15s ease}.wp-media-editor-image-editor--dragging .wp-media-editor-image-editor__dimming{box-shadow:0 0 0 9999px hsla(0,0%,88%,.4)}.wp-media-editor-image-editor__grid{overflow:hidden;pointer-events:none;position:absolute;transition:opacity .15s ease}.wp-media-editor-image-editor__canvas--grid-interactive .wp-media-editor-image-editor__grid{opacity:0;transition-delay:.1s}.wp-media-editor-image-editor__canvas--show-grid .wp-media-editor-image-editor__grid{opacity:1;transition-delay:0s}.wp-media-editor-image-editor__canvas--settling .wp-media-editor-image-editor__grid{opacity:0;transition:none}.wp-media-editor-image-editor__grid-line{background:hsla(0,0%,100%,.4);position:absolute}.wp-media-editor-image-editor__grid-line--horizontal{height:1px;left:0;width:100%}.wp-media-editor-image-editor__grid-line--vertical{height:100%;top:0;width:1px}.wp-media-editor-image-editor__dimensions-tooltip{background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.08);color:#1e1e1e;font-size:11px;font-variant-numeric:tabular-nums;line-height:1.4;padding:2px 6px;pointer-events:none;position:absolute;white-space:nowrap;z-index:2}.wp-media-editor-image-editor__stencil-rect{border:1px solid #1e1e1e;box-sizing:border-box;pointer-events:none;position:absolute;transition:border-color .15s ease,box-shadow .15s ease}.wp-media-editor-image-editor__canvas--focus-visible:focus .wp-media-editor-image-editor__stencil-rect{border-color:var(--wp-image-editor-focus-color,var(--wp-admin-theme-color,#007cba));box-shadow:0 0 0 1px var(--wp-image-editor-focus-color,var(--wp-admin-theme-color,#007cba))}.wp-media-editor-image-editor__handle{-webkit-appearance:none;-moz-appearance:none;appearance:none;background:#fff;border:1px solid var(--wp-admin-theme-color,#007cba);border-radius:50%;box-sizing:border-box;cursor:default;font:inherit;height:12px;margin:0;padding:0;pointer-events:auto;position:absolute;transition:background-color .15s ease,box-shadow .15s ease;width:12px}.wp-media-editor-image-editor__handle:focus{outline:none}.wp-media-editor-image-editor__canvas--focus-visible .wp-media-editor-image-editor__handle:focus{background:var(--wp-image-editor-focus-color,var(--wp-admin-theme-color,#007cba));border-color:transparent;box-shadow:0 0 0 2px #fff,0 0 0 4px var(--wp-image-editor-focus-color,var(--wp-admin-theme-color,#007cba))}.wp-media-editor-image-editor__handle:before{content:"";height:44px;left:50%;position:absolute;top:50%;transform:translate(-50%,-50%);width:44px}.wp-media-editor-image-editor__handle--n{cursor:ns-resize;left:50%;margin-left:-6px;top:-6px}.wp-media-editor-image-editor__handle--s{bottom:-6px;cursor:ns-resize;left:50%;margin-left:-6px}.wp-media-editor-image-editor__handle--e{cursor:ew-resize;margin-top:-6px;right:-6px;top:50%}.wp-media-editor-image-editor__handle--w{cursor:ew-resize;left:-6px;margin-top:-6px;top:50%}.wp-media-editor-image-editor__handle--nw{cursor:nwse-resize;left:-6px;top:-6px}.wp-media-editor-image-editor__handle--ne{cursor:nesw-resize;right:-6px;top:-6px}.wp-media-editor-image-editor__handle--sw{bottom:-6px;cursor:nesw-resize;left:-6px}.wp-media-editor-image-editor__handle--se{bottom:-6px;cursor:nwse-resize;right:-6px}.media-editor{display:flex;flex:1;flex-direction:column;height:100%;min-height:0}.media-editor .media-editor__loading{align-items:center;display:flex;height:100%;justify-content:center}.media-editor .interface-interface-skeleton{bottom:auto;flex:1;flex-direction:column;height:100%;left:auto;max-height:none;position:relative;right:auto;top:auto}.media-editor-modal .media-editor .interface-interface-skeleton.interface-interface-skeleton{top:auto}.media-editor .interface-interface-skeleton__editor{flex:1;min-width:0}.media-editor .media-editor__content{border-radius:8px;display:flex;flex:1;flex-direction:column;margin:0 24px;min-height:0;overflow:hidden}.media-editor .media-editor__canvas-toolbar{background:#e0e0e0;display:flex;flex-shrink:0;justify-content:center;padding:8px 16px}.media-editor .media-editor__canvas-toolbar .media-editor-fine-rotation{flex:0 1 360px;min-width:0}.media-editor .media-editor__canvas-area{align-items:center;background:#e0e0e0;display:flex;flex:1;justify-content:center;min-height:0;overflow:auto}.media-editor .media-editor__canvas-area .media-editor-preview{height:100%}.media-editor .media-editor__canvas-area img,.media-editor .media-editor__canvas-area video{max-height:100%;max-width:100%;-o-object-fit:contain;object-fit:contain}.media-editor .media-editor__sidebar{box-sizing:border-box}.media-editor .media-editor__sidebar *,.media-editor .media-editor__sidebar :after,.media-editor .media-editor__sidebar :before{box-sizing:inherit}@media (min-width:600px){.media-editor .media-editor__sidebar{padding-left:1px}}.media-editor .media-editor__sidebar-panel{padding-bottom:24px}.media-editor .interface-interface-skeleton__sidebar{border-top:0;box-shadow:none;outline:1px solid transparent}.media-editor .media-editor__panel{padding:16px}@media (min-width:600px){.media-editor .media-editor__panel{padding:24px 24px 0 0}}.media-editor .components-panel__header.media-editor__sidebar-header{margin-right:0;padding-left:0;padding-right:8px}@media (min-width:600px){.media-editor .components-panel__header.media-editor__sidebar-header{margin-right:24px}}.media-editor .components-panel__header.media-editor__sidebar-header .components-button.has-icon{padding:0}@media (min-width:600px){.media-editor .components-panel__header.media-editor__sidebar-header .components-button.has-icon{display:flex}}@media (min-width:600px) and (max-width:781px){.media-editor .interface-interface-skeleton__sidebar:has(.interface-complementary-area__fill){position:relative!important}.media-editor .interface-complementary-area,.media-editor .interface-complementary-area__fill{width:280px!important}}@media (max-width:599px){.media-editor .interface-interface-skeleton__sidebar:has(.interface-complementary-area__fill){width:100%}.media-editor .interface-complementary-area,.media-editor .interface-complementary-area__fill{width:100%!important}}.media-editor__snackbar{bottom:24px;box-sizing:border-box;display:flex;flex-direction:column;left:0;padding-inline:16px;pointer-events:none;position:fixed;right:0}.media-editor__snackbar .components-snackbar{margin-inline:auto}.media-editor-form .dataforms-layouts-panel__field-control{text-wrap:pretty}.media-editor-modal.components-modal__frame .components-modal__content{display:flex;flex-direction:column;margin-bottom:0;min-height:0;padding:0}.media-editor-modal.components-modal__frame .components-modal__children-container{display:flex;flex:1;flex-direction:column;min-height:0}.media-editor-modal.components-modal__frame .media-editor-modal__footer{background:#fff;display:flex;flex-shrink:0;gap:16px;padding:16px 32px 24px;z-index:1000001}.media-editor-modal.components-modal__frame .media-editor-modal__footer.is-wide{align-items:center;flex-direction:row}.media-editor-modal.components-modal__frame .media-editor-modal__footer.is-wide .media-editor__footer-actions{margin-left:auto}.media-editor-modal.components-modal__frame .media-editor-modal__footer.is-narrow{flex-direction:column}.media-editor-modal.components-modal__frame .media-editor-modal__footer.is-narrow>.media-editor-image-controls{align-self:center}.media-editor-modal__footer-row{align-items:center;display:flex;flex-wrap:wrap;gap:16px}.media-editor-modal__footer-row .media-editor-image-controls,.media-editor-modal__footer-row .media-editor__footer-actions{margin-left:auto}.media-editor__history-actions .components-button.has-icon:not([aria-disabled=true]){color:var(--wp-admin-theme-color)}.media-editor-modal,.media-editor-modal__snackbar{display:flex;flex-direction:column}.media-editor-modal__snackbar{bottom:24px;box-sizing:border-box;left:0;padding-inline:16px;pointer-events:none;position:fixed;right:0}.media-editor-modal__snackbar .components-snackbar{margin-inline:auto}.media-editor-modal__snackbar{z-index:1000001}.media-editor-canvas{height:100%;position:relative;width:100%}.media-editor-canvas__cropper{height:100%;opacity:0;pointer-events:none;width:100%}.media-editor-canvas__cropper.is-loaded{opacity:1;pointer-events:auto}@keyframes __wp-base-styles-fade-in{0%{opacity:0}to{opacity:1}}@media not (prefers-reduced-motion){.media-editor-canvas__cropper.is-loaded{animation:__wp-base-styles-fade-in .2s linear 0s;animation-fill-mode:forwards}}.media-editor-canvas__spinner{left:50%;position:absolute;top:50%;transform:translate(-50%,-50%)}.media-editor-canvas__error{align-items:center;color:#757575;display:flex;height:100%;justify-content:center;text-align:center;width:100%}.media-editor-image-controls{align-items:center;display:flex;flex-wrap:nowrap;gap:8px}.media-editor-image-controls.is-stacked{align-items:flex-start;flex-direction:column;gap:24px}.media-editor-image-controls__transforms{display:flex;gap:48px}.media-editor-image-controls__group{display:flex;flex-direction:column;gap:4px}.media-editor-image-controls__label{font-size:11px;font-weight:var(--wpds-typography-font-weight-emphasis,600);line-height:1.4;text-transform:uppercase}.media-editor-image-controls__buttons{display:flex;gap:8px;padding-inline:2px 0}.media-editor-keyboard-shortcuts-modal{min-width:280px}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__note{color:#757575;font-size:13px;margin:0 0 16px}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut-list{list-style:none;margin:0;padding:0}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut{align-items:baseline;border-top:1px solid #ddd;display:flex;margin-bottom:0;padding:.6rem 0}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut:last-child{border-bottom:1px solid #ddd}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut-description{flex:1;margin:0}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut-term{background:none;font-weight:var(--wpds-typography-font-weight-emphasis,600);margin:0 0 0 1rem;padding:0;text-align:right}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut-key{border-radius:8%;margin:0 .2rem;padding:.25rem .5rem}.media-editor-keyboard-shortcuts-modal .media-editor-keyboard-shortcuts-modal__shortcut-key:last-child{margin:0 0 0 .2rem}.rotation-ruler{box-sizing:border-box;color:#1e1e1e;container-type:inline-size;cursor:ew-resize;font-family:-apple-system,system-ui,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif;height:32px;min-width:180px;padding:0 8px;position:relative;touch-action:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.rotation-ruler[data-disabled]{cursor:default;opacity:.5;pointer-events:none}.rotation-ruler:has(.rotation-ruler__input:focus-visible){border-radius:4px;outline:2px solid var(--wp-admin-theme-color,#3858e9);outline-offset:2px}.rotation-ruler__input{clip:rect(0 0 0 0);border:0;height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;white-space:nowrap;width:1px}.rotation-ruler__pointer{background:var(--wp-admin-theme-color,#3858e9);border-radius:1px;bottom:0;height:18px;left:50%;pointer-events:none;position:absolute;transform:translateX(-50%);width:2px}.rotation-ruler__strip{inset:0;mask-image:linear-gradient(90deg,transparent 0,#000 8px,#000 calc(100% - 8px),transparent);-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 8px,#000 calc(100% - 8px),transparent);overflow:hidden;position:absolute}.rotation-ruler__ticks{display:block;left:50%;overflow:visible;position:absolute;top:0}.rotation-ruler__tick{stroke:currentColor;stroke-width:1}.rotation-ruler__tick--minor{opacity:.35}.rotation-ruler__tick--mid{opacity:.6}.rotation-ruler__tick--major{opacity:1}.rotation-ruler__label{fill:currentColor;font-size:10px;font-weight:400;opacity:.45}.rotation-ruler__active-label{color:#1e1e1e;font-size:12px;font-weight:var(--wpds-typography-font-weight-emphasis,600);height:14px;left:50%;line-height:14px;pointer-events:none;position:absolute;top:0;transform:translateX(-50%)}.rotation-ruler__active-label:before{background:linear-gradient(90deg,transparent 0,#e0e0e0 12px,#e0e0e0 calc(100% - 12px),transparent);content:"";height:100%;left:50%;position:absolute;top:0;transform:translateX(-50%);width:60px}.rotation-ruler__active-label-number{display:inline-block;position:relative}.rotation-ruler__active-label-sign{position:absolute;right:100%;top:0}.rotation-ruler__active-label-unit{left:100%;position:absolute;top:0}@container (max-width: 220px){.rotation-ruler__tick--minor{opacity:0}}@media (prefers-reduced-motion:reduce){.rotation-ruler__ticks{transition:none}}.media-editor-route__content{display:flex;flex:1;min-height:0;overflow:hidden}'));
   document.head.appendChild(style);
 }
 

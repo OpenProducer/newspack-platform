@@ -1,8 +1,51 @@
 var React = (() => {
+function __wpWarnCompat(key) {var w = __wpWarnCompat.warned || (__wpWarnCompat.warned = {});if (w[key]) return;w[key] = true;var messages = {"legacy-element":"A React element created by an older React runtime (React 17/18) was detected and is handled by a compatibility patch. This usually means a bundled package ships its own React; align it with React 19.","inert":"An empty-string `inert` attribute was used. React 19 treats `inert` as a boolean, so the value was coerced to `true` by a compatibility patch. Pass `inert={true}` instead."};if (typeof console !== "undefined" && console.warn) {console.warn("[wordpress-react-19] " + messages[key]);}}
+
+  var __defProp = Object.defineProperty;
+  var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
   var __getOwnPropNames = Object.getOwnPropertyNames;
+  var __hasOwnProp = Object.prototype.hasOwnProperty;
+  var __esm = (fn, res) => function __init() {
+    return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+  };
   var __commonJS = (cb, mod) => function __require() {
     return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
   };
+  var __export = (target, all) => {
+    for (var name in all)
+      __defProp(target, name, { get: all[name], enumerable: true });
+  };
+  var __copyProps = (to, from, except, desc) => {
+    if (from && typeof from === "object" || typeof from === "function") {
+      for (let key of __getOwnPropNames(from))
+        if (!__hasOwnProp.call(to, key) && key !== except)
+          __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+    }
+    return to;
+  };
+  var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+  // ../react-19/warn-compat.js
+  var warn_compat_exports = {};
+  __export(warn_compat_exports, {
+    warnCompat: () => warnCompat
+  });
+  function warnCompat(key, message) {
+    if (warned.has(key)) {
+      return;
+    }
+    warned.add(key);
+    if (typeof console !== "undefined" && console.warn) {
+      console.warn(`${PREFIX} ${message}`);
+    }
+  }
+  var PREFIX, warned;
+  var init_warn_compat = __esm({
+    "../react-19/warn-compat.js"() {
+      PREFIX = "[wordpress-react-19]";
+      warned = /* @__PURE__ */ new Set();
+    }
+  });
 
   // ../react-19/node_modules/react/cjs/react.development.js
   var require_react_development = __commonJS({
@@ -222,7 +265,7 @@ var React = (() => {
           isValidElement(node) ? node._store && (node._store.validated = 1) : "object" === typeof node && null !== node && node.$$typeof === REACT_LAZY_TYPE && ("fulfilled" === node._payload.status ? isValidElement(node._payload.value) && node._payload.value._store && (node._payload.value._store.validated = 1) : node._store && (node._store.validated = 1));
         }
         function isValidElement(object) {
-          return "object" === typeof object && null !== object && (object.$$typeof === REACT_ELEMENT_TYPE || object.$$typeof === REACT_LEGACY_ELEMENT_TYPE);
+          return "object" === typeof object && null !== object && (object.$$typeof === REACT_ELEMENT_TYPE || (object.$$typeof === REACT_LEGACY_ELEMENT_TYPE && (__wpWarnCompat("legacy-element"), true)));
         }
         function escape(key) {
           var escaperLookup = { "=": "=0", ":": "=2" };
@@ -270,7 +313,7 @@ var React = (() => {
                 break;
               case "object":
                 switch (children.$$typeof) {
-                  case REACT_LEGACY_ELEMENT_TYPE: case REACT_ELEMENT_TYPE:
+                  case REACT_LEGACY_ELEMENT_TYPE: __wpWarnCompat("legacy-element"); case REACT_ELEMENT_TYPE:
                   case REACT_PORTAL_TYPE:
                     invokeCallback = true;
                     break;
@@ -991,19 +1034,40 @@ var React = (() => {
   // ../react-19/react.js
   var require_react2 = __commonJS({
     "../react-19/react.js"(exports, module) {
-      module.exports = {
-        ...require_react(),
-        // Polyfill React 18 internals for older versions of `react/jsx-runtime`.
-        __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: {
-          ReactCurrentOwner: { current: null },
-          ReactCurrentDispatcher: { current: null },
-          ReactDebugCurrentFrame: {
-            setExtraStackFrame: () => {
-            },
-            getStackAddendum: () => ""
+      var { warnCompat: warnCompat2 } = (init_warn_compat(), __toCommonJS(warn_compat_exports));
+      var SECRET_INTERNALS_KEY = "__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED";
+      var secretInternals = {
+        ReactCurrentOwner: { current: null },
+        ReactCurrentDispatcher: { current: null },
+        ReactDebugCurrentFrame: {
+          setExtraStackFrame() {
+            warnCompat2(
+              "react-secret-internals-setExtraStackFrame",
+              `\`${SECRET_INTERNALS_KEY}.ReactDebugCurrentFrame.setExtraStackFrame\` was removed in React 19 and is a no-op compatibility shim.`
+            );
+          },
+          getStackAddendum() {
+            warnCompat2(
+              "react-secret-internals-getStackAddendum",
+              `\`${SECRET_INTERNALS_KEY}.ReactDebugCurrentFrame.getStackAddendum\` was removed in React 19 and is a no-op compatibility shim.`
+            );
+            return "";
           }
         }
       };
+      var react = { ...require_react() };
+      Object.defineProperty(react, SECRET_INTERNALS_KEY, {
+        enumerable: true,
+        configurable: true,
+        get() {
+          warnCompat2(
+            "react-secret-internals",
+            `Accessing \`${SECRET_INTERNALS_KEY}\` was removed in React 19 and is provided by a compatibility shim.`
+          );
+          return secretInternals;
+        }
+      });
+      module.exports = react;
     }
   });
   return require_react2();

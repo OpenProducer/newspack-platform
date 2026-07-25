@@ -35,7 +35,6 @@ var require_i18n = __commonJS({
 var import_i18n = __toESM(require_i18n());
 var widget_default = {
   name: "core/activity",
-  title: (0, import_i18n.__)("Activity"),
   attributes: [
     {
       id: "perPage",

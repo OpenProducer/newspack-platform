@@ -33,6 +33,28 @@ var ReactDOM = (() => {
   ));
   var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
+  // ../react-19/warn-compat.js
+  var warn_compat_exports = {};
+  __export(warn_compat_exports, {
+    warnCompat: () => warnCompat
+  });
+  function warnCompat(key, message) {
+    if (warned.has(key)) {
+      return;
+    }
+    warned.add(key);
+    if (typeof console !== "undefined" && console.warn) {
+      console.warn(`${PREFIX} ${message}`);
+    }
+  }
+  var PREFIX, warned;
+  var init_warn_compat = __esm({
+    "../react-19/warn-compat.js"() {
+      PREFIX = "[wordpress-react-19]";
+      warned = /* @__PURE__ */ new Set();
+    }
+  });
+
   // react-external:react
   var require_react = __commonJS({
     "react-external:react"(exports, module) {
@@ -20523,6 +20545,10 @@ var ReactDOM = (() => {
     return null;
   }
   function findDOMNode(instance) {
+    warnCompat(
+      "findDOMNode",
+      "`ReactDOM.findDOMNode` was removed in React 19 and is emulated by a compatibility polyfill. Use refs instead."
+    );
     if (instance === null || instance === void 0) {
       return null;
     }
@@ -20543,6 +20569,10 @@ var ReactDOM = (() => {
     return hostFiber?.stateNode ?? null;
   }
   function render(element, container, callback) {
+    warnCompat(
+      "render",
+      "`ReactDOM.render` was removed in React 19 and is emulated by a compatibility polyfill. Use `createRoot` instead."
+    );
     let root = roots.get(container);
     if (!root) {
       root = (0, import_client.createRoot)(container);
@@ -20556,6 +20586,10 @@ var ReactDOM = (() => {
     }
   }
   function hydrate(element, container, callback) {
+    warnCompat(
+      "hydrate",
+      "`ReactDOM.hydrate` was removed in React 19 and is emulated by a compatibility polyfill. Use `hydrateRoot` instead."
+    );
     let root = roots.get(container);
     if (!root) {
       root = (0, import_client.hydrateRoot)(container, element);
@@ -20568,6 +20602,10 @@ var ReactDOM = (() => {
     }
   }
   function unmountComponentAtNode(container) {
+    warnCompat(
+      "unmountComponentAtNode",
+      "`ReactDOM.unmountComponentAtNode` was removed in React 19 and is emulated by a compatibility polyfill. Use `root.unmount` instead."
+    );
     const root = roots.get(container);
     if (!root) {
       return false;
@@ -20583,6 +20621,7 @@ var ReactDOM = (() => {
     "../react-19/react-polyfill.js"() {
       import_react_dom = __toESM(require_react_dom());
       import_client = __toESM(require_client());
+      init_warn_compat();
       internalsKey = "_reactInternals";
       HostComponent = 5;
       HostText = 6;
@@ -20593,12 +20632,26 @@ var ReactDOM = (() => {
   // ../react-19/react-dom.js
   var require_react_dom2 = __commonJS({
     "../react-19/react-dom.js"(exports, module) {
-      module.exports = {
+      var { warnCompat: warnCompat2 } = (init_warn_compat(), __toCommonJS(warn_compat_exports));
+      var SECRET_INTERNALS_KEY = "__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED";
+      var secretInternals = {};
+      var reactDOM = {
         ...require_react_dom(),
         ...require_client(),
-        ...(init_react_polyfill(), __toCommonJS(react_polyfill_exports)),
-        __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: {}
+        ...(init_react_polyfill(), __toCommonJS(react_polyfill_exports))
       };
+      Object.defineProperty(reactDOM, SECRET_INTERNALS_KEY, {
+        enumerable: true,
+        configurable: true,
+        get() {
+          warnCompat2(
+            "react-dom-secret-internals",
+            `Accessing \`${SECRET_INTERNALS_KEY}\` was removed in React 19 and is provided by a compatibility shim.`
+          );
+          return secretInternals;
+        }
+      });
+      module.exports = reactDOM;
     }
   });
   return require_react_dom2();

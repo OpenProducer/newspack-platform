@@ -335,7 +335,7 @@ function gutenberg_block_core_image_print_lightbox_overlay() {
 	$background_color   = '#fff';
 	$close_button_color = '#000';
 	if ( wp_theme_has_theme_json() ) {
-		$global_styles_color = wp_get_global_styles( array( 'color' ) );
+		$global_styles_color = gutenberg_get_global_styles( array( 'color' ) );
 		if ( ! empty( $global_styles_color['background'] ) ) {
 			$background_color = esc_attr( $global_styles_color['background'] );
 		}

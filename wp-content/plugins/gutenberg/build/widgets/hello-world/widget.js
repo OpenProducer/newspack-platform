@@ -46,7 +46,6 @@ var wordpress_default = /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_primi
 // widgets/hello-world/widget.ts
 var widget_default = {
   name: "core/hello-world",
-  title: "Hello World",
   icon: wordpress_default,
   attributes: [
     {
