@@ -311,7 +311,16 @@ if [[ ${#GH_UPDATES[@]} -gt 0 ]]; then
   COMMIT_MSG="${COMMIT_MSG} + GitHub theme releases:"
   for ENTRY in "${GH_UPDATES[@]}"; do
     IFS='|' read -r SLUG ASSET_URL NEW_VERSION <<< "$ENTRY"
-    COMMIT_MSG="${COMMIT_MSG} ${SLUG}@${NEW_VERSION}"
+    # newspack-block-theme's version-compare trigger is a known false positive
+    # (see GH_THEME_REPOS comment above and docs/ARCHITECTURE.md) -- the
+    # installed code is already correct, only style.css's cosmetic Version
+    # header lags. Word the commit message accurately instead of implying a
+    # real version change happened.
+    if [[ "$SLUG" == "newspack-block-theme" ]]; then
+      COMMIT_MSG="${COMMIT_MSG} reinstall ${SLUG} (no functional change; corrects leaked dev-tooling files from release zip, see docs/ARCHITECTURE.md for the upstream style.css version-lag quirk)"
+    else
+      COMMIT_MSG="${COMMIT_MSG} ${SLUG}@${NEW_VERSION}"
+    fi
   done
 fi
 
