@@ -147,17 +147,26 @@ if ! command -v terminus >/dev/null 2>&1; then
 fi
 
 echo "Verifying Terminus auth..."
-terminus auth:whoami >/dev/null || { echo "Error: not authenticated. Run 'terminus auth:login' first."; exit 1; }
+terminus auth:whoami >/dev/null </dev/null || { echo "Error: not authenticated. Run 'terminus auth:login' first."; exit 1; }
 
 echo "Verifying environment exists..."
-terminus env:info "$SITE_ENV" >/dev/null || { echo "Error: could not find environment ${SITE_ENV}"; exit 1; }
+terminus env:info "$SITE_ENV" >/dev/null </dev/null || { echo "Error: could not find environment ${SITE_ENV}"; exit 1; }
 
 # ---- query available updates ---------------------------------------------
+# NOTE: every `terminus` call below through the two confirm prompts
+# explicitly closes stdin (`</dev/null`). Confirmed by direct test
+# (2026-07-25): `terminus wp` -- SSH under the hood -- silently drains
+# whatever is sitting on the script's own stdin even though it never asks
+# for input, which starves the `read -r -p` confirm prompts further down
+# when this script is fed piped answers (or run non-interactively at all).
+# Without this, the script dies silently at the first `read` once enough
+# terminus calls precede it -- which is exactly what happened here once the
+# GitHub-release theme check below added ~7 more such calls.
 echo "Checking for plugin updates..."
-PLUGIN_UPDATES_JSON=$(terminus wp "$SITE_ENV" -- plugin list --update=available --format=json)
+PLUGIN_UPDATES_JSON=$(terminus wp "$SITE_ENV" -- plugin list --update=available --format=json </dev/null)
 
 echo "Checking for theme updates..."
-THEME_UPDATES_JSON=$(terminus wp "$SITE_ENV" -- theme list --update=available --format=json)
+THEME_UPDATES_JSON=$(terminus wp "$SITE_ENV" -- theme list --update=available --format=json </dev/null)
 
 # Filter out pre-release versions (alpha/beta/rc) -- flagged, not updated
 PRERELEASE_PATTERN='alpha|beta|rc'
@@ -215,7 +224,7 @@ for GH_REPO in "${GH_THEME_REPOS[@]}"; do
   fi
   TAG_VERSION="${TAG#v}"
   for SLUG in $(slugs_for_gh_repo "$GH_REPO"); do
-    INSTALLED_VERSION=$(terminus wp "$SITE_ENV" -- theme get "$SLUG" --field=version 2>/dev/null) || INSTALLED_VERSION=""
+    INSTALLED_VERSION=$(terminus wp "$SITE_ENV" -- theme get "$SLUG" --field=version 2>/dev/null </dev/null) || INSTALLED_VERSION=""
     if [[ -z "$INSTALLED_VERSION" ]]; then
       echo "  SKIP (not installed on this environment)  ${SLUG}"
       continue
@@ -256,10 +265,10 @@ fi
 
 # ---- apply updates ---------------------------------------------------------
 echo "Switching ${SITE_ENV} to SFTP mode..."
-terminus connection:set "$SITE_ENV" sftp
+terminus connection:set "$SITE_ENV" sftp </dev/null
 
 echo "Updating plugins..."
-terminus wp "$SITE_ENV" -- plugin update --all
+terminus wp "$SITE_ENV" -- plugin update --all </dev/null
 
 echo "Updating themes (excluding guarded: ${GUARDED_THEMES[*]})..."
 THEME_SLUGS=$(echo "$THEME_UPDATES_JSON" | GUARDED="${GUARDED_THEMES[*]}" python3 -c "
@@ -270,7 +279,7 @@ print(' '.join(t['name'] for t in data if t.get('name') not in guarded))
 ")
 if [[ -n "$THEME_SLUGS" ]]; then
   # shellcheck disable=SC2086
-  terminus wp "$SITE_ENV" -- theme update $THEME_SLUGS
+  terminus wp "$SITE_ENV" -- theme update $THEME_SLUGS </dev/null
 else
   echo "No non-guarded theme updates to apply."
 fi
@@ -281,7 +290,7 @@ if [[ ${#GH_UPDATES[@]} -gt 0 ]]; then
   for ENTRY in "${GH_UPDATES[@]}"; do
     IFS='|' read -r SLUG ASSET_URL NEW_VERSION <<< "$ENTRY"
     echo "-- ${SLUG} -> ${NEW_VERSION} --"
-    terminus wp "$SITE_ENV" -- theme install "$ASSET_URL" --force
+    terminus wp "$SITE_ENV" -- theme install "$ASSET_URL" --force </dev/null
   done
 else
   echo "No GitHub-release theme updates to apply."
@@ -293,7 +302,7 @@ echo "Diff on ${SITE_ENV}:"
 # after a real update -- Pantheon's diff index lags the actual filesystem
 # write by a few seconds. Treat this output as advisory only, not proof
 # either way. The env:commit step below is the real check.
-terminus env:diffstat "$SITE_ENV" || true
+terminus env:diffstat "$SITE_ENV" </dev/null || true
 
 if [[ "$SKIP_COMMIT" == true ]]; then
   echo "Skipping commit as requested (--skip-commit). Environment left in SFTP mode."
@@ -332,7 +341,7 @@ COMMITTED=false
 for ATTEMPT in 1 2 3; do
   echo "Committing (attempt ${ATTEMPT}/3)..."
   sleep $((ATTEMPT * 5))
-  COMMIT_OUTPUT=$(terminus env:commit "$SITE_ENV" --message="$COMMIT_MSG" 2>&1) || true
+  COMMIT_OUTPUT=$(terminus env:commit "$SITE_ENV" --message="$COMMIT_MSG" 2>&1 </dev/null) || true
   echo "$COMMIT_OUTPUT"
   if echo "$COMMIT_OUTPUT" | grep -qi "your code was committed"; then
     COMMITTED=true
@@ -394,7 +403,7 @@ fi
 # NOTE: mode lives under env:info (matches the "Connection Mode" column in
 # `terminus env:list`), not connection:info -- connection:info only returns
 # SFTP/Git/MySQL connection strings.
-MODE=$(terminus env:info "$SITE_ENV" --field=connection_mode)
+MODE=$(terminus env:info "$SITE_ENV" --field=connection_mode </dev/null)
 if [[ "$MODE" != "git" ]]; then
   echo "Error: environment did not return to Git mode (reported: '${MODE}'). Check manually."
   exit 1
