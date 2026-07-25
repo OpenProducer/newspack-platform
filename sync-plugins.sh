@@ -10,6 +10,16 @@
 # touched by this script -- they are not on WordPress.org and are managed
 # exclusively by sync-themes.sh.
 #
+# newspack-theme (+ its 5 named style variants) and newspack-block-theme are
+# ALSO not on WordPress.org (confirmed 2026-07-25: Theme URI points to
+# Automattic's GitHub repos, no Update URI header) -- `wp theme update` can
+# never see updates for them, a real coverage gap `wp plugin/theme
+# list --update=available` silently can't fill. These are checked via the
+# GitHub Releases API instead (see the GH_THEME_REPOS section below) and
+# folded into the same SFTP session, diff, and commit as everything else in
+# this script -- they are NOT guarded/excluded like newspack-theme-child and
+# newspack-radio-theme are.
+#
 # Environment model (confirmed via `terminus env:list newspack`, 2026-07-24):
 #   dev, radio, podcast  -- this script's only valid targets.
 #   test, live           -- master branch's production tiers. Code reaches
@@ -38,6 +48,41 @@ set -euo pipefail
 PANTHEON_SITE="newspack"          # Pantheon site machine name -- confirmed via `terminus site:info newspack`
 GUARDED_THEMES=("newspack-theme-child" "newspack-radio-theme")
 VALID_ENVS=("dev" "radio" "podcast")   # test/live/donate deliberately excluded -- see note above
+
+# GitHub-Releases-sourced themes: repos with no WordPress.org presence, so
+# `wp theme update` never sees them. Checked via
+# GET /repos/{owner}/{repo}/releases/latest -- trust GitHub's own
+# prerelease/draft filtering entirely; don't reimplement semver comparison
+# locally. One repo can cover multiple installed theme slugs: a single
+# newspack-theme release ships 6 separately-zipped variants (the base theme
+# plus 5 named style variants) as release assets, one zip per slug.
+#
+# KNOWN UPSTREAM QUIRK (confirmed 2026-07-25): newspack-block-theme's build
+# pipeline correctly bumps a version constant in functions.php but leaves
+# style.css's WP-standard `Version:` header one release behind -- e.g. the
+# official v1.28.1 "stable" release zip's own style.css says
+# "Version: 1.28.1-alpha.1". Since `wp theme get --field=version` (and WP
+# core itself) only ever reads style.css, the version-compare step below can
+# flag newspack-block-theme as needing an update even when it's already
+# current. This is expected and harmless: a false-positive here just
+# re-installs identical bytes, the resulting diff comes back empty, and
+# nothing gets committed (see the "No changes to commit" handling near the
+# end of this script). Do NOT try to "fix" this by re-checking the version
+# string after install -- `wp theme install`'s own exit code/output is the
+# only success signal that matters here.
+GH_THEME_REPOS=("Automattic/newspack-theme" "Automattic/newspack-block-theme")
+
+# Maps a GitHub repo to the site theme slug(s) its releases cover. Kept as a
+# case statement rather than `declare -A` (bash associative arrays) --
+# macOS ships bash 3.2 by default, which doesn't support them (bit us once
+# already on sync-themes.sh; see docs/ARCHITECTURE.md).
+slugs_for_gh_repo() {
+  case "$1" in
+    Automattic/newspack-theme) echo "newspack-theme newspack-joseph newspack-katharine newspack-nelson newspack-sacha newspack-scott" ;;
+    Automattic/newspack-block-theme) echo "newspack-block-theme" ;;
+    *) echo "" ;;
+  esac
+}
 # --------------------------------------------------------------------------
 
 ENV=""
@@ -151,6 +196,52 @@ for t in data:
     print(f\"  update  {t['name']}: {t.get('version')} -> {v}\")
 "
 
+# ---- GitHub-release theme updates (not on WordPress.org) -----------------
+# See GH_THEME_REPOS above for why this exists and the newspack-block-theme
+# version-string caveat. GH_UPDATES entries are "slug|asset_url|new_version",
+# queued here and installed later in the same SFTP session as everything else.
+echo ""
+echo "-- GitHub-release theme updates (not on WordPress.org) --"
+GH_UPDATES=()
+for GH_REPO in "${GH_THEME_REPOS[@]}"; do
+  RELEASE_JSON=$(curl -sf "https://api.github.com/repos/${GH_REPO}/releases/latest") || {
+    echo "  WARN  ${GH_REPO}: could not fetch latest release (network error or rate-limited) -- skipping"
+    continue
+  }
+  TAG=$(echo "$RELEASE_JSON" | python3 -c "import json,sys; print(json.load(sys.stdin).get('tag_name',''))")
+  if [[ -z "$TAG" ]]; then
+    echo "  WARN  ${GH_REPO}: no releases found -- skipping"
+    continue
+  fi
+  TAG_VERSION="${TAG#v}"
+  for SLUG in $(slugs_for_gh_repo "$GH_REPO"); do
+    INSTALLED_VERSION=$(terminus wp "$SITE_ENV" -- theme get "$SLUG" --field=version 2>/dev/null) || INSTALLED_VERSION=""
+    if [[ -z "$INSTALLED_VERSION" ]]; then
+      echo "  SKIP (not installed on this environment)  ${SLUG}"
+      continue
+    fi
+    if [[ "$INSTALLED_VERSION" == "$TAG_VERSION" ]]; then
+      echo "  up to date  ${SLUG}: ${INSTALLED_VERSION}"
+      continue
+    fi
+    ASSET_URL=$(echo "$RELEASE_JSON" | SLUG="$SLUG" python3 -c "
+import json, os, sys
+data = json.load(sys.stdin)
+slug = os.environ['SLUG']
+for a in data.get('assets', []):
+    if a['name'] == f'{slug}.zip':
+        print(a['browser_download_url'])
+        break
+")
+    if [[ -z "$ASSET_URL" ]]; then
+      echo "  WARN  ${SLUG}: release ${TAG} has no matching ${SLUG}.zip asset -- skipping"
+      continue
+    fi
+    echo "  update  ${SLUG}: ${INSTALLED_VERSION} -> ${TAG_VERSION}"
+    GH_UPDATES+=("${SLUG}|${ASSET_URL}|${TAG_VERSION}")
+  done
+done
+
 if [[ "$DRY_RUN" == true ]]; then
   echo ""
   echo "Dry run complete. No changes made."
@@ -185,6 +276,18 @@ else
 fi
 
 echo ""
+if [[ ${#GH_UPDATES[@]} -gt 0 ]]; then
+  echo "Installing GitHub-release theme updates..."
+  for ENTRY in "${GH_UPDATES[@]}"; do
+    IFS='|' read -r SLUG ASSET_URL NEW_VERSION <<< "$ENTRY"
+    echo "-- ${SLUG} -> ${NEW_VERSION} --"
+    terminus wp "$SITE_ENV" -- theme install "$ASSET_URL" --force
+  done
+else
+  echo "No GitHub-release theme updates to apply."
+fi
+
+echo ""
 echo "Diff on ${SITE_ENV}:"
 # NOTE: this has been observed to report "No changes on server" immediately
 # after a real update -- Pantheon's diff index lags the actual filesystem
@@ -204,6 +307,13 @@ if [[ ! "$CONFIRM_COMMIT" =~ ^[Yy]$ ]]; then
 fi
 
 COMMIT_MSG="Sync plugins (${ENV}): $(date +%Y-%m-%d)"
+if [[ ${#GH_UPDATES[@]} -gt 0 ]]; then
+  COMMIT_MSG="${COMMIT_MSG} + GitHub theme releases:"
+  for ENTRY in "${GH_UPDATES[@]}"; do
+    IFS='|' read -r SLUG ASSET_URL NEW_VERSION <<< "$ENTRY"
+    COMMIT_MSG="${COMMIT_MSG} ${SLUG}@${NEW_VERSION}"
+  done
+fi
 
 # Pantheon can take a few seconds to register SFTP-mode filesystem changes
 # before env:commit sees them -- committing too early can report "no code
