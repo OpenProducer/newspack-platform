@@ -190,7 +190,21 @@ What it does: `terminus backup:create`s a fresh db backup on `live`, resolves an
 
 Verified real content landed correctly: `wp post list` shows 263 real posts (not the default "Hello world!"), `siteurl`/`home` both correctly rewritten to the local URL, `newspack-theme-child` active with `newspack-theme` as parent (matches what's genuinely live in production). Independently re-confirmed via browser: real post titles render on category pages (e.g. "Venenatis feugiat eros...", Nov 30 2025) with the correct branded header/nav.
 
-**Known gap, expected by design**: the homepage renders blank and all post thumbnails show broken-image icons. Root cause: the imported DB references ~20 Newspack plugins (Newspack core, TEC, Yoast, etc.) and real media files that this vanilla local Studio site doesn't have installed/synced — this is the direct, accepted consequence of the DB-only/no-plugins scope decision, not a bug in the sync itself. Individual post pages (not relying on homepage-specific plugin blocks) render correctly.
+~~**Known gap**: the homepage renders blank and all post thumbnails show broken-image icons.~~ Resolved 2026-07-28 — see "Newspack plugin stack (local Studio site)" below. Files were closed out via `--with-files` (see above); the homepage/`/events/` gap required installing the actual plugin stack, not just content.
+
+### Newspack plugin stack (local Studio site) — resolved 2026-07-28
+
+The DB import alone couldn't render the homepage carousel/grid or `/events/` — both are built by plugins (Newspack core's blocks, The Events Calendar's rewrite rules), not by content the DB sync could carry on its own. Confirmed directly before installing anything: the homepage was genuinely the correct front page (`page-id-126`, `newspack-front-page` body class) with no error, just no plugin present to render its blocks; `/events/` had no registered route at all and silently fell through to the homepage rather than 404ing.
+
+Ground truth pulled from `terminus wp newspack.live -- plugin list` (not assumed): 8 plugins active on `live` — `jetpack`, `newspack-plugin`, `newspack-blocks`, `newspack-newsletters`, `pwa`, `google-site-kit`, `the-events-calendar`, `wordpress-seo`. Left inactive, matching production: `newspack-ads`, `newspack-popups`, `newspack-listings`, `newspack-plugin-update-checker`, `newspack-sponsors`, `woocommerce`, `gutenberg`.
+
+Install sources: `newspack-plugin` (core) and `newspack-blocks` are GitHub-Releases-only (`Automattic/newspack-plugin`, `Automattic/newspack-blocks` — confirmed not on wp.org, same pattern as `newspack-theme`/`newspack-block-theme`), installed at `v6.42.3`/`v4.26.3` respectively, exact match to `live`. The remaining six are wp.org-hosted, installed via `wp plugin install --activate`; five matched `live`'s version exactly, `google-site-kit` landed one patch ahead (`1.184.0` vs. `live`'s `1.183.0` with an update pending there) since a plain install grabs wp.org's current latest — noted, not treated as a problem, no functional issue observed.
+
+Installed incrementally (core+blocks, then TEC, then the rest one at a time), checking the homepage and `/events/` for HTTP status and PHP fatals after each install rather than installing everything blind. Core+blocks alone fixed the homepage carousel/grid; TEC alone flipped `/events/` from a redirect-to-homepage into a real archive.
+
+The three plugins flagged as likely to need a real WordPress.com/Jetpack connection to function (`jetpack`, `google-site-kit`, `newspack-newsletters`) did **not** block anything — verified via authenticated `wp-admin` requests (using the real `gusaus` user that came in with the DB sync, since Studio's original local admin user no longer exists post-import), not just a front-end glance. One incidental, unrelated fix needed along the way: `wp core update-db` after several installs, to clear a standard "database needs upgrading" redirect on `wp-admin`.
+
+Current state: homepage renders fully (carousel with real images, 3-column grid, "Upcoming Events" widget), `/events/` renders as a real, working TEC archive (search, List/Month toggle, real events with images/venues, pagination) — both independently re-verified by loading the pages directly. Nothing left broken or worked around.
 
 ### `sync-themes.sh` — custom child themes
 
