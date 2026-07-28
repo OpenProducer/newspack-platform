@@ -171,6 +171,27 @@ This replaces the manual Pantheon Dashboard → SFTP → wp-admin update workflo
 
 This was caught in practice: `dev` briefly appeared to be running a pre-release build of `newspack-block-theme` (`1.28.1-alpha.1`). Investigation (see Progress log) found the *actual* installed code was already the correct stable content — `functions.php` already read `1.28.1` — the alpha-looking version string was purely this upstream cosmetic bug. No fix was needed or applied; the SFTP session opened to investigate was discarded (`terminus connection:set newspack.dev git --yes`) rather than committing a no-op.
 
+### `sync-content.sh` — live database into the local Studio site
+
+```
+./sync-content.sh --dry-run
+./sync-content.sh
+./sync-content.sh --local-url http://localhost:8884   # if auto-detection fails
+```
+
+**Decision (2026-07-27):** local content sync is DB-only, one-way (`live` → local Studio site), on-demand only (no scheduling for now). `live` is the only valid source — matches the existing `live → test → dev` content-flow direction (`clone-content`) already used for `test`/`dev`; `radio`/`podcast` are separate content sets and out of scope for this script. Media/uploads are deliberately not synced (see "Known gap" below).
+
+What it does: `terminus backup:create`s a fresh db backup on `live`, resolves and downloads it via `terminus backup:get`, imports it into the local Studio site, then rewrites URLs from `https://live-newspack.pantheonsite.io` to the local Studio URL via `studio wp search-replace` (necessary — Pantheon's DB stores absolute URLs). Guarded to `live` only; never pushes local changes back to Pantheon.
+
+**Confirmed working end to end, 2026-07-27/28** (see Progress log for the full investigation) — both original assumptions checked out (`terminus backup:get` does print a bare URL; the local-URL grep against `studio site status` matches, even through the OSC-8 terminal hyperlink escape codes Studio wraps it in), but two real, unrelated blockers were found and fixed along the way:
+
+1. **SQLite vs MySQL**: the local Studio site defaults to SQLite (Studio's zero-dependency default), and `wp db import` shells out directly to a `mysql` client binary that simply doesn't exist in that setup — not fixable by changing the script, since it's not a `$wpdb`-level operation. Decision: convert this one Studio site to a real local MySQL server (Homebrew `mysql`), matching Studio's own documented supported path for sites that need MySQL specifically (stop site → delete `wp-content/db.php`, `wp-content/database/`, `wp-content/mu-plugins/sqlite-database-integration/` → point `wp-config.php` at real MySQL credentials → restart). One wrinkle: `studio site start` re-runs its own SQLite-setup check on every restart and will reset `DB_NAME` back to its own default (`wordpress`) if it doesn't match — worked around by naming the local MySQL database `wordpress` to match what Studio expects, rather than fighting it. Confirmed via `studio wp cli info` (`MySQL binary` populated, previously blank).
+2. **`wp db import`'s `SOURCE` mechanism is broken under modern mysql clients**: `wp db import` wraps the dump in a `mysql --execute='...; SOURCE file; COMMIT;'` call, but Homebrew's mysql 9.7.1 client no longer treats `SOURCE` as a client-side meta-command inside a batched `--execute` string — it gets sent to the server as literal SQL and fails (`ERROR 1064 ... near 'SOURCE'`). Fixed by replacing that line in the script with a direct `mysql < file.sql` pipe import (credentials read via `studio wp config get DB_NAME/DB_USER/DB_PASSWORD/DB_HOST`), which sidesteps the broken code path entirely. Verified the fix manually before changing the script.
+
+Verified real content landed correctly: `wp post list` shows 263 real posts (not the default "Hello world!"), `siteurl`/`home` both correctly rewritten to the local URL, `newspack-theme-child` active with `newspack-theme` as parent (matches what's genuinely live in production). Independently re-confirmed via browser: real post titles render on category pages (e.g. "Venenatis feugiat eros...", Nov 30 2025) with the correct branded header/nav.
+
+**Known gap, expected by design**: the homepage renders blank and all post thumbnails show broken-image icons. Root cause: the imported DB references ~20 Newspack plugins (Newspack core, TEC, Yoast, etc.) and real media files that this vanilla local Studio site doesn't have installed/synced — this is the direct, accepted consequence of the DB-only/no-plugins scope decision, not a bug in the sync itself. Individual post pages (not relying on homepage-specific plugin blocks) render correctly.
+
 ### `sync-themes.sh` — custom child themes
 
 ```
