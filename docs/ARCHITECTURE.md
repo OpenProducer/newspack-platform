@@ -44,7 +44,16 @@
 - **2026-07-25**: Owner visually confirmed `radio` — carousel, shows, nav all rendering correctly, no breakage.
 - **2026-07-25**: `sync-plugins.sh --env podcast` run for real — the last of the three environments. Same result as `dev`/`radio`: no wp.org plugin/theme updates pending, `newspack-block-theme` reinstalled (the documented false-positive), commit message correctly worded. Verified: `terminus env:diffstat newspack.podcast` → "No changes on server"; `connection_mode: git`; `terminus env:code-log newspack.podcast` shows the new commit (`c0d0365794`) at the top; `git show --stat` confirms **only** `CLAUDE.md` (+1 line) and `.hooks/pre-push` (mode change) — matches the dry-run prediction exactly, nothing unexpected. Pulled into local `podcast` (fast-forward) and pushed to `github` — both remotes in sync. Owner doing the final visual check next. **This completes the `newspack-block-theme` leaked-artifact fix rollout across all three environments** (`dev`/`test`/`live` via the `master` promotion pipeline, plus `radio` and `podcast` directly).
 
-- **Remaining for full rollout**: visual confirmation of podcast's `newspack-radio-theme` carousel/venue behavior from the earlier theme sync (separate from today's `newspack-block-theme` work — still not explicitly confirmed); owner's final visual check on `podcast` after today's `newspack-block-theme` fix (in progress); Studio symlink setup (open question #3, still unresolved — no Studio site exists for this repo on any branch).
+- **Remaining for full rollout**: visual confirmation of podcast's `newspack-radio-theme` carousel/venue behavior from the earlier theme sync (separate from today's `newspack-block-theme` work — still not explicitly confirmed); owner's final visual check on `podcast` after today's `newspack-block-theme` fix (in progress); ~~Studio symlink setup (open question #3, still unresolved — no Studio site exists for this repo on any branch)~~ resolved 2026-07-27, see below.
+- **2026-07-27**: Resolved open question #3 (Studio local site). First attempt (`git clone` of this repo directly into a Studio site path, then `studio site create --path ...` on top of it) **failed**: Studio's `wp-config.php` rewriter only patched `DB_NAME` and left `DB_USER`/`DB_PASSWORD`/`DB_HOST` as the literal placeholder strings (`'database_username'`, etc.), because this repo's DB defines live nested inside a Pantheon/`wp-config-local.php` conditional, not as flat top-level defines — Studio's transformer can't reliably rewrite that shape. Root-caused via Studio's own daemon log (`~/.studio/daemon/logs/studio-site-*-error-*.log`: "Error establishing a database connection", target host literally `database_host`) before attempting any fix. The failed site was never registered in `studio list`, so nothing needed cleanup beyond `rm -rf` of the dead clone.
+  - **Corrected approach, confirmed working end to end**: this matches how the existing `newspack-radio-pro` Studio site actually works, which turned out to have no `.git` at all (it's a vanilla Studio-generated install, not a repo clone — the earlier assumption that it was a clone was wrong).
+    1. `studio site create --path ~/Dev/local/wordpress/studio/newspack-platform` in a fresh, empty directory (no git clone) — Studio provisions its own clean `wp-config.php`, WP 7.0.2, PHP 8.4, SQLite. Started cleanly, `studio site status` → `🟢 Online`.
+    2. **New dependency found**: `newspack-theme-child`'s `style.css` declares `Template: newspack-theme` — it needs its parent theme installed and active first, or WordPress won't render it correctly. A vanilla Studio install has none of the Newspack theme/plugin stack. Installed `newspack-theme` from the same GitHub Releases source `sync-plugins.sh` already tracks (`Automattic/newspack-theme`, latest tag at the time `v2.22.3`, `newspack-theme.zip` asset).
+    3. Symlinked both custom themes over Studio's placeholders: `wp-content/themes/newspack-theme-child` → `~/Dev/projects/newspack-theme-child`, `wp-content/themes/newspack-radio-theme` → `~/Dev/projects/newspack-radio-theme`. Both resolve correctly.
+    4. Activated `newspack-theme-child`; site loads (HTTP 200, no PHP fatal/parse errors). `wp theme list` shows the expected hierarchy: `newspack-theme-child` (active) → `newspack-theme` (parent, 2.22.3) → `newspack-radio-theme` (inactive, present but not in use on this branch's default theme).
+    5. Independently verified via browser (not just trusting the report): `http://localhost:8884` loads the default "Hello world!" post with working sidebar widgets and "Powered by Newspack" footer — confirms the child theme is actually active and rendering, not just installed.
+  - **This Studio site is local-dev-only and is never committed or pushed** — it has no `.git`, unlike the `~/Dev/projects/newspack-platform` clone used for all `sync-plugins.sh`/`sync-themes.sh`/`terminus` work. Don't confuse the two directories.
+  - Scope note: this vanilla install has none of the ~20 Newspack plugins (Newspack core, TEC, Jetpack, etc.) that exist on Pantheon, so it's good for theme PHP/CSS iteration with instant reflection (the actual goal), not full visual parity with the live sites. Full plugin parity wasn't attempted and isn't currently planned — flag if that becomes a real need.
 
 ## Known issues fixed in sync-plugins.sh (read before modifying)
 
@@ -97,20 +106,22 @@ Today both live as plain, historyless directories baked into all three branches.
 
 ## Local rapid development — WordPress Studio
 
-Single Studio site, branch-switched (not one Studio site per branch):
+**Confirmed 2026-07-27** (see Progress log for the full investigation, including the failed first attempt). This is a **vanilla Studio-generated site, not a git clone** — do not confuse it with the `~/Dev/projects/newspack-platform` clone used for `sync-plugins.sh`/`sync-themes.sh`/`terminus`. Studio's `wp-config.php` rewriter cannot reliably patch this repo's Pantheon-conditional DB defines, so cloning the repo directly into a Studio site path fails (DB connection error to a literal `database_host`).
 
-1. Clone `newspack-platform`, check out the branch you're working on (`master`, `radio`, or `podcast`) as a Studio site.
-2. Clone `newspack-theme-child` and `newspack-radio-theme` locally, outside the Studio site directory.
-3. Symlink them into the Studio site's `wp-content/themes/`:
+1. Create a vanilla Studio site in a fresh, empty directory — no git clone:
    ```
+   studio site create --path ~/Dev/local/wordpress/studio/newspack-platform
+   ```
+2. Install the parent theme (`newspack-theme-child` requires it — `Template: newspack-theme` in its `style.css`). A vanilla install has none of the Newspack stack. Install from the GitHub Releases source `sync-plugins.sh` already tracks (`Automattic/newspack-theme`, latest release, `newspack-theme.zip` asset).
+3. Clone `newspack-theme-child` and `newspack-radio-theme` locally (already done at `~/Dev/projects/newspack-theme-child` and `~/Dev/projects/newspack-radio-theme`), then symlink them over Studio's placeholder themes:
+   ```
+   rm -rf wp-content/themes/newspack-theme-child wp-content/themes/newspack-radio-theme
    ln -s ~/Dev/projects/newspack-theme-child   wp-content/themes/newspack-theme-child
    ln -s ~/Dev/projects/newspack-radio-theme   wp-content/themes/newspack-radio-theme
    ```
-4. Edits in the theme repos reflect instantly in Studio — no copy step, same benefit the symlink approach gave Radio Pro's enhancements plugin.
+4. Activate `newspack-theme-child`: `studio wp theme activate newspack-theme-child --path ~/Dev/local/wordpress/studio/newspack-platform`. Edits in the theme repos reflect instantly — no copy step, same benefit the symlink approach gave Radio Pro's enhancements plugin.
 
-Switching branches: check out the new branch in `newspack-platform`, confirm the symlinks still resolve (they will, since the theme repos live outside the site repo), restart Studio's site if needed.
-
-*Note: confirm the exact local folder Studio uses for a given site (via its "Open in Terminal" / site settings) before wiring the symlinks — this can vary by Studio version and wasn't verified against your installed version.*
+Scope note: this is a vanilla WordPress install (default content, SQLite) — it does not carry the ~20 Newspack plugins or any content from Pantheon. It's for theme PHP/CSS iteration with instant reflection, not visual parity with the live sites. Local URL and admin credentials are printed by `studio site create` / `studio site status` at creation time (not fixed — don't hardcode the port).
 
 ## Two-script automation architecture
 
@@ -193,7 +204,7 @@ This replaces the manual "download from GitHub, copy-paste locally" theme workfl
 
 ~~1. Theme sourcing mechanism~~ — resolved 2026-07-25: directly from Automattic's individual GitHub repos via the Releases API, not `newspack-workspace`. Investigated `newspack-workspace`'s `bin/repos.sh` and its vendored `themes/newspack-theme`, `themes/newspack-block-theme` directories first — turned out those track `main` HEAD (unreleased dev trunk, confirmed ahead of even the newest alpha tag), not a pinned release, so they're the wrong reference for a production site. See "GitHub-Releases-sourced themes" under `sync-plugins.sh` above for the mechanism that got built instead.
 2. **GitHub sync for `sync-plugins.sh`** — Radio Pro's plugin-update script only commits on Pantheon's internal git per environment; it doesn't push those commits to GitHub. Decide whether `sync-plugins.sh` should also pull-and-push to `github` after `terminus env:commit`, or whether GitHub stays theme-repo-only and gets periodic manual syncs from Pantheon.
-3. **Studio local site path** — confirm the actual filesystem path Studio uses so the symlink step in the setup checklist is accurate.
+~~3. Studio local site path~~ — resolved 2026-07-27: `~/Dev/local/wordpress/studio/newspack-platform`, a vanilla Studio-generated site (not a git clone — cloning the repo directly fails, see "Local rapid development" above and Progress log for the full investigation).
 
 ~~4. History for the two extracted themes~~ — resolved 2026-07-24: preserve history via `git subtree split`, not a fresh start. See "Theme repo extraction" below for the validated commands.
 
@@ -243,7 +254,7 @@ ln -s ~/Dev/projects/newspack-radio-theme   wp-content/themes/newspack-radio-the
 1. ~~Confirm Terminus auth and the Pantheon site/environment machine names~~ — done: site `newspack`; envs `dev`, `test`, `live`, `radio`, `podcast`, `donate`.
 2. ~~Validate `sync-plugins.sh`~~ — done on all three environments (`dev`, `radio`, `podcast`); see Progress log and Known issues above.
 3. ~~Create `OpenProducer/newspack-theme-child` and `OpenProducer/newspack-radio-theme` on GitHub and run the extraction~~ — done 2026-07-24, see Progress log and "Theme repo extraction" above.
-4. **Current task**: clone both new theme repos locally; wire the WordPress Studio symlinks.
+4. ~~Clone both new theme repos locally; wire the WordPress Studio symlinks~~ — done 2026-07-27. See "Local rapid development" above for the corrected (vanilla-site, not git-clone) recipe.
 5. `sync-themes.sh --branch master --dry-run`, then a real run on `master` (theme-child only, lowest risk).
 6. `sync-themes.sh --branch radio --dry-run`, then a real run; then same for `podcast` — expect podcast's carousel behavior to change, that's intentional (see above).
 7. Promote `master`'s plugin + theme changes: `terminus env:deploy newspack.test`, verify, `terminus env:deploy newspack.live`.
