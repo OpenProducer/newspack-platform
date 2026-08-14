@@ -44,11 +44,11 @@ trait MessageTrait
     }
     public function hasHeader($header) : bool
     {
-        return isset($this->headerNames[\strtolower($header)]);
+        return isset($this->headerNames[\YoastSEO_Vendor\GuzzleHttp\Psr7\Utils::asciiToLower($header)]);
     }
     public function getHeader($header) : array
     {
-        $header = \strtolower($header);
+        $header = \YoastSEO_Vendor\GuzzleHttp\Psr7\Utils::asciiToLower($header);
         if (!isset($this->headerNames[$header])) {
             return [];
         }
@@ -73,7 +73,7 @@ trait MessageTrait
             }
         }
         $value = $this->normalizeHeaderValue($value);
-        $normalized = \strtolower($header);
+        $normalized = \YoastSEO_Vendor\GuzzleHttp\Psr7\Utils::asciiToLower($header);
         $new = clone $this;
         if (isset($new->headerNames[$normalized])) {
             unset($new->headers[$new->headerNames[$normalized]]);
@@ -96,7 +96,7 @@ trait MessageTrait
             }
         }
         $value = $this->normalizeHeaderValue($value);
-        $normalized = \strtolower($header);
+        $normalized = \YoastSEO_Vendor\GuzzleHttp\Psr7\Utils::asciiToLower($header);
         $new = clone $this;
         if (isset($new->headerNames[$normalized])) {
             $header = $this->headerNames[$normalized];
@@ -112,7 +112,7 @@ trait MessageTrait
      */
     public function withoutHeader($header) : \YoastSEO_Vendor\Psr\Http\Message\MessageInterface
     {
-        $normalized = \strtolower($header);
+        $normalized = \YoastSEO_Vendor\GuzzleHttp\Psr7\Utils::asciiToLower($header);
         if (!isset($this->headerNames[$normalized])) {
             return $this;
         }
@@ -158,7 +158,7 @@ trait MessageTrait
                 }
             }
             $value = $this->normalizeHeaderValue($value);
-            $normalized = \strtolower($header);
+            $normalized = \YoastSEO_Vendor\GuzzleHttp\Psr7\Utils::asciiToLower($header);
             if (isset($this->headerNames[$normalized])) {
                 $header = $this->headerNames[$normalized];
                 $this->headers[$header] = \array_merge($this->headers[$header], $value);

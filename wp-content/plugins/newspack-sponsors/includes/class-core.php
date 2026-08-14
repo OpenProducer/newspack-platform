@@ -238,7 +238,7 @@ final class Core {
 			[
 				'description'       => __( 'Display the sponsor only in the byline, or both the sponsor and post author.', 'newspack-sponsors' ),
 				'type'              => 'string',
-				'default'           => self::is_sponsor() ? 'sponsor' : 'inherit',
+				'default'           => 'inherit',
 				'sanitize_callback' => 'sanitize_text_field',
 				'single'            => true,
 				'show_in_rest'      => true,
@@ -253,7 +253,7 @@ final class Core {
 			[
 				'description'       => __( 'Display the sponsor only, or display categories alongside the sponsor.', 'newspack-sponsors' ),
 				'type'              => 'string',
-				'default'           => self::is_sponsor() ? 'sponsor' : 'inherit',
+				'default'           => 'inherit',
 				'sanitize_callback' => 'sanitize_text_field',
 				'single'            => true,
 				'show_in_rest'      => true,
@@ -268,7 +268,7 @@ final class Core {
 			[
 				'description'       => __( 'Display the underwriter blurb in standard or simple-text format.', 'newspack-sponsors' ),
 				'type'              => 'string',
-				'default'           => self::is_sponsor() ? 'standard' : 'inherit',
+				'default'           => 'inherit',
 				'sanitize_callback' => 'sanitize_text_field',
 				'single'            => true,
 				'show_in_rest'      => true,
@@ -283,7 +283,7 @@ final class Core {
 			[
 				'description'       => __( 'Display the underwriter blurb at the top or bottom of the post.', 'newspack-sponsors' ),
 				'type'              => 'string',
-				'default'           => self::is_sponsor() ? 'top' : 'inherit',
+				'default'           => 'inherit',
 				'sanitize_callback' => 'sanitize_text_field',
 				'single'            => true,
 				'show_in_rest'      => true,

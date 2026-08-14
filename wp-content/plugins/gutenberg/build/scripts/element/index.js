@@ -230,6 +230,15 @@ var wp;
         offset = startOffset + tokenLength;
         return true;
       case "closer":
+        if (0 === stackDepth) {
+          if (true) {
+            console.warn(
+              `Unmatched closing tag '</${name}>' in createInterpolateElement. The rest of the string was not interpolated.`
+            );
+          }
+          addText();
+          return false;
+        }
         if (1 === stackDepth) {
           closeOuterElement(startOffset);
           offset = startOffset + tokenLength;

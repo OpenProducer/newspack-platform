@@ -136,6 +136,16 @@ final class Error_Code {
 	public const UNKNOWN_ERROR = 'lw-harbor-unknown-error';
 
 	/**
+	 * The validation endpoint received too many failed attempts within the
+	 * rate-limit window.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @var string
+	 */
+	public const TOO_MANY_ATTEMPTS = 'lw-harbor-too-many-attempts';
+
+	/**
 	 * Maps an error code to its recommended HTTP status code.
 	 *
 	 * @since 1.0.0
@@ -162,6 +172,9 @@ final class Error_Code {
 			self::ACTIVATION_REQUIRED     => 422,
 			self::TIER_SELECTION_REQUIRED => 422,
 			self::OUT_OF_ACTIVATIONS      => 422,
+
+			// 429 Too Many Requests. Validation rate-limit tripped.
+			self::TOO_MANY_ATTEMPTS       => 429,
 
 			// 500 Internal Server Error — storage failure.
 			self::STORE_FAILED            => 500,

@@ -1,0 +1,1 @@
+!function(e){function n(){const n=e('.newspack-label-enable input[type="checkbox"]'),c=e(".newspack-label-setting");n.is(":checked")?(c.show(),c.find("input").prop("disabled",!1)):(c.hide(),c.find("input").prop("disabled",!0))}n(),e('.newspack-label-enable input[type="checkbox"]').on("change",n)}(jQuery);

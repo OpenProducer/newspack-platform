@@ -46,7 +46,9 @@ class SessionCookieJar extends \YoastSEO_Vendor\GuzzleHttp\Cookie\CookieJar
         /** @var SetCookie $cookie */
         foreach ($this as $cookie) {
             if (\YoastSEO_Vendor\GuzzleHttp\Cookie\CookieJar::shouldPersist($cookie, $this->storeSessionCookies)) {
-                $json[] = $cookie->toArray();
+                $data = $cookie->toArray();
+                $data['HostOnly'] = $cookie->getHostOnly();
+                $json[] = $data;
             }
         }
         $json = \json_encode($json);
@@ -69,11 +71,15 @@ class SessionCookieJar extends \YoastSEO_Vendor\GuzzleHttp\Cookie\CookieJar
         }
         $data = \json_decode($json, \true);
         if (\is_array($data)) {
+            $cookies = [];
             foreach ($data as $cookie) {
-                if (!\is_array($cookie)) {
+                if (!\is_array($cookie) || !\array_key_exists('HostOnly', $cookie) || !\is_bool($cookie['HostOnly'])) {
                     throw new \RuntimeException('Invalid cookie data');
                 }
-                $this->setCookie(new \YoastSEO_Vendor\GuzzleHttp\Cookie\SetCookie($cookie));
+                $cookies[] = new \YoastSEO_Vendor\GuzzleHttp\Cookie\SetCookie($cookie);
+            }
+            foreach ($cookies as $cookie) {
+                $this->setCookie($cookie);
             }
         } elseif (\is_scalar($data) && \strlen((string) $data)) {
             throw new \RuntimeException('Invalid cookie data');

@@ -499,6 +499,7 @@ html :where(.wp-block)[data-align="right"] {
 	font-family: var(--newspack-theme-font-heading);
 	font-size: var(--newspack-theme-font-size-sm);
 	font-weight: bold;
+	padding: 0.76rem 1rem;
 
 	&:not(.has-background) {
 		background: var(--newspack-theme-color-secondary);
@@ -511,6 +512,7 @@ html :where(.wp-block)[data-align="right"] {
 
 .is-style-outline .wp-block-button__link, // legacy selector
 .wp-block-button__link.is-style-outline {
+	padding: calc(0.76rem - 2px) calc(1rem - 2px);
 	&:not(.has-background) {
 		background: transparent;
 	}
@@ -1636,4 +1638,11 @@ $colors: (
 }
 .has-grad-6-gradient-background {
 	background-image: linear-gradient(135deg, rgb(221, 221, 221) 0%, rgb(255, 255, 255) 100%);
+}
+
+// Gutenberg's inline text-color format wraps text in mark.has-inline-color.
+// Keep the editor canvas consistent with the frontend fix: color-carrier
+// marks get no highlight background (browser default is yellow).
+mark.has-inline-color {
+	background-color: transparent;
 }

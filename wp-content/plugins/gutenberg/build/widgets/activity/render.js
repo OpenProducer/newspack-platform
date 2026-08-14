@@ -11905,12 +11905,19 @@ function getClosestSelectedId({
 }
 function useSelectionProps({
   data,
-  actions,
   getItemId,
+  isItemSelectable,
   selection,
-  onChangeSelection
+  onChangeSelection,
+  selectionMode,
+  shouldSelectOnClick
 }) {
+  const isMultiselect = selectionMode === "multi";
+  const allowDeselect = selectionMode !== "single-required";
   const gestureRef = (0, import_element33.useRef)(null);
+  const anchorTo = (id) => {
+    gestureRef.current = { anchorId: id, lastTargetId: null };
+  };
   const isTouchDeviceRef = (0, import_element33.useRef)(false);
   (0, import_element33.useEffect)(() => {
     const markTouchDevice = () => {
@@ -11921,29 +11928,44 @@ function useSelectionProps({
     });
     return () => document.removeEventListener("touchstart", markTouchDevice);
   }, []);
-  const selectableIds = data.filter((item) => hasAPossibleBulkAction(actions, item)).map(getItemId);
+  const selectableIds = data.filter(isItemSelectable).map(getItemId);
   const selectableIdSet = new Set(selectableIds);
   const hasSelectableItems = selectableIds.length > 0;
+  const hasRangeGesture = hasSelectableItems && isMultiselect;
   const getSelectionProps = (id) => {
     const isSelectable = selectableIdSet.has(id);
     return {
+      // When a plain click selects, that click is also what anchors the
+      // range a following Shift+Click extends from. Modifier clicks never
+      // reach here: `onClickCapture` stops them.
+      ...shouldSelectOnClick && {
+        onClick: () => {
+          if (allowDeselect && selection.includes(id)) {
+            onChangeSelection(
+              selection.filter((itemId) => id !== itemId)
+            );
+          } else {
+            onChangeSelection(
+              isMultiselect ? [...selection, id] : [id]
+            );
+          }
+          anchorTo(id);
+        }
+      },
       onMouseDown: (event) => {
-        if (event.button === 0 && event.shiftKey && hasSelectableItems) {
+        if (event.button === 0 && event.shiftKey && hasRangeGesture) {
           event.preventDefault();
         }
       },
       onClickCapture: (event) => {
-        if (!hasSelectableItems) {
+        if (!hasRangeGesture) {
           return;
         }
         const isModifierKeyPressed = (0, import_keycodes.isAppleOS)() ? event.metaKey : event.ctrlKey;
         const isSelectionCheckboxClick = event.target instanceof Element && !!event.target.closest(`.${SELECTION_CHECKBOX_CLASS}`);
         if (!isModifierKeyPressed && !event.shiftKey) {
           if (isSelectable && isSelectionCheckboxClick) {
-            gestureRef.current = {
-              anchorId: id,
-              lastTargetId: null
-            };
+            anchorTo(id);
           }
           return;
         }
@@ -11986,7 +12008,7 @@ function useSelectionProps({
           onChangeSelection(
             selection.includes(id) ? selection.filter((itemId) => id !== itemId) : [...selection, id]
           );
-          gestureRef.current = { anchorId: id, lastTargetId: null };
+          anchorTo(id);
         }
       }
     };
@@ -12295,10 +12317,12 @@ function ViewTable({
   const orderedData = dataByGroup ? Array.from(dataByGroup.values()).flat() : data;
   const { getSelectionProps } = useSelectionProps({
     data: orderedData,
-    actions,
     getItemId,
+    isItemSelectable: (item) => hasAPossibleBulkAction(actions, item),
     selection,
-    onChangeSelection
+    onChangeSelection,
+    selectionMode: "multi",
+    shouldSelectOnClick: false
   });
   const headerMenuRefs = (0, import_element36.useRef)(/* @__PURE__ */ new Map());
   const headerMenuToFocusRef = (0, import_element36.useRef)(void 0);
@@ -13202,10 +13226,12 @@ function ViewGrid({
   const orderedData = dataByGroup ? Array.from(dataByGroup.values()).flat() : data;
   const { getSelectionProps } = useSelectionProps({
     data: orderedData,
-    actions,
     getItemId,
+    isItemSelectable: (item) => hasAPossibleBulkAction(actions, item),
     selection,
-    onChangeSelection
+    onChangeSelection,
+    selectionMode: "multi",
+    shouldSelectOnClick: false
   });
   if (!hasData) {
     return /* @__PURE__ */ (0, import_jsx_runtime58.jsx)(
@@ -13359,7 +13385,7 @@ function ListItem({
   titleField,
   mediaField,
   descriptionField,
-  onSelect,
+  selectionProps,
   otherFields,
   onDropdownTriggerKeyDown,
   posinset
@@ -13514,7 +13540,7 @@ function ListItem({
                 "aria-labelledby": labelId,
                 "aria-describedby": descriptionId,
                 className: "dataviews-view-list__item",
-                onClick: () => onSelect(item)
+                ...selectionProps
               }
             ) }),
             /* @__PURE__ */ (0, import_jsx_runtime59.jsxs)(
@@ -13623,7 +13649,15 @@ function ViewList(props) {
     (field) => field.id === view.descriptionField
   );
   const otherFields = (view?.fields ?? []).map((fieldId) => fields.find((f2) => fieldId === f2.id)).filter(isDefined2);
-  const onSelect = (item) => onChangeSelection([getItemId(item)]);
+  const { getSelectionProps } = useSelectionProps({
+    data,
+    getItemId,
+    isItemSelectable: () => true,
+    selection,
+    onChangeSelection,
+    selectionMode: "single-required",
+    shouldSelectOnClick: true
+  });
   const generateCompositeItemIdPrefix = (0, import_element41.useCallback)(
     (item) => `${baseId}-${getItemId(item)}`,
     [baseId, getItemId]
@@ -13755,7 +13789,9 @@ function ViewList(props) {
                   actions,
                   item,
                   isSelected: item === selectedItem,
-                  onSelect,
+                  selectionProps: getSelectionProps(
+                    getItemId(item)
+                  ),
                   mediaField,
                   titleField,
                   descriptionField,
@@ -13787,7 +13823,9 @@ function ViewList(props) {
               actions,
               item,
               isSelected: item === selectedItem,
-              onSelect,
+              selectionProps: getSelectionProps(
+                getItemId(item)
+              ),
               mediaField,
               titleField,
               descriptionField,
@@ -14264,9 +14302,9 @@ var import_jsx_runtime65 = __toESM(require_jsx_runtime(), 1);
 var { Badge: WCBadge2 } = unlock2(import_components14.privateApis);
 function GridItem3({
   view,
-  multiselect,
   selection,
   onChangeSelection,
+  selectionProps,
   getItemId,
   item,
   mediaField,
@@ -14305,16 +14343,7 @@ function GridItem3({
         "is-selected": isSelected2
       }),
       "aria-selected": isSelected2,
-      onClick: () => {
-        if (isSelected2) {
-          onChangeSelection(
-            selection.filter((itemId) => id !== itemId)
-          );
-        } else {
-          const newSelection = multiselect ? [...selection, id] : [id];
-          onChangeSelection(newSelection);
-        }
-      },
+      ...selectionProps,
       children: [
         showMedia && renderedMediaField && /* @__PURE__ */ (0, import_jsx_runtime65.jsx)("div", { className: "dataviews-view-picker-grid__media", children: renderedMediaField }),
         showMedia && renderedMediaField && /* @__PURE__ */ (0, import_jsx_runtime65.jsx)(
@@ -14498,6 +14527,16 @@ function ViewPickerGrid({
   const groupField = view.groupBy?.field ? fields.find((f2) => f2.id === view.groupBy?.field) : null;
   const dataByGroup = groupField ? getDataByGroup(data, groupField) : null;
   const isInfiniteScroll = (view.infiniteScrollEnabled && !dataByGroup) ?? false;
+  const orderedData = dataByGroup ? Array.from(dataByGroup.values()).flat() : data;
+  const { getSelectionProps } = useSelectionProps({
+    data: orderedData,
+    getItemId,
+    isItemSelectable: () => true,
+    selection,
+    onChangeSelection,
+    selectionMode: isMultiselect ? "multi" : "single-clearable",
+    shouldSelectOnClick: true
+  });
   const currentPage = view?.page ?? 1;
   const perPage = view?.perPage ?? 0;
   const setSize = isInfiniteScroll ? paginationInfo?.totalItems : void 0;
@@ -14558,9 +14597,11 @@ function ViewPickerGrid({
                         GridItem3,
                         {
                           view,
-                          multiselect: isMultiselect,
                           selection,
                           onChangeSelection,
+                          selectionProps: getSelectionProps(
+                            getItemId(item)
+                          ),
                           getItemId,
                           item,
                           mediaField,
@@ -14639,9 +14680,11 @@ function ViewPickerGrid({
                 GridItem3,
                 {
                   view,
-                  multiselect: isMultiselect,
                   selection,
                   onChangeSelection,
+                  selectionProps: getSelectionProps(
+                    getItemId(item)
+                  ),
                   getItemId,
                   item,
                   mediaField,
@@ -14710,7 +14753,7 @@ function TableRow2({
   selection,
   getItemId,
   onChangeSelection,
-  multiselect,
+  selectionProps,
   posinset
 }) {
   const { paginationInfo } = (0, import_element47.useContext)(dataviews_context_default);
@@ -14753,6 +14796,8 @@ function TableRow2({
       "aria-setsize": paginationInfo.totalItems || void 0,
       "aria-posinset": posinset,
       role: infiniteScrollEnabled ? "article" : "option",
+      onClickCapture: selectionProps.onClickCapture,
+      onClick: selectionProps.onClick,
       onMouseDown: (event) => {
         if (event.button !== 0) {
           return;
@@ -14760,16 +14805,7 @@ function TableRow2({
         event.currentTarget.parentElement?.focus({
           preventScroll: true
         });
-      },
-      onClick: () => {
-        if (isSelected2) {
-          onChangeSelection(
-            selection.filter((itemId) => id !== itemId)
-          );
-        } else {
-          const newSelection = multiselect ? [...selection, id] : [id];
-          onChangeSelection(newSelection);
-        }
+        selectionProps.onMouseDown(event);
       },
       children: [
         /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(
@@ -14864,6 +14900,16 @@ function ViewPickerTable({
   const groupField = view.groupBy?.field ? fields.find((f2) => f2.id === view.groupBy?.field) : null;
   const dataByGroup = groupField ? getDataByGroup(data, groupField) : null;
   const isInfiniteScroll = view.infiniteScrollEnabled && !dataByGroup;
+  const orderedData = dataByGroup ? Array.from(dataByGroup.values()).flat() : data;
+  const { getSelectionProps } = useSelectionProps({
+    data: orderedData,
+    getItemId,
+    isItemSelectable: () => true,
+    selection,
+    onChangeSelection,
+    selectionMode: isMultiselect ? "multi" : "single-clearable",
+    shouldSelectOnClick: true
+  });
   const tableNoticeId = (0, import_element47.useId)();
   if (nextHeaderMenuToFocus) {
     headerMenuToFocusRef.current = nextHeaderMenuToFocus;
@@ -15007,23 +15053,28 @@ function ViewPickerTable({
                       )
                     }
                   ),
-                  groupItems.map((item, index2) => /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(
-                    TableRow2,
-                    {
-                      item,
-                      fields,
-                      id: getItemId(item) || index2.toString(),
-                      view,
-                      titleField,
-                      mediaField,
-                      descriptionField,
-                      selection,
-                      getItemId,
-                      onChangeSelection,
-                      multiselect: isMultiselect
-                    },
-                    getItemId(item)
-                  ))
+                  groupItems.map((item, index2) => {
+                    const id = getItemId(item) || index2.toString();
+                    return /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(
+                      TableRow2,
+                      {
+                        item,
+                        fields,
+                        id,
+                        view,
+                        titleField,
+                        mediaField,
+                        descriptionField,
+                        selection,
+                        getItemId,
+                        onChangeSelection,
+                        selectionProps: getSelectionProps(
+                          id
+                        )
+                      },
+                      getItemId(item)
+                    );
+                  })
                 ]
               },
               `group-${groupName}`
@@ -15036,13 +15087,14 @@ function ViewPickerTable({
               orientation: "vertical",
               children: hasData && data.map((item, index2) => {
                 const itemId = getItemId(item);
+                const id = itemId || index2.toString();
                 const posinset = item.position;
                 return /* @__PURE__ */ (0, import_jsx_runtime66.jsx)(
                   TableRow2,
                   {
                     item,
                     fields,
-                    id: itemId || index2.toString(),
+                    id,
                     view,
                     titleField,
                     mediaField,
@@ -15050,7 +15102,9 @@ function ViewPickerTable({
                     selection,
                     getItemId,
                     onChangeSelection,
-                    multiselect: isMultiselect,
+                    selectionProps: getSelectionProps(
+                      id
+                    ),
                     posinset
                   },
                   itemId
@@ -15090,9 +15144,8 @@ function isDefined4(item) {
 }
 function PickerActivityItem({
   view,
-  multiselect,
   selection,
-  onChangeSelection,
+  selectionProps,
   getItemId,
   item,
   titleField,
@@ -15151,16 +15204,7 @@ function PickerActivityItem({
         density === "comfortable" && "is-comfortable",
         isSelected2 && "is-selected"
       ),
-      onClick: () => {
-        if (isSelected2) {
-          onChangeSelection(
-            selection.filter((itemId) => id !== itemId)
-          );
-        } else {
-          const newSelection = multiselect ? [...selection, id] : [id];
-          onChangeSelection(newSelection);
-        }
-      },
+      ...selectionProps,
       render: /* @__PURE__ */ (0, import_jsx_runtime67.jsx)("div", {}),
       children: /* @__PURE__ */ (0, import_jsx_runtime67.jsxs)(Stack, { direction: "row", gap: "lg", justify: "start", align: "flex-start", children: [
         /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(
@@ -15280,13 +15324,22 @@ function ViewPickerActivity({
   const setsize = isInfiniteScroll ? paginationInfo?.totalItems : void 0;
   const hasData = !!data?.length;
   const isGrouped = !!(groupField && dataByGroup);
+  const orderedData = dataByGroup ? Array.from(dataByGroup.values()).flat() : data;
+  const { getSelectionProps } = useSelectionProps({
+    data: orderedData,
+    getItemId,
+    isItemSelectable: () => true,
+    selection,
+    onChangeSelection,
+    selectionMode: isMultiselect ? "multi" : "single-clearable",
+    shouldSelectOnClick: true
+  });
   const renderItem = (item) => /* @__PURE__ */ (0, import_jsx_runtime67.jsx)(
     PickerActivityItem,
     {
       view,
-      multiselect: isMultiselect,
       selection,
-      onChangeSelection,
+      selectionProps: getSelectionProps(getItemId(item)),
       getItemId,
       item,
       titleField,
@@ -19834,7 +19887,7 @@ function InputWidget({
   );
 }
 
-// node_modules/date-fns/constants.js
+// packages/dataviews/node_modules/date-fns/constants.js
 var daysInYear = 365.2425;
 var maxTime = Math.pow(10, 8) * 24 * 60 * 60 * 1e3;
 var minTime = -maxTime;
@@ -19848,7 +19901,7 @@ var secondsInMonth = secondsInYear / 12;
 var secondsInQuarter = secondsInMonth * 3;
 var constructFromSymbol = /* @__PURE__ */ Symbol.for("constructDateFrom");
 
-// node_modules/date-fns/constructFrom.js
+// packages/dataviews/node_modules/date-fns/constructFrom.js
 function constructFrom(date, value) {
   if (typeof date === "function") return date(value);
   if (date && typeof date === "object" && constructFromSymbol in date)
@@ -19857,12 +19910,12 @@ function constructFrom(date, value) {
   return new Date(value);
 }
 
-// node_modules/date-fns/toDate.js
+// packages/dataviews/node_modules/date-fns/toDate.js
 function toDate(argument, context) {
   return constructFrom(context || argument, argument);
 }
 
-// node_modules/date-fns/addDays.js
+// packages/dataviews/node_modules/date-fns/addDays.js
 function addDays(date, amount, options) {
   const _date = toDate(date, options?.in);
   if (isNaN(amount)) return constructFrom(options?.in || date, NaN);
@@ -19871,7 +19924,7 @@ function addDays(date, amount, options) {
   return _date;
 }
 
-// node_modules/date-fns/addMonths.js
+// packages/dataviews/node_modules/date-fns/addMonths.js
 function addMonths(date, amount, options) {
   const _date = toDate(date, options?.in);
   if (isNaN(amount)) return constructFrom(options?.in || date, NaN);
@@ -19894,13 +19947,13 @@ function addMonths(date, amount, options) {
   }
 }
 
-// node_modules/date-fns/_lib/defaultOptions.js
+// packages/dataviews/node_modules/date-fns/_lib/defaultOptions.js
 var defaultOptions = {};
 function getDefaultOptions() {
   return defaultOptions;
 }
 
-// node_modules/date-fns/startOfWeek.js
+// packages/dataviews/node_modules/date-fns/startOfWeek.js
 function startOfWeek(date, options) {
   const defaultOptions2 = getDefaultOptions();
   const weekStartsOn = options?.weekStartsOn ?? options?.locale?.options?.weekStartsOn ?? defaultOptions2.weekStartsOn ?? defaultOptions2.locale?.options?.weekStartsOn ?? 0;
@@ -19912,12 +19965,12 @@ function startOfWeek(date, options) {
   return _date;
 }
 
-// node_modules/date-fns/startOfISOWeek.js
+// packages/dataviews/node_modules/date-fns/startOfISOWeek.js
 function startOfISOWeek(date, options) {
   return startOfWeek(date, { ...options, weekStartsOn: 1 });
 }
 
-// node_modules/date-fns/getISOWeekYear.js
+// packages/dataviews/node_modules/date-fns/getISOWeekYear.js
 function getISOWeekYear(date, options) {
   const _date = toDate(date, options?.in);
   const year = _date.getFullYear();
@@ -19938,7 +19991,7 @@ function getISOWeekYear(date, options) {
   }
 }
 
-// node_modules/date-fns/_lib/getTimezoneOffsetInMilliseconds.js
+// packages/dataviews/node_modules/date-fns/_lib/getTimezoneOffsetInMilliseconds.js
 function getTimezoneOffsetInMilliseconds(date) {
   const _date = toDate(date);
   const utcDate = new Date(
@@ -19956,7 +20009,7 @@ function getTimezoneOffsetInMilliseconds(date) {
   return +date - +utcDate;
 }
 
-// node_modules/date-fns/_lib/normalizeDates.js
+// packages/dataviews/node_modules/date-fns/_lib/normalizeDates.js
 function normalizeDates(context, ...dates) {
   const normalize = constructFrom.bind(
     null,
@@ -19965,14 +20018,14 @@ function normalizeDates(context, ...dates) {
   return dates.map(normalize);
 }
 
-// node_modules/date-fns/startOfDay.js
+// packages/dataviews/node_modules/date-fns/startOfDay.js
 function startOfDay(date, options) {
   const _date = toDate(date, options?.in);
   _date.setHours(0, 0, 0, 0);
   return _date;
 }
 
-// node_modules/date-fns/differenceInCalendarDays.js
+// packages/dataviews/node_modules/date-fns/differenceInCalendarDays.js
 function differenceInCalendarDays(laterDate, earlierDate, options) {
   const [laterDate_, earlierDate_] = normalizeDates(
     options?.in,
@@ -19986,7 +20039,7 @@ function differenceInCalendarDays(laterDate, earlierDate, options) {
   return Math.round((laterTimestamp - earlierTimestamp) / millisecondsInDay);
 }
 
-// node_modules/date-fns/startOfISOWeekYear.js
+// packages/dataviews/node_modules/date-fns/startOfISOWeekYear.js
 function startOfISOWeekYear(date, options) {
   const year = getISOWeekYear(date, options);
   const fourthOfJanuary = constructFrom(options?.in || date, 0);
@@ -19995,27 +20048,27 @@ function startOfISOWeekYear(date, options) {
   return startOfISOWeek(fourthOfJanuary);
 }
 
-// node_modules/date-fns/addWeeks.js
+// packages/dataviews/node_modules/date-fns/addWeeks.js
 function addWeeks(date, amount, options) {
   return addDays(date, amount * 7, options);
 }
 
-// node_modules/date-fns/addYears.js
+// packages/dataviews/node_modules/date-fns/addYears.js
 function addYears(date, amount, options) {
   return addMonths(date, amount * 12, options);
 }
 
-// node_modules/date-fns/isDate.js
+// packages/dataviews/node_modules/date-fns/isDate.js
 function isDate(value) {
   return value instanceof Date || typeof value === "object" && Object.prototype.toString.call(value) === "[object Date]";
 }
 
-// node_modules/date-fns/isValid.js
+// packages/dataviews/node_modules/date-fns/isValid.js
 function isValid(date) {
   return !(!isDate(date) && typeof date !== "number" || isNaN(+toDate(date)));
 }
 
-// node_modules/date-fns/startOfMonth.js
+// packages/dataviews/node_modules/date-fns/startOfMonth.js
 function startOfMonth(date, options) {
   const _date = toDate(date, options?.in);
   _date.setDate(1);
@@ -20023,7 +20076,7 @@ function startOfMonth(date, options) {
   return _date;
 }
 
-// node_modules/date-fns/startOfYear.js
+// packages/dataviews/node_modules/date-fns/startOfYear.js
 function startOfYear(date, options) {
   const date_ = toDate(date, options?.in);
   date_.setFullYear(date_.getFullYear(), 0, 1);
@@ -20031,7 +20084,7 @@ function startOfYear(date, options) {
   return date_;
 }
 
-// node_modules/date-fns/locale/en-US/_lib/formatDistance.js
+// packages/dataviews/node_modules/date-fns/locale/en-US/_lib/formatDistance.js
 var formatDistanceLocale = {
   lessThanXSeconds: {
     one: "less than a second",
@@ -20115,7 +20168,7 @@ var formatDistance = (token, count, options) => {
   return result;
 };
 
-// node_modules/date-fns/locale/_lib/buildFormatLongFn.js
+// packages/dataviews/node_modules/date-fns/locale/_lib/buildFormatLongFn.js
 function buildFormatLongFn(args) {
   return (options = {}) => {
     const width = options.width ? String(options.width) : args.defaultWidth;
@@ -20124,7 +20177,7 @@ function buildFormatLongFn(args) {
   };
 }
 
-// node_modules/date-fns/locale/en-US/_lib/formatLong.js
+// packages/dataviews/node_modules/date-fns/locale/en-US/_lib/formatLong.js
 var dateFormats = {
   full: "EEEE, MMMM do, y",
   long: "MMMM do, y",
@@ -20158,7 +20211,7 @@ var formatLong = {
   })
 };
 
-// node_modules/date-fns/locale/en-US/_lib/formatRelative.js
+// packages/dataviews/node_modules/date-fns/locale/en-US/_lib/formatRelative.js
 var formatRelativeLocale = {
   lastWeek: "'last' eeee 'at' p",
   yesterday: "'yesterday at' p",
@@ -20169,7 +20222,7 @@ var formatRelativeLocale = {
 };
 var formatRelative = (token, _date, _baseDate, _options) => formatRelativeLocale[token];
 
-// node_modules/date-fns/locale/_lib/buildLocalizeFn.js
+// packages/dataviews/node_modules/date-fns/locale/_lib/buildLocalizeFn.js
 function buildLocalizeFn(args) {
   return (value, options) => {
     const context = options?.context ? String(options.context) : "standalone";
@@ -20188,7 +20241,7 @@ function buildLocalizeFn(args) {
   };
 }
 
-// node_modules/date-fns/locale/en-US/_lib/localize.js
+// packages/dataviews/node_modules/date-fns/locale/en-US/_lib/localize.js
 var eraValues = {
   narrow: ["B", "A"],
   abbreviated: ["BC", "AD"],
@@ -20350,7 +20403,7 @@ var localize = {
   })
 };
 
-// node_modules/date-fns/locale/_lib/buildMatchFn.js
+// packages/dataviews/node_modules/date-fns/locale/_lib/buildMatchFn.js
 function buildMatchFn(args) {
   return (string, options = {}) => {
     const width = options.width;
@@ -20392,7 +20445,7 @@ function findIndex(array, predicate) {
   return void 0;
 }
 
-// node_modules/date-fns/locale/_lib/buildMatchPatternFn.js
+// packages/dataviews/node_modules/date-fns/locale/_lib/buildMatchPatternFn.js
 function buildMatchPatternFn(args) {
   return (string, options = {}) => {
     const matchResult = string.match(args.matchPattern);
@@ -20407,7 +20460,7 @@ function buildMatchPatternFn(args) {
   };
 }
 
-// node_modules/date-fns/locale/en-US/_lib/match.js
+// packages/dataviews/node_modules/date-fns/locale/en-US/_lib/match.js
 var matchOrdinalNumberPattern = /^(\d+)(th|st|nd|rd)?/i;
 var parseOrdinalNumberPattern = /\d+/i;
 var matchEraPatterns = {
@@ -20526,7 +20579,7 @@ var match = {
   })
 };
 
-// node_modules/date-fns/locale/en-US.js
+// packages/dataviews/node_modules/date-fns/locale/en-US.js
 var enUS = {
   code: "en-US",
   formatDistance,
@@ -20540,7 +20593,7 @@ var enUS = {
   }
 };
 
-// node_modules/date-fns/getDayOfYear.js
+// packages/dataviews/node_modules/date-fns/getDayOfYear.js
 function getDayOfYear(date, options) {
   const _date = toDate(date, options?.in);
   const diff = differenceInCalendarDays(_date, startOfYear(_date));
@@ -20548,14 +20601,14 @@ function getDayOfYear(date, options) {
   return dayOfYear;
 }
 
-// node_modules/date-fns/getISOWeek.js
+// packages/dataviews/node_modules/date-fns/getISOWeek.js
 function getISOWeek(date, options) {
   const _date = toDate(date, options?.in);
   const diff = +startOfISOWeek(_date) - +startOfISOWeekYear(_date);
   return Math.round(diff / millisecondsInWeek) + 1;
 }
 
-// node_modules/date-fns/getWeekYear.js
+// packages/dataviews/node_modules/date-fns/getWeekYear.js
 function getWeekYear(date, options) {
   const _date = toDate(date, options?.in);
   const year = _date.getFullYear();
@@ -20578,7 +20631,7 @@ function getWeekYear(date, options) {
   }
 }
 
-// node_modules/date-fns/startOfWeekYear.js
+// packages/dataviews/node_modules/date-fns/startOfWeekYear.js
 function startOfWeekYear(date, options) {
   const defaultOptions2 = getDefaultOptions();
   const firstWeekContainsDate = options?.firstWeekContainsDate ?? options?.locale?.options?.firstWeekContainsDate ?? defaultOptions2.firstWeekContainsDate ?? defaultOptions2.locale?.options?.firstWeekContainsDate ?? 1;
@@ -20590,21 +20643,21 @@ function startOfWeekYear(date, options) {
   return _date;
 }
 
-// node_modules/date-fns/getWeek.js
+// packages/dataviews/node_modules/date-fns/getWeek.js
 function getWeek(date, options) {
   const _date = toDate(date, options?.in);
   const diff = +startOfWeek(_date, options) - +startOfWeekYear(_date, options);
   return Math.round(diff / millisecondsInWeek) + 1;
 }
 
-// node_modules/date-fns/_lib/addLeadingZeros.js
+// packages/dataviews/node_modules/date-fns/_lib/addLeadingZeros.js
 function addLeadingZeros(number, targetLength) {
   const sign = number < 0 ? "-" : "";
   const output = Math.abs(number).toString().padStart(targetLength, "0");
   return sign + output;
 }
 
-// node_modules/date-fns/_lib/format/lightFormatters.js
+// packages/dataviews/node_modules/date-fns/_lib/format/lightFormatters.js
 var lightFormatters = {
   // Year
   y(date, token) {
@@ -20664,7 +20717,7 @@ var lightFormatters = {
   }
 };
 
-// node_modules/date-fns/_lib/format/formatters.js
+// packages/dataviews/node_modules/date-fns/_lib/format/formatters.js
 var dayPeriodEnum = {
   am: "am",
   pm: "pm",
@@ -21310,7 +21363,7 @@ function formatTimezone(offset4, delimiter = "") {
   return sign + hours + delimiter + minutes;
 }
 
-// node_modules/date-fns/_lib/format/longFormatters.js
+// packages/dataviews/node_modules/date-fns/_lib/format/longFormatters.js
 var dateLongFormatter = (pattern, formatLong2) => {
   switch (pattern) {
     case "P":
@@ -21367,7 +21420,7 @@ var longFormatters = {
   P: dateTimeLongFormatter
 };
 
-// node_modules/date-fns/_lib/protectedTokens.js
+// packages/dataviews/node_modules/date-fns/_lib/protectedTokens.js
 var dayOfYearTokenRE = /^D+$/;
 var weekYearTokenRE = /^Y+$/;
 var throwTokens = ["D", "DD", "YY", "YYYY"];
@@ -21387,7 +21440,7 @@ function message(token, format6, input) {
   return `Use \`${token.toLowerCase()}\` instead of \`${token}\` (in \`${format6}\`) for formatting ${subject} to the input \`${input}\`; see: https://github.com/date-fns/date-fns/blob/master/docs/unicodeTokens.md`;
 }
 
-// node_modules/date-fns/format.js
+// packages/dataviews/node_modules/date-fns/format.js
 var formattingTokensRegExp = /[yYQqMLwIdDecihHKkms]o|(\w)\1*|''|'(''|[^'])+('|$)|./g;
 var longFormattingTokensRegExp = /P+p+|P+|p+|''|'(''|[^'])+('|$)|./g;
 var escapedStringRegExp = /^'([^]*?)'?$/;
@@ -21453,22 +21506,22 @@ function cleanEscapedString(input) {
   return matched[1].replace(doubleQuoteRegExp, "'");
 }
 
-// node_modules/date-fns/subDays.js
+// packages/dataviews/node_modules/date-fns/subDays.js
 function subDays(date, amount, options) {
   return addDays(date, -amount, options);
 }
 
-// node_modules/date-fns/subMonths.js
+// packages/dataviews/node_modules/date-fns/subMonths.js
 function subMonths(date, amount, options) {
   return addMonths(date, -amount, options);
 }
 
-// node_modules/date-fns/subWeeks.js
+// packages/dataviews/node_modules/date-fns/subWeeks.js
 function subWeeks(date, amount, options) {
   return addWeeks(date, -amount, options);
 }
 
-// node_modules/date-fns/subYears.js
+// packages/dataviews/node_modules/date-fns/subYears.js
 function subYears(date, amount, options) {
   return addYears(date, -amount, options);
 }
@@ -24647,7 +24700,6 @@ function Textarea({
       disabled: disabled2,
       minLength: isValid2.minLength ? isValid2.minLength.constraint : void 0,
       maxLength: isValid2.maxLength ? isValid2.maxLength.constraint : void 0,
-      __next40pxDefaultSize: true,
       hideLabelFromVision
     }
   );

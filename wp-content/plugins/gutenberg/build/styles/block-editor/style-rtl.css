@@ -164,9 +164,6 @@
 .block-editor-global-styles-background-panel__image-tools-panel-item button.components-button:hover {
   color: var(--wp-admin-theme-color);
 }
-.block-editor-global-styles-background-panel__image-tools-panel-item button.components-button:focus {
-  box-shadow: inset 0 0 0 var(--wp-admin-border-width-focus) var(--wp-admin-theme-color);
-}
 .block-editor-global-styles-background-panel__image-tools-panel-item .block-editor-global-styles-background-panel__loading {
   height: 100%;
   position: absolute;
@@ -1208,7 +1205,8 @@ iframe[name=editor-canvas] {
   color: #fff;
 }
 .block-editor-block-styles__variants button.components-button.block-editor-block-styles__item:focus, .block-editor-block-styles__variants button.components-button.block-editor-block-styles__item.is-active:focus {
-  outline: var(--wpds-border-width-focus, var(--wp-admin-border-width-focus, 2px)) solid var(--wpds-color-stroke-focus, var(--wp-admin-theme-color, #3858e9));
+  --focus-color: var(--wpds-color-stroke-focus, var(--wp-admin-theme-color, #3858e9));
+  outline: var(--wpds-border-width-focus, var(--wp-admin-border-width-focus, 2px)) solid var(--focus-color);
   outline-offset: var(--wpds-border-width-focus, var(--wp-admin-border-width-focus, 2px));
 }
 .block-editor-block-styles__variants .block-editor-block-styles__item-text {
@@ -2161,6 +2159,25 @@ iframe[name=editor-canvas] {
   width: var(--wp-block-editor-iframe-zoom-out-scale-container-width, 100vw);
   position: absolute;
   left: 0;
+}
+
+.wp-block-image__crop-area {
+  position: relative;
+  max-width: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+.wp-block-image__crop-area .reactEasyCrop_Container {
+  pointer-events: auto;
+}
+.wp-block-image__crop-area .reactEasyCrop_Container .reactEasyCrop_Image {
+  border: none;
+  border-radius: 0;
+}
+
+.wp-block-image__zoom .components-popover__content {
+  min-width: 260px;
+  overflow: visible !important;
 }
 
 .block-editor-block-types-list__list-item {
@@ -3703,8 +3720,8 @@ iframe[name=editor-canvas] {
   }
 }
 .block-editor-content-only-controls__rich-text:focus {
-  border-color: var(--wp-admin-theme-color, #3858e9);
-  box-shadow: 0 0 0 0.5px var(--wp-admin-theme-color, #3858e9);
+  border-color: var(--wp-admin-theme-color);
+  box-shadow: 0 0 0 0.5px var(--wp-admin-theme-color);
   outline: 2px solid transparent;
 }
 .block-editor-content-only-controls__rich-text::-moz-placeholder {

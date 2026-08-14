@@ -260,9 +260,11 @@ class Contribution_Meter {
 			return new \WP_Error( 'woocommerce_inactive', __( 'WooCommerce is not active.', 'newspack-plugin' ) );
 		}
 
-		// Get all donation product IDs.
+		// Get all donation product IDs (default + flagged).
 		$donation_products    = Donations::get_donation_product_child_products_ids();
 		$donation_product_ids = array_filter( array_map( 'intval', array_values( $donation_products ) ) );
+		$flagged_product_ids  = Donations::get_flagged_donation_product_ids();
+		$donation_product_ids = array_unique( array_merge( $donation_product_ids, $flagged_product_ids ) );
 
 		if ( empty( $donation_product_ids ) ) {
 			return new \WP_Error( 'no_donation_products', __( 'No donation products found.', 'newspack-plugin' ) );

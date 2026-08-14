@@ -183,9 +183,11 @@ function gutenberg_render_block_core_breadcrumbs( $attributes, $content, $block 
 		return '';
 	}
 
+	$separator_attr     = $attributes['separator'] ?? null;
+	$separator          = is_string( $separator_attr ) ? addcslashes( $separator_attr, '\\"' ) : '';
 	$wrapper_attributes = get_block_wrapper_attributes(
 		array(
-			'style'      => '--separator: "' . addcslashes( $attributes['separator'], '\\"' ) . '";',
+			'style'      => '--separator: "' . $separator . '";',
 			'aria-label' => __( 'Breadcrumbs' ),
 		)
 	);

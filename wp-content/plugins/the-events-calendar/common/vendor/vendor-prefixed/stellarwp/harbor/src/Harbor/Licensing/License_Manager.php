@@ -39,6 +39,36 @@ class License_Manager {
 	use With_Error_Throttle;
 
 	/**
+	 * Window (in seconds) during which a repeat submission of the same
+	 * invalid key returns the cached error without re-calling the API.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @var int
+	 */
+	private const VALIDATION_PER_KEY_THROTTLE_TTL = MINUTE_IN_SECONDS;
+
+	/**
+	 * Sliding window (in seconds) for the site-wide failure counter that
+	 * protects against bots cycling through bad keys.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @var int
+	 */
+	private const VALIDATION_FAILURE_WINDOW = MINUTE_IN_SECONDS;
+
+	/**
+	 * Number of failed validate_and_store attempts within
+	 * VALIDATION_FAILURE_WINDOW that triggers the rate-limit error.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @var int
+	 */
+	private const VALIDATION_FAILURE_THRESHOLD = 5;
+
+	/**
 	 * @since 1.0.0
 	 *
 	 * @var License_Repository
@@ -150,17 +180,41 @@ class License_Manager {
 			);
 		}
 
-		$throttled = $this->get_throttled_error();
+		/**
+		 * Per-key throttle. The same bad key inside the TTL window returns
+		 * the cached error without re-calling the API. A different key has
+		 * no entry and proceeds.
+		 */
+		$per_key_error = $this->repository->get_per_key_failure( $key, self::VALIDATION_PER_KEY_THROTTLE_TTL );
 
-		if ( $throttled !== null ) {
+		if ( $per_key_error !== null ) {
 			static::debug_log(
 				sprintf(
-					'Validate-and-store throttled: %s',
-					$throttled->get_error_message()
+					'Validate-and-store per-key throttled: %s',
+					$per_key_error->get_error_message()
 				)
 			);
 
-			return $throttled;
+			return $per_key_error;
+		}
+
+		/**
+		 * Rolling-window counter. Site-wide rate-limit on the count of
+		 * distinct failed attempts inside the failure window. Submissions
+		 * pass through normally while the count stays below the threshold,
+		 * so a user typing a few wrong keys (typos, format mistakes, etc.)
+		 * keeps getting through. Once the threshold is reached the next
+		 * attempt is rejected, and rejections continue until enough
+		 * of the earliest recorded failures age out of the window.
+		 */
+		if ( $this->repository->get_recent_failure_count( self::VALIDATION_FAILURE_WINDOW ) >= self::VALIDATION_FAILURE_THRESHOLD ) {
+			static::debug_log( 'Validate-and-store rate-limited by rolling-window counter.' );
+
+			return new WP_Error(
+				Error_Code::TOO_MANY_ATTEMPTS,
+				__( 'Too many failed license activation attempts. Please wait a moment and try again.', 'tribe-common' ),
+				[ 'status' => Error_Code::http_status( Error_Code::TOO_MANY_ATTEMPTS ) ]
+			);
 		}
 
 		$result = $this->call_products_api( $key, $domain );
@@ -180,6 +234,7 @@ class License_Manager {
 				$result->add_data( [ 'status' => 500 ] );
 			}
 
+			$this->repository->record_validation_failure( $key, $result, $this->get_validation_retention_seconds() );
 			$this->repository->set_products( $result );
 
 			return $result;
@@ -193,6 +248,9 @@ class License_Manager {
 		);
 
 		$collection = Product_Collection::from_array( $result );
+
+		// A previously-bad-then-corrected key should not stay throttled.
+		$this->repository->clear_validation_failure_for_key( $key );
 
 		// Store the key before the products. store_key() fires the
 		// unified_license_key_changed action, which deletes cached
@@ -458,6 +516,28 @@ class License_Manager {
 			static::debug_log( sprintf( 'Products API exception: %s', $e->getMessage() ) );
 			return new WP_Error( Error_Code::INVALID_RESPONSE, __( 'An unexpected error occurred.', 'tribe-common' ), [ 'status' => 500 ] );
 		}
+	}
+
+	/**
+	 * How long the validation throttle state should retain entries.
+	 *
+	 * Each layer of the throttle reads a different slice of history:
+	 * get_per_key_failure() looks back VALIDATION_PER_KEY_THROTTLE_TTL
+	 * seconds, and get_recent_failure_count() looks back
+	 * VALIDATION_FAILURE_WINDOW seconds. Retention is the larger of the
+	 * two so neither layer has its data pruned before it can read it.
+	 *
+	 * As of 1.5.0 both constants hold the same value.
+	 * This is intentional: this method lets either window be tuned
+	 * independently in the future without silently dropping data
+	 * the other layer depends on.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @return int
+	 */
+	private function get_validation_retention_seconds(): int {
+		return max( self::VALIDATION_PER_KEY_THROTTLE_TTL, self::VALIDATION_FAILURE_WINDOW );
 	}
 
 	/**

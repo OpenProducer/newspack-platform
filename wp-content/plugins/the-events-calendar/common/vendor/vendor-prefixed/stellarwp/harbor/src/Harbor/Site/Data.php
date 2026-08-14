@@ -38,7 +38,7 @@ class Data {
 		$domain    = $this->container->has( $cache_key ) ? Cast::to_string( $this->container->get( $cache_key ) ) : null;
 
 		if ( null === $domain ) {
-			$domain = is_multisite() ? $this->get_domain_multisite_option() : $this->get_site_domain();
+			$domain = $this->get_site_domain();
 			$this->container->bind(
 				$cache_key,
 				function () use ( $domain ) {
@@ -60,47 +60,32 @@ class Data {
 	}
 
 	/**
-	 * Return domain for multisite
+	 * Returns the domain of the site.
 	 *
-	 * @return string
-	 */
-	protected function get_domain_multisite_option(): string {
-		/** @var string */
-		$site_url = get_site_option( 'siteurl', '' );
-
-		/** @var array<string> */
-		$site_url = wp_parse_url( $site_url );
-		if ( ! $site_url || ! isset( $site_url['host'] ) ) {
-			return '';
-		}
-
-		return strtolower( $site_url['host'] );
-	}
-
-	/**
-	 * Returns the domain of the single site installation
+	 * Derives the host from home_url() rather than reading the siteurl option
+	 * directly. home_url() passes through the home_url/site_url filters, so
+	 * host-environment plugins that rewrite the site address (e.g. Hostinger's
+	 * preview-domain mu-plugin, which rewrites home_url/site_url to the preview
+	 * host while leaving the siteurl option pointing at production) are honored.
+	 * This keeps the domain Harbor sends for license validation consistent with
+	 * the URLs used elsewhere in the activation flow (rest_url/admin_url).
 	 *
-	 * Will try to read it from the $_SERVER['SERVER_NAME'] variable
-	 * and fall back on the one contained in the siteurl option.
+	 * Under WP-CLI and cron there is no web request for such plugins to hook,
+	 * so home_url() returns the canonical (option-backed) domain — no reliance
+	 * on request-only server variables.
 	 *
+	 * @since 1.5.0 resolve from home_url() so URL rewrite filters are respected
 	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
 	public function get_site_domain(): string {
-		/** @var string */
-		$site_url = get_option( 'siteurl', '' );
-
-		/** @var array<string> */
-		$site_url = wp_parse_url( $site_url );
-		if ( ! $site_url || ! isset( $site_url['host'] ) ) {
-			if ( isset( $_SERVER['SERVER_NAME'] ) ) {
-				return Cast::to_string( $_SERVER['SERVER_NAME'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- SERVER_NAME is set by the web server, not user input.
-			}
-
+		/** @var array<string>|false */
+		$home_url = wp_parse_url( home_url() );
+		if ( ! $home_url || ! isset( $home_url['host'] ) ) {
 			return '';
 		}
 
-		return strtolower( $site_url['host'] );
+		return strtolower( $home_url['host'] );
 	}
 }

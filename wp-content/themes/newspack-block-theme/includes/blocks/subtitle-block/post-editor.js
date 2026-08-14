@@ -38,7 +38,6 @@ const appendSubtitleToTitleDOMElement = ( subtitle, editorDoc, callback ) => {
 			style.id = SUBTITLE_STYLE_ID;
 			style.innerHTML = `
                 #${ SUBTITLE_ID } {
-                    font-style: italic;
                     max-width: calc(var(--wp--style--global--content-size, 632px) + var(--wp--preset--spacing--30)* 2);
                     margin-left: auto;
                     margin-right: auto;

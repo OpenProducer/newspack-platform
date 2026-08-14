@@ -250,7 +250,7 @@
   box-sizing: border-box;
 }
 .edit-post-meta-boxes-area .postbox-header {
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #e0e0e0;
   border-bottom: 0;
 }
 .edit-post-meta-boxes-area {
@@ -268,7 +268,8 @@
 .edit-post-meta-boxes-area #poststuff .stuffbox > h3,
 .edit-post-meta-boxes-area #poststuff h2.hndle { /* WordPress selectors yolo */
   box-sizing: border-box;
-  color: inherit;
+  color: #1e1e1e;
+  font-size: 13px;
   font-weight: var(--wpds-typography-font-weight-emphasis, 600);
   outline: none;
   padding: 0 24px;

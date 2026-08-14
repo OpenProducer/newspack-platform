@@ -40,6 +40,9 @@ final class Blocks {
 			require_once NEWSPACK_ABSPATH . 'src/blocks/overlay-menu/class-overlay-menu-block.php';
 			require_once NEWSPACK_ABSPATH . 'src/blocks/overlay-menu/trigger/class-overlay-menu-trigger-block.php';
 			require_once NEWSPACK_ABSPATH . 'src/blocks/overlay-menu/panel/class-overlay-menu-panel-block.php';
+			require_once NEWSPACK_ABSPATH . 'src/blocks/overlay-search/class-overlay-search-block.php';
+			require_once NEWSPACK_ABSPATH . 'src/blocks/responsive-container/class-responsive-container-block.php';
+			require_once NEWSPACK_ABSPATH . 'src/blocks/responsive-container/breakpoint/class-responsive-container-breakpoint-block.php';
 			Social_Icons::init();
 		}
 		if ( Collections::is_module_active() ) {
@@ -60,7 +63,7 @@ final class Blocks {
 			'newspack-blocks',
 			Newspack::plugin_url() . '/dist/blocks.js',
 			[],
-			NEWSPACK_PLUGIN_VERSION,
+			Newspack::asset_version( 'blocks' ),
 			true
 		);
 		$script_data = [
@@ -81,8 +84,10 @@ final class Blocks {
 		];
 		if ( $script_data['has_memberships'] ) {
 			$script_data['content_gate_data'] = [
-				'anonymous_metered_views' => Metering::get_total_metered_views( false ),
-				'loggedin_metered_views'  => Metering::get_total_metered_views( true ),
+				// Cast to int: the getter returns false when metering is disabled or there
+				// is no gate, and the editor preview parses these as numbers.
+				'anonymous_metered_views' => absint( Metering::get_total_metered_views( false ) ),
+				'loggedin_metered_views'  => absint( Metering::get_total_metered_views( true ) ),
 				'metered_views'           => Metering::get_current_user_metered_views(),
 				'metering_period'         => Metering::get_metering_period(),
 			];
@@ -96,7 +101,7 @@ final class Blocks {
 			'newspack-blocks',
 			Newspack::plugin_url() . '/dist/blocks.css',
 			[],
-			NEWSPACK_PLUGIN_VERSION
+			Newspack::asset_version( 'blocks' )
 		);
 	}
 
@@ -110,7 +115,7 @@ final class Blocks {
 				'newspack-blocks-frontend',
 				Newspack::plugin_url() . '/dist/blocks.css',
 				[],
-				NEWSPACK_PLUGIN_VERSION
+				Newspack::asset_version( 'blocks' )
 			);
 		}
 	}

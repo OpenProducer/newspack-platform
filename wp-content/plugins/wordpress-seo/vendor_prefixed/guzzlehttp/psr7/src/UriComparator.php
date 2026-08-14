@@ -17,7 +17,7 @@ final class UriComparator
      */
     public static function isCrossOrigin(\YoastSEO_Vendor\Psr\Http\Message\UriInterface $original, \YoastSEO_Vendor\Psr\Http\Message\UriInterface $modified) : bool
     {
-        if (\strcasecmp($original->getHost(), $modified->getHost()) !== 0) {
+        if (!\YoastSEO_Vendor\GuzzleHttp\Psr7\Utils::caselessEquals($original->getHost(), $modified->getHost())) {
             return \true;
         }
         if ($original->getScheme() !== $modified->getScheme()) {

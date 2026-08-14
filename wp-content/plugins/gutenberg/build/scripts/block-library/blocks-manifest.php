@@ -287,6 +287,7 @@ return array(
 			'core/accordion-open-by-default'
 		),
 		'supports' => array(
+			'__experimentalOnEnter' => true,
 			'html' => false,
 			'color' => array(
 				'background' => true,
@@ -2286,6 +2287,7 @@ return array(
 			'postType'
 		),
 		'supports' => array(
+			'__experimentalOnEnter' => true,
 			'anchor' => true,
 			'align' => true,
 			'html' => false,
@@ -5040,7 +5042,6 @@ return array(
 				'full'
 			),
 			'splitting' => true,
-			'editableRoot' => true,
 			'anchor' => true,
 			'className' => false,
 			'__experimentalBorder' => array(

@@ -15,6 +15,8 @@ defined( 'ABSPATH' ) || exit;
  * Connection with WooCommerce's features.
  */
 class WooCommerce_Products {
+
+	const DONATION_FLAG_META_KEY = '_newspack_is_donation';
 	/**
 	 * Initialize.
 	 *
@@ -48,7 +50,7 @@ class WooCommerce_Products {
 			'newspack-products-custom-options',
 			Newspack::plugin_url() . '/dist/other-scripts/custom-product-options.js',
 			[],
-			NEWSPACK_PLUGIN_VERSION,
+			Newspack::asset_version( 'other-scripts/custom-product-options' ),
 			true
 		);
 	}
@@ -68,6 +70,15 @@ class WooCommerce_Products {
 				'description'   => __( 'Allow orders containing this product to automatically complete upon successful payment.', 'newspack-plugin' ),
 				'default'       => 'yes',
 				'product_types' => [ 'simple', 'variation', 'subscription', 'subscription_variation' ],
+				'type'          => 'boolean',
+			],
+			'newspack_is_donation'         => [
+				'id'            => self::DONATION_FLAG_META_KEY,
+				'wrapper_class' => '',
+				'label'         => __( 'Donation product', 'newspack-plugin' ),
+				'description'   => __( 'Flag this product as a donation. Donation products use donation-specific checkout, reporting, and reader activation behaviors. For variable products, set on the parent and all variations inherit.', 'newspack-plugin' ),
+				'default'       => 'no',
+				'product_types' => [ 'simple', 'subscription', 'grouped', 'variable', 'variable-subscription' ],
 				'type'          => 'boolean',
 			],
 		];

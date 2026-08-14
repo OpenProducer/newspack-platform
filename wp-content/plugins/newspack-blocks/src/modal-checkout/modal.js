@@ -24,6 +24,8 @@ import {
 	getCheckoutData,
 	getFormattedAmount,
 } from './utils';
+import { resolveCheckoutButtonForm, readCheckoutData, applyContextFields } from './checkout-button-trigger';
+import { applyCtaAttribution } from '../shared/js/cta-attribution';
 
 const CLASS_PREFIX = newspackBlocksModal.newspack_class_prefix;
 const IFRAME_NAME = 'newspack_modal_checkout_iframe';
@@ -163,12 +165,6 @@ domReady( () => {
 		onCheckoutPlaceOrderError( container, hideProcessingPaymentScreen );
 
 		onCheckoutReady( container, () => {
-			// Make sure the order summary renders the correct text.
-			const summaryTextNode = productDetails?.querySelector( 'strong' );
-			if ( summaryTextNode ) {
-				summaryTextNode.textContent = checkoutData.price_summary;
-			}
-
 			// Display initial errors if any.
 			if ( modalCheckout.initialErrors ) {
 				const errorContainer = document.createElement( 'div' );
@@ -300,6 +296,13 @@ domReady( () => {
 		const form = ev.target;
 		form.classList.add( 'modal-processing' );
 
+		// NPPD-1887: if the reader arrived here by clicking a paid-intent CTA in a gate
+		// or prompt, replay that surface's id as a hidden field so the order carries
+		// `_gate_post_id` / `_newspack_popup_id`. No-ops when the form already has one
+		// (a form rendered inside the surface itself always wins) or when the form is
+		// inside a gate. Must run BEFORE getCheckoutData(), which snapshots the form.
+		applyCtaAttribution( form );
+
 		const checkoutData = getCheckoutData( form );
 
 		const isDonateBlock = checkoutData.newspack_donate;
@@ -360,25 +363,16 @@ domReady( () => {
 			const variationModal = [ ...variationModals ].find( modal => modal.dataset.productId === checkoutData.product_id );
 			if ( variationModal ) {
 				variationModal.querySelectorAll( `form[target="${ IFRAME_NAME }"]` ).forEach( singleVariationForm => {
-					// Fill in the hidden params in the variation modal.
-					[
-						'after_success_behavior',
-						'after_success_url',
-						'after_success_button_label',
-						'gate_post_id',
-						'newspack_popup_id',
-						'prompt_title',
-					].forEach( hiddenParam => {
-						const existingInputs = singleVariationForm.querySelectorAll( 'input[name="' + hiddenParam + '"]' );
-						if ( 0 === existingInputs.length ) {
-							singleVariationForm.prepend( createHiddenInput( hiddenParam, checkoutData[ hiddenParam ] ) );
-						}
-					} );
+					// Fill in the hidden params in the variation modal. The picker is
+					// shared by every button for this product and is never reset, so
+					// this overwrites the previous open's context rather than adding to it.
+					// The shared PICKER_CONTEXT_FIELDS list carries `after_success_token`, so
+					// the signed destination propagates through the picker with everything else.
+					applyContextFields( singleVariationForm, checkoutData );
 
 					// Append the product data hidden inputs.
-					const variationData = singleVariationForm.dataset.checkout;
-					if ( variationData ) {
-						const data = JSON.parse( variationData );
+					const data = readCheckoutData( singleVariationForm );
+					if ( data ) {
 						Object.keys( data ).forEach( key => {
 							const existingInputs = singleVariationForm.querySelectorAll( 'input[name="' + key + '"]' );
 							if ( 0 === existingInputs.length ) {
@@ -436,11 +430,6 @@ domReady( () => {
 		if ( shouldPromptRegistration() ) {
 			ev.preventDefault();
 
-			const priceSummary = checkoutData.price_summary;
-			const content = priceSummary
-				? `<div class="order-details-summary ${ CLASS_PREFIX }__box ${ CLASS_PREFIX }__box--text-center"><p><strong>${ priceSummary }</strong></p></div>`
-				: '';
-
 			// Generate cart asynchroneously.
 			const cartReq = generateCart( checkoutData );
 
@@ -491,7 +480,6 @@ domReady( () => {
 						title: newspackBlocksModal.labels.register_modal_title,
 					},
 				},
-				content,
 				trigger: ev.submitter,
 				closeOnSuccess: isModalCheckout,
 			} );
@@ -601,7 +589,26 @@ domReady( () => {
 					if ( 'custom' === afterSuccessBehavior ) {
 						window.location.href = afterSuccessUrl;
 					} else if ( 'referrer' === afterSuccessBehavior ) {
-						window.history.back();
+						// window.history.back() is a no-op when there's no in-session
+						// history entry (reader landed directly, opened in a new tab, or
+						// the previous entry is cross-origin), stranding the reader with no
+						// feedback. Prefer the same-origin document.referrer when we have
+						// one, and fall back to history.back() otherwise.
+						const referrer = document.referrer;
+						let navigated = false;
+						if ( referrer ) {
+							try {
+								if ( new URL( referrer ).origin === window.location.origin ) {
+									window.location.href = referrer;
+									navigated = true;
+								}
+							} catch ( e ) {
+								// Malformed referrer — fall through to history.back().
+							}
+						}
+						if ( ! navigated ) {
+							window.history.back();
+						}
 					}
 				}
 				window?.newspackReaderActivation?.setPendingCheckout?.();
@@ -799,41 +806,29 @@ domReady( () => {
 	};
 
 	/**
-	 * Handle checkout button form triggers.
+	 * Handle checkout button URL triggers.
 	 *
-	 * @param {number}      productId   The product ID.
-	 * @param {number|null} variationId Optional. The variation ID.
+	 * @param {string}      productId   The product ID.
+	 * @param {string|null} variationId Optional. The variation ID.
+	 *
+	 * @return {boolean} Whether a matching form was submitted.
 	 */
 	const triggerCheckoutButtonForm = ( productId, variationId = null ) => {
-		let form;
-		if ( variationId && variationId !== productId ) {
-			const variationModals = document.querySelectorAll( `.${ VARIATON_MODAL_CLASS_PREFIX }` );
-			const variationModal = [ ...variationModals ].find( modal => modal.dataset.productId === productId );
-			if ( variationModal ) {
-				const forms = variationModal.querySelectorAll( `form[target="${ IFRAME_NAME }"]` );
-				forms.forEach( variationForm => {
-					const productData = JSON.parse( variationForm.dataset.checkout );
-					if ( productData?.variation_id === Number( variationId ) ) {
-						form = variationForm;
-					}
-				} );
-			}
-		} else {
-			const checkoutButtons = document.querySelectorAll( '.wp-block-newspack-blocks-checkout-button' );
-			checkoutButtons.forEach( button => {
-				const checkoutButtonForm = button.querySelector( 'form' );
-				if ( ! checkoutButtonForm ) {
-					return;
-				}
-				const productData = JSON.parse( checkoutButtonForm.dataset.checkout );
-				if ( productData?.product_id === productId ) {
-					form = checkoutButtonForm;
-				}
-			} );
-		}
+		const form = resolveCheckoutButtonForm( document, productId, variationId, {
+			variationModalClassPrefix: VARIATON_MODAL_CLASS_PREFIX,
+			iframeName: IFRAME_NAME,
+		} );
 		if ( form ) {
 			triggerFormSubmit( form );
+			return true;
 		}
+		const message =
+			`Newspack modal checkout: no checkout form found for product_id "${ productId }"` +
+			( variationId ? ` and variation_id "${ variationId }"` : '' ) +
+			'. The checkout was not triggered.';
+		// eslint-disable-next-line no-console
+		console.warn( message );
+		return false;
 	};
 
 	/**
@@ -844,6 +839,10 @@ domReady( () => {
 		if ( ! urlParams.has( 'checkout' ) ) {
 			return;
 		}
+		// Default to stripping the params after handling. The checkout button
+		// trigger overrides this so a link that matches no form stays visible
+		// and diagnosable rather than being silently dropped.
+		let shouldStripParams = true;
 		const type = urlParams.get( 'type' );
 		if ( type === 'donate' ) {
 			const layout = urlParams.get( 'layout' );
@@ -857,7 +856,13 @@ domReady( () => {
 			const productId = urlParams.get( 'product_id' );
 			const variationId = urlParams.get( 'variation_id' );
 			if ( productId ) {
-				triggerCheckoutButtonForm( productId, variationId );
+				shouldStripParams = triggerCheckoutButtonForm( productId, variationId );
+			} else {
+				// A checkout_button trigger with no product_id cannot resolve a
+				// form; keep the params visible rather than dropping them silently.
+				shouldStripParams = false;
+				// eslint-disable-next-line no-console
+				console.warn( 'Newspack modal checkout: checkout_button trigger is missing product_id. The checkout was not triggered.' );
 			}
 		} else {
 			const url = window.newspackReaderActivation?.getPendingCheckout?.();
@@ -866,8 +871,11 @@ domReady( () => {
 				triggerFormSubmit( form );
 			}
 		}
-		// Remove the URL param to prevent re-triggering.
-		window.history.replaceState( null, null, window.location.pathname );
+		// Remove the URL params to prevent re-triggering, but only when the
+		// trigger succeeded.
+		if ( shouldStripParams ) {
+			window.history.replaceState( null, null, window.location.pathname );
+		}
 	};
 	handleModalCheckoutUrlParams();
 

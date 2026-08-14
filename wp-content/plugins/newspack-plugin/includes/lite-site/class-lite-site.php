@@ -20,6 +20,11 @@ class Lite_Site {
 	 * Initialize the lite site functionality
 	 */
 	public static function init() {
+		// The standalone Newspack Lite Site plugin supersedes this module, so skip initialization to avoid conflicts.
+		if ( defined( 'NEWSPACK_LITE_SITE_PLUGIN_FILE' ) ) {
+			return;
+		}
+
 		// Only register rewrite rules if the feature is enabled.
 		if ( self::is_enabled() ) {
 			add_action( 'init', [ __CLASS__, 'register_rewrite_rules' ] );
@@ -375,6 +380,10 @@ class Lite_Site {
 	 */
 	public static function get_primary_color() {
 		if ( wp_is_block_theme() ) {
+			// Guard against re-entry via wp_theme_json_data_theme — wp_get_global_settings() re-fires that filter and recurses.
+			if ( doing_filter( 'wp_theme_json_data_theme' ) ) {
+				return 'currentcolor';
+			}
 			$settings = wp_get_global_settings();
 			$palettes = $settings['color']['palette'] ?? [];
 			$palette  = [];
@@ -525,5 +534,4 @@ class Lite_Site {
 	}
 }
 
-// Initialize the class.
-Lite_Site::init();
+add_action( 'plugins_loaded', [ Lite_Site::class, 'init' ] );

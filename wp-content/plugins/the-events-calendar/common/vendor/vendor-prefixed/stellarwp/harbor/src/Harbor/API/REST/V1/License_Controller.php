@@ -84,6 +84,10 @@ final class License_Controller extends WP_REST_Controller {
 	 * @return void
 	 */
 	public function register_routes(): void {
+		if ( ! $this->namespace ) {
+			return;
+		}
+
 		register_rest_route(
 			$this->namespace,
 			'/' . $this->rest_base,
