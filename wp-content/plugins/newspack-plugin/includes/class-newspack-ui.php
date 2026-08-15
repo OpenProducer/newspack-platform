@@ -20,7 +20,7 @@ class Newspack_UI {
 	 *
 	 * @var array
 	 */
-	private static $notices = [];
+	private static array $notices = [];
 
 	/**
 	 * Initialize hooks.
@@ -49,44 +49,66 @@ class Newspack_UI {
 			'newspack-ui',
 			Newspack::plugin_url() . '/dist/newspack-ui.css',
 			[],
-			NEWSPACK_PLUGIN_VERSION
+			Newspack::asset_version( 'newspack-ui' )
 		);
 
 		wp_enqueue_script(
 			'newspack-ui',
 			Newspack::plugin_url() . '/dist/newspack-ui.js',
 			[ 'wp-util' ],
-			NEWSPACK_PLUGIN_VERSION,
+			Newspack::asset_version( 'newspack-ui' ),
 			true
 		);
+
+		$icons = [];
+		foreach ( self::get_type_icons() as $type => $icon_name ) {
+			$icons[ $type ] = wp_kses( Newspack_UI_Icons::get_svg( $icon_name ), Newspack_UI_Icons::sanitize_svgs() );
+		}
+		wp_localize_script(
+			'newspack-ui',
+			'newspackUIData',
+			[
+				'icons' => $icons,
+			]
+		);
+	}
+
+	/**
+	 * Map of notice types to their Newspack UI icon name. Types absent from the
+	 * map render no icon.
+	 *
+	 * @return array<string, string> Notice type => icon name.
+	 */
+	private static function get_type_icons() {
+		return [
+			'error'   => 'error',
+			'warning' => 'caution',
+		];
 	}
 
 	/**
 	 * Add a snackbar notice.
 	 *
 	 * @param string       $message The notice message.
-	 * @param string|array $args    Notice arguments array or notice type.
+	 * @param string|array $args    Notice arguments array, or a notice type string as shorthand.
 	 *
 	 * @return string The notice ID.
 	 */
-	public static function add_notice( $message, $args = [] ) {
+	public static function add_notice( string $message, string|array $args = [] ): string {
 		if ( is_string( $args ) ) {
-			$args = [
-				'type' => $args,
-			];
+			$args = [ 'type' => $args ];
 		}
 		$notice = wp_parse_args(
 			$args,
 			[
 				'message'        => $message,
-				'corner'         => 'top-right',
-				'type'           => 'success',
+				'type'           => 'success', // Severity; drives the ARIA announcement politeness ('error' assertive, else polite), the type icon, and the [data-type] styling.
 				'id'             => uniqid(),
 				'autohide'       => true, // If false, the notice will have a close button.
 				'active_on_load' => true, // Whether the notice should be visible on page load.
 			]
 		);
-		self::$notices[ $notice['corner'] ][ $notice['id'] ] = $notice;
+		self::$notices[ $notice['id'] ] = $notice;
 
 		return $notice['id'];
 	}
@@ -98,36 +120,35 @@ class Newspack_UI {
 		if ( empty( self::$notices ) ) {
 			return;
 		}
-
-		foreach ( self::$notices as $corner => $notices ) {
-			if ( empty( $notices ) ) {
-				continue;
-			}
-			?>
-			<div class="newspack-ui">
-				<div class="newspack-ui__snackbar newspack-ui__snackbar--<?php echo esc_attr( $corner ); ?>">
-					<?php foreach ( $notices as $notice ) : ?>
-						<div
-							class="newspack-ui__snackbar__item newspack-ui__snackbar__item--<?php echo esc_attr( $notice['type'] ); ?>"
-							data-notice-id="<?php echo esc_attr( $notice['id'] ); ?>"
-							data-nonce="<?php echo esc_attr( wp_create_nonce( 'newspack_ui_notice_dismissed' ) ); ?>"
-							data-autohide="<?php echo $notice['autohide'] ? 'true' : 'false'; ?>"
-							data-active-on-load="<?php echo $notice['active_on_load'] ? 'true' : 'false'; ?>"
-						>
-							<?php if ( ! $notice['autohide'] ) : ?>
-								<button class="newspack-ui__snackbar__close" aria-label="<?php esc_attr_e( 'Close', 'newspack-plugin' ); ?>" title="<?php esc_attr_e( 'Close', 'newspack-plugin' ); ?>">
-									<?php Newspack_UI_Icons::print_svg( 'closeSmall' ); ?>
-								</button>
-							<?php endif; ?>
-							<div class="newspack-ui__snackbar__content">
-								<?php echo wp_kses_post( $notice['message'] ); ?>
-							</div>
+		?>
+		<div class="newspack-ui">
+			<div class="newspack-ui__snackbar">
+				<?php foreach ( self::$notices as $notice ) : ?>
+					<div
+						class="newspack-ui__snackbar__item"
+						data-type="<?php echo esc_attr( $notice['type'] ); ?>"
+						data-notice-id="<?php echo esc_attr( $notice['id'] ); ?>"
+						data-nonce="<?php echo esc_attr( wp_create_nonce( 'newspack_ui_notice_dismissed' ) ); ?>"
+						data-autohide="<?php echo $notice['autohide'] ? 'true' : 'false'; ?>"
+						data-active-on-load="<?php echo $notice['active_on_load'] ? 'true' : 'false'; ?>"
+					>
+						<?php $type_icons = self::get_type_icons(); ?>
+						<?php if ( isset( $type_icons[ $notice['type'] ] ) ) : ?>
+							<span class="newspack-ui__snackbar__icon"><?php Newspack_UI_Icons::print_svg( $type_icons[ $notice['type'] ] ); ?></span>
+						<?php endif; ?>
+						<div class="newspack-ui__snackbar__content">
+							<?php echo wp_kses_post( $notice['message'] ); ?>
 						</div>
-					<?php endforeach; ?>
-				</div>
+						<?php if ( ! $notice['autohide'] ) : ?>
+							<button class="newspack-ui__button newspack-ui__button--icon newspack-ui__button--ghost-dark newspack-ui__snackbar__close" aria-label="<?php esc_attr_e( 'Close', 'newspack-plugin' ); ?>" title="<?php esc_attr_e( 'Close', 'newspack-plugin' ); ?>">
+								<?php Newspack_UI_Icons::print_svg( 'closeSmall' ); ?>
+							</button>
+						<?php endif; ?>
+					</div>
+				<?php endforeach; ?>
 			</div>
-			<?php
-		}
+		</div>
+		<?php
 	}
 
 	/**
@@ -225,6 +246,8 @@ class Newspack_UI {
 				'size'        => 'small',
 				'state'       => 'closed',
 				'form_action' => '',
+				'form_id'     => '',
+				'form_class'  => '',
 			]
 		);
 		?>
@@ -314,11 +337,11 @@ class Newspack_UI {
 								?>
 								<?php if ( isset( $action['url'] ) ) : ?>
 								<a href="<?php echo esc_url( $action['url'] ); ?>" class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" <?php echo esc_attr( $fetch_data ); ?>>
-									<?php echo wp_kses_post( $action['label'] ); ?>
+									<span><?php echo wp_kses_post( $action['label'] ); ?></span>
 								</a>
 							<?php else : ?>
 								<button type="submit" class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" <?php echo esc_attr( $fetch_data ); ?>>
-									<?php echo wp_kses_post( $action['label'] ); ?>
+									<span><?php echo wp_kses_post( $action['label'] ); ?></span>
 								</button>
 								<?php
 							endif;
@@ -356,6 +379,7 @@ class Newspack_UI {
 				<li><a href="?ui-demo#checkbox-radio-lists">Checkbox/Radio Lists</a></li>
 				<li><a href="?ui-demo#order-table">Order table</a></li>
 				<li><a href="?ui-demo#buttons">Buttons</a></li>
+				<li><a href="?ui-demo#tabs">Tabs</a></li>
 				<li><a href="#buttons-icon">Buttons Icon</a></li>
 				<li><a href="?ui-demo#modals">Modals</a></li>
 			</ul>
@@ -465,69 +489,92 @@ class Newspack_UI {
 
 			<h2 id="notices">Notices</h2>
 
-			<div class="newspack-ui__notice">
+			<div class="newspack-ui__notice" role="status">
 				<div>
 					<p>Default notice style</p>
 				</div>
 			</div>
 
-			<div class="newspack-ui__notice newspack-ui__notice--success">
+			<div class="newspack-ui__notice newspack-ui__notice--success" role="status">
 				<div>
 					<p>"Success" notice style</p>
 				</div>
 			</div>
 
-			<div class="newspack-ui__notice newspack-ui__notice--warning">
+			<div class="newspack-ui__notice newspack-ui__notice--warning" role="status">
 				<div>
 					<p>"Warning" notice style</p>
 				</div>
 			</div>
 
-			<div class="newspack-ui__notice newspack-ui__notice--error">
+			<div class="newspack-ui__notice newspack-ui__notice--error" role="alert">
 				<div>
 					<p>"Error" notice style</p>
 				</div>
 			</div>
 
-			<div class="newspack-ui__notice">
+			<div class="newspack-ui__notice" role="status">
 				<?php Newspack_UI_Icons::print_svg( 'info' ); ?>
 				<div>
 					<p>Default notice with icon style</p>
 				</div>
 			</div>
 
-			<div class="newspack-ui__notice newspack-ui__notice--success">
+			<div class="newspack-ui__notice newspack-ui__notice--success" role="status">
 				<?php Newspack_UI_Icons::print_svg( 'check' ); ?>
 				<div>
 					<p>"Success" notice with icon style</p>
 				</div>
 			</div>
 
-			<div class="newspack-ui__notice newspack-ui__notice--warning">
+			<div class="newspack-ui__notice newspack-ui__notice--warning" role="status">
 				<?php Newspack_UI_Icons::print_svg( 'info' ); ?>
 				<div>
 					<p>"Warning" notice with icon style</p>
 				</div>
 			</div>
 
-			<div class="newspack-ui__notice newspack-ui__notice--error">
+			<div class="newspack-ui__notice newspack-ui__notice--error" role="alert">
 				<?php Newspack_UI_Icons::print_svg( 'error' ); ?>
 				<div>
 					<p>"Error" notice with icon style</p>
 				</div>
 			</div>
-			<button id="show-snackbar-example" class="newspack-ui__button newspack-ui__button--primary">Show snackbar</button>
-			<div class="newspack-ui__snackbar newspack-ui__snackbar--top-right">
-				<div id="snackbar-example" class="newspack-ui__snackbar__item newspack-ui__snackbar__item--success" data-autohide="true">
-					<div class="newspack-ui__snackbar__content">This is a snackbar message</div>
-				</div>
+			<div class="newspack-ui__stack newspack-ui__stack--horizontal">
+				<button id="show-snackbar-example" class="newspack-ui__button newspack-ui__button--primary">Show snackbar</button>
+				<button id="show-snackbar-warning" class="newspack-ui__button newspack-ui__button--secondary">Show warning snackbar</button>
+				<button id="show-snackbar-persistent" class="newspack-ui__button newspack-ui__button--secondary">Show error snackbar</button>
 			</div>
+			<div class="newspack-ui__snackbar"></div>
+			<template id="snackbar-persistent-template">
+				<div class="newspack-ui__snackbar__item" data-type="error" data-autohide="false">
+					<span class="newspack-ui__snackbar__icon"><?php Newspack_UI_Icons::print_svg( 'error' ); ?></span>
+					<div class="newspack-ui__snackbar__content">This snackbar stays until dismissed. Please <a href="#">take action</a>.</div>
+					<button class="newspack-ui__button newspack-ui__button--icon newspack-ui__button--ghost-dark newspack-ui__snackbar__close" aria-label="<?php esc_attr_e( 'Close', 'newspack-plugin' ); ?>" title="<?php esc_attr_e( 'Close', 'newspack-plugin' ); ?>">
+						<?php Newspack_UI_Icons::print_svg( 'closeSmall' ); ?>
+					</button>
+				</div>
+			</template>
 			<script>
 				( function() {
-					const snackbar = document.getElementById( 'snackbar-example' );
-					const button = document.getElementById( 'show-snackbar-example' );
-					button.addEventListener( 'click', function() {
-						newspackUI.notices.openNotice( snackbar, false );
+					const snackbar = document.querySelector( '.newspack-ui__snackbar' );
+					document.getElementById( 'show-snackbar-example' ).addEventListener( 'click', function() {
+						newspackUI.notices.createNotice( 'This is a snackbar message' );
+					} );
+					document.getElementById( 'show-snackbar-warning' ).addEventListener( 'click', function() {
+						newspackUI.notices.createNotice( 'This is a warning snackbar message', 'warning' );
+					} );
+					const template = document.getElementById( 'snackbar-persistent-template' );
+					document.getElementById( 'show-snackbar-persistent' ).addEventListener( 'click', function() {
+						const item = template.content.firstElementChild.cloneNode( true );
+						snackbar.appendChild( item );
+						item.querySelectorAll( 'a, button' ).forEach( function( el ) {
+							el.addEventListener( 'click', function() {
+								newspackUI.notices.closeNotice( item );
+							} );
+						} );
+						void item.offsetWidth;
+						newspackUI.notices.openNotice( item, true );
 					} );
 				} )();
 			</script>
@@ -896,6 +943,55 @@ class Newspack_UI {
 
 			<hr>
 
+			<h2 id="tabs">Tabs</h2>
+			<p>Underline-style tabs. Built on Ghost button + bottom box-shadow. Drop-in replacement for <code>newspack-ui__segmented-control</code> where the underline aesthetic is preferred.</p>
+
+			<h3>Default</h3>
+			<div class="newspack-ui__tabs">
+				<div class="newspack-ui__tabs__list" role="tablist">
+					<button type="button" role="tab" class="newspack-ui__button newspack-ui__button--ghost selected"><?php esc_html_e( 'Tab One', 'newspack-plugin' ); ?></button>
+					<button type="button" role="tab" class="newspack-ui__button newspack-ui__button--ghost"><?php esc_html_e( 'Tab Two', 'newspack-plugin' ); ?></button>
+					<button type="button" role="tab" class="newspack-ui__button newspack-ui__button--ghost"><?php esc_html_e( 'Tab Three', 'newspack-plugin' ); ?></button>
+				</div>
+			</div>
+
+			<h3>With count badges</h3>
+			<div class="newspack-ui__tabs">
+				<div class="newspack-ui__tabs__list" role="tablist">
+					<button type="button" role="tab" class="newspack-ui__button newspack-ui__button--ghost selected">
+						<?php esc_html_e( 'Members', 'newspack-plugin' ); ?>
+						<span class="newspack-ui__badge newspack-ui__badge--outline">12</span>
+					</button>
+					<button type="button" role="tab" class="newspack-ui__button newspack-ui__button--ghost">
+						<?php esc_html_e( 'Invitations', 'newspack-plugin' ); ?>
+						<span class="newspack-ui__badge newspack-ui__badge--outline">3</span>
+					</button>
+				</div>
+			</div>
+
+			<h3>Small &mdash; with panels</h3>
+			<div class="newspack-ui__tabs">
+				<div class="newspack-ui__tabs__list" role="tablist">
+					<button type="button" role="tab" class="newspack-ui__button newspack-ui__button--ghost newspack-ui__button--small selected"><?php esc_html_e( 'Monthly', 'newspack-plugin' ); ?></button>
+					<button type="button" role="tab" class="newspack-ui__button newspack-ui__button--ghost newspack-ui__button--small"><?php esc_html_e( 'Annually', 'newspack-plugin' ); ?></button>
+				</div>
+				<div class="newspack-ui__tabs__content">
+					<div class="newspack-ui__tabs__panel"><p><?php esc_html_e( 'Monthly content goes here.', 'newspack-plugin' ); ?></p></div>
+					<div class="newspack-ui__tabs__panel"><p><?php esc_html_e( 'Annually content goes here.', 'newspack-plugin' ); ?></p></div>
+				</div>
+			</div>
+
+			<h3>X-Small &mdash; stretch (equal width)</h3>
+			<div class="newspack-ui__tabs newspack-ui__tabs--stretch">
+				<div class="newspack-ui__tabs__list" role="tablist">
+					<button type="button" role="tab" class="newspack-ui__button newspack-ui__button--ghost newspack-ui__button--x-small selected"><?php esc_html_e( 'All', 'newspack-plugin' ); ?></button>
+					<button type="button" role="tab" class="newspack-ui__button newspack-ui__button--ghost newspack-ui__button--x-small"><?php esc_html_e( 'Active', 'newspack-plugin' ); ?></button>
+					<button type="button" role="tab" class="newspack-ui__button newspack-ui__button--ghost newspack-ui__button--x-small"><?php esc_html_e( 'Archived', 'newspack-plugin' ); ?></button>
+				</div>
+			</div>
+
+			<hr>
+
 			<h2 id="buttons-icon">Buttons Icon</h2>
 
 			<p>Uses the same classes as the <code>newspack-ui__button</code> but we add an extra class to it <code>newspack-ui__button--icon</code></p>
@@ -1182,14 +1278,18 @@ class Newspack_UI {
 								<input type="hidden" name="reader-activation-newsletters-signup" value="1" />
 								<input type="hidden" name="email_address" value="<?php echo esc_attr( $demo_email_address ); ?>" />
 
-								<div class="newspack-ui__stack newspack-ui__stack--vertical newspack-ui__stack--gap-2 overflow-hidden position-relative newsletter-list-container" data-list-default-size="<?php echo esc_attr( $demo_default_list_size ); ?>">
+								<?php $demo_has_overflow = count( $demo_newsletters_lists ) > (int) $demo_default_list_size; ?>
+								<div class="newspack-ui__stack newspack-ui__stack--vertical newspack-ui__stack--gap-2 overflow-hidden position-relative newsletter-list-container">
 								<?php
 								foreach ( $demo_newsletters_lists as $list ) {
-									$checkbox_id = sprintf( 'newspack-plugin-list-%s', $list['id'] );
-									$is_hidden   = $loop_index <= $demo_default_list_size ? '' : 'hidden';
+									$checkbox_id   = sprintf( 'newspack-plugin-list-%s', $list['id'] );
+									$is_peek       = $loop_index === (int) $demo_default_list_size;
+									$is_hidden     = $loop_index > (int) $demo_default_list_size;
+									$label_classes = 'newspack-ui__input-card' . ( $is_hidden ? ' hidden' : '' );
+									$label_inert   = ( $is_peek || $is_hidden ) ? ' inert' : '';
 									$loop_index++;
 									?>
-									<label class="newspack-ui__input-card <?php echo esc_attr( $is_hidden ); ?>" for="<?php echo esc_attr( $checkbox_id ); ?>">
+									<label class="<?php echo esc_attr( $label_classes ); ?>" for="<?php echo esc_attr( $checkbox_id ); ?>"<?php echo esc_attr( $label_inert ); ?>>
 										<input
 											type="checkbox"
 											name="lists[]"
@@ -1207,17 +1307,15 @@ class Newspack_UI {
 										<?php endif; ?>
 									</label>
 									<?php
-									if ( $loop_index === (int) $demo_default_list_size && count( $demo_newsletters_lists ) > $demo_default_list_size ) :
-										?>
-										<div class="newspack-ui__gradient-divider"></div>
-										<?php
-									endif;
 								}
 								?>
+								<?php if ( $demo_has_overflow ) : ?>
+									<div class="newspack-ui__gradient-divider"></div>
+								<?php endif; ?>
 								</div>
 
 								<div class="newspack-ui__stack newspack-ui__stack--vertical newspack-ui__stack--gap-2 newspack-ui__spacing-top--5">
-									<?php if ( count( $demo_newsletters_lists ) > $demo_default_list_size ) : ?>
+									<?php if ( $demo_has_overflow ) : ?>
 										<button type="button" class="newspack-ui__button newspack-ui__button--wide newspack-ui__button--secondary see-all-button" aria-label="<?php esc_attr_e( 'See all newsletters', 'newspack-plugin' ); ?>">
 											<span aria-hidden="true"><?php esc_html_e( 'See all', 'newspack-plugin' ); ?></span>
 											<?php Newspack_UI_Icons::print_svg( 'chevronDownSmall' ); ?>
@@ -1229,43 +1327,43 @@ class Newspack_UI {
 						</div>
 						<script>
 							( function() {
-								const container = document.querySelector( '.newspack-newsletters-signup' );
-								if ( ! container ) {
-									return;
-								}
-								const seeAllButton = container.querySelector( '.see-all-button' );
-								const newsletterContainer = container.querySelector( '.newsletter-list-container' );
-								if ( seeAllButton && newsletterContainer ) {
+								const setupReveal = function( container ) {
+									const seeAllButton = container.querySelector( '.see-all-button' );
+									const newsletterContainer = container.querySelector( '.newsletter-list-container' );
+									if ( ! seeAllButton || ! newsletterContainer ) {
+										return;
+									}
 									const divider = newsletterContainer.querySelector( '.newspack-ui__gradient-divider' );
+									const peekItem = newsletterContainer.querySelector( '.newspack-ui__input-card[inert]:not(.hidden)' );
+
 									seeAllButton.addEventListener( 'click', function() {
-										newsletterContainer.querySelectorAll( '.hidden' ).forEach( function( item ) {
+										const firstRevealed = newsletterContainer.querySelector( '.newspack-ui__input-card[inert]' );
+										newsletterContainer.querySelectorAll( '.newspack-ui__input-card[inert]' ).forEach( function( item ) {
 											item.classList.remove( 'hidden' );
+											item.removeAttribute( 'inert' );
 										} );
 										newsletterContainer.style.maxHeight = 'none';
 										if ( divider ) {
 											divider.classList.add( 'hidden' );
 										}
 										seeAllButton.classList.add( 'hidden' );
+										if ( firstRevealed ) {
+											const firstInput = firstRevealed.querySelector( 'input' );
+											if ( firstInput ) {
+												firstInput.focus();
+											}
+										}
 									} );
 
-									// Set the initial height to show partially visible.
-									const listDefaultSize = parseInt( newsletterContainer.dataset.listDefaultSize, 10 );
-									const newsletterItems = newsletterContainer.querySelectorAll( '.newspack-ui__input-card' );
-
-									if ( newsletterItems.length > listDefaultSize ) {
-										const gap = 12;
-										const extraSpace = 32;
-
-										let totalHeight = 0;
-										newsletterItems.forEach( function( item, index ) {
-											if ( index < listDefaultSize ) {
-												totalHeight += item.offsetHeight;
-											}
-										} );
-
-										const maxHeight = totalHeight + listDefaultSize * gap + extraSpace;
-										newsletterContainer.style.maxHeight = maxHeight + 'px';
+									if ( peekItem ) {
+										const peekAmount = ( divider && divider.offsetHeight ) || 32;
+										newsletterContainer.style.maxHeight = ( peekItem.offsetTop + peekAmount ) + 'px';
 									}
+								};
+
+								const container = document.querySelector( '.newspack-newsletters-signup' );
+								if ( container ) {
+									setupReveal( container );
 								}
 							} )();
 						</script>

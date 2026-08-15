@@ -16,6 +16,7 @@ use YoastSEO_Vendor\Psr\Http\Message\RequestInterface;
  */
 class CurlHandler
 {
+    private const KNOWN_CONSTRUCTOR_OPTIONS = ['handle_factory' => \true, 'transport_sharing' => \true];
     /**
      * @var CurlFactoryInterface
      */
@@ -34,6 +35,11 @@ class CurlHandler
      */
     public function __construct(array $options = [])
     {
+        foreach ($options as $name => $_) {
+            if (!isset(self::KNOWN_CONSTRUCTOR_OPTIONS[$name])) {
+                \YoastSEO_Vendor\trigger_deprecation('guzzlehttp/guzzle', '7.14', \sprintf('The "%s" CurlHandler constructor option is unknown; guzzlehttp/guzzle 8.0 will reject unknown constructor options.', (string) $name));
+            }
+        }
         \YoastSEO_Vendor\GuzzleHttp\Handler\CurlShareHandleState::assertNoRequiredSharingCustomFactoryConflict($options, 'CurlHandler');
         $transportSharing = $options['transport_sharing'] ?? null;
         $sharingMode = \YoastSEO_Vendor\GuzzleHttp\Handler\CurlShareHandleState::normalizeMode($transportSharing, 'transport_sharing');
@@ -43,13 +49,18 @@ class CurlHandler
             return;
         }
         $this->shareHandleState = $sharingMode !== \YoastSEO_Vendor\GuzzleHttp\TransportSharing::NONE ? \YoastSEO_Vendor\GuzzleHttp\Handler\CurlShareHandleState::fromOption($transportSharing) : null;
-        $this->factory = $this->shareHandleState !== null ? new \YoastSEO_Vendor\GuzzleHttp\Handler\CurlFactory(3, $this->shareHandleState->mode, $this->shareHandleState->handle) : new \YoastSEO_Vendor\GuzzleHttp\Handler\CurlFactory(3);
+        $this->factory = $this->shareHandleState !== null ? new \YoastSEO_Vendor\GuzzleHttp\Handler\CurlFactory(3, $this->shareHandleState->mode, $this->shareHandleState) : new \YoastSEO_Vendor\GuzzleHttp\Handler\CurlFactory(3);
     }
     public function __invoke(\YoastSEO_Vendor\Psr\Http\Message\RequestInterface $request, array $options) : \YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface
     {
         if (isset($options['delay'])) {
             \usleep($options['delay'] * 1000);
         }
+        // A Multiplexing::NONE request option holds unconditionally here:
+        // transport sharing never shares the connection cache on this
+        // branch, and nothing else executes during the blocking curl_exec(),
+        // so the transfer cannot share its connection with a concurrent
+        // transfer.
         $easy = $this->factory->create($request, $options);
         \curl_exec($easy->handle);
         $easy->errno = \curl_errno($easy->handle);

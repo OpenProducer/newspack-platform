@@ -22,6 +22,6 @@ final class MimeType
      */
     public static function fromExtension(string $extension) : ?string
     {
-        return self::MIME_TYPES[\strtolower($extension)] ?? null;
+        return self::MIME_TYPES[\YoastSEO_Vendor\GuzzleHttp\Psr7\Utils::asciiToLower($extension)] ?? null;
     }
 }

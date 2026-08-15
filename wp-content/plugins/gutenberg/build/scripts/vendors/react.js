@@ -1,4 +1,3 @@
-"use strict";
 var React = (() => {
   var __getOwnPropNames = Object.getOwnPropertyNames;
   var __commonJS = (cb, mod) => function __require() {
@@ -1882,6 +1881,7 @@ var React = (() => {
   // ../../node_modules/react/index.js
   var require_react = __commonJS({
     "../../node_modules/react/index.js"(exports, module) {
+      "use strict";
       if (false) {
         module.exports = null;
       } else {
@@ -1889,7 +1889,14 @@ var React = (() => {
       }
     }
   });
-  return require_react();
+
+  // ../react-18/react.js
+  var require_react2 = __commonJS({
+    "../react-18/react.js"(exports, module) {
+      module.exports = require_react();
+    }
+  });
+  return require_react2();
 })();
 /*! Bundled license information:
 

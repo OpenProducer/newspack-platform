@@ -15,7 +15,7 @@ class Harbor {
 	 *
 	 * @var string
 	 */
-	public const VERSION = '1.4.0';
+	public const VERSION = '1.6.0';
 
 	/**
 	 * Initializes the service provider.

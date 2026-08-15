@@ -15,9 +15,37 @@ use Newspack\Newspack_UI;
 class IP_Access_Rule {
 
 	/**
-	 * The name of the cookie used to bypass cache and allow server side IP checking.
+	 * Cookie used to trigger a cache-exempt render for IP-based access checking.
+	 *
+	 * The `wp` 2-char prefix causes Batcache's advanced-cache.php to skip
+	 * page cache for requests carrying this cookie (rule: any cookie whose
+	 * name starts with `wp` is exempted, except the small allowlist that
+	 * defaults to `wordpress_test_cookie`). The cookie is a cache-skip
+	 * signal only — the actual IP-match check runs server-side on the
+	 * resulting uncached request, so a forged cookie just produces an
+	 * uncached render where the check rejects the visitor.
+	 *
+	 * NOT renamed in this PR: unlike the newsletter cookies (which are new),
+	 * this cookie may already be set on production sites; renaming would
+	 * invalidate in-flight cookies for current visitors. See miguelpeixe
+	 * review on PR #136.
+	 *
+	 * See: https://github.com/Automattic/batcache/blob/master/advanced-cache.php
 	 */
 	const COOKIE_NAME = 'wp_nocache_ip';
+
+	/**
+	 * Lifetime of the IP-access bypass cookie.
+	 *
+	 * This is the effective re-validation interval for anonymous institutional
+	 * visitors: without the cookie, gated pages are served from the page cache
+	 * and the per-request IP check cannot run, so once it expires the visitor
+	 * is walled out until they re-visit /institutional-access. Keep it
+	 * long-lived — the cookie grants nothing by itself (the visitor's IP is
+	 * re-checked server-side on every uncached request), so a long lifetime
+	 * carries no access risk.
+	 */
+	const COOKIE_EXPIRATION = YEAR_IN_SECONDS;
 
 	/**
 	 * The endpoint for institutional access.
@@ -157,7 +185,7 @@ class IP_Access_Rule {
 		}
 
 		if ( $valid ) {
-			setcookie( self::COOKIE_NAME, '1', time() + YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN ); // phpcs:ignore
+			self::set_cookie();
 		}
 
 		$data = [ 'valid' => $valid ];
@@ -334,7 +362,7 @@ class IP_Access_Rule {
 		$result = apply_filters( 'newspack_content_gate_check_ip', false );
 
 		if ( $result ) {
-			setcookie( self::COOKIE_NAME, '1', time() + MONTH_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN ); // phpcs:ignore
+			self::set_cookie();
 		}
 
 		$redirect_url = self::get_redirect_url();
@@ -371,7 +399,6 @@ class IP_Access_Rule {
 			Newspack_UI::add_notice(
 				$message,
 				[
-					'type'     => 'success',
 					'autohide' => true,
 				]
 			);
@@ -379,7 +406,7 @@ class IP_Access_Rule {
 			Newspack_UI::add_notice(
 				__( "We couldn't verify your location. Make sure you're on your organization's network and try again.", 'newspack-plugin' ),
 				[
-					'type'     => 'warning',
+					'type'     => 'error',
 					'autohide' => false,
 				]
 			);
@@ -411,8 +438,13 @@ class IP_Access_Rule {
 	 * Get the URL to redirect to from the dedicated endpoint.
 	 *
 	 * Checks redirect_to param, then Referer header, then falls back to homepage.
+	 * Returned host-relative (see get_check_url()) so the loading page's
+	 * client-side redirect resolves against the document (proxy) origin. Under a
+	 * rewriting proxy (e.g. a library EZproxy) an absolute URL would send the
+	 * just-verified reader back to the canonical host — off the proxy, without
+	 * the proxied IP — and re-lock the content. See NPPD-2039.
 	 *
-	 * @return string The redirect URL.
+	 * @return string Host-relative redirect URL (path and query, without scheme or host).
 	 */
 	private static function get_dedicated_redirect_url() {
 		$home = home_url( '/' );
@@ -420,16 +452,39 @@ class IP_Access_Rule {
 		if ( ! empty( $_GET['redirect_to'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput
 			$url = esc_url_raw( wp_unslash( $_GET['redirect_to'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput
 			if ( wp_validate_redirect( $url, $home ) !== $home || $url === $home ) {
-				return $url;
+				return wp_make_link_relative( $url );
 			}
 		}
 
 		$referer = wp_get_referer();
 		if ( $referer && wp_validate_redirect( $referer, $home ) !== $home ) {
-			return $referer;
+			return wp_make_link_relative( $referer );
 		}
 
-		return $home;
+		return wp_make_link_relative( $home );
+	}
+
+	/**
+	 * Build the host-relative URL for the institutional-access check endpoint.
+	 *
+	 * The loading page's fetch must resolve against the document origin rather
+	 * than an absolute canonical host. When the page is served through a
+	 * rewriting reverse proxy (e.g. a library EZproxy), that origin is the
+	 * proxy host, so a host-relative URL stays proxied and the origin sees the
+	 * proxy's whitelisted IP. An absolute URL is left unrewritten inside the
+	 * inline script, so the browser fetches it directly from the reader's real
+	 * IP — bypassing the proxy and defeating institutional IP access. See NPPD-2039.
+	 *
+	 * @param int|null $institution_id Optional. Institution post ID to scope the check.
+	 *
+	 * @return string Host-relative REST URL (path and query, without scheme or host).
+	 */
+	private static function get_check_url( $institution_id = null ) {
+		$url = rest_url( NEWSPACK_API_NAMESPACE . self::REST_ROUTE );
+		if ( $institution_id ) {
+			$url = add_query_arg( 'institution_id', $institution_id, $url );
+		}
+		return wp_make_link_relative( $url );
 	}
 
 	/**
@@ -445,10 +500,7 @@ class IP_Access_Rule {
 	 */
 	public static function render_loading_page( $institution_id = null ) {
 		$redirect_url = self::get_dedicated_redirect_url();
-		$rest_url     = rest_url( NEWSPACK_API_NAMESPACE . self::REST_ROUTE );
-		if ( $institution_id ) {
-			$rest_url = add_query_arg( 'institution_id', $institution_id, $rest_url );
-		}
+		$rest_url     = self::get_check_url( $institution_id );
 		$result_param = self::RESULT_PARAM;
 		$site_name    = get_bloginfo( 'name' );
 		$timeout_ms   = 10000;
@@ -686,19 +738,45 @@ class IP_Access_Rule {
 	}
 
 	/**
-	 * Whether the IP-access bypass cookie was sent on the current request.
+	 * Whether the IP-access bypass cookie is present on the current request.
 	 *
-	 * The cookie is set after a successful institutional-access verification
-	 * (any of an institution's rules matching — IP range, email domain, or
-	 * reader data) and signals that downstream IP-rule checks may safely
-	 * run server-side without breaking the page cache. Centralizes the
-	 * `phpcs:ignore` for the restricted `$_COOKIE` read so callers don't
-	 * each carry their own annotation.
+	 * The cookie is a cache-skip signal set after a successful institutional-access
+	 * verification. Its presence tells downstream code to run the IP check
+	 * server-side rather than serving a cached response. The actual access
+	 * decision is made by IP_Access_Rule::ip_matches_ranges(), not by this cookie.
 	 *
-	 * @return bool True if the cookie is present on this request.
+	 * @return bool True if the bypass cookie is present on this request.
 	 */
 	public static function is_cookie_set() {
-		return isset( $_COOKIE[ self::COOKIE_NAME ] ); // phpcs:ignore WordPressVIPMinimum.Variables.RestrictedVariables.cache_constraints___COOKIE
+		// phpcs:ignore WordPressVIPMinimum.Variables.RestrictedVariables.cache_constraints___COOKIE, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- presence-only check; the cookie is a cache-skip signal, not an auth grant.
+		return ! empty( $_COOKIE[ self::COOKIE_NAME ] );
+	}
+
+	/**
+	 * Set the IP-access bypass cookie.
+	 *
+	 * The cookie value is a simple sentinel ('1'). It signals that the visitor
+	 * has previously passed the IP check and subsequent requests should skip
+	 * the page cache so the IP check can run server-side.
+	 */
+	private static function set_cookie() {
+		$expiry = time() + self::COOKIE_EXPIRATION;
+		if ( ! headers_sent() ) {
+			// phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.cookies_setcookie
+			setcookie(
+				self::COOKIE_NAME,
+				'1',
+				[
+					'expires'  => $expiry,
+					'path'     => COOKIEPATH,
+					'domain'   => COOKIE_DOMAIN,
+					'secure'   => is_ssl(),
+					'httponly' => true,
+					'samesite' => 'Lax',
+				]
+			);
+		}
+		$_COOKIE[ self::COOKIE_NAME ] = '1'; // phpcs:ignore WordPressVIPMinimum.Variables.RestrictedVariables.cache_constraints___COOKIE
 	}
 }
 IP_Access_Rule::init();

@@ -23,6 +23,24 @@
     "iconSize": {
       "type": "number",
       "default": 24
+    },
+    "iconColor": {
+      "type": "string"
+    },
+    "customIconColor": {
+      "type": "string"
+    },
+    "iconColorValue": {
+      "type": "string"
+    },
+    "iconBackgroundColor": {
+      "type": "string"
+    },
+    "customIconBackgroundColor": {
+      "type": "string"
+    },
+    "iconBackgroundColorValue": {
+      "type": "string"
     }
   },
   "styles": [
@@ -37,16 +55,6 @@
     }
   ],
   "supports": {
-    "color": {
-      "enableContrastChecker": false,
-      "background": true,
-      "text": true,
-      "link": false,
-      "__experimentalSkipSerialization": [
-        "text",
-        "background"
-      ]
-    },
     "html": false,
     "layout": {
       "allowSwitching": false,

@@ -3,6 +3,7 @@
 namespace TEC\Common\LiquidWeb\Harbor\Licensing\Repositories;
 
 use TEC\Common\LiquidWeb\Harbor\Licensing\Product_Collection;
+use TEC\Common\LiquidWeb\Harbor\Licensing\Validation_State;
 use TEC\Common\LiquidWeb\Harbor\Utils\Sanitize;
 use WP_Error;
 
@@ -102,6 +103,21 @@ final class License_Repository {
 	 * @var string
 	 */
 	public const PRODUCTS_LAST_ACTIVE_DATES_OPTION_NAME = 'lw_harbor_licensing_products_last_active_dates';
+
+	/**
+	 * Option name for the validate_and_store rate-limit state.
+	 *
+	 * Backs a Validation_State envelope holding the per-key cached failures
+	 * and the rolling-window failure timestamps used by the layered
+	 * validation throttle. Distinct from PRODUCTS_STATE_OPTION_NAME so that
+	 * user-submitted failures do not arm the background-fetch throttle that
+	 * get_products() relies on.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @var string
+	 */
+	public const VALIDATION_STATE_OPTION_NAME = 'lw_harbor_licensing_validation_state';
 
 	/**
 	 * Get the stored unified license key.
@@ -541,5 +557,153 @@ final class License_Repository {
 		$current_time = time();
 
 		return $current_time <= $last_active + $this->get_grace_period_in_seconds();
+	}
+
+	/**
+	 * Get the cached WP_Error from the most recent failed validation attempt
+	 * for the given license key if it is still within the supplied TTL.
+	 *
+	 * Used by the per-key throttle in License_Manager::validate_and_store() so
+	 * that a different key submitted right after a failed attempt is never
+	 * blocked by the previous key's error.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string $key The license key being submitted.
+	 * @param int    $ttl How long (seconds) a cached failure remains valid.
+	 *
+	 * @return WP_Error|null The cached WP_Error, or null if there is no
+	 *                       in-window entry for this key.
+	 */
+	public function get_per_key_failure( string $key, int $ttl ): ?WP_Error {
+		return $this->read_validation_state()->get_failure_for(
+			$this->hash_key( $key ),
+			$ttl,
+			time()
+		);
+	}
+
+	/**
+	 * Record a failed validation attempt for the given license key.
+	 *
+	 * Persists both the per-key entry (read by get_per_key_failure) and a
+	 * timestamp in the rolling window (read by get_recent_failure_count),
+	 * pruning anything outside `$retention_seconds` so the option stays bounded.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string   $key               The license key whose validation failed.
+	 * @param WP_Error $error             The error returned by the upstream API.
+	 * @param int      $retention_seconds How long (seconds) the state should
+	 *                                    retain entries before they are pruned.
+	 *
+	 * @return void
+	 */
+	public function record_validation_failure( string $key, WP_Error $error, int $retention_seconds ): void {
+		$state = $this->read_validation_state();
+		$now   = time();
+
+		$state->record_failure( $this->hash_key( $key ), $error, $now );
+		$state->prune( $retention_seconds, $now );
+
+		$this->write_validation_state( $state );
+	}
+
+	/**
+	 * Clear the per-key throttle entry for a single license key.
+	 *
+	 * Called after a successful validation so the same key can be re-submitted
+	 * without hitting the cached error. The rolling-window failure counter is
+	 * intentionally not cleared because legitimate successes should not erase
+	 * evidence of abusive traffic.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string $key The license key to clear.
+	 *
+	 * @return void
+	 */
+	public function clear_validation_failure_for_key( string $key ): void {
+		$state = $this->read_validation_state();
+		$state->clear_failure_for( $this->hash_key( $key ) );
+
+		$this->write_validation_state( $state );
+	}
+
+	/**
+	 * Number of failed validate_and_store attempts within the given window.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int $window Length of the rolling window in seconds.
+	 *
+	 * @return int
+	 */
+	public function get_recent_failure_count( int $window ): int {
+		return $this->read_validation_state()->count_recent_failures( $window, time() );
+	}
+
+	/**
+	 * Delete the entire validation throttle state.
+	 *
+	 * Wired up to lw-harbor/unified_license_key_changed so that rotating the
+	 * stored license key wipes per-key entries that are no longer relevant.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @return void
+	 */
+	public function delete_validation_state(): void {
+		delete_option( self::VALIDATION_STATE_OPTION_NAME );
+	}
+
+	/**
+	 * Hydrate a Validation_State from the backing option, or a fresh one on miss.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @return Validation_State
+	 */
+	private function read_validation_state(): Validation_State {
+		$raw = get_option( self::VALIDATION_STATE_OPTION_NAME, null );
+
+		if ( ! is_array( $raw ) ) {
+			return new Validation_State();
+		}
+
+		$string_keyed = [];
+		foreach ( $raw as $key => $value ) {
+			if ( is_string( $key ) ) {
+				$string_keyed[ $key ] = $value;
+			}
+		}
+
+		return Validation_State::from_array( $string_keyed );
+	}
+
+	/**
+	 * Persist a Validation_State to the backing option.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param Validation_State $state The state to persist.
+	 *
+	 * @return void
+	 */
+	private function write_validation_state( Validation_State $state ): void {
+		update_option( self::VALIDATION_STATE_OPTION_NAME, $state->to_array(), false );
+	}
+
+	/**
+	 * Hash a license key for use as a map key in the per-key throttle.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string $key The license key.
+	 *
+	 * @return string
+	 */
+	private function hash_key( string $key ): string {
+		return hash( 'sha256', $key );
 	}
 }

@@ -1,3 +1,175 @@
+## newspack-sponsors [2.2.1](https://github.com/Automattic/newspack-workspace/compare/newspack-sponsors@2.2.0...newspack-sponsors@2.2.1) (2026-08-03)
+
+
+### Dependencies
+
+* **newspack-scripts:** upgraded to 5.10.0
+
+# [2.2.0](https://github.com/Automattic/newspack-sponsors/compare/v2.1.0...v2.2.0) (2025-11-24)
+
+
+### Features
+
+* Merge pull request [#384](https://github.com/Automattic/newspack-sponsors/issues/384) from Automattic/trunk ([0166215](https://github.com/Automattic/newspack-sponsors/commit/016621523e7fd0cb9fdc66577e226b78ac0b8c71))
+
+# [2.1.0](https://github.com/Automattic/newspack-sponsors/compare/v2.0.2...v2.1.0) (2025-08-25)
+
+
+### Features
+
+* add i18n ([#361](https://github.com/Automattic/newspack-sponsors/issues/361)) ([00e7450](https://github.com/Automattic/newspack-sponsors/commit/00e745089f10dd74ff02fbaa12025bc43d4cf867))
+
+## [2.0.2](https://github.com/Automattic/newspack-sponsors/compare/v2.0.1...v2.0.2) (2025-05-14)
+
+
+### Bug Fixes
+
+* force alpha build ([8079741](https://github.com/Automattic/newspack-sponsors/commit/8079741128e2f295a4cf2709c507ee7e2dfbeafb))
+
+## [2.0.1](https://github.com/Automattic/newspack-sponsors/compare/v2.0.0...v2.0.1) (2025-01-20)
+
+
+### Bug Fixes
+
+* Merge pull request [#333](https://github.com/Automattic/newspack-sponsors/issues/333) from Automattic/trunk ([14d00dc](https://github.com/Automattic/newspack-sponsors/commit/14d00dcb44a42a7ff0b0b7af0e5cdd8a3e022a56))
+
+# [2.0.0](https://github.com/Automattic/newspack-sponsors/compare/v1.13.1...v2.0.0) (2024-08-13)
+
+
+### Bug Fixes
+
+* update dependencies to support `@wordpress/scripts` ([#303](https://github.com/Automattic/newspack-sponsors/issues/303)) ([98738e1](https://github.com/Automattic/newspack-sponsors/commit/98738e15cabe1e90be5c1839088d229050d64117))
+
+
+### BREAKING CHANGES
+
+* Updates dependencies for compatibility with WordPress 6.6.*, but breaks JS in WordPress 6.5.* and below. If you need support for WP 6.5.*, please do not upgrade to this new major version.
+
+* chore: refactor for newspack-scripts dependency updates
+
+* refactor: use proxy script for eslint and stylelint scripts
+
+* fix: peer dependencies
+
+* chore: update newspack-scripts to v5.6.0-alpha.3
+
+* chore: add .stylelintrc.js
+
+* chore: update newspack-scripts to v5.6.0-alpha.4
+
+* fix: add missing Prettier config files
+
+* chore: update newspack-scripts to 5.6.0-alpha.5
+
+* chore: update newspack-scripts to v5.6.0-alpha.7
+
+* chore: update newspack-scripts to v5.6.0-alpha.8
+
+* fix: phpcs
+
+* chore: bump newspack-scripts to v5.5.2
+
+## [1.13.1](https://github.com/Automattic/newspack-sponsors/compare/v1.13.0...v1.13.1) (2024-07-02)
+
+
+### Bug Fixes
+
+* specify asset filenames as editor.* ([#309](https://github.com/Automattic/newspack-sponsors/issues/309)) ([484f480](https://github.com/Automattic/newspack-sponsors/commit/484f48075d52333695e737bbe492641e7699de20))
+
+# [1.13.0](https://github.com/Automattic/newspack-sponsors/compare/v1.12.0...v1.13.0) (2024-07-01)
+
+
+### Bug Fixes
+
+* update newspack-scripts to v5.5.1 ([#306](https://github.com/Automattic/newspack-sponsors/issues/306)) ([b1b8b06](https://github.com/Automattic/newspack-sponsors/commit/b1b8b06c9a29c5496b12495238bf2d1d8d4abecd))
+
+
+### Features
+
+* ensure regenerator-runtime is available (for WP 6.6) ([4b0fcfb](https://github.com/Automattic/newspack-sponsors/commit/4b0fcfb286a0ff0a6b96c3710b4c0dab602ee78a))
+
+# [1.12.0](https://github.com/Automattic/newspack-sponsors/compare/v1.11.1...v1.12.0) (2024-04-08)
+
+
+### Bug Fixes
+
+* make sure sponsored categories, tags show sponsor info ([#289](https://github.com/Automattic/newspack-sponsors/issues/289)) ([ad652aa](https://github.com/Automattic/newspack-sponsors/commit/ad652aa7bd511803316669a017da5246130d8f0b))
+
+
+### Features
+
+* **ci:** add epic/* release workflow and rename `master` to `trunk` ([#285](https://github.com/Automattic/newspack-sponsors/issues/285)) ([008c0a1](https://github.com/Automattic/newspack-sponsors/commit/008c0a1084c9d3042be95b238cb832beba972dc6))
+
+# [1.12.0-alpha.2](https://github.com/Automattic/newspack-sponsors/compare/v1.12.0-alpha.1...v1.12.0-alpha.2) (2024-03-28)
+
+
+### Bug Fixes
+
+* make sure sponsored categories, tags show sponsor info ([#289](https://github.com/Automattic/newspack-sponsors/issues/289)) ([ad652aa](https://github.com/Automattic/newspack-sponsors/commit/ad652aa7bd511803316669a017da5246130d8f0b))
+
+# [1.12.0-alpha.1](https://github.com/Automattic/newspack-sponsors/compare/v1.11.1...v1.12.0-alpha.1) (2024-02-08)
+
+
+### Features
+
+* **ci:** add epic/* release workflow and rename `master` to `trunk` ([#285](https://github.com/Automattic/newspack-sponsors/issues/285)) ([008c0a1](https://github.com/Automattic/newspack-sponsors/commit/008c0a1084c9d3042be95b238cb832beba972dc6))
+
+## [1.11.1](https://github.com/Automattic/newspack-sponsors/compare/v1.11.0...v1.11.1) (2023-10-31)
+
+
+### Bug Fixes
+
+* newspack.pub > newspack.com ([#271](https://github.com/Automattic/newspack-sponsors/issues/271)) ([eb951a2](https://github.com/Automattic/newspack-sponsors/commit/eb951a2e8216564b5beccdaf15a7f865fa458cee))
+
+## [1.11.1-alpha.1](https://github.com/Automattic/newspack-sponsors/compare/v1.11.0...v1.11.1-alpha.1) (2023-10-16)
+
+
+### Bug Fixes
+
+* newspack.pub > newspack.com ([#271](https://github.com/Automattic/newspack-sponsors/issues/271)) ([eb951a2](https://github.com/Automattic/newspack-sponsors/commit/eb951a2e8216564b5beccdaf15a7f865fa458cee))
+
+# [1.11.0](https://github.com/Automattic/newspack-sponsors/compare/v1.10.7...v1.11.0) (2023-09-13)
+
+
+### Features
+
+* add helper function to get all sponsored terms ([#263](https://github.com/Automattic/newspack-sponsors/issues/263)) ([0f37ec4](https://github.com/Automattic/newspack-sponsors/commit/0f37ec4161fba90ffb5b36dc0861bbba81832cb0))
+
+# [1.11.0-alpha.1](https://github.com/Automattic/newspack-sponsors/compare/v1.10.7...v1.11.0-alpha.1) (2023-09-06)
+
+
+### Features
+
+* add helper function to get all sponsored terms ([#263](https://github.com/Automattic/newspack-sponsors/issues/263)) ([0f37ec4](https://github.com/Automattic/newspack-sponsors/commit/0f37ec4161fba90ffb5b36dc0861bbba81832cb0))
+
+## [1.10.7](https://github.com/Automattic/newspack-sponsors/compare/v1.10.6...v1.10.7) (2023-04-10)
+
+
+### Bug Fixes
+
+* remove check for default meta values that isn’t working ([#235](https://github.com/Automattic/newspack-sponsors/issues/235)) ([d45f64b](https://github.com/Automattic/newspack-sponsors/commit/d45f64b6c0b124b0834f62df8edb92a2ca641988))
+
+## [1.10.7-alpha.1](https://github.com/Automattic/newspack-sponsors/compare/v1.10.6...v1.10.7-alpha.1) (2023-03-31)
+
+
+### Bug Fixes
+
+* remove check for default meta values that isn’t working ([#235](https://github.com/Automattic/newspack-sponsors/issues/235)) ([d45f64b](https://github.com/Automattic/newspack-sponsors/commit/d45f64b6c0b124b0834f62df8edb92a2ca641988))
+
+## [1.10.6](https://github.com/Automattic/newspack-sponsors/compare/v1.10.5...v1.10.6) (2023-03-14)
+
+
+### Bug Fixes
+
+* update composer file to correct linting error ([#229](https://github.com/Automattic/newspack-sponsors/issues/229)) ([2716ed2](https://github.com/Automattic/newspack-sponsors/commit/2716ed28dbaf41091ef9ab7ec497887ea3af910f))
+
+## [1.10.6-alpha.1](https://github.com/Automattic/newspack-sponsors/compare/v1.10.5...v1.10.6-alpha.1) (2023-03-03)
+
+
+### Bug Fixes
+
+* update composer file to correct linting error ([#229](https://github.com/Automattic/newspack-sponsors/issues/229)) ([2716ed2](https://github.com/Automattic/newspack-sponsors/commit/2716ed28dbaf41091ef9ab7ec497887ea3af910f))
+
 ## [1.10.5](https://github.com/Automattic/newspack-sponsors/compare/v1.10.4...v1.10.5) (2023-02-16)
 
 

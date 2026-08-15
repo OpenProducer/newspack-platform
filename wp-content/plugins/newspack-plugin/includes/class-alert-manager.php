@@ -32,6 +32,29 @@ class Alert_Manager {
 	const FAILURE_LOG_OPTION = 'newspack_alert_failure_log';
 
 	/**
+	 * Window during which a repeating health-check failure for the same
+	 * integration + error-code signature emits at most one Slack alert.
+	 *
+	 * Private because no external caller needs to read it; keeping the
+	 * surface minimal lets the value evolve without breaking consumers.
+	 */
+	private const HEALTH_CHECK_DEDUP_INTERVAL = DAY_IN_SECONDS;
+
+	/**
+	 * Window during which repeat permanent config-level sync failures for the
+	 * same integration emit at most one Slack alert.
+	 *
+	 * A config failure (disabled/unpaid ESP account) is site-level rather than
+	 * per-contact, and — unlike the retry-exhausted path, which is naturally
+	 * rate-limited by the retry backoff — the permanent-failure path fires on
+	 * the first failure of every contact, so an account-wide outage on a busy
+	 * site would otherwise page once per contact for a single problem.
+	 *
+	 * Private for the same reason as HEALTH_CHECK_DEDUP_INTERVAL.
+	 */
+	private const PERMANENT_FAILURE_DEDUP_INTERVAL = HOUR_IN_SECONDS;
+
+	/**
 	 * Default pattern rules.
 	 * Each rule defines a grouping dimension, threshold, and time interval.
 	 */
@@ -94,10 +117,92 @@ class Alert_Manager {
 		add_action( 'newspack_sync_contact_failed', [ __CLASS__, 'record_failure' ] );
 		add_action( 'newspack_data_event_handler_failed', [ __CLASS__, 'record_failure' ] );
 		add_action( 'newspack_sync_retry_exhausted', [ __CLASS__, 'handle_sync_retry_exhausted' ] );
+		add_action( 'newspack_sync_permanent_failure', [ __CLASS__, 'handle_sync_permanent_failure' ] );
 		add_action( 'newspack_data_event_retry_exhausted', [ __CLASS__, 'handle_data_event_retry_exhausted' ] );
 		add_action( 'newspack_integration_health_check_failed', [ __CLASS__, 'handle_health_check_failed' ] );
+		add_action( 'newspack_alert', [ __CLASS__, 'forward_alert_to_log' ] );
 		add_action( self::PATTERN_SCAN_HOOK, [ __CLASS__, 'scan_failure_patterns' ] );
 		add_action( 'init', [ __CLASS__, 'schedule_pattern_scan' ] );
+	}
+
+	/**
+	 * Forward a `newspack_alert` to the `newspack_log` action so Newspack
+	 * Manager's Logger routes it. Severity drives the destination:
+	 *
+	 *   - severity = 'error' or 'critical' → type 'error', log_level 3
+	 *     (Alert — Slack)
+	 *   - anything else (incl. 'warning', unknown, or missing severity) →
+	 *     type 'debug', log_level 2 (Watch — logstash only)
+	 *
+	 * Only known error severities escalate to Slack so an unanticipated
+	 * alert shape (e.g. a third-party `newspack_alert` with no severity)
+	 * lands in Watch rather than paging on-call.
+	 *
+	 * Only the human-readable `message` is forwarded as free text. Any
+	 * contact email carried in the alert `context` is passed through
+	 * Logger's first-class `user_email` param — a structured field that is
+	 * not part of the Slack message body — instead of being interpolated
+	 * into `message`. The rest of the `context` is intentionally dropped to
+	 * avoid leaking source payloads into downstream logs.
+	 *
+	 * When Newspack Manager isn't active, `newspack_log` is a no-op.
+	 *
+	 * @param mixed $alert The alert payload fired by this class.
+	 */
+	public static function forward_alert_to_log( $alert ) {
+		if ( ! is_array( $alert ) || ! isset( $alert['message'] ) || ! is_scalar( $alert['message'] ) || '' === (string) $alert['message'] ) {
+			return;
+		}
+
+		$code = is_scalar( $alert['type'] ?? null ) && '' !== (string) $alert['type']
+			? (string) $alert['type']
+			: 'newspack_alert';
+
+		$severity = is_scalar( $alert['severity'] ?? null ) ? (string) $alert['severity'] : '';
+		$is_error = in_array( $severity, [ 'error', 'critical' ], true );
+
+		$params = [
+			'type'      => $is_error ? 'error' : 'debug',
+			'log_level' => $is_error ? 3 : 2,
+		];
+
+		$user_email = self::get_alert_user_email( $alert );
+		if ( '' !== $user_email ) {
+			$params['user_email'] = $user_email;
+		}
+
+		do_action( 'newspack_log', $code, (string) $alert['message'], $params );
+	}
+
+	/**
+	 * Extract the contact email (if any) carried in an alert's `context` so
+	 * it can be forwarded via Logger's structured `user_email` param rather
+	 * than interpolated into the human-readable message.
+	 *
+	 * @param array $alert The alert payload.
+	 *
+	 * @return string The contact email, or '' when none is present.
+	 */
+	private static function get_alert_user_email( $alert ) {
+		$context = is_array( $alert['context'] ?? null ) ? $alert['context'] : [];
+
+		// Failure-pattern alerts grouped by contact email carry it as the group value.
+		if ( 'contact_email' === ( $context['group_by'] ?? '' ) && is_scalar( $context['group_value'] ?? null ) ) {
+			return (string) $context['group_value'];
+		}
+
+		// Sync/handler exhaustion payloads carry the contact under `contact.email`.
+		if ( is_array( $context['contact'] ?? null ) && is_scalar( $context['contact']['email'] ?? null ) ) {
+			return (string) $context['contact']['email'];
+		}
+
+		// Permanent-failure payloads carry the contact email at the top level
+		// (contact-sync path passes the user's email, deletion path is keyed on it).
+		if ( is_scalar( $context['email'] ?? null ) && '' !== (string) $context['email'] ) {
+			return (string) $context['email'];
+		}
+
+		return '';
 	}
 
 	/**
@@ -129,6 +234,17 @@ class Alert_Manager {
 	 * @param array $payload Alert data from the exhaustion hook.
 	 */
 	public static function record_failure( $payload ) {
+		// Keep never-fixable failures out of the failure log: pattern alerts
+		// exist to surface conditions someone can fix, and benign / permanent
+		// classes would otherwise keep tripping the hourly same_integration /
+		// same_message rules for exactly the noise the retry classification
+		// de-noises (permanent_config failures fire their own immediate alert
+		// instead). Payloads without a classification — e.g. data-event handler
+		// failures — are always recorded.
+		if ( 'transient' !== ( $payload['error_class'] ?? 'transient' ) ) {
+			return;
+		}
+
 		$log = get_option( self::FAILURE_LOG_OPTION, [] );
 
 		$record = [
@@ -159,11 +275,13 @@ class Alert_Manager {
 	 * @param array $payload Alert data from Contact_Sync.
 	 */
 	public static function handle_sync_retry_exhausted( $payload ) {
+		// The contact email is intentionally left out of the message; it is
+		// forwarded to the log via Logger's structured `user_email` param
+		// (see forward_alert_to_log) and remains available in `context`.
 		$message = sprintf(
-			'Max retries (%d) reached for integration "%s" sync of %s. Last error: %s',
+			'Max retries (%d) reached for integration "%s" contact sync. Last error: %s',
 			$payload['retry_count'] ?? 0,
 			$payload['integration_id'] ?? 'unknown',
-			$payload['contact']['email'] ?? 'unknown',
 			$payload['reason'] ?? 'unknown'
 		);
 
@@ -185,6 +303,67 @@ class Alert_Manager {
 			[
 				'type'      => 'sync_retry_exhausted',
 				'severity'  => 'error',
+				'message'   => $message,
+				'context'   => $payload,
+				'timestamp' => time(),
+			]
+		);
+	}
+
+	/**
+	 * Handle a permanent (non-retryable) contact-sync failure.
+	 *
+	 * Severity derives from the failure class carried in the payload:
+	 *
+	 * - `permanent_config` (disabled/unpaid ESP account — actionable and
+	 *   site-level): 'error' severity, routed to Slack by
+	 *   forward_alert_to_log(). Deduped per integration for
+	 *   PERMANENT_FAILURE_DEDUP_INTERVAL, since per-contact repeats of a
+	 *   site-level condition add no signal.
+	 * - `permanent_contact` (fired by the deletion path only, where a skipped
+	 *   retry has no natural re-trigger and the dropped deletion signal is
+	 *   GDPR-relevant): 'warning' severity — surfaced in Watch without
+	 *   paging. Not deduped: each alert concerns a distinct contact.
+	 *
+	 * Contact_Sync skips permanent contact-data failures silently on the
+	 * regular sync path (the contact re-syncs on the reader's next event), so
+	 * those never reach here.
+	 *
+	 * @param array $payload Alert data from Contact_Sync.
+	 */
+	public static function handle_sync_permanent_failure( $payload ) {
+		$integration_id = $payload['integration_id'] ?? 'unknown';
+		$is_config      = 'permanent_contact' !== ( $payload['error_class'] ?? 'permanent_config' );
+
+		if ( $is_config ) {
+			$dedup_key = 'newspack_alert_pf_' . md5( (string) $integration_id );
+			if ( get_transient( $dedup_key ) ) {
+				return;
+			}
+			// Set the dedup transient BEFORE dispatch so a `newspack_alert`
+			// handler that throws cannot defeat dedup by leaving the key unset
+			// (see handle_health_check_failed for the same rationale).
+			set_transient( $dedup_key, time(), self::PERMANENT_FAILURE_DEDUP_INTERVAL );
+
+			$message = sprintf(
+				'Permanent config sync failure for integration "%s" (no retry). Last error: %s',
+				$integration_id,
+				$payload['reason'] ?? 'unknown'
+			);
+		} else {
+			$message = sprintf(
+				'Permanent contact-data failure for integration "%s" account-deletion sync; the deletion signal was not propagated (no retry). Last error: %s',
+				$integration_id,
+				$payload['reason'] ?? 'unknown'
+			);
+		}
+
+		/** This action is documented in includes/class-alert-manager.php */
+		do_action(
+			'newspack_alert',
+			[
+				'type'      => 'sync_permanent_failure',
+				'severity'  => $is_config ? 'error' : 'warning',
 				'message'   => $message,
 				'context'   => $payload,
 				'timestamp' => time(),
@@ -287,11 +466,15 @@ class Alert_Manager {
 					continue;
 				}
 
-				$message = sprintf(
-					'Pattern detected: %d failures with %s "%s" in the last %s.',
+				// When grouping by contact email, keep the email out of the
+				// message; it is forwarded via Logger's `user_email` param
+				// (see forward_alert_to_log) and stays in `context`.
+				$is_email_group = 'contact_email' === $rule['group_by'];
+				$message        = sprintf(
+					'Pattern detected: %d failures with %s%s in the last %s.',
 					count( $entries ),
 					$rule['label'],
-					$group_value,
+					$is_email_group ? '' : sprintf( ' "%s"', $group_value ),
 					self::format_interval( $rule['interval'] )
 				);
 
@@ -373,14 +556,52 @@ class Alert_Manager {
 	/**
 	 * Handle integration health check failure.
 	 *
+	 * Deduplicates by integration + error-code + error-message signature
+	 * for HEALTH_CHECK_DEDUP_INTERVAL so an hourly cron does not repeat
+	 * the same Slack alert all day. A new error code OR a changed message
+	 * on the same integration (e.g. "list missing" escalating to "auth
+	 * fully revoked") falls outside the key and alerts immediately.
+	 *
+	 * Known boundaries of the dedup contract:
+	 * - Message text is part of the key, so locale shifts between cron
+	 *   passes (e.g. `switch_to_locale()` in a multilingual context) can
+	 *   produce a different key for the same underlying error and
+	 *   re-alert. Newspack ESP error messages are static per code today,
+	 *   so this is theoretical; revisit if dynamic content lands in
+	 *   error strings.
+	 * - The dedup key is stored as a transient, so on hosts backed by a
+	 *   persistent object cache (memcached) the entry can be evicted
+	 *   under LRU pressure before HEALTH_CHECK_DEDUP_INTERVAL elapses.
+	 *   The failure mode is re-alerting on the next hourly cron — the
+	 *   alternative (writing to the options table on every cron tick)
+	 *   has its own cost; transient + accepted re-alert risk is the
+	 *   intentional trade-off here.
+	 *
 	 * @param array $payload Health check failure data.
 	 */
 	public static function handle_health_check_failed( $payload ) {
-		$error   = $payload['error'] ?? null;
+		$error          = $payload['error'] ?? null;
+		$integration_id = $payload['integration_id'] ?? 'unknown';
+		$error_codes    = is_wp_error( $error ) ? $error->get_error_codes() : [];
+		if ( empty( $error_codes ) ) {
+			$error_codes = [ 'unknown' ];
+		}
+		$error_messages = is_wp_error( $error ) ? $error->get_error_messages() : [];
+
+		$dedup_key = self::get_health_check_dedup_key( $integration_id, $error_codes, $error_messages );
+		if ( get_transient( $dedup_key ) ) {
+			return;
+		}
+
+		// Set the dedup transient BEFORE dispatch so a `newspack_alert`
+		// handler that throws (e.g. transient Slack POST failure) cannot
+		// defeat dedup by leaving the key unset for the next hourly cron.
+		set_transient( $dedup_key, time(), self::HEALTH_CHECK_DEDUP_INTERVAL );
+
 		$message = sprintf(
 			'Integration "%s" health check failed: %s',
 			$payload['integration_name'] ?? 'unknown',
-			is_wp_error( $error ) ? implode( '; ', $error->get_error_messages() ) : 'unknown error'
+			is_wp_error( $error ) ? implode( '; ', $error_messages ) : 'unknown error'
 		);
 
 		/** This action is documented in includes/class-alert-manager.php */
@@ -394,6 +615,23 @@ class Alert_Manager {
 				'timestamp' => time(),
 			]
 		);
+	}
+
+	/**
+	 * Get the deduplication transient key for a health-check failure.
+	 *
+	 * @param string   $integration_id The integration identifier.
+	 * @param string[] $error_codes    The WP_Error codes from the failure.
+	 * @param string[] $error_messages The WP_Error messages from the failure.
+	 *
+	 * @return string Transient key.
+	 */
+	private static function get_health_check_dedup_key( $integration_id, $error_codes, $error_messages = [] ) {
+		$codes = array_map( 'strval', $error_codes );
+		sort( $codes );
+		$messages = array_map( 'strval', $error_messages );
+		sort( $messages );
+		return 'newspack_alert_hc_' . md5( $integration_id . ':' . implode( ',', $codes ) . ':' . implode( '|', $messages ) );
 	}
 }
 Alert_Manager::init();

@@ -9,8 +9,8 @@
 
 namespace Newspack_Sponsors;
 
-use \Newspack_Sponsors\Core;
-use \Newspack_Sponsors\Settings;
+use Newspack_Sponsors\Core;
+use Newspack_Sponsors\Settings;
 
 defined( 'ABSPATH' ) || exit;
 

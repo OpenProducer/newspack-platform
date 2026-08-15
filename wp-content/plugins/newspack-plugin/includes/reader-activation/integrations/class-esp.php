@@ -10,7 +10,6 @@ namespace Newspack\Reader_Activation\Integrations;
 use Newspack\Reader_Activation\Integration;
 use Newspack\Reader_Activation\Sync;
 use Newspack\Reader_Activation\Integrations;
-use Newspack\Reader_Activation;
 use Newspack_Newsletters_Contacts;
 use Newspack_Newsletters_Subscription;
 use Newspack\Configuration_Managers;
@@ -35,16 +34,66 @@ class ESP extends Integration {
 	}
 
 	/**
+	 * Whether a newsletter provider is connected in Newspack Newsletters.
+	 *
+	 * Checks STORED configuration only (provider option + credentials
+	 * status) — never the live provider API. See is_set_up() for why.
+	 *
+	 * @return bool True if a provider is selected and its credentials are stored.
+	 */
+	public function is_connected() {
+		$newsletters_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-newsletters' );
+		if ( ! $newsletters_configuration_manager || is_wp_error( $newsletters_configuration_manager ) ) {
+			return false;
+		}
+		return (bool) $newsletters_configuration_manager->is_esp_set_up();
+	}
+
+	/**
+	 * Why the ESP integration cannot operate with the current provider.
+	 *
+	 * The "manual" provider is valid for authoring newsletters but exposes no
+	 * API for contact syncing: no lists, no master list, no contact upsert.
+	 *
+	 * @return string|null Reason string when the provider is manual, null otherwise.
+	 */
+	public function get_unsupported_reason() {
+		if ( class_exists( 'Newspack_Newsletters' ) && 'manual' === \Newspack_Newsletters::service_provider() ) {
+			return __( 'Requires an API-based ESP', 'newspack-plugin' );
+		}
+		return null;
+	}
+
+	/**
+	 * The remedy for the manual provider: swap it for an API-based one.
+	 *
+	 * "Connect" would be wrong here — the site is connected, just to a provider
+	 * that exposes no contact-sync API.
+	 *
+	 * @return string The action label.
+	 */
+	public function get_unsupported_action_label() {
+		return __( 'Change provider', 'newspack-plugin' );
+	}
+
+	/**
 	 * Whether the ESP integration is ready to sync.
 	 *
-	 * Mirrors the readiness gate used by get_settings_config() so the configure
-	 * UI never advertises a card as set up while the underlying settings call
-	 * short-circuits to an empty config.
+	 * Checks STORED configuration only — provider option set + master list
+	 * option set. Does NOT call the live provider API. A live `get_lists()`
+	 * call here would mean: every gate that consults `is_set_up()`
+	 * (`Integrations::get_active_configured_integrations()`, the retry-time
+	 * guards in `Contact_Sync` / `Contact_Pull`) would silently skip and
+	 * lose data on any transient provider failure — exactly the failure
+	 * mode the AS retry system was built to survive. The setup question
+	 * "did the admin finish configuring this?" must be answered from local
+	 * state; "is the provider reachable right now?" is `health_check()`'s
+	 * job.
 	 *
-	 * @return bool True if an ESP provider is selected and at least one list is active.
+	 * @return bool True if a provider is selected and a master list ID is stored.
 	 */
 	public function is_set_up() {
-		return Reader_Activation::is_esp_configured();
+		return $this->is_connected() && (bool) $this->get_master_list_id();
 	}
 
 	/**
@@ -65,6 +114,40 @@ class ESP extends Integration {
 	}
 
 	/**
+	 * The selected ESP provider slug, so the integration card shows its brand mark.
+	 *
+	 * Reported whenever a provider is selected — including the manual provider,
+	 * which is unsupported yet still carries its own mark. The card falls back to
+	 * its generic icon only when no provider is selected at all.
+	 *
+	 * @return string|null The provider service slug (e.g. 'mailchimp'), or null.
+	 */
+	public function get_provider_slug() {
+		if ( ! class_exists( 'Newspack_Newsletters' ) ) {
+			return null;
+		}
+		$service = \Newspack_Newsletters::service_provider();
+		return ! empty( $service ) ? $service : null;
+	}
+
+	/**
+	 * Get the plugins this integration depends on, with their install/active status.
+	 *
+	 * @return array List of associative arrays with keys `slug`, `name`, `is_active`, `is_installed`.
+	 */
+	public function get_required_plugins() {
+		$status = \Newspack\Plugin_Manager::get_managed_plugin_status( 'newspack-newsletters' );
+		return [
+			[
+				'slug'         => 'newspack-newsletters',
+				'name'         => __( 'Newspack Newsletters', 'newspack-plugin' ),
+				'is_active'    => 'active' === $status,
+				'is_installed' => 'uninstalled' !== $status,
+			],
+		];
+	}
+
+	/**
 	 * Register the settings fields declared by this integration.
 	 *
 	 * Returns ALL possible ESP fields unconditionally as static
@@ -79,6 +162,7 @@ class ESP extends Integration {
 				'key'         => 'mailchimp_audience_id',
 				'type'        => 'select',
 				'default'     => '',
+				'required'    => true,
 				'label'       => __( 'Mailchimp Audience', 'newspack-plugin' ),
 				'description' => __( 'Choose an audience to receive reader activity data.', 'newspack-plugin' ),
 			],
@@ -103,6 +187,7 @@ class ESP extends Integration {
 				'key'         => 'active_campaign_master_list',
 				'type'        => 'select',
 				'default'     => '',
+				'required'    => true,
 				'label'       => __( 'ActiveCampaign Master List', 'newspack-plugin' ),
 				'description' => __( 'Choose a master list to which all registered readers will be added.', 'newspack-plugin' ),
 			],
@@ -110,15 +195,9 @@ class ESP extends Integration {
 				'key'         => 'constant_contact_list_id',
 				'type'        => 'select',
 				'default'     => '',
+				'required'    => true,
 				'label'       => __( 'Constant Contact Master List', 'newspack-plugin' ),
 				'description' => __( 'Choose a master list to which all registered readers will be added.', 'newspack-plugin' ),
-			],
-			[
-				'key'         => 'sync_esp_delete',
-				'type'        => 'checkbox',
-				'default'     => true,
-				'label'       => __( 'Sync user account deletion', 'newspack-plugin' ),
-				'description' => __( 'When a reader account is deleted, also remove the contact from the ESP.', 'newspack-plugin' ),
 			],
 		];
 	}
@@ -130,10 +209,14 @@ class ESP extends Integration {
 	 * expensive data (API-fetched list options).
 	 * Only called when serving the settings UI.
 	 *
+	 * Available as soon as the provider is connected (`is_connected()`),
+	 * so the master-list options can be collected right after connecting —
+	 * before any subscription lists are enabled.
+	 *
 	 * @return array Array of field declarations with current values.
 	 */
 	public function get_settings_config() {
-		if ( ! Reader_Activation::is_esp_configured() ) {
+		if ( ! $this->is_connected() ) {
 			return [];
 		}
 		$provider = $this->get_provider();
@@ -172,10 +255,12 @@ class ESP extends Integration {
 				);
 				break;
 		}
-		$enriched[]    = $config['sync_esp_delete'];
-		$metadata_keys = array_column( $this->get_metadata_fields(), 'key' );
+		$auto_keys = array_merge(
+			array_column( $this->get_account_deletion_fields(), 'key' ),
+			array_column( $this->get_metadata_fields(), 'key' )
+		);
 		foreach ( $config as $field ) {
-			if ( in_array( $field['key'], $metadata_keys ) ) {
+			if ( in_array( $field['key'], $auto_keys, true ) ) {
 				$enriched[] = $config[ $field['key'] ];
 			}
 		}
@@ -340,21 +425,49 @@ class ESP extends Integration {
 	/**
 	 * Push contact data to the integration destination.
 	 *
-	 * @param array      $contact The contact data to push.
-	 * @param string     $context Optional. The context of the sync.
+	 * @param array      $contact          The contact data to push.
+	 * @param string     $context          Optional. The context of the sync.
 	 * @param array|null $existing_contact Optional. Existing contact data if available.
+	 * @param array      $options          Optional. Sync options. Recognized keys:
+	 *                                     `skip_lists` (bool) — upsert without a master
+	 *                                     list so an unsubscribed contact is not
+	 *                                     resubscribed (the contact is still created if
+	 *                                     missing, but joins no list).
 	 *
 	 * @return true|\WP_Error True on success or WP_Error on failure.
 	 */
-	public function push_contact_data( $contact, $context = '', $existing_contact = null ) {
+	public function push_contact_data( $contact, $context = '', $existing_contact = null, $options = [] ) {
 		$can_sync = $this->can_sync( true );
 		if ( $can_sync->has_errors() ) {
 			return $can_sync;
 		}
 
-		$master_list_id = $this->get_master_list_id();
+		$master_list_id = ! empty( $options['skip_lists'] ) ? false : $this->get_master_list_id();
 
 		return Newspack_Newsletters_Contacts::upsert( $contact, $master_list_id, $context, $existing_contact );
+	}
+
+	/**
+	 * ESP supports hard-deleting contacts via Newspack_Newsletters_Contacts::delete().
+	 *
+	 * @return bool
+	 */
+	public function supports_hard_delete(): bool {
+		return true;
+	}
+
+	/**
+	 * Delete a contact from the connected ESP.
+	 *
+	 * @param string $email Email address.
+	 * @return true|\WP_Error
+	 */
+	public function delete_contact( string $email ) {
+		$can_sync = $this->can_sync( true );
+		if ( $can_sync->has_errors() ) {
+			return $can_sync;
+		}
+		return \Newspack_Newsletters_Contacts::delete( $email, 'RAS Reader deleted' );
 	}
 
 	/**

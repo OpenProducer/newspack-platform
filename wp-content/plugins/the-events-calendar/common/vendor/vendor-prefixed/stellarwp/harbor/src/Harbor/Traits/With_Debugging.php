@@ -21,6 +21,11 @@ trait With_Debugging {
 	 *
 	 * All messages are prefixed with "Harbor:" for easy filtering in the debug log.
 	 *
+	 * Logging is skipped entirely when the `LW_HARBOR_DISABLE_DEBUG_LOG` constant is
+	 * defined and truthy, allowing site owners to silence Harbor's debug output even
+	 * while `WP_DEBUG` and `WP_DEBUG_LOG` remain enabled for other purposes.
+	 *
+	 * @since 1.5.0 add LW_HARBOR_DISABLE_DEBUG_LOG
 	 * @since 1.0.0
 	 *
 	 * @param string $message The message to log.
@@ -28,6 +33,11 @@ trait With_Debugging {
 	 * @return void
 	 */
 	protected static function debug_log( string $message ): void {
+		// Allow site owners to opt out of Harbor's debug logging without disabling WP_DEBUG.
+		if ( defined( 'LW_HARBOR_DISABLE_DEBUG_LOG' ) && LW_HARBOR_DISABLE_DEBUG_LOG ) {
+			return;
+		}
+
 		// Inline check for WP_DEBUG instead of using the `is_wp_debug()` method here because `is_wp_debug()` is not static and we don't want to change it because of the backwards compatibility.
 		if (
 			! defined( 'WP_DEBUG' )

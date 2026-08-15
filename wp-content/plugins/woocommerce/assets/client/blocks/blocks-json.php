@@ -3249,7 +3249,8 @@ return array(
 				'default' => false
 			),
 			'__privatePreviewState' => array(
-				'type' => 'object'
+				'type' => 'object',
+				'role' => 'local'
 			)
 		),
 		'providesContext' => array(
@@ -3446,7 +3447,7 @@ return array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'name' => 'woocommerce/product-filter-active',
 		'title' => 'Active Filters',
-		'description' => 'Display the currently active filters.',
+		'description' => 'Display all active filters.',
 		'category' => 'woocommerce',
 		'keywords' => array(
 			'WooCommerce'
@@ -3490,7 +3491,7 @@ return array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'name' => 'woocommerce/product-filter-attribute',
 		'title' => 'Attribute Filter',
-		'description' => 'Enable customers to filter the product grid by selecting one or more attributes, such as color.',
+		'description' => 'Let shoppers filter products by attribute.',
 		'category' => 'woocommerce',
 		'keywords' => array(
 			'WooCommerce'
@@ -3594,7 +3595,7 @@ return array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'name' => 'woocommerce/product-filter-checkbox-list',
 		'title' => 'List',
-		'description' => 'Display a list of filter options.',
+		'description' => 'Display filter options as a list.',
 		'category' => 'woocommerce',
 		'keywords' => array(
 			'WooCommerce'
@@ -3727,7 +3728,7 @@ return array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'name' => 'woocommerce/product-filter-clear-button',
 		'title' => 'Clear filters',
-		'description' => 'Allows shoppers to clear active filters.',
+		'description' => 'Let shoppers clear any active filters.',
 		'category' => 'woocommerce',
 		'keywords' => array(
 			'WooCommerce',
@@ -3750,7 +3751,7 @@ return array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'name' => 'woocommerce/product-filter-price',
 		'title' => 'Price Filter',
-		'description' => 'Let shoppers filter products by choosing a price range.',
+		'description' => 'Let shoppers filter products by price.',
 		'category' => 'woocommerce',
 		'keywords' => array(
 			'WooCommerce'
@@ -3773,7 +3774,7 @@ return array(
 	'product-filter-price-slider' => array(
 		'name' => 'woocommerce/product-filter-price-slider',
 		'title' => 'Price Slider',
-		'description' => 'A slider helps shopper choose a price range.',
+		'description' => 'Let shoppers choose a price range with a slider.',
 		'category' => 'woocommerce',
 		'keywords' => array(
 			'WooCommerce'
@@ -3836,7 +3837,7 @@ return array(
 	'product-filter-rating' => array(
 		'name' => 'woocommerce/product-filter-rating',
 		'title' => 'Rating Filter',
-		'description' => 'Enable customers to filter the product collection by rating.',
+		'description' => 'Let shoppers filter products by rating.',
 		'category' => 'woocommerce',
 		'keywords' => array(
 			
@@ -3881,7 +3882,7 @@ return array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'name' => 'woocommerce/product-filter-removable-chips',
 		'title' => 'Chips',
-		'description' => 'Display removable active filters as chips.',
+		'description' => 'Display active filters as removable chips.',
 		'category' => 'woocommerce',
 		'keywords' => array(
 			'WooCommerce'
@@ -3930,8 +3931,8 @@ return array(
 	),
 	'product-filter-status' => array(
 		'name' => 'woocommerce/product-filter-status',
-		'title' => 'Status Filter',
-		'description' => 'Let shoppers filter products by choosing stock status.',
+		'title' => 'Availability Filter',
+		'description' => 'Let shoppers filter products by availability.',
 		'category' => 'woocommerce',
 		'keywords' => array(
 			'WooCommerce'
@@ -4019,7 +4020,7 @@ return array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'name' => 'woocommerce/product-filter-taxonomy',
 		'title' => 'Taxonomy Filter',
-		'description' => 'Enable customers to filter the product collection by selecting one or more taxonomy terms, such as categories, brands, or tags.',
+		'description' => 'Let shoppers filter products by category, brand, or tag.',
 		'category' => 'woocommerce',
 		'keywords' => array(
 			'WooCommerce'
@@ -4115,7 +4116,7 @@ return array(
 		'apiVersion' => 3,
 		'name' => 'woocommerce/product-filters',
 		'title' => 'Product Filters',
-		'description' => 'Let shoppers filter products displayed on the page.',
+		'description' => 'Add a set of filters shoppers can use.',
 		'category' => 'woocommerce',
 		'keywords' => array(
 			'WooCommerce'
@@ -4129,7 +4130,6 @@ return array(
 				'enableContrastChecker' => false,
 				'button' => true
 			),
-			'multiple' => false,
 			'inserter' => true,
 			'interactivity' => true,
 			'typography' => array(
@@ -4159,6 +4159,10 @@ return array(
 			'isPreview' => array(
 				'type' => 'boolean',
 				'default' => false
+			),
+			'showFilterDrawer' => array(
+				'type' => 'boolean',
+				'default' => true
 			)
 		),
 		'example' => array(
@@ -4221,6 +4225,7 @@ return array(
 			
 		),
 		'viewScriptModule' => 'woocommerce/product-gallery',
+		'editorStyle' => 'file:../woocommerce/product-gallery-editor.css',
 		'style' => 'file:../woocommerce/product-gallery-style.css'
 	),
 	'product-gallery-large-image' => array(
@@ -4738,7 +4743,6 @@ return array(
 			'woocommerce/product-template',
 			'core/post-template'
 		),
-		'viewScriptModule' => 'product-price',
 		'style' => 'file:../product-price.css',
 		'$schema' => 'https://schemas.wp.org/trunk/block.json'
 	),

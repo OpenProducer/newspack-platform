@@ -80,7 +80,8 @@
   padding: 1rem;
 }
 
-.block-editor-format-toolbar__math-input {
+.block-editor-format-toolbar__math-input input {
+  font-family: Menlo, Consolas, monaco, monospace;
   /*rtl:ignore*/
   direction: ltr;
 }
