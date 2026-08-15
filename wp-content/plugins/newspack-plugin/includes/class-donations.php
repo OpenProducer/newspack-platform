@@ -278,12 +278,127 @@ class Donations {
 	 * @return boolean True if a donation product, false if not.
 	 */
 	public static function is_donation_product( $product_id ) {
-		$parent_product = self::get_parent_donation_product();
-		if ( ! $parent_product ) {
-			return false;
+		// Check the meta flag first (fast path).
+		if ( function_exists( 'wc_bool_to_string' ) && get_post_meta( $product_id, WooCommerce_Products::DONATION_FLAG_META_KEY, true ) === wc_bool_to_string( true ) ) {
+			return true;
 		}
-		$donation_product_ids = array_values( self::get_donation_product_child_products_ids() );
-		return in_array( $product_id, $donation_product_ids, true ) || $product_id === $parent_product->get_id();
+
+		// Variations inherit the donation flag from their parent (variable / variable-subscription).
+		if ( function_exists( 'wc_get_product' ) ) {
+			$product = \wc_get_product( $product_id );
+			if ( $product && $product->is_type( [ 'variation', 'subscription_variation' ] ) ) {
+				$parent_id = $product->get_parent_id();
+				if ( $parent_id && get_post_meta( $parent_id, WooCommerce_Products::DONATION_FLAG_META_KEY, true ) === wc_bool_to_string( true ) ) {
+					return true;
+				}
+			}
+		}
+
+		// Fall back to the legacy parent/child donation product check.
+		return in_array( $product_id, self::get_legacy_donation_product_ids(), true );
+	}
+
+	/**
+	 * Request-level cache of the legacy donation product IDs, keyed by the
+	 * parent-product option.
+	 *
+	 * The key only covers the parent: children can be regenerated under a stable
+	 * option (see update_donation_product()), which the key cannot detect. Call
+	 * reset_legacy_donation_product_ids_cache() after any write that may have
+	 * changed them.
+	 *
+	 * @var array|null
+	 */
+	private static $legacy_donation_product_ids = null;
+
+	/**
+	 * Reset the cached legacy donation product IDs.
+	 *
+	 * Call this after regenerating the donation products in the same request or
+	 * other long-lived process so subsequent lookups reload the current set.
+	 */
+	public static function reset_legacy_donation_product_ids_cache() {
+		self::$legacy_donation_product_ids = null;
+	}
+
+	/**
+	 * Get the legacy donation product IDs: the grouped parent and its children.
+	 *
+	 * Memoized because the answer is request-invariant while callers are not:
+	 * is_donation_product() runs once per row of a products REST response, and
+	 * resolving this from scratch re-instantiates the parent product and each of
+	 * its children every time.
+	 *
+	 * @return int[] Legacy donation product IDs, empty when none is configured.
+	 */
+	private static function get_legacy_donation_product_ids() {
+		$option_id = (int) get_option( self::DONATION_PRODUCT_ID_OPTION, 0 );
+		if ( null !== self::$legacy_donation_product_ids && self::$legacy_donation_product_ids['option_id'] === $option_id ) {
+			return self::$legacy_donation_product_ids['ids'];
+		}
+
+		$ids            = [];
+		$parent_product = self::get_parent_donation_product();
+		if ( $parent_product ) {
+			// Missing frequencies are stored as false; strict in_array() would never
+			// match them anyway, so drop them rather than carry them around.
+			$ids   = array_values( array_filter( self::get_donation_product_child_products_ids() ) );
+			$ids[] = $parent_product->get_id();
+		}
+
+		self::$legacy_donation_product_ids = [
+			'option_id' => $option_id,
+			'ids'       => $ids,
+		];
+		return $ids;
+	}
+
+	/**
+	 * Cached list of product IDs flagged as donations.
+	 *
+	 * @var int[]|null
+	 */
+	private static $flagged_donation_product_ids = null;
+
+	/**
+	 * Get IDs of all products flagged as donations via the _newspack_is_donation meta.
+	 *
+	 * @return int[] Array of product IDs.
+	 */
+	public static function get_flagged_donation_product_ids() {
+		if ( null !== self::$flagged_donation_product_ids ) {
+			return self::$flagged_donation_product_ids;
+		}
+		if ( ! function_exists( 'wc_bool_to_string' ) ) {
+			return [];
+		}
+		$flagged_products = get_posts(
+			[
+				'post_type'      => 'product',
+				'post_status'    => 'any',
+				'posts_per_page' => -1,
+				'fields'         => 'ids',
+				'meta_query'     => [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+					[
+						'key'   => WooCommerce_Products::DONATION_FLAG_META_KEY,
+						'value' => wc_bool_to_string( true ),
+					],
+				],
+			]
+		);
+		self::$flagged_donation_product_ids = array_map( 'intval', $flagged_products );
+		return self::$flagged_donation_product_ids;
+	}
+
+	/**
+	 * Reset the cached list of flagged donation product IDs.
+	 *
+	 * Call this after updating donation-flag product meta in the same request
+	 * or other long-lived process so subsequent lookups reload the current set
+	 * of flagged donation products.
+	 */
+	public static function reset_flagged_donation_product_ids_cache() {
+		self::$flagged_donation_product_ids = null;
 	}
 
 	/**
@@ -309,7 +424,7 @@ class Donations {
 	 * @return int|false The donation product ID or false.
 	 */
 	public static function get_order_donation_product_id( $order_id ) {
-		$donation_products = self::get_donation_product_child_products_ids();
+		$donation_products = array_merge( self::get_donation_product_child_products_ids(), self::get_flagged_donation_product_ids() );
 		if ( empty( array_filter( $donation_products ) ) ) {
 			return;
 		}
@@ -598,13 +713,17 @@ class Donations {
 		$parent_product->set_status( 'publish' );
 		$parent_product->save();
 		update_option( self::DONATION_PRODUCT_ID_OPTION, $parent_product->get_id() );
+
+		// Children may have been regenerated under an unchanged parent option, so
+		// neither cache can detect the change on its own. Drop both.
+		self::reset_legacy_donation_product_ids_cache();
+		self::reset_flagged_donation_product_ids_cache();
 	}
 
 	/**
 	 * Remove all donation products from the cart.
 	 */
 	public static function remove_donations_from_cart() {
-		$donation_settings = self::get_donation_settings();
 		if ( ! self::is_platform_wc() || is_wp_error( self::is_woocommerce_suite_active() ) ) {
 			return;
 		}
@@ -629,6 +748,22 @@ class Donations {
 			self::set_platform_slug( $saved_slug );
 		}
 		return $saved_slug;
+	}
+
+	/**
+	 * Whether a reader revenue platform has been explicitly chosen.
+	 *
+	 * The platform option defaults to 'wc' and has no unset value, so first-run
+	 * is detected by whether the option was ever saved.
+	 *
+	 * Note: get_platform_slug() persists 'wc' when migrating a legacy 'stripe'
+	 * platform, which marks the option as saved. Such sites are treated as
+	 * having selected Newspack.
+	 *
+	 * @return bool
+	 */
+	public static function is_platform_selected(): bool {
+		return null !== get_option( self::NEWSPACK_READER_REVENUE_PLATFORM, null );
 	}
 
 	/**
@@ -798,10 +933,25 @@ class Donations {
 		if ( $is_modal_checkout ) {
 			$query_args['modal_checkout'] = 1;
 		}
-		foreach ( [ 'after_success_behavior', 'after_success_button_label', 'after_success_url' ] as $attribute_name ) {
-			$value = filter_input( INPUT_GET, $attribute_name, FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+		// Matched by prefix rather than listed by name. Every `after_success_*` param has to
+		// arrive together: `after_success_token` vouches for the destination in
+		// `after_success_url`, so a param left behind here means a publisher-configured
+		// destination arrives unvouched and is refused as if a link had supplied it. A list
+		// would need editing again the next time one of these is renamed.
+		// Mirrors the same prefix match in `Newspack_Blocks\Modal_Checkout`.
+		// Only the keys are used here; each value is read again below with the filter that
+		// suits it.
+		$request_params = filter_input_array( INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS ) ?? [];
+		foreach ( array_keys( (array) $request_params ) as $attribute_name ) {
+			if ( 0 !== strpos( $attribute_name, 'after_success' ) ) {
+				continue;
+			}
+			// The destination is a URL, not display text: HTML-encoding it here would turn
+			// `&` into `&amp;` in the value itself.
+			$filter = 'after_success_url' === $attribute_name ? FILTER_SANITIZE_URL : FILTER_SANITIZE_FULL_SPECIAL_CHARS;
+			$value  = filter_input( INPUT_GET, $attribute_name, $filter );
 			if ( ! empty( $value ) ) {
-				$query_args[ $attribute_name ] = $value;
+				$query_args[ sanitize_key( $attribute_name ) ] = $value;
 			}
 		}
 
@@ -1072,15 +1222,11 @@ class Donations {
 		if ( ! self::is_platform_wc() ) {
 			return false;
 		}
-		$donation_products_ids = array_values( self::get_donation_product_child_products_ids() );
-		if ( empty( $donation_products_ids ) ) {
-			return false;
-		}
 		if ( ! WC()->cart || ! WC()->cart->cart_contents || ! is_array( WC()->cart->cart_contents ) ) {
 			return false;
 		}
 		foreach ( WC()->cart->cart_contents as $prod_in_cart ) {
-			if ( isset( $prod_in_cart['product_id'] ) && in_array( $prod_in_cart['product_id'], $donation_products_ids ) ) {
+			if ( isset( $prod_in_cart['product_id'] ) && self::is_donation_product( $prod_in_cart['product_id'] ) ) {
 				return true;
 			}
 		}

@@ -11307,8 +11307,12 @@ ${err.toString()}`);
     return Math.floor(Math.random() * 1e9);
   }
   function serializeCrdtDoc(crdtDoc) {
+    const tempDoc = createYjsDoc();
+    applyUpdateV2(tempDoc, encodeStateAsUpdateV2(crdtDoc));
+    const compactedUpdate = encodeStateAsUpdateV2(tempDoc);
+    tempDoc.destroy();
     return JSON.stringify({
-      document: toBase64(encodeStateAsUpdateV2(crdtDoc)),
+      document: toBase64(compactedUpdate),
       updateId: pseudoRandomID()
       // helps with debugging
     });

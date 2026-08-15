@@ -7,7 +7,7 @@
 
 namespace Newspack_Sponsors;
 
-use \Newspack_Sponsors\Core;
+use Newspack_Sponsors\Core;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -167,7 +167,7 @@ final class Settings {
 				'newspack_sponsors_options_group',
 				$setting
 			);
-		};
+		}
 	}
 
 	/**

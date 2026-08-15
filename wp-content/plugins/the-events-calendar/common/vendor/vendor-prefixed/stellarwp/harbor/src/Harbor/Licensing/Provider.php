@@ -53,6 +53,7 @@ final class Provider extends Abstract_Provider {
 				/** @var License_Repository $license_repository */
 				$license_repository = $this->container->get( License_Repository::class );
 				$license_repository->delete_products();
+				$license_repository->delete_validation_state();
 			}
 		);
 

@@ -34,7 +34,7 @@ class Request implements \YoastSEO_Vendor\Psr\Http\Message\RequestInterface
             $uri = new \YoastSEO_Vendor\GuzzleHttp\Psr7\Uri($uri);
         }
         self::warnOnMethodCasingChange($method);
-        $this->method = \strtoupper($method);
+        $this->method = \YoastSEO_Vendor\GuzzleHttp\Psr7\Utils::asciiToUpper($method);
         $this->uri = $uri;
         $this->setHeaders($headers);
         $this->protocol = $version;
@@ -61,7 +61,11 @@ class Request implements \YoastSEO_Vendor\Psr\Http\Message\RequestInterface
     }
     public function withRequestTarget($requestTarget) : \YoastSEO_Vendor\Psr\Http\Message\RequestInterface
     {
-        if (\preg_match('#\\s#', $requestTarget)) {
+        $hasWhitespace = \preg_match('#\\s#', $requestTarget);
+        if ($hasWhitespace === \false) {
+            throw new \RuntimeException('Unable to validate request target: ' . \preg_last_error_msg());
+        }
+        if ($hasWhitespace === 1) {
             throw new \InvalidArgumentException('Invalid request target provided; cannot contain whitespace');
         }
         $new = clone $this;
@@ -77,7 +81,7 @@ class Request implements \YoastSEO_Vendor\Psr\Http\Message\RequestInterface
         $this->assertMethod($method);
         self::warnOnMethodCasingChange($method);
         $new = clone $this;
-        $new->method = \strtoupper($method);
+        $new->method = \YoastSEO_Vendor\GuzzleHttp\Psr7\Utils::asciiToUpper($method);
         return $new;
     }
     public function getUri() : \YoastSEO_Vendor\Psr\Http\Message\UriInterface
@@ -132,7 +136,7 @@ class Request implements \YoastSEO_Vendor\Psr\Http\Message\RequestInterface
     }
     private static function warnOnMethodCasingChange(string $method) : void
     {
-        if ($method !== \strtoupper($method)) {
+        if ($method !== \YoastSEO_Vendor\GuzzleHttp\Psr7\Utils::asciiToUpper($method)) {
             \YoastSEO_Vendor\trigger_deprecation('guzzlehttp/psr7', '2.11', 'Passing a non-uppercase HTTP method is deprecated; guzzlehttp/psr7 3.0 preserves method casing and will no longer uppercase it. Normalize the method before constructing or modifying requests if uppercase is required.');
         }
     }

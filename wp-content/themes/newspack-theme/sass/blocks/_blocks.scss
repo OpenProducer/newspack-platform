@@ -240,6 +240,15 @@ p.has-background {
 	padding: 20px 30px;
 }
 
+.entry-content,
+[id="pico"],
+.newspack-popup,
+.widget {
+	p:empty {
+		display: none;
+	}
+}
+
 //! Newspack Article Block
 .wpnbha {
 	figcaption {
@@ -992,6 +1001,12 @@ body:not(.wp-child-theme-newspack-joseph):not(.wp-child-theme-newspack-nelson) .
 	img:not([style*="object-fit"]) {
 		height: auto !important; // !important to override inline styles.
 	}
+
+	// Preventing space under linked images; the wacky structure is to avoid affecting images from migrations that may not have ideal markup.
+	& > a:has( img ) {
+		display: block;
+	}
+
 }
 
 //! Galleries
@@ -1080,6 +1095,17 @@ hr {
 			color: inherit;
 		}
 	}
+}
+
+// Default-width separators need a short max-width. Historically WordPress core
+// pinned this with `.wp-block-separator { width: 100px }` (the separator block's
+// theme.css). WordPress 7.0 stopped enqueuing that rule in separate-block-assets
+// mode, exposing that inside post content `.entry .entry-content > *` (0,2,0)
+// out-specifies the base `.wp-block-separator` (0,1,0) max-width above, so a
+// Default separator stretched to full width. Re-assert the short width for the
+// default style with a higher-specificity selector (0,3,0). See NPPM-2930.
+.wp-block-separator:not(.is-style-wide):not(.is-style-dots) {
+	max-width: #{5 * structure.$size__spacing-unit};
 }
 
 .entry .entry-content,

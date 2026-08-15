@@ -21681,16 +21681,16 @@ var ReactDOM = (() => {
     }
   });
 
-  // <stdin>
-  var require_stdin = __commonJS({
-    "<stdin>"(exports, module) {
+  // ../react-18/react-dom.js
+  var require_react_dom2 = __commonJS({
+    "../react-18/react-dom.js"(exports, module) {
       module.exports = {
         ...require_react_dom(),
         ...require_client()
       };
     }
   });
-  return require_stdin();
+  return require_react_dom2();
 })();
 /*! Bundled license information:
 

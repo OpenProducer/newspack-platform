@@ -155,6 +155,11 @@ return array(
 		'min_only' => true,
 	),
 	array(
+		'id' => '@wordpress/widget-primitives',
+		'path' => 'widget-primitives/index',
+		'asset' => 'widget-primitives/index.min.asset.php',
+	),
+	array(
 		'id' => '@wordpress/workflow',
 		'path' => 'workflow/index',
 		'asset' => 'workflow/index.min.asset.php',

@@ -27,6 +27,15 @@ final class EasyHandle
      */
     public $headers = [];
     /**
+     * @var array Valid trailer lines, retained only when an on_trailers
+     *            callback is configured
+     */
+    public $trailers = [];
+    /**
+     * @var bool Whether this handle was configured with CURLOPT_PIPEWAIT
+     */
+    public $usesPipewait = \false;
+    /**
      * @var ResponseInterface|null Received response (if any)
      */
     public $response;
@@ -47,6 +56,13 @@ final class EasyHandle
      */
     public $effectiveProxy;
     /**
+     * Proxy tunnel or SOCKS proxy section signature for connection-reuse
+     * isolation, or null when the request does not require sectioning.
+     *
+     * @var string|null
+     */
+    public $proxyTunnelSignature;
+    /**
      * @var \Throwable|null Exception during on_headers (if any)
      */
     public $onHeadersException;
@@ -65,7 +81,7 @@ final class EasyHandle
         $this->response = null;
         [$ver, $status, $reason, $headers] = \YoastSEO_Vendor\GuzzleHttp\Handler\HeaderProcessor::parseHeaders($this->headers);
         $normalizedKeys = \YoastSEO_Vendor\GuzzleHttp\Utils::normalizeHeaderKeys($headers);
-        if (!empty($this->options['decode_content']) && isset($normalizedKeys['content-encoding'])) {
+        if (isset($this->options['decode_content']) && $this->options['decode_content'] !== \false && isset($normalizedKeys['content-encoding'])) {
             $headers['x-encoded-content-encoding'] = $headers[$normalizedKeys['content-encoding']];
             unset($headers[$normalizedKeys['content-encoding']]);
             if (isset($normalizedKeys['content-length'])) {

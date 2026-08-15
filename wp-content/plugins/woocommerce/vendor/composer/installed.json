@@ -1112,17 +1112,17 @@
         },
         {
             "name": "woocommerce/action-scheduler",
-            "version": "3.9.3",
-            "version_normalized": "3.9.3.0",
+            "version": "4.0.0",
+            "version_normalized": "4.0.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/woocommerce/action-scheduler.git",
-                "reference": "c58cdbab17651303d406cd3b22cf9d75c71c986c"
+                "reference": "7321e865436e125a997de5ad95bdc8821c5a53e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/woocommerce/action-scheduler/zipball/c58cdbab17651303d406cd3b22cf9d75c71c986c",
-                "reference": "c58cdbab17651303d406cd3b22cf9d75c71c986c",
+                "url": "https://api.github.com/repos/woocommerce/action-scheduler/zipball/7321e865436e125a997de5ad95bdc8821c5a53e3",
+                "reference": "7321e865436e125a997de5ad95bdc8821c5a53e3",
                 "shasum": ""
             },
             "require": {
@@ -1134,7 +1134,7 @@
                 "wp-cli/wp-cli": "~2.5.0",
                 "yoast/phpunit-polyfills": "^2.0"
             },
-            "time": "2025-07-15T09:32:30+00:00",
+            "time": "2026-06-16T15:01:01+00:00",
             "type": "wordpress-plugin",
             "extra": {
                 "scripts-description": {
@@ -1152,7 +1152,7 @@
             "homepage": "https://actionscheduler.org/",
             "support": {
                 "issues": "https://github.com/woocommerce/action-scheduler/issues",
-                "source": "https://github.com/woocommerce/action-scheduler/tree/3.9.3"
+                "source": "https://github.com/woocommerce/action-scheduler/tree/4.0.0"
             },
             "install-path": "../../packages/action-scheduler"
         },
@@ -1226,12 +1226,12 @@
         },
         {
             "name": "woocommerce/email-editor",
-            "version": "2.13.0",
-            "version_normalized": "2.13.0.0",
+            "version": "2.14.0",
+            "version_normalized": "2.14.0.0",
             "dist": {
                 "type": "path",
                 "url": "../../packages/php/email-editor",
-                "reference": "da46bc3b7b39e7a3ff8476a762b50cdaf7e1299d"
+                "reference": "c73d7ed3745213cfe0b2b09289be5846d4dc0fe0"
             },
             "require": {
                 "php": ">=7.4"

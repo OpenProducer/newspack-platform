@@ -238,6 +238,10 @@
     transition: padding ease-out 0.1s;
   }
 }
+.dataviews__search {
+  flex-grow: 1;
+}
+
 .dataviews-no-results,
 .dataviews-loading {
   padding: 0 var(--wpds-dimension-padding-2xl, 24px);
@@ -950,8 +954,7 @@
 }
 
 .dataviews-search {
-  width: -moz-fit-content;
-  width: fit-content;
+  flex-basis: 210px;
 }
 
 .dataviews-filters__user-input-widget {
@@ -3694,11 +3697,15 @@ fieldset.fields__media-edit .fields__media-edit-expanded:not(.is-empty) .fields_
 }
 
 @media (min-width: 600px) {
-  .font-library__page-selection .font-library__page-selection-trigger {
+  .font-library__page-selection .components-select-control__input {
     font-size: 11px !important;
     font-weight: var(--wpds-typography-font-weight-emphasis, 600);
   }
 }
+.font-library__search {
+  width: 240px;
+}
+
 .font-library__fonts-title {
   text-transform: uppercase;
   font-size: 11px;
@@ -4469,6 +4476,7 @@ button.font-library__upload-area {
 }
 
 .edit-site-canvas-loader {
+  --wp-components-color-foreground: var(--color);
   width: 100%;
   height: 100%;
   display: flex;
@@ -4484,9 +4492,6 @@ button.font-library__upload-area {
     animation: 0.5s ease 0.2s edit-site-canvas-loader__fade-in-animation;
     animation-fill-mode: forwards;
   }
-}
-.edit-site-canvas-loader > div {
-  width: 160px;
 }
 
 @keyframes edit-site-canvas-loader__fade-in-animation {

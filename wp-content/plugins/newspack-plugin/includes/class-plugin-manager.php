@@ -32,6 +32,19 @@ class Plugin_Manager {
 	];
 
 	/**
+	 * Per-request memoization for get_managed_plugin_status(), keyed by slug.
+	 *
+	 * The underlying get_installed_plugins() calls wp_get_themes() which rescans
+	 * /themes on every call (get_plugins() is cached intra-request, themes are
+	 * not). With multiple integrations declaring the same required plugin, that
+	 * scan ran once per lookup. The cache is per-request, so plugin state changes
+	 * between requests are picked up on the next call.
+	 *
+	 * @var array<string, string>
+	 */
+	private static $managed_plugin_status_cache = [];
+
+	/**
 	 * Get info about all the managed plugins and their status.
 	 *
 	 * @todo Define what the structure of this looks like better and load it up from a config or something.
@@ -91,7 +104,7 @@ class Plugin_Manager {
 				'Author'      => \esc_html__( 'Automattic', 'newspack-plugin' ),
 				'PluginURI'   => \esc_url( 'https://newspack.com' ),
 				'AuthorURI'   => \esc_url( 'https://automattic.com' ),
-				'Download'    => 'https://github.com/Automattic/newspack-ads/releases/latest/download/newspack-ads.zip',
+				'Download'    => 'https://newspack.com/downloads/newspack-ads/latest',
 			],
 			'newspack-blocks'             => [
 				'Name'        => \esc_html__( 'Newspack Blocks', 'newspack-plugin' ),
@@ -99,7 +112,7 @@ class Plugin_Manager {
 				'Author'      => \esc_html__( 'Automattic', 'newspack-plugin' ),
 				'PluginURI'   => \esc_url( 'https://newspack.com' ),
 				'AuthorURI'   => \esc_url( 'https://automattic.com' ),
-				'Download'    => 'https://github.com/Automattic/newspack-blocks/releases/latest/download/newspack-blocks.zip',
+				'Download'    => 'https://newspack.com/downloads/newspack-blocks/latest',
 			],
 			'newspack-content-converter'  => [
 				'Name'        => \esc_html__( 'Newspack Content Converter', 'newspack-plugin' ),
@@ -116,7 +129,7 @@ class Plugin_Manager {
 				'Author'      => \esc_html__( 'Automattic', 'newspack-plugin' ),
 				'PluginURI'   => \esc_url( 'https://newspack.com' ),
 				'AuthorURI'   => \esc_url( 'https://automattic.com' ),
-				'Download'    => 'https://github.com/Automattic/newspack-multibranded-site/releases/latest/download/newspack-multibranded-site.zip',
+				'Download'    => 'https://newspack.com/downloads/newspack-multibranded-site/latest',
 				'Quiet'       => true,
 			],
 			'newspack-network'            => [
@@ -125,7 +138,7 @@ class Plugin_Manager {
 				'Author'      => \esc_html__( 'Automattic', 'newspack-plugin' ),
 				'PluginURI'   => \esc_url( 'https://newspack.com' ),
 				'AuthorURI'   => \esc_url( 'https://automattic.com' ),
-				'Download'    => 'https://github.com/Automattic/newspack-network/releases/latest/download/newspack-network.zip',
+				'Download'    => 'https://newspack.com/downloads/newspack-network/latest',
 				'Quiet'       => true,
 			],
 			'newspack-newsletters'        => [
@@ -134,7 +147,7 @@ class Plugin_Manager {
 				'Author'      => \esc_html__( 'Automattic', 'newspack-plugin' ),
 				'PluginURI'   => \esc_url( 'https://newspack.com' ),
 				'AuthorURI'   => \esc_url( 'https://automattic.com' ),
-				'Download'    => 'https://github.com/Automattic/newspack-newsletters/releases/latest/download/newspack-newsletters.zip',
+				'Download'    => 'https://newspack.com/downloads/newspack-newsletters/latest',
 			],
 			'newspack-popups'             => [
 				'Name'        => \esc_html__( 'Newspack Campaigns', 'newspack-plugin' ),
@@ -142,7 +155,7 @@ class Plugin_Manager {
 				'Author'      => \esc_html__( 'Automattic', 'newspack-plugin' ),
 				'PluginURI'   => \esc_url( 'https://newspack.com' ),
 				'AuthorURI'   => \esc_url( 'https://automattic.com' ),
-				'Download'    => 'https://github.com/Automattic/newspack-popups/releases/latest/download/newspack-popups.zip',
+				'Download'    => 'https://newspack.com/downloads/newspack-popups/latest',
 			],
 			'newspack-sponsors'           => [
 				'Name'        => \esc_html__( 'Newspack Sponsors', 'newspack-plugin' ),
@@ -150,7 +163,7 @@ class Plugin_Manager {
 				'Author'      => \esc_html__( 'Automattic', 'newspack-plugin' ),
 				'PluginURI'   => \esc_url( 'https://newspack.com' ),
 				'AuthorURI'   => \esc_url( 'https://automattic.com' ),
-				'Download'    => 'https://github.com/Automattic/newspack-sponsors/releases/latest/download/newspack-sponsors.zip',
+				'Download'    => 'https://newspack.com/downloads/newspack-sponsors/latest',
 			],
 			'newspack-listings'           => [
 				'Name'        => \esc_html__( 'Newspack Listings', 'newspack-plugin' ),
@@ -158,7 +171,7 @@ class Plugin_Manager {
 				'Author'      => \esc_html__( 'Automattic', 'newspack-plugin' ),
 				'PluginURI'   => \esc_url( 'https://newspack.com' ),
 				'AuthorURI'   => \esc_url( 'https://automattic.com' ),
-				'Download'    => 'https://github.com/Automattic/newspack-listings/releases/latest/download/newspack-listings.zip',
+				'Download'    => 'https://newspack.com/downloads/newspack-listings/latest',
 			],
 			'newspack-theme'              => [
 				'Name'        => \esc_html__( 'Newspack Theme', 'newspack-plugin' ),
@@ -393,6 +406,9 @@ class Plugin_Manager {
 		if ( Newspack::is_debug_mode() ) {
 			return 'active';
 		}
+		if ( isset( self::$managed_plugin_status_cache[ $plugin_slug ] ) ) {
+			return self::$managed_plugin_status_cache[ $plugin_slug ];
+		}
 		$status            = 'uninstalled';
 		$installed_plugins = self::get_installed_plugins();
 
@@ -430,7 +446,18 @@ class Plugin_Manager {
 			}
 		}
 
+		self::$managed_plugin_status_cache[ $plugin_slug ] = $status;
 		return $status;
+	}
+
+	/**
+	 * Reset the per-request memoization of get_managed_plugin_status().
+	 *
+	 * Tests that mutate plugin install/active state mid-test must call this so
+	 * subsequent get_managed_plugin_status() calls re-derive the status.
+	 */
+	public static function reset_managed_plugin_status_cache() {
+		self::$managed_plugin_status_cache = [];
 	}
 
 	/**
@@ -571,6 +598,11 @@ class Plugin_Manager {
 			}
 		}
 
+		// State changed: drop the memoized status so a status read later in this
+		// request (e.g. the configure endpoint's response) reflects the new state
+		// instead of the value cached before activation.
+		self::reset_managed_plugin_status_cache();
+
 		return true;
 	}
 
@@ -600,6 +632,11 @@ class Plugin_Manager {
 		if ( \is_plugin_active( $plugin_file ) ) {
 			return new WP_Error( 'newspack_plugin_failed_deactivation', __( 'Failed to deactivate plugin.', 'newspack-plugin' ) );
 		}
+
+		// State changed: drop the memoized status so subsequent reads in this
+		// request reflect the deactivation.
+		self::reset_managed_plugin_status_cache();
+
 		return true;
 	}
 

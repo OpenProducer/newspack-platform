@@ -68,19 +68,18 @@ class Newsletters_Wizard extends Wizard {
 		// Define admin screens based on Newspack Newsletters plugin's admin pages, post types, and taxonomies.
 		$this->admin_screens = [
 			// Admin pages.
-			'newspack-newsletters-settings' => __( 'Newsletters / Settings', 'newspack-plugin' ),
+			'newspack-newsletters-settings' => [ [ 'label' => __( 'Newsletters', 'newspack-plugin' ) ], [ 'label' => __( 'Settings', 'newspack-plugin' ) ] ],
 			// Admin post types.
-			'newspack_nl_cpt'               => __( 'Newsletters / All Newsletters', 'newspack-plugin' ),
-			'newspack_nl_ads_cpt'           => __( 'Newsletters / Advertising', 'newspack-plugin' ),
+			'newspack_nl_cpt'               => [ [ 'label' => __( 'Newsletters', 'newspack-plugin' ) ], [ 'label' => __( 'All Newsletters', 'newspack-plugin' ) ] ],
+			'newspack_nl_ads_cpt'           => [ [ 'label' => __( 'Newsletters', 'newspack-plugin' ) ], [ 'label' => __( 'Advertising', 'newspack-plugin' ) ] ],
 			// Admin taxonomies.
-			'newspack_nl_advertiser'        => __( 'Newsletters / Advertising', 'newspack-plugin' ),
+			'newspack_nl_advertiser'        => [ [ 'label' => __( 'Newsletters', 'newspack-plugin' ) ], [ 'label' => __( 'Advertising', 'newspack-plugin' ) ] ],
 			// Admin Newsletter Lists.
-			'newspack_nl_list'              => __( 'Newsletters / Lists', 'newspack-plugin' ),
+			'newspack_nl_list'              => [ [ 'label' => __( 'Newsletters', 'newspack-plugin' ) ], [ 'label' => __( 'Lists', 'newspack-plugin' ) ] ],
 		];
 
 		// Menu removals.
 		remove_action( 'admin_menu', [ Newspack_Newsletters_Settings::class, 'add_plugin_page' ] );
-		remove_action( 'admin_menu', [ Newspack_Newsletters_Tracking_Admin::class, 'add_settings_page' ] );
 
 		// Customize the Newsletter ads menu titles.
 		add_filter(
@@ -120,8 +119,8 @@ class Newsletters_Wizard extends Wizard {
 				// Add the admin header.
 				$this->admin_header_init(
 					[
-						'title' => $this->get_name(),
-						'tabs'  => $this->get_tabs(),
+						'breadcrumbs' => $this->admin_screens[ $this->get_screen_slug() ] ?? [],
+						'tabs'        => $this->get_tabs(),
 					]
 				);
 			}
@@ -227,9 +226,25 @@ class Newsletters_Wizard extends Wizard {
 			},
 			[]
 		);
+
+		$labels = [];
+		if ( class_exists( 'Newspack_Newsletters' ) ) {
+			$provider = Newspack_Newsletters::get_service_provider();
+			if ( $provider && method_exists( $provider, 'label' ) ) {
+				// `label()` accepts a second `$context` arg (usually a list public id).
+				// Intentionally omitted here: this is the generic explanation copy
+				// shown above the "Add new local list" button, not a per-list label.
+				$labels = [
+					'local_list_explanation' => $provider::label( 'local_list_explanation' ),
+				];
+			}
+		}
+
 		return [
-			'configured' => $newsletters_configuration_manager->is_configured(),
-			'settings'   => $settings,
+			'configured'    => $newsletters_configuration_manager->is_configured(),
+			'esp_connected' => (bool) $newsletters_configuration_manager->is_esp_set_up(),
+			'settings'      => $settings,
+			'labels'        => $labels,
 		];
 	}
 
@@ -253,6 +268,12 @@ class Newsletters_Wizard extends Wizard {
 		$args                              = $request->get_params();
 		$newsletters_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-newsletters' );
 		$newsletters_configuration_manager->update_settings( $args );
+		// The provider instance is memoized on `init`, before this save runs, so
+		// refresh it before reading credential status — otherwise a provider switch
+		// reports the previously-active provider's connection state.
+		if ( method_exists( 'Newspack_Newsletters', 'memoize_service_provider' ) ) {
+			\Newspack_Newsletters::memoize_service_provider();
+		}
 		return $this->api_get_newsletters_settings();
 	}
 
@@ -321,7 +342,7 @@ class Newsletters_Wizard extends Wizard {
 			'newspack-newsletters-wizard',
 			Newspack::plugin_url() . '/dist/newsletters.js',
 			$this->get_script_dependencies(),
-			NEWSPACK_PLUGIN_VERSION,
+			Newspack::asset_version( 'newsletters' ),
 			true
 		);
 
@@ -343,7 +364,8 @@ class Newsletters_Wizard extends Wizard {
 	 * @return string The wizard name.
 	 */
 	public function get_name() {
-		return esc_html( $this->admin_screens[ $this->get_screen_slug() ] );
+		$breadcrumbs = $this->admin_screens[ $this->get_screen_slug() ] ?? [];
+		return esc_html( implode( ' / ', wp_list_pluck( $breadcrumbs, 'label' ) ) );
 	}
 
 	/**
@@ -407,10 +429,18 @@ class Newsletters_Wizard extends Wizard {
 			$newsletters_post_type_object = get_post_type_object( Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT );
 			$can_edit_newsletters = current_user_can( $newsletters_post_type_object->cap->edit_posts );
 
+			// The Ads and Advertisers React pages share the newspack_nl_ads_cpt
+			// screen (keyed off the admin-shell page slug), while legacy advertiser
+			// taxonomy/term screens resolve to the newspack_nl_advertiser slug.
+			$current_admin_page = filter_input( INPUT_GET, 'page', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+			$on_advertisers     = 'newspack-newsletters-advertisers-list' === $current_admin_page
+				|| 'newspack_nl_advertiser' === $this->get_screen_slug();
+
 			$tabs = [
 				[
-					'textContent' => esc_html__( 'Ads', 'newspack-plugin' ),
-					'href'        => admin_url( 'edit.php?post_type=newspack_nl_ads_cpt' ),
+					'textContent'   => esc_html__( 'Ads', 'newspack-plugin' ),
+					'href'          => admin_url( 'edit.php?post_type=newspack_nl_ads_cpt' ),
+					'forceSelected' => ! $on_advertisers,
 				],
 			];
 
@@ -419,15 +449,9 @@ class Newsletters_Wizard extends Wizard {
 				$tabs[] = [
 					'textContent'   => esc_html__( 'Advertisers', 'newspack-plugin' ),
 					'href'          => admin_url( 'edit-tags.php?taxonomy=newspack_nl_advertiser&post_type=newspack_nl_cpt' ),
-					// also force selected tab for url: term.php?taxonomy=newspack_nl_advertiser&tag_ID=32&post_type=newspack_nl_cpt...
-					'forceSelected' => ( 'newspack_nl_advertiser' === $this->get_screen_slug() ),
+					'forceSelected' => $on_advertisers,
 				];
 			}
-
-			$tabs[] = [
-				'textContent' => esc_html__( 'Tracking', 'newspack-plugin' ),
-				'href'        => admin_url( 'edit.php?post_type=' . Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT . '&page=' . $this->slug . '#/tracking' ),
-			];
 
 			return $tabs;
 		}

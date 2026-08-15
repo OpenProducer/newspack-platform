@@ -25,6 +25,38 @@ function register_block() {
 add_action( 'init', __NAMESPACE__ . '\\register_block' );
 
 /**
+ * Expose whether a product is a donation to the products REST response.
+ *
+ * The block editor needs this to tell the publisher that an attached coupon
+ * will not be applied: Newspack disables coupons for any cart containing a
+ * donation (see Newspack\Donations::disable_coupons()). It cannot be derived
+ * from the product meta alone, because the legacy donation product and its
+ * children are matched by ID rather than by the donation flag, so the answer
+ * is delegated to Donations::is_donation_product().
+ */
+function register_donation_rest_field() {
+	if ( ! class_exists( '\Newspack\Donations' ) || ! method_exists( '\Newspack\Donations', 'is_donation_product' ) ) {
+		return;
+	}
+	register_rest_field(
+		'product',
+		'newspack_is_donation',
+		[
+			'get_callback' => function ( $product ) {
+				return (bool) \Newspack\Donations::is_donation_product( $product['id'] );
+			},
+			'schema'       => [
+				'description' => __( 'Whether the product is treated as a donation by Newspack.', 'newspack-blocks' ),
+				'type'        => 'boolean',
+				'context'     => [ 'view', 'edit' ],
+				'readonly'    => true,
+			],
+		]
+	);
+}
+add_action( 'rest_api_init', __NAMESPACE__ . '\\register_donation_rest_field' );
+
+/**
  * Render the block.
  *
  * @param array $attributes Block attributes.
@@ -43,18 +75,26 @@ function render_callback( $attributes ) {
 	if ( $attributes['is_variable'] && ! empty( $attributes['variation'] ) ) {
 		$product_id = $attributes['variation'];
 	}
-	\Newspack_Blocks\Modal_Checkout::enqueue_modal( $product_id );
+	// Register the parent for variable buttons so the picker is rendered.
+	// The form still carries any locked variation for direct clicks.
+	$modal_product_id = ! empty( $attributes['is_variable'] ) && ! empty( $attributes['product'] )
+		? $attributes['product']
+		: $product_id;
+	\Newspack_Blocks\Modal_Checkout::enqueue_modal( $modal_product_id );
 	\Newspack_Blocks::enqueue_view_assets( 'checkout-button' );
 
 	$background_color           = $attributes['backgroundColor'] ?? '';
+	$text_color                 = $attributes['textColor'] ?? '';
 	$gradient                   = $attributes['gradient'] ?? '';
 	$font_size                  = $attributes['fontSize'] ?? '';
+	$font_family                = $attributes['fontFamily'] ?? '';
 	$style                      = $attributes['style'] ?? [];
 	$text_align                 = $attributes['textAlign'] ?? '';
 	$width                      = $attributes['width'] ?? '';
 	$after_success_behavior     = $attributes['afterSuccessBehavior'] ?? '';
 	$after_success_button_label = $attributes['afterSuccessButtonLabel'] ?? '';
 	$after_success_url          = $attributes['afterSuccessURL'] ?? '';
+	$coupon                     = $attributes['coupon'] ?? '';
 	$is_variable                = $attributes['is_variable'];
 
 	if ( $is_variable && $variation_id ) {
@@ -62,22 +102,17 @@ function render_callback( $attributes ) {
 	}
 
 	// Generate the button.
-	$button_color = '';
-	// Get button color from style attribute since style engine doesn't seem to handle this.
-	if ( isset( $style['elements']['link']['color']['text'] ) ) {
-		$color = $style['elements']['link']['color']['text'];
-		$color = explode( '|', $color );
+	// Fall back to the legacy link-color storage path if textColor isn't set.
+	if ( ! $text_color && isset( $style['elements']['link']['color']['text'] ) ) {
+		$color = explode( '|', $style['elements']['link']['color']['text'] );
 		if ( isset( $color[2] ) ) {
-			$button_color = $color[2];
+			$text_color = $color[2];
 		}
 	}
 	$button_styles = Newspack_Blocks::block_styles(
 		$attributes,
 		[
-			$background_color ? 'background-color:' . esc_attr( $background_color ) . ';' : '',
-			$font_size ? 'font-size:' . esc_attr( $font_size ) . ';' : '',
 			$width ? 'width:' . esc_attr( $width ) . '%;' : '',
-			$button_color ? 'color:' . esc_attr( $button_color ) . ';' : '',
 		]
 	);
 
@@ -86,19 +121,23 @@ function render_callback( $attributes ) {
 		$attributes,
 		[
 			'wp-block-button__link',
-			$background_color ? 'has-background has-' . esc_attr( $background_color ) . '-background-color' : '',
-			$gradient ? 'has-background has-' . esc_attr( $gradient ) . '-gradient-background' : '',
+			( $background_color || $gradient || isset( $style['color']['background'] ) || isset( $style['color']['gradient'] ) ) ? 'has-background' : '',
+			$background_color ? 'has-' . esc_attr( $background_color ) . '-background-color' : '',
+			$gradient ? 'has-' . esc_attr( $gradient ) . '-gradient-background' : '',
+			$font_size ? 'has-' . esc_attr( $font_size ) . '-font-size' : '',
+			$font_family ? 'has-' . esc_attr( $font_family ) . '-font-family' : '',
 			$text_align ? 'has-text-align-' . esc_attr( $text_align ) : '',
 			isset( $style['border']['radius'] ) && $style['border']['radius'] === 0 ? 'no-border-radius' : '',
-			$button_color ? 'has-text-color has-' . esc_attr( $button_color ) . '-color' : '',
+			( $text_color || isset( $style['color']['text'] ) ) ? 'has-text-color' : '',
+			$text_color ? 'has-' . esc_attr( $text_color ) . '-color' : '',
 		]
 	);
 
 	$button = sprintf(
 		'<button class="%1$s" style="%2$s" type="submit">%3$s</button>',
-		$button_classes,
-		$button_styles,
-		$text
+		esc_attr( $button_classes ),
+		esc_attr( $button_styles ),
+		wp_kses_post( $text )
 	);
 
 	// Generate hidden fields for the form.
@@ -107,6 +146,16 @@ function render_callback( $attributes ) {
 		$hidden_fields .= $after_success_behavior ? '<input type="hidden" name="after_success_behavior" value="' . esc_attr( $after_success_behavior ) . '" />' : '';
 		$hidden_fields .= $after_success_button_label ? '<input type="hidden" name="after_success_button_label" value="' . esc_attr( $after_success_button_label ) . '" />' : '';
 		$hidden_fields .= $after_success_url ? '<input type="hidden" name="after_success_url" value="' . esc_attr( $after_success_url ) . '" />' : '';
+		// Vouched for here because this is the last point the destination is known to come
+		// from the block's own settings rather than from the request.
+		$after_success_token = $after_success_url ? Modal_Checkout::get_after_success_token( $after_success_url ) : '';
+		$hidden_fields      .= $after_success_token ? '<input type="hidden" name="after_success_token" value="' . esc_attr( $after_success_token ) . '" />' : '';
+	}
+	// Always emit the coupon field (not gated on the gateway check): it is
+	// applied server-side for both the modal and the redirect checkout flows.
+	// Strict check so a coupon code of "0" is still emitted.
+	if ( '' !== $coupon ) {
+		$hidden_fields .= '<input type="hidden" name="coupon" value="' . esc_attr( $coupon ) . '" />';
 	}
 
 	ob_start();
@@ -147,8 +196,8 @@ function render_callback( $attributes ) {
 		$checkout_data = Checkout_Data::get_checkout_data( $product );
 
 		$form = sprintf(
-			'<form data-checkout="%1$s">%2$s %3$s</form>',
-			esc_attr( wp_json_encode( $checkout_data ) ),
+			'<form %1$s>%2$s %3$s</form>',
+			Checkout_Data::data_checkout_attr( $checkout_data ),
 			$button,
 			$hidden_fields
 		);
@@ -166,7 +215,7 @@ function render_callback( $attributes ) {
 		[
 			'wp-block-button',
 			( $font_size || isset( $style['typography']['fontSize'] ) ) ? 'has-custom-font-size' : '',
-			$width ? ' has-custom-width wp-block-button__width-' . esc_attr( $width ) : '',
+			$width ? 'has-custom-width wp-block-button__width-' . esc_attr( $width ) : '',
 		]
 	);
 	return sprintf(

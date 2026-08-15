@@ -91,6 +91,7 @@ return array(
     'TEC\\Common\\LiquidWeb\\Harbor\\Licensing\\Registry\\Product_Registry' => $vendorDir . '/stellarwp/harbor/src/Harbor/Licensing/Registry/Product_Registry.php',
     'TEC\\Common\\LiquidWeb\\Harbor\\Licensing\\Repositories\\License_Repository' => $vendorDir . '/stellarwp/harbor/src/Harbor/Licensing/Repositories/License_Repository.php',
     'TEC\\Common\\LiquidWeb\\Harbor\\Licensing\\Results\\Product_Entry' => $vendorDir . '/stellarwp/harbor/src/Harbor/Licensing/Results/Product_Entry.php',
+    'TEC\\Common\\LiquidWeb\\Harbor\\Licensing\\Validation_State' => $vendorDir . '/stellarwp/harbor/src/Harbor/Licensing/Validation_State.php',
     'TEC\\Common\\LiquidWeb\\Harbor\\Notice\\Notice' => $vendorDir . '/stellarwp/harbor/src/Harbor/Notice/Notice.php',
     'TEC\\Common\\LiquidWeb\\Harbor\\Notice\\Notice_Controller' => $vendorDir . '/stellarwp/harbor/src/Harbor/Notice/Notice_Controller.php',
     'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Catalog_Collection' => $vendorDir . '/stellarwp/harbor/src/Harbor/Portal/Catalog_Collection.php',

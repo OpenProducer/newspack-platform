@@ -13,6 +13,7 @@ use Google\Site_Kit\Modules\Analytics_4\Settings;
 use Google\Site_Kit\Core\Modules\Module;
 use Google\Site_Kit\Core\Authentication\Clients\Google_Site_Kit_Client;
 use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin as Google_Service_GoogleAnalyticsAdmin;
+use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaCustomDimension;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -80,5 +81,55 @@ class GoogleSiteKitAnalytics extends Module {
 			'webDataStreamID' => $webstreamdata_id,
 			'measurementID'   => $datastream['webStreamData']['measurementId'],
 		];
+	}
+
+	/**
+	 * List custom dimensions for a GA4 property.
+	 *
+	 * @param string $property_id GA4 property ID.
+	 * @return array List of custom dimension objects (each with parameterName, displayName, scope, name).
+	 */
+	public function list_custom_dimensions( $property_id ) {
+		$analyticsadmin = $this->get_service( 'analyticsadmin' );
+		$dimensions     = [];
+		$page_token     = null;
+		do {
+			$params = [];
+			if ( $page_token ) {
+				$params['pageToken'] = $page_token;
+			}
+			$response = $analyticsadmin
+				->properties_customDimensions // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+				->listPropertiesCustomDimensions( 'properties/' . $property_id, $params );
+			$items    = isset( $response['customDimensions'] ) && is_array( $response['customDimensions'] ) ? $response['customDimensions'] : [];
+			foreach ( $items as $dimension ) {
+				$dimensions[] = [
+					'name'          => isset( $dimension['name'] ) ? $dimension['name'] : '',
+					'parameterName' => isset( $dimension['parameterName'] ) ? $dimension['parameterName'] : '',
+					'displayName'   => isset( $dimension['displayName'] ) ? $dimension['displayName'] : '',
+					'scope'         => isset( $dimension['scope'] ) ? $dimension['scope'] : '',
+				];
+			}
+			$page_token = isset( $response['nextPageToken'] ) ? $response['nextPageToken'] : null;
+		} while ( $page_token );
+		return $dimensions;
+	}
+
+	/**
+	 * Create an event-scoped custom dimension on a GA4 property.
+	 *
+	 * @param string $property_id    GA4 property ID.
+	 * @param string $parameter_name Event parameter name.
+	 * @param string $display_name   Display name shown in GA4 UI.
+	 */
+	public function create_custom_dimension( $property_id, $parameter_name, $display_name ) {
+		$analyticsadmin = $this->get_service( 'analyticsadmin' );
+		$dimension      = new GoogleAnalyticsAdminV1betaCustomDimension();
+		$dimension->setParameterName( $parameter_name );
+		$dimension->setDisplayName( $display_name );
+		$dimension->setScope( 'EVENT' );
+		return $analyticsadmin
+			->properties_customDimensions // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+			->create( 'properties/' . $property_id, $dimension );
 	}
 }

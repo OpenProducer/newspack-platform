@@ -164,7 +164,7 @@ function newspack_customize_register( $wp_customize ) {
 		'slideout_label',
 		array(
 			'default'           => esc_html__( 'Menu', 'newspack-theme' ),
-			'sanitize_callback' => 'sanitize_text_field',
+			'sanitize_callback' => 'newspack_sanitize_radio',
 		)
 	);
 	$wp_customize->add_control(
@@ -1254,6 +1254,27 @@ function newspack_customize_register( $wp_customize ) {
 		)
 	);
 
+	// Add option to control comment meta position.
+	$wp_customize->add_setting(
+		'comment_meta_position',
+		array(
+			'default'           => 'above',
+			'sanitize_callback' => 'newspack_sanitize_radio',
+		)
+	);
+	$wp_customize->add_control(
+		'comment_meta_position',
+		array(
+			'type'    => 'radio',
+			'label'   => esc_html__( 'Comment meta position', 'newspack-theme' ),
+			'section' => 'comments_options',
+			'choices' => array(
+				'above' => esc_html__( 'Above comment content', 'newspack-theme' ),
+				'below' => esc_html__( 'Below comment content', 'newspack-theme' ),
+			),
+		)
+	);
+
 	/**
 	 * Footer settings
 	 */
@@ -1385,7 +1406,7 @@ function newspack_customize_typography_register( $wp_customize ) {
 		array(
 			'label'       => __( 'Font Provider Import Code or URL', 'newspack-theme' ),
 			// phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet -- This is example text, not actual code.
-			'description' => __( 'Example: &lt;link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet"&gt; or https://fonts.googleapis.com/css?family=Open+Sans' ),
+			'description' => __( 'Example: &lt;link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet"&gt; or https://fonts.googleapis.com/css?family=Open+Sans.', 'newspack-theme' ),
 			'section'     => 'newspack_typography',
 			'type'        => 'text',
 		)
@@ -1690,6 +1711,8 @@ function newspack_sanitize_font_provider_url( $code ) {
 	}
 	$font_service_urls = array(
 		'google'      => 'fonts.googleapis.com',
+		'bunny'       => 'fonts.bunny.net',
+		'coollabs'    => 'api.fonts.coollabs.io',
 		'fonts'       => 'fast.fonts.net',
 		'typekit'     => 'use.typekit.net',
 		'typenetwork' => 'cloud.typenetwork.com',

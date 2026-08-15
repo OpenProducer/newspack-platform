@@ -2823,6 +2823,17 @@ namespace TEC\Common {
     array (
     ),
   ),
+  'LiquidWeb\\Harbor\\Licensing\\Validation_State' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Validation_State',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Licensing',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Licensing\\Validation_State',
+    'implements' => 
+    array (
+    ),
+  ),
   'LiquidWeb\\Harbor\\Notice\\Notice' => 
   array (
     'type' => 'class',
