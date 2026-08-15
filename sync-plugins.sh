@@ -49,40 +49,57 @@ PANTHEON_SITE="newspack"          # Pantheon site machine name -- confirmed via 
 GUARDED_THEMES=("newspack-theme-child" "newspack-radio-theme")
 VALID_ENVS=("dev" "radio" "podcast")   # test/live/donate deliberately excluded -- see note above
 
-# GitHub-Releases-sourced themes: repos with no WordPress.org presence, so
-# `wp theme update` never sees them. Checked via
-# GET /repos/{owner}/{repo}/releases/latest -- trust GitHub's own
-# prerelease/draft filtering entirely; don't reimplement semver comparison
-# locally. One repo can cover multiple installed theme slugs: a single
-# newspack-theme release ships 6 separately-zipped variants (the base theme
-# plus 5 named style variants) as release assets, one zip per slug.
+# GitHub-release packages from Automattic/newspack-workspace -- covers both
+# the GH-only themes (never on WordPress.org, see prior note) AND, as of
+# 2026-08-14, six core Newspack plugins whose dedicated GitHub repos
+# (Automattic/newspack-plugin, newspack-ads, newspack-blocks, newspack-popups,
+# newspack-listings, newspack-sponsors) were archived 2026-08-06 and merged
+# into this one monorepo. Those plugins were never on WordPress.org either --
+# they used to be tracked by wp-content/plugins/newspack-plugin-update-checker
+# (a small third-party plugin hardcoded to each old per-repo GitHub URL), which
+# we deactivated rather than fix: pointing it at the monorepo would have meant
+# patching the vendored YahnisElsts PluginUpdateChecker library's version-
+# number derivation (it reads the tag name directly, with no hook to strip a
+# "{slug}@" monorepo prefix before comparing versions -- a custom release
+# filter alone isn't enough). Simpler and more visible to do this ourselves
+# here, in the same place theme updates already work this way. Re-enable
+# newspack-plugin-update-checker instead of this section only if it's ever
+# updated upstream for monorepo tags.
 #
-# KNOWN UPSTREAM QUIRK (confirmed 2026-07-25): newspack-block-theme's build
-# pipeline correctly bumps a version constant in functions.php but leaves
-# style.css's WP-standard `Version:` header one release behind -- e.g. the
-# official v1.28.1 "stable" release zip's own style.css says
-# "Version: 1.28.1-alpha.1". Since `wp theme get --field=version` (and WP
-# core itself) only ever reads style.css, the version-compare step below can
-# flag newspack-block-theme as needing an update even when it's already
-# current. This is expected and harmless: a false-positive here just
-# re-installs identical bytes, the resulting diff comes back empty, and
-# nothing gets committed (see the "No changes to commit" handling near the
-# end of this script). Do NOT try to "fix" this by re-checking the version
-# string after install -- `wp theme install`'s own exit code/output is the
-# only success signal that matters here.
-GH_THEME_REPOS=("Automattic/newspack-theme" "Automattic/newspack-block-theme")
+# The monorepo publishes one shared release feed across ~20 unrelated
+# packages, tagged "{slug}@{version}" (NOT "v{version}" -- there's no "v"
+# prefix to strip), with heavy pre-release noise ("-alpha.N", "-hotfix-*").
+# Filter by tag PREFIX and trust GitHub's own `prerelease` flag entirely --
+# don't reimplement semver comparison locally. Confirmed 2026-08-14: the core
+# plugin's tag prefix changed from "newspack-plugin" to "newspack", but its
+# release ZIP asset is still named newspack-plugin.zip -- prefix and zip name
+# differ for that one entry only. Fetched via
+# GET /repos/Automattic/newspack-workspace/releases (paginated -- a single
+# per_page=100 page is NOT guaranteed to contain a match for a slow-moving
+# package if faster-moving packages dominate recent activity).
+GH_WORKSPACE_REPO="Automattic/newspack-workspace"
 
-# Maps a GitHub repo to the site theme slug(s) its releases cover. Kept as a
-# case statement rather than `declare -A` (bash associative arrays) --
-# macOS ships bash 3.2 by default, which doesn't support them (bit us once
-# already on sync-themes.sh; see docs/ARCHITECTURE.md).
-slugs_for_gh_repo() {
-  case "$1" in
-    Automattic/newspack-theme) echo "newspack-theme newspack-joseph newspack-katharine newspack-nelson newspack-sacha newspack-scott" ;;
-    Automattic/newspack-block-theme) echo "newspack-block-theme" ;;
-    *) echo "" ;;
-  esac
-}
+# tag_prefix|type|wp_slug|zip_asset_name -- one row per zip asset. A single
+# newspack-theme release covers 6 zips (base + 5 named style variants) under
+# one shared tag_prefix, so it appears 6 times here, once per zip/slug.
+# Rows are a flat array (not `declare -A`) -- macOS ships bash 3.2 by
+# default, which has no associative arrays (bit us once already on
+# sync-themes.sh; see docs/ARCHITECTURE.md).
+GH_WORKSPACE_PACKAGES=(
+  "newspack|plugin|newspack-plugin|newspack-plugin.zip"
+  "newspack-ads|plugin|newspack-ads|newspack-ads.zip"
+  "newspack-blocks|plugin|newspack-blocks|newspack-blocks.zip"
+  "newspack-popups|plugin|newspack-popups|newspack-popups.zip"
+  "newspack-listings|plugin|newspack-listings|newspack-listings.zip"
+  "newspack-sponsors|plugin|newspack-sponsors|newspack-sponsors.zip"
+  "newspack-theme|theme|newspack-theme|newspack-theme.zip"
+  "newspack-theme|theme|newspack-joseph|newspack-joseph.zip"
+  "newspack-theme|theme|newspack-katharine|newspack-katharine.zip"
+  "newspack-theme|theme|newspack-nelson|newspack-nelson.zip"
+  "newspack-theme|theme|newspack-sacha|newspack-sacha.zip"
+  "newspack-theme|theme|newspack-scott|newspack-scott.zip"
+  "newspack-block-theme|theme|newspack-block-theme|newspack-block-theme.zip"
+)
 # --------------------------------------------------------------------------
 
 ENV=""
@@ -205,50 +222,130 @@ for t in data:
     print(f\"  update  {t['name']}: {t.get('version')} -> {v}\")
 "
 
-# ---- GitHub-release theme updates (not on WordPress.org) -----------------
-# See GH_THEME_REPOS above for why this exists and the newspack-block-theme
-# version-string caveat. GH_UPDATES entries are "slug|asset_url|new_version",
-# queued here and installed later in the same SFTP session as everything else.
+# ---- GitHub-release workspace packages (plugins + themes, not on WordPress.org) ----
+# See GH_WORKSPACE_PACKAGES above for why this exists. GH_UPDATES entries are
+# "type|slug|asset_url|new_version", queued here and installed later in the
+# same SFTP session as everything else.
+#
+# One shared release feed covers ~20 unrelated packages, so we fetch it once,
+# paginated, and cache the raw pages -- NOT one API call per package (would be
+# both slow and easy to rate-limit). A single page is not guaranteed to
+# contain every package's latest release if faster-moving packages dominate
+# recent activity, so we page forward until every distinct tag_prefix in
+# GH_WORKSPACE_PACKAGES has been found at least once, up to GH_MAX_PAGES.
 echo ""
-echo "-- GitHub-release theme updates (not on WordPress.org) --"
+echo "-- GitHub-release workspace packages (plugins + themes, not on WordPress.org) --"
 GH_UPDATES=()
-for GH_REPO in "${GH_THEME_REPOS[@]}"; do
-  RELEASE_JSON=$(curl -sf "https://api.github.com/repos/${GH_REPO}/releases/latest") || {
-    echo "  WARN  ${GH_REPO}: could not fetch latest release (network error or rate-limited) -- skipping"
-    continue
-  }
-  TAG=$(echo "$RELEASE_JSON" | python3 -c "import json,sys; print(json.load(sys.stdin).get('tag_name',''))")
-  if [[ -z "$TAG" ]]; then
-    echo "  WARN  ${GH_REPO}: no releases found -- skipping"
+GH_MAX_PAGES=5
+GH_PER_PAGE=100
+GH_RELEASES_CACHE=$(mktemp)
+GH_PAGE_TMP=$(mktemp)
+GH_MERGE_TMP=$(mktemp)
+trap 'rm -f "$GH_RELEASES_CACHE" "$GH_PAGE_TMP" "$GH_MERGE_TMP"' EXIT
+
+PREFIXES="$(printf '%s\n' "${GH_WORKSPACE_PACKAGES[@]}" | cut -d'|' -f1 | sort -u | tr '\n' ' ')"
+
+echo "[]" > "$GH_RELEASES_CACHE"
+for GH_PAGE in $(seq 1 "$GH_MAX_PAGES"); do
+  if ! curl -sf "https://api.github.com/repos/${GH_WORKSPACE_REPO}/releases?per_page=${GH_PER_PAGE}&page=${GH_PAGE}" -o "$GH_PAGE_TMP"; then
+    echo "  WARN  page ${GH_PAGE}: could not fetch (network error or rate-limited) -- stopping pagination"
+    break
+  fi
+
+  # Merge this page into the running cache (both are JSON files on disk --
+  # never embed API response bodies directly into inline Python/shell source,
+  # that's a quoting/escaping hazard once real payloads are involved).
+  python3 -c "
+import json
+existing = json.load(open('${GH_RELEASES_CACHE}'))
+page = json.load(open('${GH_PAGE_TMP}'))
+existing.extend(page)
+json.dump(existing, open('${GH_MERGE_TMP}', 'w'))
+" 2>/dev/null || { echo "  WARN  page ${GH_PAGE}: could not parse -- stopping pagination"; break; }
+  mv "$GH_MERGE_TMP" "$GH_RELEASES_CACHE"
+  GH_MERGE_TMP=$(mktemp)
+
+  PAGE_LEN=$(python3 -c "import json; print(len(json.load(open('${GH_PAGE_TMP}'))))" 2>/dev/null || echo 0)
+
+  # Stop early once every distinct prefix we need has turned up at least once
+  # (avoids paging through all ~5700 releases on every run).
+  MISSING=$(PREFIXES="$PREFIXES" python3 -c "
+import json, os
+releases = json.load(open('${GH_RELEASES_CACHE}'))
+prefixes = os.environ['PREFIXES'].split()
+# Only count a prefix as 'found' once a STABLE release (not draft, not
+# prerelease) has actually turned up -- matches the per-package resolution
+# loop below exactly. Counting any tag (including prereleases) here caused a
+# real bug: a hotfix wave put a prerelease tag for every tracked package on
+# page 1, satisfying this check for everyone and stopping pagination before
+# the real stable releases (living on later pages) were ever fetched.
+found = {
+    r['tag_name'].split('@')[0] for r in releases
+    if '@' in r.get('tag_name', '') and not r.get('draft') and not r.get('prerelease')
+}
+print(' '.join(p for p in prefixes if p not in found))
+" 2>/dev/null || echo "")
+  if [[ -z "$MISSING" ]]; then
+    break
+  fi
+  if [[ "$PAGE_LEN" -lt "$GH_PER_PAGE" ]]; then
+    echo "  WARN  reached end of release feed with no match for: ${MISSING}"
+    break
+  fi
+done
+
+for ENTRY in "${GH_WORKSPACE_PACKAGES[@]}"; do
+  IFS='|' read -r TAG_PREFIX PKG_TYPE SLUG ZIP_NAME <<< "$ENTRY"
+
+  RELEASE_JSON=$(TAG_PREFIX="$TAG_PREFIX" python3 -c "
+import json, os
+releases = json.load(open('${GH_RELEASES_CACHE}'))
+prefix = os.environ['TAG_PREFIX'] + '@'
+for r in releases:
+    if r.get('draft'):
+        continue
+    if r.get('prerelease'):
+        continue
+    if r.get('tag_name', '').startswith(prefix):
+        print(json.dumps(r))
+        break
+")
+  if [[ -z "$RELEASE_JSON" ]]; then
+    echo "  WARN  ${SLUG}: no stable release found for tag prefix '${TAG_PREFIX}@' in the first ${GH_MAX_PAGES} page(s) -- skipping"
     continue
   fi
-  TAG_VERSION="${TAG#v}"
-  for SLUG in $(slugs_for_gh_repo "$GH_REPO"); do
+  TAG=$(echo "$RELEASE_JSON" | python3 -c "import json,sys; print(json.load(sys.stdin)['tag_name'])")
+  TAG_VERSION="${TAG#${TAG_PREFIX}@}"
+
+  if [[ "$PKG_TYPE" == "theme" ]]; then
     INSTALLED_VERSION=$(terminus wp "$SITE_ENV" -- theme get "$SLUG" --field=version 2>/dev/null </dev/null) || INSTALLED_VERSION=""
-    if [[ -z "$INSTALLED_VERSION" ]]; then
-      echo "  SKIP (not installed on this environment)  ${SLUG}"
-      continue
-    fi
-    if [[ "$INSTALLED_VERSION" == "$TAG_VERSION" ]]; then
-      echo "  up to date  ${SLUG}: ${INSTALLED_VERSION}"
-      continue
-    fi
-    ASSET_URL=$(echo "$RELEASE_JSON" | SLUG="$SLUG" python3 -c "
+  else
+    INSTALLED_VERSION=$(terminus wp "$SITE_ENV" -- plugin get "$SLUG" --field=version 2>/dev/null </dev/null) || INSTALLED_VERSION=""
+  fi
+  if [[ -z "$INSTALLED_VERSION" ]]; then
+    echo "  SKIP (not installed on this environment)  ${SLUG}"
+    continue
+  fi
+  if [[ "$INSTALLED_VERSION" == "$TAG_VERSION" ]]; then
+    echo "  up to date  ${SLUG}: ${INSTALLED_VERSION}"
+    continue
+  fi
+
+  ASSET_URL=$(echo "$RELEASE_JSON" | ZIP_NAME="$ZIP_NAME" python3 -c "
 import json, os, sys
 data = json.load(sys.stdin)
-slug = os.environ['SLUG']
+zip_name = os.environ['ZIP_NAME']
 for a in data.get('assets', []):
-    if a['name'] == f'{slug}.zip':
+    if a['name'] == zip_name:
         print(a['browser_download_url'])
         break
 ")
-    if [[ -z "$ASSET_URL" ]]; then
-      echo "  WARN  ${SLUG}: release ${TAG} has no matching ${SLUG}.zip asset -- skipping"
-      continue
-    fi
-    echo "  update  ${SLUG}: ${INSTALLED_VERSION} -> ${TAG_VERSION}"
-    GH_UPDATES+=("${SLUG}|${ASSET_URL}|${TAG_VERSION}")
-  done
+  if [[ -z "$ASSET_URL" ]]; then
+    echo "  WARN  ${SLUG}: release ${TAG} has no matching ${ZIP_NAME} asset -- skipping"
+    continue
+  fi
+  echo "  update  ${SLUG} (${PKG_TYPE}): ${INSTALLED_VERSION} -> ${TAG_VERSION}"
+  GH_UPDATES+=("${PKG_TYPE}|${SLUG}|${ASSET_URL}|${TAG_VERSION}")
 done
 
 if [[ "$DRY_RUN" == true ]]; then
@@ -286,14 +383,18 @@ fi
 
 echo ""
 if [[ ${#GH_UPDATES[@]} -gt 0 ]]; then
-  echo "Installing GitHub-release theme updates..."
+  echo "Installing GitHub-release workspace package updates (plugins + themes)..."
   for ENTRY in "${GH_UPDATES[@]}"; do
-    IFS='|' read -r SLUG ASSET_URL NEW_VERSION <<< "$ENTRY"
-    echo "-- ${SLUG} -> ${NEW_VERSION} --"
-    terminus wp "$SITE_ENV" -- theme install "$ASSET_URL" --force </dev/null
+    IFS='|' read -r PKG_TYPE SLUG ASSET_URL NEW_VERSION <<< "$ENTRY"
+    echo "-- ${SLUG} (${PKG_TYPE}) -> ${NEW_VERSION} --"
+    if [[ "$PKG_TYPE" == "theme" ]]; then
+      terminus wp "$SITE_ENV" -- theme install "$ASSET_URL" --force </dev/null
+    else
+      terminus wp "$SITE_ENV" -- plugin install "$ASSET_URL" --force </dev/null
+    fi
   done
 else
-  echo "No GitHub-release theme updates to apply."
+  echo "No GitHub-release workspace package updates to apply."
 fi
 
 echo ""
@@ -317,14 +418,13 @@ fi
 
 COMMIT_MSG="Sync plugins (${ENV}): $(date +%Y-%m-%d)"
 if [[ ${#GH_UPDATES[@]} -gt 0 ]]; then
-  COMMIT_MSG="${COMMIT_MSG} + GitHub theme releases:"
+  COMMIT_MSG="${COMMIT_MSG} + newspack-workspace releases:"
   for ENTRY in "${GH_UPDATES[@]}"; do
-    IFS='|' read -r SLUG ASSET_URL NEW_VERSION <<< "$ENTRY"
+    IFS='|' read -r PKG_TYPE SLUG ASSET_URL NEW_VERSION <<< "$ENTRY"
     # newspack-block-theme's version-compare trigger is a known false positive
-    # (see GH_THEME_REPOS comment above and docs/ARCHITECTURE.md) -- the
-    # installed code is already correct, only style.css's cosmetic Version
-    # header lags. Word the commit message accurately instead of implying a
-    # real version change happened.
+    # (see docs/ARCHITECTURE.md) -- the installed code is already correct,
+    # only style.css's cosmetic Version header lags. Word the commit message
+    # accurately instead of implying a real version change happened.
     if [[ "$SLUG" == "newspack-block-theme" ]]; then
       COMMIT_MSG="${COMMIT_MSG} reinstall ${SLUG} (no functional change; corrects leaked dev-tooling files from release zip, see docs/ARCHITECTURE.md for the upstream style.css version-lag quirk)"
     else
