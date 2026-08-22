@@ -106,10 +106,12 @@ Valid `--env` targets: **`dev`, `radio`, `podcast` only.** `test` and `live` are
 Once `dev` is verified, promote it forward instead of re-running the script:
 
 ```
-terminus env:deploy newspack.test --message="Promote plugin/theme updates"
+terminus env:deploy newspack.test --note="Promote plugin/theme updates"
 # verify test loads correctly and shows the new versions, then:
-terminus env:deploy newspack.live --message="Promote plugin/theme updates"
+terminus env:deploy newspack.live --note="Promote plugin/theme updates"
 ```
+
+(Terminus's `env:deploy` takes `--note`, not `--message` — `--message` doesn't exist on this Terminus version and errors immediately with "The '--message' option does not exist." Confirmed again 2026-08-21 after this exact mistake shipped in this doc; see the 2026-07-25 progress-log entry, where it was first caught and then apparently not fully scrubbed from every example.)
 
 Flags:
 
@@ -162,9 +164,9 @@ Remotes on the site repo: `origin` → Pantheon (drush.in), `github` → `OpenPr
 `master` is the only branch with a `dev`/`test`/`live` tier. `sync-plugins.sh` and `sync-themes.sh` only ever act on `dev` — they hard-refuse `test`/`live` as targets. Getting a validated change to production is a separate, manual promotion step:
 
 ```
-terminus env:deploy newspack.test --message="Promote plugin/theme updates"
+terminus env:deploy newspack.test --note="Promote plugin/theme updates"
 # verify test
-terminus env:deploy newspack.live --message="Promote plugin/theme updates"
+terminus env:deploy newspack.live --note="Promote plugin/theme updates"
 ```
 
 `radio` and `podcast` have no test/live tier — their multidev *is* the live site for that variant, so a sync there is immediately public. Treat those runs with the same caution you'd give a production deploy.
