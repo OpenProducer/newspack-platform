@@ -1,3 +1,4 @@
+(function() {
 "use strict";
 var wp;
 (wp ||= {}).coreData = (() => {
@@ -660,16 +661,39 @@ var wp;
     LOCAL_UNDO_IGNORED_ORIGIN,
     retrySyncConnection
   } = unlock(import_sync.privateApis);
+  var CRDT_AUTOSAVE_SNAPSHOT_KEY = "crdt_snapshot";
   var syncManager;
   function getSyncManager() {
     if (syncManager) {
       return syncManager;
+    }
+    if (!globalThis.window?.__experimentalEnableRealTimeCollaboration) {
+      return void 0;
     }
     syncManager = createSyncManager();
     return syncManager;
   }
   function hasSyncManager() {
     return Boolean(syncManager);
+  }
+  function getEntitySnapshot(kind, name, recordId) {
+    if (!hasSyncManager()) {
+      return void 0;
+    }
+    return getSyncManager()?.getEntitySnapshot(
+      `${kind}/${name}`,
+      `${recordId}`
+    );
+  }
+  function entityContainsSnapshot(kind, name, recordId, encodedSnapshot) {
+    if (!hasSyncManager()) {
+      return false;
+    }
+    return getSyncManager()?.entityContainsSnapshot(
+      `${kind}/${name}`,
+      `${recordId}`,
+      encodedSnapshot
+    ) ?? false;
   }
 
   // packages/core-data/build-module/utils/save-crdt-doc.mjs
@@ -1571,30 +1595,30 @@ var wp;
         cursorPosition
       };
     } else if (isSelectionInOneBlock) {
-      const cursorStartPosition2 = getCursorPosition(
+      const cursorStartPosition = getCursorPosition(
         selectionStart,
         yBlocks
       );
-      const cursorEndPosition2 = getCursorPosition(selectionEnd, yBlocks);
-      if (!cursorStartPosition2 || !cursorEndPosition2) {
+      const cursorEndPosition = getCursorPosition(selectionEnd, yBlocks);
+      if (!cursorStartPosition || !cursorEndPosition) {
         return noSelection;
       }
       return {
         type: "selection-in-one-block",
-        cursorStartPosition: cursorStartPosition2,
-        cursorEndPosition: cursorEndPosition2,
+        cursorStartPosition,
+        cursorEndPosition,
         selectionDirection
       };
     }
-    const cursorStartPosition = getCursorPosition(selectionStart, yBlocks);
-    const cursorEndPosition = getCursorPosition(selectionEnd, yBlocks);
-    if (!cursorStartPosition || !cursorEndPosition) {
+    const startEndpoint = getSelectionEndpoint(selectionStart, yBlocks);
+    const endEndpoint = getSelectionEndpoint(selectionEnd, yBlocks);
+    if (!startEndpoint || !endEndpoint) {
       return noSelection;
     }
     return {
       type: "selection-in-multiple-blocks",
-      cursorStartPosition,
-      cursorEndPosition,
+      startEndpoint,
+      endEndpoint,
       selectionDirection
     };
   }
@@ -1621,6 +1645,18 @@ var wp;
       absoluteOffset: selection.offset,
       attributeKey: selection.attributeKey
     };
+  }
+  function getSelectionEndpoint(selection, blocks) {
+    const cursorPosition = getCursorPosition(selection, blocks);
+    if (cursorPosition) {
+      return { type: "cursor", cursorPosition };
+    }
+    const path = getBlockPathForLocalClientId(selection.clientId);
+    const blockPosition = path ? createRelativePositionForBlockPath(path, blocks) : null;
+    if (blockPosition) {
+      return { type: "whole-block", blockPosition };
+    }
+    return null;
   }
   function getBlockPathForLocalClientId(clientId) {
     const { getBlockIndex, getBlockRootClientId, getBlockName } = (0, import_data3.select)(import_block_editor2.store);
@@ -1699,12 +1735,12 @@ var wp;
           selection2.cursorEndPosition
         ) && selection1.selectionDirection === selection2.selectionDirection;
       case "selection-in-multiple-blocks":
-        return areCursorPositionsEqual(
-          selection1.cursorStartPosition,
-          selection2.cursorStartPosition
-        ) && areCursorPositionsEqual(
-          selection1.cursorEndPosition,
-          selection2.cursorEndPosition
+        return areEndpointsEqual(
+          selection1.startEndpoint,
+          selection2.startEndpoint
+        ) && areEndpointsEqual(
+          selection1.endEndpoint,
+          selection2.endEndpoint
         ) && selection1.selectionDirection === selection2.selectionDirection;
       case "whole-block":
         return import_sync7.Y.compareRelativePositions(
@@ -1714,6 +1750,21 @@ var wp;
       default:
         return false;
     }
+  }
+  function areEndpointsEqual(ep1, ep2) {
+    if (ep1.type !== ep2.type) {
+      return false;
+    }
+    if (ep1.type === "cursor" && ep2.type === "cursor") {
+      return areCursorPositionsEqual(
+        ep1.cursorPosition,
+        ep2.cursorPosition
+      );
+    }
+    return import_sync7.Y.compareRelativePositions(
+      ep1.blockPosition,
+      ep2.blockPosition
+    );
   }
   function areCursorPositionsEqual(cursorPosition1, cursorPosition2) {
     const isRelativePositionEqual = import_sync7.Y.compareRelativePositions(
@@ -1881,6 +1932,13 @@ var wp;
         return {
           richTextOffset: null,
           localClientId: localClientId2,
+          attributeKey: null
+        };
+      }
+      if (selection.type === SelectionType.SelectionInMultipleBlocks) {
+        return {
+          richTextOffset: null,
+          localClientId: null,
           attributeKey: null
         };
       }
@@ -3201,7 +3259,7 @@ var wp;
       plural: "comments",
       label: (0, import_i18n.__)("Comment"),
       supportsPagination: true,
-      syncConfig: defaultCollectionSyncConfig
+      ...globalThis.window?.__experimentalEnableRealTimeCollaboration ? { syncConfig: defaultCollectionSyncConfig } : {}
     },
     {
       name: "menu",
@@ -3344,7 +3402,7 @@ var wp;
         newEdits.title = "";
       }
     }
-    if (persistedRecord) {
+    if (window.__experimentalEnableRealTimeCollaboration && persistedRecord) {
       const objectType = `postType/${name}`;
       const objectId = persistedRecord.id;
       const serializedDoc = await getSyncManager()?.createPersistedCRDTDoc(
@@ -3362,7 +3420,7 @@ var wp;
   };
   async function loadPostTypeEntities() {
     const postTypesPromise = (0, import_api_fetch2.default)({ path: "/wp/v2/types?context=view" });
-    const taxonomiesPromise = window._wpCollaborationEnabled ? (0, import_api_fetch2.default)({ path: "/wp/v2/taxonomies?context=view" }) : Promise.resolve({});
+    const taxonomiesPromise = window.__experimentalEnableRealTimeCollaboration ? (0, import_api_fetch2.default)({ path: "/wp/v2/taxonomies?context=view" }) : Promise.resolve({});
     const [postTypes, taxonomies] = await Promise.all([
       postTypesPromise,
       taxonomiesPromise
@@ -3409,6 +3467,9 @@ var wp;
         getRevisionsUrl: (parentId, revisionId) => `/${namespace}/${postType.rest_base}/${parentId}/revisions${revisionId ? "/" + revisionId : ""}`,
         revisionKey: isTemplate && !window?.__experimentalTemplateActivate ? "wp_id" : DEFAULT_ENTITY_KEY
       };
+      if (!window.__experimentalEnableRealTimeCollaboration) {
+        return entity2;
+      }
       entity2.syncConfig = {
         // Save a CRDT document with this entity
         supportsPersistence: true,
@@ -3476,7 +3537,9 @@ var wp;
         getTitle: (record) => record?.name,
         supportsPagination: true
       };
-      entity2.syncConfig = defaultSyncConfig;
+      if (window.__experimentalEnableRealTimeCollaboration) {
+        entity2.syncConfig = defaultSyncConfig;
+      }
       return entity2;
     });
   }
@@ -4239,6 +4302,7 @@ var wp;
     getEditorSettings: () => getEditorSettings,
     getEntityRecordPermissions: () => getEntityRecordPermissions,
     getEntityRecordsPermissions: () => getEntityRecordsPermissions,
+    getEntitySyncConnectionStatus: () => getEntitySyncConnectionStatus,
     getHomePage: () => getHomePage,
     getNavigationFallbackId: () => getNavigationFallbackId,
     getPostsPageId: () => getPostsPageId,
@@ -4465,6 +4529,9 @@ var wp;
       }
     }
     return coalesced;
+  }
+  function getEntitySyncConnectionStatus(state, kind, name, recordId) {
+    return state.syncConnectionStatuses?.[`${kind}/${name}:${recordId}`];
   }
 
   // packages/core-data/build-module/selectors.mjs
@@ -5606,6 +5673,14 @@ var wp;
       try {
         const path = `${baseURL}${recordId ? "/" + recordId : ""}`;
         const persistedRecord = !isNewRecord ? select4.getRawEntityRecord(kind, name, recordId) : {};
+        if (entityConfig.syncConfig && !__unstableSkipSyncUpdate && !isNewRecord && persistedRecord) {
+          getSyncManager()?.update(
+            `${kind}/${name}`,
+            recordId,
+            record,
+            LOCAL_UNDO_IGNORED_ORIGIN
+          );
+        }
         if (isAutosave) {
           const merged = { ...persistedRecord, ...record };
           const data = [
@@ -5628,6 +5703,15 @@ var wp;
               status: merged.status === "auto-draft" ? "draft" : void 0
             }
           );
+          if (entityConfig.syncConfig) {
+            const crdtSnapshot = getSyncManager()?.getEntitySnapshot(
+              `${kind}/${name}`,
+              recordId
+            );
+            if (crdtSnapshot) {
+              data[CRDT_AUTOSAVE_SNAPSHOT_KEY] = crdtSnapshot;
+            }
+          }
           updatedRecord = await __unstableFetch({
             path: `${path}/autosaves`,
             method: "POST",
@@ -5671,14 +5755,6 @@ var wp;
             );
           }
         } else {
-          if (entityConfig.syncConfig && !__unstableSkipSyncUpdate && !isNewRecord && persistedRecord) {
-            getSyncManager()?.update(
-              `${kind}/${name}`,
-              recordId,
-              record,
-              LOCAL_UNDO_IGNORED_ORIGIN
-            );
-          }
           let edits = record;
           if (entityConfig.__unstablePrePersist) {
             edits = {
@@ -5909,6 +5985,7 @@ var wp;
   var import_api_fetch5 = __toESM(require_api_fetch(), 1);
   var import_notices = __toESM(require_notices(), 1);
   var import_block_editor5 = __toESM(require_block_editor(), 1);
+  var import_html_entities = __toESM(require_html_entities(), 1);
   var import_i18n2 = __toESM(require_i18n(), 1);
   function receiveRegisteredPostMeta(postType, registeredPostMeta2) {
     return {
@@ -6073,7 +6150,9 @@ var wp;
           });
         }
         pendingSavedRecords.push(
-          registry.dispatch(STORE_NAME).saveEditedEntityRecord(kind, name, key)
+          registry.dispatch(STORE_NAME).saveEditedEntityRecord(kind, name, key, {
+            throwOnError: true
+          }).catch(ensureError)
         );
       }
     });
@@ -6083,19 +6162,34 @@ var wp;
           "root",
           "site",
           void 0,
-          siteItemsToSave
-        )
+          siteItemsToSave,
+          {
+            throwOnError: true
+          }
+        ).catch(ensureError)
       );
     }
     registry.dispatch(import_block_editor5.store).__unstableMarkLastChangeAsPersistent();
-    Promise.all(pendingSavedRecords).then(async (values) => {
+    return Promise.all(pendingSavedRecords).then(async (values) => {
       if (onSave) {
         await onSave();
       }
       return values;
     }).then((values) => {
-      if (values.some((value) => typeof value === "undefined")) {
-        registry.dispatch(import_notices.store).createErrorNotice((0, import_i18n2.__)("Saving failed."));
+      const errors = values.filter((v) => v instanceof Error);
+      if (errors.length) {
+        const firstMessage = errors.find(
+          (e) => e.message
+        )?.message;
+        registry.dispatch(import_notices.store).createErrorNotice(
+          (0, import_html_entities.decodeEntities)(
+            firstMessage || (0, import_i18n2.__)("Saving failed.")
+          ),
+          {
+            type: "snackbar",
+            id: saveNoticeId
+          }
+        );
       } else {
         registry.dispatch(import_notices.store).createSuccessNotice(
           successNoticeContent || (0, import_i18n2.__)("Site updated."),
@@ -6114,9 +6208,38 @@ var wp;
       }
     }).catch(
       (error) => registry.dispatch(import_notices.store).createErrorNotice(
-        `${(0, import_i18n2.__)("Saving failed.")} ${error}`
+        (0, import_html_entities.decodeEntities)(
+          error?.message || (0, import_i18n2.__)("Saving failed.")
+        ),
+        {
+          type: "snackbar",
+          id: saveNoticeId
+        }
       )
     );
+    function ensureError(error) {
+      if (error instanceof Error) {
+        return error;
+      }
+      let message;
+      if (!error) {
+      } else if (typeof error.message === "string") {
+        message = error.message;
+      } else if (typeof error === "string") {
+        message = error;
+      } else if (
+        // Only consider own method, lest we erroneously end up calling
+        // `Object#toString` at the end of the prototype chain, thereby
+        // returning `"[object Object]"`.
+        Object.hasOwn(error, "toString") && typeof error.toString === "function"
+      ) {
+        const result = error.toString();
+        if (typeof result === "string") {
+          message = result;
+        }
+      }
+      return new Error(message, { cause: error });
+    }
   };
 
   // packages/core-data/build-module/resolvers.mjs
@@ -6155,7 +6278,7 @@ var wp;
     getViewConfig: () => getViewConfig2
   });
   var import_url6 = __toESM(require_url(), 1);
-  var import_html_entities2 = __toESM(require_html_entities(), 1);
+  var import_html_entities3 = __toESM(require_html_entities(), 1);
   var import_api_fetch9 = __toESM(require_api_fetch(), 1);
 
   // packages/core-data/build-module/fetch/index.mjs
@@ -6164,7 +6287,7 @@ var wp;
   // packages/core-data/build-module/fetch/__experimental-fetch-link-suggestions.mjs
   var import_api_fetch6 = __toESM(require_api_fetch(), 1);
   var import_url4 = __toESM(require_url(), 1);
-  var import_html_entities = __toESM(require_html_entities(), 1);
+  var import_html_entities2 = __toESM(require_html_entities(), 1);
   var import_i18n3 = __toESM(require_i18n(), 1);
   async function fetchLinkSuggestions(search, searchOptions = {}, editorSettings2 = {}) {
     const searchOptionsToUse = searchOptions.isInitialSuggestions && searchOptions.initialSuggestionsSearchOptions ? {
@@ -6194,7 +6317,7 @@ var wp;
             return {
               id: result.id,
               url: result.url,
-              title: (0, import_html_entities.decodeEntities)(result.title || "") || (0, import_i18n3.__)("(no title)"),
+              title: (0, import_html_entities2.decodeEntities)(result.title || "") || (0, import_i18n3.__)("(no title)"),
               type: result.subtype || result.type,
               kind: "post-type"
             };
@@ -6218,7 +6341,7 @@ var wp;
             return {
               id: result.id,
               url: result.url,
-              title: (0, import_html_entities.decodeEntities)(result.title || "") || (0, import_i18n3.__)("(no title)"),
+              title: (0, import_html_entities2.decodeEntities)(result.title || "") || (0, import_i18n3.__)("(no title)"),
               type: result.subtype || result.type,
               kind: "taxonomy"
             };
@@ -6242,7 +6365,7 @@ var wp;
             return {
               id: result.id,
               url: result.url,
-              title: (0, import_html_entities.decodeEntities)(result.title || "") || (0, import_i18n3.__)("(no title)"),
+              title: (0, import_html_entities2.decodeEntities)(result.title || "") || (0, import_i18n3.__)("(no title)"),
               type: result.subtype || result.type,
               kind: "taxonomy"
             };
@@ -6264,7 +6387,7 @@ var wp;
             return {
               id: result.id,
               url: result.source_url,
-              title: (0, import_html_entities.decodeEntities)(result.title.rendered || "") || (0, import_i18n3.__)("(no title)"),
+              title: (0, import_html_entities2.decodeEntities)(result.title.rendered || "") || (0, import_i18n3.__)("(no title)"),
               type: result.type,
               kind: "media"
             };
@@ -6951,7 +7074,7 @@ var wp;
     );
     const mappedPatternCategories = patternCategories?.map((userCategory) => ({
       ...userCategory,
-      label: (0, import_html_entities2.decodeEntities)(userCategory.name),
+      label: (0, import_html_entities3.decodeEntities)(userCategory.name),
       name: userCategory.slug
     })) || [];
     dispatch3({
@@ -7017,7 +7140,7 @@ var wp;
   getDefaultTemplateId2.shouldInvalidate = (action) => {
     return action.type === "RECEIVE_ITEMS" && action.kind === "root" && action.name === "site" && !!action.persistedEdits;
   };
-  var getRevisions2 = (kind, name, recordKey, query = {}) => async ({ dispatch: dispatch3, registry, resolveSelect: resolveSelect2 }) => {
+  var getRevisions2 = (kind, name, recordKey, query = {}) => async ({ dispatch: dispatch3, resolveSelect: resolveSelect2 }) => {
     const configs = await resolveSelect2.getEntitiesConfig(kind);
     const entityConfig = configs.find(
       (config) => config.name === name && config.kind === kind
@@ -7074,30 +7197,25 @@ var wp;
             return record;
           });
         }
-        registry.batch(() => {
-          dispatch3.receiveRevisions(
-            kind,
-            name,
-            recordKey,
-            records,
-            query,
-            false,
-            meta
-          );
-          const key = entityConfig.revisionKey || DEFAULT_ENTITY_KEY;
-          const normalizedQuery = normalizeQueryForResolution(rawQuery);
-          const resolutionsArgs = records.filter((record) => record[key]).map((record) => [
-            kind,
-            name,
-            recordKey,
-            record[key],
-            normalizedQuery
-          ]);
-          dispatch3.finishResolutions(
-            "getRevision",
-            resolutionsArgs
-          );
-        });
+        await dispatch3.receiveRevisions(
+          kind,
+          name,
+          recordKey,
+          records,
+          query,
+          false,
+          meta
+        );
+        const key = entityConfig.revisionKey || DEFAULT_ENTITY_KEY;
+        const normalizedQuery = normalizeQueryForResolution(rawQuery);
+        const resolutionsArgs = records.filter((record) => record[key]).map((record) => [
+          kind,
+          name,
+          recordKey,
+          record[key],
+          normalizedQuery
+        ]);
+        dispatch3.finishResolutions("getRevision", resolutionsArgs);
       }
     } finally {
       dispatch3.__unstableReleaseStoreLock(lock2);
@@ -7151,7 +7269,7 @@ var wp;
         return;
       }
       if (record) {
-        dispatch3.receiveRevisions(
+        await dispatch3.receiveRevisions(
           kind,
           name,
           recordKey,
@@ -7633,7 +7751,7 @@ var wp;
     );
     const ids = (0, import_element4.useMemo)(
       () => data?.map(
-        // @ts-ignore
+        // @ts-expect-error `data` is `unknown[]`, so the callback signature does not line up.
         (record) => record[entityConfig?.key ?? "id"]
       ) ?? [],
       [data, entityConfig?.key]
@@ -7649,7 +7767,7 @@ var wp;
     );
     const dataWithPermissions = (0, import_element4.useMemo)(
       () => data?.map((record, index) => ({
-        // @ts-ignore
+        // @ts-expect-error `record` is `unknown`, which cannot be spread.
         ...record,
         permissions: permissions[index]
       })) ?? [],
@@ -7850,6 +7968,7 @@ var wp;
 
   // packages/core-data/build-module/footnotes/index.mjs
   var import_rich_text4 = __toESM(require_rich_text(), 1);
+  var import_warning2 = __toESM(require_warning(), 1);
 
   // packages/core-data/build-module/footnotes/get-rich-text-values-cached.mjs
   var import_block_editor6 = __toESM(require_block_editor(), 1);
@@ -7900,7 +8019,17 @@ var wp;
       return output;
     }
     const newOrder = getFootnotesOrder(blocks);
-    const footnotes = meta.footnotes ? JSON.parse(meta.footnotes) : [];
+    let parsed;
+    try {
+      parsed = JSON.parse(meta.footnotes || "[]");
+    } catch {
+    }
+    let footnotes = [];
+    if (Array.isArray(parsed)) {
+      footnotes = parsed;
+    } else {
+      (0, import_warning2.default)("Footnotes post meta is not a JSON array; ignoring it.");
+    }
     const currentOrder = footnotes.map((fn) => fn.id);
     if (currentOrder.join("") === newOrder.join("")) {
       return output;
@@ -8425,7 +8554,12 @@ var wp;
     "styles.color": (0, import_i18n4.__)("Colors"),
     "styles.spacing": (0, import_i18n4.__)("Spacing"),
     "styles.background": (0, import_i18n4.__)("Background"),
-    "styles.typography": (0, import_i18n4.__)("Typography")
+    "styles.typography": (0, import_i18n4.__)("Typography"),
+    "styles.border": (0, import_i18n4.__)("Border"),
+    "styles.shadow": (0, import_i18n4.__)("Shadow"),
+    "styles.outline": (0, import_i18n4.__)("Outline"),
+    "styles.filter": (0, import_i18n4.__)("Filter"),
+    "styles.dimensions": (0, import_i18n4.__)("Dimensions")
   };
   var getBlockNames = memize(
     () => (0, import_blocks6.getBlockTypes)().reduce(
@@ -8478,6 +8612,22 @@ var wp;
     }
     return diffs;
   }
+  var COMPARED_STYLE_KEYS = [
+    "background",
+    "color",
+    "typography",
+    "spacing",
+    "border",
+    "shadow",
+    "outline",
+    "filter",
+    "dimensions"
+  ];
+  function pickComparedStyles(config) {
+    return Object.fromEntries(
+      COMPARED_STYLE_KEYS.map((key) => [key, config?.styles?.[key]])
+    );
+  }
   function getGlobalStylesChangelist(next, previous) {
     const cacheKey = JSON.stringify({ next, previous });
     if (globalStylesChangesCache.has(cacheKey)) {
@@ -8485,23 +8635,13 @@ var wp;
     }
     const changedValueTree = deepCompare(
       {
-        styles: {
-          background: next?.styles?.background,
-          color: next?.styles?.color,
-          typography: next?.styles?.typography,
-          spacing: next?.styles?.spacing
-        },
+        styles: pickComparedStyles(next),
         blocks: next?.styles?.blocks,
         elements: next?.styles?.elements,
         settings: next?.settings
       },
       {
-        styles: {
-          background: previous?.styles?.background,
-          color: previous?.styles?.color,
-          typography: previous?.styles?.typography,
-          spacing: previous?.styles?.spacing
-        },
+        styles: pickComparedStyles(previous),
         blocks: previous?.styles?.blocks,
         elements: previous?.styles?.elements,
         settings: previous?.settings
@@ -8591,7 +8731,7 @@ var wp;
   var import_components = __toESM(require_components(), 1);
   var import_i18n5 = __toESM(require_i18n(), 1);
   var import_data15 = __toESM(require_data(), 1);
-  var import_html_entities3 = __toESM(require_html_entities(), 1);
+  var import_html_entities4 = __toESM(require_html_entities(), 1);
   var import_jsx_runtime8 = __toESM(require_jsx_runtime(), 1);
   function EntityRecordItem({ record, checked, onChange }) {
     const { name, kind, title, key } = record;
@@ -8620,7 +8760,7 @@ var wp;
     return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_jsx_runtime8.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_components.PanelRow, { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
       import_components.CheckboxControl,
       {
-        label: (0, import_html_entities3.decodeEntities)(entityRecordTitle) || (0, import_i18n5.__)("Untitled"),
+        label: (0, import_html_entities4.decodeEntities)(entityRecordTitle) || (0, import_i18n5.__)("Untitled"),
         checked,
         onChange,
         className: "entities-saved-states__change-control"
@@ -8748,11 +8888,15 @@ var wp;
       );
       const siteEntityLabels = siteEntityConfig?.meta?.labels ?? {};
       const {
+        title: siteTitleEdit,
+        description: siteDescriptionEdit,
         site_logo: siteLogoEdit,
         site_icon: siteIconEdit,
         ...otherSiteEdits
       } = siteEdits ?? {};
       const orderedSiteProperties = [
+        siteTitleEdit !== void 0 && "title",
+        siteDescriptionEdit !== void 0 && "description",
         siteLogoEdit !== void 0 && "site_logo",
         siteIconEdit !== void 0 && "site_icon",
         ...Object.keys(otherSiteEdits)
@@ -8966,6 +9110,9 @@ var wp;
     useEntitiesSavedStatesIsDirty: useIsDirty,
     useEntityRecordsWithPermissions,
     RECEIVE_INTERMEDIATE_RESULTS,
+    CRDT_AUTOSAVE_SNAPSHOT_KEY,
+    entityContainsSnapshot,
+    getEntitySnapshot,
     retrySyncConnection,
     useActiveCollaborators,
     useResolvedSelection,
@@ -9068,5 +9215,7 @@ var wp;
   unlock(store).registerPrivateActions(private_actions_exports);
   (0, import_data19.register)(store);
   return __toCommonJS(index_exports);
+})();
+(window.wp ||= {}).coreData = wp.coreData;
 })();
 //# sourceMappingURL=index.js.map

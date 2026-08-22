@@ -3109,6 +3109,17 @@ html.has-modal-open {
   text-transform: uppercase;
 }
 
+:where(.wp-block-navigation-overlay-close) {
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  font-style: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  text-transform: inherit;
+}
+
 .wp-block-navigation-overlay-close {
   display: inline-flex;
   align-items: center;
@@ -3849,6 +3860,7 @@ p.has-text-align-left[style*="writing-mode:vertical-lr"] {
 .wp-block-post-author-biography {
   box-sizing: border-box;
   white-space: pre-wrap;
+  overflow-wrap: break-word;
 }
 
 :where(.wp-block-post-comments-form textarea),

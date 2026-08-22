@@ -74,91 +74,91 @@ function generatePreferenceKey(kind, name, slug) {
   return `dataviews-${kind}-${name}-${slug}`;
 }
 
-// packages/views/build-module/filter-utils.mjs
-var SCALAR_VALUES = [
-  "titleField",
-  "mediaField",
-  "descriptionField",
-  "showTitle",
-  "showMedia",
-  "showDescription",
-  "showLevels",
-  "infiniteScrollEnabled"
-];
-function mergeActiveViewOverrides(view, activeViewOverrides, defaultView) {
-  if (!activeViewOverrides) {
-    return view;
-  }
-  let result = view;
-  for (const key of SCALAR_VALUES) {
-    if (key in activeViewOverrides) {
-      result = { ...result, [key]: activeViewOverrides[key] };
-    }
-  }
-  if (activeViewOverrides.filters && activeViewOverrides.filters.length > 0) {
-    const activeFields = new Set(
-      activeViewOverrides.filters.map((f) => f.field)
-    );
-    const preserved = (view.filters ?? []).filter(
-      (f) => !activeFields.has(f.field)
-    );
-    result = {
-      ...result,
-      filters: [...preserved, ...activeViewOverrides.filters]
-    };
-  }
-  if (activeViewOverrides.sort) {
-    const isDefaultSort = defaultView && view.sort?.field === defaultView.sort?.field && view.sort?.direction === defaultView.sort?.direction;
-    if (isDefaultSort) {
-      result = {
-        ...result,
-        sort: activeViewOverrides.sort
-      };
-    }
-  }
-  if (activeViewOverrides.layout) {
-    result = {
-      ...result,
-      layout: {
-        ...result.layout,
-        ...activeViewOverrides.layout
-      }
-    };
-  }
-  if (activeViewOverrides.groupBy) {
-    result = {
-      ...result,
-      groupBy: activeViewOverrides.groupBy
-    };
+// packages/views/build-module/resolve-view.mjs
+var QUERY_PARAMS = ["page", "search"];
+function isPlainObject(value) {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+function withoutQueryParams(layer) {
+  const result = isPlainObject(layer) ? { ...layer } : {};
+  for (const key of QUERY_PARAMS) {
+    delete result[key];
   }
   return result;
+}
+function mergeLayer(lower, upper) {
+  const result = { ...lower };
+  for (const key of Object.keys(upper)) {
+    const value = upper[key];
+    const current = result[key];
+    result[key] = isPlainObject(current) && isPlainObject(value) ? mergeLayer(current, value) : value;
+  }
+  return result;
+}
+function getLockedFilters(overrides) {
+  return (overrides?.filters ?? []).filter((filter) => filter.isLocked);
+}
+function applyLockedFilters(view, overrides) {
+  const locked = getLockedFilters(overrides);
+  if (locked.length === 0) {
+    return view;
+  }
+  const rest = (view.filters ?? []).filter(
+    (filter) => !locked.some((f) => f.field === filter.field)
+  );
+  return { ...view, filters: [...locked, ...rest] };
+}
+function resolveBaseView(layers, effectiveType) {
+  const { defaultView, defaultLayouts, activeViewOverrides } = layers;
+  const layoutDefaults = defaultLayouts?.[effectiveType];
+  return applyLockedFilters(
+    [layoutDefaults, activeViewOverrides].reduce(
+      (lower, upper) => mergeLayer(lower, withoutQueryParams(upper)),
+      withoutQueryParams(defaultView)
+    ),
+    activeViewOverrides
+  );
+}
+function resolveView(args) {
+  const { defaultView, activeViewOverrides, persistedView, page, search } = args;
+  const effectiveType = persistedView?.type ?? activeViewOverrides?.type ?? defaultView?.type;
+  const baseView = resolveBaseView(args, effectiveType);
+  const view = {
+    ...applyLockedFilters(
+      mergeLayer(baseView, withoutQueryParams(persistedView)),
+      activeViewOverrides
+    ),
+    page: Number(page ?? 1),
+    search: search ?? ""
+  };
+  return view;
 }
 
 // packages/views/build-module/load-view.mjs
 var import_data2 = __toESM(require_data(), 1);
 var import_preferences2 = __toESM(require_preferences(), 1);
 async function loadView(config) {
-  const { kind, name, slug, defaultView, activeViewOverrides, queryParams } = config;
+  const {
+    kind,
+    name,
+    slug,
+    defaultView,
+    defaultLayouts,
+    activeViewOverrides,
+    queryParams
+  } = config;
   const preferenceKey = generatePreferenceKey(kind, name, slug);
-  const persistedView = (0, import_data2.select)(import_preferences2.store).get(
-    "core/views",
-    preferenceKey
-  );
-  const baseView = persistedView ?? defaultView;
-  const page = queryParams?.page ?? 1;
-  const search = queryParams?.search ?? "";
-  const rawDefaults = config.defaultLayouts?.[baseView?.type];
-  const layoutTypeDefaults = !rawDefaults || rawDefaults === true ? {} : rawDefaults;
-  const combinedOverrides = { ...layoutTypeDefaults, ...activeViewOverrides };
-  return mergeActiveViewOverrides(
-    {
-      ...baseView,
-      page,
-      search
-    },
-    combinedOverrides,
-    defaultView
-  );
+  const persistedView = (0, import_data2.select)(
+    import_preferences2.store
+  ).get("core/views", preferenceKey);
+  return resolveView({
+    defaultView,
+    defaultLayouts,
+    activeViewOverrides,
+    persistedView,
+    page: queryParams?.page,
+    search: queryParams?.search
+  });
 }
 
 // packages/views/build-module/use-view-config.mjs

@@ -3140,7 +3140,6 @@ return array(
 		),
 		'supports' => array(
 			'__experimentalOnEnter' => true,
-			'__experimentalOnMerge' => true,
 			'__experimentalSettings' => true,
 			'align' => array(
 				'wide',
@@ -5205,6 +5204,7 @@ return array(
 		'supports' => array(
 			'anchor' => true,
 			'align' => true,
+			'__experimentalExposeControlsToChildren' => true,
 			'color' => array(
 				'gradients' => true,
 				'link' => true,

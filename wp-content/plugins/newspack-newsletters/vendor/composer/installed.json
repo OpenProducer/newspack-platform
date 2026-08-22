@@ -2,17 +2,17 @@
     "packages": [
         {
             "name": "automattic/jetpack-autoloader",
-            "version": "v5.0.20",
-            "version_normalized": "5.0.20.0",
+            "version": "v5.0.21",
+            "version_normalized": "5.0.21.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Automattic/jetpack-autoloader.git",
-                "reference": "b6abf43a9ea638d6a0edc02f0dd7575703f9c2a1"
+                "reference": "07b6e0d9b5f948659ce8503140551d5758865a3c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Automattic/jetpack-autoloader/zipball/b6abf43a9ea638d6a0edc02f0dd7575703f9c2a1",
-                "reference": "b6abf43a9ea638d6a0edc02f0dd7575703f9c2a1",
+                "url": "https://api.github.com/repos/Automattic/jetpack-autoloader/zipball/07b6e0d9b5f948659ce8503140551d5758865a3c",
+                "reference": "07b6e0d9b5f948659ce8503140551d5758865a3c",
                 "shasum": ""
             },
             "require": {
@@ -24,7 +24,7 @@
                 "composer/composer": "^2.2",
                 "yoast/phpunit-polyfills": "^4.0.0"
             },
-            "time": "2026-06-15T12:15:05+00:00",
+            "time": "2026-07-13T23:33:42+00:00",
             "type": "composer-plugin",
             "extra": {
                 "class": "Automattic\\Jetpack\\Autoloader\\CustomAutoloaderPlugin",
@@ -63,7 +63,7 @@
                 "wordpress"
             ],
             "support": {
-                "source": "https://github.com/Automattic/jetpack-autoloader/tree/v5.0.20"
+                "source": "https://github.com/Automattic/jetpack-autoloader/tree/v5.0.21"
             },
             "install-path": "../automattic/jetpack-autoloader"
         },
@@ -136,17 +136,17 @@
         },
         {
             "name": "woocommerce/email-editor",
-            "version": "2.14.0",
-            "version_normalized": "2.14.0.0",
+            "version": "2.15.1",
+            "version_normalized": "2.15.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/woocommerce/email-editor.git",
-                "reference": "e6ab4c31c5223fa2c28267a3cc4514199a1981e6"
+                "reference": "620f16bc1ee7ad33b7b5df8f354286a0033a33da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/woocommerce/email-editor/zipball/e6ab4c31c5223fa2c28267a3cc4514199a1981e6",
-                "reference": "e6ab4c31c5223fa2c28267a3cc4514199a1981e6",
+                "url": "https://api.github.com/repos/woocommerce/email-editor/zipball/620f16bc1ee7ad33b7b5df8f354286a0033a33da",
+                "reference": "620f16bc1ee7ad33b7b5df8f354286a0033a33da",
                 "shasum": ""
             },
             "require": {
@@ -158,7 +158,7 @@
                 "woocommerce/woocommerce-sniffs": "1.0.0",
                 "yoast/phpunit-polyfills": "^4.0"
             },
-            "time": "2026-06-15T09:32:46+00:00",
+            "time": "2026-07-30T06:35:43+00:00",
             "type": "wordpress-plugin",
             "extra": {
                 "changelogger": {
@@ -190,7 +190,7 @@
             ],
             "description": "Email editor based on WordPress Gutenberg package.",
             "support": {
-                "source": "https://github.com/woocommerce/email-editor/tree/2.14.0"
+                "source": "https://github.com/woocommerce/email-editor/tree/2.15.1"
             },
             "install-path": "../woocommerce/email-editor"
         }

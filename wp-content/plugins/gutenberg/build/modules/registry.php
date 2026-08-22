@@ -78,11 +78,6 @@ return array(
 		'asset' => 'connectors/index.min.asset.php',
 	),
 	array(
-		'id' => '@wordpress/content-types',
-		'path' => 'content-types/index',
-		'asset' => 'content-types/index.min.asset.php',
-	),
-	array(
 		'id' => '@wordpress/core-abilities',
 		'path' => 'core-abilities/index',
 		'asset' => 'core-abilities/index.min.asset.php',

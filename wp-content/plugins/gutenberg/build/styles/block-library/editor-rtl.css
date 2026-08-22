@@ -1966,18 +1966,6 @@ body.editor-styles-wrapper .wp-block-navigation__responsive-container.is-menu-op
   pointer-events: none;
 }
 
-@media (min-width: 600px) {
-  .wp-block-page-list-modal {
-    max-width: 480px;
-  }
-}
-
-.wp-block-page-list-modal-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-}
-
 .wp-block-page-list .open-on-click:focus-within > .wp-block-navigation__submenu-container {
   visibility: visible;
   opacity: 1;
