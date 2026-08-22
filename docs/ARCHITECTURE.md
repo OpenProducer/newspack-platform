@@ -67,6 +67,83 @@
 - **Custom theme layer = controlled iteration layer.** `newspack-theme-child` and `newspack-radio-theme` are the only code we author. They live in their own repos and are synced in, never edited inside the site repo.
 - **Everything else = automated.** Newspack's own plugins, `newspack-theme`, `newspack-block-theme`, the radio/podcast add-ons, and every WordPress.org-hosted plugin Newspack recommends (Jetpack, Yoast SEO, Site Kit, Co-Authors Plus, etc.) are pulled and updated by script — no dashboard SFTP, no manual downloads.
 
+## Running the update scripts — quick reference
+
+The full rationale, history, and edge cases for these scripts live in "Two-script automation architecture" further down. This section is just the commands — start here if you already know what you're doing and just need the steps.
+
+### Prerequisites (once per machine)
+
+- Terminus installed and authenticated: `terminus auth:login`
+- Working directory for every command below: `/Users/gusaustin/Dev/projects/newspack-platform`
+- `git status` clean before running either script (both refuse to run on a dirty tree)
+
+### 1. Update plugins + themes: `sync-plugins.sh`
+
+Always dry-run first:
+
+```
+cd /Users/gusaustin/Dev/projects/newspack-platform
+./sync-plugins.sh --env dev --dry-run
+```
+
+Read the output. It lists every plugin/theme with an available update, split into three groups: will update, skipped (pre-release), skipped (guarded). If it looks right, run for real:
+
+```
+./sync-plugins.sh --env dev
+```
+
+This prompts twice — once to confirm before applying updates, once to confirm the commit. Confirm both. It updates everything in one pass and one commit: WordPress.org-hosted plugins/themes, AND the GitHub-release "workspace packages" (`newspack-plugin`, `newspack-ads`, `newspack-blocks`, `newspack-popups`, `newspack-listings`, `newspack-sponsors`, `newspack-theme` + 5 style variants, `newspack-block-theme`) pulled directly from Automattic's `newspack-workspace` monorepo — see "GitHub-release workspace packages" below for why those need special handling. `newspack-theme-child` and `newspack-radio-theme` are never touched by this script.
+
+Valid `--env` targets: **`dev`, `radio`, `podcast` only.** `test` and `live` are NOT valid targets — the script will refuse them. `donate` is out of scope entirely.
+
+`radio` and `podcast` are separate multidevs, not part of the dev→test→live pipeline — run the script directly against each, independently:
+
+```
+./sync-plugins.sh --env radio
+./sync-plugins.sh --env podcast
+```
+
+Once `dev` is verified, promote it forward instead of re-running the script:
+
+```
+terminus env:deploy newspack.test --message="Promote plugin/theme updates"
+# verify test loads correctly and shows the new versions, then:
+terminus env:deploy newspack.live --message="Promote plugin/theme updates"
+```
+
+Flags:
+
+| Flag | Effect |
+| --- | --- |
+| `--env <dev\|radio\|podcast>` | Required. Target environment. |
+| `--dry-run` | Preview only — shows what would change, makes no changes. |
+| `--skip-commit` | Applies updates but stops before committing, leaving the environment in SFTP mode for manual review. |
+
+### 2. Update custom themes: `sync-themes.sh`
+
+```
+cd /Users/gusaustin/Dev/projects/newspack-platform
+./sync-themes.sh --branch master --dry-run
+./sync-themes.sh --branch master
+```
+
+Valid `--branch` targets and what each pulls in:
+
+| Branch | Pulls in |
+| --- | --- |
+| `master` | `newspack-theme-child` only |
+| `radio` | both `newspack-theme-child` and `newspack-radio-theme` |
+| `podcast` | both `newspack-theme-child` and `newspack-radio-theme` |
+
+If running both scripts in the same session, **run `sync-plugins.sh` first, then `sync-themes.sh`** — this avoids push conflicts (same rule Radio Pro's scripts follow).
+
+### 3. After either script finishes
+
+- Confirm connection mode is back to `git`: `terminus env:info <site>.<env> --field=connection_mode`
+- Load the site and confirm it renders (no blank page, no fatal errors)
+- Check `/wp-admin/plugins.php` and `/wp-admin/themes.php` for the expected new version numbers
+
+
 ## Branches and environments
 
 Confirmed via `terminus site:info newspack` and `terminus env:list newspack` (2026-07-24). Full environment list on the site: `dev`, `test`, `live`, `radio`, `podcast`, `donate`.
