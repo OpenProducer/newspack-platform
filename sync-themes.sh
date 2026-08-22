@@ -16,8 +16,8 @@
 #   environment directly (git-connected branch->env mapping). It does NOT
 #   touch test/live -- those are promotion tiers. After verifying dev,
 #   promote with:
-#     terminus env:deploy newspack.test --message="Promote theme sync"
-#     terminus env:deploy newspack.live --message="Promote theme sync"
+#     terminus env:deploy newspack.test --note="Promote theme sync"
+#     terminus env:deploy newspack.live --note="Promote theme sync"
 #   radio and podcast have no test/live tier -- pushing to those branches
 #   is immediately live for that variant.
 #   "donate" is out of scope for this automation for now.
@@ -191,6 +191,6 @@ echo "Pushed to origin and github."
 if [[ "$BRANCH" == "master" ]]; then
   echo ""
   echo "This updated the 'dev' environment only. Verify dev, then promote:"
-  echo "  terminus env:deploy newspack.test --message=\"Promote theme sync\""
-  echo "  terminus env:deploy newspack.live --message=\"Promote theme sync\""
+  echo "  terminus env:deploy newspack.test --note=\"Promote theme sync\""
+  echo "  terminus env:deploy newspack.live --note=\"Promote theme sync\""
 fi

@@ -29,9 +29,11 @@
 #   donate               -- out of scope for this automation (2026-07-24).
 #
 # After a successful --env dev run and manual verification, promote with:
-#   terminus env:deploy newspack.test --message="Promote plugin/theme updates"
+#   terminus env:deploy newspack.test --note="Promote plugin/theme updates"
 #   # verify test, then:
-#   terminus env:deploy newspack.live --message="Promote plugin/theme updates"
+#   terminus env:deploy newspack.live --note="Promote plugin/theme updates"
+# (env:deploy takes --note, not --message -- --message errors immediately with
+# "The '--message' option does not exist." Confirmed for real 2026-08-21.)
 #
 # radio and podcast have no test/live tier -- the multidev itself is the
 # live site for that variant, so a sync there is immediately live.
@@ -138,8 +140,8 @@ fi
 if [[ "$ENV" == "test" || "$ENV" == "live" ]]; then
   echo "Error: '${ENV}' is a promotion tier, not a sync target."
   echo "Run and verify '--env dev' first, then promote with:"
-  echo "  terminus env:deploy ${PANTHEON_SITE}.test --message=\"...\""
-  echo "  terminus env:deploy ${PANTHEON_SITE}.live --message=\"...\""
+  echo "  terminus env:deploy ${PANTHEON_SITE}.test --note=\"...\""
+  echo "  terminus env:deploy ${PANTHEON_SITE}.live --note=\"...\""
   exit 1
 fi
 
@@ -520,6 +522,6 @@ echo "Sync to the 'github' remote separately if GitHub should reflect this updat
 if [[ "$ENV" == "dev" ]]; then
   echo ""
   echo "Next: verify dev, then promote to test and live when ready:"
-  echo "  terminus env:deploy ${PANTHEON_SITE}.test --message=\"Promote plugin/theme updates\""
-  echo "  terminus env:deploy ${PANTHEON_SITE}.live --message=\"Promote plugin/theme updates\""
+  echo "  terminus env:deploy ${PANTHEON_SITE}.test --note=\"Promote plugin/theme updates\""
+  echo "  terminus env:deploy ${PANTHEON_SITE}.live --note=\"Promote plugin/theme updates\""
 fi
