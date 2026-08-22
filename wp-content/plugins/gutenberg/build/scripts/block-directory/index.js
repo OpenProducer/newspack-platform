@@ -1,3 +1,4 @@
+(function() {
 var wp;
 (wp ||= {}).blockDirectory = (() => {
   var __create = Object.create;
@@ -166,7 +167,7 @@ var wp;
           return x === y && (0 !== x || 1 / x === 1 / y) || x !== x && y !== y;
         }
         function useSyncExternalStore$2(subscribe, getSnapshot) {
-          didWarnOld18Alpha || void 0 === React47.startTransition || (didWarnOld18Alpha = true, console.error(
+          didWarnOld18Alpha || void 0 === React48.startTransition || (didWarnOld18Alpha = true, console.error(
             "You are using an outdated, pre-release alpha of React 18 that does not support useSyncExternalStore. The use-sync-external-store shim will not work correctly. Upgrade to a newer pre-release."
           ));
           var value = getSnapshot();
@@ -214,8 +215,8 @@ var wp;
           return getSnapshot();
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React47 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState13 = React47.useState, useEffect13 = React47.useEffect, useLayoutEffect3 = React47.useLayoutEffect, useDebugValue2 = React47.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
-        exports.useSyncExternalStore = void 0 !== React47.useSyncExternalStore ? React47.useSyncExternalStore : shim;
+        var React48 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState13 = React48.useState, useEffect13 = React48.useEffect, useLayoutEffect3 = React48.useLayoutEffect, useDebugValue2 = React48.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+        exports.useSyncExternalStore = void 0 !== React48.useSyncExternalStore ? React48.useSyncExternalStore : shim;
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
       })();
     }
@@ -242,14 +243,14 @@ var wp;
           return x === y && (0 !== x || 1 / x === 1 / y) || x !== x && y !== y;
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React47 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore2 = shim.useSyncExternalStore, useRef19 = React47.useRef, useEffect13 = React47.useEffect, useMemo15 = React47.useMemo, useDebugValue2 = React47.useDebugValue;
+        var React48 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore2 = shim.useSyncExternalStore, useRef19 = React48.useRef, useEffect13 = React48.useEffect, useMemo16 = React48.useMemo, useDebugValue2 = React48.useDebugValue;
         exports.useSyncExternalStoreWithSelector = function(subscribe, getSnapshot, getServerSnapshot, selector, isEqual) {
           var instRef = useRef19(null);
           if (null === instRef.current) {
             var inst = { hasValue: false, value: null };
             instRef.current = inst;
           } else inst = instRef.current;
-          instRef = useMemo15(
+          instRef = useMemo16(
             function() {
               function memoizedSelector(nextSnapshot) {
                 if (!hasMemo) {
@@ -902,14 +903,14 @@ var wp;
   var import_element20 = __toESM(require_element(), 1);
 
   // packages/block-directory/build-module/components/downloadable-blocks-panel/index.mjs
-  var import_i18n8 = __toESM(require_i18n(), 1);
+  var import_i18n9 = __toESM(require_i18n(), 1);
   var import_components4 = __toESM(require_components(), 1);
   var import_core_data = __toESM(require_core_data(), 1);
   var import_data8 = __toESM(require_data(), 1);
   var import_blocks5 = __toESM(require_blocks(), 1);
 
   // packages/block-directory/build-module/components/downloadable-blocks-list/index.mjs
-  var import_i18n5 = __toESM(require_i18n(), 1);
+  var import_i18n6 = __toESM(require_i18n(), 1);
   var import_components2 = __toESM(require_components(), 1);
   var import_blocks4 = __toESM(require_blocks(), 1);
   var import_data7 = __toESM(require_data(), 1);
@@ -931,7 +932,7 @@ var wp;
   var clsx_default = clsx;
 
   // packages/block-directory/build-module/components/downloadable-block-list-item/index.mjs
-  var import_i18n4 = __toESM(require_i18n(), 1);
+  var import_i18n5 = __toESM(require_i18n(), 1);
   var import_components = __toESM(require_components(), 1);
   var import_element18 = __toESM(require_element(), 1);
   var import_html_entities = __toESM(require_html_entities(), 1);
@@ -1892,7 +1893,7 @@ var wp;
   function getNearestOverflowAncestor(node) {
     const parentNode = getParentNode(node);
     if (isLastTraversableNode(parentNode)) {
-      return node.ownerDocument ? node.ownerDocument.body : node.body;
+      return (node.ownerDocument || node).body;
     }
     if (isHTMLElement(parentNode) && isOverflowElement(parentNode)) {
       return parentNode;
@@ -2639,12 +2640,12 @@ var wp;
     return oppositeSideMap[side] + placement.slice(side.length);
   }
   function expandPaddingObject(padding) {
+    var _padding$top, _padding$right, _padding$bottom, _padding$left;
     return {
-      top: 0,
-      right: 0,
-      bottom: 0,
-      left: 0,
-      ...padding
+      top: (_padding$top = padding.top) != null ? _padding$top : 0,
+      right: (_padding$right = padding.right) != null ? _padding$right : 0,
+      bottom: (_padding$bottom = padding.bottom) != null ? _padding$bottom : 0,
+      left: (_padding$left = padding.left) != null ? _padding$left : 0
     };
   }
   function getPaddingObject(padding) {
@@ -3451,8 +3452,8 @@ var wp;
           const isScrollableY = lastTraversableNode || scrollRe.test(style.overflowY);
           const canScrollX = isScrollableX && target.clientWidth > 0 && target.scrollWidth > target.clientWidth;
           const canScrollY = isScrollableY && target.clientHeight > 0 && target.scrollHeight > target.clientHeight;
-          const isRTL2 = style.direction === "rtl";
-          const pressedVerticalScrollbar = canScrollY && (isRTL2 ? event.offsetX <= target.offsetWidth - target.clientWidth : event.offsetX > target.clientWidth);
+          const isRTL3 = style.direction === "rtl";
+          const pressedVerticalScrollbar = canScrollY && (isRTL3 ? event.offsetX <= target.offsetWidth - target.clientWidth : event.offsetX > target.clientWidth);
           const pressedHorizontalScrollbar = canScrollX && event.offsetY > target.clientHeight;
           if (pressedVerticalScrollbar || pressedHorizontalScrollbar) {
             return;
@@ -3689,13 +3690,9 @@ var wp;
           y: reference.y
         };
     }
-    switch (getAlignment(placement)) {
-      case "start":
-        coords[alignmentAxis] -= commonAlign * (rtl && isVertical ? -1 : 1);
-        break;
-      case "end":
-        coords[alignmentAxis] += commonAlign * (rtl && isVertical ? -1 : 1);
-        break;
+    const alignment = getAlignment(placement);
+    if (alignment) {
+      coords[alignmentAxis] += commonAlign * (alignment === "end" ? 1 : -1) * (rtl && isVertical ? -1 : 1);
     }
     return coords;
   }
@@ -3735,10 +3732,7 @@ var wp;
       height: rects.floating.height
     } : rects.reference;
     const offsetParent = await (platform3.getOffsetParent == null ? void 0 : platform3.getOffsetParent(elements.floating));
-    const offsetScale = await (platform3.isElement == null ? void 0 : platform3.isElement(offsetParent)) ? await (platform3.getScale == null ? void 0 : platform3.getScale(offsetParent)) || {
-      x: 1,
-      y: 1
-    } : {
+    const offsetScale = await (platform3.isElement == null ? void 0 : platform3.isElement(offsetParent)) && await (platform3.getScale == null ? void 0 : platform3.getScale(offsetParent)) || {
       x: 1,
       y: 1
     };
@@ -4117,23 +4111,16 @@ var wp;
           y
         };
         const overflow = await platform3.detectOverflow(state, detectOverflowOptions);
-        const crossAxis = getSideAxis(getSide(placement));
+        const crossAxis = getSideAxis(placement);
         const mainAxis = getOppositeAxis(crossAxis);
         let mainAxisCoord = coords[mainAxis];
         let crossAxisCoord = coords[crossAxis];
+        const clampCoord = (axis, coord) => clamp(coord + overflow[axis === "y" ? "top" : "left"], coord, coord - overflow[axis === "y" ? "bottom" : "right"]);
         if (checkMainAxis) {
-          const minSide = mainAxis === "y" ? "top" : "left";
-          const maxSide = mainAxis === "y" ? "bottom" : "right";
-          const min2 = mainAxisCoord + overflow[minSide];
-          const max2 = mainAxisCoord - overflow[maxSide];
-          mainAxisCoord = clamp(min2, mainAxisCoord, max2);
+          mainAxisCoord = clampCoord(mainAxis, mainAxisCoord);
         }
         if (checkCrossAxis) {
-          const minSide = crossAxis === "y" ? "top" : "left";
-          const maxSide = crossAxis === "y" ? "bottom" : "right";
-          const min2 = crossAxisCoord + overflow[minSide];
-          const max2 = crossAxisCoord - overflow[maxSide];
-          crossAxisCoord = clamp(min2, crossAxisCoord, max2);
+          crossAxisCoord = clampCoord(crossAxis, crossAxisCoord);
         }
         const limitedCoords = limiter.fn({
           ...state,
@@ -4161,6 +4148,7 @@ var wp;
     return {
       options,
       fn(state) {
+        var _rawOffset$mainAxis, _rawOffset$crossAxis;
         const {
           x,
           y,
@@ -4186,9 +4174,8 @@ var wp;
           mainAxis: rawOffset,
           crossAxis: 0
         } : {
-          mainAxis: 0,
-          crossAxis: 0,
-          ...rawOffset
+          mainAxis: (_rawOffset$mainAxis = rawOffset.mainAxis) != null ? _rawOffset$mainAxis : 0,
+          crossAxis: (_rawOffset$crossAxis = rawOffset.crossAxis) != null ? _rawOffset$crossAxis : 0
         };
         if (checkMainAxis) {
           const len = mainAxis === "y" ? "height" : "width";
@@ -4227,7 +4214,6 @@ var wp;
       name: "size",
       options,
       async fn(state) {
-        var _state$middlewareData, _state$middlewareData2;
         const {
           placement,
           rects,
@@ -4260,24 +4246,21 @@ var wp;
         const maximumClippingWidth = width - overflow.left - overflow.right;
         const overflowAvailableHeight = min(height - overflow[heightSide], maximumClippingHeight);
         const overflowAvailableWidth = min(width - overflow[widthSide], maximumClippingWidth);
-        const noShift = !state.middlewareData.shift;
+        const shiftData = state.middlewareData.shift;
+        const noShift = !shiftData;
         let availableHeight = overflowAvailableHeight;
         let availableWidth = overflowAvailableWidth;
-        if ((_state$middlewareData = state.middlewareData.shift) != null && _state$middlewareData.enabled.x) {
+        if (shiftData != null && shiftData.enabled.x) {
           availableWidth = maximumClippingWidth;
         }
-        if ((_state$middlewareData2 = state.middlewareData.shift) != null && _state$middlewareData2.enabled.y) {
+        if (shiftData != null && shiftData.enabled.y) {
           availableHeight = maximumClippingHeight;
         }
         if (noShift && !alignment) {
-          const xMin = max(overflow.left, 0);
-          const xMax = max(overflow.right, 0);
-          const yMin = max(overflow.top, 0);
-          const yMax = max(overflow.bottom, 0);
           if (isYAxis) {
-            availableWidth = width - 2 * (xMin !== 0 || xMax !== 0 ? xMin + xMax : max(overflow.left, overflow.right));
+            availableWidth = width - 2 * max(overflow.left, overflow.right);
           } else {
-            availableHeight = height - 2 * (yMin !== 0 || yMax !== 0 ? yMin + yMax : max(overflow.top, overflow.bottom));
+            availableHeight = height - 2 * max(overflow.top, overflow.bottom);
           }
         }
         await apply({
@@ -4359,10 +4342,7 @@ var wp;
     if (isFixed === void 0) {
       isFixed = false;
     }
-    if (!floatingOffsetParent || isFixed && floatingOffsetParent !== getWindow(element)) {
-      return false;
-    }
-    return isFixed;
+    return !!floatingOffsetParent && isFixed && floatingOffsetParent === getWindow(element);
   }
   function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetParent) {
     if (includeScale === void 0) {
@@ -4388,12 +4368,12 @@ var wp;
     let y = (clientRect.top + visualOffsets.y) / scale.y;
     let width = clientRect.width / scale.x;
     let height = clientRect.height / scale.y;
-    if (domElement) {
+    if (domElement && offsetParent) {
       const win = getWindow(domElement);
-      const offsetWin = offsetParent && isElement(offsetParent) ? getWindow(offsetParent) : offsetParent;
+      const offsetWin = isElement(offsetParent) ? getWindow(offsetParent) : offsetParent;
       let currentWin = win;
       let currentIFrame = getFrameElement(currentWin);
-      while (currentIFrame && offsetParent && offsetWin !== currentWin) {
+      while (currentIFrame && offsetWin !== currentWin) {
         const iframeScale = getScale(currentIFrame);
         const iframeRect = currentIFrame.getBoundingClientRect();
         const css = getComputedStyle2(currentIFrame);
@@ -4452,7 +4432,7 @@ var wp;
     let scale = createCoords(1);
     const offsets = createCoords(0);
     const isOffsetParentAnElement = isHTMLElement(offsetParent);
-    if (isOffsetParentAnElement || !isOffsetParentAnElement && !isFixed) {
+    if (isOffsetParentAnElement || !isFixed) {
       if (getNodeName(offsetParent) !== "body" || isOverflowElement(documentElement)) {
         scroll = getNodeScroll(offsetParent);
       }
@@ -4472,15 +4452,14 @@ var wp;
     };
   }
   function getClientRects(element) {
-    return Array.from(element.getClientRects());
+    return element.getClientRects ? Array.from(element.getClientRects()) : [];
   }
-  function getDocumentRect(element) {
-    const html = getDocumentElement(element);
-    const scroll = getNodeScroll(element);
-    const body = element.ownerDocument.body;
+  function getDocumentRect(html) {
+    const scroll = getNodeScroll(html);
+    const body = html.ownerDocument.body;
     const width = max(html.scrollWidth, html.clientWidth, body.scrollWidth, body.clientWidth);
     const height = max(html.scrollHeight, html.clientHeight, body.scrollHeight, body.clientHeight);
-    let x = -scroll.scrollLeft + getWindowScrollBarX(element);
+    let x = -scroll.scrollLeft + getWindowScrollBarX(html);
     const y = -scroll.scrollTop;
     if (getComputedStyle2(body).direction === "rtl") {
       x += max(html.clientWidth, body.clientWidth) - width;
@@ -4493,7 +4472,11 @@ var wp;
     };
   }
   var SCROLLBAR_MAX = 25;
-  function getViewportRect(element, strategy) {
+  function getViewportRect(element, strategy, rootBoundary) {
+    if (rootBoundary === void 0) {
+      rootBoundary = "viewport";
+    }
+    const isLayoutViewport = rootBoundary === "layoutViewport";
     const win = getWindow(element);
     const html = getDocumentElement(element);
     const visualViewport = win.visualViewport;
@@ -4502,12 +4485,19 @@ var wp;
     let x = 0;
     let y = 0;
     if (visualViewport) {
-      width = visualViewport.width;
-      height = visualViewport.height;
-      const visualViewportBased = isWebKit();
-      if (!visualViewportBased || visualViewportBased && strategy === "fixed") {
-        x = visualViewport.offsetLeft;
-        y = visualViewport.offsetTop;
+      const layoutRelativeClientCoords = !isWebKit() || strategy === "fixed";
+      if (isLayoutViewport) {
+        if (!layoutRelativeClientCoords) {
+          x = -visualViewport.offsetLeft;
+          y = -visualViewport.offsetTop;
+        }
+      } else {
+        width = visualViewport.width;
+        height = visualViewport.height;
+        if (layoutRelativeClientCoords) {
+          x = visualViewport.offsetLeft;
+          y = visualViewport.offsetTop;
+        }
       }
     }
     const windowScrollbarX = getWindowScrollBarX(html);
@@ -4516,12 +4506,11 @@ var wp;
       const body = doc.body;
       const bodyStyles = getComputedStyle(body);
       const bodyMarginInline = doc.compatMode === "CSS1Compat" ? parseFloat(bodyStyles.marginLeft) + parseFloat(bodyStyles.marginRight) || 0 : 0;
-      const clippingStableScrollbarWidth = Math.abs(html.clientWidth - body.clientWidth - bodyMarginInline);
-      if (clippingStableScrollbarWidth <= SCROLLBAR_MAX) {
-        width -= clippingStableScrollbarWidth;
+      const reservedWidth = Math.abs(html.clientWidth - body.clientWidth - bodyMarginInline);
+      const gutter = getComputedStyle(html).scrollbarGutter === "stable both-edges" ? reservedWidth / 2 : reservedWidth;
+      if (gutter <= SCROLLBAR_MAX) {
+        width -= gutter;
       }
-    } else if (windowScrollbarX <= SCROLLBAR_MAX) {
-      width += windowScrollbarX;
     }
     return {
       width,
@@ -4534,7 +4523,7 @@ var wp;
     const clientRect = getBoundingClientRect(element, true, strategy === "fixed");
     const top = clientRect.top + element.clientTop;
     const left = clientRect.left + element.clientLeft;
-    const scale = isHTMLElement(element) ? getScale(element) : createCoords(1);
+    const scale = getScale(element);
     const width = element.clientWidth * scale.x;
     const height = element.clientHeight * scale.y;
     const x = left * scale.x;
@@ -4548,8 +4537,8 @@ var wp;
   }
   function getClientRectFromClippingAncestor(element, clippingAncestor, strategy) {
     let rect;
-    if (clippingAncestor === "viewport") {
-      rect = getViewportRect(element, strategy);
+    if (clippingAncestor === "viewport" || clippingAncestor === "layoutViewport") {
+      rect = getViewportRect(element, strategy, clippingAncestor);
     } else if (clippingAncestor === "document") {
       rect = getDocumentRect(getDocumentElement(element));
     } else if (isElement(clippingAncestor)) {
@@ -4565,33 +4554,24 @@ var wp;
     }
     return rectToClientRect(rect);
   }
-  function hasFixedPositionAncestor(element, stopNode) {
-    const parentNode = getParentNode(element);
-    if (parentNode === stopNode || !isElement(parentNode) || isLastTraversableNode(parentNode)) {
-      return false;
-    }
-    return getComputedStyle2(parentNode).position === "fixed" || hasFixedPositionAncestor(parentNode, stopNode);
-  }
   function getClippingElementAncestors(element, cache) {
     const cachedResult = cache.get(element);
     if (cachedResult) {
       return cachedResult;
     }
     let result = getOverflowAncestors(element, [], false).filter((el) => isElement(el) && getNodeName(el) !== "body");
-    let currentContainingBlockComputedStyle = null;
+    let lastKeptComputedStyle = null;
     const elementIsFixed = getComputedStyle2(element).position === "fixed";
     let currentNode = elementIsFixed ? getParentNode(element) : element;
     while (isElement(currentNode) && !isLastTraversableNode(currentNode)) {
       const computedStyle = getComputedStyle2(currentNode);
       const currentNodeIsContaining = isContainingBlock(currentNode);
-      if (!currentNodeIsContaining && computedStyle.position === "fixed") {
-        currentContainingBlockComputedStyle = null;
-      }
-      const shouldDropCurrentNode = elementIsFixed ? !currentNodeIsContaining && !currentContainingBlockComputedStyle : !currentNodeIsContaining && computedStyle.position === "static" && !!currentContainingBlockComputedStyle && (currentContainingBlockComputedStyle.position === "absolute" || currentContainingBlockComputedStyle.position === "fixed") || isOverflowElement(currentNode) && !currentNodeIsContaining && hasFixedPositionAncestor(element, currentNode);
+      const lastPosition = lastKeptComputedStyle ? lastKeptComputedStyle.position : elementIsFixed ? "fixed" : "";
+      const shouldDropCurrentNode = !currentNodeIsContaining && (lastPosition === "fixed" || lastPosition === "absolute" && computedStyle.position === "static");
       if (shouldDropCurrentNode) {
         result = result.filter((ancestor) => ancestor !== currentNode);
       } else {
-        currentContainingBlockComputedStyle = computedStyle;
+        lastKeptComputedStyle = computedStyle;
       }
       currentNode = getParentNode(currentNode);
     }
@@ -4646,10 +4626,7 @@ var wp;
       scrollTop: 0
     };
     const offsets = createCoords(0);
-    function setLeftRTLScrollbarOffset() {
-      offsets.x = getWindowScrollBarX(documentElement);
-    }
-    if (isOffsetParentAnElement || !isOffsetParentAnElement && !isFixed) {
+    if (isOffsetParentAnElement || !isFixed) {
       if (getNodeName(offsetParent) !== "body" || isOverflowElement(documentElement)) {
         scroll = getNodeScroll(offsetParent);
       }
@@ -4657,12 +4634,10 @@ var wp;
         const offsetRect = getBoundingClientRect(offsetParent, true, isFixed, offsetParent);
         offsets.x = offsetRect.x + offsetParent.clientLeft;
         offsets.y = offsetRect.y + offsetParent.clientTop;
-      } else if (documentElement) {
-        setLeftRTLScrollbarOffset();
       }
     }
-    if (isFixed && !isOffsetParentAnElement && documentElement) {
-      setLeftRTLScrollbarOffset();
+    if (!isOffsetParentAnElement && documentElement) {
+      offsets.x = getWindowScrollBarX(documentElement);
     }
     const htmlOffset = documentElement && !isOffsetParentAnElement && !isFixed ? getHTMLOffset(documentElement, scroll) : createCoords(0);
     const x = rect.left + scroll.scrollLeft - offsets.x - htmlOffset.x;
@@ -4746,7 +4721,7 @@ var wp;
   function rectsAreEqual(a, b) {
     return a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height;
   }
-  function observeMove(element, onMove) {
+  function observeMove(element, onMove, ancestorResize) {
     let io = null;
     let timeoutId;
     const root = getDocumentElement(element);
@@ -4789,6 +4764,9 @@ var wp;
       let isFirstUpdate = true;
       function handleObserve(entries) {
         const ratio = entries[0].intersectionRatio;
+        if (!rectsAreEqual(elementRectForRootMargin, element.getBoundingClientRect())) {
+          return refresh();
+        }
         if (ratio !== threshold) {
           if (!isFirstUpdate) {
             return refresh();
@@ -4800,9 +4778,6 @@ var wp;
           } else {
             refresh(false, ratio);
           }
-        }
-        if (ratio === 1 && !rectsAreEqual(elementRectForRootMargin, element.getBoundingClientRect())) {
-          refresh();
         }
         isFirstUpdate = false;
       }
@@ -4817,8 +4792,14 @@ var wp;
       }
       io.observe(element);
     }
+    const win = getWindow(element);
+    const handleResize = () => refresh(ancestorResize);
+    win.addEventListener("resize", handleResize);
     refresh(true);
-    return cleanup;
+    return () => {
+      win.removeEventListener("resize", handleResize);
+      cleanup();
+    };
   }
   function autoUpdate(reference, floating, update2, options) {
     if (options === void 0) {
@@ -4834,12 +4815,10 @@ var wp;
     const referenceEl = unwrapElement(reference);
     const ancestors = ancestorScroll || ancestorResize ? [...referenceEl ? getOverflowAncestors(referenceEl) : [], ...floating ? getOverflowAncestors(floating) : []] : [];
     ancestors.forEach((ancestor) => {
-      ancestorScroll && ancestor.addEventListener("scroll", update2, {
-        passive: true
-      });
+      ancestorScroll && ancestor.addEventListener("scroll", update2);
       ancestorResize && ancestor.addEventListener("resize", update2);
     });
-    const cleanupIo = referenceEl && layoutShift ? observeMove(referenceEl, update2) : null;
+    const cleanupIo = referenceEl && layoutShift ? observeMove(referenceEl, update2, ancestorResize) : null;
     let reobserveFrame = -1;
     let resizeObserver = null;
     if (elementResize) {
@@ -4898,11 +4877,9 @@ var wp;
   var limitShift2 = limitShift;
   var computePosition2 = (reference, floating, options) => {
     const cache = /* @__PURE__ */ new Map();
-    const mergedOptions = {
-      platform: platform2,
-      ...options
-    };
+    const mergedOptions = options != null ? options : {};
     const platformWithCache = {
+      ...platform2,
       ...mergedOptions.platform,
       _c: cache
     };
@@ -7833,7 +7810,7 @@ var wp;
   }
 
   // node_modules/@base-ui/react/utils/usePopupViewport.mjs
-  var React32 = __toESM(require_react(), 1);
+  var React33 = __toESM(require_react(), 1);
   var ReactDOM6 = __toESM(require_react_dom(), 1);
 
   // node_modules/@base-ui/utils/usePreviousValue.mjs
@@ -8004,8 +7981,25 @@ var wp;
     positionerElement.style.setProperty("--positioner-height", height);
   }
 
-  // node_modules/@base-ui/react/utils/usePopupViewport.mjs
+  // node_modules/@base-ui/react/direction-provider/DirectionProvider.mjs
+  var React32 = __toESM(require_react(), 1);
   var import_jsx_runtime5 = __toESM(require_jsx_runtime(), 1);
+  var DirectionProvider = function DirectionProvider2(props) {
+    const {
+      direction = "ltr"
+    } = props;
+    const contextValue = React32.useMemo(() => ({
+      direction
+    }), [direction]);
+    return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(DirectionContext.Provider, {
+      value: contextValue,
+      children: props.children
+    });
+  };
+  if (true) DirectionProvider.displayName = "DirectionProvider";
+
+  // node_modules/@base-ui/react/utils/usePopupViewport.mjs
+  var import_jsx_runtime6 = __toESM(require_jsx_runtime(), 1);
   function usePopupViewport(parameters) {
     const {
       store: store2,
@@ -8023,15 +8017,15 @@ var wp;
     const positionerElement = store2.useState("positionerElement");
     const previousActiveTrigger = usePreviousValue(open ? activeTrigger : null);
     const currentContentKey = usePopupContentKey(activeTriggerId, payload);
-    const capturedNodeRef = React32.useRef(null);
-    const [previousContentNode, setPreviousContentNode] = React32.useState(null);
-    const [newTriggerOffset, setNewTriggerOffset] = React32.useState(null);
-    const currentContainerRef = React32.useRef(null);
-    const previousContainerRef = React32.useRef(null);
+    const capturedNodeRef = React33.useRef(null);
+    const [previousContentNode, setPreviousContentNode] = React33.useState(null);
+    const [newTriggerOffset, setNewTriggerOffset] = React33.useState(null);
+    const currentContainerRef = React33.useRef(null);
+    const previousContainerRef = React33.useRef(null);
     const onAnimationsFinished = useAnimationsFinished(currentContainerRef, true, false);
     const cleanupFrame = useAnimationFrame();
-    const [previousContentDimensions, setPreviousContentDimensions] = React32.useState(null);
-    const [showStartingStyleAttribute, setShowStartingStyleAttribute] = React32.useState(false);
+    const [previousContentDimensions, setPreviousContentDimensions] = React33.useState(null);
+    const [showStartingStyleAttribute, setShowStartingStyleAttribute] = React33.useState(false);
     useIsoLayoutEffect(() => {
       store2.set("hasViewport", true);
       return () => {
@@ -8051,7 +8045,7 @@ var wp;
         setPreviousContentDimensions(previousDimensions);
       }
     });
-    const lastHandledTriggerRef = React32.useRef(null);
+    const lastHandledTriggerRef = React33.useRef(null);
     useIsoLayoutEffect(() => {
       if (!open || !mounted) {
         lastHandledTriggerRef.current = null;
@@ -8090,14 +8084,14 @@ var wp;
     const isTransitioning = previousContentNode != null;
     let childrenToRender;
     if (!isTransitioning) {
-      childrenToRender = /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", {
+      childrenToRender = /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", {
         "data-current": true,
         ref: currentContainerRef,
         children
       }, currentContentKey);
     } else {
-      childrenToRender = /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(React32.Fragment, {
-        children: [/* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", {
+      childrenToRender = /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(React33.Fragment, {
+        children: [/* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", {
           "data-previous": true,
           inert: inertValue(true),
           ref: previousContainerRef,
@@ -8109,7 +8103,7 @@ var wp;
             position: "absolute"
           },
           "data-ending-style": showStartingStyleAttribute ? void 0 : ""
-        }, "previous"), /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", {
+        }, "previous"), /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", {
           "data-current": true,
           ref: currentContainerRef,
           "data-starting-style": showStartingStyleAttribute ? "" : void 0,
@@ -8175,10 +8169,10 @@ var wp;
     };
   }
   function usePopupContentKey(activeTriggerId, payload) {
-    const [contentKey, setContentKey] = React32.useState(0);
-    const previousActiveTriggerIdRef = React32.useRef(activeTriggerId);
-    const previousPayloadRef = React32.useRef(payload);
-    const pendingPayloadUpdateRef = React32.useRef(false);
+    const [contentKey, setContentKey] = React33.useState(0);
+    const previousActiveTriggerIdRef = React33.useRef(activeTriggerId);
+    const previousPayloadRef = React33.useRef(payload);
+    const pendingPayloadUpdateRef = React33.useRef(false);
     useIsoLayoutEffect(() => {
       const previousActiveTriggerId = previousActiveTriggerIdRef.current;
       const previousPayload = previousPayloadRef.current;
@@ -8198,10 +8192,10 @@ var wp;
   }
 
   // node_modules/@base-ui/react/utils/FloatingPortalLite.mjs
-  var React33 = __toESM(require_react(), 1);
+  var React34 = __toESM(require_react(), 1);
   var ReactDOM7 = __toESM(require_react_dom(), 1);
-  var import_jsx_runtime6 = __toESM(require_jsx_runtime(), 1);
-  var FloatingPortalLite = /* @__PURE__ */ React33.forwardRef(function FloatingPortalLite2(componentProps, forwardedRef) {
+  var import_jsx_runtime7 = __toESM(require_jsx_runtime(), 1);
+  var FloatingPortalLite = /* @__PURE__ */ React34.forwardRef(function FloatingPortalLite2(componentProps, forwardedRef) {
     const {
       children,
       container,
@@ -8222,7 +8216,7 @@ var wp;
     if (!portalSubtree && !portalNode) {
       return null;
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(React33.Fragment, {
+    return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(React34.Fragment, {
       children: [portalSubtree, portalNode && /* @__PURE__ */ ReactDOM7.createPortal(children, portalNode)]
     });
   });
@@ -8244,14 +8238,14 @@ var wp;
   });
 
   // node_modules/@base-ui/react/tooltip/root/TooltipRoot.mjs
-  var React36 = __toESM(require_react(), 1);
+  var React37 = __toESM(require_react(), 1);
 
   // node_modules/@base-ui/react/tooltip/root/TooltipRootContext.mjs
-  var React34 = __toESM(require_react(), 1);
-  var TooltipRootContext = /* @__PURE__ */ React34.createContext(void 0);
+  var React35 = __toESM(require_react(), 1);
+  var TooltipRootContext = /* @__PURE__ */ React35.createContext(void 0);
   if (true) TooltipRootContext.displayName = "TooltipRootContext";
   function useTooltipRootContext(optional) {
-    const context = React34.useContext(TooltipRootContext);
+    const context = React35.useContext(TooltipRootContext);
     if (context === void 0 && !optional) {
       throw new Error(true ? "Base UI: TooltipRootContext is missing. Tooltip parts must be placed within <Tooltip.Root>." : formatErrorMessage_default(72));
     }
@@ -8259,7 +8253,7 @@ var wp;
   }
 
   // node_modules/@base-ui/react/tooltip/store/TooltipStore.mjs
-  var React35 = __toESM(require_react(), 1);
+  var React36 = __toESM(require_react(), 1);
   var selectors2 = {
     ...popupStoreSelectors,
     disabled: createSelector2((state) => state.disabled),
@@ -8281,7 +8275,7 @@ var wp;
       };
       state.floatingRootContext = createPopupFloatingRootContext(triggerElements, floatingId, nested);
       super(state, {
-        popupRef: /* @__PURE__ */ React35.createRef(),
+        popupRef: /* @__PURE__ */ React36.createRef(),
         onOpenChange: void 0,
         onOpenChangeComplete: void 0,
         triggerElements
@@ -8319,7 +8313,7 @@ var wp;
   }
 
   // node_modules/@base-ui/react/tooltip/root/TooltipRoot.mjs
-  var import_jsx_runtime7 = __toESM(require_jsx_runtime(), 1);
+  var import_jsx_runtime8 = __toESM(require_jsx_runtime(), 1);
   var TooltipRoot = fastComponent(function TooltipRoot2(props) {
     const {
       disabled: disabled2 = false,
@@ -8366,7 +8360,7 @@ var wp;
     const isInstantPhase = store2.useState("isInstantPhase");
     const instantType = store2.useState("instantType");
     const lastOpenChangeReason = store2.useState("lastOpenChangeReason");
-    const previousInstantTypeRef = React36.useRef(null);
+    const previousInstantTypeRef = React37.useRef(null);
     useIsoLayoutEffect(() => {
       if (openState && disabled2) {
         store2.setOpen(false, createChangeEventDetails(reason_parts_exports.disabled));
@@ -8390,17 +8384,17 @@ var wp;
         }
       }
     }, [store2, activeTriggerId, open]);
-    const handleImperativeClose = React36.useCallback(() => {
+    const handleImperativeClose = React37.useCallback(() => {
       store2.setOpen(false, createChangeEventDetails(reason_parts_exports.imperativeAction));
     }, [store2]);
-    React36.useImperativeHandle(actionsRef, () => ({
+    React37.useImperativeHandle(actionsRef, () => ({
       unmount: forceUnmount,
       close: handleImperativeClose
     }), [forceUnmount, handleImperativeClose]);
     const shouldRenderInteractions = open || mounted || !disabled2 && trackCursorAxis !== "none";
-    return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(TooltipRootContext.Provider, {
+    return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(TooltipRootContext.Provider, {
       value: store2,
-      children: [shouldRenderInteractions && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(TooltipInteractions, {
+      children: [shouldRenderInteractions && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(TooltipInteractions, {
         store: store2,
         disabled: disabled2,
         trackCursorAxis
@@ -8424,9 +8418,9 @@ var wp;
       enabled: !disabled2 && trackCursorAxis !== "none",
       axis: trackCursorAxis === "none" ? void 0 : trackCursorAxis
     });
-    const activeTriggerProps = React36.useMemo(() => mergeProps(clientPoint.reference, dismiss.reference), [clientPoint.reference, dismiss.reference]);
-    const inactiveTriggerProps = React36.useMemo(() => mergeProps(clientPoint.trigger, dismiss.trigger), [clientPoint.trigger, dismiss.trigger]);
-    const popupProps = React36.useMemo(() => mergeProps(FOCUSABLE_POPUP_PROPS, clientPoint.floating, dismiss.floating), [clientPoint.floating, dismiss.floating]);
+    const activeTriggerProps = React37.useMemo(() => mergeProps(clientPoint.reference, dismiss.reference), [clientPoint.reference, dismiss.reference]);
+    const inactiveTriggerProps = React37.useMemo(() => mergeProps(clientPoint.trigger, dismiss.trigger), [clientPoint.trigger, dismiss.trigger]);
+    const popupProps = React37.useMemo(() => mergeProps(FOCUSABLE_POPUP_PROPS, clientPoint.floating, dismiss.floating), [clientPoint.floating, dismiss.floating]);
     usePopupInteractionProps(store2, {
       activeTriggerProps,
       inactiveTriggerProps,
@@ -8436,14 +8430,14 @@ var wp;
   }
 
   // node_modules/@base-ui/react/tooltip/trigger/TooltipTrigger.mjs
-  var React38 = __toESM(require_react(), 1);
+  var React39 = __toESM(require_react(), 1);
 
   // node_modules/@base-ui/react/tooltip/provider/TooltipProviderContext.mjs
-  var React37 = __toESM(require_react(), 1);
-  var TooltipProviderContext = /* @__PURE__ */ React37.createContext(void 0);
+  var React38 = __toESM(require_react(), 1);
+  var TooltipProviderContext = /* @__PURE__ */ React38.createContext(void 0);
   if (true) TooltipProviderContext.displayName = "TooltipProviderContext";
   function useTooltipProviderContext() {
-    return React37.useContext(TooltipProviderContext);
+    return React38.useContext(TooltipProviderContext);
   }
 
   // node_modules/@base-ui/react/tooltip/trigger/TooltipTriggerDataAttributes.mjs
@@ -8513,7 +8507,7 @@ var wp;
     const isTriggerActive = store2.useState("isTriggerActive", thisTriggerId);
     const isOpenedByThisTrigger = store2.useState("isOpenedByTrigger", thisTriggerId);
     const floatingRootContext = store2.useState("floatingRootContext");
-    const triggerElementRef = React38.useRef(null);
+    const triggerElementRef = React39.useRef(null);
     const delayWithDefault = delay ?? OPEN_DELAY;
     const closeDelayWithDefault = closeDelay ?? 0;
     const {
@@ -8539,9 +8533,9 @@ var wp;
     const disabledRef = useValueAsRef(disabled2);
     const trackCursorAxis = store2.useState("trackCursorAxis");
     const disableHoverablePopup = store2.useState("disableHoverablePopup");
-    const isNestedTriggerHoveredRef = React38.useRef(false);
+    const isNestedTriggerHoveredRef = React39.useRef(false);
     const nestedTriggerOpenTimeout = useTimeout();
-    const pointerTypeRef = React38.useRef(void 0);
+    const pointerTypeRef = React39.useRef(void 0);
     function getOpenDelay() {
       const providerDelay = providerContext?.delay;
       const groupOpenValue = typeof delayRef.current === "object" ? delayRef.current.open : void 0;
@@ -8674,14 +8668,14 @@ var wp;
   if (true) TooltipTrigger.displayName = "TooltipTrigger";
 
   // node_modules/@base-ui/react/tooltip/portal/TooltipPortal.mjs
-  var React40 = __toESM(require_react(), 1);
+  var React41 = __toESM(require_react(), 1);
 
   // node_modules/@base-ui/react/tooltip/portal/TooltipPortalContext.mjs
-  var React39 = __toESM(require_react(), 1);
-  var TooltipPortalContext = /* @__PURE__ */ React39.createContext(void 0);
+  var React40 = __toESM(require_react(), 1);
+  var TooltipPortalContext = /* @__PURE__ */ React40.createContext(void 0);
   if (true) TooltipPortalContext.displayName = "TooltipPortalContext";
   function useTooltipPortalContext() {
-    const value = React39.useContext(TooltipPortalContext);
+    const value = React40.useContext(TooltipPortalContext);
     if (value === void 0) {
       throw new Error(true ? "Base UI: <Tooltip.Portal> is missing." : formatErrorMessage_default(70));
     }
@@ -8689,8 +8683,8 @@ var wp;
   }
 
   // node_modules/@base-ui/react/tooltip/portal/TooltipPortal.mjs
-  var import_jsx_runtime8 = __toESM(require_jsx_runtime(), 1);
-  var TooltipPortal = /* @__PURE__ */ React40.forwardRef(function TooltipPortal2(props, forwardedRef) {
+  var import_jsx_runtime9 = __toESM(require_jsx_runtime(), 1);
+  var TooltipPortal = /* @__PURE__ */ React41.forwardRef(function TooltipPortal2(props, forwardedRef) {
     const {
       keepMounted = false,
       ...portalProps
@@ -8701,9 +8695,9 @@ var wp;
     if (!shouldRender) {
       return null;
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(TooltipPortalContext.Provider, {
+    return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(TooltipPortalContext.Provider, {
       value: keepMounted,
-      children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(FloatingPortalLite, {
+      children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(FloatingPortalLite, {
         ref: forwardedRef,
         ...portalProps
       })
@@ -8712,14 +8706,14 @@ var wp;
   if (true) TooltipPortal.displayName = "TooltipPortal";
 
   // node_modules/@base-ui/react/tooltip/positioner/TooltipPositioner.mjs
-  var React42 = __toESM(require_react(), 1);
+  var React43 = __toESM(require_react(), 1);
 
   // node_modules/@base-ui/react/tooltip/positioner/TooltipPositionerContext.mjs
-  var React41 = __toESM(require_react(), 1);
-  var TooltipPositionerContext = /* @__PURE__ */ React41.createContext(void 0);
+  var React42 = __toESM(require_react(), 1);
+  var TooltipPositionerContext = /* @__PURE__ */ React42.createContext(void 0);
   if (true) TooltipPositionerContext.displayName = "TooltipPositionerContext";
   function useTooltipPositionerContext() {
-    const context = React41.useContext(TooltipPositionerContext);
+    const context = React42.useContext(TooltipPositionerContext);
     if (context === void 0) {
       throw new Error(true ? "Base UI: TooltipPositionerContext is missing. TooltipPositioner parts must be placed within <Tooltip.Positioner>." : formatErrorMessage_default(71));
     }
@@ -8727,8 +8721,8 @@ var wp;
   }
 
   // node_modules/@base-ui/react/tooltip/positioner/TooltipPositioner.mjs
-  var import_jsx_runtime9 = __toESM(require_jsx_runtime(), 1);
-  var TooltipPositioner = /* @__PURE__ */ React42.forwardRef(function TooltipPositioner2(componentProps, forwardedRef) {
+  var import_jsx_runtime10 = __toESM(require_jsx_runtime(), 1);
+  var TooltipPositioner = /* @__PURE__ */ React43.forwardRef(function TooltipPositioner2(componentProps, forwardedRef) {
     const {
       render,
       className,
@@ -8775,7 +8769,7 @@ var wp;
       collisionAvoidance,
       adaptiveOrigin: hasViewport ? adaptiveOrigin : void 0
     });
-    const state = React42.useMemo(() => ({
+    const state = React43.useMemo(() => ({
       open,
       side: positioning.side,
       align: positioning.align,
@@ -8790,7 +8784,7 @@ var wp;
       hidden: !mounted,
       inert: !open || trackCursorAxis === "both" || disableHoverablePopup
     });
-    return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(TooltipPositionerContext.Provider, {
+    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(TooltipPositionerContext.Provider, {
       value: positioning,
       children: element
     });
@@ -8798,12 +8792,12 @@ var wp;
   if (true) TooltipPositioner.displayName = "TooltipPositioner";
 
   // node_modules/@base-ui/react/tooltip/popup/TooltipPopup.mjs
-  var React43 = __toESM(require_react(), 1);
+  var React44 = __toESM(require_react(), 1);
   var stateAttributesMapping = {
     ...popupStateMapping,
     ...transitionStatusMapping
   };
-  var TooltipPopup = /* @__PURE__ */ React43.forwardRef(function TooltipPopup2(componentProps, forwardedRef) {
+  var TooltipPopup = /* @__PURE__ */ React44.forwardRef(function TooltipPopup2(componentProps, forwardedRef) {
     const {
       render,
       className,
@@ -8854,8 +8848,8 @@ var wp;
   if (true) TooltipPopup.displayName = "TooltipPopup";
 
   // node_modules/@base-ui/react/tooltip/arrow/TooltipArrow.mjs
-  var React44 = __toESM(require_react(), 1);
-  var TooltipArrow = /* @__PURE__ */ React44.forwardRef(function TooltipArrow2(componentProps, forwardedRef) {
+  var React45 = __toESM(require_react(), 1);
+  var TooltipArrow = /* @__PURE__ */ React45.forwardRef(function TooltipArrow2(componentProps, forwardedRef) {
     const {
       render,
       className,
@@ -8893,25 +8887,25 @@ var wp;
   if (true) TooltipArrow.displayName = "TooltipArrow";
 
   // node_modules/@base-ui/react/tooltip/provider/TooltipProvider.mjs
-  var React45 = __toESM(require_react(), 1);
-  var import_jsx_runtime10 = __toESM(require_jsx_runtime(), 1);
+  var React46 = __toESM(require_react(), 1);
+  var import_jsx_runtime11 = __toESM(require_jsx_runtime(), 1);
   var TooltipProvider = function TooltipProvider2(props) {
     const {
       delay,
       closeDelay,
       timeout = 400
     } = props;
-    const contextValue = React45.useMemo(() => ({
+    const contextValue = React46.useMemo(() => ({
       delay,
       closeDelay
     }), [delay, closeDelay]);
-    const delayValue = React45.useMemo(() => ({
+    const delayValue = React46.useMemo(() => ({
       open: delay,
       close: closeDelay
     }), [delay, closeDelay]);
-    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(TooltipProviderContext.Provider, {
+    return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(TooltipProviderContext.Provider, {
       value: contextValue,
-      children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(FloatingDelayGroup, {
+      children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(FloatingDelayGroup, {
         delay: delayValue,
         timeoutMs: timeout,
         children: props.children
@@ -8921,7 +8915,7 @@ var wp;
   if (true) TooltipProvider.displayName = "TooltipProvider";
 
   // node_modules/@base-ui/react/tooltip/viewport/TooltipViewport.mjs
-  var React46 = __toESM(require_react(), 1);
+  var React47 = __toESM(require_react(), 1);
 
   // node_modules/@base-ui/react/tooltip/viewport/TooltipViewportCssVars.mjs
   var TooltipViewportCssVars = /* @__PURE__ */ (function(TooltipViewportCssVars2) {
@@ -8936,7 +8930,7 @@ var wp;
       "data-activation-direction": value
     } : null
   };
-  var TooltipViewport = /* @__PURE__ */ React46.forwardRef(function TooltipViewport2(componentProps, forwardedRef) {
+  var TooltipViewport = /* @__PURE__ */ React47.forwardRef(function TooltipViewport2(componentProps, forwardedRef) {
     const {
       render,
       className,
@@ -9033,18 +9027,18 @@ var wp;
 
   // packages/icons/build-module/library/star-empty.mjs
   var import_primitives = __toESM(require_primitives(), 1);
-  var import_jsx_runtime11 = __toESM(require_jsx_runtime(), 1);
-  var star_empty_default = /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(import_primitives.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(import_primitives.Path, { fillRule: "evenodd", clipRule: "evenodd", d: "M9.706 8.646a.25.25 0 01-.188.137l-4.626.672a.25.25 0 00-.139.427l3.348 3.262a.25.25 0 01.072.222l-.79 4.607a.25.25 0 00.362.264l4.138-2.176a.25.25 0 01.233 0l4.137 2.175a.25.25 0 00.363-.263l-.79-4.607a.25.25 0 01.072-.222l3.347-3.262a.25.25 0 00-.139-.427l-4.626-.672a.25.25 0 01-.188-.137l-2.069-4.192a.25.25 0 00-.448 0L9.706 8.646zM12 7.39l-.948 1.921a1.75 1.75 0 01-1.317.957l-2.12.308 1.534 1.495c.412.402.6.982.503 1.55l-.362 2.11 1.896-.997a1.75 1.75 0 011.629 0l1.895.997-.362-2.11a1.75 1.75 0 01.504-1.55l1.533-1.495-2.12-.308a1.75 1.75 0 01-1.317-.957L12 7.39z" }) });
+  var import_jsx_runtime12 = __toESM(require_jsx_runtime(), 1);
+  var star_empty_default = /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(import_primitives.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(import_primitives.Path, { fillRule: "evenodd", clipRule: "evenodd", d: "M9.706 8.646a.25.25 0 01-.188.137l-4.626.672a.25.25 0 00-.139.427l3.348 3.262a.25.25 0 01.072.222l-.79 4.607a.25.25 0 00.362.264l4.138-2.176a.25.25 0 01.233 0l4.137 2.175a.25.25 0 00.363-.263l-.79-4.607a.25.25 0 01.072-.222l3.347-3.262a.25.25 0 00-.139-.427l-4.626-.672a.25.25 0 01-.188-.137l-2.069-4.192a.25.25 0 00-.448 0L9.706 8.646zM12 7.39l-.948 1.921a1.75 1.75 0 01-1.317.957l-2.12.308 1.534 1.495c.412.402.6.982.503 1.55l-.362 2.11 1.896-.997a1.75 1.75 0 011.629 0l1.895.997-.362-2.11a1.75 1.75 0 01.504-1.55l1.533-1.495-2.12-.308a1.75 1.75 0 01-1.317-.957L12 7.39z" }) });
 
   // packages/icons/build-module/library/star-filled.mjs
   var import_primitives2 = __toESM(require_primitives(), 1);
-  var import_jsx_runtime12 = __toESM(require_jsx_runtime(), 1);
-  var star_filled_default = /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(import_primitives2.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(import_primitives2.Path, { d: "M11.776 4.454a.25.25 0 01.448 0l2.069 4.192a.25.25 0 00.188.137l4.626.672a.25.25 0 01.139.426l-3.348 3.263a.25.25 0 00-.072.222l.79 4.607a.25.25 0 01-.362.263l-4.138-2.175a.25.25 0 00-.232 0l-4.138 2.175a.25.25 0 01-.363-.263l.79-4.607a.25.25 0 00-.071-.222L4.754 9.881a.25.25 0 01.139-.426l4.626-.672a.25.25 0 00.188-.137l2.069-4.192z" }) });
+  var import_jsx_runtime13 = __toESM(require_jsx_runtime(), 1);
+  var star_filled_default = /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_primitives2.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_primitives2.Path, { d: "M11.776 4.454a.25.25 0 01.448 0l2.069 4.192a.25.25 0 00.188.137l4.626.672a.25.25 0 01.139.426l-3.348 3.263a.25.25 0 00-.072.222l.79 4.607a.25.25 0 01-.362.263l-4.138-2.175a.25.25 0 00-.232 0l-4.138 2.175a.25.25 0 01-.363-.263l.79-4.607a.25.25 0 00-.071-.222L4.754 9.881a.25.25 0 01.139-.426l4.626-.672a.25.25 0 00.188-.137l2.069-4.192z" }) });
 
   // packages/icons/build-module/library/star-half.mjs
   var import_primitives3 = __toESM(require_primitives(), 1);
-  var import_jsx_runtime13 = __toESM(require_jsx_runtime(), 1);
-  var star_half_default = /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_primitives3.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_primitives3.Path, { d: "M9.518 8.783a.25.25 0 00.188-.137l2.069-4.192a.25.25 0 01.448 0l2.07 4.192a.25.25 0 00.187.137l4.626.672a.25.25 0 01.139.427l-3.347 3.262a.25.25 0 00-.072.222l.79 4.607a.25.25 0 01-.363.264l-4.137-2.176a.25.25 0 00-.233 0l-4.138 2.175a.25.25 0 01-.362-.263l.79-4.607a.25.25 0 00-.072-.222L4.753 9.882a.25.25 0 01.14-.427l4.625-.672zM12 14.533c.28 0 .559.067.814.2l1.895.997-.362-2.11a1.75 1.75 0 01.504-1.55l1.533-1.495-2.12-.308a1.75 1.75 0 01-1.317-.957L12 7.39v7.143z" }) });
+  var import_jsx_runtime14 = __toESM(require_jsx_runtime(), 1);
+  var star_half_default = /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_primitives3.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_primitives3.Path, { d: "M9.518 8.783a.25.25 0 00.188-.137l2.069-4.192a.25.25 0 01.448 0l2.07 4.192a.25.25 0 00.187.137l4.626.672a.25.25 0 01.139.427l-3.347 3.262a.25.25 0 00-.072.222l.79 4.607a.25.25 0 01-.363.264l-4.137-2.176a.25.25 0 00-.233 0l-4.138 2.175a.25.25 0 01-.362-.263l.79-4.607a.25.25 0 00-.072-.222L4.753 9.882a.25.25 0 01.14-.427l4.625-.672zM12 14.533c.28 0 .559.067.814.2l1.895.997-.362-2.11a1.75 1.75 0 01.504-1.55l1.533-1.495-2.12-.308a1.75 1.75 0 01-1.317-.957L12 7.39v7.143z" }) });
 
   // packages/ui/build-module/utils/render-slot-with-children.mjs
   var import_element12 = __toESM(require_element(), 1);
@@ -9237,10 +9231,10 @@ var wp;
   }
 
   // packages/ui/build-module/tooltip/portal.mjs
-  var import_jsx_runtime14 = __toESM(require_jsx_runtime(), 1);
+  var import_jsx_runtime15 = __toESM(require_jsx_runtime(), 1);
   var Portal = (0, import_element13.forwardRef)(
     function TooltipPortal3({ container, ...restProps }, ref) {
-      return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+      return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
         index_parts_exports.Portal,
         {
           container: container ?? getWpCompatOverlaySlot(),
@@ -9253,7 +9247,7 @@ var wp;
 
   // packages/ui/build-module/tooltip/positioner.mjs
   var import_element14 = __toESM(require_element(), 1);
-  var import_jsx_runtime15 = __toESM(require_jsx_runtime(), 1);
+  var import_jsx_runtime16 = __toESM(require_jsx_runtime(), 1);
   var STYLE_HASH_ATTRIBUTE2 = "data-wp-hash";
   function getRuntime2() {
     const globalScope = globalThis;
@@ -9344,7 +9338,7 @@ var wp;
   var style_default = { "positioner": "_480b748dd3510e64__positioner", "popup": "_50096b232db7709d__popup" };
   var Positioner = (0, import_element14.forwardRef)(
     function TooltipPositioner3({ align = "center", className, side = "top", sideOffset = 4, ...props }, ref) {
-      return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+      return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
         index_parts_exports.Positioner,
         {
           ref,
@@ -9363,7 +9357,7 @@ var wp;
   );
 
   // packages/ui/build-module/tooltip/popup.mjs
-  var import_jsx_runtime16 = __toESM(require_jsx_runtime(), 1);
+  var import_jsx_runtime17 = __toESM(require_jsx_runtime(), 1);
   var STYLE_HASH_ATTRIBUTE3 = "data-wp-hash";
   function getRuntime3() {
     const globalScope = globalThis;
@@ -9450,7 +9444,7 @@ var wp;
   var style_default2 = { "positioner": "_480b748dd3510e64__positioner", "popup": "_50096b232db7709d__popup" };
   var POPUP_COLOR = { background: "#1e1e1e" };
   var Popup = (0, import_element15.forwardRef)(function TooltipPopup3({ portal, positioner, children, className, ...props }, ref) {
-    const popupContent = /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(ThemeProvider, { color: POPUP_COLOR, children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+    const popupContent = /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(ThemeProvider, { color: POPUP_COLOR, children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
       index_parts_exports.Popup,
       {
         ref,
@@ -9461,31 +9455,38 @@ var wp;
     ) });
     const positionedPopup = renderSlotWithChildren(
       positioner,
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Positioner, {}),
+      /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Positioner, {}),
       popupContent
     );
-    return renderSlotWithChildren(portal, /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Portal, {}), positionedPopup);
+    return renderSlotWithChildren(portal, /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Portal, {}), positionedPopup);
   });
 
   // packages/ui/build-module/tooltip/trigger.mjs
   var import_element16 = __toESM(require_element(), 1);
-  var import_jsx_runtime17 = __toESM(require_jsx_runtime(), 1);
+  var import_jsx_runtime18 = __toESM(require_jsx_runtime(), 1);
   var Trigger = (0, import_element16.forwardRef)(
     function TooltipTrigger3(props, ref) {
-      return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(index_parts_exports.Trigger, { ref, ...props });
+      return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(index_parts_exports.Trigger, { ref, ...props });
     }
   );
 
+  // packages/ui/build-module/utils/direction-provider.mjs
+  var import_i18n2 = __toESM(require_i18n(), 1);
+  var import_jsx_runtime19 = __toESM(require_jsx_runtime(), 1);
+  function DirectionProvider3({ children }) {
+    return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(DirectionProvider, { direction: (0, import_i18n2.isRTL)() ? "rtl" : "ltr", children });
+  }
+
   // packages/ui/build-module/tooltip/root.mjs
-  var import_jsx_runtime18 = __toESM(require_jsx_runtime(), 1);
+  var import_jsx_runtime20 = __toESM(require_jsx_runtime(), 1);
   function Root(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(index_parts_exports.Root, { ...props });
+    return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(DirectionProvider3, { children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(index_parts_exports.Root, { ...props }) });
   }
 
   // packages/ui/build-module/tooltip/provider.mjs
-  var import_jsx_runtime19 = __toESM(require_jsx_runtime(), 1);
+  var import_jsx_runtime21 = __toESM(require_jsx_runtime(), 1);
   function Provider({ ...props }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(index_parts_exports.Provider, { ...props });
+    return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(index_parts_exports.Provider, { ...props });
   }
 
   // packages/ui/build-module/visually-hidden/visually-hidden.mjs
@@ -9593,23 +9594,23 @@ var wp;
   );
 
   // packages/block-directory/build-module/components/block-ratings/stars.mjs
-  var import_i18n2 = __toESM(require_i18n(), 1);
-  var import_jsx_runtime20 = __toESM(require_jsx_runtime(), 1);
+  var import_i18n3 = __toESM(require_i18n(), 1);
+  var import_jsx_runtime22 = __toESM(require_jsx_runtime(), 1);
   function Stars({ rating }) {
     const stars = Math.round(rating / 0.5) * 0.5;
     const fullStarCount = Math.floor(rating);
     const halfStarCount = Math.ceil(rating - fullStarCount);
     const emptyStarCount = 5 - (fullStarCount + halfStarCount);
-    return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
+    return /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(
       "span",
       {
-        "aria-label": (0, import_i18n2.sprintf)(
+        "aria-label": (0, import_i18n3.sprintf)(
           /* translators: %s: number of stars. */
-          (0, import_i18n2.__)("%s out of 5 stars"),
+          (0, import_i18n3.__)("%s out of 5 stars"),
           stars
         ),
         children: [
-          Array.from({ length: fullStarCount }).map((_, i) => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+          Array.from({ length: fullStarCount }).map((_, i) => /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
             icon_default,
             {
               className: "block-directory-block-ratings__star-full",
@@ -9618,7 +9619,7 @@ var wp;
             },
             `full_stars_${i}`
           )),
-          Array.from({ length: halfStarCount }).map((_, i) => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+          Array.from({ length: halfStarCount }).map((_, i) => /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
             icon_default,
             {
               className: "block-directory-block-ratings__star-half-full",
@@ -9627,7 +9628,7 @@ var wp;
             },
             `half_stars_${i}`
           )),
-          Array.from({ length: emptyStarCount }).map((_, i) => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+          Array.from({ length: emptyStarCount }).map((_, i) => /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
             icon_default,
             {
               className: "block-directory-block-ratings__star-empty",
@@ -9643,23 +9644,23 @@ var wp;
   var stars_default = Stars;
 
   // packages/block-directory/build-module/components/block-ratings/index.mjs
-  var import_jsx_runtime21 = __toESM(require_jsx_runtime(), 1);
-  var BlockRatings = ({ rating }) => /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("span", { className: "block-directory-block-ratings", children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(stars_default, { rating }) });
+  var import_jsx_runtime23 = __toESM(require_jsx_runtime(), 1);
+  var BlockRatings = ({ rating }) => /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("span", { className: "block-directory-block-ratings", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(stars_default, { rating }) });
   var block_ratings_default = BlockRatings;
 
   // packages/block-directory/build-module/components/downloadable-block-icon/index.mjs
   var import_block_editor2 = __toESM(require_block_editor(), 1);
-  var import_jsx_runtime22 = __toESM(require_jsx_runtime(), 1);
+  var import_jsx_runtime24 = __toESM(require_jsx_runtime(), 1);
   function DownloadableBlockIcon({ icon }) {
     const className = "block-directory-downloadable-block-icon";
-    return icon.match(/\.(jpeg|jpg|gif|png|svg)(?:\?.*)?$/) !== null ? /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("img", { className, src: icon, alt: "" }) : /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(import_block_editor2.BlockIcon, { className, icon, showColors: true });
+    return icon.match(/\.(jpeg|jpg|gif|png|svg)(?:\?.*)?$/) !== null ? /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("img", { className, src: icon, alt: "" }) : /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(import_block_editor2.BlockIcon, { className, icon, showColors: true });
   }
   var downloadable_block_icon_default = DownloadableBlockIcon;
 
   // packages/block-directory/build-module/components/downloadable-block-notice/index.mjs
-  var import_i18n3 = __toESM(require_i18n(), 1);
+  var import_i18n4 = __toESM(require_i18n(), 1);
   var import_data5 = __toESM(require_data(), 1);
-  var import_jsx_runtime23 = __toESM(require_jsx_runtime(), 1);
+  var import_jsx_runtime25 = __toESM(require_jsx_runtime(), 1);
   var DownloadableBlockNotice = ({ block }) => {
     const errorNotice = (0, import_data5.useSelect)(
       (select) => select(store).getErrorNoticeForBlock(block.id),
@@ -9668,32 +9669,48 @@ var wp;
     if (!errorNotice) {
       return null;
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "block-directory-downloadable-block-notice", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { className: "block-directory-downloadable-block-notice__content", children: [
+    return /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("div", { className: "block-directory-downloadable-block-notice", children: /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)("div", { className: "block-directory-downloadable-block-notice__content", children: [
       errorNotice.message,
-      errorNotice.isFatal ? " " + (0, import_i18n3.__)("Try reloading the page.") : null
+      errorNotice.isFatal ? " " + (0, import_i18n4.__)("Try reloading the page.") : null
     ] }) });
   };
   var downloadable_block_notice_default = DownloadableBlockNotice;
 
   // packages/block-directory/build-module/components/downloadable-block-list-item/index.mjs
-  var import_jsx_runtime24 = __toESM(require_jsx_runtime(), 1);
+  var import_jsx_runtime26 = __toESM(require_jsx_runtime(), 1);
   function getDownloadableBlockLabel({ title, rating, ratingCount }, { hasNotice, isInstalled, isInstalling: isInstalling2 }) {
     const stars = Math.round(rating / 0.5) * 0.5;
     if (!isInstalled && hasNotice) {
-      return (0, import_i18n4.sprintf)("Retry installing %s.", (0, import_html_entities.decodeEntities)(title));
+      return (0, import_i18n5.sprintf)(
+        /* translators: %s: block title */
+        (0, import_i18n5.__)("Retry installing %s."),
+        (0, import_html_entities.decodeEntities)(title)
+      );
     }
     if (isInstalled) {
-      return (0, import_i18n4.sprintf)("Add %s.", (0, import_html_entities.decodeEntities)(title));
+      return (0, import_i18n5.sprintf)(
+        /* translators: %s: block title */
+        (0, import_i18n5.__)("Add %s."),
+        (0, import_html_entities.decodeEntities)(title)
+      );
     }
     if (isInstalling2) {
-      return (0, import_i18n4.sprintf)("Installing %s.", (0, import_html_entities.decodeEntities)(title));
+      return (0, import_i18n5.sprintf)(
+        /* translators: %s: block title */
+        (0, import_i18n5.__)("Installing %s."),
+        (0, import_html_entities.decodeEntities)(title)
+      );
     }
     if (ratingCount < 1) {
-      return (0, import_i18n4.sprintf)("Install %s.", (0, import_html_entities.decodeEntities)(title));
+      return (0, import_i18n5.sprintf)(
+        /* translators: %s: block title */
+        (0, import_i18n5.__)("Install %s."),
+        (0, import_html_entities.decodeEntities)(title)
+      );
     }
-    return (0, import_i18n4.sprintf)(
+    return (0, import_i18n5.sprintf)(
       /* translators: 1: block title, 2: average rating, 3: total ratings count. */
-      (0, import_i18n4._n)(
+      (0, import_i18n5._n)(
         "Install %1$s. %2$s stars with %3$s review.",
         "Install %1$s. %2$s stars with %3$s reviews.",
         ratingCount
@@ -9721,20 +9738,20 @@ var wp;
     );
     let statusText = "";
     if (isInstalled) {
-      statusText = (0, import_i18n4.__)("Installed!");
+      statusText = (0, import_i18n5.__)("Installed!");
     } else if (isInstalling2) {
-      statusText = (0, import_i18n4.__)("Installing\u2026");
+      statusText = (0, import_i18n5.__)("Installing\u2026");
     }
     const itemLabel = getDownloadableBlockLabel(item, {
       hasNotice,
       isInstalled,
       isInstalling: isInstalling2
     });
-    return /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)(tooltip_exports.Root, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)(tooltip_exports.Root, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
         tooltip_exports.Trigger,
         {
-          render: /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)(
+          render: /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)(
             import_components.Composite.Item,
             {
               className: clsx_default(
@@ -9751,31 +9768,31 @@ var wp;
               type: "button",
               role: "option",
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)("div", { className: "block-directory-downloadable-block-list-item__icon", children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
+                /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("div", { className: "block-directory-downloadable-block-list-item__icon", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
                     downloadable_block_icon_default,
                     {
                       icon,
                       title
                     }
                   ),
-                  isInstalling2 ? /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("span", { className: "block-directory-downloadable-block-list-item__spinner", children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(import_components.Spinner, {}) }) : /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(block_ratings_default, { rating })
+                  isInstalling2 ? /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("span", { className: "block-directory-downloadable-block-list-item__spinner", children: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(import_components.Spinner, {}) }) : /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(block_ratings_default, { rating })
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)("span", { className: "block-directory-downloadable-block-list-item__details", children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("span", { className: "block-directory-downloadable-block-list-item__title", children: (0, import_element18.createInterpolateElement)(
-                    (0, import_i18n4.sprintf)(
+                /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("span", { className: "block-directory-downloadable-block-list-item__details", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("span", { className: "block-directory-downloadable-block-list-item__title", children: (0, import_element18.createInterpolateElement)(
+                    (0, import_i18n5.sprintf)(
                       /* translators: 1: block title. 2: author name. */
-                      (0, import_i18n4.__)("%1$s <span>by %2$s</span>"),
+                      (0, import_i18n5.__)("%1$s <span>by %2$s</span>"),
                       (0, import_html_entities.decodeEntities)(title),
                       author
                     ),
                     {
-                      span: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("span", { className: "block-directory-downloadable-block-list-item__author" })
+                      span: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("span", { className: "block-directory-downloadable-block-list-item__author" })
                     }
                   ) }),
-                  hasNotice ? /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(downloadable_block_notice_default, { block: item }) : /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)(import_jsx_runtime24.Fragment, { children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("span", { className: "block-directory-downloadable-block-list-item__desc", children: !!statusText ? statusText : (0, import_html_entities.decodeEntities)(description) }),
-                    isInstallable && !(isInstalled || isInstalling2) && /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(VisuallyHidden, { children: (0, import_i18n4.__)("Install block") })
+                  hasNotice ? /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(downloadable_block_notice_default, { block: item }) : /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)(import_jsx_runtime26.Fragment, { children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("span", { className: "block-directory-downloadable-block-list-item__desc", children: !!statusText ? statusText : (0, import_html_entities.decodeEntities)(description) }),
+                    isInstallable && !(isInstalled || isInstalling2) && /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(VisuallyHidden, { children: (0, import_i18n5.__)("Install block") })
                   ] })
                 ] })
               ]
@@ -9783,13 +9800,13 @@ var wp;
           )
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(tooltip_exports.Popup, { children: itemLabel })
+      /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(tooltip_exports.Popup, { children: itemLabel })
     ] });
   }
   var downloadable_block_list_item_default = DownloadableBlockListItem;
 
   // packages/block-directory/build-module/components/downloadable-blocks-list/index.mjs
-  var import_jsx_runtime25 = __toESM(require_jsx_runtime(), 1);
+  var import_jsx_runtime27 = __toESM(require_jsx_runtime(), 1);
   var noop4 = () => {
   };
   function DownloadableBlocksList({ items, onHover = noop4, onSelect }) {
@@ -9797,14 +9814,14 @@ var wp;
     if (!items.length) {
       return null;
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
       import_components2.Composite,
       {
         role: "listbox",
         className: "block-directory-downloadable-blocks-list",
-        "aria-label": (0, import_i18n5.__)("Blocks available for install"),
+        "aria-label": (0, import_i18n6.__)("Blocks available for install"),
         children: items.map((item) => {
-          return /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
+          return /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
             downloadable_block_list_item_default,
             {
               onClick: () => {
@@ -9831,10 +9848,10 @@ var wp;
   var downloadable_blocks_list_default = DownloadableBlocksList;
 
   // packages/block-directory/build-module/components/downloadable-blocks-panel/inserter-panel.mjs
-  var import_i18n6 = __toESM(require_i18n(), 1);
+  var import_i18n7 = __toESM(require_i18n(), 1);
   var import_element19 = __toESM(require_element(), 1);
   var import_a11y = __toESM(require_a11y(), 1);
-  var import_jsx_runtime26 = __toESM(require_jsx_runtime(), 1);
+  var import_jsx_runtime28 = __toESM(require_jsx_runtime(), 1);
   function DownloadableBlocksInserterPanel({
     children,
     downloadableItems,
@@ -9843,9 +9860,9 @@ var wp;
     const count = downloadableItems.length;
     (0, import_element19.useEffect)(() => {
       (0, import_a11y.speak)(
-        (0, import_i18n6.sprintf)(
+        (0, import_i18n7.sprintf)(
           /* translators: %d: number of available blocks. */
-          (0, import_i18n6._n)(
+          (0, import_i18n7._n)(
             "%d additional block is available to install.",
             "%d additional blocks are available to install.",
             count
@@ -9854,13 +9871,13 @@ var wp;
         )
       );
     }, [count]);
-    return /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)(import_jsx_runtime26.Fragment, { children: [
-      !hasLocalBlocks && /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("p", { className: "block-directory-downloadable-blocks-panel__no-local", children: (0, import_i18n6.__)("No results available from your installed blocks.") }),
-      /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("div", { className: "block-editor-inserter__quick-inserter-separator" }),
-      /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("div", { className: "block-directory-downloadable-blocks-panel", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("div", { className: "block-directory-downloadable-blocks-panel__header", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("h2", { className: "block-directory-downloadable-blocks-panel__title", children: (0, import_i18n6.__)("Available to install") }),
-          /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("p", { className: "block-directory-downloadable-blocks-panel__description", children: (0, import_i18n6.__)(
+    return /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)(import_jsx_runtime28.Fragment, { children: [
+      !hasLocalBlocks && /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("p", { className: "block-directory-downloadable-blocks-panel__no-local", children: (0, import_i18n7.__)("No results available from your installed blocks.") }),
+      /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("div", { className: "block-editor-inserter__quick-inserter-separator" }),
+      /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)("div", { className: "block-directory-downloadable-blocks-panel", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)("div", { className: "block-directory-downloadable-blocks-panel__header", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("h2", { className: "block-directory-downloadable-blocks-panel__title", children: (0, import_i18n7.__)("Available to install") }),
+          /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("p", { className: "block-directory-downloadable-blocks-panel__description", children: (0, import_i18n7.__)(
             "Select a block to install and add it to your post."
           ) })
         ] }),
@@ -9871,17 +9888,17 @@ var wp;
   var inserter_panel_default = DownloadableBlocksInserterPanel;
 
   // packages/block-directory/build-module/components/downloadable-blocks-panel/no-results.mjs
-  var import_i18n7 = __toESM(require_i18n(), 1);
+  var import_i18n8 = __toESM(require_i18n(), 1);
   var import_components3 = __toESM(require_components(), 1);
-  var import_jsx_runtime27 = __toESM(require_jsx_runtime(), 1);
+  var import_jsx_runtime29 = __toESM(require_jsx_runtime(), 1);
   function DownloadableBlocksNoResults() {
-    return /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(import_jsx_runtime27.Fragment, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "block-editor-inserter__no-results", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("p", { children: (0, import_i18n7.__)("No results found.") }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "block-editor-inserter__tips", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(import_components3.Tip, { children: [
-        (0, import_i18n7.__)("Interested in creating your own block?"),
-        /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("br", {}),
-        /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(import_components3.ExternalLink, { href: "https://developer.wordpress.org/block-editor/", children: [
-          (0, import_i18n7.__)("Get started here"),
+    return /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)(import_jsx_runtime29.Fragment, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("div", { className: "block-editor-inserter__no-results", children: /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("p", { children: (0, import_i18n8.__)("No results found.") }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("div", { className: "block-editor-inserter__tips", children: /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)(import_components3.Tip, { children: [
+        (0, import_i18n8.__)("Interested in creating your own block?"),
+        /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("br", {}),
+        /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)(import_components3.ExternalLink, { href: "https://developer.wordpress.org/block-editor/", children: [
+          (0, import_i18n8.__)("Get started here"),
           "."
         ] })
       ] }) })
@@ -9890,7 +9907,7 @@ var wp;
   var no_results_default = DownloadableBlocksNoResults;
 
   // packages/block-directory/build-module/components/downloadable-blocks-panel/index.mjs
-  var import_jsx_runtime28 = __toESM(require_jsx_runtime(), 1);
+  var import_jsx_runtime30 = __toESM(require_jsx_runtime(), 1);
   var EMPTY_ARRAY3 = [];
   var useDownloadableBlocks = (filterValue) => (0, import_data8.useSelect)(
     (select) => {
@@ -9940,31 +9957,31 @@ var wp;
   }) {
     const { hasPermission, downloadableBlocks: downloadableBlocks2, isLoading } = useDownloadableBlocks(filterValue);
     if (hasPermission === void 0 || isLoading || isTyping) {
-      return /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)(import_jsx_runtime28.Fragment, { children: [
-        hasPermission && !hasLocalBlocks && /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)(import_jsx_runtime28.Fragment, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("p", { className: "block-directory-downloadable-blocks-panel__no-local", children: (0, import_i18n8.__)(
+      return /* @__PURE__ */ (0, import_jsx_runtime30.jsxs)(import_jsx_runtime30.Fragment, { children: [
+        hasPermission && !hasLocalBlocks && /* @__PURE__ */ (0, import_jsx_runtime30.jsxs)(import_jsx_runtime30.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime30.jsx)("p", { className: "block-directory-downloadable-blocks-panel__no-local", children: (0, import_i18n9.__)(
             "No results available from your installed blocks."
           ) }),
-          /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("div", { className: "block-editor-inserter__quick-inserter-separator" })
+          /* @__PURE__ */ (0, import_jsx_runtime30.jsx)("div", { className: "block-editor-inserter__quick-inserter-separator" })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("div", { className: "block-directory-downloadable-blocks-panel has-blocks-loading", children: /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(import_components4.Spinner, {}) })
+        /* @__PURE__ */ (0, import_jsx_runtime30.jsx)("div", { className: "block-directory-downloadable-blocks-panel has-blocks-loading", children: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(import_components4.Spinner, {}) })
       ] });
     }
     if (false === hasPermission) {
       if (!hasLocalBlocks) {
-        return /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(no_results_default, {});
+        return /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(no_results_default, {});
       }
       return null;
     }
     if (downloadableBlocks2.length === 0) {
-      return hasLocalBlocks ? null : /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(no_results_default, {});
+      return hasLocalBlocks ? null : /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(no_results_default, {});
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
       inserter_panel_default,
       {
         downloadableItems: downloadableBlocks2,
         hasLocalBlocks,
-        children: /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
+        children: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
           downloadable_blocks_list_default,
           {
             items: downloadableBlocks2,
@@ -9977,18 +9994,18 @@ var wp;
   }
 
   // packages/block-directory/build-module/plugins/inserter-menu-downloadable-blocks-panel/index.mjs
-  var import_jsx_runtime29 = __toESM(require_jsx_runtime(), 1);
+  var import_jsx_runtime31 = __toESM(require_jsx_runtime(), 1);
   function InserterMenuDownloadableBlocksPanel() {
     const [debouncedFilterValue, setFilterValue] = (0, import_element20.useState)("");
     const debouncedSetFilterValue = (0, import_compose.debounce)(setFilterValue, 400);
-    return /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(import_block_editor3.__unstableInserterMenuExtension, { children: ({ onSelect, onHover, filterValue, hasItems }) => {
+    return /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(import_block_editor3.__unstableInserterMenuExtension, { children: ({ onSelect, onHover, filterValue, hasItems }) => {
       if (debouncedFilterValue !== filterValue) {
         debouncedSetFilterValue(filterValue);
       }
       if (!debouncedFilterValue) {
         return null;
       }
-      return /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
+      return /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(
         DownloadableBlocksPanel,
         {
           onSelect,
@@ -10003,24 +10020,24 @@ var wp;
   var inserter_menu_downloadable_blocks_panel_default = InserterMenuDownloadableBlocksPanel;
 
   // packages/block-directory/build-module/plugins/installed-blocks-pre-publish-panel/index.mjs
-  var import_i18n10 = __toESM(require_i18n(), 1);
+  var import_i18n11 = __toESM(require_i18n(), 1);
   var import_data9 = __toESM(require_data(), 1);
   var import_editor2 = __toESM(require_editor(), 1);
 
   // packages/block-directory/build-module/components/compact-list/index.mjs
-  var import_i18n9 = __toESM(require_i18n(), 1);
-  var import_jsx_runtime30 = __toESM(require_jsx_runtime(), 1);
+  var import_i18n10 = __toESM(require_i18n(), 1);
+  var import_jsx_runtime32 = __toESM(require_jsx_runtime(), 1);
   function CompactList({ items }) {
     if (!items.length) {
       return null;
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime30.jsx)("ul", { className: "block-directory-compact-list", children: items.map(({ icon, id, title, author }) => /* @__PURE__ */ (0, import_jsx_runtime30.jsxs)("li", { className: "block-directory-compact-list__item", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(downloadable_block_icon_default, { icon, title }),
-      /* @__PURE__ */ (0, import_jsx_runtime30.jsxs)("div", { className: "block-directory-compact-list__item-details", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime30.jsx)("div", { className: "block-directory-compact-list__item-title", children: title }),
-        /* @__PURE__ */ (0, import_jsx_runtime30.jsx)("div", { className: "block-directory-compact-list__item-author", children: (0, import_i18n9.sprintf)(
+    return /* @__PURE__ */ (0, import_jsx_runtime32.jsx)("ul", { className: "block-directory-compact-list", children: items.map(({ icon, id, title, author }) => /* @__PURE__ */ (0, import_jsx_runtime32.jsxs)("li", { className: "block-directory-compact-list__item", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(downloadable_block_icon_default, { icon, title }),
+      /* @__PURE__ */ (0, import_jsx_runtime32.jsxs)("div", { className: "block-directory-compact-list__item-details", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime32.jsx)("div", { className: "block-directory-compact-list__item-title", children: title }),
+        /* @__PURE__ */ (0, import_jsx_runtime32.jsx)("div", { className: "block-directory-compact-list__item-author", children: (0, import_i18n10.sprintf)(
           /* translators: %s: Name of the block author. */
-          (0, import_i18n9.__)("By %s"),
+          (0, import_i18n10.__)("By %s"),
           author
         ) })
       ] })
@@ -10028,7 +10045,7 @@ var wp;
   }
 
   // packages/block-directory/build-module/plugins/installed-blocks-pre-publish-panel/index.mjs
-  var import_jsx_runtime31 = __toESM(require_jsx_runtime(), 1);
+  var import_jsx_runtime33 = __toESM(require_jsx_runtime(), 1);
   function InstalledBlocksPrePublishPanel() {
     const newBlockTypes = (0, import_data9.useSelect)(
       (select) => select(store).getNewBlockTypes(),
@@ -10037,12 +10054,12 @@ var wp;
     if (!newBlockTypes.length) {
       return null;
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)(
+    return /* @__PURE__ */ (0, import_jsx_runtime33.jsxs)(
       import_editor2.PluginPrePublishPanel,
       {
-        title: (0, import_i18n10.sprintf)(
+        title: (0, import_i18n11.sprintf)(
           // translators: %d: number of blocks (number).
-          (0, import_i18n10._n)(
+          (0, import_i18n11._n)(
             "Added: %d block",
             "Added: %d blocks",
             newBlockTypes.length
@@ -10051,19 +10068,19 @@ var wp;
         ),
         initialOpen: true,
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime31.jsx)("p", { className: "installed-blocks-pre-publish-panel__copy", children: (0, import_i18n10._n)(
+          /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("p", { className: "installed-blocks-pre-publish-panel__copy", children: (0, import_i18n11._n)(
             "The following block has been added to your site.",
             "The following blocks have been added to your site.",
             newBlockTypes.length
           ) }),
-          /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(CompactList, { items: newBlockTypes })
+          /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(CompactList, { items: newBlockTypes })
         ]
       }
     );
   }
 
   // packages/block-directory/build-module/plugins/get-install-missing/index.mjs
-  var import_i18n12 = __toESM(require_i18n(), 1);
+  var import_i18n13 = __toESM(require_i18n(), 1);
   var import_components6 = __toESM(require_components(), 1);
   var import_blocks7 = __toESM(require_blocks(), 1);
   var import_element21 = __toESM(require_element(), 1);
@@ -10072,12 +10089,12 @@ var wp;
   var import_block_editor5 = __toESM(require_block_editor(), 1);
 
   // packages/block-directory/build-module/plugins/get-install-missing/install-button.mjs
-  var import_i18n11 = __toESM(require_i18n(), 1);
+  var import_i18n12 = __toESM(require_i18n(), 1);
   var import_components5 = __toESM(require_components(), 1);
   var import_blocks6 = __toESM(require_blocks(), 1);
   var import_data10 = __toESM(require_data(), 1);
   var import_block_editor4 = __toESM(require_block_editor(), 1);
-  var import_jsx_runtime32 = __toESM(require_jsx_runtime(), 1);
+  var import_jsx_runtime34 = __toESM(require_jsx_runtime(), 1);
   function InstallButton({ attributes, block, clientId }) {
     const isInstallingBlock = (0, import_data10.useSelect)(
       (select) => select(store).isInstalling(block.id),
@@ -10085,7 +10102,7 @@ var wp;
     );
     const { installBlockType: installBlockType2 } = (0, import_data10.useDispatch)(store);
     const { replaceBlock } = (0, import_data10.useDispatch)(import_block_editor4.store);
-    return /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(
       import_components5.Button,
       {
         __next40pxDefaultSize: true,
@@ -10111,9 +10128,9 @@ var wp;
         disabled: isInstallingBlock,
         isBusy: isInstallingBlock,
         variant: "primary",
-        children: (0, import_i18n11.sprintf)(
+        children: (0, import_i18n12.sprintf)(
           /* translators: %s: block name */
-          (0, import_i18n11.__)("Install %s"),
+          (0, import_i18n12.__)("Install %s"),
           block.title
         )
       }
@@ -10121,7 +10138,7 @@ var wp;
   }
 
   // packages/block-directory/build-module/plugins/get-install-missing/index.mjs
-  var import_jsx_runtime33 = __toESM(require_jsx_runtime(), 1);
+  var import_jsx_runtime35 = __toESM(require_jsx_runtime(), 1);
   var getInstallMissing = (OriginalComponent) => (props) => {
     const { originalName } = props.attributes;
     const { block, hasPermission } = (0, import_data11.useSelect)(
@@ -10141,9 +10158,9 @@ var wp;
       [originalName]
     );
     if (!hasPermission || !block) {
-      return /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(OriginalComponent, { ...props });
+      return /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(OriginalComponent, { ...props });
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(ModifiedWarning, { ...props, originalBlock: block });
+    return /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(ModifiedWarning, { ...props, originalBlock: block });
   };
   var ModifiedWarning = ({ originalBlock, ...props }) => {
     const { originalName, originalUndelimitedContent, clientId } = props.attributes;
@@ -10165,15 +10182,15 @@ var wp;
       },
       [clientId]
     );
-    let messageHTML = (0, import_i18n12.sprintf)(
+    let messageHTML = (0, import_i18n13.sprintf)(
       /* translators: %s: block name */
-      (0, import_i18n12.__)(
+      (0, import_i18n13.__)(
         "Your site doesn\u2019t include support for the %s block. You can try installing the block or remove it entirely."
       ),
       originalBlock.title || originalName
     );
     const actions = [
-      /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(
         InstallButton,
         {
           block: originalBlock,
@@ -10184,44 +10201,44 @@ var wp;
       )
     ];
     if (hasContent && hasHTMLBlock) {
-      messageHTML = (0, import_i18n12.sprintf)(
+      messageHTML = (0, import_i18n13.sprintf)(
         /* translators: %s: block name */
-        (0, import_i18n12.__)(
+        (0, import_i18n13.__)(
           "Your site doesn\u2019t include support for the %s block. You can try installing the block, convert it to a Custom HTML block, or remove it entirely."
         ),
         originalBlock.title || originalName
       );
       actions.push(
-        /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(
           import_components6.Button,
           {
             __next40pxDefaultSize: true,
             onClick: convertToHTML,
             variant: "tertiary",
-            children: (0, import_i18n12.__)("Keep as HTML")
+            children: (0, import_i18n13.__)("Keep as HTML")
           },
           "convert"
         )
       );
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime33.jsxs)("div", { ...(0, import_block_editor5.useBlockProps)(), children: [
-      /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(import_block_editor5.Warning, { actions, children: messageHTML }),
-      /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(import_element21.RawHTML, { children: originalUndelimitedContent })
+    return /* @__PURE__ */ (0, import_jsx_runtime35.jsxs)("div", { ...(0, import_block_editor5.useBlockProps)(), children: [
+      /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(import_block_editor5.Warning, { actions, children: messageHTML }),
+      /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(import_element21.RawHTML, { children: originalUndelimitedContent })
     ] });
   };
   var get_install_missing_default = getInstallMissing;
 
   // packages/block-directory/build-module/plugins/index.mjs
-  var import_jsx_runtime34 = __toESM(require_jsx_runtime(), 1);
+  var import_jsx_runtime36 = __toESM(require_jsx_runtime(), 1);
   (0, import_plugins.registerPlugin)("block-directory", {
     // The icon is explicitly set to undefined to prevent PluginPrePublishPanel
     // from rendering the fallback icon pluginIcon.
     icon: void 0,
     render() {
-      return /* @__PURE__ */ (0, import_jsx_runtime34.jsxs)(import_jsx_runtime34.Fragment, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(AutoBlockUninstaller, {}),
-        /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(inserter_menu_downloadable_blocks_panel_default, {}),
-        /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(InstalledBlocksPrePublishPanel, {})
+      return /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)(import_jsx_runtime36.Fragment, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(AutoBlockUninstaller, {}),
+        /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(inserter_menu_downloadable_blocks_panel_default, {}),
+        /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(InstalledBlocksPrePublishPanel, {})
       ] });
     }
   });
@@ -10262,4 +10279,6 @@ use-sync-external-store/cjs/use-sync-external-store-shim/with-selector.developme
    * LICENSE file in the root directory of this source tree.
    *)
 */
+(window.wp ||= {}).blockDirectory = wp.blockDirectory;
+})();
 //# sourceMappingURL=index.js.map

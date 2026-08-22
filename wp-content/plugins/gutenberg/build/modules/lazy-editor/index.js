@@ -1017,9 +1017,11 @@ var BACKGROUND_BLOCK_DEFAULT_VALUES = {
   backgroundPosition: "50% 50%"
   // used only when backgroundSize is 'contain'.
 };
+function hasImageUrl(backgroundImage) {
+  return typeof backgroundImage === "object" && backgroundImage !== null && "url" in backgroundImage && !!backgroundImage.url;
+}
 function setBackgroundStyleDefaults(backgroundStyle) {
-  if (!backgroundStyle || // @ts-expect-error
-  !backgroundStyle?.backgroundImage?.url) {
+  if (!backgroundStyle || !hasImageUrl(backgroundStyle.backgroundImage)) {
     return;
   }
   let backgroundStylesWithDefaults;
@@ -1777,6 +1779,20 @@ function getResponsiveStyleNodes(node, responsiveMediaQueries) {
     }
   );
 }
+function getElementStylesByName(styleNode, responsiveMediaQueries) {
+  const elementStylesByName = { ...styleNode?.elements ?? {} };
+  Object.keys(responsiveMediaQueries).forEach((breakpointKey) => {
+    Object.entries(styleNode?.[breakpointKey]?.elements ?? {}).forEach(
+      ([elementName, styles]) => {
+        elementStylesByName[elementName] = {
+          ...elementStylesByName[elementName] ?? {},
+          [breakpointKey]: styles
+        };
+      }
+    );
+  });
+  return elementStylesByName;
+}
 var getNodesWithStyles = (tree, blockSelectors) => {
   const nodes = [];
   if (!tree?.styles) {
@@ -1844,7 +1860,10 @@ var getNodesWithStyles = (tree, blockSelectors) => {
               });
             }
             Object.entries(
-              typedVariation?.elements ?? {}
+              getElementStylesByName(
+                typedVariation,
+                responsiveMediaQueries
+              )
             ).forEach(([element, elementStyles]) => {
               if (elementStyles && import_blocks.__EXPERIMENTAL_ELEMENTS[element]) {
                 variationNodesToAdd.push({
@@ -1897,7 +1916,10 @@ var getNodesWithStyles = (tree, blockSelectors) => {
                   styles: variationBlockStyleNodes
                 });
                 Object.entries(
-                  variationBlockStyles.elements ?? {}
+                  getElementStylesByName(
+                    variationBlockStyles,
+                    responsiveMediaQueries
+                  )
                 ).forEach(
                   ([
                     variationBlockElement,
@@ -1933,22 +1955,22 @@ var getNodesWithStyles = (tree, blockSelectors) => {
         });
       }
       nodes.push(...variationStyleNodesToAdd);
-      Object.entries(typedNode?.elements ?? {}).forEach(
-        ([elementName, value]) => {
-          if (typeof blockSelectors !== "string" && value && blockSelectors?.[blockName] && import_blocks.__EXPERIMENTAL_ELEMENTS[elementName]) {
-            nodes.push({
-              styles: value,
-              selector: blockSelectors[blockName]?.selector.split(",").map((sel) => {
-                const elementSelectors = import_blocks.__EXPERIMENTAL_ELEMENTS[elementName].split(",");
-                return elementSelectors.map(
-                  (elementSelector) => sel + " " + elementSelector
-                );
-              }).join(","),
-              elementName
-            });
-          }
+      Object.entries(
+        getElementStylesByName(typedNode, responsiveMediaQueries)
+      ).forEach(([elementName, value]) => {
+        if (typeof blockSelectors !== "string" && value && blockSelectors?.[blockName] && import_blocks.__EXPERIMENTAL_ELEMENTS[elementName]) {
+          nodes.push({
+            styles: value,
+            selector: blockSelectors[blockName]?.selector.split(",").map((sel) => {
+              const elementSelectors = import_blocks.__EXPERIMENTAL_ELEMENTS[elementName].split(",");
+              return elementSelectors.map(
+                (elementSelector) => sel + " " + elementSelector
+              );
+            }).join(","),
+            elementName
+          });
         }
-      );
+      });
       nodes.push(...variationNodesToAdd);
     }
   );
@@ -2319,10 +2341,8 @@ var getBlockSelectors = (blockTypes, variationInstanceId) => {
       }
     }
     const hasLayoutSupport = !!blockType?.supports?.layout || !!blockType?.supports?.__experimentalLayout;
-    const fallbackGapValue = (
-      // @ts-expect-error
-      blockType?.supports?.spacing?.blockGap?.__experimentalDefault
-    );
+    const blockGapSupport = blockType?.supports?.spacing?.blockGap;
+    const fallbackGapValue = typeof blockGapSupport === "object" && !Array.isArray(blockGapSupport) ? blockGapSupport.__experimentalDefault : void 0;
     const blockStyleVariations = getBlockStyles(name);
     const styleVariationSelectors = {};
     blockStyleVariations?.forEach((variation) => {

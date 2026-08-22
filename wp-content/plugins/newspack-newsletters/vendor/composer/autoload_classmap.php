@@ -183,6 +183,7 @@ return array(
     'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\List_Item' => $vendorDir . '/woocommerce/email-editor/src/Integrations/Core/Renderer/Blocks/class-list-item.php',
     'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Media_Text' => $vendorDir . '/woocommerce/email-editor/src/Integrations/Core/Renderer/Blocks/class-media-text.php',
     'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Post_Content' => $vendorDir . '/woocommerce/email-editor/src/Integrations/Core/Renderer/Blocks/class-post-content.php',
+    'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Post_Template' => $vendorDir . '/woocommerce/email-editor/src/Integrations/Core/Renderer/Blocks/class-post-template.php',
     'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Quote' => $vendorDir . '/woocommerce/email-editor/src/Integrations/Core/Renderer/Blocks/class-quote.php',
     'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Social_Link' => $vendorDir . '/woocommerce/email-editor/src/Integrations/Core/Renderer/Blocks/class-social-link.php',
     'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Social_Links' => $vendorDir . '/woocommerce/email-editor/src/Integrations/Core/Renderer/Blocks/class-social-links.php',

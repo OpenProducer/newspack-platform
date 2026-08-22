@@ -85,6 +85,17 @@ function gutenberg_initialize_experiments_settings() {
 			),
 		),
 		array(
+			'slug'  => 'real-time-collaboration',
+			'label' => _x( 'Real-Time Collaboration', 'experiments group name', 'gutenberg' ),
+			'items' => array(
+				array(
+					'id'          => 'gutenberg-real-time-collaboration',
+					'label'       => __( 'Enable real-time collaboration', 'gutenberg' ),
+					'description' => __( 'Allows multiple people to edit the same post at the same time.', 'gutenberg' ),
+				),
+			),
+		),
+		array(
 			'slug'  => 'templates',
 			'label' => _x( 'Templates', 'experiments group name', 'gutenberg' ),
 			'items' => array(
@@ -119,11 +130,6 @@ function gutenberg_initialize_experiments_settings() {
 					'id'          => 'gutenberg-guidelines',
 					'label'       => __( 'Guidelines', 'gutenberg' ),
 					'description' => __( 'Enables the Guidelines page under Settings and the experimental knowledge storage (wp_knowledge).', 'gutenberg' ),
-				),
-				array(
-					'id'          => 'gutenberg-content-types',
-					'label'       => __( 'Content types', 'gutenberg' ),
-					'description' => __( 'Enables a UI for creating and managing custom taxonomies and custom post types under Settings.', 'gutenberg' ),
 				),
 				array(
 					'id'          => 'gutenberg-dashboard-widgets',

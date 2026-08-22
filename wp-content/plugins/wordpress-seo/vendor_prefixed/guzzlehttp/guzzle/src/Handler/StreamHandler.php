@@ -4,6 +4,7 @@ namespace YoastSEO_Vendor\GuzzleHttp\Handler;
 
 use YoastSEO_Vendor\GuzzleHttp\Exception\ConnectException;
 use YoastSEO_Vendor\GuzzleHttp\Exception\RequestException;
+use YoastSEO_Vendor\GuzzleHttp\Exception\TransferException;
 use YoastSEO_Vendor\GuzzleHttp\Multiplexing;
 use YoastSEO_Vendor\GuzzleHttp\Promise as P;
 use YoastSEO_Vendor\GuzzleHttp\Promise\FulfilledPromise;
@@ -142,11 +143,8 @@ class StreamHandler
         } catch (\InvalidArgumentException $e) {
             throw $e;
         } catch (\Exception $e) {
-            // Determine if the error was a networking error.
-            if (self::isConnectionError($e->getMessage())) {
-                $e = new \YoastSEO_Vendor\GuzzleHttp\Exception\ConnectException($e->getMessage(), $request, $e);
-            } else {
-                $e = $e instanceof \YoastSEO_Vendor\GuzzleHttp\Exception\RequestException ? $e : new \YoastSEO_Vendor\GuzzleHttp\Exception\RequestException($e->getMessage(), $request, null, $e);
+            if (!$e instanceof \YoastSEO_Vendor\GuzzleHttp\Exception\TransferException) {
+                $e = self::isConnectionError($e->getMessage()) ? new \YoastSEO_Vendor\GuzzleHttp\Exception\ConnectException($e->getMessage(), $request, $e) : new \YoastSEO_Vendor\GuzzleHttp\Exception\RequestException($e->getMessage(), $request, null, $e);
             }
             $this->invokeStats($options, $request, $startTime, null, $e);
             return \YoastSEO_Vendor\GuzzleHttp\Promise\Create::rejectionFor($e);
@@ -322,6 +320,7 @@ class StreamHandler
         if ($uri->getHost() === '') {
             throw new \YoastSEO_Vendor\GuzzleHttp\Exception\RequestException('URI must include a scheme and host. Use an absolute URI, a network-path reference starting with //, or configure a base_uri.', $request);
         }
+        \YoastSEO_Vendor\GuzzleHttp\Handler\HostValidator::assertRequestHost($request);
         // HTTP/1.1 streams using the PHP stream wrapper require a
         // Connection: close header
         if ($request->getProtocolVersion() === '1.1' && !$request->hasHeader('Connection')) {

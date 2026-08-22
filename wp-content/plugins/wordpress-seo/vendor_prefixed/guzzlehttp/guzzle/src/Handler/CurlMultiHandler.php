@@ -277,6 +277,7 @@ class CurlMultiHandler
     }
     public function __invoke(\YoastSEO_Vendor\Psr\Http\Message\RequestInterface $request, array $options) : \YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface
     {
+        \YoastSEO_Vendor\GuzzleHttp\Handler\HostValidator::assertRequestHost($request);
         if ($this->connectionCapsApplied && \defined('CURLOPT_SHARE') && isset($options['curl']) && \is_array($options['curl']) && \array_key_exists((int) \constant('CURLOPT_SHARE'), $options['curl'])) {
             // Key presence alone conflicts: Guzzle cannot verify that a
             // caller-managed shared connection pool honors the caps.
