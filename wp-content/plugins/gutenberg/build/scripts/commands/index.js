@@ -1,3 +1,4 @@
+(function() {
 var wp;
 (wp ||= {}).commands = (() => {
   var __create = Object.create;
@@ -84,6 +85,13 @@ var wp;
   var require_keyboard_shortcuts = __commonJS({
     "package-external:@wordpress/keyboard-shortcuts"(exports, module) {
       module.exports = window.wp.keyboardShortcuts;
+    }
+  });
+
+  // package-external:@wordpress/keycodes
+  var require_keycodes = __commonJS({
+    "package-external:@wordpress/keycodes"(exports, module) {
+      module.exports = window.wp.keycodes;
     }
   });
 
@@ -2569,6 +2577,7 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   var import_i18n = __toESM(require_i18n(), 1);
   var import_components = __toESM(require_components(), 1);
   var import_keyboard_shortcuts = __toESM(require_keyboard_shortcuts(), 1);
+  var import_keycodes = __toESM(require_keycodes(), 1);
 
   // packages/icons/build-module/icon/index.mjs
   var import_element = __toESM(require_element(), 1);
@@ -2907,7 +2916,6 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
 
   // packages/commands/build-module/components/command-menu.mjs
   var import_jsx_runtime10 = __toESM(require_jsx_runtime(), 1);
-  var { withIgnoreIMEEvents } = unlock(import_components.privateApis);
   var ITEM_ID_PREFIX = "command-palette-item-";
   var inputLabel = (0, import_i18n.__)("Search commands and settings");
   var CATEGORY_ICONS = {
@@ -3137,7 +3145,7 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
     (0, import_keyboard_shortcuts.useShortcut)(
       "core/commands",
       /** @type {React.KeyboardEventHandler} */
-      withIgnoreIMEEvents((event) => {
+      (0, import_keycodes.withIgnoreIMEEvents)((event) => {
         if (event.defaultPrevented) {
           return;
         }
@@ -3331,5 +3339,7 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
     ]);
   }
   return __toCommonJS(index_exports);
+})();
+(window.wp ||= {}).commands = wp.commands;
 })();
 //# sourceMappingURL=index.js.map

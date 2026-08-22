@@ -79,7 +79,7 @@ var require_use_sync_external_store_shim_development = __commonJS({
         return x === y && (0 !== x || 1 / x === 1 / y) || x !== x && y !== y;
       }
       function useSyncExternalStore$2(subscribe, getSnapshot) {
-        didWarnOld18Alpha || void 0 === React47.startTransition || (didWarnOld18Alpha = true, console.error(
+        didWarnOld18Alpha || void 0 === React48.startTransition || (didWarnOld18Alpha = true, console.error(
           "You are using an outdated, pre-release alpha of React 18 that does not support useSyncExternalStore. The use-sync-external-store shim will not work correctly. Upgrade to a newer pre-release."
         ));
         var value = getSnapshot();
@@ -127,8 +127,8 @@ var require_use_sync_external_store_shim_development = __commonJS({
         return getSnapshot();
       }
       "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-      var React47 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState19 = React47.useState, useEffect18 = React47.useEffect, useLayoutEffect3 = React47.useLayoutEffect, useDebugValue2 = React47.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
-      exports.useSyncExternalStore = void 0 !== React47.useSyncExternalStore ? React47.useSyncExternalStore : shim;
+      var React48 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState19 = React48.useState, useEffect18 = React48.useEffect, useLayoutEffect3 = React48.useLayoutEffect, useDebugValue2 = React48.useDebugValue, didWarnOld18Alpha = false, didWarnUncachedGetSnapshot = false, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+      exports.useSyncExternalStore = void 0 !== React48.useSyncExternalStore ? React48.useSyncExternalStore : shim;
       "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
     })();
   }
@@ -155,14 +155,14 @@ var require_with_selector_development = __commonJS({
         return x === y && (0 !== x || 1 / x === 1 / y) || x !== x && y !== y;
       }
       "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-      var React47 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore2 = shim.useSyncExternalStore, useRef22 = React47.useRef, useEffect18 = React47.useEffect, useMemo19 = React47.useMemo, useDebugValue2 = React47.useDebugValue;
+      var React48 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore2 = shim.useSyncExternalStore, useRef22 = React48.useRef, useEffect18 = React48.useEffect, useMemo20 = React48.useMemo, useDebugValue2 = React48.useDebugValue;
       exports.useSyncExternalStoreWithSelector = function(subscribe, getSnapshot, getServerSnapshot, selector, isEqual) {
         var instRef = useRef22(null);
         if (null === instRef.current) {
           var inst = { hasValue: false, value: null };
           instRef.current = inst;
         } else inst = instRef.current;
-        instRef = useMemo19(
+        instRef = useMemo20(
           function() {
             function memoizedSelector(nextSnapshot) {
               if (!hasMemo) {
@@ -307,7 +307,7 @@ var import_element32 = __toESM(require_element(), 1);
 var import_data10 = __toESM(require_data(), 1);
 
 // packages/boot/build-module/components/app/router.mjs
-var import_i18n10 = __toESM(require_i18n(), 1);
+var import_i18n11 = __toESM(require_i18n(), 1);
 var import_element30 = __toESM(require_element(), 1);
 
 // node_modules/clsx/dist/clsx.mjs
@@ -1280,7 +1280,7 @@ function getParentNode(node) {
 function getNearestOverflowAncestor(node) {
   const parentNode = getParentNode(node);
   if (isLastTraversableNode(parentNode)) {
-    return node.ownerDocument ? node.ownerDocument.body : node.body;
+    return (node.ownerDocument || node).body;
   }
   if (isHTMLElement(parentNode) && isOverflowElement(parentNode)) {
     return parentNode;
@@ -2027,12 +2027,12 @@ function getOppositePlacement(placement) {
   return oppositeSideMap[side] + placement.slice(side.length);
 }
 function expandPaddingObject(padding) {
+  var _padding$top, _padding$right, _padding$bottom, _padding$left;
   return {
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-    ...padding
+    top: (_padding$top = padding.top) != null ? _padding$top : 0,
+    right: (_padding$right = padding.right) != null ? _padding$right : 0,
+    bottom: (_padding$bottom = padding.bottom) != null ? _padding$bottom : 0,
+    left: (_padding$left = padding.left) != null ? _padding$left : 0
   };
 }
 function getPaddingObject(padding) {
@@ -2839,8 +2839,8 @@ function useDismiss(context, props = {}) {
         const isScrollableY = lastTraversableNode || scrollRe.test(style.overflowY);
         const canScrollX = isScrollableX && target.clientWidth > 0 && target.scrollWidth > target.clientWidth;
         const canScrollY = isScrollableY && target.clientHeight > 0 && target.scrollHeight > target.clientHeight;
-        const isRTL6 = style.direction === "rtl";
-        const pressedVerticalScrollbar = canScrollY && (isRTL6 ? event.offsetX <= target.offsetWidth - target.clientWidth : event.offsetX > target.clientWidth);
+        const isRTL7 = style.direction === "rtl";
+        const pressedVerticalScrollbar = canScrollY && (isRTL7 ? event.offsetX <= target.offsetWidth - target.clientWidth : event.offsetX > target.clientWidth);
         const pressedHorizontalScrollbar = canScrollX && event.offsetY > target.clientHeight;
         if (pressedVerticalScrollbar || pressedHorizontalScrollbar) {
           return;
@@ -3077,13 +3077,9 @@ function computeCoordsFromPlacement(_ref, placement, rtl) {
         y: reference.y
       };
   }
-  switch (getAlignment(placement)) {
-    case "start":
-      coords[alignmentAxis] -= commonAlign * (rtl && isVertical ? -1 : 1);
-      break;
-    case "end":
-      coords[alignmentAxis] += commonAlign * (rtl && isVertical ? -1 : 1);
-      break;
+  const alignment = getAlignment(placement);
+  if (alignment) {
+    coords[alignmentAxis] += commonAlign * (alignment === "end" ? 1 : -1) * (rtl && isVertical ? -1 : 1);
   }
   return coords;
 }
@@ -3123,10 +3119,7 @@ async function detectOverflow(state, options) {
     height: rects.floating.height
   } : rects.reference;
   const offsetParent = await (platform3.getOffsetParent == null ? void 0 : platform3.getOffsetParent(elements.floating));
-  const offsetScale = await (platform3.isElement == null ? void 0 : platform3.isElement(offsetParent)) ? await (platform3.getScale == null ? void 0 : platform3.getScale(offsetParent)) || {
-    x: 1,
-    y: 1
-  } : {
+  const offsetScale = await (platform3.isElement == null ? void 0 : platform3.isElement(offsetParent)) && await (platform3.getScale == null ? void 0 : platform3.getScale(offsetParent)) || {
     x: 1,
     y: 1
   };
@@ -3505,23 +3498,16 @@ var shift = function(options) {
         y
       };
       const overflow = await platform3.detectOverflow(state, detectOverflowOptions);
-      const crossAxis = getSideAxis(getSide(placement));
+      const crossAxis = getSideAxis(placement);
       const mainAxis = getOppositeAxis(crossAxis);
       let mainAxisCoord = coords[mainAxis];
       let crossAxisCoord = coords[crossAxis];
+      const clampCoord = (axis, coord) => clamp(coord + overflow[axis === "y" ? "top" : "left"], coord, coord - overflow[axis === "y" ? "bottom" : "right"]);
       if (checkMainAxis) {
-        const minSide = mainAxis === "y" ? "top" : "left";
-        const maxSide = mainAxis === "y" ? "bottom" : "right";
-        const min2 = mainAxisCoord + overflow[minSide];
-        const max2 = mainAxisCoord - overflow[maxSide];
-        mainAxisCoord = clamp(min2, mainAxisCoord, max2);
+        mainAxisCoord = clampCoord(mainAxis, mainAxisCoord);
       }
       if (checkCrossAxis) {
-        const minSide = crossAxis === "y" ? "top" : "left";
-        const maxSide = crossAxis === "y" ? "bottom" : "right";
-        const min2 = crossAxisCoord + overflow[minSide];
-        const max2 = crossAxisCoord - overflow[maxSide];
-        crossAxisCoord = clamp(min2, crossAxisCoord, max2);
+        crossAxisCoord = clampCoord(crossAxis, crossAxisCoord);
       }
       const limitedCoords = limiter.fn({
         ...state,
@@ -3549,6 +3535,7 @@ var limitShift = function(options) {
   return {
     options,
     fn(state) {
+      var _rawOffset$mainAxis, _rawOffset$crossAxis;
       const {
         x,
         y,
@@ -3574,9 +3561,8 @@ var limitShift = function(options) {
         mainAxis: rawOffset,
         crossAxis: 0
       } : {
-        mainAxis: 0,
-        crossAxis: 0,
-        ...rawOffset
+        mainAxis: (_rawOffset$mainAxis = rawOffset.mainAxis) != null ? _rawOffset$mainAxis : 0,
+        crossAxis: (_rawOffset$crossAxis = rawOffset.crossAxis) != null ? _rawOffset$crossAxis : 0
       };
       if (checkMainAxis) {
         const len = mainAxis === "y" ? "height" : "width";
@@ -3615,7 +3601,6 @@ var size = function(options) {
     name: "size",
     options,
     async fn(state) {
-      var _state$middlewareData, _state$middlewareData2;
       const {
         placement,
         rects,
@@ -3648,24 +3633,21 @@ var size = function(options) {
       const maximumClippingWidth = width - overflow.left - overflow.right;
       const overflowAvailableHeight = min(height - overflow[heightSide], maximumClippingHeight);
       const overflowAvailableWidth = min(width - overflow[widthSide], maximumClippingWidth);
-      const noShift = !state.middlewareData.shift;
+      const shiftData = state.middlewareData.shift;
+      const noShift = !shiftData;
       let availableHeight = overflowAvailableHeight;
       let availableWidth = overflowAvailableWidth;
-      if ((_state$middlewareData = state.middlewareData.shift) != null && _state$middlewareData.enabled.x) {
+      if (shiftData != null && shiftData.enabled.x) {
         availableWidth = maximumClippingWidth;
       }
-      if ((_state$middlewareData2 = state.middlewareData.shift) != null && _state$middlewareData2.enabled.y) {
+      if (shiftData != null && shiftData.enabled.y) {
         availableHeight = maximumClippingHeight;
       }
       if (noShift && !alignment) {
-        const xMin = max(overflow.left, 0);
-        const xMax = max(overflow.right, 0);
-        const yMin = max(overflow.top, 0);
-        const yMax = max(overflow.bottom, 0);
         if (isYAxis) {
-          availableWidth = width - 2 * (xMin !== 0 || xMax !== 0 ? xMin + xMax : max(overflow.left, overflow.right));
+          availableWidth = width - 2 * max(overflow.left, overflow.right);
         } else {
-          availableHeight = height - 2 * (yMin !== 0 || yMax !== 0 ? yMin + yMax : max(overflow.top, overflow.bottom));
+          availableHeight = height - 2 * max(overflow.top, overflow.bottom);
         }
       }
       await apply({
@@ -3747,10 +3729,7 @@ function shouldAddVisualOffsets(element, isFixed, floatingOffsetParent) {
   if (isFixed === void 0) {
     isFixed = false;
   }
-  if (!floatingOffsetParent || isFixed && floatingOffsetParent !== getWindow(element)) {
-    return false;
-  }
-  return isFixed;
+  return !!floatingOffsetParent && isFixed && floatingOffsetParent === getWindow(element);
 }
 function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetParent) {
   if (includeScale === void 0) {
@@ -3776,12 +3755,12 @@ function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetPar
   let y = (clientRect.top + visualOffsets.y) / scale.y;
   let width = clientRect.width / scale.x;
   let height = clientRect.height / scale.y;
-  if (domElement) {
+  if (domElement && offsetParent) {
     const win = getWindow(domElement);
-    const offsetWin = offsetParent && isElement(offsetParent) ? getWindow(offsetParent) : offsetParent;
+    const offsetWin = isElement(offsetParent) ? getWindow(offsetParent) : offsetParent;
     let currentWin = win;
     let currentIFrame = getFrameElement(currentWin);
-    while (currentIFrame && offsetParent && offsetWin !== currentWin) {
+    while (currentIFrame && offsetWin !== currentWin) {
       const iframeScale = getScale(currentIFrame);
       const iframeRect = currentIFrame.getBoundingClientRect();
       const css = getComputedStyle2(currentIFrame);
@@ -3840,7 +3819,7 @@ function convertOffsetParentRelativeRectToViewportRelativeRect(_ref) {
   let scale = createCoords(1);
   const offsets = createCoords(0);
   const isOffsetParentAnElement = isHTMLElement(offsetParent);
-  if (isOffsetParentAnElement || !isOffsetParentAnElement && !isFixed) {
+  if (isOffsetParentAnElement || !isFixed) {
     if (getNodeName(offsetParent) !== "body" || isOverflowElement(documentElement)) {
       scroll = getNodeScroll(offsetParent);
     }
@@ -3860,15 +3839,14 @@ function convertOffsetParentRelativeRectToViewportRelativeRect(_ref) {
   };
 }
 function getClientRects(element) {
-  return Array.from(element.getClientRects());
+  return element.getClientRects ? Array.from(element.getClientRects()) : [];
 }
-function getDocumentRect(element) {
-  const html = getDocumentElement(element);
-  const scroll = getNodeScroll(element);
-  const body = element.ownerDocument.body;
+function getDocumentRect(html) {
+  const scroll = getNodeScroll(html);
+  const body = html.ownerDocument.body;
   const width = max(html.scrollWidth, html.clientWidth, body.scrollWidth, body.clientWidth);
   const height = max(html.scrollHeight, html.clientHeight, body.scrollHeight, body.clientHeight);
-  let x = -scroll.scrollLeft + getWindowScrollBarX(element);
+  let x = -scroll.scrollLeft + getWindowScrollBarX(html);
   const y = -scroll.scrollTop;
   if (getComputedStyle2(body).direction === "rtl") {
     x += max(html.clientWidth, body.clientWidth) - width;
@@ -3881,7 +3859,11 @@ function getDocumentRect(element) {
   };
 }
 var SCROLLBAR_MAX = 25;
-function getViewportRect(element, strategy) {
+function getViewportRect(element, strategy, rootBoundary) {
+  if (rootBoundary === void 0) {
+    rootBoundary = "viewport";
+  }
+  const isLayoutViewport = rootBoundary === "layoutViewport";
   const win = getWindow(element);
   const html = getDocumentElement(element);
   const visualViewport = win.visualViewport;
@@ -3890,12 +3872,19 @@ function getViewportRect(element, strategy) {
   let x = 0;
   let y = 0;
   if (visualViewport) {
-    width = visualViewport.width;
-    height = visualViewport.height;
-    const visualViewportBased = isWebKit();
-    if (!visualViewportBased || visualViewportBased && strategy === "fixed") {
-      x = visualViewport.offsetLeft;
-      y = visualViewport.offsetTop;
+    const layoutRelativeClientCoords = !isWebKit() || strategy === "fixed";
+    if (isLayoutViewport) {
+      if (!layoutRelativeClientCoords) {
+        x = -visualViewport.offsetLeft;
+        y = -visualViewport.offsetTop;
+      }
+    } else {
+      width = visualViewport.width;
+      height = visualViewport.height;
+      if (layoutRelativeClientCoords) {
+        x = visualViewport.offsetLeft;
+        y = visualViewport.offsetTop;
+      }
     }
   }
   const windowScrollbarX = getWindowScrollBarX(html);
@@ -3904,12 +3893,11 @@ function getViewportRect(element, strategy) {
     const body = doc.body;
     const bodyStyles = getComputedStyle(body);
     const bodyMarginInline = doc.compatMode === "CSS1Compat" ? parseFloat(bodyStyles.marginLeft) + parseFloat(bodyStyles.marginRight) || 0 : 0;
-    const clippingStableScrollbarWidth = Math.abs(html.clientWidth - body.clientWidth - bodyMarginInline);
-    if (clippingStableScrollbarWidth <= SCROLLBAR_MAX) {
-      width -= clippingStableScrollbarWidth;
+    const reservedWidth = Math.abs(html.clientWidth - body.clientWidth - bodyMarginInline);
+    const gutter = getComputedStyle(html).scrollbarGutter === "stable both-edges" ? reservedWidth / 2 : reservedWidth;
+    if (gutter <= SCROLLBAR_MAX) {
+      width -= gutter;
     }
-  } else if (windowScrollbarX <= SCROLLBAR_MAX) {
-    width += windowScrollbarX;
   }
   return {
     width,
@@ -3922,7 +3910,7 @@ function getInnerBoundingClientRect(element, strategy) {
   const clientRect = getBoundingClientRect(element, true, strategy === "fixed");
   const top = clientRect.top + element.clientTop;
   const left = clientRect.left + element.clientLeft;
-  const scale = isHTMLElement(element) ? getScale(element) : createCoords(1);
+  const scale = getScale(element);
   const width = element.clientWidth * scale.x;
   const height = element.clientHeight * scale.y;
   const x = left * scale.x;
@@ -3936,8 +3924,8 @@ function getInnerBoundingClientRect(element, strategy) {
 }
 function getClientRectFromClippingAncestor(element, clippingAncestor, strategy) {
   let rect;
-  if (clippingAncestor === "viewport") {
-    rect = getViewportRect(element, strategy);
+  if (clippingAncestor === "viewport" || clippingAncestor === "layoutViewport") {
+    rect = getViewportRect(element, strategy, clippingAncestor);
   } else if (clippingAncestor === "document") {
     rect = getDocumentRect(getDocumentElement(element));
   } else if (isElement(clippingAncestor)) {
@@ -3953,33 +3941,24 @@ function getClientRectFromClippingAncestor(element, clippingAncestor, strategy) 
   }
   return rectToClientRect(rect);
 }
-function hasFixedPositionAncestor(element, stopNode) {
-  const parentNode = getParentNode(element);
-  if (parentNode === stopNode || !isElement(parentNode) || isLastTraversableNode(parentNode)) {
-    return false;
-  }
-  return getComputedStyle2(parentNode).position === "fixed" || hasFixedPositionAncestor(parentNode, stopNode);
-}
 function getClippingElementAncestors(element, cache) {
   const cachedResult = cache.get(element);
   if (cachedResult) {
     return cachedResult;
   }
   let result = getOverflowAncestors(element, [], false).filter((el) => isElement(el) && getNodeName(el) !== "body");
-  let currentContainingBlockComputedStyle = null;
+  let lastKeptComputedStyle = null;
   const elementIsFixed = getComputedStyle2(element).position === "fixed";
   let currentNode = elementIsFixed ? getParentNode(element) : element;
   while (isElement(currentNode) && !isLastTraversableNode(currentNode)) {
     const computedStyle = getComputedStyle2(currentNode);
     const currentNodeIsContaining = isContainingBlock(currentNode);
-    if (!currentNodeIsContaining && computedStyle.position === "fixed") {
-      currentContainingBlockComputedStyle = null;
-    }
-    const shouldDropCurrentNode = elementIsFixed ? !currentNodeIsContaining && !currentContainingBlockComputedStyle : !currentNodeIsContaining && computedStyle.position === "static" && !!currentContainingBlockComputedStyle && (currentContainingBlockComputedStyle.position === "absolute" || currentContainingBlockComputedStyle.position === "fixed") || isOverflowElement(currentNode) && !currentNodeIsContaining && hasFixedPositionAncestor(element, currentNode);
+    const lastPosition = lastKeptComputedStyle ? lastKeptComputedStyle.position : elementIsFixed ? "fixed" : "";
+    const shouldDropCurrentNode = !currentNodeIsContaining && (lastPosition === "fixed" || lastPosition === "absolute" && computedStyle.position === "static");
     if (shouldDropCurrentNode) {
       result = result.filter((ancestor) => ancestor !== currentNode);
     } else {
-      currentContainingBlockComputedStyle = computedStyle;
+      lastKeptComputedStyle = computedStyle;
     }
     currentNode = getParentNode(currentNode);
   }
@@ -4034,10 +4013,7 @@ function getRectRelativeToOffsetParent(element, offsetParent, strategy) {
     scrollTop: 0
   };
   const offsets = createCoords(0);
-  function setLeftRTLScrollbarOffset() {
-    offsets.x = getWindowScrollBarX(documentElement);
-  }
-  if (isOffsetParentAnElement || !isOffsetParentAnElement && !isFixed) {
+  if (isOffsetParentAnElement || !isFixed) {
     if (getNodeName(offsetParent) !== "body" || isOverflowElement(documentElement)) {
       scroll = getNodeScroll(offsetParent);
     }
@@ -4045,12 +4021,10 @@ function getRectRelativeToOffsetParent(element, offsetParent, strategy) {
       const offsetRect = getBoundingClientRect(offsetParent, true, isFixed, offsetParent);
       offsets.x = offsetRect.x + offsetParent.clientLeft;
       offsets.y = offsetRect.y + offsetParent.clientTop;
-    } else if (documentElement) {
-      setLeftRTLScrollbarOffset();
     }
   }
-  if (isFixed && !isOffsetParentAnElement && documentElement) {
-    setLeftRTLScrollbarOffset();
+  if (!isOffsetParentAnElement && documentElement) {
+    offsets.x = getWindowScrollBarX(documentElement);
   }
   const htmlOffset = documentElement && !isOffsetParentAnElement && !isFixed ? getHTMLOffset(documentElement, scroll) : createCoords(0);
   const x = rect.left + scroll.scrollLeft - offsets.x - htmlOffset.x;
@@ -4134,7 +4108,7 @@ var platform2 = {
 function rectsAreEqual(a, b) {
   return a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height;
 }
-function observeMove(element, onMove) {
+function observeMove(element, onMove, ancestorResize) {
   let io = null;
   let timeoutId;
   const root = getDocumentElement(element);
@@ -4177,6 +4151,9 @@ function observeMove(element, onMove) {
     let isFirstUpdate = true;
     function handleObserve(entries) {
       const ratio = entries[0].intersectionRatio;
+      if (!rectsAreEqual(elementRectForRootMargin, element.getBoundingClientRect())) {
+        return refresh();
+      }
       if (ratio !== threshold) {
         if (!isFirstUpdate) {
           return refresh();
@@ -4188,9 +4165,6 @@ function observeMove(element, onMove) {
         } else {
           refresh(false, ratio);
         }
-      }
-      if (ratio === 1 && !rectsAreEqual(elementRectForRootMargin, element.getBoundingClientRect())) {
-        refresh();
       }
       isFirstUpdate = false;
     }
@@ -4205,8 +4179,14 @@ function observeMove(element, onMove) {
     }
     io.observe(element);
   }
+  const win = getWindow(element);
+  const handleResize = () => refresh(ancestorResize);
+  win.addEventListener("resize", handleResize);
   refresh(true);
-  return cleanup;
+  return () => {
+    win.removeEventListener("resize", handleResize);
+    cleanup();
+  };
 }
 function autoUpdate(reference, floating, update2, options) {
   if (options === void 0) {
@@ -4222,12 +4202,10 @@ function autoUpdate(reference, floating, update2, options) {
   const referenceEl = unwrapElement(reference);
   const ancestors = ancestorScroll || ancestorResize ? [...referenceEl ? getOverflowAncestors(referenceEl) : [], ...floating ? getOverflowAncestors(floating) : []] : [];
   ancestors.forEach((ancestor) => {
-    ancestorScroll && ancestor.addEventListener("scroll", update2, {
-      passive: true
-    });
+    ancestorScroll && ancestor.addEventListener("scroll", update2);
     ancestorResize && ancestor.addEventListener("resize", update2);
   });
-  const cleanupIo = referenceEl && layoutShift ? observeMove(referenceEl, update2) : null;
+  const cleanupIo = referenceEl && layoutShift ? observeMove(referenceEl, update2, ancestorResize) : null;
   let reobserveFrame = -1;
   let resizeObserver = null;
   if (elementResize) {
@@ -4286,11 +4264,9 @@ var hide2 = hide;
 var limitShift2 = limitShift;
 var computePosition2 = (reference, floating, options) => {
   const cache = /* @__PURE__ */ new Map();
-  const mergedOptions = {
-    platform: platform2,
-    ...options
-  };
+  const mergedOptions = options != null ? options : {};
   const platformWithCache = {
+    ...platform2,
     ...mergedOptions.platform,
     _c: cache
   };
@@ -7221,7 +7197,7 @@ function usePositioner(componentProps, state, {
 }
 
 // node_modules/@base-ui/react/utils/usePopupViewport.mjs
-var React32 = __toESM(require_react(), 1);
+var React33 = __toESM(require_react(), 1);
 var ReactDOM6 = __toESM(require_react_dom(), 1);
 
 // node_modules/@base-ui/utils/usePreviousValue.mjs
@@ -7392,8 +7368,25 @@ function setPositionerCssSize(positionerElement, size4) {
   positionerElement.style.setProperty("--positioner-height", height);
 }
 
-// node_modules/@base-ui/react/utils/usePopupViewport.mjs
+// node_modules/@base-ui/react/direction-provider/DirectionProvider.mjs
+var React32 = __toESM(require_react(), 1);
 var import_jsx_runtime5 = __toESM(require_jsx_runtime(), 1);
+var DirectionProvider = function DirectionProvider2(props) {
+  const {
+    direction = "ltr"
+  } = props;
+  const contextValue = React32.useMemo(() => ({
+    direction
+  }), [direction]);
+  return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(DirectionContext.Provider, {
+    value: contextValue,
+    children: props.children
+  });
+};
+if (true) DirectionProvider.displayName = "DirectionProvider";
+
+// node_modules/@base-ui/react/utils/usePopupViewport.mjs
+var import_jsx_runtime6 = __toESM(require_jsx_runtime(), 1);
 function usePopupViewport(parameters) {
   const {
     store: store2,
@@ -7411,15 +7404,15 @@ function usePopupViewport(parameters) {
   const positionerElement = store2.useState("positionerElement");
   const previousActiveTrigger = usePreviousValue(open ? activeTrigger : null);
   const currentContentKey = usePopupContentKey(activeTriggerId, payload);
-  const capturedNodeRef = React32.useRef(null);
-  const [previousContentNode, setPreviousContentNode] = React32.useState(null);
-  const [newTriggerOffset, setNewTriggerOffset] = React32.useState(null);
-  const currentContainerRef = React32.useRef(null);
-  const previousContainerRef = React32.useRef(null);
+  const capturedNodeRef = React33.useRef(null);
+  const [previousContentNode, setPreviousContentNode] = React33.useState(null);
+  const [newTriggerOffset, setNewTriggerOffset] = React33.useState(null);
+  const currentContainerRef = React33.useRef(null);
+  const previousContainerRef = React33.useRef(null);
   const onAnimationsFinished = useAnimationsFinished(currentContainerRef, true, false);
   const cleanupFrame = useAnimationFrame();
-  const [previousContentDimensions, setPreviousContentDimensions] = React32.useState(null);
-  const [showStartingStyleAttribute, setShowStartingStyleAttribute] = React32.useState(false);
+  const [previousContentDimensions, setPreviousContentDimensions] = React33.useState(null);
+  const [showStartingStyleAttribute, setShowStartingStyleAttribute] = React33.useState(false);
   useIsoLayoutEffect(() => {
     store2.set("hasViewport", true);
     return () => {
@@ -7439,7 +7432,7 @@ function usePopupViewport(parameters) {
       setPreviousContentDimensions(previousDimensions);
     }
   });
-  const lastHandledTriggerRef = React32.useRef(null);
+  const lastHandledTriggerRef = React33.useRef(null);
   useIsoLayoutEffect(() => {
     if (!open || !mounted) {
       lastHandledTriggerRef.current = null;
@@ -7478,14 +7471,14 @@ function usePopupViewport(parameters) {
   const isTransitioning = previousContentNode != null;
   let childrenToRender;
   if (!isTransitioning) {
-    childrenToRender = /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", {
+    childrenToRender = /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", {
       "data-current": true,
       ref: currentContainerRef,
       children
     }, currentContentKey);
   } else {
-    childrenToRender = /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(React32.Fragment, {
-      children: [/* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", {
+    childrenToRender = /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(React33.Fragment, {
+      children: [/* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", {
         "data-previous": true,
         inert: inertValue(true),
         ref: previousContainerRef,
@@ -7497,7 +7490,7 @@ function usePopupViewport(parameters) {
           position: "absolute"
         },
         "data-ending-style": showStartingStyleAttribute ? void 0 : ""
-      }, "previous"), /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", {
+      }, "previous"), /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", {
         "data-current": true,
         ref: currentContainerRef,
         "data-starting-style": showStartingStyleAttribute ? "" : void 0,
@@ -7563,10 +7556,10 @@ function calculateRelativePosition(from, to) {
   };
 }
 function usePopupContentKey(activeTriggerId, payload) {
-  const [contentKey, setContentKey] = React32.useState(0);
-  const previousActiveTriggerIdRef = React32.useRef(activeTriggerId);
-  const previousPayloadRef = React32.useRef(payload);
-  const pendingPayloadUpdateRef = React32.useRef(false);
+  const [contentKey, setContentKey] = React33.useState(0);
+  const previousActiveTriggerIdRef = React33.useRef(activeTriggerId);
+  const previousPayloadRef = React33.useRef(payload);
+  const pendingPayloadUpdateRef = React33.useRef(false);
   useIsoLayoutEffect(() => {
     const previousActiveTriggerId = previousActiveTriggerIdRef.current;
     const previousPayload = previousPayloadRef.current;
@@ -7586,10 +7579,10 @@ function usePopupContentKey(activeTriggerId, payload) {
 }
 
 // node_modules/@base-ui/react/utils/FloatingPortalLite.mjs
-var React33 = __toESM(require_react(), 1);
+var React34 = __toESM(require_react(), 1);
 var ReactDOM7 = __toESM(require_react_dom(), 1);
-var import_jsx_runtime6 = __toESM(require_jsx_runtime(), 1);
-var FloatingPortalLite = /* @__PURE__ */ React33.forwardRef(function FloatingPortalLite2(componentProps, forwardedRef) {
+var import_jsx_runtime7 = __toESM(require_jsx_runtime(), 1);
+var FloatingPortalLite = /* @__PURE__ */ React34.forwardRef(function FloatingPortalLite2(componentProps, forwardedRef) {
   const {
     children,
     container,
@@ -7610,7 +7603,7 @@ var FloatingPortalLite = /* @__PURE__ */ React33.forwardRef(function FloatingPor
   if (!portalSubtree && !portalNode) {
     return null;
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(React33.Fragment, {
+  return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(React34.Fragment, {
     children: [portalSubtree, portalNode && /* @__PURE__ */ ReactDOM7.createPortal(children, portalNode)]
   });
 });
@@ -7632,14 +7625,14 @@ __export(index_parts_exports, {
 });
 
 // node_modules/@base-ui/react/tooltip/root/TooltipRoot.mjs
-var React36 = __toESM(require_react(), 1);
+var React37 = __toESM(require_react(), 1);
 
 // node_modules/@base-ui/react/tooltip/root/TooltipRootContext.mjs
-var React34 = __toESM(require_react(), 1);
-var TooltipRootContext = /* @__PURE__ */ React34.createContext(void 0);
+var React35 = __toESM(require_react(), 1);
+var TooltipRootContext = /* @__PURE__ */ React35.createContext(void 0);
 if (true) TooltipRootContext.displayName = "TooltipRootContext";
 function useTooltipRootContext(optional) {
-  const context = React34.useContext(TooltipRootContext);
+  const context = React35.useContext(TooltipRootContext);
   if (context === void 0 && !optional) {
     throw new Error(true ? "Base UI: TooltipRootContext is missing. Tooltip parts must be placed within <Tooltip.Root>." : formatErrorMessage_default(72));
   }
@@ -7647,7 +7640,7 @@ function useTooltipRootContext(optional) {
 }
 
 // node_modules/@base-ui/react/tooltip/store/TooltipStore.mjs
-var React35 = __toESM(require_react(), 1);
+var React36 = __toESM(require_react(), 1);
 var selectors2 = {
   ...popupStoreSelectors,
   disabled: createSelector((state) => state.disabled),
@@ -7669,7 +7662,7 @@ var TooltipStore = class _TooltipStore extends ReactStore {
     };
     state.floatingRootContext = createPopupFloatingRootContext(triggerElements, floatingId, nested);
     super(state, {
-      popupRef: /* @__PURE__ */ React35.createRef(),
+      popupRef: /* @__PURE__ */ React36.createRef(),
       onOpenChange: void 0,
       onOpenChangeComplete: void 0,
       triggerElements
@@ -7707,7 +7700,7 @@ function createInitialState() {
 }
 
 // node_modules/@base-ui/react/tooltip/root/TooltipRoot.mjs
-var import_jsx_runtime7 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime8 = __toESM(require_jsx_runtime(), 1);
 var TooltipRoot = fastComponent(function TooltipRoot2(props) {
   const {
     disabled: disabled2 = false,
@@ -7754,7 +7747,7 @@ var TooltipRoot = fastComponent(function TooltipRoot2(props) {
   const isInstantPhase = store2.useState("isInstantPhase");
   const instantType = store2.useState("instantType");
   const lastOpenChangeReason = store2.useState("lastOpenChangeReason");
-  const previousInstantTypeRef = React36.useRef(null);
+  const previousInstantTypeRef = React37.useRef(null);
   useIsoLayoutEffect(() => {
     if (openState && disabled2) {
       store2.setOpen(false, createChangeEventDetails(reason_parts_exports.disabled));
@@ -7778,17 +7771,17 @@ var TooltipRoot = fastComponent(function TooltipRoot2(props) {
       }
     }
   }, [store2, activeTriggerId, open]);
-  const handleImperativeClose = React36.useCallback(() => {
+  const handleImperativeClose = React37.useCallback(() => {
     store2.setOpen(false, createChangeEventDetails(reason_parts_exports.imperativeAction));
   }, [store2]);
-  React36.useImperativeHandle(actionsRef, () => ({
+  React37.useImperativeHandle(actionsRef, () => ({
     unmount: forceUnmount,
     close: handleImperativeClose
   }), [forceUnmount, handleImperativeClose]);
   const shouldRenderInteractions = open || mounted || !disabled2 && trackCursorAxis !== "none";
-  return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(TooltipRootContext.Provider, {
+  return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(TooltipRootContext.Provider, {
     value: store2,
-    children: [shouldRenderInteractions && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(TooltipInteractions, {
+    children: [shouldRenderInteractions && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(TooltipInteractions, {
       store: store2,
       disabled: disabled2,
       trackCursorAxis
@@ -7812,9 +7805,9 @@ function TooltipInteractions({
     enabled: !disabled2 && trackCursorAxis !== "none",
     axis: trackCursorAxis === "none" ? void 0 : trackCursorAxis
   });
-  const activeTriggerProps = React36.useMemo(() => mergeProps(clientPoint.reference, dismiss.reference), [clientPoint.reference, dismiss.reference]);
-  const inactiveTriggerProps = React36.useMemo(() => mergeProps(clientPoint.trigger, dismiss.trigger), [clientPoint.trigger, dismiss.trigger]);
-  const popupProps = React36.useMemo(() => mergeProps(FOCUSABLE_POPUP_PROPS, clientPoint.floating, dismiss.floating), [clientPoint.floating, dismiss.floating]);
+  const activeTriggerProps = React37.useMemo(() => mergeProps(clientPoint.reference, dismiss.reference), [clientPoint.reference, dismiss.reference]);
+  const inactiveTriggerProps = React37.useMemo(() => mergeProps(clientPoint.trigger, dismiss.trigger), [clientPoint.trigger, dismiss.trigger]);
+  const popupProps = React37.useMemo(() => mergeProps(FOCUSABLE_POPUP_PROPS, clientPoint.floating, dismiss.floating), [clientPoint.floating, dismiss.floating]);
   usePopupInteractionProps(store2, {
     activeTriggerProps,
     inactiveTriggerProps,
@@ -7824,14 +7817,14 @@ function TooltipInteractions({
 }
 
 // node_modules/@base-ui/react/tooltip/trigger/TooltipTrigger.mjs
-var React38 = __toESM(require_react(), 1);
+var React39 = __toESM(require_react(), 1);
 
 // node_modules/@base-ui/react/tooltip/provider/TooltipProviderContext.mjs
-var React37 = __toESM(require_react(), 1);
-var TooltipProviderContext = /* @__PURE__ */ React37.createContext(void 0);
+var React38 = __toESM(require_react(), 1);
+var TooltipProviderContext = /* @__PURE__ */ React38.createContext(void 0);
 if (true) TooltipProviderContext.displayName = "TooltipProviderContext";
 function useTooltipProviderContext() {
-  return React37.useContext(TooltipProviderContext);
+  return React38.useContext(TooltipProviderContext);
 }
 
 // node_modules/@base-ui/react/tooltip/trigger/TooltipTriggerDataAttributes.mjs
@@ -7901,7 +7894,7 @@ var TooltipTrigger = fastComponentRef(function TooltipTrigger2(componentProps, f
   const isTriggerActive = store2.useState("isTriggerActive", thisTriggerId);
   const isOpenedByThisTrigger = store2.useState("isOpenedByTrigger", thisTriggerId);
   const floatingRootContext = store2.useState("floatingRootContext");
-  const triggerElementRef = React38.useRef(null);
+  const triggerElementRef = React39.useRef(null);
   const delayWithDefault = delay ?? OPEN_DELAY;
   const closeDelayWithDefault = closeDelay ?? 0;
   const {
@@ -7927,9 +7920,9 @@ var TooltipTrigger = fastComponentRef(function TooltipTrigger2(componentProps, f
   const disabledRef = useValueAsRef(disabled2);
   const trackCursorAxis = store2.useState("trackCursorAxis");
   const disableHoverablePopup = store2.useState("disableHoverablePopup");
-  const isNestedTriggerHoveredRef = React38.useRef(false);
+  const isNestedTriggerHoveredRef = React39.useRef(false);
   const nestedTriggerOpenTimeout = useTimeout();
-  const pointerTypeRef = React38.useRef(void 0);
+  const pointerTypeRef = React39.useRef(void 0);
   function getOpenDelay() {
     const providerDelay = providerContext?.delay;
     const groupOpenValue = typeof delayRef.current === "object" ? delayRef.current.open : void 0;
@@ -8062,14 +8055,14 @@ var TooltipTrigger = fastComponentRef(function TooltipTrigger2(componentProps, f
 if (true) TooltipTrigger.displayName = "TooltipTrigger";
 
 // node_modules/@base-ui/react/tooltip/portal/TooltipPortal.mjs
-var React40 = __toESM(require_react(), 1);
+var React41 = __toESM(require_react(), 1);
 
 // node_modules/@base-ui/react/tooltip/portal/TooltipPortalContext.mjs
-var React39 = __toESM(require_react(), 1);
-var TooltipPortalContext = /* @__PURE__ */ React39.createContext(void 0);
+var React40 = __toESM(require_react(), 1);
+var TooltipPortalContext = /* @__PURE__ */ React40.createContext(void 0);
 if (true) TooltipPortalContext.displayName = "TooltipPortalContext";
 function useTooltipPortalContext() {
-  const value = React39.useContext(TooltipPortalContext);
+  const value = React40.useContext(TooltipPortalContext);
   if (value === void 0) {
     throw new Error(true ? "Base UI: <Tooltip.Portal> is missing." : formatErrorMessage_default(70));
   }
@@ -8077,8 +8070,8 @@ function useTooltipPortalContext() {
 }
 
 // node_modules/@base-ui/react/tooltip/portal/TooltipPortal.mjs
-var import_jsx_runtime8 = __toESM(require_jsx_runtime(), 1);
-var TooltipPortal = /* @__PURE__ */ React40.forwardRef(function TooltipPortal2(props, forwardedRef) {
+var import_jsx_runtime9 = __toESM(require_jsx_runtime(), 1);
+var TooltipPortal = /* @__PURE__ */ React41.forwardRef(function TooltipPortal2(props, forwardedRef) {
   const {
     keepMounted = false,
     ...portalProps
@@ -8089,9 +8082,9 @@ var TooltipPortal = /* @__PURE__ */ React40.forwardRef(function TooltipPortal2(p
   if (!shouldRender) {
     return null;
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(TooltipPortalContext.Provider, {
+  return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(TooltipPortalContext.Provider, {
     value: keepMounted,
-    children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(FloatingPortalLite, {
+    children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(FloatingPortalLite, {
       ref: forwardedRef,
       ...portalProps
     })
@@ -8100,14 +8093,14 @@ var TooltipPortal = /* @__PURE__ */ React40.forwardRef(function TooltipPortal2(p
 if (true) TooltipPortal.displayName = "TooltipPortal";
 
 // node_modules/@base-ui/react/tooltip/positioner/TooltipPositioner.mjs
-var React42 = __toESM(require_react(), 1);
+var React43 = __toESM(require_react(), 1);
 
 // node_modules/@base-ui/react/tooltip/positioner/TooltipPositionerContext.mjs
-var React41 = __toESM(require_react(), 1);
-var TooltipPositionerContext = /* @__PURE__ */ React41.createContext(void 0);
+var React42 = __toESM(require_react(), 1);
+var TooltipPositionerContext = /* @__PURE__ */ React42.createContext(void 0);
 if (true) TooltipPositionerContext.displayName = "TooltipPositionerContext";
 function useTooltipPositionerContext() {
-  const context = React41.useContext(TooltipPositionerContext);
+  const context = React42.useContext(TooltipPositionerContext);
   if (context === void 0) {
     throw new Error(true ? "Base UI: TooltipPositionerContext is missing. TooltipPositioner parts must be placed within <Tooltip.Positioner>." : formatErrorMessage_default(71));
   }
@@ -8115,8 +8108,8 @@ function useTooltipPositionerContext() {
 }
 
 // node_modules/@base-ui/react/tooltip/positioner/TooltipPositioner.mjs
-var import_jsx_runtime9 = __toESM(require_jsx_runtime(), 1);
-var TooltipPositioner = /* @__PURE__ */ React42.forwardRef(function TooltipPositioner2(componentProps, forwardedRef) {
+var import_jsx_runtime10 = __toESM(require_jsx_runtime(), 1);
+var TooltipPositioner = /* @__PURE__ */ React43.forwardRef(function TooltipPositioner2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -8163,7 +8156,7 @@ var TooltipPositioner = /* @__PURE__ */ React42.forwardRef(function TooltipPosit
     collisionAvoidance,
     adaptiveOrigin: hasViewport ? adaptiveOrigin : void 0
   });
-  const state = React42.useMemo(() => ({
+  const state = React43.useMemo(() => ({
     open,
     side: positioning.side,
     align: positioning.align,
@@ -8178,7 +8171,7 @@ var TooltipPositioner = /* @__PURE__ */ React42.forwardRef(function TooltipPosit
     hidden: !mounted,
     inert: !open || trackCursorAxis === "both" || disableHoverablePopup
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(TooltipPositionerContext.Provider, {
+  return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(TooltipPositionerContext.Provider, {
     value: positioning,
     children: element
   });
@@ -8186,12 +8179,12 @@ var TooltipPositioner = /* @__PURE__ */ React42.forwardRef(function TooltipPosit
 if (true) TooltipPositioner.displayName = "TooltipPositioner";
 
 // node_modules/@base-ui/react/tooltip/popup/TooltipPopup.mjs
-var React43 = __toESM(require_react(), 1);
+var React44 = __toESM(require_react(), 1);
 var stateAttributesMapping = {
   ...popupStateMapping,
   ...transitionStatusMapping
 };
-var TooltipPopup = /* @__PURE__ */ React43.forwardRef(function TooltipPopup2(componentProps, forwardedRef) {
+var TooltipPopup = /* @__PURE__ */ React44.forwardRef(function TooltipPopup2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -8242,8 +8235,8 @@ var TooltipPopup = /* @__PURE__ */ React43.forwardRef(function TooltipPopup2(com
 if (true) TooltipPopup.displayName = "TooltipPopup";
 
 // node_modules/@base-ui/react/tooltip/arrow/TooltipArrow.mjs
-var React44 = __toESM(require_react(), 1);
-var TooltipArrow = /* @__PURE__ */ React44.forwardRef(function TooltipArrow2(componentProps, forwardedRef) {
+var React45 = __toESM(require_react(), 1);
+var TooltipArrow = /* @__PURE__ */ React45.forwardRef(function TooltipArrow2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -8281,25 +8274,25 @@ var TooltipArrow = /* @__PURE__ */ React44.forwardRef(function TooltipArrow2(com
 if (true) TooltipArrow.displayName = "TooltipArrow";
 
 // node_modules/@base-ui/react/tooltip/provider/TooltipProvider.mjs
-var React45 = __toESM(require_react(), 1);
-var import_jsx_runtime10 = __toESM(require_jsx_runtime(), 1);
+var React46 = __toESM(require_react(), 1);
+var import_jsx_runtime11 = __toESM(require_jsx_runtime(), 1);
 var TooltipProvider = function TooltipProvider2(props) {
   const {
     delay,
     closeDelay,
     timeout = 400
   } = props;
-  const contextValue = React45.useMemo(() => ({
+  const contextValue = React46.useMemo(() => ({
     delay,
     closeDelay
   }), [delay, closeDelay]);
-  const delayValue = React45.useMemo(() => ({
+  const delayValue = React46.useMemo(() => ({
     open: delay,
     close: closeDelay
   }), [delay, closeDelay]);
-  return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(TooltipProviderContext.Provider, {
+  return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(TooltipProviderContext.Provider, {
     value: contextValue,
-    children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(FloatingDelayGroup, {
+    children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(FloatingDelayGroup, {
       delay: delayValue,
       timeoutMs: timeout,
       children: props.children
@@ -8309,7 +8302,7 @@ var TooltipProvider = function TooltipProvider2(props) {
 if (true) TooltipProvider.displayName = "TooltipProvider";
 
 // node_modules/@base-ui/react/tooltip/viewport/TooltipViewport.mjs
-var React46 = __toESM(require_react(), 1);
+var React47 = __toESM(require_react(), 1);
 
 // node_modules/@base-ui/react/tooltip/viewport/TooltipViewportCssVars.mjs
 var TooltipViewportCssVars = /* @__PURE__ */ (function(TooltipViewportCssVars2) {
@@ -8324,7 +8317,7 @@ var stateAttributesMapping2 = {
     "data-activation-direction": value
   } : null
 };
-var TooltipViewport = /* @__PURE__ */ React46.forwardRef(function TooltipViewport2(componentProps, forwardedRef) {
+var TooltipViewport = /* @__PURE__ */ React47.forwardRef(function TooltipViewport2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -8516,38 +8509,38 @@ var Text = (0, import_element10.forwardRef)(function Text2({ variant = "body-md"
 
 // packages/icons/build-module/library/check.mjs
 var import_primitives = __toESM(require_primitives(), 1);
-var import_jsx_runtime11 = __toESM(require_jsx_runtime(), 1);
-var check_default = /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(import_primitives.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(import_primitives.Path, { d: "M16.5 7.5 10 13.9l-2.5-2.4-1 1 3.5 3.6 7.5-7.6z" }) });
+var import_jsx_runtime12 = __toESM(require_jsx_runtime(), 1);
+var check_default = /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(import_primitives.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(import_primitives.Path, { d: "M16.5 7.5 10 13.9l-2.5-2.4-1 1 3.5 3.6 7.5-7.6z" }) });
 
 // packages/icons/build-module/library/chevron-down-small.mjs
 var import_primitives2 = __toESM(require_primitives(), 1);
-var import_jsx_runtime12 = __toESM(require_jsx_runtime(), 1);
-var chevron_down_small_default = /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(import_primitives2.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(import_primitives2.Path, { d: "m15.99 10.889-3.988 3.418-3.988-3.418.976-1.14 3.012 2.582 3.012-2.581.976 1.139Z" }) });
+var import_jsx_runtime13 = __toESM(require_jsx_runtime(), 1);
+var chevron_down_small_default = /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_primitives2.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_primitives2.Path, { d: "m15.99 10.889-3.988 3.418-3.988-3.418.976-1.14 3.012 2.582 3.012-2.581.976 1.139Z" }) });
 
 // packages/icons/build-module/library/chevron-left-small.mjs
 var import_primitives3 = __toESM(require_primitives(), 1);
-var import_jsx_runtime13 = __toESM(require_jsx_runtime(), 1);
-var chevron_left_small_default = /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_primitives3.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_primitives3.Path, { d: "m13.1 16-3.4-4 3.4-4 1.1 1-2.6 3 2.6 3-1.1 1z" }) });
+var import_jsx_runtime14 = __toESM(require_jsx_runtime(), 1);
+var chevron_left_small_default = /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_primitives3.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_primitives3.Path, { d: "m13.1 16-3.4-4 3.4-4 1.1 1-2.6 3 2.6 3-1.1 1z" }) });
 
 // packages/icons/build-module/library/chevron-left.mjs
 var import_primitives4 = __toESM(require_primitives(), 1);
-var import_jsx_runtime14 = __toESM(require_jsx_runtime(), 1);
-var chevron_left_default = /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_primitives4.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_primitives4.Path, { d: "M14.6 7l-1.2-1L8 12l5.4 6 1.2-1-4.6-5z" }) });
+var import_jsx_runtime15 = __toESM(require_jsx_runtime(), 1);
+var chevron_left_default = /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(import_primitives4.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(import_primitives4.Path, { d: "M14.6 7l-1.2-1L8 12l5.4 6 1.2-1-4.6-5z" }) });
 
 // packages/icons/build-module/library/chevron-right-small.mjs
 var import_primitives5 = __toESM(require_primitives(), 1);
-var import_jsx_runtime15 = __toESM(require_jsx_runtime(), 1);
-var chevron_right_small_default = /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(import_primitives5.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(import_primitives5.Path, { d: "M10.8622 8.04053L14.2805 12.0286L10.8622 16.0167L9.72327 15.0405L12.3049 12.0286L9.72327 9.01672L10.8622 8.04053Z" }) });
+var import_jsx_runtime16 = __toESM(require_jsx_runtime(), 1);
+var chevron_right_small_default = /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(import_primitives5.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(import_primitives5.Path, { d: "M10.8622 8.04053L14.2805 12.0286L10.8622 16.0167L9.72327 15.0405L12.3049 12.0286L9.72327 9.01672L10.8622 8.04053Z" }) });
 
 // packages/icons/build-module/library/chevron-right.mjs
 var import_primitives6 = __toESM(require_primitives(), 1);
-var import_jsx_runtime16 = __toESM(require_jsx_runtime(), 1);
-var chevron_right_default = /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(import_primitives6.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(import_primitives6.Path, { d: "M10.6 6L9.4 7l4.6 5-4.6 5 1.2 1 5.4-6z" }) });
+var import_jsx_runtime17 = __toESM(require_jsx_runtime(), 1);
+var chevron_right_default = /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_primitives6.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_primitives6.Path, { d: "M10.6 6L9.4 7l4.6 5-4.6 5 1.2 1 5.4-6z" }) });
 
 // packages/icons/build-module/library/menu.mjs
 var import_primitives7 = __toESM(require_primitives(), 1);
-var import_jsx_runtime17 = __toESM(require_jsx_runtime(), 1);
-var menu_default = /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_primitives7.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_primitives7.Path, { d: "M5 5v1.5h14V5H5zm0 7.8h14v-1.5H5v1.5zM5 19h14v-1.5H5V19z" }) });
+var import_jsx_runtime18 = __toESM(require_jsx_runtime(), 1);
+var menu_default = /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_primitives7.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_primitives7.Path, { d: "M5 5v1.5h14V5H5zm0 7.8h14v-1.5H5v1.5zM5 19h14v-1.5H5V19z" }) });
 
 // packages/ui/build-module/utils/render-slot-with-children.mjs
 var import_element11 = __toESM(require_element(), 1);
@@ -8851,10 +8844,10 @@ function getWpCompatOverlaySlot() {
 }
 
 // packages/ui/build-module/tooltip/portal.mjs
-var import_jsx_runtime18 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime19 = __toESM(require_jsx_runtime(), 1);
 var Portal = (0, import_element13.forwardRef)(
   function TooltipPortal3({ container, ...restProps }, ref) {
-    return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
       index_parts_exports.Portal,
       {
         container: container ?? getWpCompatOverlaySlot(),
@@ -8867,7 +8860,7 @@ var Portal = (0, import_element13.forwardRef)(
 
 // packages/ui/build-module/tooltip/positioner.mjs
 var import_element14 = __toESM(require_element(), 1);
-var import_jsx_runtime19 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime20 = __toESM(require_jsx_runtime(), 1);
 var STYLE_HASH_ATTRIBUTE4 = "data-wp-hash";
 function getRuntime4() {
   const globalScope = globalThis;
@@ -8958,7 +8951,7 @@ if (typeof process === "undefined" || true) {
 var style_default3 = { "positioner": "_480b748dd3510e64__positioner", "popup": "_50096b232db7709d__popup" };
 var Positioner = (0, import_element14.forwardRef)(
   function TooltipPositioner3({ align = "center", className, side = "top", sideOffset = 4, ...props }, ref) {
-    return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
       index_parts_exports.Positioner,
       {
         ref,
@@ -8977,7 +8970,7 @@ var Positioner = (0, import_element14.forwardRef)(
 );
 
 // packages/ui/build-module/tooltip/popup.mjs
-var import_jsx_runtime20 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime21 = __toESM(require_jsx_runtime(), 1);
 var STYLE_HASH_ATTRIBUTE5 = "data-wp-hash";
 function getRuntime5() {
   const globalScope = globalThis;
@@ -9064,7 +9057,7 @@ if (typeof process === "undefined" || true) {
 var style_default4 = { "positioner": "_480b748dd3510e64__positioner", "popup": "_50096b232db7709d__popup" };
 var POPUP_COLOR = { background: "#1e1e1e" };
 var Popup = (0, import_element15.forwardRef)(function TooltipPopup3({ portal, positioner, children, className, ...props }, ref) {
-  const popupContent = /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(ThemeProvider, { color: POPUP_COLOR, children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+  const popupContent = /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(ThemeProvider, { color: POPUP_COLOR, children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
     index_parts_exports.Popup,
     {
       ref,
@@ -9075,39 +9068,46 @@ var Popup = (0, import_element15.forwardRef)(function TooltipPopup3({ portal, po
   ) });
   const positionedPopup = renderSlotWithChildren(
     positioner,
-    /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(Positioner, {}),
+    /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Positioner, {}),
     popupContent
   );
-  return renderSlotWithChildren(portal, /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(Portal, {}), positionedPopup);
+  return renderSlotWithChildren(portal, /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Portal, {}), positionedPopup);
 });
 
 // packages/ui/build-module/tooltip/trigger.mjs
 var import_element16 = __toESM(require_element(), 1);
-var import_jsx_runtime21 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime22 = __toESM(require_jsx_runtime(), 1);
 var Trigger = (0, import_element16.forwardRef)(
   function TooltipTrigger3(props, ref) {
-    return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(index_parts_exports.Trigger, { ref, ...props });
+    return /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(index_parts_exports.Trigger, { ref, ...props });
   }
 );
 
+// packages/ui/build-module/utils/direction-provider.mjs
+var import_i18n = __toESM(require_i18n(), 1);
+var import_jsx_runtime23 = __toESM(require_jsx_runtime(), 1);
+function DirectionProvider3({ children }) {
+  return /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(DirectionProvider, { direction: (0, import_i18n.isRTL)() ? "rtl" : "ltr", children });
+}
+
 // packages/ui/build-module/tooltip/root.mjs
-var import_jsx_runtime22 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime24 = __toESM(require_jsx_runtime(), 1);
 function Root(props) {
-  return /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(index_parts_exports.Root, { ...props });
+  return /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(DirectionProvider3, { children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(index_parts_exports.Root, { ...props }) });
 }
 
 // packages/ui/build-module/tooltip/provider.mjs
-var import_jsx_runtime23 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime25 = __toESM(require_jsx_runtime(), 1);
 function Provider({ ...props }) {
-  return /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(index_parts_exports.Provider, { ...props });
+  return /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(index_parts_exports.Provider, { ...props });
 }
 
 // packages/admin-ui/build-module/navigable-region/index.mjs
 var import_element17 = __toESM(require_element(), 1);
-var import_jsx_runtime24 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime26 = __toESM(require_jsx_runtime(), 1);
 var NavigableRegion = (0, import_element17.forwardRef)(
   ({ children, className, ariaLabel, as: Tag = "div", ...props }, ref) => {
-    return /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
       Tag,
       {
         ref,
@@ -9129,7 +9129,7 @@ var import_components = __toESM(require_components(), 1);
 var { Fill: SidebarToggleFill, Slot: SidebarToggleSlot } = (0, import_components.createSlotFill)("SidebarToggle");
 
 // packages/admin-ui/build-module/page/header.mjs
-var import_jsx_runtime25 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime27 = __toESM(require_jsx_runtime(), 1);
 var STYLE_HASH_ATTRIBUTE6 = "data-wp-hash";
 function getRuntime6() {
   const globalScope = globalThis;
@@ -9225,8 +9225,8 @@ function Header({
   showSidebarToggle = true
 }) {
   const HeadingTag = `h${headingLevel}`;
-  return /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)(Stack, { direction: "column", className: style_default5.header, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(Stack, { direction: "column", className: style_default5.header, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(
       Stack,
       {
         className: style_default5["header-content"],
@@ -9234,15 +9234,15 @@ function Header({
         gap: "sm",
         justify: "space-between",
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)(Stack, { direction: "row", gap: "sm", align: "center", justify: "start", children: [
-            showSidebarToggle && /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(Stack, { direction: "row", gap: "sm", align: "center", justify: "start", children: [
+            showSidebarToggle && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
               SidebarToggleSlot,
               {
                 bubblesVirtually: true,
                 className: style_default5["sidebar-toggle-slot"]
               }
             ),
-            visual && /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
+            visual && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
               "div",
               {
                 className: style_default5["header-visual"],
@@ -9250,11 +9250,11 @@ function Header({
                 children: visual
               }
             ),
-            title && /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
+            title && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
               Text,
               {
                 className: style_default5["header-title"],
-                render: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(HeadingTag, {}),
+                render: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(HeadingTag, {}),
                 variant: "heading-lg",
                 children: title
               }
@@ -9262,7 +9262,7 @@ function Header({
             breadcrumbs,
             badges
           ] }),
-          actions && /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
+          actions && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
             Stack,
             {
               align: "center",
@@ -9275,10 +9275,10 @@ function Header({
         ]
       }
     ),
-    subTitle && /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
+    subTitle && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
       Text,
       {
-        render: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("p", {}),
+        render: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("p", {}),
         variant: "body-md",
         className: style_default5["header-subtitle"],
         children: subTitle
@@ -9288,7 +9288,7 @@ function Header({
 }
 
 // packages/admin-ui/build-module/page/index.mjs
-var import_jsx_runtime26 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime28 = __toESM(require_jsx_runtime(), 1);
 var STYLE_HASH_ATTRIBUTE7 = "data-wp-hash";
 function getRuntime7() {
   const globalScope = globalThis;
@@ -9389,8 +9389,8 @@ function Page({
 }) {
   const classes = clsx_default(style_default6.page, className);
   const effectiveAriaLabel = ariaLabel ?? (typeof title === "string" ? title : "");
-  return /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)(navigable_region_default, { className: classes, ariaLabel: effectiveAriaLabel, children: [
-    (title || breadcrumbs || badges || actions || visual) && /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)(navigable_region_default, { className: classes, ariaLabel: effectiveAriaLabel, children: [
+    (title || breadcrumbs || badges || actions || visual) && /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
       Header,
       {
         headingLevel,
@@ -9403,7 +9403,7 @@ function Page({
         showSidebarToggle
       }
     ),
-    hasPadding ? /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
+    hasPadding ? /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
       "div",
       {
         className: clsx_default(
@@ -9452,13 +9452,13 @@ var import_compose4 = __toESM(require_compose(), 1);
 var import_components13 = __toESM(require_components(), 1);
 import { privateApis as routePrivateApis4 } from "@wordpress/route";
 var import_element29 = __toESM(require_element(), 1);
-var import_i18n9 = __toESM(require_i18n(), 1);
+var import_i18n10 = __toESM(require_i18n(), 1);
 var import_theme = __toESM(require_theme(), 1);
 
 // packages/boot/build-module/components/sidebar/index.mjs
 var import_components9 = __toESM(require_components(), 1);
 var import_data7 = __toESM(require_data(), 1);
-var import_i18n5 = __toESM(require_i18n(), 1);
+var import_i18n6 = __toESM(require_i18n(), 1);
 
 // packages/boot/build-module/components/navigation/index.mjs
 var import_element21 = __toESM(require_element(), 1);
@@ -9585,10 +9585,10 @@ var { lock: lock2, unlock: unlock2 } = (0, import_private_apis2.__dangerousOptIn
 );
 
 // packages/boot/build-module/components/navigation/router-link-item.mjs
-var import_jsx_runtime27 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime29 = __toESM(require_jsx_runtime(), 1);
 var { createLink } = unlock2(routePrivateApis);
 function AnchorOnlyItem(props, forwardedRef) {
-  return /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(import_components2.__experimentalItem, { as: "a", ref: forwardedRef, ...props });
+  return /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(import_components2.__experimentalItem, { as: "a", ref: forwardedRef, ...props });
 }
 var RouterLinkItem = createLink((0, import_element18.forwardRef)(AnchorOnlyItem));
 var router_link_item_default = RouterLinkItem;
@@ -9597,20 +9597,20 @@ var router_link_item_default = RouterLinkItem;
 var import_element19 = __toESM(require_element(), 1);
 var import_components3 = __toESM(require_components(), 1);
 var import_primitives8 = __toESM(require_primitives(), 1);
-var import_jsx_runtime28 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime30 = __toESM(require_jsx_runtime(), 1);
 function isSvg(element) {
   return (0, import_element19.isValidElement)(element) && (element.type === import_primitives8.SVG || element.type === "svg");
 }
 function wrapIcon(icon, shouldShowPlaceholder = true) {
   if (isSvg(icon)) {
-    return /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(import_components3.Icon, { icon });
+    return /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(import_components3.Icon, { icon });
   }
   if (typeof icon === "string" && icon.startsWith("dashicons-")) {
     const iconKey = icon.replace(
       /^dashicons-/,
       ""
     );
-    return /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
       import_components3.Dashicon,
       {
         style: { padding: "2px" },
@@ -9620,7 +9620,7 @@ function wrapIcon(icon, shouldShowPlaceholder = true) {
     );
   }
   if (typeof icon === "string" && icon.startsWith("data:")) {
-    return /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
       "img",
       {
         src: icon,
@@ -9639,7 +9639,7 @@ function wrapIcon(icon, shouldShowPlaceholder = true) {
     return icon;
   }
   if (shouldShowPlaceholder) {
-    return /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
       "div",
       {
         style: { width: "24px", height: "24px" },
@@ -9651,7 +9651,7 @@ function wrapIcon(icon, shouldShowPlaceholder = true) {
 }
 
 // packages/boot/build-module/components/navigation/navigation-item/index.mjs
-var import_jsx_runtime29 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime31 = __toESM(require_jsx_runtime(), 1);
 if (typeof document !== "undefined" && true && !document.head.querySelector("style[data-wp-hash='4e60007e70']")) {
   const style = document.createElement("style");
   style.setAttribute("data-wp-hash", "4e60007e70");
@@ -9668,12 +9668,12 @@ function NavigationItem({
   const isExternal = !String(
     new URL(to, window.location.origin)
   ).startsWith(window.location.origin);
-  const content = /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)(import_components4.__experimentalHStack, { justify: "flex-start", spacing: 2, style: { flexGrow: "1" }, children: [
+  const content = /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)(import_components4.__experimentalHStack, { justify: "flex-start", spacing: 2, style: { flexGrow: "1" }, children: [
     wrapIcon(icon, shouldShowPlaceholder),
-    /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(import_components4.FlexBlock, { children })
+    /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(import_components4.FlexBlock, { children })
   ] });
   if (isExternal) {
-    return /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(
       import_components4.__experimentalItem,
       {
         as: "a",
@@ -9683,7 +9683,7 @@ function NavigationItem({
       }
     );
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(
     router_link_item_default,
     {
       to,
@@ -9695,8 +9695,8 @@ function NavigationItem({
 
 // packages/boot/build-module/components/navigation/drilldown-item/index.mjs
 var import_components5 = __toESM(require_components(), 1);
-var import_i18n = __toESM(require_i18n(), 1);
-var import_jsx_runtime30 = __toESM(require_jsx_runtime(), 1);
+var import_i18n2 = __toESM(require_i18n(), 1);
+var import_jsx_runtime32 = __toESM(require_jsx_runtime(), 1);
 function DrilldownItem({
   className,
   id,
@@ -9709,12 +9709,12 @@ function DrilldownItem({
     e.preventDefault();
     onNavigate({ id, direction: "forward" });
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(
     import_components5.__experimentalItem,
     {
       className: clsx_default("boot-navigation-item", className),
       onClick: handleClick,
-      children: /* @__PURE__ */ (0, import_jsx_runtime30.jsxs)(
+      children: /* @__PURE__ */ (0, import_jsx_runtime32.jsxs)(
         import_components5.__experimentalHStack,
         {
           justify: "flex-start",
@@ -9722,11 +9722,11 @@ function DrilldownItem({
           style: { flexGrow: "1" },
           children: [
             wrapIcon(icon, shouldShowPlaceholder),
-            /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(import_components5.FlexBlock, { children }),
-            /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(import_components5.FlexBlock, { children }),
+            /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(
               import_components5.Icon,
               {
-                icon: (0, import_i18n.isRTL)() ? chevron_left_small_default : chevron_right_small_default
+                icon: (0, import_i18n2.isRTL)() ? chevron_left_small_default : chevron_right_small_default
               }
             )
           ]
@@ -9740,7 +9740,7 @@ function DrilldownItem({
 var import_components6 = __toESM(require_components(), 1);
 var import_compose = __toESM(require_compose(), 1);
 var import_data2 = __toESM(require_data(), 1);
-var import_jsx_runtime31 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime33 = __toESM(require_jsx_runtime(), 1);
 if (typeof document !== "undefined" && true && !document.head.querySelector("style[data-wp-hash='608eff82f3']")) {
   const style = document.createElement("style");
   style.setAttribute("data-wp-hash", "608eff82f3");
@@ -9758,15 +9758,15 @@ function DropdownItem({
 }) {
   const menuItems = (0, import_data2.useSelect)(
     (select) => (
-      // @ts-ignore
+      // @ts-expect-error Store types are not available when selecting by store name.
       select(STORE_NAME).getMenuItems()
     ),
     []
   );
   const items = menuItems.filter((item) => item.parent === id);
   const disableMotion = (0, import_compose.useReducedMotion)();
-  return /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)("div", { className: "boot-dropdown-item", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime33.jsxs)("div", { className: "boot-dropdown-item", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
       import_components6.__experimentalItem,
       {
         className: clsx_default("boot-navigation-item", className),
@@ -9776,7 +9776,7 @@ function DropdownItem({
           onToggle();
         },
         onMouseDown: (e) => e.preventDefault(),
-        children: /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)(
+        children: /* @__PURE__ */ (0, import_jsx_runtime33.jsxs)(
           import_components6.__experimentalHStack,
           {
             justify: "flex-start",
@@ -9784,8 +9784,8 @@ function DropdownItem({
             style: { flexGrow: "1" },
             children: [
               wrapIcon(icon, false),
-              /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(import_components6.FlexBlock, { children }),
-              /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(import_components6.FlexBlock, { children }),
+              /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
                 import_components6.Icon,
                 {
                   icon: chevron_down_small_default,
@@ -9799,7 +9799,7 @@ function DropdownItem({
         )
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(import_components6.__unstableAnimatePresence, { initial: false, children: isExpanded && /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(
+    /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(import_components6.__unstableAnimatePresence, { initial: false, children: isExpanded && /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
       import_components6.__unstableMotion.div,
       {
         initial: { height: 0 },
@@ -9811,7 +9811,7 @@ function DropdownItem({
           ease: "easeOut"
         },
         className: "boot-dropdown-item__children",
-        children: items.map((item, index2) => /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(
+        children: items.map((item, index2) => /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
           NavigationItem,
           {
             to: item.to,
@@ -9827,9 +9827,9 @@ function DropdownItem({
 
 // packages/boot/build-module/components/navigation/navigation-screen/index.mjs
 var import_components7 = __toESM(require_components(), 1);
-var import_i18n2 = __toESM(require_i18n(), 1);
+var import_i18n3 = __toESM(require_i18n(), 1);
 var import_compose2 = __toESM(require_compose(), 1);
-var import_jsx_runtime32 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime34 = __toESM(require_jsx_runtime(), 1);
 if (typeof document !== "undefined" && true && !document.head.querySelector("style[data-wp-hash='db54ac7e93']")) {
   const style = document.createElement("style");
   style.setAttribute("data-wp-hash", "db54ac7e93");
@@ -9863,13 +9863,13 @@ function NavigationScreen({
   navigationKey,
   onNavigate
 }) {
-  const icon = (0, import_i18n2.isRTL)() ? chevron_right_default : chevron_left_default;
+  const icon = (0, import_i18n3.isRTL)() ? chevron_right_default : chevron_left_default;
   const disableMotion = (0, import_compose2.useReducedMotion)();
   const handleBackClick = (e) => {
     e.preventDefault();
     onNavigate({ id: backMenuItem, direction: "backward" });
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(
     "div",
     {
       className: "boot-navigation-screen",
@@ -9880,7 +9880,7 @@ function NavigationScreen({
         gridTemplateColumns: "1fr",
         gridTemplateRows: "1fr"
       },
-      children: /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(import_components7.__unstableAnimatePresence, { initial: false, children: /* @__PURE__ */ (0, import_jsx_runtime32.jsxs)(
+      children: /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(import_components7.__unstableAnimatePresence, { initial: false, children: /* @__PURE__ */ (0, import_jsx_runtime34.jsxs)(
         import_components7.__unstableMotion.div,
         {
           custom: animationDirection,
@@ -9899,24 +9899,24 @@ function NavigationScreen({
             gridRow: "1"
           },
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime32.jsxs)(
+            /* @__PURE__ */ (0, import_jsx_runtime34.jsxs)(
               import_components7.__experimentalHStack,
               {
                 spacing: 2,
                 className: "boot-navigation-screen__title-icon",
                 children: [
-                  !isRoot && /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(
+                  !isRoot && /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(
                     import_components7.Button,
                     {
                       ref: backButtonRef,
                       icon,
                       onClick: handleBackClick,
-                      label: (0, import_i18n2.__)("Back"),
+                      label: (0, import_i18n3.__)("Back"),
                       size: "small",
                       variant: "tertiary"
                     }
                   ),
-                  /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(
+                  /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(
                     import_components7.__experimentalHeading,
                     {
                       className: "boot-navigation-screen__title",
@@ -9925,11 +9925,11 @@ function NavigationScreen({
                       children: title
                     }
                   ),
-                  actions && /* @__PURE__ */ (0, import_jsx_runtime32.jsx)("div", { className: "boot-navigation-screen__actions", children: actions })
+                  actions && /* @__PURE__ */ (0, import_jsx_runtime34.jsx)("div", { className: "boot-navigation-screen__actions", children: actions })
                 ]
               }
             ),
-            description && /* @__PURE__ */ (0, import_jsx_runtime32.jsx)("div", { className: "boot-navigation-screen__description", children: description }),
+            description && /* @__PURE__ */ (0, import_jsx_runtime34.jsx)("div", { className: "boot-navigation-screen__description", children: description }),
             content
           ]
         },
@@ -10024,7 +10024,7 @@ function useSidebarParent() {
   const router = useRouter();
   const menuItems = (0, import_data3.useSelect)(
     (select) => (
-      // @ts-ignore
+      // @ts-expect-error Store types are not available when selecting by store name.
       select(STORE_NAME).getMenuItems()
     ),
     []
@@ -10059,14 +10059,14 @@ function useSidebarParent() {
 }
 
 // packages/boot/build-module/components/navigation/index.mjs
-var import_jsx_runtime33 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime35 = __toESM(require_jsx_runtime(), 1);
 function Navigation() {
   const backButtonRef = (0, import_element21.useRef)(null);
   const [animationDirection, setAnimationDirection] = (0, import_element21.useState)(null);
   const [parentId, setParentId, parentDropdownId, setParentDropdownId] = useSidebarParent();
   const menuItems = (0, import_data4.useSelect)(
     (select) => (
-      // @ts-ignore
+      // @ts-expect-error Store types are not available when selecting by store name.
       select(STORE_NAME).getMenuItems()
     ),
     []
@@ -10093,7 +10093,7 @@ function Navigation() {
     [menuItems, parentId]
   );
   const hasRealIcons = items.some((item) => !!item.icon);
-  return /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(
     NavigationScreen,
     {
       isRoot: !parent,
@@ -10103,9 +10103,9 @@ function Navigation() {
       animationDirection: animationDirection || void 0,
       navigationKey,
       onNavigate: handleNavigate,
-      content: /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("div", { role: "list", children: items.map((item) => {
+      content: /* @__PURE__ */ (0, import_jsx_runtime35.jsx)("div", { role: "list", children: items.map((item) => {
         if (item.parent_type === "dropdown") {
-          return /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
+          return /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(
             DropdownItem,
             {
               id: item.id,
@@ -10120,7 +10120,7 @@ function Navigation() {
           );
         }
         if (item.parent_type === "drilldown") {
-          return /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
+          return /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(
             DrilldownItem,
             {
               id: item.id,
@@ -10132,7 +10132,7 @@ function Navigation() {
             item.id
           );
         }
-        return /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
+        return /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(
           NavigationItem,
           {
             to: item.to,
@@ -10151,7 +10151,7 @@ var navigation_default = Navigation;
 // packages/boot/build-module/components/save-button/index.mjs
 var import_element23 = __toESM(require_element(), 1);
 var import_data6 = __toESM(require_data(), 1);
-var import_i18n4 = __toESM(require_i18n(), 1);
+var import_i18n5 = __toESM(require_i18n(), 1);
 var import_core_data2 = __toESM(require_core_data(), 1);
 var import_keycodes = __toESM(require_keycodes(), 1);
 var import_editor2 = __toESM(require_editor(), 1);
@@ -10160,7 +10160,7 @@ var import_components8 = __toESM(require_components(), 1);
 // packages/boot/build-module/components/save-panel/use-save-shortcut.mjs
 var import_element22 = __toESM(require_element(), 1);
 var import_keyboard_shortcuts = __toESM(require_keyboard_shortcuts(), 1);
-var import_i18n3 = __toESM(require_i18n(), 1);
+var import_i18n4 = __toESM(require_i18n(), 1);
 var import_data5 = __toESM(require_data(), 1);
 var import_core_data = __toESM(require_core_data(), 1);
 var import_editor = __toESM(require_editor(), 1);
@@ -10178,7 +10178,7 @@ function useSaveShortcut({
     registerShortcut({
       name: shortcutName,
       category: "global",
-      description: (0, import_i18n3.__)("Save your changes."),
+      description: (0, import_i18n4.__)("Save your changes."),
       keyCombination: {
         modifier: "primary",
         character: "s"
@@ -10207,7 +10207,7 @@ function useSaveShortcut({
 }
 
 // packages/boot/build-module/components/save-button/index.mjs
-var import_jsx_runtime34 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime36 = __toESM(require_jsx_runtime(), 1);
 if (typeof document !== "undefined" && true && !document.head.querySelector("style[data-wp-hash='020f606c18']")) {
   const style = document.createElement("style");
   style.setAttribute("data-wp-hash", "020f606c18");
@@ -10252,11 +10252,11 @@ function SaveButton() {
   const disabled2 = isSaving || isInSavedState;
   const getLabel = () => {
     if (isInSavedState) {
-      return (0, import_i18n4.__)("Saved");
+      return (0, import_i18n5.__)("Saved");
     }
-    return (0, import_i18n4.sprintf)(
+    return (0, import_i18n5.sprintf)(
       // translators: %d: number of unsaved changes (number).
-      (0, import_i18n4._n)(
+      (0, import_i18n5._n)(
         "Review %d change…",
         "Review %d changes…",
         dirtyEntityRecordsCount
@@ -10266,12 +10266,12 @@ function SaveButton() {
   };
   const label = getLabel();
   const shortcut = import_keycodes.displayShortcut.primary("s");
-  return /* @__PURE__ */ (0, import_jsx_runtime34.jsxs)(import_jsx_runtime34.Fragment, { children: [
-    /* @__PURE__ */ (0, import_jsx_runtime34.jsxs)(tooltip_exports.Root, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)(import_jsx_runtime36.Fragment, { children: [
+    /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)(tooltip_exports.Root, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(
         tooltip_exports.Trigger,
         {
-          render: /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(
+          render: /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(
             import_components8.Button,
             {
               variant: "primary",
@@ -10289,18 +10289,18 @@ function SaveButton() {
           )
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime34.jsxs)(tooltip_exports.Popup, { children: [
-        hasChanges && /* @__PURE__ */ (0, import_jsx_runtime34.jsx)("span", { children: label }),
-        /* @__PURE__ */ (0, import_jsx_runtime34.jsx)("span", { className: "boot-save-button__shortcut", children: shortcut })
+      /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)(tooltip_exports.Popup, { children: [
+        hasChanges && /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("span", { children: label }),
+        /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("span", { className: "boot-save-button__shortcut", children: shortcut })
       ] })
     ] }),
-    isSaveViewOpen && /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(
+    isSaveViewOpen && /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(
       import_components8.Modal,
       {
-        title: (0, import_i18n4.__)("Review changes"),
+        title: (0, import_i18n5.__)("Review changes"),
         onRequestClose: () => setIsSaveViewOpened(false),
         size: "small",
-        children: /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(
+        children: /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(
           import_editor2.EntitiesSavedStates,
           {
             close: () => setIsSaveViewOpened(false),
@@ -10313,7 +10313,7 @@ function SaveButton() {
 }
 
 // packages/boot/build-module/components/sidebar/index.mjs
-var import_jsx_runtime35 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime37 = __toESM(require_jsx_runtime(), 1);
 if (typeof document !== "undefined" && true && !document.head.querySelector("style[data-wp-hash='17b769ae66']")) {
   const style = document.createElement("style");
   style.setAttribute("data-wp-hash", "17b769ae66");
@@ -10325,23 +10325,23 @@ function DashboardBackButton() {
     (select) => select(store).getDashboardLink(),
     []
   );
-  return /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(
     import_components9.Button,
     {
       __next40pxDefaultSize: true,
       className: "boot-sidebar__back-button",
       href: dashboardLink || "/",
-      icon: (0, import_i18n5.isRTL)() ? chevron_right_default : chevron_left_default,
-      label: (0, import_i18n5.__)("Go to the Dashboard"),
-      children: (0, import_i18n5.__)("Dashboard")
+      icon: (0, import_i18n6.isRTL)() ? chevron_right_default : chevron_left_default,
+      label: (0, import_i18n6.__)("Go to the Dashboard"),
+      children: (0, import_i18n6.__)("Dashboard")
     }
   );
 }
 function Sidebar() {
-  return /* @__PURE__ */ (0, import_jsx_runtime35.jsxs)("div", { className: "boot-sidebar__scrollable", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(DashboardBackButton, {}),
-    /* @__PURE__ */ (0, import_jsx_runtime35.jsx)("div", { className: "boot-sidebar__content", children: /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(navigation_default, {}) }),
-    /* @__PURE__ */ (0, import_jsx_runtime35.jsx)("div", { className: "boot-sidebar__footer", children: /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(SaveButton, {}) })
+  return /* @__PURE__ */ (0, import_jsx_runtime37.jsxs)("div", { className: "boot-sidebar__scrollable", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(DashboardBackButton, {}),
+    /* @__PURE__ */ (0, import_jsx_runtime37.jsx)("div", { className: "boot-sidebar__content", children: /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(navigation_default, {}) }),
+    /* @__PURE__ */ (0, import_jsx_runtime37.jsx)("div", { className: "boot-sidebar__footer", children: /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(SaveButton, {}) })
   ] });
 }
 
@@ -10349,8 +10349,8 @@ function Sidebar() {
 var import_element24 = __toESM(require_element(), 1);
 var import_components10 = __toESM(require_components(), 1);
 var import_editor3 = __toESM(require_editor(), 1);
-var import_i18n6 = __toESM(require_i18n(), 1);
-var import_jsx_runtime36 = __toESM(require_jsx_runtime(), 1);
+var import_i18n7 = __toESM(require_i18n(), 1);
+var import_jsx_runtime38 = __toESM(require_jsx_runtime(), 1);
 function SavePanel() {
   const [isOpen, setIsOpen] = (0, import_element24.useState)(false);
   useSaveShortcut({
@@ -10359,14 +10359,14 @@ function SavePanel() {
   if (!isOpen) {
     return false;
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(
     import_components10.Modal,
     {
       className: "edit-site-save-panel__modal",
       onRequestClose: () => setIsOpen(false),
-      title: (0, import_i18n6.__)("Review changes"),
+      title: (0, import_i18n7.__)("Review changes"),
       size: "small",
-      children: /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(
+      children: /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(
         import_editor3.EntitiesSavedStates,
         {
           close: () => setIsOpen(false),
@@ -10387,8 +10387,8 @@ import { useNavigate } from "@wordpress/route";
 
 // packages/boot/build-module/components/canvas/back-button.mjs
 var import_components11 = __toESM(require_components(), 1);
-var import_i18n7 = __toESM(require_i18n(), 1);
-var import_jsx_runtime37 = __toESM(require_jsx_runtime(), 1);
+var import_i18n8 = __toESM(require_i18n(), 1);
+var import_jsx_runtime39 = __toESM(require_jsx_runtime(), 1);
 function BootBackButton({ length }) {
   const handleBack = () => {
     window.history.back();
@@ -10396,19 +10396,19 @@ function BootBackButton({ length }) {
   if (length > 1) {
     return null;
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(
     import_components11.Button,
     {
       size: "compact",
       onClick: handleBack,
-      label: (0, import_i18n7.__)("Go back"),
-      icon: (0, import_i18n7.isRTL)() ? chevron_right_default : chevron_left_default
+      label: (0, import_i18n8.__)("Go back"),
+      icon: (0, import_i18n8.isRTL)() ? chevron_right_default : chevron_left_default
     }
   );
 }
 
 // packages/boot/build-module/components/canvas/index.mjs
-var import_jsx_runtime38 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime40 = __toESM(require_jsx_runtime(), 1);
 function Canvas({ canvas }) {
   const [Editor, setEditor] = (0, import_element25.useState)(null);
   const navigate = useNavigate();
@@ -10420,7 +10420,7 @@ function Canvas({ canvas }) {
     });
   }, []);
   if (!Editor) {
-    return /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(
       "div",
       {
         style: {
@@ -10430,18 +10430,18 @@ function Canvas({ canvas }) {
           height: "100%",
           padding: "2rem"
         },
-        children: /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(import_components12.Spinner, {})
+        children: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(import_components12.Spinner, {})
       }
     );
   }
-  const backButton = !canvas.isPreview ? ({ length }) => /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(BootBackButton, { length }) : void 0;
-  return /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)("div", { style: { height: "100%", position: "relative" }, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(
+  const backButton = !canvas.isPreview ? ({ length }) => /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(BootBackButton, { length }) : void 0;
+  return /* @__PURE__ */ (0, import_jsx_runtime40.jsxs)("div", { style: { height: "100%", position: "relative" }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(
       "div",
       {
         style: { height: "100%" },
         inert: canvas.isPreview ? "true" : void 0,
-        children: /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(
+        children: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(
           Editor,
           {
             postType: canvas.postType,
@@ -10455,7 +10455,7 @@ function Canvas({ canvas }) {
         )
       }
     ),
-    canvas.isPreview && canvas.editLink && /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(
+    canvas.isPreview && canvas.editLink && /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(
       "div",
       {
         onClick: () => navigate({ to: canvas.editLink }),
@@ -10480,7 +10480,7 @@ function Canvas({ canvas }) {
 }
 
 // packages/boot/build-module/components/canvas-renderer/index.mjs
-var import_jsx_runtime39 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime41 = __toESM(require_jsx_runtime(), 1);
 function CanvasRenderer({
   canvas,
   routeContentModule
@@ -10504,16 +10504,16 @@ function CanvasRenderer({
     if (!CustomCanvas) {
       return null;
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(CustomCanvas, {});
+    return /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(CustomCanvas, {});
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(Canvas, { canvas });
+  return /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Canvas, { canvas });
 }
 
 // packages/boot/build-module/components/app/use-route-title.mjs
 var import_element27 = __toESM(require_element(), 1);
 var import_data8 = __toESM(require_data(), 1);
 var import_core_data3 = __toESM(require_core_data(), 1);
-var import_i18n8 = __toESM(require_i18n(), 1);
+var import_i18n9 = __toESM(require_i18n(), 1);
 var import_html_entities = __toESM(require_html_entities(), 1);
 import { speak } from "@wordpress/a11y";
 import { privateApis as routePrivateApis3 } from "@wordpress/route";
@@ -10541,9 +10541,9 @@ function useRouteTitle() {
     if (routeTitle && typeof routeTitle === "string" && siteTitle && typeof siteTitle === "string") {
       const decodedRouteTitle = (0, import_html_entities.decodeEntities)(routeTitle);
       const decodedSiteTitle = (0, import_html_entities.decodeEntities)(siteTitle);
-      const formattedTitle = (0, import_i18n8.sprintf)(
+      const formattedTitle = (0, import_i18n9.sprintf)(
         /* translators: Admin document title. 1: Admin screen name, 2: Site name. */
-        (0, import_i18n8.__)("%1$s ‹ %2$s — WordPress"),
+        (0, import_i18n9.__)("%1$s ‹ %2$s — WordPress"),
         decodedRouteTitle,
         decodedSiteTitle
       );
@@ -10579,7 +10579,7 @@ function useSyncBodyBackground() {
 }
 
 // packages/boot/build-module/components/root/index.mjs
-var import_jsx_runtime40 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime42 = __toESM(require_jsx_runtime(), 1);
 if (typeof document !== "undefined" && true && !document.head.querySelector("style[data-wp-hash='d38c56df8c']")) {
   const style = document.createElement("style");
   style.setAttribute("data-wp-hash", "d38c56df8c");
@@ -10603,12 +10603,12 @@ function Root2() {
   }, [location.pathname, isMobileViewport]);
   const themeColors = (0, import_element29.useMemo)(getAdminThemeColors, []);
   const layoutRef = useSyncBodyBackground();
-  return /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(import_components13.SlotFillProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(tooltip_exports.Provider, { children: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(import_components13.SlotFillProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(tooltip_exports.Provider, { children: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(
     import_theme.ThemeProvider,
     {
       isRoot: true,
       color: { ...themeColors, background: "#f8f8f8" },
-      children: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(import_theme.ThemeProvider, { color: themeColors, children: /* @__PURE__ */ (0, import_jsx_runtime40.jsxs)(
+      children: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(import_theme.ThemeProvider, { color: themeColors, children: /* @__PURE__ */ (0, import_jsx_runtime42.jsxs)(
         "div",
         {
           ref: layoutRef,
@@ -10617,18 +10617,18 @@ function Root2() {
             "has-full-canvas": isFullScreen
           }),
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(SavePanel, {}),
-            /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(import_notices.SnackbarNotices, { className: "boot-notices__snackbar" }),
-            isMobileViewport && /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(page_default.SidebarToggleFill, { children: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(SavePanel, {}),
+            /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(import_notices.SnackbarNotices, { className: "boot-notices__snackbar" }),
+            isMobileViewport && /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(page_default.SidebarToggleFill, { children: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(
               import_components13.Button,
               {
                 icon: menu_default,
                 onClick: () => setIsMobileSidebarOpen(true),
-                label: (0, import_i18n9.__)("Open navigation panel"),
+                label: (0, import_i18n10.__)("Open navigation panel"),
                 size: "compact"
               }
             ) }),
-            /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(import_components13.__unstableAnimatePresence, { children: isMobileViewport && isMobileSidebarOpen && !isFullScreen && /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(import_components13.__unstableAnimatePresence, { children: isMobileViewport && isMobileSidebarOpen && !isFullScreen && /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(
               import_components13.__unstableMotion.div,
               {
                 initial: { opacity: 0 },
@@ -10650,12 +10650,12 @@ function Root2() {
                 },
                 role: "button",
                 tabIndex: -1,
-                "aria-label": (0, import_i18n9.__)(
+                "aria-label": (0, import_i18n10.__)(
                   "Close navigation panel"
                 )
               }
             ) }),
-            /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(import_components13.__unstableAnimatePresence, { children: isMobileViewport && isMobileSidebarOpen && !isFullScreen && /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(import_components13.__unstableAnimatePresence, { children: isMobileViewport && isMobileSidebarOpen && !isFullScreen && /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(
               import_components13.__unstableMotion.div,
               {
                 initial: { x: "-100%" },
@@ -10667,11 +10667,11 @@ function Root2() {
                   ease: "easeOut"
                 },
                 className: "boot-layout__sidebar is-mobile",
-                children: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(Sidebar, {})
+                children: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(Sidebar, {})
               }
             ) }),
-            !isMobileViewport && !isFullScreen && /* @__PURE__ */ (0, import_jsx_runtime40.jsx)("div", { className: "boot-layout__sidebar", children: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(Sidebar, {}) }),
-            /* @__PURE__ */ (0, import_jsx_runtime40.jsx)("div", { className: "boot-layout__surfaces", children: /* @__PURE__ */ (0, import_jsx_runtime40.jsxs)(
+            !isMobileViewport && !isFullScreen && /* @__PURE__ */ (0, import_jsx_runtime42.jsx)("div", { className: "boot-layout__sidebar", children: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(Sidebar, {}) }),
+            /* @__PURE__ */ (0, import_jsx_runtime42.jsx)("div", { className: "boot-layout__surfaces", children: /* @__PURE__ */ (0, import_jsx_runtime42.jsxs)(
               import_theme.ThemeProvider,
               {
                 color: {
@@ -10679,8 +10679,8 @@ function Root2() {
                   background: "#ffffff"
                 },
                 children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(Outlet, {}),
-                  (canvas || canvas === null) && /* @__PURE__ */ (0, import_jsx_runtime40.jsxs)(
+                  /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(Outlet, {}),
+                  (canvas || canvas === null) && /* @__PURE__ */ (0, import_jsx_runtime42.jsxs)(
                     "div",
                     {
                       className: clsx_default(
@@ -10690,20 +10690,20 @@ function Root2() {
                         }
                       ),
                       children: [
-                        canvas?.isPreview && isMobileViewport && /* @__PURE__ */ (0, import_jsx_runtime40.jsx)("div", { className: "boot-layout__mobile-sidebar-drawer", children: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(
+                        canvas?.isPreview && isMobileViewport && /* @__PURE__ */ (0, import_jsx_runtime42.jsx)("div", { className: "boot-layout__mobile-sidebar-drawer", children: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(
                           import_components13.Button,
                           {
                             icon: menu_default,
                             onClick: () => setIsMobileSidebarOpen(
                               true
                             ),
-                            label: (0, import_i18n9.__)(
+                            label: (0, import_i18n10.__)(
                               "Open navigation panel"
                             ),
                             size: "compact"
                           }
                         ) }),
-                        /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(
+                        /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(
                           CanvasRenderer,
                           {
                             canvas,
@@ -10724,7 +10724,7 @@ function Root2() {
 }
 
 // packages/boot/build-module/components/app/router.mjs
-var import_jsx_runtime41 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime43 = __toESM(require_jsx_runtime(), 1);
 var {
   createLazyRoute,
   createRouter,
@@ -10736,7 +10736,7 @@ var {
   useLoaderData
 } = unlock2(routePrivateApis5);
 function NotFoundComponent() {
-  return /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("div", { className: "boot-layout__stage", children: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(page_default, { title: (0, import_i18n10.__)("Route not found"), hasPadding: true, children: (0, import_i18n10.__)("The page you're looking for does not exist") }) });
+  return /* @__PURE__ */ (0, import_jsx_runtime43.jsx)("div", { className: "boot-layout__stage", children: /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(page_default, { title: (0, import_i18n11.__)("Route not found"), hasPadding: true, children: (0, import_i18n11.__)("The page you're looking for does not exist") }) });
 }
 function createRouteFromDefinition(route, parentRoute) {
   let tanstackRoute = createRoute({
@@ -10794,9 +10794,9 @@ function createRouteFromDefinition(route, parentRoute) {
     return createLazyRoute(route.path)({
       component: function RouteComponent() {
         const { inspector: showInspector } = useLoaderData({ from: route.path }) ?? {};
-        return /* @__PURE__ */ (0, import_jsx_runtime41.jsxs)(import_jsx_runtime41.Fragment, { children: [
-          Stage && /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("div", { className: "boot-layout__stage", children: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Stage, {}) }),
-          Inspector && showInspector && /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("div", { className: "boot-layout__inspector", children: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Inspector, {}) })
+        return /* @__PURE__ */ (0, import_jsx_runtime43.jsxs)(import_jsx_runtime43.Fragment, { children: [
+          Stage && /* @__PURE__ */ (0, import_jsx_runtime43.jsx)("div", { className: "boot-layout__stage", children: /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(Stage, {}) }),
+          Inspector && showInspector && /* @__PURE__ */ (0, import_jsx_runtime43.jsx)("div", { className: "boot-layout__inspector", children: /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(Inspector, {}) })
         ] });
       }
     });
@@ -10852,7 +10852,7 @@ function Router({
       }
     });
   }, [routes, rootComponent]);
-  return /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(RouterProvider, { router });
+  return /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(RouterProvider, { router });
 }
 
 // packages/boot/build-module/components/root/single-page.mjs
@@ -10861,7 +10861,7 @@ var import_components14 = __toESM(require_components(), 1);
 var import_element31 = __toESM(require_element(), 1);
 import { privateApis as routePrivateApis6 } from "@wordpress/route";
 var import_theme2 = __toESM(require_theme(), 1);
-var import_jsx_runtime42 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime44 = __toESM(require_jsx_runtime(), 1);
 if (typeof document !== "undefined" && true && !document.head.querySelector("style[data-wp-hash='d38c56df8c']")) {
   const style = document.createElement("style");
   style.setAttribute("data-wp-hash", "d38c56df8c");
@@ -10878,12 +10878,12 @@ function RootSinglePage() {
   useRouteTitle();
   const themeColors = (0, import_element31.useMemo)(getAdminThemeColors, []);
   const layoutRef = useSyncBodyBackground();
-  return /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(import_components14.SlotFillProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(import_components14.SlotFillProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(
     import_theme2.ThemeProvider,
     {
       isRoot: true,
       color: { ...themeColors, background: "#f8f8f8" },
-      children: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(import_theme2.ThemeProvider, { color: themeColors, children: /* @__PURE__ */ (0, import_jsx_runtime42.jsxs)(
+      children: /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(import_theme2.ThemeProvider, { color: themeColors, children: /* @__PURE__ */ (0, import_jsx_runtime44.jsxs)(
         "div",
         {
           ref: layoutRef,
@@ -10895,9 +10895,9 @@ function RootSinglePage() {
             }
           ),
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(SavePanel, {}),
-            /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(import_notices2.SnackbarNotices, { className: "boot-notices__snackbar" }),
-            /* @__PURE__ */ (0, import_jsx_runtime42.jsx)("div", { className: "boot-layout__surfaces", children: /* @__PURE__ */ (0, import_jsx_runtime42.jsxs)(
+            /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(SavePanel, {}),
+            /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(import_notices2.SnackbarNotices, { className: "boot-notices__snackbar" }),
+            /* @__PURE__ */ (0, import_jsx_runtime44.jsx)("div", { className: "boot-layout__surfaces", children: /* @__PURE__ */ (0, import_jsx_runtime44.jsxs)(
               import_theme2.ThemeProvider,
               {
                 color: {
@@ -10905,8 +10905,8 @@ function RootSinglePage() {
                   background: "#ffffff"
                 },
                 children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(Outlet2, {}),
-                  (canvas || canvas === null) && /* @__PURE__ */ (0, import_jsx_runtime42.jsx)("div", { className: "boot-layout__canvas", children: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(
+                  /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(Outlet2, {}),
+                  (canvas || canvas === null) && /* @__PURE__ */ (0, import_jsx_runtime44.jsx)("div", { className: "boot-layout__canvas", children: /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(
                     CanvasRenderer,
                     {
                       canvas,
@@ -10924,10 +10924,10 @@ function RootSinglePage() {
 }
 
 // packages/boot/build-module/components/app/index.mjs
-var import_jsx_runtime43 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime45 = __toESM(require_jsx_runtime(), 1);
 function App({ rootComponent }) {
   const routes = (0, import_data10.useSelect)((select) => select(store).getRoutes(), []);
-  return /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(Router, { routes, rootComponent });
+  return /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(Router, { routes, rootComponent });
 }
 async function runInitModules(initModules) {
   for (const moduleId of initModules ?? []) {
@@ -10956,7 +10956,7 @@ async function init({
   if (rootElement) {
     const root = (0, import_element32.createRoot)(rootElement);
     root.render(
-      /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(import_element32.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(App, {}) })
+      /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(import_element32.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(App, {}) })
     );
   }
 }
@@ -10973,16 +10973,16 @@ async function initSinglePage({
   if (rootElement) {
     const root = (0, import_element32.createRoot)(rootElement);
     root.render(
-      /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(import_element32.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(App, { rootComponent: RootSinglePage }) })
+      /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(import_element32.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(App, { rootComponent: RootSinglePage }) })
     );
   }
 }
 
 // packages/boot/build-module/index.mjs
-if (typeof document !== "undefined" && true && !document.head.querySelector("style[data-wp-hash='54fd778906']")) {
+if (typeof document !== "undefined" && true && !document.head.querySelector("style[data-wp-hash='5c714da7f2']")) {
   const style = document.createElement("style");
-  style.setAttribute("data-wp-hash", "54fd778906");
-  style.appendChild(document.createTextNode("@media (min-width:600px){.boot-layout-container .boot-layout{bottom:0;left:0;min-height:calc(100vh - 46px);position:absolute;right:0;top:0}}@media (min-width:782px){.boot-layout-container .boot-layout{min-height:calc(100vh - 32px)}body:has(.boot-layout.has-full-canvas) .boot-layout-container .boot-layout{min-height:100vh}}.boot-layout-container .boot-layout img{height:auto;max-width:100%}.boot-layout .boot-notices__snackbar{bottom:24px;box-sizing:border-box;display:flex;flex-direction:column;left:0;padding-inline:16px;pointer-events:none;position:fixed;right:0}.boot-layout .boot-notices__snackbar .components-snackbar{margin-inline:auto}"));
+  style.setAttribute("data-wp-hash", "5c714da7f2");
+  style.appendChild(document.createTextNode("@media (min-width:600px){.boot-layout-container .boot-layout{bottom:0;left:0;min-height:calc(100vh - 46px);position:absolute;right:0;top:0}}@media (min-width:782px){.boot-layout-container .boot-layout{min-height:calc(100vh - 32px)}body:has(.boot-layout.has-full-canvas) .boot-layout-container .boot-layout{min-height:100vh}}:where(.boot-layout) img{height:auto;max-width:100%}.boot-layout .boot-notices__snackbar{bottom:var(--wpds-dimension-size-md,32px);box-sizing:border-box;display:flex;flex-direction:column;left:0;padding-inline:16px;pointer-events:none;position:fixed;right:0}.boot-layout .boot-notices__snackbar .components-snackbar{margin-inline:auto}"));
   document.head.appendChild(style);
 }
 if (typeof document !== "undefined" && true && !document.head.querySelector("style[data-wp-hash='28f077581a']")) {

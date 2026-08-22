@@ -1,3 +1,4 @@
+(function() {
 var wp;
 (wp ||= {}).nux = (() => {
   var __create = Object.create;
@@ -144,5 +145,7 @@ var wp;
     version: "6.2"
   });
   return __toCommonJS(index_exports);
+})();
+(window.wp ||= {}).nux = wp.nux;
 })();
 //# sourceMappingURL=index.js.map

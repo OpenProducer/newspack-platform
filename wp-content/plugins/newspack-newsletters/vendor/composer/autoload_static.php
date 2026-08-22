@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitd783a45ecd7e52575a0d7a6a35bd321e
+class ComposerStaticInit5afdd6eda101fe9ebd968fc1f8fbed2d
 {
     public static $prefixLengthsPsr4 = array (
         'A' =>
@@ -198,6 +198,7 @@ class ComposerStaticInitd783a45ecd7e52575a0d7a6a35bd321e
         'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\List_Item' => __DIR__ . '/..' . '/woocommerce/email-editor/src/Integrations/Core/Renderer/Blocks/class-list-item.php',
         'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Media_Text' => __DIR__ . '/..' . '/woocommerce/email-editor/src/Integrations/Core/Renderer/Blocks/class-media-text.php',
         'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Post_Content' => __DIR__ . '/..' . '/woocommerce/email-editor/src/Integrations/Core/Renderer/Blocks/class-post-content.php',
+        'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Post_Template' => __DIR__ . '/..' . '/woocommerce/email-editor/src/Integrations/Core/Renderer/Blocks/class-post-template.php',
         'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Quote' => __DIR__ . '/..' . '/woocommerce/email-editor/src/Integrations/Core/Renderer/Blocks/class-quote.php',
         'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Social_Link' => __DIR__ . '/..' . '/woocommerce/email-editor/src/Integrations/Core/Renderer/Blocks/class-social-link.php',
         'Automattic\\WooCommerce\\EmailEditor\\Integrations\\Core\\Renderer\\Blocks\\Social_Links' => __DIR__ . '/..' . '/woocommerce/email-editor/src/Integrations/Core/Renderer/Blocks/class-social-links.php',
@@ -357,9 +358,9 @@ class ComposerStaticInitd783a45ecd7e52575a0d7a6a35bd321e
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitd783a45ecd7e52575a0d7a6a35bd321e::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitd783a45ecd7e52575a0d7a6a35bd321e::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitd783a45ecd7e52575a0d7a6a35bd321e::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit5afdd6eda101fe9ebd968fc1f8fbed2d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit5afdd6eda101fe9ebd968fc1f8fbed2d::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit5afdd6eda101fe9ebd968fc1f8fbed2d::$classMap;
 
         }, null, ClassLoader::class);
     }

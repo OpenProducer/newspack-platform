@@ -111,7 +111,36 @@ function resolveFields(fields) {
   });
 }
 
+// packages/widget-primitives/build-module/icon-resolver/icon-resolver.mjs
+var iconResolver;
+function registerIconResolver(resolver) {
+  if (iconResolver) {
+    return void 0;
+  }
+  iconResolver = resolver;
+  return resolver;
+}
+async function resolveIcon(reference) {
+  if (!iconResolver) {
+    return null;
+  }
+  try {
+    return await iconResolver(reference);
+  } catch {
+    return null;
+  }
+}
+
 // packages/widget-primitives/build-module/hooks/use-widget-types.mjs
+var pendingIcon = (0, import_element2.createElement)("svg", {
+  viewBox: "0 0 24 24"
+});
+function withRenderableIcons(actions) {
+  return actions.map(({ icon, ...action }) => ({
+    ...action,
+    ...(0, import_element2.isValidElement)(icon) ? { icon } : {}
+  }));
+}
 function useWidgetTypes(records) {
   const [widgetTypes, setWidgetTypes] = (0, import_element2.useState)([]);
   const [isResolvingWidgetTypes, setIsResolvingWidgetTypes] = (0, import_element2.useState)(true);
@@ -141,6 +170,9 @@ function useWidgetTypes(records) {
             return null;
           }
           const metadata = module.default;
+          const moduleIcon = (0, import_element2.isValidElement)(metadata.icon) ? metadata.icon : void 0;
+          const icon = moduleIcon ?? (record.icon ? pendingIcon : void 0);
+          const actions = record.actions ?? metadata.actions;
           return {
             ...metadata,
             ...metadata.attributes ? {
@@ -150,6 +182,7 @@ function useWidgetTypes(records) {
             } : {},
             name: record.name,
             renderModule: record.render_module ?? "",
+            icon,
             /*
              * `title` is required:
              * - Server-side title wins
@@ -162,7 +195,7 @@ function useWidgetTypes(records) {
             ...record.description ? { description: record.description } : {},
             ...record.help ? { help: record.help } : {},
             ...record.keywords ? { keywords: record.keywords } : {},
-            ...record.actions ? { actions: record.actions } : {}
+            ...actions ? { actions: withRenderableIcons(actions) } : {}
           };
         } catch {
           return null;
@@ -176,6 +209,52 @@ function useWidgetTypes(records) {
         results.filter((t) => t !== null)
       );
       setIsResolvingWidgetTypes(false);
+      for (const record of records) {
+        if (!record.icon) {
+          continue;
+        }
+        void resolveIcon(record.icon).then((resolved) => {
+          if (cancelled) {
+            return;
+          }
+          setWidgetTypes(
+            (prev) => prev.map((widgetType) => {
+              if (widgetType.name !== record.name) {
+                return widgetType;
+              }
+              if (resolved) {
+                return { ...widgetType, icon: resolved };
+              }
+              return widgetType.icon === pendingIcon ? { ...widgetType, icon: void 0 } : widgetType;
+            })
+          );
+        });
+      }
+      for (const record of records) {
+        for (const action of record.actions ?? []) {
+          if (typeof action.icon !== "string") {
+            continue;
+          }
+          void resolveIcon(action.icon).then((resolved) => {
+            if (cancelled || !resolved) {
+              return;
+            }
+            setWidgetTypes(
+              (prev) => prev.map((type) => {
+                if (type.name !== record.name) {
+                  return type;
+                }
+                return {
+                  ...type,
+                  actions: type.actions?.map(
+                    (entry) => entry.id === action.id ? { ...entry, icon: resolved } : entry
+                  )
+                };
+              })
+            );
+          });
+        }
+      }
     });
     return () => {
       cancelled = true;
@@ -186,6 +265,7 @@ function useWidgetTypes(records) {
 export {
   WidgetRender,
   registerFieldType,
+  registerIconResolver,
   useWidgetTypes
 };
 //# sourceMappingURL=index.js.map

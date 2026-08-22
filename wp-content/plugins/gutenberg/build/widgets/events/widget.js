@@ -31,32 +31,10 @@ var require_i18n = __commonJS({
   }
 });
 
-// package-external:@wordpress/primitives
-var require_primitives = __commonJS({
-  "package-external:@wordpress/primitives"(exports, module) {
-    module.exports = window.wp.primitives;
-  }
-});
-
-// vendor-external:react/jsx-runtime
-var require_jsx_runtime = __commonJS({
-  "vendor-external:react/jsx-runtime"(exports, module) {
-    module.exports = window.ReactJSXRuntime;
-  }
-});
-
 // widgets/events/widget.ts
 var import_i18n = __toESM(require_i18n());
-
-// packages/icons/build-module/library/calendar.mjs
-var import_primitives = __toESM(require_primitives(), 1);
-var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
-var calendar_default = /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_primitives.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_primitives.Path, { d: "M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm.5 16c0 .3-.2.5-.5.5H5c-.3 0-.5-.2-.5-.5V7h15v12zM9 10H7v2h2v-2zm0 4H7v2h2v-2zm4-4h-2v2h2v-2zm4 0h-2v2h2v-2zm-4 4h-2v2h2v-2zm4 0h-2v2h2v-2z" }) });
-
-// widgets/events/widget.ts
 var widget_default = {
   name: "core/events",
-  icon: calendar_default,
   attributes: [
     {
       id: "location",

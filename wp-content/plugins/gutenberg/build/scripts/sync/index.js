@@ -1,3 +1,4 @@
+(function() {
 "use strict";
 var wp;
 (wp ||= {}).sync = (() => {
@@ -9977,13 +9978,6 @@ ${err.toString()}`);
   function passThru(fn) {
     return ((...args2) => fn(...args2));
   }
-  function yieldToEventLoop(fn) {
-    return function(...args2) {
-      setTimeout(() => {
-        fn.apply(this, args2);
-      }, 0);
-    };
-  }
 
   // packages/sync/build-module/providers/index.mjs
   var import_hooks3 = __toESM(require_hooks(), 1);
@@ -10349,7 +10343,7 @@ ${err.toString()}`);
       );
     }
   }
-  function processDocUpdate(update, doc2, onSync) {
+  function processDocUpdate(update, doc2) {
     const data = base64ToUint8Array(update.data);
     switch (update.type) {
       case SyncUpdateType.SYNC_STEP_1: {
@@ -10364,7 +10358,6 @@ ${err.toString()}`);
           doc2,
           POLLING_MANAGER_ORIGIN
         );
-        onSync();
         return;
       }
       case SyncUpdateType.COMPACTION:
@@ -10722,7 +10715,6 @@ ${err.toString()}`);
     doc: doc2,
     awareness,
     log,
-    onSync,
     onStatusChange
   }) {
     if (roomStates.has(room)) {
@@ -10775,7 +10767,7 @@ ${err.toString()}`);
       log,
       onStatusChange,
       processAwarenessUpdate: (state) => processAwarenessUpdate(state, awareness),
-      processDocUpdate: (update) => processDocUpdate(update, doc2, onSync),
+      processDocUpdate: (update) => processDocUpdate(update, doc2),
       room,
       unregister,
       updateQueue
@@ -10850,7 +10842,6 @@ ${err.toString()}`);
     }
     awareness;
     status = "disconnected";
-    synced = false;
     /**
      * Connect to the endpoint and initialize sync.
      */
@@ -10861,8 +10852,7 @@ ${err.toString()}`);
         doc: this.options.ydoc,
         awareness: this.awareness,
         log: this.log,
-        onStatusChange: this.emitStatus,
-        onSync: this.onSync
+        onStatusChange: this.emitStatus
       });
     }
     /**
@@ -10917,15 +10907,6 @@ ${err.toString()}`);
         ...debug
       });
     };
-    /**
-     * Handle synchronization events from the polling manager.
-     */
-    onSync = () => {
-      if (!this.synced) {
-        this.synced = true;
-        this.log("Synced");
-      }
-    };
   };
   function createHttpPollingProvider() {
     return async ({
@@ -10955,7 +10936,7 @@ ${err.toString()}`);
   // packages/sync/build-module/providers/index.mjs
   var providerCreators = null;
   function getDefaultProviderCreators() {
-    return [createHttpPollingProvider()];
+    return window.__experimentalEnableRealTimeCollaboration ? [createHttpPollingProvider()] : [];
   }
   function isProviderCreator(creator) {
     return "function" === typeof creator;
@@ -10964,7 +10945,7 @@ ${err.toString()}`);
     if (providerCreators) {
       return providerCreators;
     }
-    if (!window._wpCollaborationEnabled) {
+    if (!window.__experimentalEnableRealTimeCollaboration) {
       return [];
     }
     const filteredProviderCreators = (0, import_hooks3.applyFilters)(
@@ -11285,6 +11266,31 @@ ${err.toString()}`);
         yUndoManager.stopCapturing();
       }
     };
+  }
+
+  // packages/sync/build-module/crdt-snapshot.mjs
+  function encodeDocSnapshot(ydoc) {
+    return toBase64(encodeSnapshotV2(snapshot(ydoc)));
+  }
+  function docContainsSnapshot(ydoc, encodedSnapshot) {
+    let snapshot2;
+    try {
+      snapshot2 = decodeSnapshotV2(fromBase64(encodedSnapshot));
+    } catch {
+      return false;
+    }
+    const localSnapshot = snapshot(ydoc);
+    for (const [client, clock] of snapshot2.sv) {
+      if ((localSnapshot.sv.get(client) ?? 0) < clock) {
+        return false;
+      }
+    }
+    const copiedDeleteSet = snapshot(ydoc).ds;
+    const mergedDeleteSet = mergeDeleteSets([
+      copiedDeleteSet,
+      snapshot2.ds
+    ]);
+    return equalDeleteSets(localSnapshot.ds, mergedDeleteSet);
   }
 
   // packages/sync/build-module/utils.mjs
@@ -11650,11 +11656,46 @@ ${err.toString()}`);
         }, origin2);
       }
     }
-    const deferUpdateCRDTDoc = yieldToEventLoop(updateCRDTDoc);
+    const pendingCRDTDocUpdates = [];
+    function flushPendingCRDTDocUpdates() {
+      while (pendingCRDTDocUpdates.length > 0) {
+        const args2 = pendingCRDTDocUpdates.shift();
+        if (args2) {
+          updateCRDTDoc(...args2);
+        }
+      }
+    }
+    function deferUpdateCRDTDoc(...args2) {
+      pendingCRDTDocUpdates.push(args2);
+      setTimeout(flushPendingCRDTDocUpdates, 0);
+    }
     function updateOrDefer(objectType, objectId, changes, origin2, options = {}) {
       const hasRemotePeers = (getAwareness(objectType, objectId)?.getStates().size ?? 0) > 1;
-      const update = hasRemotePeers ? updateCRDTDoc : deferUpdateCRDTDoc;
-      update(objectType, objectId, changes, origin2, options);
+      if (hasRemotePeers) {
+        flushPendingCRDTDocUpdates();
+        updateCRDTDoc(objectType, objectId, changes, origin2, options);
+        return;
+      }
+      deferUpdateCRDTDoc(objectType, objectId, changes, origin2, options);
+    }
+    function getEntitySnapshot(objectType, objectId) {
+      const entityId = getEntityId(objectType, objectId);
+      const entityState = entityStates.get(entityId);
+      if (!entityState) {
+        log("getEntitySnapshot", "no entity state", entityId);
+        return void 0;
+      }
+      flushPendingCRDTDocUpdates();
+      return encodeDocSnapshot(entityState.ydoc);
+    }
+    function entityContainsSnapshot(objectType, objectId, encodedSnapshot) {
+      const entityId = getEntityId(objectType, objectId);
+      const entityState = entityStates.get(entityId);
+      if (!entityState) {
+        return false;
+      }
+      flushPendingCRDTDocUpdates();
+      return docContainsSnapshot(entityState.ydoc, encodedSnapshot);
     }
     async function _updateEntityRecord(objectType, objectId) {
       const entityId = getEntityId(objectType, objectId);
@@ -11683,7 +11724,7 @@ ${err.toString()}`);
       if (!entityState?.ydoc) {
         return null;
       }
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      flushPendingCRDTDocUpdates();
       return serializeCrdtDoc(entityState.ydoc);
     }
     const internal = {
@@ -11692,7 +11733,9 @@ ${err.toString()}`);
     };
     return {
       createPersistedCRDTDoc: debugWrap(createPersistedCRDTDoc),
+      entityContainsSnapshot: debugWrap(entityContainsSnapshot),
       getAwareness,
+      getEntitySnapshot: debugWrap(getEntitySnapshot),
       load: debugWrap(loadEntity),
       loadCollection: debugWrap(loadCollection),
       // Use getter to ensure we always return the current value of `undoManager`.
@@ -12867,5 +12910,7 @@ ${err.toString()}`);
   // packages/sync/build-module/index.mjs
   var YJS_VERSION = "13";
   return __toCommonJS(index_exports);
+})();
+(window.wp ||= {}).sync = wp.sync;
 })();
 //# sourceMappingURL=index.js.map

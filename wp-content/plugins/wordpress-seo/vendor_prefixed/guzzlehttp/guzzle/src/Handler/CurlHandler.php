@@ -53,6 +53,7 @@ class CurlHandler
     }
     public function __invoke(\YoastSEO_Vendor\Psr\Http\Message\RequestInterface $request, array $options) : \YoastSEO_Vendor\GuzzleHttp\Promise\PromiseInterface
     {
+        \YoastSEO_Vendor\GuzzleHttp\Handler\HostValidator::assertRequestHost($request);
         if (isset($options['delay'])) {
             \usleep($options['delay'] * 1000);
         }
