@@ -286,7 +286,8 @@ class Sonaar_Music_Widget extends WP_Widget{
                     break;
                 }
             }
-            if ( FALSE === get_post_status( $albums ) || get_post_status ( $albums ) == 'trash') {
+            $first_album_id = trim( explode( ',', $albums )[0] );
+            if ( FALSE === get_post_status( $first_album_id ) || get_post_status ( $first_album_id ) == 'trash') {
                 // if album is set by is deleted afterward, let fallback on the latest album post.
                 $playlatestalbum = true;
             }

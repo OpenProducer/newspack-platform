@@ -395,48 +395,95 @@
                 render(<SrpModalGoPro />, document.getElementById("sonaar-music-plugin-app"));
             }
             var initialPlayerCount = jQuery('.iron-audioplayer').length;
-            var setIronAudioplayers = function (newPlayer = false) { //"newPlayer" is true when the page load or adding a new player widget (when setIronAudioplayers is called from the root function)
-                var ifBlockExist = (jQuery('#block-' + clientId + ' .iron-audioplayer').length > 0)?true:false;
+            var setIronAudioplayers = function (newPlayer = false) {
+
+                // WordPress 7.1 Gutenberg: the block content is rendered inside an iframe.
+                // Fallback to the current document if no iframe is available.
+                var editorIframe = document.querySelector('iframe[name^="editor-canvas"]');
+                var editorDocument = editorIframe && editorIframe.contentDocument
+                    ? editorIframe.contentDocument
+                    : document;
+
+                var $editor = jQuery(editorDocument);
+                var $block = $editor.find('#block-' + clientId);
+                var $players = $block.find('.iron-audioplayer');
+
+                var ifBlockExist = $players.length > 0;
+
                 function resetPlayer() {
-                    IRON.players = []
-                    jQuery('.iron-audioplayer').each(function () {
-                        var player = Object.create(IRON.audioPlayer)
-                        player.init(jQuery(this))
-                        IRON.players.push(player)
+
+                    IRON.players = [];
+
+                    $block.find('.iron-audioplayer').each(function () {
+
+                        var player = Object.create(IRON.audioPlayer);
+
+                        player.init(jQuery(this));
+
+                        IRON.players.push(player);
                     });
+
                     ironAudioplayersLoaded = true;
 
-                    if (jQuery('#block-' + clientId + ' .iron-audioplayer').attr('data-lazyload') == 'true' || jQuery('#block-' + clientId + ' .iron-audioplayer').attr('data-lazyload') == '1' ) { //Load playlist by ajax when lazyload is enabled
-                        if(typeof IRON.audioPlayer !== 'undefined' && typeof IRON.audioPlayer.reloadAjax !== 'undefined'){ 
-                            IRON.audioPlayer.reloadAjax( jQuery('#block-' + clientId + ' .iron-audioplayer'), true, true );
+                    var $player = $block.find('.iron-audioplayer');
+
+                    if (
+                        $player.attr('data-lazyload') == 'true' ||
+                        $player.attr('data-lazyload') == '1'
+                    ) {
+                        if (
+                            typeof IRON.audioPlayer !== 'undefined' &&
+                            typeof IRON.audioPlayer.reloadAjax !== 'undefined'
+                        ) {
+                            IRON.audioPlayer.reloadAjax($player, true, true);
                         }
                     }
                 }
 
-                if ( !ironAudioplayersLoaded && ifBlockExist){ //if block exist and player not loaded (when we are changing settings)
+                if (!ironAudioplayersLoaded && ifBlockExist) {
+
                     function checkPlayerIdChange() {
-                        let currentDataId = jQuery('#block-' + clientId + ' .iron-audioplayer').data('id');
+
+                        var $player = $block.find('.iron-audioplayer');
+
+                        if (!$player.length) {
+                            return;
+                        }
+
+                        let currentDataId = $player.data('id');
+
                         if (currentDataId !== checkPlayerIdChange.previousDataId) {
                             resetPlayer();
                             clearInterval(setDataIdInterval);
                         }
+
                         checkPlayerIdChange.previousDataId = currentDataId;
                     }
-                    checkPlayerIdChange.previousDataId = jQuery('#block-' + clientId + ' .iron-audioplayer').data('id');
+
+                    checkPlayerIdChange.previousDataId = $players.data('id');
+
                     let setDataIdInterval = setInterval(checkPlayerIdChange, 500);
                 }
 
-                if ( newPlayer && !ifBlockExist ){ //if block doesnt exist (When the page load or adding a new player widget)
+                if (newPlayer && !ifBlockExist) {
+
                     let setIronAudioplayerInterval = setInterval(function () {
-                        if (initialPlayerCount < jQuery('.iron-audioplayer').length) {
+
+                        var $currentPlayers = $block.find('.iron-audioplayer');
+
+                        if (initialPlayerCount < $currentPlayers.length) {
                             ironAudioplayersLoaded = false;
                         }
-                        if (jQuery('#block-' + clientId + ' .iron-audioplayer').length > 0) {
+
+                        if ($currentPlayers.length > 0) {
+
                             if (!ironAudioplayersLoaded) {
                                 resetPlayer();
                             }
+
                             clearInterval(setIronAudioplayerInterval);
                         }
+
                     }, 500);
                 }
             };
@@ -775,251 +822,255 @@
                     custom_css += ' #block-' + clientId + ' .iron-audioplayer .tracklist-item-time { display: block; }';
                 }
 
-                if (jQuery('head #' + clientId).length) {
-                    jQuery('head #' + clientId).remove();
-                }
+                var iframe = document.querySelector('iframe[name="editor-canvas"]');
+                var doc = iframe ? iframe.contentDocument : document;
+                var $block = jQuery(doc).find('#block-' + clientId);
 
-                jQuery('head').append('<style id="' + clientId + '" >' + custom_css + '</style>');
+                jQuery(doc).find('head #' + clientId).remove();
+                jQuery(doc).find('head').append(
+                    '<style id="' + clientId + '">' + custom_css + '</style>'
+                );
+                
 
                 if (play_pause_bt_show) {
-                    jQuery('#block-' + clientId + ' .sonaar_audioplayer_block_cover').addClass('sr_play_pause_bt_hide');
+                    $block.find('.sonaar_audioplayer_block_cover').addClass('sr_play_pause_bt_hide');
                 } else {
-                    jQuery('#block-' + clientId + ' .sonaar_audioplayer_block_cover').removeClass('sr_play_pause_bt_hide');
+                    $block.find('.sonaar_audioplayer_block_cover').removeClass('sr_play_pause_bt_hide');
                 }
 
                 if (playlist_hide_artwork) {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer').addClass('sonaar-no-artwork');
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .sonaar-Artwort-box').hide();
+                    $block.find('.iron-audioplayer').addClass('sonaar-no-artwork');
+                    $block.find('.iron-audioplayer .sonaar-Artwort-box').hide();
                 } else {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer').removeClass('sonaar-no-artwork');
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .sonaar-Artwort-box').show();
+                    $block.find('.iron-audioplayer').removeClass('sonaar-no-artwork');
+                    $block.find('.iron-audioplayer .sonaar-Artwort-box').show();
                 }
 
                 if (enable_scrollbar && scrollbar_height != '') {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist ul').css({ 'height': scrollbar_height + 'px', 'overflow-y': 'hidden', 'overflow-x': 'hidden' });
+                    $block.find('.iron-audioplayer .playlist ul').css({ 'height': scrollbar_height + 'px', 'overflow-y': 'hidden', 'overflow-x': 'hidden' });
                 } else {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist ul').css({ 'height': 'auto', 'overflow-y': 'auto', 'overflow-x': 'auto' });
+                    $block.find('.iron-audioplayer .playlist ul').css({ 'height': 'auto', 'overflow-y': 'auto', 'overflow-x': 'auto' });
                 }
 
                 if (move_playlist_below_artwork) {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .sonaar-grid').css('flex-direction', 'column');
+                    $block.find('.iron-audioplayer .sonaar-grid').css('flex-direction', 'column');
                 } else {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .sonaar-grid').css('flex-direction', 'row');
+                    $block.find('.iron-audioplayer .sonaar-grid').css('flex-direction', 'row');
                 }
 
-                jQuery('#block-' + clientId + ' .iron-audioplayer .playlist li .sr_track_cover').css({'width': track_artwork_size + 'px', 'min-width': track_artwork_size + 'px'});
+                $block.find('.iron-audioplayer .playlist li .sr_track_cover').css({'width': track_artwork_size + 'px', 'min-width': track_artwork_size + 'px'});
 
-                jQuery('#block-' + clientId + ' .iron-audioplayer .playlist, #block-' + clientId + ' .iron-audioplayer .sonaar-Artwort-box, #block-' + clientId + ' .iron-audioplayer .buttons-block').css('width', playlist_width + '%');
+                $block.find('.iron-audioplayer .playlist, #block-' + clientId + ' .iron-audioplayer .sonaar-Artwort-box, #block-' + clientId + ' .iron-audioplayer .buttons-block').css('width', playlist_width + '%');
 
-                jQuery('#block-' + clientId + ' .iron-audioplayer .sonaar-grid').css('justify-content', playlist_justify);
-                jQuery('#block-' + clientId + ' .sr_playlist_below_artwork_auto .iron-audioplayer .sonaar-grid').css('align-items', playlist_justify);
+                $block.find('.iron-audioplayer .sonaar-grid').css('justify-content', playlist_justify);
+                $block.find('.sr_playlist_below_artwork_auto .iron-audioplayer .sonaar-grid').css('align-items', playlist_justify);
 
-                jQuery('#block-' + clientId + ' .iron-audioplayer .playlist').css('margin', playlist_margin + 'px');
+                $block.find('.iron-audioplayer .playlist').css('margin', playlist_margin + 'px');
 
-                jQuery('#block-' + clientId + ' .iron-audioplayer .srp_tracklist').css('margin', tracklist_margin + 'px');
+                $block.find('.iron-audioplayer .srp_tracklist').css('margin', tracklist_margin + 'px');
 
                 if (title_btshow) {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .sr_it-playlist-title').hide();
+                    $block.find('.iron-audioplayer .playlist .sr_it-playlist-title').hide();
                 } else {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .sr_it-playlist-title').show();
+                    $block.find('.iron-audioplayer .playlist .sr_it-playlist-title').show();
                 }
 
-                var titleClass = jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .sr_it-playlist-title').attr('class');
-                jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .sr_it-playlist-title').replaceWith('<' + title_html_tag_playlist + ' class="' + titleClass + '" >' + jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .sr_it-playlist-title').html() + '</' + title_html_tag_playlist + '>');
+                var titleClass = $block.find('.iron-audioplayer .playlist .sr_it-playlist-title').attr('class');
+                $block.find('.iron-audioplayer .playlist .sr_it-playlist-title').replaceWith('<' + title_html_tag_playlist + ' class="' + titleClass + '" >' + $block.find('.iron-audioplayer .playlist .sr_it-playlist-title').html() + '</' + title_html_tag_playlist + '>');
 
                 if (title_color != '' && title_color != undefined) {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .sr_it-playlist-title').css('color', title_color);
+                    $block.find('.iron-audioplayer .playlist .sr_it-playlist-title').css('color', title_color);
                 }
 
                 if (title_fontsize > 0) {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .sr_it-playlist-title').css('font-size', title_fontsize + 'px');
+                    $block.find('.iron-audioplayer .playlist .sr_it-playlist-title').css('font-size', title_fontsize + 'px');
                 }
 
                 if (subtitle_btshow) {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .sr_it-playlist-release-date').hide();
-                    jQuery('#block-' + clientId + ' .sonaar_audioplayer_block_cover').addClass('sr_player_subtitle_hide');
+                    $block.find('.iron-audioplayer .playlist .sr_it-playlist-release-date').hide();
+                    $block.find('.sonaar_audioplayer_block_cover').addClass('sr_player_subtitle_hide');
                 } else {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .sr_it-playlist-release-date').show();
-                    jQuery('#block-' + clientId + ' .sonaar_audioplayer_block_cover').removeClass('sr_player_subtitle_hide');
+                    $block.find('.iron-audioplayer .playlist .sr_it-playlist-release-date').show();
+                    $block.find('.sonaar_audioplayer_block_cover').removeClass('sr_player_subtitle_hide');
                 }
 
                 if (subtitle_color != '' && subtitle_color != undefined) {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .sr_it-playlist-release-date').css('color', subtitle_color);
+                    $block.find('.iron-audioplayer .playlist .sr_it-playlist-release-date').css('color', subtitle_color);
                 } else {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .sr_it-playlist-release-date').css('color', 'inherit');
+                    $block.find('.iron-audioplayer .playlist .sr_it-playlist-release-date').css('color', 'inherit');
                 }
 
                 if (track_separator_color != '' && track_separator_color != undefined) {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist li').css('border-bottom', 'solid 1px ' + track_separator_color);
+                    $block.find('.iron-audioplayer .playlist li').css('border-bottom', 'solid 1px ' + track_separator_color);
                 } else {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist li').css('border-bottom', 'none');
+                    $block.find('.iron-audioplayer .playlist li').css('border-bottom', 'none');
                 }
 
-                jQuery('#block-' + clientId + ' .iron-audioplayer .playlist li').css({ 'padding-top': tracklist_spacing + 'px', 'padding-bottom': tracklist_spacing + 'px' });
+                $block.find('.iron-audioplayer .playlist li').css({ 'padding-top': tracklist_spacing + 'px', 'padding-bottom': tracklist_spacing + 'px' });
 
                 if (hide_number_btshow) {
-                    jQuery('#block-' + clientId + ' .sonaar_audioplayer_block_cover').addClass('sr_player_track_num_hide');
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .track-number .number').hide();
+                    $block.find('.sonaar_audioplayer_block_cover').addClass('sr_player_track_num_hide');
+                    $block.find('.iron-audioplayer .playlist .track-number .number').hide();
                 } else {
-                    jQuery('#block-' + clientId + ' .sonaar_audioplayer_block_cover').removeClass('sr_player_track_num_hide');
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .track-number .number').show();
+                    $block.find('.sonaar_audioplayer_block_cover').removeClass('sr_player_track_num_hide');
+                    $block.find('.iron-audioplayer .playlist .track-number .number').show();
                 }
 
                 if (hide_time_duration) {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .tracklist-item-time').hide();
+                    $block.find('.iron-audioplayer .tracklist-item-time').hide();
                 } else {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .tracklist-item-time').show();
+                    $block.find('.iron-audioplayer .tracklist-item-time').show();
                 }
 
                 if (duration_fontsize > 0) {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .tracklist-item-time').css('font-size', duration_fontsize + 'px');
+                    $block.find('.iron-audioplayer .tracklist-item-time').css('font-size', duration_fontsize + 'px');
                 } else {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .tracklist-item-time').css('font-size', '');
+                    $block.find('.iron-audioplayer .tracklist-item-time').css('font-size', '');
                 }
 
                 if (duration_color != '' && duration_color != undefined) {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .tracklist-item-time').css('color', duration_color);
+                    $block.find('.iron-audioplayer .tracklist-item-time').css('color', duration_color);
                 } else {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .tracklist-item-time').css('color', 'inherit');
+                    $block.find('.iron-audioplayer .tracklist-item-time').css('color', 'inherit');
                 }
 
                 if (hide_track_market) {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .store-list').hide();
+                    $block.find('.iron-audioplayer .playlist .store-list').hide();
                 } else {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .store-list').show();
+                    $block.find('.iron-audioplayer .playlist .store-list').show();
                 }
 
                 if (view_icons_alltime) {
-                    jQuery('#block-' + clientId + ' .sonaar_audioplayer_block_cover').addClass('sr_track_inline_cta_bt__yes');
+                    $block.find('.sonaar_audioplayer_block_cover').addClass('sr_track_inline_cta_bt__yes');
                 } else {
-                    jQuery('#block-' + clientId + ' .sonaar_audioplayer_block_cover').removeClass('sr_track_inline_cta_bt__yes');
+                    $block.find('.sonaar_audioplayer_block_cover').removeClass('sr_track_inline_cta_bt__yes');
                 }
 
                 if (popover_icons_store != '') {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .song-store-list-menu .fa-ellipsis-v, #block-' + clientId + ' .iron-audioplayer .store-list .srp_ellipsis').css('color', popover_icons_store);
+                    $block.find('.iron-audioplayer .playlist .song-store-list-menu .fa-ellipsis-v, #block-' + clientId + ' .iron-audioplayer .store-list .srp_ellipsis').css('color', popover_icons_store);
                 } else {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .song-store-list-menu .fa-ellipsis-v, #block-' + clientId + ' .iron-audioplayer .store-list .srp_ellipsis').css('color', 'inherit');
+                    $block.find('.iron-audioplayer .playlist .song-store-list-menu .fa-ellipsis-v, #block-' + clientId + ' .iron-audioplayer .store-list .srp_ellipsis').css('color', 'inherit');
                 }
 
-                jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .store-list .song-store-list-container').css('column-gap', tracklist_icons_spacing + 'px');
+                $block.find('.iron-audioplayer .playlist .store-list .song-store-list-container').css('column-gap', tracklist_icons_spacing + 'px');
 
                 if (!wc_bt_show) {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist a.song-store.sr_store_wc_round_bt').hide();
+                    $block.find('.iron-audioplayer .playlist a.song-store.sr_store_wc_round_bt').hide();
                 } else {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist a.song-store.sr_store_wc_round_bt').show();
+                    $block.find('.iron-audioplayer .playlist a.song-store.sr_store_wc_round_bt').show();
                 }
 
                 if (wc_icons_color != '' && wc_icons_color != undefined) {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist a.song-store.sr_store_wc_round_bt').css('color', wc_icons_color);
+                    $block.find('.iron-audioplayer .playlist a.song-store.sr_store_wc_round_bt').css('color', wc_icons_color);
                 } else {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist a.song-store.sr_store_wc_round_bt').css('color', 'inherit');
+                    $block.find('.iron-audioplayer .playlist a.song-store.sr_store_wc_round_bt').css('color', 'inherit');
                 }
 
                 if (wc_icons_bg_color != '' && wc_icons_bg_color != undefined) {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist a.song-store.sr_store_wc_round_bt').css('background-color', wc_icons_bg_color);
+                    $block.find('.iron-audioplayer .playlist a.song-store.sr_store_wc_round_bt').css('background-color', wc_icons_bg_color);
                 } else {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist a.song-store.sr_store_wc_round_bt').css('background-color', 'inherit');
+                    $block.find('.iron-audioplayer .playlist a.song-store.sr_store_wc_round_bt').css('background-color', 'inherit');
                 }
 
                 if (store_title_btshow) {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .available-now').hide();
+                    $block.find('.iron-audioplayer .available-now').hide();
                 } else {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .available-now').show();
+                    $block.find('.iron-audioplayer .available-now').show();
                 }
 
-                jQuery('#block-' + clientId + ' .iron-audioplayer .available-now').html(store_title_text);
+                $block.find('.iron-audioplayer .available-now').html(store_title_text);
 
                 if (store_title_fontsize > 0) {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .available-now').css('font-size', store_title_fontsize + 'px');
+                    $block.find('.iron-audioplayer .available-now').css('font-size', store_title_fontsize + 'px');
                 } else {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .available-now').css('font-size', '16px');
+                    $block.find('.iron-audioplayer .available-now').css('font-size', '16px');
                 }
 
                 if (store_title_color != '' && store_title_color != undefined) {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .available-now').css('color', store_title_color);
+                    $block.find('.iron-audioplayer .available-now').css('color', store_title_color);
                 } else {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .available-now').css('color', 'inherit');
+                    $block.find('.iron-audioplayer .available-now').css('color', 'inherit');
                 }
 
-                jQuery('#block-' + clientId + ' .iron-audioplayer .ctnButton-block').css({ 'justify-content': store_title_align, 'align-items': store_title_align });
+                $block.find('.iron-audioplayer .ctnButton-block').css({ 'justify-content': store_title_align, 'align-items': store_title_align });
 
-                jQuery('#block-' + clientId + ' .iron-audioplayer .buttons-block').css({ 'justify-content': album_stores_align, 'align-items': album_stores_align });
+                $block.find('.iron-audioplayer .buttons-block').css({ 'justify-content': album_stores_align, 'align-items': album_stores_align });
 
                 if (store_button_fontsize > 0) {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer a.button').css('font-size', store_button_fontsize + 'px');
+                    $block.find('.iron-audioplayer a.button').css('font-size', store_button_fontsize + 'px');
                 } else {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer a.button').css('font-size', '');
+                    $block.find('.iron-audioplayer a.button').css('font-size', '');
                 }
 
-                jQuery('#block-' + clientId + ' .buttons-block .store-list li .button').css('border-style', button_border_style);
-                jQuery('#block-' + clientId + ' .buttons-block .store-list li .button').css('border-width', button_border_width + 'px');
+                $block.find('.buttons-block .store-list li .button').css('border-style', button_border_style);
+                $block.find('.buttons-block .store-list li .button').css('border-width', button_border_width + 'px');
 
                 if (button_border_color != '' && button_border_color != undefined) {
-                    jQuery('#block-' + clientId + ' .buttons-block .store-list li .button').css('border-color', button_border_color);
+                    $block.find('.buttons-block .store-list li .button').css('border-color', button_border_color);
                 } else {
-                    jQuery('#block-' + clientId + ' .buttons-block .store-list li .button').css('border-color', 'inherit');
+                    $block.find('.buttons-block .store-list li .button').css('border-color', 'inherit');
                 }
 
-                jQuery('#block-' + clientId + ' .store-list .button').css('border-radius', button_border_radius + 'px');
+                $block.find('.store-list .button').css('border-radius', button_border_radius + 'px');
 
                 if (store_icon_show) {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .store-list .button i').hide();
+                    $block.find('.iron-audioplayer .store-list .button i').hide();
                 } else {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .store-list .button i').show();
+                    $block.find('.iron-audioplayer .store-list .button i').show();
                 }
 
                 if (icon_font_size > 0) {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .buttons-block .store-list i').css('font-size', icon_font_size + 'px');
+                    $block.find('.iron-audioplayer .buttons-block .store-list i').css('font-size', icon_font_size + 'px');
                 } else {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .buttons-block .store-list i').css('font-size', '');
+                    $block.find('.iron-audioplayer .buttons-block .store-list i').css('font-size', '');
                 }
 
-                jQuery('#block-' + clientId + ' .iron-audioplayer .buttons-block .store-list i').css('margin-right', icon_indent + 'px');
+                $block.find('.iron-audioplayer .buttons-block .store-list i').css('margin-right', icon_indent + 'px');
 
-                jQuery('#block-' + clientId + ' .iron-audioplayer.show-playlist .ctnButton-block').css('margin', album_stores_padding + 'px');
+                $block.find('.iron-audioplayer.show-playlist .ctnButton-block').css('margin', album_stores_padding + 'px');
 
-                var soundwaveClass = jQuery('#block-' + clientId + ' .iron-audioplayer .track-title').attr('class');
-                jQuery('#block-' + clientId + ' .iron-audioplayer .track-title').replaceWith('<' + title_html_tag_soundwave + ' class="' + soundwaveClass + '" >' + jQuery('#block-' + clientId + ' .iron-audioplayer .track-title').html() + '</' + title_html_tag_soundwave + '>');
+                var soundwaveClass = $block.find('.iron-audioplayer .track-title').attr('class');
+                $block.find('.iron-audioplayer .track-title').replaceWith('<' + title_html_tag_soundwave + ' class="' + soundwaveClass + '" >' + $block.find('.iron-audioplayer .track-title').html() + '</' + title_html_tag_soundwave + '>');
 
                 if (progressbar_inline) {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .album-player .player').addClass('sr_player__inline');
+                    $block.find('.iron-audioplayer .album-player .player').addClass('sr_player__inline');
                 } else {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .album-player .player').removeClass('sr_player__inline');
+                    $block.find('.iron-audioplayer .album-player .player').removeClass('sr_player__inline');
                 }
 
                 if (soundWave_progress_bar_color != '' && soundWave_progress_bar_color != undefined) {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .sonaar_wave_cut rect').css('fill', soundWave_progress_bar_color);
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .sr_waveform_simplebar .sonaar_wave_cut').css('background-color', soundWave_progress_bar_color);
+                    $block.find('.iron-audioplayer .sonaar_wave_cut rect').css('fill', soundWave_progress_bar_color);
+                    $block.find('.iron-audioplayer .sr_waveform_simplebar .sonaar_wave_cut').css('background-color', soundWave_progress_bar_color);
                 } else {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .sonaar_wave_cut rect').css('fill', 'inherit');
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .sr_waveform_simplebar .sonaar_wave_cut').css('background-color', 'inherit');
+                    $block.find('.iron-audioplayer .sonaar_wave_cut rect').css('fill', 'inherit');
+                    $block.find('.iron-audioplayer .sr_waveform_simplebar .sonaar_wave_cut').css('background-color', 'inherit');
                 }
 
                 if (soundWave_bg_bar_color != '' && soundWave_bg_bar_color != undefined) {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .sonaar_wave_base rect').css('fill', soundWave_bg_bar_color);
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .sr_waveform_simplebar .sonaar_wave_base').css('background-color', soundWave_bg_bar_color);
+                    $block.find('.iron-audioplayer .sonaar_wave_base rect').css('fill', soundWave_bg_bar_color);
+                    $block.find('.iron-audioplayer .sr_waveform_simplebar .sonaar_wave_base').css('background-color', soundWave_bg_bar_color);
                 } else {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .sonaar_wave_base rect').css('fill', 'inherit');
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .sr_waveform_simplebar .sonaar_wave_base').css('background-color', 'inherit');
+                    $block.find('.iron-audioplayer .sonaar_wave_base rect').css('fill', 'inherit');
+                    $block.find('.iron-audioplayer .sr_waveform_simplebar .sonaar_wave_base').css('background-color', 'inherit');
                 }
 
                 if (duration_soundwave_show) {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .currentTime').hide();
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .totalTime').hide();
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .sr_progressbar > .wave').css({ 'margin-left': 0, 'margin-right': 0 });
+                    $block.find('.iron-audioplayer .currentTime').hide();
+                    $block.find('.iron-audioplayer .totalTime').hide();
+                    $block.find('.iron-audioplayer .sr_progressbar > .wave').css({ 'margin-left': 0, 'margin-right': 0 });
                 } else {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .currentTime').show();
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .totalTime').show();
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .sr_progressbar > .wave').css({ 'margin-left': '10px', 'margin-right': '10px' });
+                    $block.find('.iron-audioplayer .currentTime').show();
+                    $block.find('.iron-audioplayer .totalTime').show();
+                    $block.find('.iron-audioplayer .sr_progressbar > .wave').css({ 'margin-left': '10px', 'margin-right': '10px' });
                 }
 
                 if (duration_soundwave_fontsize > 0) {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .player').css('font-size', duration_soundwave_fontsize + 'px');
+                    $block.find('.iron-audioplayer .player').css('font-size', duration_soundwave_fontsize + 'px');
                 } else {
-                    jQuery('#block-' + clientId + ' .iron-audioplayer .player').css('font-size', '12px');
+                    $block.find('.iron-audioplayer .player').css('font-size', '12px');
                 }
 
-                jQuery('#block-' + clientId + ' .iron-audioplayer .album-player .control').css({ 'top': audio_player_controls_spacebefore + 'px', 'position': 'relative' });
+                $block.find('.iron-audioplayer .album-player .control').css({ 'top': audio_player_controls_spacebefore + 'px', 'position': 'relative' });
             }
 
             //Display block preview and UI
@@ -1187,13 +1238,6 @@
                             onChange: hide_artwork => {
                                 is_style_loaded;
                                 setAttributes({ playlist_hide_artwork: hide_artwork });
-                                if (hide_artwork) {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer').addClass('sonaar-no-artwork');
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .sonaar-Artwort-box').hide();
-                                } else {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer').removeClass('sonaar-no-artwork');
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .sonaar-Artwort-box').show();
-                                }
                             }
                         }),
                         (player_layout != 'skin_button') && createElement(ToggleControl, {
@@ -1641,12 +1685,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ move_playlist_below_artwork: move_playlist_artwork });
-
-                                if (move_playlist_artwork) {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .sonaar-grid').css('flex-direction', 'column');
-                                } else {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .sonaar-grid').css('flex-direction', 'row');
-                                }
                             }
                         }),
                         (!playlist_hide_artwork) && createElement('hr', {}),
@@ -1694,7 +1732,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ track_artwork_size: value });
-                                jQuery('#block-' + clientId + ' .iron-audioplayer .playlist li .sr_track_cover').css({'width': value + 'px', 'width': value + 'px'});
                             }
                         }),
 
@@ -1730,7 +1767,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ playlist_width: value });
-                                jQuery('#block-' + clientId + ' .iron-audioplayer .playlist, #block-' + clientId + ' .iron-audioplayer .sonaar-Artwort-box, #block-' + clientId + ' .iron-audioplayer .buttons-block').css('width', value + '%');
                             }
                         }),
                         (player_layout == 'skin_float_tracklist') && playlist_width < 91 && createElement(RichText.Content, {
@@ -1748,8 +1784,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ playlist_justify: value });
-                                jQuery('#block-' + clientId + ' .iron-audioplayer .sonaar-grid').css('justify-content', value);
-                                jQuery('#block-' + clientId + ' .sr_playlist_below_artwork_auto .iron-audioplayer .sonaar-grid').css('align-items', value);
                             }
                         }),
                         createElement(RangeControl, {
@@ -1764,7 +1798,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ playlist_margin: value });
-                                jQuery('#block-' + clientId + ' .iron-audioplayer .playlist').css('margin', value + 'px');
                             }
                         }),
                         createElement(RangeControl, {
@@ -1779,7 +1812,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ tracklist_margin: value });
-                                jQuery('#block-' + clientId + ' .iron-audioplayer .srp_tracklist').css('margin', value + 'px');
                             }
                         }),
 
@@ -1817,8 +1849,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ title_html_tag_playlist: value });
-                                var thisClass = jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .sr_it-playlist-title').attr('class');
-                                jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .sr_it-playlist-title').replaceWith('<' + value + ' class="' + thisClass + '">' + jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .sr_it-playlist-title').html() + '</' + value + '>');
                             }
                         }),
                         (player_layout == 'skin_float_tracklist') && (!title_btshow) && createElement(RichText.Content, {
@@ -1837,11 +1867,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ title_color: value });
-                                if (value != '' && value != undefined) {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .sr_it-playlist-title').css('color', value);
-                                } else {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .sr_it-playlist-title').css('color', 'inherit');
-                                }
                             }
                         }),
                         (player_layout == 'skin_float_tracklist') && (!title_btshow) && createElement(RichText.Content, {
@@ -1874,12 +1899,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ title_fontsize: value });
-
-                                if (value > 0) {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .sr_it-playlist-title').css('font-size', value + 'px');
-                                } else {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .sr_it-playlist-title').css('font-size', '2em');
-                                }
                             }
                         }),
                         (player_layout == 'skin_float_tracklist') && (!title_btshow) && createElement(RangeControl, {
@@ -1914,14 +1933,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ subtitle_btshow: hide_subtitle });
-
-                                if (hide_subtitle) {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .sr_it-playlist-release-date').hide();
-                                    jQuery('#block-' + clientId + ' .sonaar_audioplayer_block_cover').addClass('sr_player_subtitle_hide');
-                                } else {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .sr_it-playlist-release-date').show();
-                                    jQuery('#block-' + clientId + ' .sonaar_audioplayer_block_cover').removeClass('sr_player_subtitle_hide');
-                                }
                             }
                         }),
                         (player_layout == 'skin_float_tracklist') && (!subtitle_btshow) && createElement(RangeControl, {
@@ -2038,11 +2049,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ track_separator_color: value });
-                                if (value != '' && value != undefined) {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist li').css('border-bottom', 'solid 1px ' + value);
-                                } else {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist li').css('border-bottom', 'none');
-                                }
                             }
                         }),
                         createElement('hr', {}),
@@ -2073,8 +2079,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ tracklist_spacing: value });
-
-                                jQuery('#block-' + clientId + ' .iron-audioplayer .playlist li').css({ 'padding-top': value + 'px', 'padding-bottom': value + 'px' });
                             }
                         }),
 
@@ -2102,12 +2106,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ hide_time_duration: hide_time });
-
-                                if (hide_time) {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .tracklist-item-time').hide();
-                                } else {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .tracklist-item-time').show();
-                                }
                             }
                         }),
                         (!hide_time_duration) && createElement(RangeControl, {
@@ -2122,12 +2120,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ duration_fontsize: value });
-
-                                if (value > 0) {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .tracklist-item-time').css('font-size', value + 'px');
-                                } else {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .tracklist-item-time').css('font-size', '');
-                                }
                             }
                         }),
                         (!hide_time_duration) && createElement(RichText.Content, {
@@ -2146,12 +2138,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ duration_color: value });
-
-                                if (value != '' && value != undefined) {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .tracklist-item-time').css('color', value);
-                                } else {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .tracklist-item-time').css('color', 'inherit');
-                                }
                             }
                         }),
 
@@ -2294,15 +2280,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ hide_number_btshow: hide_track_num });
-                                if (hide_track_num) {
-                                    jQuery('#block-' + clientId + ' .sonaar_audioplayer_block_cover').addClass('sr_player_track_num_hide');
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .track-number .number').hide();
-                                    // jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .track-number').css('padding-right', '0' );
-                                } else {
-                                    jQuery('#block-' + clientId + ' .sonaar_audioplayer_block_cover').removeClass('sr_player_track_num_hide');
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .track-number .number').show();
-                                    // jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .track-number').css('padding-right', '10px' );
-                                }
                             }
                         }),
 
@@ -2318,12 +2295,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ play_pause_bt_show: hide_play_pause });
-
-                                if (hide_play_pause) {
-                                    jQuery('#block-' + clientId + ' .sonaar_audioplayer_block_cover').addClass('sr_play_pause_bt_hide');
-                                } else {
-                                    jQuery('#block-' + clientId + ' .sonaar_audioplayer_block_cover').removeClass('sr_play_pause_bt_hide');
-                                }
                             }
                         }),
                         (!play_pause_bt_show) && createElement(RichText.Content, {
@@ -2358,10 +2329,6 @@
                                 is_style_loaded;
                                 setAttributes({ tracklist_controls_size: value });
                                 style_changes();
-
-                               // var paddingValue = value + 12;
-                               // jQuery('#block-' + clientId + ' ..sr-playlist-item .sricon-play:before').css({ 'font-size': value + 'px' });
-                              // // jQuery('#block-' + clientId + ' .iron-audioplayer .track-number').css('padding-left', paddingValue + 'px');
                             }
                         }),
 
@@ -2381,12 +2348,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ hide_track_market: track_market });
-
-                                if (track_market) {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .store-list').hide();
-                                } else {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .store-list').show();
-                                }
                             }
                         }),
                         createElement(SelectControl, {
@@ -2410,12 +2371,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ view_icons_alltime: icons_alltime });
-
-                                if (icons_alltime) {
-                                    jQuery('#block-' + clientId + ' .sonaar_audioplayer_block_cover').addClass('sr_track_inline_cta_bt__yes');
-                                } else {
-                                    jQuery('#block-' + clientId + ' .sonaar_audioplayer_block_cover').removeClass('sr_track_inline_cta_bt__yes');
-                                }
                             }
                         }),
                         (!hide_track_market) && (!view_icons_alltime) && createElement(RichText.Content, {
@@ -2434,12 +2389,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ popover_icons_store: value });
-
-                                if (value != '' && value != undefined) {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .song-store-list-menu .fa-ellipsis-v, #block-' + clientId + ' .iron-audioplayer .store-list .srp_ellipsis').css('color', value);
-                                } else {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .song-store-list-menu .fa-ellipsis-v, #block-' + clientId + ' .iron-audioplayer .store-list .srp_ellipsis').css('color', 'inherit');
-                                }
                             }
                         }),
                         (!hide_track_market) && createElement(RichText.Content, {
@@ -2473,8 +2422,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ tracklist_icons_spacing: value });
-
-                                jQuery('#block-' + clientId + ' .iron-audioplayer .playlist .store-list .song-store-list-container').css('column-gap', value + 'px');
                             }
                         }),
                         (!hide_track_market) && createElement(RangeControl, {
@@ -2504,12 +2451,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ wc_bt_show: wc_btn_show });
-
-                                if (!wc_btn_show) {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist a.song-store.sr_store_wc_round_bt').hide();
-                                } else {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist a.song-store.sr_store_wc_round_bt').show();
-                                }
                             }
                         }),
                         (wc_enable) && (wc_bt_show) && (!hide_track_market) && createElement(ColorPalette, {
@@ -2523,12 +2464,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ wc_icons_color: value });
-
-                                if (value != '' && value != undefined) {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist a.song-store.sr_store_wc_round_bt').css('color', value);
-                                } else {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist a.song-store.sr_store_wc_round_bt').css('color', 'inherit');
-                                }
                             }
                         }),
                         (wc_enable) && (wc_bt_show) && (!hide_track_market) && createElement(ColorPalette, {
@@ -2542,12 +2477,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ wc_icons_bg_color: value });
-
-                                if (value != '' && value != undefined) {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist a.song-store.sr_store_wc_round_bt').css('background-color', value);
-                                } else {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .playlist a.song-store.sr_store_wc_round_bt').css('background-color', 'inherit');
-                                }
                             }
                         }),
                     ),
@@ -2660,12 +2589,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ store_title_btshow: store_title_hide });
-
-                                if (store_title_hide) {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .available-now').hide();
-                                } else {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .available-now').show();
-                                }
                             }
                         }),
                         (!store_title_btshow) && createElement(TextControl, {
@@ -2678,8 +2601,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ store_title_text: value });
-
-                                jQuery('#block-' + clientId + ' .iron-audioplayer .available-now').html(value);
                             }
                         }),
                         (!store_title_btshow) && createElement(RangeControl, {
@@ -2694,12 +2615,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ store_title_fontsize: value });
-
-                                if (value > 0) {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .available-now').css('font-size', value + 'px');
-                                } else {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .available-now').css('font-size', '16px');
-                                }
                             }
                         }),
                         (!store_title_btshow) && createElement(RichText.Content, {
@@ -2718,12 +2633,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ store_title_color: value });
-
-                                if (value != '' && value != undefined) {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .available-now').css('color', value);
-                                } else {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .available-now').css('color', 'inherit');
-                                }
                             }
                         }),
                         (!store_title_btshow) && createElement(RichText.Content, {
@@ -2741,8 +2650,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ store_title_align: value });
-
-                                jQuery('#block-' + clientId + ' .iron-audioplayer .ctnButton-block').css({ 'justify-content': value, 'align-items': value });
                             }
                         }),
 
@@ -2762,8 +2669,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ album_stores_align: value });
-
-                                jQuery('#block-' + clientId + ' .iron-audioplayer .buttons-block').css({ 'justify-content': value, 'align-items': value });
                             }
                         }),
                         createElement(RangeControl, {
@@ -2778,12 +2683,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ store_button_fontsize: value });
-
-                                if (value > 0) {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer a.button').css('font-size', value + 'px');
-                                } else {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer a.button').css('font-size', '');
-                                }
                             }
                         }),
                         createElement(RichText.Content, {
@@ -2879,8 +2778,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ button_border_style: value });
-
-                                jQuery('#block-' + clientId + ' .buttons-block .store-list li .button').css('border-style', value);
                             }
                         }),
                         (button_border_style != 'none') && createElement(RangeControl, {
@@ -2895,8 +2792,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ button_border_width: value });
-
-                                jQuery('#block-' + clientId + ' .buttons-block .store-list li .button').css('border-width', value + 'px');
                             }
                         }),
                         (button_border_style != 'none') && createElement(ColorPalette, {
@@ -2944,8 +2839,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ button_border_radius: value });
-
-                                jQuery('#block-' + clientId + ' .store-list .button').css('border-radius', value + 'px');
                             }
                         }),
 
@@ -2960,12 +2853,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ store_icon_show: store_icon_hide });
-
-                                if (store_icon_hide) {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .store-list .button i').hide();
-                                } else {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .store-list .button i').show();
-                                }
                             }
                         }),
                         (!store_icon_show) && createElement(RangeControl, {
@@ -2980,12 +2867,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ icon_font_size: value });
-
-                                if (value > 0) {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .buttons-block .store-list i').css('font-size', value + 'px');
-                                } else {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .buttons-block .store-list i').css('font-size', '');
-                                }
                             }
                         }),
                         (!store_icon_show) && createElement(RangeControl, {
@@ -3000,8 +2881,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ icon_indent: value });
-
-                                jQuery('#block-' + clientId + ' .iron-audioplayer .buttons-block .store-list i').css('margin-right', value + 'px');
                             }
                         }),
                         (!store_icon_show) && createElement(RangeControl, {
@@ -3016,7 +2895,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ album_stores_padding: value });
-                                jQuery('#block-' + clientId + ' .iron-audioplayer.show-playlist .ctnButton-block').css('margin', value + 'px');
                             }
                         }),
                     ),
@@ -3132,9 +3010,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ title_html_tag_soundwave: value });
-
-                                var thisClass = jQuery('#block-' + clientId + ' .iron-audioplayer .track-title').attr('class');
-                                jQuery('#block-' + clientId + ' .iron-audioplayer .track-title').replaceWith('<' + value + ' class="' + thisClass + '">' + jQuery('#block-' + clientId + ' .iron-audioplayer .track-title').html() + '</' + value + '>');
                             }
                         }),
 
@@ -3157,15 +3032,6 @@
                                 style_changes();
                             }
                         }),
-
-
-
-
-
-
-
-
-
 
 
                         (player_layout != 'skin_button') && createElement(ToggleControl, {
@@ -3252,12 +3118,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ progressbar_inline: progressbar_inline_show });
-
-                                if (progressbar_inline_show) {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .album-player .player').addClass('sr_player__inline');
-                                } else {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .album-player .player').removeClass('sr_player__inline');
-                                }
                             }
                         }),
                         (!soundwave_show) && createElement(RichText.Content, {
@@ -3315,16 +3175,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ duration_soundwave_show: duration_soundwave_hide });
-
-                                if (duration_soundwave_hide) {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .currentTime').hide();
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .totalTime').hide();
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .sr_progressbar > .wave').css({ 'margin-left': 0, 'margin-right': 0 });
-                                } else {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .currentTime').show();
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .totalTime').show();
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .sr_progressbar > .wave').css({ 'margin-left': '10px', 'margin-right': '10px' });
-                                }
                             }
                         }),
                         (!soundwave_show) && (!duration_soundwave_show) && createElement(RangeControl, {
@@ -3339,12 +3189,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ duration_soundwave_fontsize: value });
-
-                                if (value > 0) {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .player').css('font-size', value + 'px');
-                                } else {
-                                    jQuery('#block-' + clientId + ' .iron-audioplayer .player').css('font-size', '12px');
-                                }
                             }
                         }),
                         (!soundwave_show) && (!duration_soundwave_show) && createElement(RichText.Content, {
@@ -3690,7 +3534,6 @@
                                 }
                                 is_style_loaded;
                                 setAttributes({ audio_player_controls_spacebefore: value });
-                                jQuery('#block-' + clientId + ' .iron-audioplayer .album-player .control').css({ 'top': value + 'px', 'position': 'relative' });
                             }
                         }),
 

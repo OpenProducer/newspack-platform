@@ -3,9 +3,9 @@ Contributors: sonaar, eduplessis
 Tags: MP3, music player, podcast player, audio player, woocommerce
 Donate link: https://sonaar.io
 Requires at least: 4.7
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 5.6
-Stable tag: 5.13.1
+Stable tag: 5.14.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -342,6 +342,19 @@ Yes, with the pro version, you can click on the 'Add to Favorite' icon to store 
 10. Shortcode Builder: Create, Import and Customize audio players using shortcodes in real-time
 
 == Changelog ==
+= 5.14.2 =
+- Fix: Audio Player loading issue in certain configurations
+
+== Changelog ==
+= 5.14.1 =
+- Fix: Multiple selected player post are now correctly loaded with WP 7.1
+
+= 5.14 =
+- Fix: Download AskEmailClick button now works correctly in the Mini Player
+- Fix: License PDF generation with the Gutenberg Checkout Block
+- Fix: Cross-Site Scripting (XSS) vulnerability reported by Patchstack
+- Fix: Audio Player widget issue in the Gutenberg editor introduced with WordPress 7.1
+
 = 5.13.1 =
 - Hotfix: Share button issue when playlist is set to reverse mode.
 - Hotfix: Favorite button issue when playlist is set to reverse mode.

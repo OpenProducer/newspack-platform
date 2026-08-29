@@ -24,11 +24,15 @@ class Sonaar_Block {
 		$this->version = SRMP3_VERSION;
 		add_action( 'init', array( $this, 'sonaar_block_editor_style_script' ),12 );
 
-        add_action( 'enqueue_block_editor_assets', array($this, 'sonaar_block_editor_scripts') );
+        add_action( 'enqueue_block_assets', array( $this, 'sonaar_block_editor_scripts' ) );
 	}
     
     function sonaar_block_editor_scripts() {
 
+	    if ( ! is_admin() ) {
+        	return;
+    	}
+	
 		$sonaar_mp3player = 'sonaar-music-mp3player';
 
         // Register Script for elementor

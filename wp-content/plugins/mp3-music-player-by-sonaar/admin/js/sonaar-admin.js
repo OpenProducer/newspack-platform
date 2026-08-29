@@ -1168,23 +1168,46 @@
 		//Used for Audio Previews AND Tracks Indexation
 		if($('.srmp3-generate-bt').length){
 			const url = new URL(window.location.href);
+			
 			var posts_in = url.searchParams.get("posts_in");
-			//seperate the post ids with commas
-			if(posts_in){
-				//count how many posts_in are set
-				var posts_in_count = posts_in.split(',').length;
-				posts_in = posts_in.replace(/,/g, ', ');
-				$('#audiopreview-settings-title').after(
-					'<div style="width: fit-content;" class="notice notice-warning is-dismissible audiopreview_posts_in_notice">' +
-					'<h2>' +
-					'<strong>Action required!</strong> ' + posts_in_count + ' posts are ready to have their audio previews generated.' +
-					'</h2>' +
-					'<p>Review the settings below and click <strong>Generate</strong> Button.</p>' +
-					'<p style="font-size:10px;">Posts: ' + posts_in + '</p>' +
-					'</div>'
-				);
-				$('#srmp3_indexTracks_status').text('We will proceed with ' + posts_in_count + ' posts.');
+
+			if (posts_in) {
+
+				// Only allow comma-separated numeric post IDs.
+				var postIds = posts_in.split(',').filter(function(id) {
+					return /^\d+$/.test(id.trim());
+				});
+
+				if (postIds.length) {
+
+					var posts_in_count = postIds.length;
+					var postsList = postIds.join(', ');
+
+					var $notice = $(
+						'<div style="width: fit-content;" class="notice notice-warning is-dismissible audiopreview_posts_in_notice">' +
+						'<h2><strong>Action required!</strong></h2>' +
+						'<p>Review the settings below and click <strong>Generate</strong> Button.</p>' +
+						'<p class="srmp3-posts-list" style="font-size:10px;"></p>' +
+						'</div>'
+					);
+
+					// Use .text() so the value can never be interpreted as HTML.
+					$notice.find('.srmp3-posts-list').text('Posts: ' + postsList);
+
+					$notice.find('h2').append(
+						document.createTextNode(
+							' ' + posts_in_count + ' posts are ready to have their audio previews generated.'
+						)
+					);
+
+					$('#audiopreview-settings-title').after($notice);
+
+					$('#srmp3_indexTracks_status').text(
+						'We will proceed with ' + posts_in_count + ' posts.'
+					);
+				}
 			}
+			
 			setTimeout(function() {
 				// Delegate event handling for inputs, checkboxes, and datepicker
 				$(document).on('input', '.cmb-row input[type="text"], .cmb-row select', handleInputChange);
