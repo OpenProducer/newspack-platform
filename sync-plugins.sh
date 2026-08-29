@@ -516,8 +516,68 @@ echo "== Summary =="
 echo "Environment: ${SITE_ENV}"
 echo "Commit: ${COMMIT_MSG}"
 echo "Mode restored to Git."
-echo "Note: this commits to Pantheon's internal git for ${ENV} only."
-echo "Sync to the 'github' remote separately if GitHub should reflect this update (see open question in architecture doc)."
+
+# ---- sync the new commit to GitHub -----------------------------------------
+# This commit lives in Pantheon's own internal git for ${ENV} -- it never
+# touched this local checkout (unlike sync-themes.sh, which builds its commit
+# locally via rsync + `git commit` and can push directly). To reach GitHub,
+# pull the Pantheon commit into the matching local branch first, then push.
+# Resolved 2026-08-28 (previously an open question in docs/ARCHITECTURE.md):
+# this used to require a separate manual sync, which is why GitHub kept
+# drifting behind Pantheon.
+GH_BRANCH=""
+case "$ENV" in
+  dev) GH_BRANCH="master" ;;
+  radio) GH_BRANCH="radio" ;;
+  podcast) GH_BRANCH="podcast" ;;
+esac
+
+if [[ -n "$GH_BRANCH" ]]; then
+  echo ""
+  echo "Syncing this commit to GitHub (branch: ${GH_BRANCH})..."
+  GH_REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+  if [[ -z "$GH_REPO_ROOT" ]]; then
+    echo "WARN: not running from inside a git checkout -- skipping GitHub sync."
+    echo "Pantheon commit is safe. Sync manually: git checkout ${GH_BRANCH} && git pull origin ${GH_BRANCH} && git push github ${GH_BRANCH}"
+  elif [[ -n "$(git -C "$GH_REPO_ROOT" status --porcelain)" ]]; then
+    echo "WARN: local checkout has uncommitted changes -- skipping GitHub sync to avoid disrupting them."
+    echo "Pantheon commit is safe. Sync manually: cd ${GH_REPO_ROOT} && git checkout ${GH_BRANCH} && git pull origin ${GH_BRANCH} && git push github ${GH_BRANCH}"
+  else
+    GH_ORIGINAL_BRANCH=$(git -C "$GH_REPO_ROOT" rev-parse --abbrev-ref HEAD)
+    GH_SYNC_OK=true
+    git -C "$GH_REPO_ROOT" checkout "$GH_BRANCH" 2>&1 || GH_SYNC_OK=false
+    if [[ "$GH_SYNC_OK" == true ]]; then
+      git -C "$GH_REPO_ROOT" fetch origin "$GH_BRANCH" 2>&1 || GH_SYNC_OK=false
+    fi
+    GH_AHEAD=0
+    if [[ "$GH_SYNC_OK" == true ]]; then
+      GH_AHEAD=$(git -C "$GH_REPO_ROOT" rev-list --count "origin/${GH_BRANCH}..${GH_BRANCH}" 2>/dev/null || echo 0)
+    fi
+    if [[ "$GH_SYNC_OK" == true && "$GH_AHEAD" -gt 0 ]]; then
+      echo "WARN: local '${GH_BRANCH}' has ${GH_AHEAD} commit(s) not on origin -- skipping push to avoid pushing unexpected local commits to GitHub."
+      echo "Check manually: git -C ${GH_REPO_ROOT} log origin/${GH_BRANCH}..${GH_BRANCH}"
+      GH_SYNC_OK=false
+    fi
+    if [[ "$GH_SYNC_OK" == true ]]; then
+      git -C "$GH_REPO_ROOT" merge --ff-only "origin/${GH_BRANCH}" 2>&1 || GH_SYNC_OK=false
+    fi
+    if [[ "$GH_SYNC_OK" == true ]]; then
+      if git -C "$GH_REPO_ROOT" push github "$GH_BRANCH" 2>&1; then
+        echo "Pushed to github (${GH_BRANCH})."
+      else
+        echo "WARN: push to github failed. Pantheon commit is safe -- retry manually: git -C ${GH_REPO_ROOT} push github ${GH_BRANCH}"
+      fi
+    else
+      echo "WARN: could not sync local '${GH_BRANCH}' from origin. Pantheon commit is safe, but GitHub sync needs manual attention."
+      echo "Check: git -C ${GH_REPO_ROOT} status"
+    fi
+    if [[ -n "$GH_ORIGINAL_BRANCH" && "$GH_ORIGINAL_BRANCH" != "$GH_BRANCH" ]]; then
+      git -C "$GH_REPO_ROOT" checkout "$GH_ORIGINAL_BRANCH" 2>&1 || echo "WARN: could not restore original local branch '${GH_ORIGINAL_BRANCH}'."
+    fi
+  fi
+else
+  echo "Note: no local branch mapping for environment '${ENV}' -- skipping GitHub sync."
+fi
 
 if [[ "$ENV" == "dev" ]]; then
   echo ""
