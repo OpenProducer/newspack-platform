@@ -2918,7 +2918,7 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   var import_jsx_runtime10 = __toESM(require_jsx_runtime(), 1);
   var ITEM_ID_PREFIX = "command-palette-item-";
   var inputLabel = (0, import_i18n.__)("Search commands and settings");
-  var CATEGORY_ICONS = {
+  var CATEGORY_FALLBACK_ICONS = {
     view: arrow_right_default
   };
   var CATEGORY_LABELS = {
@@ -2934,6 +2934,7 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
   function CommandItem({ command, search, category, valuePrefix }) {
     const { close: close2 } = (0, import_data5.useDispatch)(store);
     const commandCategory = category ?? command.category;
+    const icon = command.icon ?? CATEGORY_FALLBACK_ICONS[commandCategory];
     const label = command.searchLabel ?? command.label;
     const value = valuePrefix ? `${valuePrefix}${command.name}` : label;
     return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
@@ -2951,10 +2952,10 @@ For more information, see https://radix-ui.com/primitives/docs/components/${titl
           {
             alignment: "left",
             className: clsx_default("commands-command-menu__item", {
-              "has-icon": CATEGORY_ICONS[commandCategory] || command.icon
+              "has-icon": !!icon
             }),
             children: [
-              CATEGORY_ICONS[commandCategory] ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(icon_default, { icon: CATEGORY_ICONS[commandCategory] }) : isValidIcon(command.icon) && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(icon_default, { icon: command.icon }),
+              isValidIcon(icon) && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(icon_default, { icon }),
               /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { className: "commands-command-menu__item-label", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                 import_components.TextHighlight,
                 {

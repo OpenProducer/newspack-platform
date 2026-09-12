@@ -70,6 +70,7 @@ var require_private_apis = __commonJS({
 var import_data4 = __toESM(require_data());
 var import_core_data2 = __toESM(require_core_data());
 var import_i18n = __toESM(require_i18n());
+import { notFound } from "@wordpress/route";
 
 // packages/views/build-module/use-view.mjs
 var import_element = __toESM(require_element(), 1);
@@ -215,22 +216,7 @@ async function ensureView(area, search) {
   });
 }
 function viewToQuery(view) {
-  const result = {};
-  if (void 0 !== view.perPage) {
-    result.per_page = view.perPage;
-  }
-  if (void 0 !== view.page) {
-    result.page = view.page;
-  }
-  if (![void 0, ""].includes(view.search)) {
-    result.search = view.search;
-  }
-  if (void 0 !== view.sort?.field) {
-    result.orderby = view.sort.field;
-  }
-  if (void 0 !== view.sort?.direction) {
-    result.order = view.sort.direction;
-  }
+  const result = { per_page: -1 };
   const areaFilter = view.filters?.find(
     (filter) => filter.field === "area"
   );
@@ -242,6 +228,13 @@ function viewToQuery(view) {
 
 // routes/template-part-list/route.ts
 var route = {
+  async beforeLoad() {
+    const theme = await (0, import_data4.resolveSelect)(import_core_data2.store).getCurrentTheme();
+    const supports = theme?.theme_supports;
+    if (!supports?.["block-templates"] && !supports?.["block-template-parts"]) {
+      throw notFound();
+    }
+  },
   title: () => (0, import_i18n.__)("Template Parts"),
   async canvas(context) {
     const { params, search } = context;
@@ -257,27 +250,21 @@ var route = {
       return {
         postType: "wp_template_part",
         postId,
-        isPreview: true,
-        editLink: `/types/wp_template_part/edit/${encodeURIComponent(
-          postId
-        )}`
+        isPreview: true
       };
     }
     const query = viewToQuery(view);
     const posts = await (0, import_data4.resolveSelect)(import_core_data2.store).getEntityRecords(
       "postType",
       "wp_template_part",
-      { ...query, per_page: 1 }
+      query
     );
     if (posts && posts.length > 0) {
       const postId = posts[0].id.toString();
       return {
         postType: "wp_template_part",
         postId,
-        isPreview: true,
-        editLink: `/types/wp_template_part/edit/${encodeURIComponent(
-          postId
-        )}`
+        isPreview: true
       };
     }
     return void 0;

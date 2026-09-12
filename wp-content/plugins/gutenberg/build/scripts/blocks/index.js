@@ -1562,6 +1562,7 @@ var wp;
     button: ".wp-element-button, .wp-block-button__link",
     caption: ".wp-element-caption, .wp-block-audio figcaption, .wp-block-embed figcaption, .wp-block-gallery figcaption, .wp-block-image figcaption, .wp-block-table figcaption, .wp-block-video figcaption",
     cite: "cite",
+    label: "label",
     select: "select",
     textInput: "textarea, input:where([type=email],[type=number],[type=password],[type=search],[type=tel],[type=text],[type=url])"
   };
@@ -2472,6 +2473,7 @@ var wp;
     getAllBlockBindingsSources: () => getAllBlockBindingsSources,
     getBlockBindingsSource: () => getBlockBindingsSource2,
     getBlockBindingsSourceFieldsList: () => getBlockBindingsSourceFieldsList,
+    getBlockKeyboardShortcuts: () => getBlockKeyboardShortcuts,
     getBootstrappedBlockType: () => getBootstrappedBlockType,
     getSupportedStyles: () => getSupportedStyles,
     getUnprocessedBlockTypes: () => getUnprocessedBlockTypes,
@@ -2606,6 +2608,54 @@ var wp;
       },
       (state, source, blockContext) => [source.getFieldsList, source.usesContext, blockContext]
     )
+  );
+  var getBlockKeyboardShortcuts = (0, import_data3.createSelector)(
+    (state) => {
+      const shortcuts = [];
+      for (const blockName of Object.keys(state.blockTypes)) {
+        for (const variation of state.blockVariations[blockName] ?? []) {
+          if (!variation.shortcut) {
+            continue;
+          }
+          shortcuts.push({
+            ...variation.shortcut,
+            targetBlockName: blockName,
+            blockNames: [blockName],
+            variationName: variation.name
+          });
+        }
+        const transforms = state.blockTypes[blockName]?.transforms;
+        for (const transform of transforms?.to ?? []) {
+          const targetBlockName = transform.blocks?.[0];
+          if (transform.type !== "block" || !targetBlockName) {
+            continue;
+          }
+          for (const shortcut of transform.shortcuts ?? []) {
+            shortcuts.push({
+              ...shortcut,
+              targetBlockName,
+              blockNames: [blockName],
+              variationName: shortcut.variationName ?? transform.variationName
+            });
+          }
+        }
+        for (const transform of transforms?.from ?? []) {
+          if (transform.type !== "block" || !transform.blocks?.length) {
+            continue;
+          }
+          for (const shortcut of transform.shortcuts ?? []) {
+            shortcuts.push({
+              ...shortcut,
+              targetBlockName: blockName,
+              blockNames: transform.blocks,
+              variationName: shortcut.variationName ?? transform.variationName
+            });
+          }
+        }
+      }
+      return shortcuts;
+    },
+    (state) => [state.blockTypes, state.blockVariations]
   );
   var hasContentRoleAttribute = (state, blockTypeName) => {
     const blockType = getBlockType2(state, blockTypeName);
@@ -2949,7 +2999,7 @@ var wp;
       (0, import_warning2.default)('The "edit" property must be a valid component.');
       return;
     }
-    if (LEGACY_CATEGORY_MAPPING.hasOwnProperty(settings.category)) {
+    if (typeof settings.category === "string" && LEGACY_CATEGORY_MAPPING.hasOwnProperty(settings.category)) {
       settings.category = LEGACY_CATEGORY_MAPPING[settings.category];
     }
     if ("category" in settings && !select3.getCategories().some(
@@ -2968,8 +3018,9 @@ var wp;
       (0, import_warning2.default)("Block titles must be strings.");
       return;
     }
-    settings.icon = normalizeIconObject(settings.icon);
-    if (!isValidIcon(settings.icon.src)) {
+    const icon = normalizeIconObject(settings.icon);
+    settings.icon = icon;
+    if (!isValidIcon(icon.src)) {
       (0, import_warning2.default)(
         "The icon passed is invalid. The icon should be a string, an element, a function, or an object following the specifications documented in https://developer.wordpress.org/block-editor/developers/block-api/block-registration/#icon-optional"
       );

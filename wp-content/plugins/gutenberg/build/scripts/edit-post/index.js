@@ -215,9 +215,9 @@ var wp;
           return x === y && (0 !== x || 1 / x === 1 / y) || x !== x && y !== y;
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React48 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore2 = shim.useSyncExternalStore, useRef23 = React48.useRef, useEffect18 = React48.useEffect, useMemo17 = React48.useMemo, useDebugValue2 = React48.useDebugValue;
+        var React48 = require_react(), shim = require_shim(), objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore3 = shim.useSyncExternalStore, useRef22 = React48.useRef, useEffect18 = React48.useEffect, useMemo17 = React48.useMemo, useDebugValue2 = React48.useDebugValue;
         exports.useSyncExternalStoreWithSelector = function(subscribe, getSnapshot, getServerSnapshot, selector, isEqual) {
-          var instRef = useRef23(null);
+          var instRef = useRef22(null);
           if (null === instRef.current) {
             var inst = { hasValue: false, value: null };
             instRef.current = inst;
@@ -257,7 +257,7 @@ var wp;
             },
             [getSnapshot, getServerSnapshot, selector, isEqual]
           );
-          var value = useSyncExternalStore2(subscribe, instRef[0], instRef[1]);
+          var value = useSyncExternalStore3(subscribe, instRef[0], instRef[1]);
           useEffect18(
             function() {
               inst.hasValue = true;
@@ -409,11 +409,11 @@ var wp;
     store: () => store
   });
   var import_blocks2 = __toESM(require_blocks(), 1);
-  var import_block_library2 = __toESM(require_block_library(), 1);
+  var import_block_library = __toESM(require_block_library(), 1);
   var import_deprecated4 = __toESM(require_deprecated(), 1);
   var import_element30 = __toESM(require_element(), 1);
-  var import_data26 = __toESM(require_data(), 1);
-  var import_preferences11 = __toESM(require_preferences(), 1);
+  var import_data27 = __toESM(require_data(), 1);
+  var import_preferences12 = __toESM(require_preferences(), 1);
   var import_widgets = __toESM(require_widgets(), 1);
   var import_editor20 = __toESM(require_editor(), 1);
   var import_core_data10 = __toESM(require_core_data(), 1);
@@ -485,12 +485,6 @@ var wp;
     }
   }
 
-  // node_modules/@base-ui/utils/useIsoLayoutEffect.mjs
-  var React3 = __toESM(require_react(), 1);
-  var noop = () => {
-  };
-  var useIsoLayoutEffect = typeof document !== "undefined" ? React3.useLayoutEffect : noop;
-
   // node_modules/@base-ui/utils/warn.mjs
   var set;
   if (true) {
@@ -506,17 +500,14 @@ var wp;
     }
   }
 
-  // node_modules/@base-ui/react/internals/direction-context/DirectionContext.mjs
-  var React4 = __toESM(require_react(), 1);
-  var DirectionContext = /* @__PURE__ */ React4.createContext(void 0);
-  if (true) DirectionContext.displayName = "DirectionContext";
-  function useDirection() {
-    const context = React4.useContext(DirectionContext);
-    return context?.direction ?? "ltr";
-  }
+  // node_modules/@base-ui/utils/useIsoLayoutEffect.mjs
+  var React3 = __toESM(require_react(), 1);
+  var noop = () => {
+  };
+  var useIsoLayoutEffect = typeof document !== "undefined" ? React3.useLayoutEffect : noop;
 
   // node_modules/@base-ui/react/internals/useRenderElement.mjs
-  var React7 = __toESM(require_react(), 1);
+  var React6 = __toESM(require_react(), 1);
 
   // node_modules/@base-ui/utils/useMergedRefs.mjs
   function useMergedRefs(a, b, c, d) {
@@ -591,7 +582,7 @@ var wp;
                 if (typeof cleanupCallback === "function") {
                   cleanupCallback();
                 } else {
-                  ref(null);
+                  void ref(null);
                 }
                 break;
               }
@@ -608,18 +599,18 @@ var wp;
   }
 
   // node_modules/@base-ui/utils/getReactElementRef.mjs
-  var React6 = __toESM(require_react(), 1);
+  var React5 = __toESM(require_react(), 1);
 
   // node_modules/@base-ui/utils/reactVersion.mjs
-  var React5 = __toESM(require_react(), 1);
-  var majorVersion = parseInt(React5.version, 10);
+  var React4 = __toESM(require_react(), 1);
+  var majorVersion = parseInt(React4.version, 10);
   function isReactVersionAtLeast(reactVersionToCheck) {
     return majorVersion >= reactVersionToCheck;
   }
 
   // node_modules/@base-ui/utils/getReactElementRef.mjs
   function getReactElementRef(element) {
-    if (!/* @__PURE__ */ React6.isValidElement(element)) {
+    if (!/* @__PURE__ */ React5.isValidElement(element)) {
       return null;
     }
     const reactElement = element;
@@ -857,17 +848,17 @@ var wp;
       state = EMPTY_OBJECT,
       ref,
       props,
-      stateAttributesMapping: stateAttributesMapping3,
+      stateAttributesMapping,
       enabled = true
     } = params;
     const className = enabled ? resolveClassName(classNameProp, state) : void 0;
     const style = enabled ? resolveStyle(styleProp, state) : void 0;
-    const stateProps = enabled ? getStateAttributesProps(state, stateAttributesMapping3) : EMPTY_OBJECT;
+    const stateProps = enabled ? getStateAttributesProps(state, stateAttributesMapping) : EMPTY_OBJECT;
     const resolvedProps = enabled && props ? resolveRenderFunctionProps(props) : void 0;
     const outProps = enabled ? mergeObjects(stateProps, resolvedProps) ?? {} : EMPTY_OBJECT;
     if (typeof document !== "undefined") {
       if (!enabled) {
-        useMergedRefs(null, null);
+        void useMergedRefs(null, null);
       } else if (Array.isArray(ref)) {
         outProps.ref = useMergedRefsN([outProps.ref, getReactElementRef(renderProp), ...ref]);
       } else {
@@ -906,15 +897,15 @@ var wp;
       mergedProps.ref = props.ref;
       let newElement = render;
       if (newElement?.$$typeof === REACT_LAZY_TYPE) {
-        const children = React7.Children.toArray(render);
+        const children = React6.Children.toArray(render);
         newElement = children[0];
       }
       if (true) {
-        if (!/* @__PURE__ */ React7.isValidElement(newElement)) {
+        if (!/* @__PURE__ */ React6.isValidElement(newElement)) {
           throw new Error(["Base UI: The `render` prop was provided an invalid React element as `React.isValidElement(render)` is `false`.", "A valid React element must be provided to the `render` prop because it is cloned with props to replace the default element.", "https://base-ui.com/r/invalid-render-prop"].join("\n"));
         }
       }
-      return /* @__PURE__ */ React7.cloneElement(newElement, mergedProps);
+      return /* @__PURE__ */ React6.cloneElement(newElement, mergedProps);
     }
     if (element) {
       if (typeof element === "string") {
@@ -951,16 +942,16 @@ var wp;
         key: props.key
       });
     }
-    return /* @__PURE__ */ React7.createElement(Tag, props);
+    return /* @__PURE__ */ React6.createElement(Tag, props);
   }
 
   // node_modules/@base-ui/utils/useId.mjs
-  var React8 = __toESM(require_react(), 1);
+  var React7 = __toESM(require_react(), 1);
   var globalId = 0;
   function useGlobalId(idOverride, prefix = "mui") {
-    const [defaultId, setDefaultId] = React8.useState(idOverride);
+    const [defaultId, setDefaultId] = React7.useState(idOverride);
     const id = idOverride || defaultId;
-    React8.useEffect(() => {
+    React7.useEffect(() => {
       if (defaultId == null) {
         globalId += 1;
         setDefaultId(`${prefix}-${globalId}`);
@@ -1084,17 +1075,16 @@ var wp;
   }
 
   // node_modules/@base-ui/react/internals/useTransitionStatus.mjs
-  var React10 = __toESM(require_react(), 1);
+  var React9 = __toESM(require_react(), 1);
 
   // node_modules/@base-ui/utils/useOnMount.mjs
-  var React9 = __toESM(require_react(), 1);
-  var EMPTY = [];
+  var React8 = __toESM(require_react(), 1);
   function useOnMount(fn) {
-    React9.useEffect(fn, EMPTY);
+    React8.useEffect(fn, EMPTY_ARRAY);
   }
 
   // node_modules/@base-ui/utils/useAnimationFrame.mjs
-  var EMPTY2 = null;
+  var EMPTY = null;
   var LAST_RAF = globalThis.requestAnimationFrame;
   var Scheduler = class {
     /* This implementation uses an array as a backing data-structure for frame callbacks.
@@ -1154,21 +1144,21 @@ var wp;
     static cancel(id) {
       return scheduler.cancel(id);
     }
-    currentId = EMPTY2;
+    currentId = EMPTY;
     /**
      * Executes `fn` after `delay`, clearing any previously scheduled call.
      */
     request(fn) {
       this.cancel();
       this.currentId = scheduler.request(() => {
-        this.currentId = EMPTY2;
+        this.currentId = EMPTY;
         fn();
       });
     }
     cancel = () => {
-      if (this.currentId !== EMPTY2) {
+      if (this.currentId !== EMPTY) {
         scheduler.cancel(this.currentId);
-        this.currentId = EMPTY2;
+        this.currentId = EMPTY;
       }
     };
     disposeEffect = () => {
@@ -1183,8 +1173,8 @@ var wp;
 
   // node_modules/@base-ui/react/internals/useTransitionStatus.mjs
   function useTransitionStatus(open, enableIdleState = false, deferEndingState = false) {
-    const [transitionStatus, setTransitionStatus] = React10.useState(open && enableIdleState ? "idle" : void 0);
-    const [mounted, setMounted] = React10.useState(open);
+    const [transitionStatus, setTransitionStatus] = React9.useState(open && enableIdleState ? "idle" : void 0);
+    const [mounted, setMounted] = React9.useState(open);
     if (open && !mounted) {
       setMounted(true);
       setTransitionStatus("starting");
@@ -1245,10 +1235,10 @@ var wp;
     return TransitionStatusDataAttributes2;
   })({});
   var STARTING_HOOK = {
-    [TransitionStatusDataAttributes.startingStyle]: ""
+    "data-starting-style": ""
   };
   var ENDING_HOOK = {
-    [TransitionStatusDataAttributes.endingStyle]: ""
+    "data-ending-style": ""
   };
   var transitionStatusMapping = {
     transitionStatus(value) {
@@ -1418,6 +1408,11 @@ var wp;
     return win.parent && Object.getPrototypeOf(win.parent) ? win.frameElement : null;
   }
 
+  // node_modules/@base-ui/utils/owner.mjs
+  function ownerDocument(node) {
+    return node?.ownerDocument || document;
+  }
+
   // node_modules/@base-ui/utils/addEventListener.mjs
   function addEventListener(target, type, listener, options) {
     target.addEventListener(type, listener, options);
@@ -1444,13 +1439,8 @@ var wp;
     return latest;
   }
 
-  // node_modules/@base-ui/utils/owner.mjs
-  function ownerDocument(node) {
-    return node?.ownerDocument || document;
-  }
-
   // node_modules/@base-ui/react/internals/useOpenChangeComplete.mjs
-  var React11 = __toESM(require_react(), 1);
+  var React10 = __toESM(require_react(), 1);
 
   // node_modules/@base-ui/react/internals/useAnimationsFinished.mjs
   var ReactDOM = __toESM(require_react_dom(), 1);
@@ -1464,7 +1454,7 @@ var wp;
   }
 
   // node_modules/@base-ui/react/internals/useAnimationsFinished.mjs
-  function useAnimationsFinished(elementOrRef, waitForStartingStyleRemoved = false, treatAbortedAsFinished = true) {
+  function useAnimationsFinished(elementOrRef, waitForStartingStyleRemoved = false) {
     const frame = useAnimationFrame();
     return useStableCallback((fnToExecute, signal = null) => {
       frame.cancel();
@@ -1485,21 +1475,20 @@ var wp;
           if (!signal?.aborted) {
             done();
           }
-        }).catch(() => {
-          if (treatAbortedAsFinished) {
-            if (!signal?.aborted) {
-              done();
-            }
+        }, () => {
+          if (signal?.aborted) {
             return;
           }
           const currentAnimations = resolvedElement.getAnimations();
-          if (!signal?.aborted && currentAnimations.length > 0 && currentAnimations.some((animation) => animation.pending || animation.playState !== "finished")) {
+          if (currentAnimations.some((animation) => animation.pending || animation.playState !== "finished")) {
             exec();
+            return;
           }
+          done();
         });
       }
       if (waitForStartingStyleRemoved) {
-        const startingStyleAttribute = TransitionStatusDataAttributes.startingStyle;
+        const startingStyleAttribute = "data-starting-style";
         if (!resolvedElement.hasAttribute(startingStyleAttribute)) {
           frame.request(exec);
           return;
@@ -1532,8 +1521,8 @@ var wp;
       onComplete: onCompleteParam
     } = parameters;
     const onComplete = useStableCallback(onCompleteParam);
-    const runOnceAnimationsFinish = useAnimationsFinished(ref, open, false);
-    React11.useEffect(() => {
+    const runOnceAnimationsFinish = useAnimationsFinished(ref, open);
+    React10.useEffect(() => {
       if (!enabled) {
         return void 0;
       }
@@ -1543,16 +1532,6 @@ var wp;
         abortController.abort();
       };
     }, [enabled, open, onComplete, runOnceAnimationsFinish]);
-  }
-
-  // node_modules/@base-ui/utils/useOnFirstRender.mjs
-  var React12 = __toESM(require_react(), 1);
-  function useOnFirstRender(fn) {
-    const ref = React12.useRef(true);
-    if (ref.current) {
-      ref.current = false;
-      fn();
-    }
   }
 
   // node_modules/@base-ui/utils/platform/parts.mjs
@@ -1646,29 +1625,29 @@ var wp;
   var jsdom = /jsdom|happydom/.test(lowerUserAgent);
 
   // node_modules/@base-ui/utils/useTimeout.mjs
-  var EMPTY3 = 0;
+  var EMPTY2 = 0;
   var Timeout = class _Timeout {
     static create() {
       return new _Timeout();
     }
-    currentId = EMPTY3;
+    currentId = EMPTY2;
     /**
      * Executes `fn` after `delay`, clearing any previously scheduled call.
      */
     start(delay, fn) {
       this.clear();
       this.currentId = setTimeout(() => {
-        this.currentId = EMPTY3;
+        this.currentId = EMPTY2;
         fn();
       }, delay);
     }
     isStarted() {
-      return this.currentId !== EMPTY3;
+      return this.currentId !== EMPTY2;
     }
     clear = () => {
-      if (this.currentId !== EMPTY3) {
+      if (this.currentId !== EMPTY2) {
         clearTimeout(this.currentId);
-        this.currentId = EMPTY3;
+        this.currentId = EMPTY2;
       }
     };
     disposeEffect = () => {
@@ -1682,7 +1661,7 @@ var wp;
   }
 
   // node_modules/@base-ui/react/floating-ui-react/components/FloatingDelayGroup.mjs
-  var React13 = __toESM(require_react(), 1);
+  var React11 = __toESM(require_react(), 1);
 
   // node_modules/@base-ui/react/floating-ui-react/utils/event.mjs
   function isReactEvent(event) {
@@ -1816,7 +1795,7 @@ var wp;
 
   // node_modules/@base-ui/react/floating-ui-react/components/FloatingDelayGroup.mjs
   var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
-  var FloatingDelayGroupContext = /* @__PURE__ */ React13.createContext({
+  var FloatingDelayGroupContext = /* @__PURE__ */ React11.createContext({
     hasProvider: false,
     timeoutMs: 0,
     delayRef: {
@@ -1843,10 +1822,10 @@ var wp;
       delay,
       timeoutMs = 0
     } = props;
-    const delayRef = React13.useRef(delay);
-    const initialDelayRef = React13.useRef(delay);
-    const currentIdRef = React13.useRef(null);
-    const currentContextRef = React13.useRef(null);
+    const delayRef = React11.useRef(delay);
+    const initialDelayRef = React11.useRef(delay);
+    const currentIdRef = React11.useRef(null);
+    const currentContextRef = React11.useRef(null);
     const timeout = useTimeout();
     useIsoLayoutEffect(() => {
       initialDelayRef.current = delay;
@@ -1860,7 +1839,7 @@ var wp;
       };
     }, [delay, currentIdRef, delayRef, initialDelayRef]);
     return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FloatingDelayGroupContext.Provider, {
-      value: React13.useMemo(() => ({
+      value: React11.useMemo(() => ({
         hasProvider: true,
         delayRef,
         initialDelayRef,
@@ -1880,7 +1859,7 @@ var wp;
     } = options;
     const store2 = "rootStore" in context ? context.rootStore : context;
     const floatingId = store2.useState("floatingId");
-    const groupContext = React13.useContext(FloatingDelayGroupContext);
+    const groupContext = React11.useContext(FloatingDelayGroupContext);
     const {
       currentIdRef,
       delayRef,
@@ -1890,22 +1869,13 @@ var wp;
       hasProvider,
       timeout
     } = groupContext;
-    const [isInstantPhase, setIsInstantPhase] = React13.useState(false);
-    const openRef = React13.useRef(open);
-    const isUnmountedRef = React13.useRef(false);
+    const [isInstantPhase, setIsInstantPhase] = React11.useState(false);
+    const openRef = React11.useRef(open);
     useIsoLayoutEffect(() => {
       openRef.current = open;
     }, [open]);
     useIsoLayoutEffect(() => {
-      return () => {
-        isUnmountedRef.current = true;
-      };
-    }, []);
-    useIsoLayoutEffect(() => {
       function unset() {
-        if (!isUnmountedRef.current) {
-          setIsInstantPhase(false);
-        }
         currentContextRef.current?.setIsInstantPhase(false);
         currentIdRef.current = null;
         currentContextRef.current = null;
@@ -1973,7 +1943,7 @@ var wp;
         }
       };
     }, [currentContextRef, currentIdRef, delayRef, floatingId, initialDelayRef, timeout]);
-    return React13.useMemo(() => ({
+    return React11.useMemo(() => ({
       hasProvider,
       delayRef,
       isInstantPhase
@@ -1993,7 +1963,7 @@ var wp;
   }
 
   // node_modules/@base-ui/react/utils/FocusGuard.mjs
-  var React14 = __toESM(require_react(), 1);
+  var React12 = __toESM(require_react(), 1);
 
   // node_modules/@base-ui/utils/visuallyHidden.mjs
   var visuallyHiddenBase = {
@@ -2019,8 +1989,8 @@ var wp;
 
   // node_modules/@base-ui/react/utils/FocusGuard.mjs
   var import_jsx_runtime2 = __toESM(require_jsx_runtime(), 1);
-  var FocusGuard = /* @__PURE__ */ React14.forwardRef(function FocusGuard2(props, ref) {
-    const [role, setRole] = React14.useState();
+  var FocusGuard = /* @__PURE__ */ React12.forwardRef(function FocusGuard2(props, ref) {
+    const [role, setRole] = React12.useState();
     useIsoLayoutEffect(() => {
       if (parts_exports.screenReader.voiceOver && parts_exports.engine.webkit) {
         setRole("button");
@@ -2043,7 +2013,6 @@ var wp;
   if (true) FocusGuard.displayName = "FocusGuard";
 
   // node_modules/@floating-ui/utils/dist/floating-ui.utils.mjs
-  var sides = ["top", "right", "bottom", "left"];
   var min = Math.min;
   var max = Math.max;
   var round = Math.round;
@@ -2365,7 +2334,7 @@ var wp;
   }
 
   // node_modules/@base-ui/react/floating-ui-react/components/FloatingPortal.mjs
-  var React15 = __toESM(require_react(), 1);
+  var React13 = __toESM(require_react(), 1);
   var ReactDOM2 = __toESM(require_react_dom(), 1);
 
   // node_modules/@base-ui/react/internals/constants.mjs
@@ -2390,9 +2359,9 @@ var wp;
 
   // node_modules/@base-ui/react/floating-ui-react/components/FloatingPortal.mjs
   var import_jsx_runtime3 = __toESM(require_jsx_runtime(), 1);
-  var PortalContext = /* @__PURE__ */ React15.createContext(null);
+  var PortalContext = /* @__PURE__ */ React13.createContext(null);
   if (true) PortalContext.displayName = "PortalContext";
-  var usePortalContext = () => React15.useContext(PortalContext);
+  var usePortalContext = () => React13.useContext(PortalContext);
   var attr = createAttribute("portal");
   function useFloatingPortalNode(props = {}) {
     const {
@@ -2404,14 +2373,14 @@ var wp;
     const uniqueId = useId();
     const portalContext = usePortalContext();
     const parentPortalNode = portalContext?.portalNode;
-    const [containerElement, setContainerElement] = React15.useState(null);
-    const [portalNode, setPortalNode] = React15.useState(null);
+    const [containerElement, setContainerElement] = React13.useState(null);
+    const [portalNode, setPortalNode] = React13.useState(null);
     const setPortalNodeRef = useStableCallback((node) => {
       if (node !== null) {
         setPortalNode(node);
       }
     });
-    const containerRef = React15.useRef(null);
+    const containerRef = React13.useRef(null);
     useIsoLayoutEffect(() => {
       if (containerProp === null) {
         if (containerRef.current) {
@@ -2419,9 +2388,6 @@ var wp;
           setPortalNode(null);
           setContainerElement(null);
         }
-        return;
-      }
-      if (uniqueId == null) {
         return;
       }
       const resolvedContainer = (containerProp && (isNode(containerProp) ? containerProp : containerProp.current)) ?? parentPortalNode ?? document.body;
@@ -2438,7 +2404,7 @@ var wp;
         setPortalNode(null);
         setContainerElement(resolvedContainer);
       }
-    }, [containerProp, parentPortalNode, uniqueId]);
+    }, [containerProp, parentPortalNode]);
     const portalElement = useRenderElement("div", componentProps, {
       ref: [ref, setPortalNodeRef],
       props: [{
@@ -2448,39 +2414,42 @@ var wp;
     });
     const portalSubtree = containerElement && portalElement ? /* @__PURE__ */ ReactDOM2.createPortal(portalElement, containerElement) : null;
     return {
-      portalNode,
-      portalSubtree
+      node: portalNode,
+      // `id` and `render` props can override or remove the generated ID. Use the exact
+      // rendered value so `aria-owns` never points at an ID absent from the DOM.
+      nodeId: /* @__PURE__ */ React13.isValidElement(portalElement) ? portalElement.props.id : void 0,
+      subtree: portalSubtree
     };
   }
-  var FloatingPortal = /* @__PURE__ */ React15.forwardRef(function FloatingPortal2(componentProps, forwardedRef) {
+  var FloatingPortal = /* @__PURE__ */ React13.forwardRef(function FloatingPortal2(componentProps, forwardedRef) {
     const {
       render,
       className,
       style,
       children,
       container,
-      renderGuards,
       ...elementProps
     } = componentProps;
     const {
-      portalNode,
-      portalSubtree
+      node: portalNode,
+      nodeId: portalNodeId,
+      subtree: portalSubtree
     } = useFloatingPortalNode({
       container,
       ref: forwardedRef,
       componentProps,
       elementProps
     });
-    const beforeOutsideRef = React15.useRef(null);
-    const afterOutsideRef = React15.useRef(null);
-    const beforeInsideRef = React15.useRef(null);
-    const afterInsideRef = React15.useRef(null);
-    const [focusManagerState, setFocusManagerState] = React15.useState(null);
-    const focusInsideDisabledRef = React15.useRef(false);
+    const beforeOutsideRef = React13.useRef(null);
+    const afterOutsideRef = React13.useRef(null);
+    const beforeInsideRef = React13.useRef(null);
+    const afterInsideRef = React13.useRef(null);
+    const [focusManagerState, setFocusManagerState] = React13.useState(null);
+    const focusInsideDisabledRef = React13.useRef(false);
     const modal = focusManagerState?.modal;
     const open = focusManagerState?.open;
-    const shouldRenderGuards = typeof renderGuards === "boolean" ? renderGuards : !!focusManagerState && !focusManagerState.modal && focusManagerState.open && !!portalNode;
-    React15.useEffect(() => {
+    const shouldRenderGuards = !!focusManagerState && !focusManagerState.modal && focusManagerState.open && !!portalNode;
+    React13.useEffect(() => {
       if (!portalNode || modal) {
         return void 0;
       }
@@ -2506,7 +2475,7 @@ var wp;
       enableFocusInside(portalNode);
       focusInsideDisabledRef.current = false;
     }, [open, portalNode]);
-    const portalContextValue = React15.useMemo(() => ({
+    const portalContextValue = React13.useMemo(() => ({
       beforeOutsideRef,
       afterOutsideRef,
       beforeInsideRef,
@@ -2514,7 +2483,7 @@ var wp;
       portalNode,
       setFocusManagerState
     }), [portalNode]);
-    return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(React15.Fragment, {
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(React13.Fragment, {
       children: [portalSubtree, /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(PortalContext.Provider, {
         value: portalContextValue,
         children: [shouldRenderGuards && portalNode && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(FocusGuard, {
@@ -2530,7 +2499,7 @@ var wp;
             }
           }
         }), shouldRenderGuards && portalNode && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", {
-          "aria-owns": portalNode.id,
+          "aria-owns": portalNodeId,
           style: ownerVisuallyHidden
         }), portalNode && /* @__PURE__ */ ReactDOM2.createPortal(children, portalNode), shouldRenderGuards && portalNode && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(FocusGuard, {
           "data-type": "outside",
@@ -2554,7 +2523,7 @@ var wp;
   if (true) FloatingPortal.displayName = "FloatingPortal";
 
   // node_modules/@base-ui/react/floating-ui-react/components/FloatingTree.mjs
-  var React16 = __toESM(require_react(), 1);
+  var React14 = __toESM(require_react(), 1);
 
   // node_modules/@base-ui/react/floating-ui-react/utils/createEventEmitter.mjs
   function createEventEmitter() {
@@ -2577,18 +2546,18 @@ var wp;
 
   // node_modules/@base-ui/react/floating-ui-react/components/FloatingTree.mjs
   var import_jsx_runtime4 = __toESM(require_jsx_runtime(), 1);
-  var FloatingNodeContext = /* @__PURE__ */ React16.createContext(null);
+  var FloatingNodeContext = /* @__PURE__ */ React14.createContext(null);
   if (true) FloatingNodeContext.displayName = "FloatingNodeContext";
-  var FloatingTreeContext = /* @__PURE__ */ React16.createContext(null);
+  var FloatingTreeContext = /* @__PURE__ */ React14.createContext(null);
   if (true) FloatingTreeContext.displayName = "FloatingTreeContext";
-  var useFloatingParentNodeId = () => React16.useContext(FloatingNodeContext)?.id || null;
+  var useFloatingParentNodeId = () => React14.useContext(FloatingNodeContext)?.id || null;
   var useFloatingTree = (externalTree) => {
-    const contextTree = React16.useContext(FloatingTreeContext);
+    const contextTree = React14.useContext(FloatingTreeContext);
     return externalTree ?? contextTree;
   };
 
   // node_modules/@base-ui/react/floating-ui-react/hooks/useClientPoint.mjs
-  var React17 = __toESM(require_react(), 1);
+  var React15 = __toESM(require_react(), 1);
   function createVirtualElement(domElement, data) {
     let offsetX = null;
     let offsetY = null;
@@ -2655,10 +2624,10 @@ var wp;
     const floating = store2.useState("floatingElement");
     const domReference = store2.useState("domReferenceElement");
     const dataRef = store2.context.dataRef;
-    const initialRef = React17.useRef(false);
-    const cleanupListenerRef = React17.useRef(null);
-    const [pointerType, setPointerType] = React17.useState();
-    const [reactive, setReactive] = React17.useState([]);
+    const initialRef = React15.useRef(false);
+    const cleanupListenerRef = React15.useRef(null);
+    const [pointerType, setPointerType] = React15.useState();
+    const [reactive, setReactive] = React15.useState([]);
     const resetReference = useStableCallback((reference2) => {
       store2.set("positionReference", reference2);
     });
@@ -2686,7 +2655,7 @@ var wp;
       }
     });
     const openCheck = isMouseLikePointerType(pointerType) ? floating : open;
-    React17.useEffect(() => {
+    React15.useEffect(() => {
       if (!enabled) {
         resetReference(domReference);
         return void 0;
@@ -2714,20 +2683,20 @@ var wp;
       }
       return cleanupListener;
     }, [openCheck, enabled, floating, dataRef, domReference, store2, setReference, resetReference, reactive]);
-    React17.useEffect(() => () => {
+    React15.useEffect(() => () => {
       store2.set("positionReference", null);
     }, [store2]);
-    React17.useEffect(() => {
+    React15.useEffect(() => {
       if (enabled && !floating) {
         initialRef.current = false;
       }
     }, [enabled, floating]);
-    React17.useEffect(() => {
+    React15.useEffect(() => {
       if (!enabled && open) {
         initialRef.current = true;
       }
     }, [enabled, open]);
-    const reference = React17.useMemo(() => {
+    const reference = React15.useMemo(() => {
       function setPointerTypeRef(event) {
         setPointerType(event.pointerType);
       }
@@ -2738,14 +2707,14 @@ var wp;
         onMouseEnter: handleReferenceEnterOrMove
       };
     }, [handleReferenceEnterOrMove]);
-    return React17.useMemo(() => enabled ? {
+    return React15.useMemo(() => enabled ? {
       reference,
       trigger: reference
     } : {}, [enabled, reference]);
   }
 
   // node_modules/@base-ui/react/floating-ui-react/hooks/useDismiss.mjs
-  var React18 = __toESM(require_react(), 1);
+  var React16 = __toESM(require_react(), 1);
   function alwaysFalse() {
     return false;
   }
@@ -2780,12 +2749,12 @@ var wp;
       escapeKey: escapeKeyBubbles,
       outsidePress: outsidePressBubbles
     } = normalizeProp(bubbles);
-    const pressStartedInsideRef = React18.useRef(false);
-    const pressStartPreventedRef = React18.useRef(false);
-    const suppressNextOutsideClickRef = React18.useRef(false);
-    const isComposingRef = React18.useRef(false);
-    const currentPointerTypeRef = React18.useRef("");
-    const touchStateRef = React18.useRef(null);
+    const pressStartedInsideRef = React16.useRef(false);
+    const pressStartPreventedRef = React16.useRef(false);
+    const suppressNextOutsideClickRef = React16.useRef(false);
+    const isComposingRef = React16.useRef(false);
+    const currentPointerTypeRef = React16.useRef("");
+    const touchStateRef = React16.useRef(null);
     const cancelDismissOnEndTimeout = useTimeout();
     const clearInsideReactTreeTimeout = useTimeout();
     const clearInsideReactTree = useStableCallback(() => {
@@ -2854,9 +2823,9 @@ var wp;
         pressStartPreventedRef.current = true;
       }
     });
-    React18.useEffect(() => {
+    React16.useEffect(() => {
       if (!open || !enabled) {
-        return void 0;
+        return clearInsideReactTree;
       }
       dataRef.current.__escapeKeyBubbles = escapeKeyBubbles;
       dataRef.current.__outsidePressBubbles = outsidePressBubbles;
@@ -3102,15 +3071,15 @@ var wp;
         preventedPressSuppressionTimeout.clear();
         resetPressStartState();
         suppressNextOutsideClickRef.current = false;
+        clearInsideReactTree();
       };
     }, [dataRef, floatingElement, escapeKey2, outsidePressEnabled, outsidePress2, open, enabled, escapeKeyBubbles, outsidePressBubbles, closeOnEscapeKeyDown, clearInsideReactTree, getOutsidePressEventProp, hasBlockingChild, isEventWithinOwnElements, tree, store2, cancelDismissOnEndTimeout]);
-    React18.useEffect(clearInsideReactTree, [outsidePress2, clearInsideReactTree]);
-    const reference = React18.useMemo(() => ({
+    const reference = React16.useMemo(() => ({
       onKeyDown: closeOnEscapeKeyDown,
       onPointerDown: closeOnReferencePress,
       onClick: closeOnReferencePress
     }), [closeOnEscapeKeyDown, closeOnReferencePress]);
-    const floating = React18.useMemo(() => ({
+    const floating = React16.useMemo(() => ({
       onKeyDown: closeOnEscapeKeyDown,
       // `onMouseDown` may be blocked if `event.preventDefault()` is called in
       // `onPointerDown`, such as with <NumberField.ScrubArea>.
@@ -3130,7 +3099,7 @@ var wp;
       onTouchEndCapture: markInsideReactTree,
       onTouchMoveCapture: markInsideReactTree
     }), [closeOnEscapeKeyDown, markInsideReactTree, markPressStartedInsideReactTree, markInsidePressStartPrevented]);
-    return React18.useMemo(() => enabled ? {
+    return React16.useMemo(() => enabled ? {
       reference,
       floating,
       trigger: reference
@@ -3138,7 +3107,7 @@ var wp;
   }
 
   // node_modules/@base-ui/react/floating-ui-react/hooks/useFloating.mjs
-  var React25 = __toESM(require_react(), 1);
+  var React24 = __toESM(require_react(), 1);
 
   // node_modules/@floating-ui/core/dist/floating-ui.core.mjs
   function computeCoordsFromPlacement(_ref, placement, rtl) {
@@ -3439,67 +3408,6 @@ var wp;
           }
         }
         return {};
-      }
-    };
-  };
-  function getSideOffsets(overflow, rect) {
-    return {
-      top: overflow.top - rect.height,
-      right: overflow.right - rect.width,
-      bottom: overflow.bottom - rect.height,
-      left: overflow.left - rect.width
-    };
-  }
-  function isAnySideFullyClipped(overflow) {
-    return sides.some((side) => overflow[side] >= 0);
-  }
-  var hide = function(options) {
-    if (options === void 0) {
-      options = {};
-    }
-    return {
-      name: "hide",
-      options,
-      async fn(state) {
-        const {
-          rects,
-          platform: platform3
-        } = state;
-        const {
-          strategy = "referenceHidden",
-          ...detectOverflowOptions
-        } = evaluate(options, state);
-        switch (strategy) {
-          case "referenceHidden": {
-            const overflow = await platform3.detectOverflow(state, {
-              ...detectOverflowOptions,
-              elementContext: "reference"
-            });
-            const offsets = getSideOffsets(overflow, rects.reference);
-            return {
-              data: {
-                referenceHiddenOffsets: offsets,
-                referenceHidden: isAnySideFullyClipped(offsets)
-              }
-            };
-          }
-          case "escaped": {
-            const overflow = await platform3.detectOverflow(state, {
-              ...detectOverflowOptions,
-              altBoundary: true
-            });
-            const offsets = getSideOffsets(overflow, rects.floating);
-            return {
-              data: {
-                escapedOffsets: offsets,
-                escaped: isAnySideFullyClipped(offsets)
-              }
-            };
-          }
-          default: {
-            return {};
-          }
-        }
       }
     };
   };
@@ -4369,7 +4277,6 @@ var wp;
   var shift2 = shift;
   var flip2 = flip;
   var size2 = size;
-  var hide2 = hide;
   var limitShift2 = limitShift;
   var computePosition2 = (reference, floating, options) => {
     const cache = /* @__PURE__ */ new Map();
@@ -4386,7 +4293,7 @@ var wp;
   };
 
   // node_modules/@floating-ui/react-dom/dist/floating-ui.react-dom.mjs
-  var React19 = __toESM(require_react(), 1);
+  var React17 = __toESM(require_react(), 1);
   var import_react2 = __toESM(require_react(), 1);
   var ReactDOM3 = __toESM(require_react_dom(), 1);
   var isClient = typeof document !== "undefined";
@@ -4452,7 +4359,7 @@ var wp;
     return Math.round(value * dpr) / dpr;
   }
   function useLatestRef(value) {
-    const ref = React19.useRef(value);
+    const ref = React17.useRef(value);
     index(() => {
       ref.current = value;
     });
@@ -4475,7 +4382,7 @@ var wp;
       whileElementsMounted,
       open
     } = options;
-    const [data, setData] = React19.useState({
+    const [data, setData] = React17.useState({
       x: 0,
       y: 0,
       strategy,
@@ -4483,19 +4390,19 @@ var wp;
       middlewareData: {},
       isPositioned: false
     });
-    const [latestMiddleware, setLatestMiddleware] = React19.useState(middleware);
+    const [latestMiddleware, setLatestMiddleware] = React17.useState(middleware);
     if (!deepEqual(latestMiddleware, middleware)) {
       setLatestMiddleware(middleware);
     }
-    const [_reference, _setReference] = React19.useState(null);
-    const [_floating, _setFloating] = React19.useState(null);
-    const setReference = React19.useCallback((node) => {
+    const [_reference, _setReference] = React17.useState(null);
+    const [_floating, _setFloating] = React17.useState(null);
+    const setReference = React17.useCallback((node) => {
       if (node !== referenceRef.current) {
         referenceRef.current = node;
         _setReference(node);
       }
     }, []);
-    const setFloating = React19.useCallback((node) => {
+    const setFloating = React17.useCallback((node) => {
       if (node !== floatingRef.current) {
         floatingRef.current = node;
         _setFloating(node);
@@ -4503,14 +4410,14 @@ var wp;
     }, []);
     const referenceEl = externalReference || _reference;
     const floatingEl = externalFloating || _floating;
-    const referenceRef = React19.useRef(null);
-    const floatingRef = React19.useRef(null);
-    const dataRef = React19.useRef(data);
+    const referenceRef = React17.useRef(null);
+    const floatingRef = React17.useRef(null);
+    const dataRef = React17.useRef(data);
     const hasWhileElementsMounted = whileElementsMounted != null;
     const whileElementsMountedRef = useLatestRef(whileElementsMounted);
     const platformRef = useLatestRef(platform3);
     const openRef = useLatestRef(open);
-    const update2 = React19.useCallback(() => {
+    const update2 = React17.useCallback(() => {
       if (!referenceRef.current || !floatingRef.current) {
         return;
       }
@@ -4548,7 +4455,7 @@ var wp;
         }));
       }
     }, [open]);
-    const isMountedRef = React19.useRef(false);
+    const isMountedRef = React17.useRef(false);
     index(() => {
       isMountedRef.current = true;
       return () => {
@@ -4565,17 +4472,17 @@ var wp;
         update2();
       }
     }, [referenceEl, floatingEl, update2, whileElementsMountedRef, hasWhileElementsMounted]);
-    const refs = React19.useMemo(() => ({
+    const refs = React17.useMemo(() => ({
       reference: referenceRef,
       floating: floatingRef,
       setReference,
       setFloating
     }), [setReference, setFloating]);
-    const elements = React19.useMemo(() => ({
+    const elements = React17.useMemo(() => ({
       reference: referenceEl,
       floating: floatingEl
     }), [referenceEl, floatingEl]);
-    const floatingStyles = React19.useMemo(() => {
+    const floatingStyles = React17.useMemo(() => {
       const initialStyles = {
         position: strategy,
         left: 0,
@@ -4601,7 +4508,7 @@ var wp;
         top: y
       };
     }, [strategy, transform, elements.floating, data.x, data.y]);
-    return React19.useMemo(() => ({
+    return React17.useMemo(() => ({
       ...data,
       update: update2,
       refs,
@@ -4648,81 +4555,182 @@ var wp;
       options: [options, deps]
     };
   };
-  var hide3 = (options, deps) => {
-    const result = hide2(options);
-    return {
-      name: result.name,
-      fn: result.fn,
-      options: [options, deps]
-    };
+
+  // node_modules/@base-ui/react/utils/popups/popupHandle.mjs
+  var BasePopupHandle = class {
+    /**
+     * Stores of every root currently using this handle, in attach order. A handle is meant to be used
+     * by a single mounted root, but roots can transiently overlap (e.g. during an animated route
+     * transition), so this stack lets `attachStore`'s cleanup restore the previous root instead of
+     * leaving a still-mounted root uncontrollable when a newer overlapping root detaches first.
+     */
+    attachedStores = [];
+    /**
+     * Store of the root that currently controls the handle: the most recently attached one still
+     * mounted, or `null` when no root is attached. Imperative methods are no-ops while this is `null`.
+     */
+    attachedStoreValue = null;
+    /**
+     * Listeners notified when `attachedStore` changes, so detached triggers can follow the store pointer.
+     */
+    storeListeners = /* @__PURE__ */ new Set();
+    /**
+     * Creates a handle backed by the store used while no root is attached.
+     *
+     * @param fallbackStore Inert, closed store handed to detached triggers while no root is attached,
+     * so they can render and register without a mounted root. Triggers register into whichever store
+     * `store` currently resolves to, so while detached they live in this store's trigger map and
+     * migrate themselves to the root's store (and back) as it attaches/detaches.
+     * @param componentName Component name used to prefix dev warnings, e.g. `'Menu'` produces
+     * `MenuHandle.open()` in warning text.
+     * @param throwOnMissingTrigger Whether `open(triggerId)` throws when no trigger with that id is
+     * registered. Anchored popups (Menu, Popover, Tooltip, PreviewCard) need a trigger to anchor to,
+     * so they throw; Dialog is not anchored and instead opens unassociated with a dev warning.
+     */
+    constructor(fallbackStore, componentName, throwOnMissingTrigger = true) {
+      this.fallbackStore = fallbackStore;
+      this.componentName = componentName;
+      this.throwOnMissingTrigger = throwOnMissingTrigger;
+    }
+    get attachedStore() {
+      return this.attachedStoreValue;
+    }
+    /**
+     * Store that detached triggers read from: the attached root's store, or an inert fallback store
+     * used while no root is attached.
+     * @internal
+     */
+    get store() {
+      return this.attachedStoreValue ?? this.fallbackStore;
+    }
+    /**
+     * Stable fallback store used for server rendering and hydration. Root stores cannot be recorded on
+     * the handle during render because a handle can be shared by concurrent server-rendered requests.
+     * @internal
+     */
+    get serverStore() {
+      return this.fallbackStore;
+    }
+    /**
+     * Subscribes to changes of the attached store pointer so detached triggers re-render and re-bind
+     * when a root attaches or detaches. Returns a function that removes the listener.
+     * @internal
+     */
+    subscribeStore(listener) {
+      this.storeListeners.add(listener);
+      return () => {
+        this.storeListeners.delete(listener);
+      };
+    }
+    /**
+     * Points the handle at a root's store and notifies subscribers so detached triggers re-render and
+     * re-register into it (their registration ref re-fires on the store-pointer change). Returns a
+     * cleanup function that detaches the store again.
+     * @internal
+     */
+    attachStore(newStore) {
+      this.attachedStores.push(newStore);
+      this.setActiveStore(newStore);
+      if (true) {
+        if (this.attachedStores.length > 1) {
+          const dev = this;
+          (dev.overlapWarningFrame ??= AnimationFrame.create()).request(() => {
+            if (this.attachedStores.length > 1) {
+              console.warn("Base UI: A handle is attached to more than one mounted root at the same time. The most recently mounted root takes over and the previous one stops being controlled by the handle. A handle should be used by a single root that stays mounted for the lifetime of the handle.");
+            }
+          });
+        }
+      }
+      return () => {
+        const index2 = this.attachedStores.lastIndexOf(newStore);
+        if (index2 !== -1) {
+          this.attachedStores.splice(index2, 1);
+        }
+        this.setActiveStore(this.attachedStores[this.attachedStores.length - 1] ?? null);
+      };
+    }
+    /**
+     * Sets the store that currently controls the handle and notifies subscribers when it changes, so
+     * detached triggers re-render and migrate their registration to the new store.
+     */
+    setActiveStore(store2) {
+      if (this.attachedStoreValue !== store2) {
+        this.attachedStoreValue = store2;
+        this.storeListeners.forEach((listener) => {
+          listener();
+        });
+      }
+    }
+    /**
+     * Opens the attached root's store and associates it with the trigger with the given id, or a
+     * no-op (with a dev warning) while no root is attached. Shared by every concrete handle's public
+     * `open()` method, which only narrows the parameter type.
+     *
+     * When a trigger id is given but no matching trigger is registered, anchored popups throw (see
+     * `throwOnMissingTrigger`); Dialog opens unassociated with a dev warning instead.
+     *
+     * This method should only be called in an event handler or an effect (not during rendering).
+     *
+     * @param triggerId ID of the trigger to associate with the popup, or `null`/`undefined` to open
+     * without associating any trigger.
+     */
+    openByTrigger(triggerId) {
+      const attachedStore = this.attachedStore;
+      if (attachedStore === null) {
+        if (true) {
+          console.warn(`Base UI: ${this.componentName}Handle.open() was called while no root using this handle is mounted. The call was ignored; mount a root with this handle before opening it imperatively.`);
+        }
+        return;
+      }
+      let triggerElement;
+      if (triggerId) {
+        for (let i = this.attachedStores.length - 1; i >= 0 && !triggerElement; i -= 1) {
+          triggerElement = this.attachedStores[i].context.triggerElements.getById(triggerId);
+        }
+        triggerElement ??= this.fallbackStore.context.triggerElements.getById(triggerId);
+      }
+      if (triggerId && !triggerElement) {
+        if (this.throwOnMissingTrigger) {
+          throw new Error(true ? `Base UI: ${this.componentName}Handle.open() was called with the trigger id "${triggerId}", but no matching trigger is registered with this handle. An anchored popup cannot open without a trigger to anchor to. Pass the id of a mounted ${this.componentName}.Trigger that has this handle set on its "handle" prop.` : formatErrorMessage_default(99, this.componentName, triggerId, this.componentName));
+        }
+        if (true) {
+          console.warn(`Base UI: ${this.componentName}Handle.open: No trigger found with id "${triggerId}". The popup will open, but the trigger will not be associated with it.`);
+        }
+      }
+      attachedStore.setOpen(true, createChangeEventDetails(reason_parts_exports.imperativeAction, void 0, triggerElement));
+    }
+    /**
+     * Closes the popup by setting the attached root's store to closed, or a no-op (with a dev warning)
+     * while no root is attached. Shared by every concrete handle's public `close()` method.
+     *
+     * This method should only be called in an event handler or an effect (not during rendering).
+     */
+    closePopup() {
+      const attachedStore = this.attachedStore;
+      if (attachedStore === null) {
+        if (true) {
+          console.warn(`Base UI: ${this.componentName}Handle.close() was called while no root using this handle is mounted. The call was ignored.`);
+        }
+        return;
+      }
+      attachedStore.setOpen(false, createChangeEventDetails(reason_parts_exports.imperativeAction));
+    }
   };
 
   // node_modules/@base-ui/react/utils/popups/popupStoreUtils.mjs
-  var React24 = __toESM(require_react(), 1);
+  var React22 = __toESM(require_react(), 1);
   var ReactDOM4 = __toESM(require_react_dom(), 1);
 
   // node_modules/@base-ui/react/floating-ui-react/hooks/useSyncedFloatingRootContext.mjs
-  var React23 = __toESM(require_react(), 1);
-
-  // node_modules/@base-ui/utils/store/createSelector.mjs
-  var createSelector = (a, b, c, d, e, f, ...other) => {
-    if (other.length > 0) {
-      throw new Error(true ? "Unsupported number of selectors" : formatErrorMessage_default(1));
-    }
-    let selector;
-    if (a && b && c && d && e && f) {
-      selector = (state, a1, a2, a3) => {
-        const va = a(state, a1, a2, a3);
-        const vb = b(state, a1, a2, a3);
-        const vc = c(state, a1, a2, a3);
-        const vd = d(state, a1, a2, a3);
-        const ve = e(state, a1, a2, a3);
-        return f(va, vb, vc, vd, ve, a1, a2, a3);
-      };
-    } else if (a && b && c && d && e) {
-      selector = (state, a1, a2, a3) => {
-        const va = a(state, a1, a2, a3);
-        const vb = b(state, a1, a2, a3);
-        const vc = c(state, a1, a2, a3);
-        const vd = d(state, a1, a2, a3);
-        return e(va, vb, vc, vd, a1, a2, a3);
-      };
-    } else if (a && b && c && d) {
-      selector = (state, a1, a2, a3) => {
-        const va = a(state, a1, a2, a3);
-        const vb = b(state, a1, a2, a3);
-        const vc = c(state, a1, a2, a3);
-        return d(va, vb, vc, a1, a2, a3);
-      };
-    } else if (a && b && c) {
-      selector = (state, a1, a2, a3) => {
-        const va = a(state, a1, a2, a3);
-        const vb = b(state, a1, a2, a3);
-        return c(va, vb, a1, a2, a3);
-      };
-    } else if (a && b) {
-      selector = (state, a1, a2, a3) => {
-        const va = a(state, a1, a2, a3);
-        return b(va, a1, a2, a3);
-      };
-    } else if (a) {
-      selector = a;
-    } else {
-      throw (
-        /* minify-error-disabled */
-        new Error("Missing arguments")
-      );
-    }
-    return selector;
-  };
+  var React21 = __toESM(require_react(), 1);
 
   // node_modules/@base-ui/utils/store/useStore.mjs
-  var React21 = __toESM(require_react(), 1);
+  var React19 = __toESM(require_react(), 1);
   var import_shim = __toESM(require_shim(), 1);
   var import_with_selector = __toESM(require_with_selector(), 1);
 
   // node_modules/@base-ui/utils/fastHooks.mjs
-  var React20 = __toESM(require_react(), 1);
+  var React18 = __toESM(require_react(), 1);
   var hooks = [];
   var currentInstance = void 0;
   function getInstance() {
@@ -4754,7 +4762,7 @@ var wp;
     return FastComponent;
   }
   function fastComponentRef(fn) {
-    return /* @__PURE__ */ React20.forwardRef(fastComponent(fn));
+    return /* @__PURE__ */ React18.forwardRef(fastComponent(fn));
   }
   function createInstance() {
     return {
@@ -4769,7 +4777,7 @@ var wp;
     return useStoreImplementation(store2, selector, a1, a2, a3);
   }
   function useStoreR19(store2, selector, a1, a2, a3) {
-    const getSelection = React21.useCallback(() => selector(store2.getSnapshot(), a1, a2, a3), [store2, selector, a1, a2, a3]);
+    const getSelection = React19.useCallback(() => selector(store2.getSnapshot(), a1, a2, a3), [store2, selector, a1, a2, a3]);
     return (0, import_shim.useSyncExternalStore)(store2.subscribe, getSelection, getSelection);
   }
   register({
@@ -4956,7 +4964,7 @@ var wp;
   };
 
   // node_modules/@base-ui/utils/store/ReactStore.mjs
-  var React22 = __toESM(require_react(), 1);
+  var React20 = __toESM(require_react(), 1);
   var ReactStore = class extends Store {
     /**
      * Creates a new ReactStore instance.
@@ -4980,7 +4988,7 @@ var wp;
      * by `useState` is updated before the next render (similarly to React's `useState`).
      */
     useSyncedValue(key, value) {
-      React22.useDebugValue(key);
+      React20.useDebugValue(key);
       const store2 = this;
       useIsoLayoutEffect(() => {
         if (store2.state[key] !== value) {
@@ -5015,8 +5023,8 @@ var wp;
     useSyncedValues(statePart) {
       const store2 = this;
       if (true) {
-        React22.useDebugValue(statePart, (p) => Object.keys(p));
-        const keys = React22.useRef(Object.keys(statePart)).current;
+        React20.useDebugValue(statePart, (p) => Object.keys(p));
+        const keys = React20.useRef(Object.keys(statePart)).current;
         const nextKeys = Object.keys(statePart);
         if (keys.length !== nextKeys.length || keys.some((key, index2) => key !== nextKeys[index2])) {
           console.error("ReactStore.useSyncedValues expects the same prop keys on every render. Keys should be stable.");
@@ -5032,7 +5040,7 @@ var wp;
      * is non-undefined, the store's state at `key` is updated to match `controlled`.
      */
     useControlledProp(key, controlled) {
-      React22.useDebugValue(key);
+      React20.useDebugValue(key);
       const store2 = this;
       const isControlled = controlled !== void 0;
       useIsoLayoutEffect(() => {
@@ -5070,7 +5078,7 @@ var wp;
      * @param key Key of the selector to use.
      */
     useState(key, a1, a2, a3) {
-      React22.useDebugValue(key);
+      React20.useDebugValue(key);
       return useStore(this, this.selectors[key], a1, a2, a3);
     }
     /**
@@ -5081,7 +5089,7 @@ var wp;
      * @param fn Function to assign.
      */
     useContextCallback(key, fn) {
-      React22.useDebugValue(key);
+      React20.useDebugValue(key);
       const stableFunction = useStableCallback(fn ?? NOOP);
       this.context[key] = stableFunction;
     }
@@ -5092,7 +5100,7 @@ var wp;
      * @param key Key of the state to set.
      */
     useStateSetter(key) {
-      const ref = React22.useRef(void 0);
+      const ref = React20.useRef(void 0);
       if (ref.current === void 0) {
         ref.current = (value) => {
           this.set(key, value);
@@ -5128,12 +5136,12 @@ var wp;
 
   // node_modules/@base-ui/react/floating-ui-react/components/FloatingRootStore.mjs
   var selectors = {
-    open: createSelector((state) => state.open),
-    transitionStatus: createSelector((state) => state.transitionStatus),
-    domReferenceElement: createSelector((state) => state.domReferenceElement),
-    referenceElement: createSelector((state) => state.positionReference ?? state.referenceElement),
-    floatingElement: createSelector((state) => state.floatingElement),
-    floatingId: createSelector((state) => state.floatingId)
+    open: (state) => state.open,
+    transitionStatus: (state) => state.transitionStatus,
+    domReferenceElement: (state) => state.domReferenceElement,
+    referenceElement: (state) => state.positionReference ?? state.referenceElement,
+    floatingElement: (state) => state.floatingElement,
+    floatingId: (state) => state.floatingId
   };
   var FloatingRootStore = class extends ReactStore {
     constructor(options) {
@@ -5214,7 +5222,7 @@ var wp;
     const floatingElement = popupStore.useState(treatPopupAsFloatingElement ? "popupElement" : "positionerElement");
     const triggerElements = popupStore.context.triggerElements;
     const handleOpenChange = onOpenChange;
-    const internalStoreRef = React23.useRef(null);
+    const internalStoreRef = React21.useRef(null);
     if (floatingRootContextProp === void 0 && internalStoreRef.current === null) {
       internalStoreRef.current = new FloatingRootStore({
         open,
@@ -5255,14 +5263,10 @@ var wp;
     tabIndex: -1,
     [FOCUSABLE_ATTRIBUTE]: ""
   };
-  function usePopupStore(externalStore, createStore, treatPopupAsFloatingElement = false) {
+  function usePopupRootStore(createStore, treatPopupAsFloatingElement = false) {
     const floatingId = useId();
     const nested = useFloatingParentNodeId() != null;
-    const internalStoreRef = React24.useRef(null);
-    if (externalStore === void 0 && internalStoreRef.current === null) {
-      internalStoreRef.current = createStore(floatingId, nested);
-    }
-    const store2 = externalStore ?? internalStoreRef.current;
+    const store2 = useRefWithInit(() => createStore(floatingId, nested)).current;
     useSyncedFloatingRootContext({
       popupStore: store2,
       treatPopupAsFloatingElement,
@@ -5271,15 +5275,21 @@ var wp;
       nested,
       onOpenChange: store2.setOpen
     });
-    return {
-      store: store2,
-      internalStore: internalStoreRef.current
-    };
+    return store2;
+  }
+  function PopupHandleAttachment({
+    handle,
+    store: store2
+  }) {
+    useIsoLayoutEffect(() => {
+      return handle.attachStore(store2);
+    }, [handle, store2]);
+    return null;
   }
   function useTriggerRegistration(id, store2) {
-    const registeredElementIdRef = React24.useRef(null);
-    const registeredElementRef = React24.useRef(null);
-    return React24.useCallback((element) => {
+    const registeredElementIdRef = React22.useRef(null);
+    const registeredElementRef = React22.useRef(null);
+    return React22.useCallback((element) => {
       if (id === void 0) {
         return;
       }
@@ -5361,26 +5371,10 @@ var wp;
       changeState();
     }
   }
-  function useInitialOpenSync(store2, openProp, defaultOpen, defaultTriggerId) {
-    useOnFirstRender(() => {
-      if (openProp === void 0 && store2.state.open === false && defaultOpen) {
-        store2.state = {
-          ...store2.state,
-          open: true,
-          activeTriggerId: defaultTriggerId,
-          preventUnmountingOnClose: false
-        };
-      }
-    });
-  }
   function useTriggerDataForwarding(triggerId, triggerElementRef, store2, stateUpdates) {
     const isMountedByThisTrigger = store2.useState("isMountedByTrigger", triggerId);
     const baseRegisterTrigger = useTriggerRegistration(triggerId, store2);
-    const registerTrigger = useStableCallback((element) => {
-      baseRegisterTrigger(element);
-      if (!element) {
-        return;
-      }
+    const applyTriggerData = useStableCallback((element) => {
       const open = store2.select("open");
       const activeTriggerId = store2.select("activeTriggerId");
       if (activeTriggerId === triggerId) {
@@ -5398,6 +5392,12 @@ var wp;
         });
       }
     });
+    const registerTrigger = React22.useCallback((element) => {
+      baseRegisterTrigger(element);
+      if (element) {
+        applyTriggerData(element);
+      }
+    }, [baseRegisterTrigger, applyTriggerData]);
     useIsoLayoutEffect(() => {
       if (isMountedByThisTrigger) {
         store2.update({
@@ -5415,10 +5415,14 @@ var wp;
     const {
       closeOnActiveTriggerUnmount = false
     } = options;
+    const resolvedActiveTriggerIdRef = React22.useRef(null);
     const open = store2.useState("open");
     const reactiveTriggerCount = store2.useState("triggerCount");
+    const activeTriggerId = store2.useState("activeTriggerId");
+    const reactiveActiveTriggerElement = store2.useState("activeTriggerElement");
     useIsoLayoutEffect(() => {
       if (!open) {
+        resolvedActiveTriggerIdRef.current = null;
         if (store2.state.triggerCount !== 0) {
           store2.set("triggerCount", 0);
         }
@@ -5429,22 +5433,42 @@ var wp;
       if (store2.state.triggerCount !== triggerCount) {
         stateUpdates.triggerCount = triggerCount;
       }
-      const activeTriggerId = store2.select("activeTriggerId");
+      const currentActiveTriggerId = store2.select("activeTriggerId");
       let lostActiveTriggerId = null;
-      if (activeTriggerId) {
-        const activeTriggerElement = store2.context.triggerElements.getById(activeTriggerId);
+      if (currentActiveTriggerId) {
+        const activeTriggerElement = store2.context.triggerElements.getById(currentActiveTriggerId);
         if (!activeTriggerElement) {
-          lostActiveTriggerId = activeTriggerId;
-        } else if (activeTriggerElement !== store2.state.activeTriggerElement) {
-          stateUpdates.activeTriggerElement = activeTriggerElement;
+          for (const [triggerId, triggerElement] of store2.context.triggerElements.entries()) {
+            if (triggerElement === store2.state.activeTriggerElement) {
+              stateUpdates.activeTriggerId = triggerId;
+              stateUpdates.activeTriggerElement = triggerElement;
+              resolvedActiveTriggerIdRef.current = triggerId;
+              break;
+            }
+          }
+          if (stateUpdates.activeTriggerId === void 0) {
+            if (resolvedActiveTriggerIdRef.current === currentActiveTriggerId) {
+              lostActiveTriggerId = currentActiveTriggerId;
+            } else {
+              resolvedActiveTriggerIdRef.current = null;
+            }
+          }
+        } else {
+          resolvedActiveTriggerIdRef.current = currentActiveTriggerId;
+          if (activeTriggerElement !== store2.state.activeTriggerElement) {
+            stateUpdates.activeTriggerElement = activeTriggerElement;
+          }
         }
+      } else {
+        resolvedActiveTriggerIdRef.current = null;
       }
-      if (!lostActiveTriggerId && !activeTriggerId && triggerCount === 1) {
+      if (!lostActiveTriggerId && !currentActiveTriggerId && triggerCount === 1) {
         const iteratorResult = store2.context.triggerElements.entries().next();
         if (!iteratorResult.done) {
           const [implicitTriggerId, implicitTriggerElement] = iteratorResult.value;
           stateUpdates.activeTriggerId = implicitTriggerId;
           stateUpdates.activeTriggerElement = implicitTriggerElement;
+          resolvedActiveTriggerIdRef.current = implicitTriggerId;
         }
       }
       if (stateUpdates.triggerCount !== void 0 || stateUpdates.activeTriggerId !== void 0 || stateUpdates.activeTriggerElement !== void 0) {
@@ -5466,7 +5490,7 @@ var wp;
           });
         }
       }
-    }, [open, store2, reactiveTriggerCount, closeOnActiveTriggerUnmount]);
+    }, [open, store2, reactiveTriggerCount, activeTriggerId, reactiveActiveTriggerElement, closeOnActiveTriggerUnmount]);
   }
   function useOpenStateTransitions(open, store2, onUnmount) {
     const {
@@ -5519,9 +5543,18 @@ var wp;
   }
 
   // node_modules/@base-ui/react/utils/popups/popupTriggerMap.mjs
+  var devElementIdsByMap;
+  function getDevElementIds(map) {
+    devElementIdsByMap ??= /* @__PURE__ */ new WeakMap();
+    let elementIds = devElementIdsByMap.get(map);
+    if (!elementIds) {
+      elementIds = /* @__PURE__ */ new WeakMap();
+      devElementIdsByMap.set(map, elementIds);
+    }
+    return elementIds;
+  }
   var PopupTriggerMap = class {
     constructor() {
-      this.elementsSet = /* @__PURE__ */ new Set();
       this.idMap = /* @__PURE__ */ new Map();
     }
     /**
@@ -5530,42 +5563,48 @@ var wp;
      * Note: The provided element is assumed to not be registered under multiple IDs.
      */
     add(id, element) {
-      const existingElement = this.idMap.get(id);
-      if (existingElement === element) {
-        return;
-      }
-      if (existingElement !== void 0) {
-        this.elementsSet.delete(existingElement);
-      }
-      this.elementsSet.add(element);
-      this.idMap.set(id, element);
       if (true) {
-        if (this.elementsSet.size !== this.idMap.size) {
+        const elementIds = getDevElementIds(this);
+        const existingId = elementIds.get(element);
+        if (existingId !== void 0 && existingId !== id) {
           throw new Error("Base UI: A trigger element cannot be registered under multiple IDs in PopupTriggerMap.");
         }
+        const previousElement = this.idMap.get(id);
+        if (previousElement !== void 0 && previousElement !== element) {
+          elementIds.delete(previousElement);
+        }
+        elementIds.set(element, id);
       }
+      this.idMap.set(id, element);
     }
     /**
      * Removes the trigger element with the given ID.
      */
     delete(id) {
-      const element = this.idMap.get(id);
-      if (element) {
-        this.elementsSet.delete(element);
-        this.idMap.delete(id);
+      if (true) {
+        const element = this.idMap.get(id);
+        if (element !== void 0) {
+          devElementIdsByMap?.get(this)?.delete(element);
+        }
       }
+      this.idMap.delete(id);
     }
     /**
      * Whether the given element is registered as a trigger.
      */
     hasElement(element) {
-      return this.elementsSet.has(element);
+      for (const registered of this.idMap.values()) {
+        if (registered === element) {
+          return true;
+        }
+      }
+      return false;
     }
     /**
      * Whether there is a registered trigger element matching the given predicate.
      */
     hasMatchingElement(predicate) {
-      for (const element of this.elementsSet) {
+      for (const element of this.idMap.values()) {
         if (predicate(element)) {
           return true;
         }
@@ -5588,7 +5627,7 @@ var wp;
      * Returns an iterable of all registered trigger elements.
      */
     elements() {
-      return this.elementsSet.values();
+      return this.idMap.values();
     }
     /**
      * Returns the number of registered trigger elements.
@@ -5648,12 +5687,12 @@ var wp;
       onOpenChange: void 0
     });
   }
-  var activeTriggerIdSelector = createSelector((state) => state.triggerIdProp ?? state.activeTriggerId);
-  var openSelector = createSelector((state) => state.openProp ?? state.open);
-  var popupIdSelector = createSelector((state) => {
+  var activeTriggerIdSelector = (state) => state.triggerIdProp ?? state.activeTriggerId;
+  var openSelector = (state) => state.openProp ?? state.open;
+  var popupIdSelector = (state) => {
     const popupId = state.popupElement?.id ?? state.floatingId;
     return popupId || void 0;
-  });
+  };
   function triggerOwnsOpenPopup(state, triggerId) {
     return triggerId !== void 0 && openSelector(state) && activeTriggerIdSelector(state) === triggerId;
   }
@@ -5665,101 +5704,73 @@ var wp;
   }
   var popupStoreSelectors = {
     open: openSelector,
-    mounted: createSelector((state) => state.mounted),
-    transitionStatus: createSelector((state) => state.transitionStatus),
-    floatingRootContext: createSelector((state) => state.floatingRootContext),
-    triggerCount: createSelector((state) => state.triggerCount),
-    preventUnmountingOnClose: createSelector((state) => state.preventUnmountingOnClose),
-    payload: createSelector((state) => state.payload),
+    mounted: (state) => state.mounted,
+    transitionStatus: (state) => state.transitionStatus,
+    floatingRootContext: (state) => state.floatingRootContext,
+    triggerCount: (state) => state.triggerCount,
+    preventUnmountingOnClose: (state) => state.preventUnmountingOnClose,
+    payload: (state) => state.payload,
     activeTriggerId: activeTriggerIdSelector,
-    activeTriggerElement: createSelector((state) => state.mounted ? state.activeTriggerElement : null),
+    activeTriggerElement: (state) => state.mounted ? state.activeTriggerElement : null,
     popupId: popupIdSelector,
     /**
      * Whether the trigger with the given ID was used to open the popup.
      */
-    isTriggerActive: createSelector((state, triggerId) => triggerId !== void 0 && activeTriggerIdSelector(state) === triggerId),
+    isTriggerActive: (state, triggerId) => triggerId !== void 0 && activeTriggerIdSelector(state) === triggerId,
     /**
      * Whether the popup is open and was activated by a trigger with the given ID.
      */
-    isOpenedByTrigger: createSelector((state, triggerId) => triggerOwnsOpenPopup(state, triggerId)),
+    isOpenedByTrigger: (state, triggerId) => triggerOwnsOpenPopup(state, triggerId),
     /**
      * Whether the popup is mounted and was activated by a trigger with the given ID.
      */
-    isMountedByTrigger: createSelector((state, triggerId) => triggerId !== void 0 && activeTriggerIdSelector(state) === triggerId && state.mounted),
-    triggerProps: createSelector((state, isActive) => isActive ? state.activeTriggerProps : state.inactiveTriggerProps),
+    isMountedByTrigger: (state, triggerId) => triggerId !== void 0 && activeTriggerIdSelector(state) === triggerId && state.mounted,
+    triggerProps: (state, isActive) => isActive ? state.activeTriggerProps : state.inactiveTriggerProps,
     /**
      * Popup id for the trigger that currently owns the open popup.
      */
-    triggerPopupId: createSelector((state, triggerId) => triggerOwnsOpenPopupOrIsOnlyTrigger(state, triggerId) ? popupIdSelector(state) : void 0),
-    popupProps: createSelector((state) => state.popupProps),
-    popupElement: createSelector((state) => state.popupElement),
-    positionerElement: createSelector((state) => state.positionerElement)
+    triggerPopupId: (state, triggerId) => triggerOwnsOpenPopupOrIsOnlyTrigger(state, triggerId) ? popupIdSelector(state) : void 0,
+    popupProps: (state) => state.popupProps,
+    popupElement: (state) => state.popupElement,
+    positionerElement: (state) => state.positionerElement
   };
 
-  // node_modules/@base-ui/react/floating-ui-react/hooks/useFloatingRootContext.mjs
-  function useFloatingRootContext(options) {
-    const {
-      open = false,
-      onOpenChange,
-      elements = {}
-    } = options;
-    const floatingId = useId();
-    const nested = useFloatingParentNodeId() != null;
-    if (true) {
-      const optionDomReference = elements.reference;
-      if (optionDomReference && !isElement(optionDomReference)) {
-        console.error("Cannot pass a virtual element to the `elements.reference` option,", "as it must be a real DOM element. Use `context.setPositionReference()`", "instead.");
+  // node_modules/@base-ui/react/utils/popups/usePopupHandleStore.mjs
+  var React23 = __toESM(require_react(), 1);
+  var import_shim2 = __toESM(require_shim(), 1);
+  function usePopupHandleStore(handle) {
+    const subscribe = React23.useCallback((listener) => {
+      if (handle === void 0) {
+        return NOOP;
       }
-    }
-    const store2 = useRefWithInit(() => new FloatingRootStore({
-      open,
-      transitionStatus: void 0,
-      onOpenChange,
-      referenceElement: elements.reference ?? null,
-      floatingElement: elements.floating ?? null,
-      triggerElements: new PopupTriggerMap(),
-      floatingId,
-      syncOnly: false,
-      nested
-    })).current;
-    useIsoLayoutEffect(() => {
-      const valuesToSync = {
-        open,
-        floatingId
-      };
-      if (elements.reference !== void 0) {
-        valuesToSync.referenceElement = elements.reference;
-        valuesToSync.domReferenceElement = isElement(elements.reference) ? elements.reference : null;
-      }
-      if (elements.floating !== void 0) {
-        valuesToSync.floatingElement = elements.floating;
-      }
-      store2.update(valuesToSync);
-    }, [open, floatingId, elements.reference, elements.floating, store2]);
-    store2.context.onOpenChange = onOpenChange;
-    store2.context.nested = nested;
-    return store2;
+      return handle.subscribeStore(listener);
+    }, [handle]);
+    const getSnapshot = React23.useCallback(() => {
+      return handle === void 0 ? void 0 : handle.store;
+    }, [handle]);
+    return (0, import_shim2.useSyncExternalStore)(subscribe, getSnapshot, () => handle?.serverStore);
   }
 
   // node_modules/@base-ui/react/floating-ui-react/hooks/useFloating.mjs
-  function useFloating2(options = {}) {
+  function useBaseUIFloating(options) {
+    return useFloatingWithStore(options, options.rootContext);
+  }
+  function useFloatingWithStore(options, store2) {
     const {
       nodeId,
       externalTree
     } = options;
-    const internalStore = useFloatingRootContext(options);
-    const store2 = options.rootContext || internalStore;
     const referenceElement = store2.useState("referenceElement");
     const floatingElement = store2.useState("floatingElement");
     const domReferenceElement = store2.useState("domReferenceElement");
     const open = store2.useState("open");
     const floatingId = store2.useState("floatingId");
-    const [positionReference, setPositionReferenceRaw] = React25.useState(null);
-    const [localDomReference, setLocalDomReference] = React25.useState(void 0);
-    const [localFloatingElement, setLocalFloatingElement] = React25.useState(void 0);
-    const domReferenceRef = React25.useRef(null);
+    const [positionReference, setPositionReferenceRaw] = React24.useState(null);
+    const [localDomReference, setLocalDomReference] = React24.useState(void 0);
+    const [localFloatingElement, setLocalFloatingElement] = React24.useState(void 0);
+    const domReferenceRef = React24.useRef(null);
     const tree = useFloatingTree(externalTree);
-    const storeElements = React25.useMemo(() => ({
+    const storeElements = React24.useMemo(() => ({
       reference: referenceElement,
       floating: floatingElement,
       domReference: domReferenceElement
@@ -5778,7 +5789,7 @@ var wp;
     store2.useSyncedValue("referenceElement", localDomReference ?? null);
     store2.useSyncedValue("domReferenceElement", localDomReference === void 0 ? domReferenceElement : localDomReferenceElement);
     store2.useSyncedValue("floatingElement", syncedFloatingElement);
-    const setPositionReference = React25.useCallback((node) => {
+    const setPositionReference = React24.useCallback((node) => {
       const computedPositionReference = isElement(node) ? {
         getBoundingClientRect: () => node.getBoundingClientRect(),
         getClientRects: () => node.getClientRects(),
@@ -5787,7 +5798,7 @@ var wp;
       setPositionReferenceRaw(computedPositionReference);
       position.refs.setReference(computedPositionReference);
     }, [position.refs]);
-    const setReference = React25.useCallback((node) => {
+    const setReference = React24.useCallback((node) => {
       if (isElement(node) || node === null) {
         domReferenceRef.current = node;
         setLocalDomReference(node);
@@ -5799,22 +5810,22 @@ var wp;
         position.refs.setReference(node);
       }
     }, [position.refs, setLocalDomReference]);
-    const setFloating = React25.useCallback((node) => {
+    const setFloating = React24.useCallback((node) => {
       setLocalFloatingElement(node);
       position.refs.setFloating(node);
     }, [position.refs]);
-    const refs = React25.useMemo(() => ({
+    const refs = React24.useMemo(() => ({
       ...position.refs,
       setReference,
       setFloating,
       setPositionReference,
       domReference: domReferenceRef
     }), [position.refs, setReference, setFloating, setPositionReference]);
-    const elements = React25.useMemo(() => ({
+    const elements = React24.useMemo(() => ({
       ...position.elements,
       domReference: domReferenceElement
     }), [position.elements, domReferenceElement]);
-    const context = React25.useMemo(() => ({
+    const context = React24.useMemo(() => ({
       ...position,
       dataRef: store2.context.dataRef,
       open,
@@ -5838,7 +5849,7 @@ var wp;
         node.context = context;
       }
     });
-    return React25.useMemo(() => ({
+    return React24.useMemo(() => ({
       ...position,
       context,
       refs,
@@ -5848,7 +5859,7 @@ var wp;
   }
 
   // node_modules/@base-ui/react/floating-ui-react/hooks/useFocus.mjs
-  var React26 = __toESM(require_react(), 1);
+  var React25 = __toESM(require_react(), 1);
   var isMacSafari = parts_exports.os.mac && parts_exports.engine.webkit;
   function useFocus(context, props = {}) {
     const {
@@ -5860,11 +5871,11 @@ var wp;
       events,
       dataRef
     } = store2.context;
-    const blockFocusRef = React26.useRef(false);
-    const blockedReferenceRef = React26.useRef(null);
-    const keyboardModalityRef = React26.useRef(true);
+    const blockFocusRef = React25.useRef(false);
+    const blockedReferenceRef = React25.useRef(null);
+    const keyboardModalityRef = React25.useRef(true);
     const timeout = useTimeout();
-    React26.useEffect(() => {
+    React25.useEffect(() => {
       const domReference = store2.select("domReferenceElement");
       if (!enabled) {
         return void 0;
@@ -5884,7 +5895,7 @@ var wp;
       }
       return mergeCleanups(addEventListener(win, "blur", onBlur), isMacSafari && addEventListener(win, "keydown", onKeyDown, true), isMacSafari && addEventListener(win, "pointerdown", onPointerDown, true));
     }, [store2, enabled]);
-    React26.useEffect(() => {
+    React25.useEffect(() => {
       if (!enabled) {
         return void 0;
       }
@@ -5902,7 +5913,7 @@ var wp;
         events.off("openchange", onOpenChangeLocal);
       };
     }, [events, enabled, store2]);
-    const reference = React26.useMemo(() => {
+    const reference = React25.useMemo(() => {
       function resetBlockedFocus() {
         blockFocusRef.current = false;
         blockedReferenceRef.current = null;
@@ -5969,14 +5980,14 @@ var wp;
         }
       };
     }, [dataRef, delay, store2, timeout]);
-    return React26.useMemo(() => enabled ? {
+    return React25.useMemo(() => enabled ? {
       reference,
       trigger: reference
     } : {}, [enabled, reference]);
   }
 
   // node_modules/@base-ui/react/floating-ui-react/hooks/useHoverFloatingInteraction.mjs
-  var React27 = __toESM(require_react(), 1);
+  var React26 = __toESM(require_react(), 1);
 
   // node_modules/@base-ui/react/floating-ui-react/hooks/useHoverInteractionSharedState.mjs
   var HoverInteraction = class _HoverInteraction {
@@ -6087,7 +6098,7 @@ var wp;
         clearPointerEvents();
       }
     }, [open, instance, clearPointerEvents]);
-    React27.useEffect(() => {
+    React26.useEffect(() => {
       return clearPointerEvents;
     }, [clearPointerEvents]);
     useIsoLayoutEffect(() => {
@@ -6116,7 +6127,7 @@ var wp;
       }
       return void 0;
     }, [enabled, open, domReferenceElement, floatingElement, instance, isHoverOpen, tree, parentId, clearPointerEvents]);
-    React27.useEffect(() => {
+    React26.useEffect(() => {
       if (!enabled) {
         return void 0;
       }
@@ -6191,7 +6202,7 @@ var wp;
   }
 
   // node_modules/@base-ui/react/floating-ui-react/hooks/useHoverReferenceInteraction.mjs
-  var React28 = __toESM(require_react(), 1);
+  var React27 = __toESM(require_react(), 1);
   var ReactDOM5 = __toESM(require_react_dom(), 1);
   var EMPTY_REF = {
     current: null
@@ -6209,7 +6220,8 @@ var wp;
       isActiveTrigger = true,
       getHandleCloseContext,
       isClosing,
-      shouldOpen: shouldOpenProp
+      shouldOpen: shouldOpenProp,
+      guardStaleOpen = false
     } = props;
     const store2 = "rootStore" in context ? context.rootStore : context;
     const {
@@ -6218,7 +6230,7 @@ var wp;
     } = store2.context;
     const tree = useFloatingTree(externalTree);
     const instance = useHoverInteractionSharedState(store2);
-    const isHoverCloseActiveRef = React28.useRef(false);
+    const isHoverCloseActiveRef = React27.useRef(false);
     const handleCloseRef = useValueAsRef(handleClose);
     const delayRef = useValueAsRef(delay);
     const restMsRef = useValueAsRef(restMs);
@@ -6256,8 +6268,8 @@ var wp;
     if (isActiveTrigger) {
       instance.handleCloseOptions = handleCloseRef.current?.__options;
     }
-    React28.useEffect(() => cleanupMouseMoveHandler, [cleanupMouseMoveHandler]);
-    React28.useEffect(() => {
+    React27.useEffect(() => cleanupMouseMoveHandler, [cleanupMouseMoveHandler]);
+    React27.useEffect(() => {
       if (!enabled) {
         return void 0;
       }
@@ -6278,7 +6290,7 @@ var wp;
         events.off("openchange", onOpenChangeLocal);
       };
     }, [enabled, events, instance, cleanupMouseMoveHandler]);
-    React28.useEffect(() => {
+    React27.useEffect(() => {
       if (!enabled) {
         return void 0;
       }
@@ -6392,14 +6404,23 @@ var wp;
           closeWithDelay(event);
         }
       }
+      function onMouseOut(event) {
+        if (contains(trigger, event.relatedTarget)) {
+          return;
+        }
+        instance.openChangeTimeout.clear();
+        instance.restTimeout.clear();
+        instance.restTimeoutPending = false;
+      }
+      const staleOpenGuard = guardStaleOpen ? addEventListener(trigger, "mouseout", onMouseOut) : void 0;
       if (move) {
         return mergeCleanups(addEventListener(trigger, "mousemove", onMouseEnter, {
           once: true
-        }), addEventListener(trigger, "mouseenter", onMouseEnter), addEventListener(trigger, "mouseleave", onMouseLeave));
+        }), addEventListener(trigger, "mouseenter", onMouseEnter), addEventListener(trigger, "mouseleave", onMouseLeave), staleOpenGuard);
       }
-      return mergeCleanups(addEventListener(trigger, "mouseenter", onMouseEnter), addEventListener(trigger, "mouseleave", onMouseLeave));
-    }, [cleanupMouseMoveHandler, clearPointerEvents, dataRef, delayRef, store2, enabled, handleCloseRef, instance, isActiveTrigger, isOverInactiveTrigger, isClickLikeOpenEvent2, mouseOnly, move, restMsRef, triggerElementRef, tree, enabledRef, getHandleCloseContext, isClosingRef, checkShouldOpen]);
-    return React28.useMemo(() => {
+      return mergeCleanups(addEventListener(trigger, "mouseenter", onMouseEnter), addEventListener(trigger, "mouseleave", onMouseLeave), staleOpenGuard);
+    }, [cleanupMouseMoveHandler, clearPointerEvents, dataRef, delayRef, store2, enabled, handleCloseRef, instance, isActiveTrigger, isOverInactiveTrigger, isClickLikeOpenEvent2, mouseOnly, move, restMsRef, triggerElementRef, tree, enabledRef, getHandleCloseContext, isClosingRef, checkShouldOpen, guardStaleOpen]);
+    return React27.useMemo(() => {
       if (!enabled) {
         return void 0;
       }
@@ -6680,6 +6701,21 @@ var wp;
     return fn;
   }
 
+  // node_modules/@base-ui/react/utils/NullStore.mjs
+  var NullStore = class extends ReactStore {
+    // `update`/`set`/`notifyAll` funnel through `setState` in the base `Store`, so overriding
+    // `setState` alone would neutralize them today. They are overridden explicitly so the store stays
+    // inert even if a future base-class change stops routing a mutator through `setState`.
+    setState(_newState) {
+    }
+    update(_changes) {
+    }
+    set(_key, _value) {
+    }
+    notifyAll() {
+    }
+  };
+
   // node_modules/@base-ui/react/utils/popupStateMapping.mjs
   var CommonPopupDataAttributes = (function(CommonPopupDataAttributes2) {
     CommonPopupDataAttributes2["open"] = "data-open";
@@ -6691,26 +6727,17 @@ var wp;
     CommonPopupDataAttributes2["align"] = "data-align";
     return CommonPopupDataAttributes2;
   })({});
-  var CommonTriggerDataAttributes = /* @__PURE__ */ (function(CommonTriggerDataAttributes2) {
-    CommonTriggerDataAttributes2["popupOpen"] = "data-popup-open";
-    CommonTriggerDataAttributes2["pressed"] = "data-pressed";
-    return CommonTriggerDataAttributes2;
-  })({});
   var TRIGGER_HOOK = {
-    [CommonTriggerDataAttributes.popupOpen]: ""
-  };
-  var PRESSABLE_TRIGGER_HOOK = {
-    [CommonTriggerDataAttributes.popupOpen]: "",
-    [CommonTriggerDataAttributes.pressed]: ""
+    "data-popup-open": ""
   };
   var POPUP_OPEN_HOOK = {
-    [CommonPopupDataAttributes.open]: ""
+    "data-open": ""
   };
   var POPUP_CLOSED_HOOK = {
-    [CommonPopupDataAttributes.closed]: ""
+    "data-closed": ""
   };
   var ANCHOR_HIDDEN_HOOK = {
-    [CommonPopupDataAttributes.anchorHidden]: ""
+    "data-anchor-hidden": ""
   };
   var triggerOpenStateMapping = {
     open(value) {
@@ -6734,6 +6761,10 @@ var wp;
       return null;
     }
   };
+  var popupTransitionStateMapping = {
+    ...popupStateMapping,
+    ...transitionStatusMapping
+  };
 
   // node_modules/@base-ui/utils/inertValue.mjs
   function inertValue(value) {
@@ -6743,7 +6774,16 @@ var wp;
     return value ? "true" : void 0;
   }
 
-  // node_modules/@base-ui/react/utils/useAnchorPositioning.mjs
+  // node_modules/@base-ui/react/internals/direction-context/DirectionContext.mjs
+  var React28 = __toESM(require_react(), 1);
+  var DirectionContext = /* @__PURE__ */ React28.createContext(void 0);
+  if (true) DirectionContext.displayName = "DirectionContext";
+  function useDirection() {
+    const context = React28.useContext(DirectionContext);
+    return context?.direction ?? "ltr";
+  }
+
+  // node_modules/@base-ui/react/internals/useAnchorPositioning.mjs
   var React29 = __toESM(require_react(), 1);
 
   // node_modules/@base-ui/react/floating-ui-react/middleware/arrow.mjs
@@ -6816,7 +6856,6 @@ var wp;
   });
 
   // node_modules/@base-ui/react/utils/hideMiddleware.mjs
-  var nativeHideFn = hide3().fn;
   var hide4 = {
     name: "hide",
     async fn(state) {
@@ -6827,88 +6866,27 @@ var wp;
         y
       } = state.rects.reference;
       const anchorHidden = width === 0 && height === 0 && x === 0 && y === 0;
-      const nativeHideResult = await nativeHideFn(state);
+      const overflow = await state.platform.detectOverflow(state, {
+        elementContext: "reference"
+      });
+      const referenceHidden = overflow.top - height >= 0 || overflow.right - width >= 0 || overflow.bottom - height >= 0 || overflow.left - width >= 0;
       return {
         data: {
-          referenceHidden: nativeHideResult.data?.referenceHidden || anchorHidden
+          referenceHidden: referenceHidden || anchorHidden
         }
       };
     }
   };
 
-  // node_modules/@base-ui/react/utils/adaptiveOriginMiddleware.mjs
+  // node_modules/@base-ui/react/utils/adaptiveOriginConstants.mjs
   var DEFAULT_SIDES = {
     sideX: "left",
     sideY: "top"
   };
-  var adaptiveOrigin = {
-    name: "adaptiveOrigin",
-    async fn(state) {
-      const {
-        x: rawX,
-        y: rawY,
-        rects: {
-          floating: floatRect
-        },
-        elements: {
-          floating
-        },
-        platform: platform3,
-        strategy,
-        placement
-      } = state;
-      const win = getWindow(floating);
-      const styles = win.getComputedStyle(floating);
-      const hasTransition = styles.transitionDuration !== "0s" && styles.transitionDuration !== "";
-      if (!hasTransition) {
-        return {
-          x: rawX,
-          y: rawY,
-          data: DEFAULT_SIDES
-        };
-      }
-      const offsetParent = await platform3.getOffsetParent?.(floating);
-      let offsetDimensions = {
-        width: 0,
-        height: 0
-      };
-      if (strategy === "fixed" && win?.visualViewport) {
-        offsetDimensions = {
-          width: win.visualViewport.width,
-          height: win.visualViewport.height
-        };
-      } else if (offsetParent === win) {
-        const doc = ownerDocument(floating);
-        offsetDimensions = {
-          width: doc.documentElement.clientWidth,
-          height: doc.documentElement.clientHeight
-        };
-      } else if (await platform3.isElement?.(offsetParent)) {
-        offsetDimensions = await platform3.getDimensions(offsetParent);
-      }
-      const currentSide = getSide(placement);
-      let x = rawX;
-      let y = rawY;
-      if (currentSide === "left") {
-        x = offsetDimensions.width - (rawX + floatRect.width);
-      }
-      if (currentSide === "top") {
-        y = offsetDimensions.height - (rawY + floatRect.height);
-      }
-      const sideX = currentSide === "left" ? "right" : DEFAULT_SIDES.sideX;
-      const sideY = currentSide === "top" ? "bottom" : DEFAULT_SIDES.sideY;
-      return {
-        x,
-        y,
-        data: {
-          sideX,
-          sideY
-        }
-      };
-    }
-  };
 
-  // node_modules/@base-ui/react/utils/useAnchorPositioning.mjs
+  // node_modules/@base-ui/react/internals/useAnchorPositioning.mjs
+  var AVAILABLE_WIDTH_VAR = "--available-width";
+  var AVAILABLE_HEIGHT_VAR = "--available-height";
   function getLogicalSide(sideParam, renderedSide, isRtl) {
     const isLogicalSideParam = sideParam === "inline-start" || sideParam === "inline-end";
     const logicalRight = isRtl ? "inline-start" : "inline-end";
@@ -6940,6 +6918,9 @@ var wp;
     return data;
   }
   function useAnchorPositioning(params) {
+    return useAnchorPositioningWithHook(params, useBaseUIFloating);
+  }
+  function useAnchorPositioningWithHook(params, useFloatingHook) {
     const {
       // Public parameters
       anchor,
@@ -6959,7 +6940,7 @@ var wp;
       floatingRootContext,
       mounted,
       collisionAvoidance,
-      shiftCrossAxis = false,
+      shift: shift4,
       nodeId,
       adaptiveOrigin: adaptiveOrigin2,
       lazyFlip = false,
@@ -6972,6 +6953,8 @@ var wp;
     const collisionAvoidanceSide = collisionAvoidance.side || "flip";
     const collisionAvoidanceAlign = collisionAvoidance.align || "flip";
     const collisionAvoidanceFallbackAxisSide = collisionAvoidance.fallbackAxisSide || "end";
+    const shiftCrossAxis = shift4?.crossAxis ?? false;
+    const shiftRootBoundary = shift4?.rootBoundary;
     const anchorFn = typeof anchor === "function" ? anchor : void 0;
     const anchorFnCallback = useStableCallback(anchorFn);
     const anchorDep = anchorFn ? anchorFnCallback : anchor;
@@ -6989,26 +6972,26 @@ var wp;
     }[sideParam];
     const placement = align === "center" ? side : `${side}-${align}`;
     let collisionPadding = collisionPaddingParam;
+    if (typeof collisionPadding === "number") {
+      collisionPadding = {
+        top: collisionPadding,
+        right: collisionPadding,
+        bottom: collisionPadding,
+        left: collisionPadding
+      };
+    } else if (collisionPadding) {
+      collisionPadding = {
+        top: collisionPadding.top || 0,
+        right: collisionPadding.right || 0,
+        bottom: collisionPadding.bottom || 0,
+        left: collisionPadding.left || 0
+      };
+    }
     const bias = 1;
     const biasTop = sideParam === "bottom" ? bias : 0;
     const biasBottom = sideParam === "top" ? bias : 0;
     const biasLeft = sideParam === "right" ? bias : 0;
     const biasRight = sideParam === "left" ? bias : 0;
-    if (typeof collisionPadding === "number") {
-      collisionPadding = {
-        top: collisionPadding + biasTop,
-        right: collisionPadding + biasRight,
-        bottom: collisionPadding + biasBottom,
-        left: collisionPadding + biasLeft
-      };
-    } else if (collisionPadding) {
-      collisionPadding = {
-        top: (collisionPadding.top || 0) + biasTop,
-        right: (collisionPadding.right || 0) + biasRight,
-        bottom: (collisionPadding.bottom || 0) + biasBottom,
-        left: (collisionPadding.left || 0) + biasLeft
-      };
-    }
     const commonCollisionProps = {
       boundary: collisionBoundary === "clipping-ancestors" ? "clippingAncestors" : collisionBoundary,
       padding: collisionPadding
@@ -7039,46 +7022,37 @@ var wp;
       // Ensure the popup flips if it's been limited by its --available-height and it resizes.
       // Since the size() padding is smaller than the flip() padding, flip() will take precedence.
       padding: {
-        top: collisionPadding.top + bias,
-        right: collisionPadding.right + bias,
-        bottom: collisionPadding.bottom + bias,
-        left: collisionPadding.left + bias
+        top: collisionPadding.top + bias + biasTop,
+        right: collisionPadding.right + bias + biasRight,
+        bottom: collisionPadding.bottom + bias + biasBottom,
+        left: collisionPadding.left + bias + biasLeft
       },
       mainAxis: !shiftCrossAxis && collisionAvoidanceSide === "flip",
       crossAxis: collisionAvoidanceAlign === "flip" ? "alignment" : false,
       fallbackAxisSideDirection: collisionAvoidanceFallbackAxisSide
     });
-    const shiftMiddleware = shiftDisabled ? null : shift3((data) => {
-      const html = ownerDocument(data.elements.floating).documentElement;
-      return {
-        ...commonCollisionProps,
-        // Use the Layout Viewport to avoid shifting around when pinch-zooming
-        // for context menus.
-        rootBoundary: shiftCrossAxis ? {
-          x: 0,
-          y: 0,
-          width: html.clientWidth,
-          height: html.clientHeight
-        } : void 0,
-        mainAxis: collisionAvoidanceAlign !== "none",
-        crossAxis: crossAxisShiftEnabled,
-        limiter: sticky || shiftCrossAxis ? void 0 : limitShift3((limitData) => {
-          if (!arrowRef.current) {
-            return {};
-          }
-          const {
-            width,
-            height
-          } = arrowRef.current.getBoundingClientRect();
-          const sideAxis = getSideAxis(getSide(limitData.placement));
-          const arrowSize = sideAxis === "y" ? width : height;
-          const offsetAmount = sideAxis === "y" ? collisionPadding.left + collisionPadding.right : collisionPadding.top + collisionPadding.bottom;
-          return {
-            offset: arrowSize / 2 + offsetAmount / 2
-          };
-        })
-      };
-    }, [commonCollisionProps, sticky, shiftCrossAxis, collisionPadding, collisionAvoidanceAlign]);
+    const shiftMiddleware = shiftDisabled ? null : shift3({
+      ...commonCollisionProps,
+      // Use the Layout Viewport to avoid shifting around when pinch-zooming.
+      rootBoundary: shiftRootBoundary,
+      mainAxis: collisionAvoidanceAlign !== "none",
+      crossAxis: crossAxisShiftEnabled,
+      limiter: sticky || shiftCrossAxis ? void 0 : limitShift3((limitData) => {
+        if (!arrowRef.current) {
+          return {};
+        }
+        const {
+          width,
+          height
+        } = arrowRef.current.getBoundingClientRect();
+        const sideAxis = getSideAxis(getSide(limitData.placement));
+        const arrowSize = sideAxis === "y" ? width : height;
+        const offsetAmount = sideAxis === "y" ? collisionPadding.left + collisionPadding.right : collisionPadding.top + collisionPadding.bottom;
+        return {
+          offset: arrowSize / 2 + offsetAmount / 2
+        };
+      })
+    }, [commonCollisionProps, sticky, shiftCrossAxis, shiftRootBoundary, collisionPadding, collisionAvoidanceAlign]);
     if (collisionAvoidanceSide === "shift" || collisionAvoidanceAlign === "shift" || align === "center") {
       middleware.push(shiftMiddleware, flipMiddleware);
     } else {
@@ -7098,8 +7072,8 @@ var wp;
           return;
         }
         const floatingStyle = floating.style;
-        floatingStyle.setProperty("--available-width", `${availableWidth}px`);
-        floatingStyle.setProperty("--available-height", `${availableHeight}px`);
+        floatingStyle.setProperty(AVAILABLE_WIDTH_VAR, `${availableWidth}px`);
+        floatingStyle.setProperty(AVAILABLE_HEIGHT_VAR, `${availableHeight}px`);
         const dpr = getWindow(floating).devicePixelRatio || 1;
         const {
           x: x2,
@@ -7177,7 +7151,7 @@ var wp;
       context,
       isPositioned,
       floatingStyles: originalFloatingStyles
-    } = useFloating2({
+    } = useFloatingHook({
       rootContext: floatingRootContext,
       open: keepMounted ? mounted : void 0,
       placement,
@@ -7193,14 +7167,27 @@ var wp;
     } = middlewareData.adaptiveOrigin || DEFAULT_SIDES;
     const resolvedPosition = isPositioned ? positionMethod : "fixed";
     const floatingStyles = React29.useMemo(() => {
-      const base = adaptiveOrigin2 ? {
-        position: resolvedPosition,
-        [sideX]: x,
-        [sideY]: y
-      } : {
-        position: resolvedPosition,
-        ...originalFloatingStyles
-      };
+      let base;
+      if (!isPositioned) {
+        base = {
+          position: resolvedPosition,
+          top: 0,
+          left: 0
+        };
+      } else if (adaptiveOrigin2) {
+        base = {
+          position: resolvedPosition,
+          [sideX]: x,
+          [sideY]: y
+        };
+      } else {
+        base = {
+          ...originalFloatingStyles,
+          position: resolvedPosition
+        };
+      }
+      base[AVAILABLE_WIDTH_VAR] = "100vw";
+      base[AVAILABLE_HEIGHT_VAR] = "100vh";
       if (!isPositioned) {
         base.opacity = 0;
       }
@@ -7244,10 +7231,10 @@ var wp;
     const renderedAlign = getAlignment(renderedPlacement) || "center";
     const anchorHidden = Boolean(middlewareData.hide?.referenceHidden);
     useIsoLayoutEffect(() => {
-      if (lazyFlip && mounted && isPositioned) {
+      if (lazyFlip && mounted && isPositioned && renderedSide !== side) {
         setMountSide(renderedSide);
       }
-    }, [lazyFlip, mounted, isPositioned, renderedSide]);
+    }, [lazyFlip, mounted, isPositioned, renderedSide, side]);
     const arrowStyles = React29.useMemo(() => ({
       position: "absolute",
       top: middlewareData.arrow?.y,
@@ -7273,7 +7260,7 @@ var wp;
     return param != null && "current" in param;
   }
 
-  // node_modules/@base-ui/react/utils/getDisabledMountTransitionStyles.mjs
+  // node_modules/@base-ui/react/internals/getDisabledMountTransitionStyles.mjs
   function getDisabledMountTransitionStyles(transitionStatus) {
     return transitionStatus === "starting" ? DISABLED_TRANSITIONS_STYLE : EMPTY_OBJECT;
   }
@@ -7316,7 +7303,7 @@ var wp;
       current: value,
       previous: null
     });
-    if (value !== state.current) {
+    if (!Object.is(value, state.current)) {
       setState({
         current: value,
         previous: state.current
@@ -7359,29 +7346,14 @@ var wp;
       side,
       direction
     } = parameters;
-    const runOnceAnimationsFinish = useAnimationsFinished(popupElement, true, false);
+    const runOnceAnimationsFinish = useAnimationsFinished(popupElement, true);
     const animationFrame = useAnimationFrame();
     const committedDimensionsRef = React31.useRef(null);
     const isInitialRenderRef = React31.useRef(true);
     const restoreAnchoringStylesRef = React31.useRef(NOOP);
     const onMeasureLayout = useStableCallback(onMeasureLayoutParam);
     const onMeasureLayoutComplete = useStableCallback(onMeasureLayoutCompleteParam);
-    const anchoringStyles = React31.useMemo(() => {
-      let isOriginSide = side === "top";
-      let isPhysicalLeft = side === "left";
-      if (direction === "rtl") {
-        isOriginSide = isOriginSide || side === "inline-end";
-        isPhysicalLeft = isPhysicalLeft || side === "inline-end";
-      } else {
-        isOriginSide = isOriginSide || side === "inline-start";
-        isPhysicalLeft = isPhysicalLeft || side === "inline-start";
-      }
-      return isOriginSide ? {
-        position: "absolute",
-        [side === "top" ? "bottom" : "top"]: "0",
-        [isPhysicalLeft ? "right" : "left"]: "0"
-      } : EMPTY_OBJECT;
-    }, [side, direction]);
+    const anchoringStyles = React31.useMemo(() => getPopupAnchoringStyles(side, direction), [side, direction]);
     useIsoLayoutEffect(() => {
       if (!mounted) {
         restoreAnchoringStylesRef.current = NOOP;
@@ -7448,6 +7420,18 @@ var wp;
       };
     }, [content, popupElement, positionerElement, runOnceAnimationsFinish, animationFrame, mounted, onMeasureLayout, onMeasureLayoutComplete, anchoringStyles]);
   }
+  function getPopupAnchoringStyles(side, direction) {
+    const isPhysicalTop = side === "top";
+    const isPhysicalLeft = side === "left" || side === (direction === "rtl" ? "inline-end" : "inline-start");
+    if (!isPhysicalTop && !isPhysicalLeft) {
+      return EMPTY_OBJECT;
+    }
+    return {
+      position: "absolute",
+      [isPhysicalTop ? "bottom" : "top"]: "0",
+      [isPhysicalLeft ? "right" : "left"]: "0"
+    };
+  }
   function overrideElementStyle(element, property, value) {
     const originalValue = element.style.getPropertyValue(property);
     element.style.setProperty(property, value);
@@ -7494,13 +7478,85 @@ var wp;
   };
   if (true) DirectionProvider.displayName = "DirectionProvider";
 
+  // node_modules/@base-ui/react/utils/adaptiveOriginMiddleware.mjs
+  var adaptiveOrigin = {
+    name: "adaptiveOrigin",
+    async fn(state) {
+      const {
+        x: rawX,
+        y: rawY,
+        rects: {
+          floating: floatRect
+        },
+        elements: {
+          floating
+        },
+        platform: platform3,
+        strategy,
+        placement
+      } = state;
+      const win = getWindow(floating);
+      const styles = win.getComputedStyle(floating);
+      const hasTransition = styles.transitionDuration !== "0s" && styles.transitionDuration !== "";
+      if (!hasTransition) {
+        return {
+          x: rawX,
+          y: rawY,
+          data: DEFAULT_SIDES
+        };
+      }
+      const offsetParent = await platform3.getOffsetParent?.(floating);
+      let offsetDimensions = {
+        width: 0,
+        height: 0
+      };
+      if (strategy === "fixed" && win?.visualViewport) {
+        offsetDimensions = {
+          width: win.visualViewport.width,
+          height: win.visualViewport.height
+        };
+      } else if (offsetParent === win) {
+        const doc = ownerDocument(floating);
+        offsetDimensions = {
+          width: doc.documentElement.clientWidth,
+          height: doc.documentElement.clientHeight
+        };
+      } else if (await platform3.isElement?.(offsetParent)) {
+        offsetDimensions = await platform3.getDimensions(offsetParent);
+      }
+      const currentSide = getSide(placement);
+      let x = rawX;
+      let y = rawY;
+      if (currentSide === "left") {
+        x = offsetDimensions.width - (rawX + floatRect.width);
+      }
+      if (currentSide === "top") {
+        y = offsetDimensions.height - (rawY + floatRect.height);
+      }
+      const sideX = currentSide === "left" ? "right" : DEFAULT_SIDES.sideX;
+      const sideY = currentSide === "top" ? "bottom" : DEFAULT_SIDES.sideY;
+      return {
+        x,
+        y,
+        data: {
+          sideX,
+          sideY
+        }
+      };
+    }
+  };
+
   // node_modules/@base-ui/react/utils/usePopupViewport.mjs
   var import_jsx_runtime6 = __toESM(require_jsx_runtime(), 1);
+  var popupViewportStateMapping = {
+    activationDirection: (value) => value ? {
+      "data-activation-direction": value
+    } : null
+  };
   function usePopupViewport(parameters) {
     const {
       store: store2,
       side,
-      cssVars,
       children
     } = parameters;
     const direction = useDirection();
@@ -7518,14 +7574,15 @@ var wp;
     const [newTriggerOffset, setNewTriggerOffset] = React33.useState(null);
     const currentContainerRef = React33.useRef(null);
     const previousContainerRef = React33.useRef(null);
-    const onAnimationsFinished = useAnimationsFinished(currentContainerRef, true, false);
+    const onAnimationsFinished = useAnimationsFinished(currentContainerRef, true);
     const cleanupFrame = useAnimationFrame();
+    const cleanupControllerRef = React33.useRef(null);
     const [previousContentDimensions, setPreviousContentDimensions] = React33.useState(null);
     const [showStartingStyleAttribute, setShowStartingStyleAttribute] = React33.useState(false);
     useIsoLayoutEffect(() => {
-      store2.set("hasViewport", true);
+      store2.set("adaptiveOrigin", adaptiveOrigin);
       return () => {
-        store2.set("hasViewport", false);
+        store2.set("adaptiveOrigin", void 0);
       };
     }, [store2]);
     const handleMeasureLayout = useStableCallback(() => {
@@ -7541,6 +7598,16 @@ var wp;
         setPreviousContentDimensions(previousDimensions);
       }
     });
+    const armViewportCleanup = useStableCallback(() => {
+      cleanupControllerRef.current?.abort();
+      const controller = new AbortController();
+      cleanupControllerRef.current = controller;
+      onAnimationsFinished(() => {
+        setPreviousContentNode(null);
+        setPreviousContentDimensions(null);
+        capturedNodeRef.current = null;
+      }, controller.signal);
+    });
     const lastHandledTriggerRef = React33.useRef(null);
     useIsoLayoutEffect(() => {
       if (!open || !mounted) {
@@ -7553,19 +7620,22 @@ var wp;
         setShowStartingStyleAttribute(true);
         const offset4 = calculateRelativePosition(previousActiveTrigger, activeTrigger);
         setNewTriggerOffset(offset4);
-        cleanupFrame.request(() => {
-          ReactDOM6.flushSync(() => {
-            setShowStartingStyleAttribute(false);
-          });
-          onAnimationsFinished(() => {
-            setPreviousContentNode(null);
-            setPreviousContentDimensions(null);
-            capturedNodeRef.current = null;
-          });
-        });
         lastHandledTriggerRef.current = activeTrigger;
       }
-    }, [activeTrigger, previousActiveTrigger, previousContentNode, onAnimationsFinished, cleanupFrame]);
+    }, [activeTrigger, previousActiveTrigger]);
+    useIsoLayoutEffect(() => {
+      if (previousContentNode == null) {
+        return;
+      }
+      cleanupControllerRef.current?.abort();
+      setShowStartingStyleAttribute(true);
+      cleanupFrame.request(() => {
+        ReactDOM6.flushSync(() => {
+          setShowStartingStyleAttribute(false);
+        });
+        armViewportCleanup();
+      });
+    }, [currentContentKey, previousContentNode, armViewportCleanup, cleanupFrame]);
     useIsoLayoutEffect(() => {
       const source = currentContainerRef.current;
       if (!source) {
@@ -7593,8 +7663,8 @@ var wp;
           ref: previousContainerRef,
           style: {
             ...previousContentDimensions ? {
-              [cssVars.popupWidth]: `${previousContentDimensions.width}px`,
-              [cssVars.popupHeight]: `${previousContentDimensions.height}px`
+              "--popup-width": `${previousContentDimensions.width}px`,
+              "--popup-height": `${previousContentDimensions.height}px`
             } : null,
             position: "absolute"
           },
@@ -7701,8 +7771,8 @@ var wp;
       ...elementProps
     } = componentProps;
     const {
-      portalNode,
-      portalSubtree
+      node: portalNode,
+      subtree: portalSubtree
     } = useFloatingPortalNode({
       container,
       ref: forwardedRef,
@@ -7752,30 +7822,20 @@ var wp;
   var React36 = __toESM(require_react(), 1);
   var selectors2 = {
     ...popupStoreSelectors,
-    disabled: createSelector((state) => state.disabled),
-    instantType: createSelector((state) => state.instantType),
-    isInstantPhase: createSelector((state) => state.isInstantPhase),
-    trackCursorAxis: createSelector((state) => state.trackCursorAxis),
-    disableHoverablePopup: createSelector((state) => state.disableHoverablePopup),
-    lastOpenChangeReason: createSelector((state) => state.openChangeReason),
-    closeOnClick: createSelector((state) => state.closeOnClick),
-    closeDelay: createSelector((state) => state.closeDelay),
-    hasViewport: createSelector((state) => state.hasViewport)
+    disabled: (state) => state.disabled,
+    instantType: (state) => state.instantType,
+    isInstantPhase: (state) => state.isInstantPhase,
+    trackCursorAxis: (state) => state.trackCursorAxis,
+    disableHoverablePopup: (state) => state.disableHoverablePopup,
+    lastOpenChangeReason: (state) => state.openChangeReason,
+    closeOnClick: (state) => state.closeOnClick,
+    closeDelay: (state) => state.closeDelay,
+    adaptiveOrigin: (state) => state.adaptiveOrigin
   };
-  var TooltipStore = class _TooltipStore extends ReactStore {
-    constructor(initialState, floatingId, nested = false) {
+  var TooltipStore = class extends ReactStore {
+    constructor(initialState, floatingId, nested) {
       const triggerElements = new PopupTriggerMap();
-      const state = {
-        ...createInitialState(),
-        ...initialState
-      };
-      state.floatingRootContext = createPopupFloatingRootContext(triggerElements, floatingId, nested);
-      super(state, {
-        popupRef: /* @__PURE__ */ React36.createRef(),
-        onOpenChange: void 0,
-        onOpenChangeComplete: void 0,
-        triggerElements
-      }, selectors2);
+      super(createInitialState(initialState, triggerElements, floatingId, nested), createInitialContext(triggerElements), selectors2);
     }
     setOpen = (nextOpen, eventDetails) => {
       applyPopupOpenChange(this, nextOpen, eventDetails, {
@@ -7788,13 +7848,17 @@ var wp;
     cancelPendingOpen(event) {
       this.state.floatingRootContext.dispatchOpenChange(false, createChangeEventDetails(reason_parts_exports.triggerPress, event));
     }
-    static useStore(externalStore, initialState) {
-      const store2 = usePopupStore(externalStore, (floatingId, nested) => new _TooltipStore(initialState, floatingId, nested)).store;
-      return store2;
-    }
   };
-  function createInitialState() {
-    return {
+  function createNullTooltipStore() {
+    const triggerElements = new PopupTriggerMap();
+    const store2 = new NullStore(Object.freeze(createInitialState(void 0, triggerElements)), Object.freeze(createInitialContext(triggerElements)), selectors2);
+    return Object.assign(store2, {
+      setOpen: NOOP,
+      cancelPendingOpen: NOOP
+    });
+  }
+  function createInitialState(initialState, triggerElements, floatingId, nested = false) {
+    const state = {
       ...createInitialPopupStoreState(),
       disabled: false,
       instantType: void 0,
@@ -7804,7 +7868,18 @@ var wp;
       openChangeReason: null,
       closeOnClick: true,
       closeDelay: 0,
-      hasViewport: false
+      adaptiveOrigin: void 0,
+      ...initialState
+    };
+    state.floatingRootContext = createPopupFloatingRootContext(triggerElements, floatingId, nested);
+    return state;
+  }
+  function createInitialContext(triggerElements) {
+    return {
+      popupRef: /* @__PURE__ */ React36.createRef(),
+      onOpenChange: void 0,
+      onOpenChangeComplete: void 0,
+      triggerElements
     };
   }
 
@@ -7825,13 +7900,12 @@ var wp;
       defaultTriggerId: defaultTriggerIdProp = null,
       children
     } = props;
-    const store2 = TooltipStore.useStore(handle?.store, {
+    const store2 = usePopupRootStore((floatingId, nested) => new TooltipStore({
       open: defaultOpen,
       openProp,
       activeTriggerId: defaultTriggerIdProp,
       triggerIdProp
-    });
-    useInitialOpenSync(store2, openProp, defaultOpen, defaultTriggerIdProp);
+    }, floatingId, nested));
     store2.useControlledProp("openProp", openProp);
     store2.useControlledProp("triggerIdProp", triggerIdProp);
     store2.useContextCallback("onOpenChange", onOpenChange);
@@ -7843,9 +7917,9 @@ var wp;
     const payload = store2.useState("payload");
     store2.useSyncedValues({
       trackCursorAxis,
-      disableHoverablePopup
+      disableHoverablePopup,
+      disabled: disabled2
     });
-    store2.useSyncedValue("disabled", disabled2);
     useImplicitActiveTrigger(store2, {
       closeOnActiveTriggerUnmount: true
     });
@@ -7880,17 +7954,17 @@ var wp;
         }
       }
     }, [store2, activeTriggerId, open]);
-    const handleImperativeClose = React37.useCallback(() => {
-      store2.setOpen(false, createChangeEventDetails(reason_parts_exports.imperativeAction));
-    }, [store2]);
     React37.useImperativeHandle(actionsRef, () => ({
       unmount: forceUnmount,
-      close: handleImperativeClose
-    }), [forceUnmount, handleImperativeClose]);
+      close: () => store2.setOpen(false, createChangeEventDetails(reason_parts_exports.imperativeAction))
+    }), [forceUnmount, store2]);
     const shouldRenderInteractions = open || mounted || !disabled2 && trackCursorAxis !== "none";
     return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(TooltipRootContext.Provider, {
       value: store2,
-      children: [shouldRenderInteractions && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(TooltipInteractions, {
+      children: [handle && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(PopupHandleAttachment, {
+        handle,
+        store: store2
+      }), shouldRenderInteractions && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(TooltipInteractions, {
         store: store2,
         disabled: disabled2,
         trackCursorAxis
@@ -7914,13 +7988,11 @@ var wp;
       enabled: !disabled2 && trackCursorAxis !== "none",
       axis: trackCursorAxis === "none" ? void 0 : trackCursorAxis
     });
-    const activeTriggerProps = React37.useMemo(() => mergeProps(clientPoint.reference, dismiss.reference), [clientPoint.reference, dismiss.reference]);
-    const inactiveTriggerProps = React37.useMemo(() => mergeProps(clientPoint.trigger, dismiss.trigger), [clientPoint.trigger, dismiss.trigger]);
-    const popupProps = React37.useMemo(() => mergeProps(FOCUSABLE_POPUP_PROPS, clientPoint.floating, dismiss.floating), [clientPoint.floating, dismiss.floating]);
+    const triggerProps = React37.useMemo(() => mergeProps(clientPoint.reference, dismiss.reference), [clientPoint.reference, dismiss.reference]);
     usePopupInteractionProps(store2, {
-      activeTriggerProps,
-      inactiveTriggerProps,
-      popupProps
+      activeTriggerProps: triggerProps,
+      inactiveTriggerProps: triggerProps,
+      popupProps: dismiss.floating ?? EMPTY_OBJECT
     });
     return null;
   }
@@ -7935,13 +8007,6 @@ var wp;
   function useTooltipProviderContext() {
     return React38.useContext(TooltipProviderContext);
   }
-
-  // node_modules/@base-ui/react/tooltip/trigger/TooltipTriggerDataAttributes.mjs
-  var TooltipTriggerDataAttributes = (function(TooltipTriggerDataAttributes2) {
-    TooltipTriggerDataAttributes2[TooltipTriggerDataAttributes2["popupOpen"] = CommonTriggerDataAttributes.popupOpen] = "popupOpen";
-    TooltipTriggerDataAttributes2["triggerDisabled"] = "data-trigger-disabled";
-    return TooltipTriggerDataAttributes2;
-  })({});
 
   // node_modules/@base-ui/react/tooltip/utils/constants.mjs
   var OPEN_DELAY = 600;
@@ -7967,13 +8032,9 @@ var wp;
   function closestEnabledTooltipTrigger(element) {
     let current = element;
     while (current) {
-      if (current.hasAttribute(TOOLTIP_TRIGGER_IDENTIFIER)) {
-        return current;
-      }
-      const parentElement = current.parentElement;
-      if (parentElement) {
-        current = parentElement;
-        continue;
+      const trigger = current.closest(`[${TOOLTIP_TRIGGER_IDENTIFIER}]`);
+      if (trigger) {
+        return trigger;
       }
       const root = current.getRootNode();
       current = "host" in root && isElement(root.host) ? root.host : null;
@@ -7995,7 +8056,8 @@ var wp;
       ...elementProps
     } = componentProps;
     const rootContext = useTooltipRootContext(true);
-    const store2 = handle?.store ?? rootContext;
+    const handleStore = usePopupHandleStore(handle);
+    const store2 = handleStore ?? rootContext;
     if (!store2) {
       throw new Error(true ? "Base UI: <Tooltip.Trigger> must be either used within a <Tooltip.Root> component or provided with a handle." : formatErrorMessage_default(82));
     }
@@ -8014,7 +8076,7 @@ var wp;
       closeOnClick,
       closeDelay: closeDelayWithDefault
     });
-    const providerContext = useTooltipProviderContext();
+    const providerDelay = useTooltipProviderContext();
     const {
       delayRef,
       isInstantPhase,
@@ -8033,17 +8095,10 @@ var wp;
     const nestedTriggerOpenTimeout = useTimeout();
     const pointerTypeRef = React39.useRef(void 0);
     function getOpenDelay() {
-      const providerDelay = providerContext?.delay;
-      const groupOpenValue = typeof delayRef.current === "object" ? delayRef.current.open : void 0;
-      let computedOpenDelay = delayWithDefault;
-      if (hasProvider) {
-        if (groupOpenValue !== 0) {
-          computedOpenDelay = delay ?? providerDelay ?? delayWithDefault;
-        } else {
-          computedOpenDelay = 0;
-        }
+      if (!hasProvider) {
+        return delayWithDefault;
       }
-      return computedOpenDelay;
+      return getDelay(delayRef.current, "open") === 0 ? 0 : delay ?? providerDelay ?? OPEN_DELAY;
     }
     function isEnabledNestedTriggerTarget(target) {
       const triggerEl = triggerElementRef.current;
@@ -8071,13 +8126,13 @@ var wp;
       handleClose: !disableHoverablePopup && trackCursorAxis !== "both" ? safePolygon() : null,
       restMs: getOpenDelay,
       delay() {
-        const closeValue = typeof delayRef.current === "object" ? delayRef.current.close : void 0;
-        let computedCloseDelay = closeDelayWithDefault;
         if (closeDelay == null && hasProvider) {
-          computedCloseDelay = closeValue;
+          return {
+            close: getDelay(delayRef.current, "close")
+          };
         }
         return {
-          close: computedCloseDelay
+          close: closeDelayWithDefault
         };
       },
       triggerElementRef,
@@ -8154,7 +8209,7 @@ var wp;
           }
         },
         id: thisTriggerId,
-        [TooltipTriggerDataAttributes.triggerDisabled]: disabled2 ? "" : void 0,
+        "data-trigger-disabled": disabled2 ? "" : void 0,
         [TOOLTIP_TRIGGER_IDENTIFIER]: disabled2 ? void 0 : ""
       }, elementProps],
       stateAttributesMapping: triggerOpenStateMapping
@@ -8246,7 +8301,7 @@ var wp;
     const floatingRootContext = store2.useState("floatingRootContext");
     const instantType = store2.useState("instantType");
     const transitionStatus = store2.useState("transitionStatus");
-    const hasViewport = store2.useState("hasViewport");
+    const adaptiveOrigin2 = store2.useState("adaptiveOrigin");
     const positioning = useAnchorPositioning({
       anchor,
       positionMethod,
@@ -8263,7 +8318,7 @@ var wp;
       disableAnchorTracking,
       keepMounted,
       collisionAvoidance,
-      adaptiveOrigin: hasViewport ? adaptiveOrigin : void 0
+      adaptiveOrigin: adaptiveOrigin2
     });
     const state = React43.useMemo(() => ({
       open,
@@ -8289,10 +8344,6 @@ var wp;
 
   // node_modules/@base-ui/react/tooltip/popup/TooltipPopup.mjs
   var React44 = __toESM(require_react(), 1);
-  var stateAttributesMapping = {
-    ...popupStateMapping,
-    ...transitionStatusMapping
-  };
   var TooltipPopup = /* @__PURE__ */ React44.forwardRef(function TooltipPopup2(componentProps, forwardedRef) {
     const {
       render,
@@ -8336,8 +8387,8 @@ var wp;
     const element = useRenderElement("div", componentProps, {
       state,
       ref: [forwardedRef, store2.context.popupRef, setPopupElement],
-      props: [popupProps, getDisabledMountTransitionStyles(transitionStatus), elementProps],
-      stateAttributesMapping
+      props: [FOCUSABLE_POPUP_PROPS, popupProps, getDisabledMountTransitionStyles(transitionStatus), elementProps],
+      stateAttributesMapping: popupTransitionStateMapping
     });
     return element;
   });
@@ -8391,16 +8442,12 @@ var wp;
       closeDelay,
       timeout = 400
     } = props;
-    const contextValue = React46.useMemo(() => ({
-      delay,
-      closeDelay
-    }), [delay, closeDelay]);
     const delayValue = React46.useMemo(() => ({
       open: delay,
       close: closeDelay
     }), [delay, closeDelay]);
     return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(TooltipProviderContext.Provider, {
-      value: contextValue,
+      value: delay,
       children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(FloatingDelayGroup, {
         delay: delayValue,
         timeoutMs: timeout,
@@ -8412,20 +8459,6 @@ var wp;
 
   // node_modules/@base-ui/react/tooltip/viewport/TooltipViewport.mjs
   var React47 = __toESM(require_react(), 1);
-
-  // node_modules/@base-ui/react/tooltip/viewport/TooltipViewportCssVars.mjs
-  var TooltipViewportCssVars = /* @__PURE__ */ (function(TooltipViewportCssVars2) {
-    TooltipViewportCssVars2["popupWidth"] = "--popup-width";
-    TooltipViewportCssVars2["popupHeight"] = "--popup-height";
-    return TooltipViewportCssVars2;
-  })({});
-
-  // node_modules/@base-ui/react/tooltip/viewport/TooltipViewport.mjs
-  var stateAttributesMapping2 = {
-    activationDirection: (value) => value ? {
-      "data-activation-direction": value
-    } : null
-  };
   var TooltipViewport = /* @__PURE__ */ React47.forwardRef(function TooltipViewport2(componentProps, forwardedRef) {
     const {
       render,
@@ -8443,7 +8476,6 @@ var wp;
     } = usePopupViewport({
       store: store2,
       side: positioner.side,
-      cssVars: TooltipViewportCssVars,
       children
     });
     const state = {
@@ -8457,46 +8489,40 @@ var wp;
       props: [elementProps, {
         children: childrenToRender
       }],
-      stateAttributesMapping: stateAttributesMapping2
+      stateAttributesMapping: popupViewportStateMapping
     });
   });
   if (true) TooltipViewport.displayName = "TooltipViewport";
 
   // node_modules/@base-ui/react/tooltip/store/TooltipHandle.mjs
-  var TooltipHandle = class {
-    /**
-     * Internal store holding the tooltip state.
-     * @internal
-     */
+  var TooltipHandle = class extends BasePopupHandle {
     constructor() {
-      this.store = new TooltipStore();
+      super(createNullTooltipStore(), "Tooltip");
     }
     /**
-     * Opens the tooltip and associates it with the trigger with the given ID.
-     * The trigger must be a Tooltip.Trigger component with this handle passed as a prop.
+     * Opens the tooltip and associates it with the trigger with the given id.
      *
      * This method should only be called in an event handler or an effect (not during rendering).
      *
-     * @param triggerId ID of the trigger to associate with the tooltip.
+     * @param triggerId ID of the trigger to associate with the tooltip. The trigger must be a matching
+     * `Tooltip.Trigger` with this handle passed as a prop.
      */
     open(triggerId) {
-      const triggerElement = triggerId ? this.store.context.triggerElements.getById(triggerId) : void 0;
-      if (triggerId && !triggerElement) {
-        throw new Error(true ? `Base UI: TooltipHandle.open: No trigger found with id "${triggerId}".` : formatErrorMessage_default(81, triggerId));
-      }
-      this.store.setOpen(true, createChangeEventDetails(reason_parts_exports.imperativeAction, void 0, triggerElement));
+      this.openByTrigger(triggerId);
     }
     /**
      * Closes the tooltip.
+     *
+     * This method should only be called in an event handler or an effect (not during rendering).
      */
     close() {
-      this.store.setOpen(false, createChangeEventDetails(reason_parts_exports.imperativeAction, void 0, void 0));
+      this.closePopup();
     }
     /**
-     * Indicates whether the tooltip is currently open.
+     * Whether the tooltip is currently open. Returns `false` while no root is attached to the handle.
      */
     get isOpen() {
-      return this.store.select("open");
+      return this.attachedStore?.select("open") ?? false;
     }
   };
   function createTooltipHandle() {
@@ -8533,41 +8559,24 @@ var wp;
   var import_jsx_runtime16 = __toESM(require_jsx_runtime(), 1);
   var fullscreen_default = /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(import_primitives5.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(import_primitives5.Path, { d: "M6 4a2 2 0 0 0-2 2v3h1.5V6a.5.5 0 0 1 .5-.5h3V4H6Zm3 14.5H6a.5.5 0 0 1-.5-.5v-3H4v3a2 2 0 0 0 2 2h3v-1.5Zm6 1.5v-1.5h3a.5.5 0 0 0 .5-.5v-3H20v3a2 2 0 0 1-2 2h-3Zm3-16a2 2 0 0 1 2 2v3h-1.5V6a.5.5 0 0 0-.5-.5h-3V4h3Z" }) });
 
-  // packages/ui/build-module/utils/render-slot-with-children.mjs
+  // packages/ui/build-module/tooltip/index.mjs
+  var tooltip_exports = {};
+  __export(tooltip_exports, {
+    Popup: () => Popup,
+    Portal: () => Portal,
+    Positioner: () => Positioner,
+    Provider: () => Provider,
+    Root: () => Root,
+    Trigger: () => Trigger
+  });
+
+  // packages/ui/build-module/tooltip/popup.mjs
+  var import_element13 = __toESM(require_element(), 1);
+
+  // packages/ui/build-module/tooltip/portal.mjs
   var import_element10 = __toESM(require_element(), 1);
-  function renderSlotWithChildren(slot, defaultSlot, children) {
-    return (0, import_element10.cloneElement)(slot ?? defaultSlot, { children });
-  }
 
-  // packages/ui/build-module/utils/theme-provider.mjs
-  var theme = __toESM(require_theme(), 1);
-
-  // packages/ui/build-module/lock-unlock.mjs
-  var import_private_apis = __toESM(require_private_apis(), 1);
-  var { lock, unlock } = (0, import_private_apis.__dangerousOptInToUnstableAPIsOnlyForCoreModules)(
-    "I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.",
-    "@wordpress/ui"
-  );
-
-  // packages/ui/build-module/utils/theme-provider.mjs
-  function getThemeProvider() {
-    const themePackage = theme;
-    if (themePackage.ThemeProvider) {
-      return themePackage.ThemeProvider;
-    }
-    if (!themePackage.privateApis) {
-      throw new Error(
-        "@wordpress/ui: @wordpress/theme must expose `ThemeProvider` or `privateApis.ThemeProvider`."
-      );
-    }
-    return unlock(
-      themePackage.privateApis
-    ).ThemeProvider;
-  }
-  var ThemeProvider = getThemeProvider();
-
-  // packages/ui/build-module/stack/stack.mjs
-  var import_element11 = __toESM(require_element(), 1);
+  // packages/ui/build-module/utils/wp-compat-overlay-slot.mjs
   var STYLE_HASH_ATTRIBUTE = "data-wp-hash";
   function getRuntime() {
     const globalScope = globalThis;
@@ -8649,52 +8658,82 @@ var wp;
     }
   }
   if (typeof process === "undefined" || true) {
-    registerStyle("32aba35fe1", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._19ce0419607e1896__stack{display:flex}}}");
+    registerStyle("be37f31c1e", "._11fc52b637ff8a7e__slot{inset:0;isolation:isolate;pointer-events:none;position:fixed;z-index:1000000003}@layer wp-ui{@layer utilities, components, compositions, overrides;@layer utilities{._11fc52b637ff8a7e__slot>*{pointer-events:auto}}}");
   }
-  var style_default = { "stack": "_19ce0419607e1896__stack" };
-  var gapTokens = {
-    xs: "var(--wpds-dimension-gap-xs, 4px)",
-    sm: "var(--wpds-dimension-gap-sm, 8px)",
-    md: "var(--wpds-dimension-gap-md, 12px)",
-    lg: "var(--wpds-dimension-gap-lg, 16px)",
-    xl: "var(--wpds-dimension-gap-xl, 24px)",
-    "2xl": "var(--wpds-dimension-gap-2xl, 32px)",
-    "3xl": "var(--wpds-dimension-gap-3xl, 40px)"
-  };
-  var Stack = (0, import_element11.forwardRef)(function Stack2({ direction, gap, align, justify, wrap, render, ...props }, ref) {
-    const style = {
-      gap: gap && gapTokens[gap],
-      alignItems: align,
-      justifyContent: justify,
-      flexDirection: direction,
-      flexWrap: wrap
-    };
-    const element = useRender({
-      render,
-      ref,
-      props: mergeProps(props, { style, className: style_default.stack })
-    });
+  var wp_compat_overlay_slot_default = { "slot": "_11fc52b637ff8a7e__slot" };
+  var WP_COMPAT_OVERLAY_SLOT_ATTRIBUTE = "data-wp-compat-overlay-slot";
+  function resolveOwnerDocument() {
+    return typeof document === "undefined" ? null : document;
+  }
+  function isInWordPressEnvironment() {
+    let topWp;
+    try {
+      topWp = window.top?.wp;
+    } catch {
+    }
+    const wp = topWp ?? window.wp;
+    return typeof wp?.components === "object" && wp.components !== null;
+  }
+  var cachedSlot = null;
+  function ensureSlotIsAccessible(element) {
+    element.setAttribute("aria-hidden", "false");
     return element;
-  });
-
-  // packages/ui/build-module/tooltip/index.mjs
-  var tooltip_exports = {};
-  __export(tooltip_exports, {
-    Popup: () => Popup,
-    Portal: () => Portal,
-    Positioner: () => Positioner,
-    Provider: () => Provider,
-    Root: () => Root,
-    Trigger: () => Trigger
-  });
-
-  // packages/ui/build-module/tooltip/popup.mjs
-  var import_element14 = __toESM(require_element(), 1);
+  }
+  function createSlot(ownerDocument2) {
+    const element = ownerDocument2.createElement("div");
+    element.setAttribute(WP_COMPAT_OVERLAY_SLOT_ATTRIBUTE, "");
+    if (wp_compat_overlay_slot_default.slot) {
+      element.classList.add(wp_compat_overlay_slot_default.slot);
+    }
+    ownerDocument2.body.appendChild(element);
+    return element;
+  }
+  function getWpCompatOverlaySlot() {
+    if (typeof window === "undefined") {
+      return void 0;
+    }
+    if (!isInWordPressEnvironment() && window.__wpUiCompatOverlaySlotEnabled !== true) {
+      return void 0;
+    }
+    const ownerDocument2 = resolveOwnerDocument();
+    if (!ownerDocument2 || !ownerDocument2.body) {
+      return void 0;
+    }
+    if (cachedSlot && cachedSlot.ownerDocument === ownerDocument2 && cachedSlot.isConnected) {
+      return ensureSlotIsAccessible(cachedSlot);
+    }
+    const existing = ownerDocument2.querySelector(
+      `[${WP_COMPAT_OVERLAY_SLOT_ATTRIBUTE}]`
+    );
+    if (existing instanceof HTMLDivElement) {
+      cachedSlot = ensureSlotIsAccessible(existing);
+      return cachedSlot;
+    }
+    if (cachedSlot?.isConnected) {
+      cachedSlot.remove();
+    }
+    cachedSlot = ensureSlotIsAccessible(createSlot(ownerDocument2));
+    return cachedSlot;
+  }
 
   // packages/ui/build-module/tooltip/portal.mjs
-  var import_element12 = __toESM(require_element(), 1);
+  var import_jsx_runtime17 = __toESM(require_jsx_runtime(), 1);
+  var Portal = (0, import_element10.forwardRef)(
+    function TooltipPortal3({ container, ...restProps }, ref) {
+      return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+        index_parts_exports.Portal,
+        {
+          container: container ?? getWpCompatOverlaySlot(),
+          ...restProps,
+          ref
+        }
+      );
+    }
+  );
 
-  // packages/ui/build-module/utils/wp-compat-overlay-slot.mjs
+  // packages/ui/build-module/tooltip/positioner.mjs
+  var import_element11 = __toESM(require_element(), 1);
+  var import_jsx_runtime18 = __toESM(require_jsx_runtime(), 1);
   var STYLE_HASH_ATTRIBUTE2 = "data-wp-hash";
   function getRuntime2() {
     const globalScope = globalThis;
@@ -8776,82 +8815,68 @@ var wp;
     }
   }
   if (typeof process === "undefined" || true) {
-    registerStyle2("be37f31c1e", "._11fc52b637ff8a7e__slot{inset:0;isolation:isolate;pointer-events:none;position:fixed;z-index:1000000003}@layer wp-ui{@layer utilities, components, compositions, overrides;@layer utilities{._11fc52b637ff8a7e__slot>*{pointer-events:auto}}}");
+    registerStyle2("10f3806643", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer utilities{._336cd3e4e743482f__box-sizing{box-sizing:border-box;*,:after,:before{box-sizing:inherit}}}}");
   }
-  var wp_compat_overlay_slot_default = { "slot": "_11fc52b637ff8a7e__slot" };
-  var WP_COMPAT_OVERLAY_SLOT_ATTRIBUTE = "data-wp-compat-overlay-slot";
-  function resolveOwnerDocument() {
-    return typeof document === "undefined" ? null : document;
+  var resets_default = { "box-sizing": "_336cd3e4e743482f__box-sizing" };
+  if (typeof process === "undefined" || true) {
+    registerStyle2("19fcc06039", '@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._480b748dd3510e64__positioner{z-index:var(--wp-ui-tooltip-z-index,initial)}._50096b232db7709d__popup{--_wp-ui-elevation-sm:0 1px 2px rgba(0,0,0,.05),0 2px 3px rgba(0,0,0,.04),0 6px 6px rgba(0,0,0,.03),0 8px 8px rgba(0,0,0,.02);background-color:var(--wpds-color-background-surface-neutral-strong,#fff);border-radius:var(--wpds-border-radius-md,4px);box-shadow:var(--_wp-ui-elevation-sm);color:var(--wpds-color-foreground-content-neutral,#1e1e1e);font-family:var(--wpds-typography-font-family-body,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-size:var(--wpds-typography-font-size-sm,12px);line-height:1.4;padding:var(--wpds-dimension-padding-xs,4px) var(--wpds-dimension-padding-sm,8px);@media (forced-colors:active){border-bottom-color:CanvasText;border-bottom-style:solid;border-bottom-width:1px;border-left-color:CanvasText;border-left-style:solid;border-left-width:1px;border-right-color:CanvasText;border-right-style:solid;border-right-width:1px;border-top-color:CanvasText;border-top-style:solid;border-top-width:1px}}}}');
   }
-  function isInWordPressEnvironment() {
-    let topWp;
-    try {
-      topWp = window.top?.wp;
-    } catch {
-    }
-    const wp = topWp ?? window.wp;
-    return typeof wp?.components === "object" && wp.components !== null;
-  }
-  var cachedSlot = null;
-  function ensureSlotIsAccessible(element) {
-    element.setAttribute("aria-hidden", "false");
-    return element;
-  }
-  function createSlot(ownerDocument2) {
-    const element = ownerDocument2.createElement("div");
-    element.setAttribute(WP_COMPAT_OVERLAY_SLOT_ATTRIBUTE, "");
-    if (wp_compat_overlay_slot_default.slot) {
-      element.classList.add(wp_compat_overlay_slot_default.slot);
-    }
-    ownerDocument2.body.appendChild(element);
-    return element;
-  }
-  function getWpCompatOverlaySlot() {
-    if (typeof window === "undefined") {
-      return void 0;
-    }
-    if (!isInWordPressEnvironment() && window.__wpUiCompatOverlaySlotEnabled !== true) {
-      return void 0;
-    }
-    const ownerDocument2 = resolveOwnerDocument();
-    if (!ownerDocument2 || !ownerDocument2.body) {
-      return void 0;
-    }
-    if (cachedSlot && cachedSlot.ownerDocument === ownerDocument2 && cachedSlot.isConnected) {
-      return ensureSlotIsAccessible(cachedSlot);
-    }
-    const existing = ownerDocument2.querySelector(
-      `[${WP_COMPAT_OVERLAY_SLOT_ATTRIBUTE}]`
-    );
-    if (existing instanceof HTMLDivElement) {
-      cachedSlot = ensureSlotIsAccessible(existing);
-      return cachedSlot;
-    }
-    if (cachedSlot?.isConnected) {
-      cachedSlot.remove();
-    }
-    cachedSlot = ensureSlotIsAccessible(createSlot(ownerDocument2));
-    return cachedSlot;
-  }
-
-  // packages/ui/build-module/tooltip/portal.mjs
-  var import_jsx_runtime17 = __toESM(require_jsx_runtime(), 1);
-  var Portal = (0, import_element12.forwardRef)(
-    function TooltipPortal3({ container, ...restProps }, ref) {
-      return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
-        index_parts_exports.Portal,
+  var style_default = { "positioner": "_480b748dd3510e64__positioner", "popup": "_50096b232db7709d__popup" };
+  var Positioner = (0, import_element11.forwardRef)(
+    function TooltipPositioner3({ align = "center", className, side = "top", sideOffset = 4, ...props }, ref) {
+      return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
+        index_parts_exports.Positioner,
         {
-          container: container ?? getWpCompatOverlaySlot(),
-          ...restProps,
-          ref
+          ref,
+          align,
+          side,
+          sideOffset,
+          ...props,
+          className: clsx_default(
+            resets_default["box-sizing"],
+            style_default.positioner,
+            className
+          )
         }
       );
     }
   );
 
-  // packages/ui/build-module/tooltip/positioner.mjs
-  var import_element13 = __toESM(require_element(), 1);
-  var import_jsx_runtime18 = __toESM(require_jsx_runtime(), 1);
+  // packages/ui/build-module/utils/render-slot-with-children.mjs
+  var import_element12 = __toESM(require_element(), 1);
+  function renderSlotWithChildren(slot, defaultSlot, children) {
+    return (0, import_element12.cloneElement)(slot ?? defaultSlot, { children });
+  }
+
+  // packages/ui/build-module/utils/theme-provider.mjs
+  var theme = __toESM(require_theme(), 1);
+
+  // packages/ui/build-module/lock-unlock.mjs
+  var import_private_apis = __toESM(require_private_apis(), 1);
+  var { lock, unlock } = (0, import_private_apis.__dangerousOptInToUnstableAPIsOnlyForCoreModules)(
+    "I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.",
+    "@wordpress/ui"
+  );
+
+  // packages/ui/build-module/utils/theme-provider.mjs
+  function getThemeProvider() {
+    const themePackage = theme;
+    if (themePackage.ThemeProvider) {
+      return themePackage.ThemeProvider;
+    }
+    if (!themePackage.privateApis) {
+      throw new Error(
+        "@wordpress/ui: @wordpress/theme must expose `ThemeProvider` or `privateApis.ThemeProvider`."
+      );
+    }
+    return unlock(
+      themePackage.privateApis
+    ).ThemeProvider;
+  }
+  var ThemeProvider = getThemeProvider();
+
+  // packages/ui/build-module/tooltip/popup.mjs
+  var import_jsx_runtime19 = __toESM(require_jsx_runtime(), 1);
   var STYLE_HASH_ATTRIBUTE3 = "data-wp-hash";
   function getRuntime3() {
     const globalScope = globalThis;
@@ -8933,35 +8958,58 @@ var wp;
     }
   }
   if (typeof process === "undefined" || true) {
-    registerStyle3("10f3806643", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer utilities{._336cd3e4e743482f__box-sizing{box-sizing:border-box;*,:after,:before{box-sizing:inherit}}}}");
-  }
-  var resets_default = { "box-sizing": "_336cd3e4e743482f__box-sizing" };
-  if (typeof process === "undefined" || true) {
     registerStyle3("19fcc06039", '@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._480b748dd3510e64__positioner{z-index:var(--wp-ui-tooltip-z-index,initial)}._50096b232db7709d__popup{--_wp-ui-elevation-sm:0 1px 2px rgba(0,0,0,.05),0 2px 3px rgba(0,0,0,.04),0 6px 6px rgba(0,0,0,.03),0 8px 8px rgba(0,0,0,.02);background-color:var(--wpds-color-background-surface-neutral-strong,#fff);border-radius:var(--wpds-border-radius-md,4px);box-shadow:var(--_wp-ui-elevation-sm);color:var(--wpds-color-foreground-content-neutral,#1e1e1e);font-family:var(--wpds-typography-font-family-body,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-size:var(--wpds-typography-font-size-sm,12px);line-height:1.4;padding:var(--wpds-dimension-padding-xs,4px) var(--wpds-dimension-padding-sm,8px);@media (forced-colors:active){border-bottom-color:CanvasText;border-bottom-style:solid;border-bottom-width:1px;border-left-color:CanvasText;border-left-style:solid;border-left-width:1px;border-right-color:CanvasText;border-right-style:solid;border-right-width:1px;border-top-color:CanvasText;border-top-style:solid;border-top-width:1px}}}}');
   }
   var style_default2 = { "positioner": "_480b748dd3510e64__positioner", "popup": "_50096b232db7709d__popup" };
-  var Positioner = (0, import_element13.forwardRef)(
-    function TooltipPositioner3({ align = "center", className, side = "top", sideOffset = 4, ...props }, ref) {
-      return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
-        index_parts_exports.Positioner,
-        {
-          ref,
-          align,
-          side,
-          sideOffset,
-          ...props,
-          className: clsx_default(
-            resets_default["box-sizing"],
-            style_default2.positioner,
-            className
-          )
-        }
-      );
+  var POPUP_COLOR = { background: "#1e1e1e" };
+  var Popup = (0, import_element13.forwardRef)(function TooltipPopup3({ portal, positioner, children, className, ...props }, ref) {
+    const popupContent = /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ThemeProvider, { color: POPUP_COLOR, children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
+      index_parts_exports.Popup,
+      {
+        ref,
+        className: clsx_default(style_default2.popup, className),
+        ...props,
+        children
+      }
+    ) });
+    const positionedPopup = renderSlotWithChildren(
+      positioner,
+      /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(Positioner, {}),
+      popupContent
+    );
+    return renderSlotWithChildren(portal, /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(Portal, {}), positionedPopup);
+  });
+
+  // packages/ui/build-module/tooltip/trigger.mjs
+  var import_element14 = __toESM(require_element(), 1);
+  var import_jsx_runtime20 = __toESM(require_jsx_runtime(), 1);
+  var Trigger = (0, import_element14.forwardRef)(
+    function TooltipTrigger3(props, ref) {
+      return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(index_parts_exports.Trigger, { ref, ...props });
     }
   );
 
-  // packages/ui/build-module/tooltip/popup.mjs
-  var import_jsx_runtime19 = __toESM(require_jsx_runtime(), 1);
+  // packages/ui/build-module/utils/direction-provider.mjs
+  var import_i18n = __toESM(require_i18n(), 1);
+  var import_jsx_runtime21 = __toESM(require_jsx_runtime(), 1);
+  function DirectionProvider3({ children }) {
+    return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(DirectionProvider, { direction: (0, import_i18n.isRTL)() ? "rtl" : "ltr", children });
+  }
+
+  // packages/ui/build-module/tooltip/root.mjs
+  var import_jsx_runtime22 = __toESM(require_jsx_runtime(), 1);
+  function Root(props) {
+    return /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(DirectionProvider3, { children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(index_parts_exports.Root, { ...props }) });
+  }
+
+  // packages/ui/build-module/tooltip/provider.mjs
+  var import_jsx_runtime23 = __toESM(require_jsx_runtime(), 1);
+  function Provider({ ...props }) {
+    return /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(index_parts_exports.Provider, { ...props });
+  }
+
+  // packages/ui/build-module/visually-hidden/visually-hidden.mjs
+  var import_element15 = __toESM(require_element(), 1);
   var STYLE_HASH_ATTRIBUTE4 = "data-wp-hash";
   function getRuntime4() {
     const globalScope = globalThis;
@@ -9043,57 +9091,28 @@ var wp;
     }
   }
   if (typeof process === "undefined" || true) {
-    registerStyle4("19fcc06039", '@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._480b748dd3510e64__positioner{z-index:var(--wp-ui-tooltip-z-index,initial)}._50096b232db7709d__popup{--_wp-ui-elevation-sm:0 1px 2px rgba(0,0,0,.05),0 2px 3px rgba(0,0,0,.04),0 6px 6px rgba(0,0,0,.03),0 8px 8px rgba(0,0,0,.02);background-color:var(--wpds-color-background-surface-neutral-strong,#fff);border-radius:var(--wpds-border-radius-md,4px);box-shadow:var(--_wp-ui-elevation-sm);color:var(--wpds-color-foreground-content-neutral,#1e1e1e);font-family:var(--wpds-typography-font-family-body,-apple-system,system-ui,"Segoe UI","Roboto","Oxygen-Sans","Ubuntu","Cantarell","Helvetica Neue",sans-serif);font-size:var(--wpds-typography-font-size-sm,12px);line-height:1.4;padding:var(--wpds-dimension-padding-xs,4px) var(--wpds-dimension-padding-sm,8px);@media (forced-colors:active){border-bottom-color:CanvasText;border-bottom-style:solid;border-bottom-width:1px;border-left-color:CanvasText;border-left-style:solid;border-left-width:1px;border-right-color:CanvasText;border-right-style:solid;border-right-width:1px;border-top-color:CanvasText;border-top-style:solid;border-top-width:1px}}}}');
+    registerStyle4("fa606a57ae", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{.f37b9e2e191ebd66__visually-hidden{word-wrap:normal;border:0;clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-break:normal}}}");
   }
-  var style_default3 = { "positioner": "_480b748dd3510e64__positioner", "popup": "_50096b232db7709d__popup" };
-  var POPUP_COLOR = { background: "#1e1e1e" };
-  var Popup = (0, import_element14.forwardRef)(function TooltipPopup3({ portal, positioner, children, className, ...props }, ref) {
-    const popupContent = /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(ThemeProvider, { color: POPUP_COLOR, children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
-      index_parts_exports.Popup,
-      {
+  var style_default3 = { "visually-hidden": "f37b9e2e191ebd66__visually-hidden" };
+  var VisuallyHidden = (0, import_element15.forwardRef)(
+    function VisuallyHidden2({ render, ...restProps }, ref) {
+      const element = useRender({
+        render,
         ref,
-        className: clsx_default(style_default3.popup, className),
-        ...props,
-        children
-      }
-    ) });
-    const positionedPopup = renderSlotWithChildren(
-      positioner,
-      /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(Positioner, {}),
-      popupContent
-    );
-    return renderSlotWithChildren(portal, /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(Portal, {}), positionedPopup);
-  });
-
-  // packages/ui/build-module/tooltip/trigger.mjs
-  var import_element15 = __toESM(require_element(), 1);
-  var import_jsx_runtime20 = __toESM(require_jsx_runtime(), 1);
-  var Trigger = (0, import_element15.forwardRef)(
-    function TooltipTrigger3(props, ref) {
-      return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(index_parts_exports.Trigger, { ref, ...props });
+        props: mergeProps(
+          { className: style_default3["visually-hidden"] },
+          restProps,
+          {
+            // @ts-expect-error Arbitrary data-* attributes aren't indexable on the typed div props. Kept hardcoded so consumers can't change or remove it.
+            "data-visually-hidden": ""
+          }
+        )
+      });
+      return element;
     }
   );
 
-  // packages/ui/build-module/utils/direction-provider.mjs
-  var import_i18n = __toESM(require_i18n(), 1);
-  var import_jsx_runtime21 = __toESM(require_jsx_runtime(), 1);
-  function DirectionProvider3({ children }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(DirectionProvider, { direction: (0, import_i18n.isRTL)() ? "rtl" : "ltr", children });
-  }
-
-  // packages/ui/build-module/tooltip/root.mjs
-  var import_jsx_runtime22 = __toESM(require_jsx_runtime(), 1);
-  function Root(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(DirectionProvider3, { children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(index_parts_exports.Root, { ...props }) });
-  }
-
-  // packages/ui/build-module/tooltip/provider.mjs
-  var import_jsx_runtime23 = __toESM(require_jsx_runtime(), 1);
-  function Provider({ ...props }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(index_parts_exports.Provider, { ...props });
-  }
-
-  // packages/ui/build-module/visually-hidden/visually-hidden.mjs
+  // packages/ui/build-module/stack/stack.mjs
   var import_element16 = __toESM(require_element(), 1);
   var STYLE_HASH_ATTRIBUTE5 = "data-wp-hash";
   function getRuntime5() {
@@ -9176,26 +9195,33 @@ var wp;
     }
   }
   if (typeof process === "undefined" || true) {
-    registerStyle5("fa606a57ae", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{.f37b9e2e191ebd66__visually-hidden{word-wrap:normal;border:0;clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-break:normal}}}");
+    registerStyle5("32aba35fe1", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{._19ce0419607e1896__stack{display:flex}}}");
   }
-  var style_default4 = { "visually-hidden": "f37b9e2e191ebd66__visually-hidden" };
-  var VisuallyHidden = (0, import_element16.forwardRef)(
-    function VisuallyHidden2({ render, ...restProps }, ref) {
-      const element = useRender({
-        render,
-        ref,
-        props: mergeProps(
-          { className: style_default4["visually-hidden"] },
-          restProps,
-          {
-            // @ts-expect-error Arbitrary data-* attributes aren't indexable on the typed div props. Kept hardcoded so consumers can't change or remove it.
-            "data-visually-hidden": ""
-          }
-        )
-      });
-      return element;
-    }
-  );
+  var style_default4 = { "stack": "_19ce0419607e1896__stack" };
+  var gapTokens = {
+    xs: "var(--wpds-dimension-gap-xs, 4px)",
+    sm: "var(--wpds-dimension-gap-sm, 8px)",
+    md: "var(--wpds-dimension-gap-md, 12px)",
+    lg: "var(--wpds-dimension-gap-lg, 16px)",
+    xl: "var(--wpds-dimension-gap-xl, 24px)",
+    "2xl": "var(--wpds-dimension-gap-2xl, 32px)",
+    "3xl": "var(--wpds-dimension-gap-3xl, 40px)"
+  };
+  var Stack = (0, import_element16.forwardRef)(function Stack2({ direction, gap, align, justify, wrap, render, ...props }, ref) {
+    const style = {
+      gap: gap && gapTokens[gap],
+      alignItems: align,
+      justifyContent: justify,
+      flexDirection: direction,
+      flexWrap: wrap
+    };
+    const element = useRender({
+      render,
+      ref,
+      props: mergeProps(props, { style, className: style_default4.stack })
+    });
+    return element;
+  });
 
   // packages/admin-ui/build-module/navigable-region/index.mjs
   var import_element17 = __toESM(require_element(), 1);
@@ -9226,7 +9252,7 @@ var wp;
   };
   var ADMIN_THEME_COLORS = /* @__PURE__ */ new Map([
     ["modern", DEFAULT_THEME_COLORS],
-    ["fresh", { primary: "#3858e9", background: "#25292b" }],
+    ["fresh", { primary: "#007cba", background: "#25292b" }],
     ["midnight", { primary: "#cf4339", background: "#3d4042" }],
     ["coffee", { primary: "#916745", background: "#5b534d" }],
     ["ocean", { primary: "#567958", background: "#5f787f" }],
@@ -9242,7 +9268,7 @@ var wp;
 
   // packages/edit-post/build-module/components/layout/index.mjs
   var import_editor18 = __toESM(require_editor(), 1);
-  var import_data25 = __toESM(require_data(), 1);
+  var import_data26 = __toESM(require_data(), 1);
   var import_block_editor2 = __toESM(require_block_editor(), 1);
 
   // packages/global-styles-engine/build-module/utils/common.mjs
@@ -9471,7 +9497,8 @@ var wp;
     fallbackGapValue
   }) {
     let ruleset = "";
-    let gapValue = hasBlockGapSupport ? getGapCSSValue(style?.spacing?.blockGap) : "";
+    const blockGapValue = style?.spacing?.blockGap;
+    let gapValue = hasBlockGapSupport ? getGapCSSValue(blockGapValue) : "";
     if (hasFallbackGapSupport) {
       if (selector === ROOT_BLOCK_SELECTOR) {
         gapValue = !gapValue ? "0.5em" : gapValue;
@@ -9479,12 +9506,16 @@ var wp;
         gapValue = fallbackGapValue;
       }
     }
+    const rowGapValue = hasBlockGapSupport && blockGapValue && typeof blockGapValue !== "string" ? getGapCSSValue(blockGapValue.top) : gapValue;
     if (gapValue && layoutDefinitions) {
       Object.values(layoutDefinitions).forEach(
         ({ className, name, spacingStyles }) => {
           if (!hasBlockGapSupport && "flex" !== name && "grid" !== name) {
             return;
           }
+          const layoutGapValue = ["default", "constrained"].includes(
+            name
+          ) ? rowGapValue : gapValue;
           if (spacingStyles?.length) {
             spacingStyles.forEach((spacingStyle) => {
               const declarations = [];
@@ -9492,7 +9523,7 @@ var wp;
                 Object.entries(spacingStyle.rules).forEach(
                   ([cssProperty, cssValue]) => {
                     declarations.push(
-                      `${cssProperty}: ${cssValue ? cssValue : gapValue}`
+                      `${cssProperty}: ${cssValue ? cssValue : layoutGapValue}`
                     );
                   }
                 );
@@ -9554,9 +9585,8 @@ var wp;
   var import_i18n15 = __toESM(require_i18n(), 1);
   var import_element29 = __toESM(require_element(), 1);
   var import_notices3 = __toESM(require_notices(), 1);
-  var import_preferences10 = __toESM(require_preferences(), 1);
+  var import_preferences11 = __toESM(require_preferences(), 1);
   var import_commands2 = __toESM(require_commands(), 1);
-  var import_block_library = __toESM(require_block_library(), 1);
   var import_url6 = __toESM(require_url(), 1);
   var import_html_entities = __toESM(require_html_entities(), 1);
   var import_core_data9 = __toESM(require_core_data(), 1);
@@ -9567,6 +9597,8 @@ var wp;
   // packages/edit-post/build-module/components/back-button/index.mjs
   var import_editor2 = __toESM(require_editor(), 1);
   var import_components2 = __toESM(require_components(), 1);
+  var import_preferences = __toESM(require_preferences(), 1);
+  var import_data3 = __toESM(require_data(), 1);
 
   // packages/edit-post/build-module/components/back-button/fullscreen-mode-close.mjs
   var import_data2 = __toESM(require_data(), 1);
@@ -9622,6 +9654,9 @@ var wp;
     hover: { x: 0, transition: { type: "tween", delay: 0.2 } }
   };
   function BackButton({ initialPost }) {
+    const showIconLabels = (0, import_data3.useSelect)((select3) => {
+      return select3(import_preferences.store).get("core", "showIconLabels");
+    }, []);
     return /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(BackButtonFill, { children: ({ length }) => length <= 1 && /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
       import_components2.__unstableMotion.div,
       {
@@ -9630,7 +9665,7 @@ var wp;
         children: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
           fullscreen_mode_close_default,
           {
-            showTooltip: true,
+            showTooltip: !showIconLabels,
             initialPost
           }
         )
@@ -9640,7 +9675,7 @@ var wp;
   var back_button_default = BackButton;
 
   // packages/edit-post/build-module/components/editor-initialization/listener-hooks.mjs
-  var import_data3 = __toESM(require_data(), 1);
+  var import_data4 = __toESM(require_data(), 1);
   var import_element18 = __toESM(require_element(), 1);
   var import_editor3 = __toESM(require_editor(), 1);
   var import_core_data2 = __toESM(require_core_data(), 1);
@@ -9652,7 +9687,7 @@ var wp;
 
   // packages/edit-post/build-module/components/editor-initialization/listener-hooks.mjs
   var useUpdatePostLinkListener = () => {
-    const { isViewable, newPermalink } = (0, import_data3.useSelect)((select3) => {
+    const { isViewable, newPermalink } = (0, import_data4.useSelect)((select3) => {
       const { getPostType } = select3(import_core_data2.store);
       const { getCurrentPost, getEditedPostAttribute } = select3(import_editor3.store);
       const postType = getPostType(getEditedPostAttribute("type"));
@@ -9686,15 +9721,15 @@ var wp;
 
   // packages/edit-post/build-module/components/keyboard-shortcuts/index.mjs
   var import_element19 = __toESM(require_element(), 1);
-  var import_data7 = __toESM(require_data(), 1);
+  var import_data8 = __toESM(require_data(), 1);
   var import_keyboard_shortcuts = __toESM(require_keyboard_shortcuts(), 1);
   var import_i18n4 = __toESM(require_i18n(), 1);
 
   // packages/edit-post/build-module/store/index.mjs
-  var import_data6 = __toESM(require_data(), 1);
+  var import_data7 = __toESM(require_data(), 1);
 
   // packages/edit-post/build-module/store/reducer.mjs
-  var import_data4 = __toESM(require_data(), 1);
+  var import_data5 = __toESM(require_data(), 1);
   function isSavingMetaBoxes(state = false, action) {
     switch (action.type) {
       case "REQUEST_META_BOX_UPDATES":
@@ -9747,12 +9782,12 @@ var wp;
     }
     return state;
   }
-  var metaBoxes = (0, import_data4.combineReducers)({
+  var metaBoxes = (0, import_data5.combineReducers)({
     isSaving: isSavingMetaBoxes,
     locations: metaBoxLocations,
     initialized: metaBoxesInitialized
   });
-  var reducer_default = (0, import_data4.combineReducers)({
+  var reducer_default = (0, import_data5.combineReducers)({
     metaBoxes
   });
 
@@ -9789,7 +9824,7 @@ var wp;
     updatePreferredStyleVariations: () => updatePreferredStyleVariations
   });
   var import_api_fetch = __toESM(require_api_fetch(), 1);
-  var import_preferences = __toESM(require_preferences(), 1);
+  var import_preferences2 = __toESM(require_preferences(), 1);
   var import_editor4 = __toESM(require_editor(), 1);
   var import_deprecated = __toESM(require_deprecated(), 1);
   var import_hooks = __toESM(require_hooks(), 1);
@@ -9870,7 +9905,7 @@ var wp;
     });
     registry.dispatch(import_editor4.store).removeEditorPanel(panelName);
   };
-  var toggleFeature = (feature) => ({ registry }) => registry.dispatch(import_preferences.store).toggle("core/edit-post", feature);
+  var toggleFeature = (feature) => ({ registry }) => registry.dispatch(import_preferences2.store).toggle("core/edit-post", feature);
   var switchEditorMode = (mode) => ({ registry }) => {
     (0, import_deprecated.default)("dispatch( 'core/edit-post' ).switchEditorMode", {
       since: "6.6",
@@ -10031,8 +10066,8 @@ var wp;
     registry.dispatch(import_editor4.store).toggleDistractionFree();
   };
   var toggleFullscreenMode = () => ({ registry }) => {
-    const isFullscreen = registry.select(import_preferences.store).get("core/edit-post", "fullscreenMode");
-    registry.dispatch(import_preferences.store).toggle("core/edit-post", "fullscreenMode");
+    const isFullscreen = registry.select(import_preferences2.store).get("core/edit-post", "fullscreenMode");
+    registry.dispatch(import_preferences2.store).toggle("core/edit-post", "fullscreenMode");
     registry.dispatch(import_notices.store).createInfoNotice(
       isFullscreen ? (0, import_i18n3.__)("Fullscreen mode deactivated.") : (0, import_i18n3.__)("Fullscreen mode activated."),
       {
@@ -10042,7 +10077,7 @@ var wp;
           {
             label: (0, import_i18n3.__)("Undo"),
             onClick: () => {
-              registry.dispatch(import_preferences.store).toggle(
+              registry.dispatch(import_preferences2.store).toggle(
                 "core/edit-post",
                 "fullscreenMode"
               );
@@ -10085,18 +10120,18 @@ var wp;
     isPublishSidebarOpened: () => isPublishSidebarOpened,
     isSavingMetaBoxes: () => isSavingMetaBoxes2
   });
-  var import_data5 = __toESM(require_data(), 1);
-  var import_preferences2 = __toESM(require_preferences(), 1);
+  var import_data6 = __toESM(require_data(), 1);
+  var import_preferences3 = __toESM(require_preferences(), 1);
   var import_core_data4 = __toESM(require_core_data(), 1);
   var import_editor5 = __toESM(require_editor(), 1);
   var import_deprecated2 = __toESM(require_deprecated(), 1);
   var { interfaceStore: interfaceStore2 } = unlock2(import_editor5.privateApis);
   var EMPTY_ARRAY2 = [];
   var EMPTY_OBJECT2 = {};
-  var getEditorMode = (0, import_data5.createRegistrySelector)(
-    (select3) => () => select3(import_preferences2.store).get("core", "editorMode") ?? "visual"
+  var getEditorMode = (0, import_data6.createRegistrySelector)(
+    (select3) => () => select3(import_preferences3.store).get("core", "editorMode") ?? "visual"
   );
-  var isEditorSidebarOpened = (0, import_data5.createRegistrySelector)(
+  var isEditorSidebarOpened = (0, import_data6.createRegistrySelector)(
     (select3) => () => {
       const activeGeneralSidebar = select3(interfaceStore2).getActiveComplementaryArea("core");
       return ["edit-post/document", "edit-post/block"].includes(
@@ -10104,7 +10139,7 @@ var wp;
       );
     }
   );
-  var isPluginSidebarOpened = (0, import_data5.createRegistrySelector)(
+  var isPluginSidebarOpened = (0, import_data6.createRegistrySelector)(
     (select3) => () => {
       const activeGeneralSidebar = select3(interfaceStore2).getActiveComplementaryArea("core");
       return !!activeGeneralSidebar && !["edit-post/document", "edit-post/block"].includes(
@@ -10112,7 +10147,7 @@ var wp;
       );
     }
   );
-  var getActiveGeneralSidebarName = (0, import_data5.createRegistrySelector)(
+  var getActiveGeneralSidebarName = (0, import_data6.createRegistrySelector)(
     (select3) => () => {
       return select3(interfaceStore2).getActiveComplementaryArea("core");
     }
@@ -10139,14 +10174,14 @@ var wp;
     }, panelsWithEnabledState ?? {});
     return panels ?? panelsWithEnabledState ?? EMPTY_OBJECT2;
   }
-  var getPreferences = (0, import_data5.createRegistrySelector)((select3) => () => {
+  var getPreferences = (0, import_data6.createRegistrySelector)((select3) => () => {
     (0, import_deprecated2.default)(`select( 'core/edit-post' ).getPreferences`, {
       since: "6.0",
       alternative: `select( 'core/preferences' ).get`
     });
     const corePreferences = ["editorMode", "hiddenBlockTypes"].reduce(
       (accumulatedPrefs, preferenceKey) => {
-        const value = select3(import_preferences2.store).get(
+        const value = select3(import_preferences3.store).get(
           "core",
           preferenceKey
         );
@@ -10157,11 +10192,11 @@ var wp;
       },
       {}
     );
-    const inactivePanels = select3(import_preferences2.store).get(
+    const inactivePanels = select3(import_preferences3.store).get(
       "core",
       "inactivePanels"
     );
-    const openPanels = select3(import_preferences2.store).get("core", "openPanels");
+    const openPanels = select3(import_preferences3.store).get("core", "openPanels");
     const panels = convertPanelsToOldFormat(inactivePanels, openPanels);
     return {
       ...corePreferences,
@@ -10177,10 +10212,10 @@ var wp;
     const value = preferences[preferenceKey];
     return value === void 0 ? defaultValue : value;
   }
-  var getHiddenBlockTypes = (0, import_data5.createRegistrySelector)((select3) => () => {
-    return select3(import_preferences2.store).get("core", "hiddenBlockTypes") ?? EMPTY_ARRAY2;
+  var getHiddenBlockTypes = (0, import_data6.createRegistrySelector)((select3) => () => {
+    return select3(import_preferences3.store).get("core", "hiddenBlockTypes") ?? EMPTY_ARRAY2;
   });
-  var isPublishSidebarOpened = (0, import_data5.createRegistrySelector)(
+  var isPublishSidebarOpened = (0, import_data6.createRegistrySelector)(
     (select3) => () => {
       (0, import_deprecated2.default)(`select( 'core/edit-post' ).isPublishSidebarOpened`, {
         since: "6.6",
@@ -10189,7 +10224,7 @@ var wp;
       return select3(import_editor5.store).isPublishSidebarOpened();
     }
   );
-  var isEditorPanelRemoved = (0, import_data5.createRegistrySelector)(
+  var isEditorPanelRemoved = (0, import_data6.createRegistrySelector)(
     (select3) => (state, panelName) => {
       (0, import_deprecated2.default)(`select( 'core/edit-post' ).isEditorPanelRemoved`, {
         since: "6.5",
@@ -10198,7 +10233,7 @@ var wp;
       return select3(import_editor5.store).isEditorPanelRemoved(panelName);
     }
   );
-  var isEditorPanelEnabled = (0, import_data5.createRegistrySelector)(
+  var isEditorPanelEnabled = (0, import_data6.createRegistrySelector)(
     (select3) => (state, panelName) => {
       (0, import_deprecated2.default)(`select( 'core/edit-post' ).isEditorPanelEnabled`, {
         since: "6.5",
@@ -10207,7 +10242,7 @@ var wp;
       return select3(import_editor5.store).isEditorPanelEnabled(panelName);
     }
   );
-  var isEditorPanelOpened = (0, import_data5.createRegistrySelector)(
+  var isEditorPanelOpened = (0, import_data6.createRegistrySelector)(
     (select3) => (state, panelName) => {
       (0, import_deprecated2.default)(`select( 'core/edit-post' ).isEditorPanelOpened`, {
         since: "6.5",
@@ -10216,7 +10251,7 @@ var wp;
       return select3(import_editor5.store).isEditorPanelOpened(panelName);
     }
   );
-  var isModalActive = (0, import_data5.createRegistrySelector)(
+  var isModalActive = (0, import_data6.createRegistrySelector)(
     (select3) => (state, modalName) => {
       (0, import_deprecated2.default)(`select( 'core/edit-post' ).isModalActive`, {
         since: "6.3",
@@ -10225,17 +10260,17 @@ var wp;
       return !!select3(interfaceStore2).isModalActive(modalName);
     }
   );
-  var isFeatureActive = (0, import_data5.createRegistrySelector)(
+  var isFeatureActive = (0, import_data6.createRegistrySelector)(
     (select3) => (state, feature) => {
-      return !!select3(import_preferences2.store).get("core/edit-post", feature);
+      return !!select3(import_preferences3.store).get("core/edit-post", feature);
     }
   );
-  var isPluginItemPinned = (0, import_data5.createRegistrySelector)(
+  var isPluginItemPinned = (0, import_data6.createRegistrySelector)(
     (select3) => (state, pluginName) => {
       return select3(interfaceStore2).isItemPinned("core", pluginName);
     }
   );
-  var getActiveMetaBoxLocations = (0, import_data5.createSelector)(
+  var getActiveMetaBoxLocations = (0, import_data6.createSelector)(
     (state) => {
       return Object.keys(state.metaBoxes.locations).filter(
         (location) => isMetaBoxLocationActive(state, location)
@@ -10243,7 +10278,7 @@ var wp;
     },
     (state) => [state.metaBoxes.locations]
   );
-  var isMetaBoxLocationVisible = (0, import_data5.createRegistrySelector)(
+  var isMetaBoxLocationVisible = (0, import_data6.createRegistrySelector)(
     (select3) => (state, location) => {
       return isMetaBoxLocationActive(state, location) && getMetaBoxesPerLocation(state, location)?.some(({ id }) => {
         return select3(import_editor5.store).isEditorPanelEnabled(
@@ -10259,7 +10294,7 @@ var wp;
   function getMetaBoxesPerLocation(state, location) {
     return state.metaBoxes.locations[location];
   }
-  var getAllMetaBoxes = (0, import_data5.createSelector)(
+  var getAllMetaBoxes = (0, import_data6.createSelector)(
     (state) => {
       return Object.values(state.metaBoxes.locations).flat();
     },
@@ -10271,7 +10306,7 @@ var wp;
   function isSavingMetaBoxes2(state) {
     return state.metaBoxes.isSaving;
   }
-  var __experimentalGetPreviewDeviceType = (0, import_data5.createRegistrySelector)(
+  var __experimentalGetPreviewDeviceType = (0, import_data6.createRegistrySelector)(
     (select3) => () => {
       (0, import_deprecated2.default)(
         `select( 'core/edit-site' ).__experimentalGetPreviewDeviceType`,
@@ -10284,14 +10319,14 @@ var wp;
       return select3(import_editor5.store).getDeviceType();
     }
   );
-  var isInserterOpened = (0, import_data5.createRegistrySelector)((select3) => () => {
+  var isInserterOpened = (0, import_data6.createRegistrySelector)((select3) => () => {
     (0, import_deprecated2.default)(`select( 'core/edit-post' ).isInserterOpened`, {
       since: "6.5",
       alternative: `select( 'core/editor' ).isInserterOpened`
     });
     return select3(import_editor5.store).isInserterOpened();
   });
-  var __experimentalGetInsertionPoint = (0, import_data5.createRegistrySelector)(
+  var __experimentalGetInsertionPoint = (0, import_data6.createRegistrySelector)(
     (select3) => () => {
       (0, import_deprecated2.default)(
         `select( 'core/edit-post' ).__experimentalGetInsertionPoint`,
@@ -10303,14 +10338,14 @@ var wp;
       return unlock2(select3(import_editor5.store)).getInserter();
     }
   );
-  var isListViewOpened = (0, import_data5.createRegistrySelector)((select3) => () => {
+  var isListViewOpened = (0, import_data6.createRegistrySelector)((select3) => () => {
     (0, import_deprecated2.default)(`select( 'core/edit-post' ).isListViewOpened`, {
       since: "6.5",
       alternative: `select( 'core/editor' ).isListViewOpened`
     });
     return select3(import_editor5.store).isListViewOpened();
   });
-  var isEditingTemplate = (0, import_data5.createRegistrySelector)((select3) => () => {
+  var isEditingTemplate = (0, import_data6.createRegistrySelector)((select3) => () => {
     (0, import_deprecated2.default)(`select( 'core/edit-post' ).isEditingTemplate`, {
       since: "6.5",
       alternative: `select( 'core/editor' ).getRenderingMode`
@@ -10320,7 +10355,7 @@ var wp;
   function areMetaBoxesInitialized(state) {
     return state.metaBoxes.initialized;
   }
-  var getEditedPostTemplate = (0, import_data5.createRegistrySelector)(
+  var getEditedPostTemplate = (0, import_data6.createRegistrySelector)(
     (select3) => () => {
       const { id: postId, type: postType } = select3(import_editor5.store).getCurrentPost();
       const templateId = unlock2(select3(import_core_data4.store)).getTemplateId(
@@ -10339,17 +10374,17 @@ var wp;
   );
 
   // packages/edit-post/build-module/store/index.mjs
-  var store = (0, import_data6.createReduxStore)(STORE_NAME, {
+  var store = (0, import_data7.createReduxStore)(STORE_NAME, {
     reducer: reducer_default,
     actions: actions_exports,
     selectors: selectors_exports
   });
-  (0, import_data6.register)(store);
+  (0, import_data7.register)(store);
 
   // packages/edit-post/build-module/components/keyboard-shortcuts/index.mjs
   function KeyboardShortcuts() {
-    const { toggleFullscreenMode: toggleFullscreenMode2 } = (0, import_data7.useDispatch)(store);
-    const { registerShortcut } = (0, import_data7.useDispatch)(import_keyboard_shortcuts.store);
+    const { toggleFullscreenMode: toggleFullscreenMode2 } = (0, import_data8.useDispatch)(store);
+    const { registerShortcut } = (0, import_data8.useDispatch)(import_keyboard_shortcuts.store);
     (0, import_element19.useEffect)(() => {
       registerShortcut({
         name: "core/edit-post/toggle-fullscreen",
@@ -10369,15 +10404,15 @@ var wp;
   var keyboard_shortcuts_default = KeyboardShortcuts;
 
   // packages/edit-post/build-module/components/init-pattern-modal/index.mjs
-  var import_data8 = __toESM(require_data(), 1);
+  var import_data9 = __toESM(require_data(), 1);
   var import_i18n5 = __toESM(require_i18n(), 1);
   var import_components3 = __toESM(require_components(), 1);
   var import_element20 = __toESM(require_element(), 1);
   var import_editor6 = __toESM(require_editor(), 1);
   var import_jsx_runtime27 = __toESM(require_jsx_runtime(), 1);
   function InitPatternModal() {
-    const { editPost } = (0, import_data8.useDispatch)(import_editor6.store);
-    const { isCleanNewPost } = (0, import_data8.useSelect)(import_editor6.store);
+    const { editPost } = (0, import_data9.useDispatch)(import_editor6.store);
+    const { isCleanNewPost } = (0, import_data9.useSelect)(import_editor6.store);
     const [syncType, setSyncType] = (0, import_element20.useState)(void 0);
     const [title, setTitle] = (0, import_element20.useState)("");
     const [isModalOpen, setIsModalOpen] = (0, import_element20.useState)(() => isCleanNewPost());
@@ -10449,19 +10484,19 @@ var wp;
 
   // packages/edit-post/build-module/components/browser-url/index.mjs
   var import_element22 = __toESM(require_element(), 1);
-  var import_data10 = __toESM(require_data(), 1);
+  var import_data11 = __toESM(require_data(), 1);
   var import_url3 = __toESM(require_url(), 1);
   var import_editor8 = __toESM(require_editor(), 1);
 
   // packages/edit-post/build-module/components/browser-url/use-classic-revision-redirect.mjs
-  var import_data9 = __toESM(require_data(), 1);
+  var import_data10 = __toESM(require_data(), 1);
   var import_core_data5 = __toESM(require_core_data(), 1);
   var import_editor7 = __toESM(require_editor(), 1);
   var import_element21 = __toESM(require_element(), 1);
   var import_url2 = __toESM(require_url(), 1);
   function useClassicRevisionRedirect() {
-    const registry = (0, import_data9.useRegistry)();
-    const { disableVisualRevisions, currentRevisionId, postType, postId } = (0, import_data9.useSelect)((select3) => {
+    const registry = (0, import_data10.useRegistry)();
+    const { disableVisualRevisions, currentRevisionId, postType, postId } = (0, import_data10.useSelect)((select3) => {
       const editor = select3(import_editor7.store);
       return {
         disableVisualRevisions: !!editor.getEditorSettings().disableVisualRevisions,
@@ -10528,7 +10563,7 @@ var wp;
       return Number.isInteger(revision) && revision > 0 ? revision : null;
     });
     const hasHandledInitialRevisionRef = (0, import_element22.useRef)(false);
-    const { postId, postStatus, currentRevisionId } = (0, import_data10.useSelect)((select3) => {
+    const { postId, postStatus, currentRevisionId } = (0, import_data11.useSelect)((select3) => {
       const { getCurrentPost } = select3(import_editor8.store);
       const { getCurrentRevisionId } = unlock2(select3(import_editor8.store));
       const post = getCurrentPost();
@@ -10547,7 +10582,7 @@ var wp;
         currentRevisionId: isTemplate ? null : getCurrentRevisionId()
       };
     }, []);
-    const { openRevision } = unlock2((0, import_data10.useDispatch)(import_editor8.store));
+    const { openRevision } = unlock2((0, import_data11.useDispatch)(import_editor8.store));
     const lastURLWriteTimeRef = (0, import_element22.useRef)(null);
     const lastPostIdRef = (0, import_element22.useRef)(null);
     (0, import_element22.useEffect)(() => {
@@ -10601,12 +10636,12 @@ var wp;
   }
 
   // packages/edit-post/build-module/components/meta-boxes/index.mjs
-  var import_data13 = __toESM(require_data(), 1);
+  var import_data14 = __toESM(require_data(), 1);
 
   // packages/edit-post/build-module/components/meta-boxes/meta-boxes-area/index.mjs
   var import_element23 = __toESM(require_element(), 1);
   var import_components4 = __toESM(require_components(), 1);
-  var import_data11 = __toESM(require_data(), 1);
+  var import_data12 = __toESM(require_data(), 1);
   var import_block_editor = __toESM(require_block_editor(), 1);
   var import_jsx_runtime28 = __toESM(require_jsx_runtime(), 1);
   var { useNativeUndo } = unlock2(import_block_editor.privateApis);
@@ -10626,7 +10661,7 @@ var wp;
         }
       };
     }, [location]);
-    const isSaving = (0, import_data11.useSelect)((select3) => {
+    const isSaving = (0, import_data12.useSelect)((select3) => {
       return select3(store).isSavingMetaBoxes();
     }, []);
     const classes = clsx_default("edit-post-meta-boxes-area", `is-${location}`, {
@@ -10649,10 +10684,10 @@ var wp;
 
   // packages/edit-post/build-module/components/meta-boxes/meta-box-visibility.mjs
   var import_element24 = __toESM(require_element(), 1);
-  var import_data12 = __toESM(require_data(), 1);
+  var import_data13 = __toESM(require_data(), 1);
   var import_editor9 = __toESM(require_editor(), 1);
   function MetaBoxVisibility({ id }) {
-    const isVisible = (0, import_data12.useSelect)(
+    const isVisible = (0, import_data13.useSelect)(
       (select3) => {
         return select3(import_editor9.store).isEditorPanelEnabled(
           `meta-box-${id}`
@@ -10677,7 +10712,7 @@ var wp;
   // packages/edit-post/build-module/components/meta-boxes/index.mjs
   var import_jsx_runtime29 = __toESM(require_jsx_runtime(), 1);
   function MetaBoxes({ location }) {
-    const metaBoxes2 = (0, import_data13.useSelect)(
+    const metaBoxes2 = (0, import_data14.useSelect)(
       (select3) => select3(store).getMetaBoxesPerLocation(location),
       [location]
     );
@@ -10692,17 +10727,17 @@ var wp;
   var import_compose = __toESM(require_compose(), 1);
   var import_editor15 = __toESM(require_editor(), 1);
   var import_keycodes = __toESM(require_keycodes(), 1);
-  var import_preferences8 = __toESM(require_preferences(), 1);
+  var import_preferences9 = __toESM(require_preferences(), 1);
 
   // packages/edit-post/build-module/components/more-menu/manage-patterns-menu-item.mjs
   var import_components5 = __toESM(require_components(), 1);
   var import_core_data6 = __toESM(require_core_data(), 1);
-  var import_data14 = __toESM(require_data(), 1);
+  var import_data15 = __toESM(require_data(), 1);
   var import_i18n6 = __toESM(require_i18n(), 1);
   var import_url4 = __toESM(require_url(), 1);
   var import_jsx_runtime30 = __toESM(require_jsx_runtime(), 1);
   function ManagePatternsMenuItem() {
-    const url = (0, import_data14.useSelect)((select3) => {
+    const url = (0, import_data15.useSelect)((select3) => {
       const { canUser } = select3(import_core_data6.store);
       const defaultUrl = (0, import_url4.addQueryArgs)("edit.php", {
         post_type: "wp_block"
@@ -10720,18 +10755,18 @@ var wp;
   var manage_patterns_menu_item_default = ManagePatternsMenuItem;
 
   // packages/edit-post/build-module/components/more-menu/welcome-guide-menu-item.mjs
-  var import_data15 = __toESM(require_data(), 1);
-  var import_preferences3 = __toESM(require_preferences(), 1);
+  var import_data16 = __toESM(require_data(), 1);
+  var import_preferences4 = __toESM(require_preferences(), 1);
   var import_i18n7 = __toESM(require_i18n(), 1);
   var import_editor10 = __toESM(require_editor(), 1);
   var import_jsx_runtime31 = __toESM(require_jsx_runtime(), 1);
   function WelcomeGuideMenuItem() {
-    const isEditingTemplate2 = (0, import_data15.useSelect)(
+    const isEditingTemplate2 = (0, import_data16.useSelect)(
       (select3) => select3(import_editor10.store).getCurrentPostType() === "wp_template",
       []
     );
     return /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(
-      import_preferences3.PreferenceToggleMenuItem,
+      import_preferences4.PreferenceToggleMenuItem,
       {
         scope: "core/edit-post",
         name: isEditingTemplate2 ? "welcomeGuideTemplate" : "welcomeGuide",
@@ -10742,25 +10777,25 @@ var wp;
 
   // packages/edit-post/build-module/components/preferences-modal/index.mjs
   var import_i18n10 = __toESM(require_i18n(), 1);
-  var import_preferences7 = __toESM(require_preferences(), 1);
+  var import_preferences8 = __toESM(require_preferences(), 1);
   var import_editor14 = __toESM(require_editor(), 1);
 
   // packages/edit-post/build-module/components/preferences-modal/meta-boxes-section.mjs
   var import_i18n9 = __toESM(require_i18n(), 1);
-  var import_data18 = __toESM(require_data(), 1);
+  var import_data19 = __toESM(require_data(), 1);
   var import_editor13 = __toESM(require_editor(), 1);
-  var import_preferences6 = __toESM(require_preferences(), 1);
+  var import_preferences7 = __toESM(require_preferences(), 1);
 
   // packages/edit-post/build-module/components/preferences-modal/enable-custom-fields.mjs
   var import_element25 = __toESM(require_element(), 1);
   var import_i18n8 = __toESM(require_i18n(), 1);
   var import_components6 = __toESM(require_components(), 1);
-  var import_data16 = __toESM(require_data(), 1);
+  var import_data17 = __toESM(require_data(), 1);
   var import_editor11 = __toESM(require_editor(), 1);
-  var import_preferences4 = __toESM(require_preferences(), 1);
+  var import_preferences5 = __toESM(require_preferences(), 1);
   var import_url5 = __toESM(require_url(), 1);
   var import_jsx_runtime32 = __toESM(require_jsx_runtime(), 1);
-  var { PreferenceBaseOption } = unlock2(import_preferences4.privateApis);
+  var { PreferenceBaseOption } = unlock2(import_preferences5.privateApis);
   function submitCustomFieldsForm() {
     const customFieldsForm = document.getElementById(
       "toggle-custom-fields-form"
@@ -10792,7 +10827,7 @@ var wp;
     ] });
   }
   function EnableCustomFieldsOption({ label }) {
-    const areCustomFieldsEnabled = (0, import_data16.useSelect)((select3) => {
+    const areCustomFieldsEnabled = (0, import_data17.useSelect)((select3) => {
       return !!select3(import_editor11.store).getEditorSettings().enableCustomFields;
     }, []);
     const [isChecked, setIsChecked] = (0, import_element25.useState)(areCustomFieldsEnabled);
@@ -10808,14 +10843,14 @@ var wp;
   }
 
   // packages/edit-post/build-module/components/preferences-modal/enable-panel.mjs
-  var import_data17 = __toESM(require_data(), 1);
+  var import_data18 = __toESM(require_data(), 1);
   var import_editor12 = __toESM(require_editor(), 1);
-  var import_preferences5 = __toESM(require_preferences(), 1);
+  var import_preferences6 = __toESM(require_preferences(), 1);
   var import_jsx_runtime33 = __toESM(require_jsx_runtime(), 1);
-  var { PreferenceBaseOption: PreferenceBaseOption2 } = unlock2(import_preferences5.privateApis);
+  var { PreferenceBaseOption: PreferenceBaseOption2 } = unlock2(import_preferences6.privateApis);
   function EnablePanelOption(props) {
-    const { toggleEditorPanelEnabled: toggleEditorPanelEnabled2 } = (0, import_data17.useDispatch)(import_editor12.store);
-    const { isChecked, isRemoved } = (0, import_data17.useSelect)(
+    const { toggleEditorPanelEnabled: toggleEditorPanelEnabled2 } = (0, import_data18.useDispatch)(import_editor12.store);
+    const { isChecked, isRemoved } = (0, import_data18.useSelect)(
       (select3) => {
         const { isEditorPanelEnabled: isEditorPanelEnabled2, isEditorPanelRemoved: isEditorPanelRemoved2 } = select3(import_editor12.store);
         return {
@@ -10840,9 +10875,9 @@ var wp;
 
   // packages/edit-post/build-module/components/preferences-modal/meta-boxes-section.mjs
   var import_jsx_runtime34 = __toESM(require_jsx_runtime(), 1);
-  var { PreferencesModalSection } = unlock2(import_preferences6.privateApis);
+  var { PreferencesModalSection } = unlock2(import_preferences7.privateApis);
   function MetaBoxesSection(sectionProps) {
-    const { areCustomFieldsRegistered, metaBoxes: metaBoxes2 } = (0, import_data18.useSelect)((select3) => {
+    const { areCustomFieldsRegistered, metaBoxes: metaBoxes2 } = (0, import_data19.useSelect)((select3) => {
       const { getEditorSettings } = select3(import_editor13.store);
       const { getAllMetaBoxes: getAllMetaBoxes2 } = select3(store);
       return {
@@ -10871,7 +10906,7 @@ var wp;
 
   // packages/edit-post/build-module/components/preferences-modal/index.mjs
   var import_jsx_runtime35 = __toESM(require_jsx_runtime(), 1);
-  var { PreferenceToggleControl } = unlock2(import_preferences7.privateApis);
+  var { PreferenceToggleControl } = unlock2(import_preferences8.privateApis);
   var { PreferencesModal } = unlock2(import_editor14.privateApis);
   function EditPostPreferencesModal() {
     const extraSections = {
@@ -10896,7 +10931,7 @@ var wp;
     const isLargeViewport = (0, import_compose.useViewportMatch)("large");
     return /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)(import_jsx_runtime36.Fragment, { children: [
       isLargeViewport && /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(ViewMoreMenuGroup, { children: /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(
-        import_preferences8.PreferenceToggleMenuItem,
+        import_preferences9.PreferenceToggleMenuItem,
         {
           scope: "core/edit-post",
           name: "fullscreenMode",
@@ -10919,10 +10954,10 @@ var wp;
   var more_menu_default = MoreMenu;
 
   // packages/edit-post/build-module/components/welcome-guide/index.mjs
-  var import_data21 = __toESM(require_data(), 1);
+  var import_data22 = __toESM(require_data(), 1);
 
   // packages/edit-post/build-module/components/welcome-guide/default.mjs
-  var import_data19 = __toESM(require_data(), 1);
+  var import_data20 = __toESM(require_data(), 1);
   var import_components7 = __toESM(require_components(), 1);
   var import_i18n12 = __toESM(require_i18n(), 1);
   var import_element26 = __toESM(require_element(), 1);
@@ -10945,7 +10980,7 @@ var wp;
   // packages/edit-post/build-module/components/welcome-guide/default.mjs
   var import_jsx_runtime38 = __toESM(require_jsx_runtime(), 1);
   function WelcomeGuideDefault() {
-    const { toggleFeature: toggleFeature2 } = (0, import_data19.useDispatch)(store);
+    const { toggleFeature: toggleFeature2 } = (0, import_data20.useDispatch)(store);
     return /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(
       import_components7.Guide,
       {
@@ -11043,12 +11078,12 @@ var wp;
   }
 
   // packages/edit-post/build-module/components/welcome-guide/template.mjs
-  var import_data20 = __toESM(require_data(), 1);
+  var import_data21 = __toESM(require_data(), 1);
   var import_components8 = __toESM(require_components(), 1);
   var import_i18n13 = __toESM(require_i18n(), 1);
   var import_jsx_runtime39 = __toESM(require_jsx_runtime(), 1);
   function WelcomeGuideTemplate() {
-    const { toggleFeature: toggleFeature2 } = (0, import_data20.useDispatch)(store);
+    const { toggleFeature: toggleFeature2 } = (0, import_data21.useDispatch)(store);
     return /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(
       import_components8.Guide,
       {
@@ -11080,7 +11115,7 @@ var wp;
   // packages/edit-post/build-module/components/welcome-guide/index.mjs
   var import_jsx_runtime40 = __toESM(require_jsx_runtime(), 1);
   function WelcomeGuide({ postType }) {
-    const { isActive, isEditingTemplate: isEditingTemplate2 } = (0, import_data21.useSelect)(
+    const { isActive, isEditingTemplate: isEditingTemplate2 } = (0, import_data22.useSelect)(
       (select3) => {
         const { isFeatureActive: isFeatureActive2 } = select3(store);
         const _isEditingTemplate = postType === "wp_template";
@@ -11099,20 +11134,20 @@ var wp;
   }
 
   // packages/edit-post/build-module/commands/use-commands.mjs
-  var import_data22 = __toESM(require_data(), 1);
+  var import_data23 = __toESM(require_data(), 1);
   var import_i18n14 = __toESM(require_i18n(), 1);
   var import_commands = __toESM(require_commands(), 1);
-  var import_preferences9 = __toESM(require_preferences(), 1);
+  var import_preferences10 = __toESM(require_preferences(), 1);
   var import_notices2 = __toESM(require_notices(), 1);
   function useCommands() {
-    const { isFullscreen } = (0, import_data22.useSelect)((select3) => {
-      const { get } = select3(import_preferences9.store);
+    const { isFullscreen } = (0, import_data23.useSelect)((select3) => {
+      const { get } = select3(import_preferences10.store);
       return {
         isFullscreen: get("core/edit-post", "fullscreenMode")
       };
     }, []);
-    const { toggle } = (0, import_data22.useDispatch)(import_preferences9.store);
-    const { createInfoNotice } = (0, import_data22.useDispatch)(import_notices2.store);
+    const { toggle } = (0, import_data23.useDispatch)(import_preferences10.store);
+    const { createInfoNotice } = (0, import_data23.useDispatch)(import_notices2.store);
     (0, import_commands.useCommand)({
       name: "core/toggle-fullscreen-mode",
       label: isFullscreen ? (0, import_i18n14.__)("Exit fullscreen") : (0, import_i18n14.__)("Enter fullscreen"),
@@ -11142,11 +11177,11 @@ var wp;
 
   // packages/edit-post/build-module/hooks/use-navigate-to-entity-record.mjs
   var import_element27 = __toESM(require_element(), 1);
-  var import_data23 = __toESM(require_data(), 1);
+  var import_data24 = __toESM(require_data(), 1);
   var import_editor16 = __toESM(require_editor(), 1);
   var import_core_data7 = __toESM(require_core_data(), 1);
   function useNavigateToEntityRecord(initialPostId, initialPostType, defaultRenderingMode) {
-    const registry = (0, import_data23.useRegistry)();
+    const registry = (0, import_data24.useRegistry)();
     const [postHistory, dispatch2] = (0, import_element27.useReducer)(
       (historyState, { type, post: post2, previousRenderingMode: previousRenderingMode2, selectedBlockClientId }) => {
         if (type === "push") {
@@ -11172,9 +11207,9 @@ var wp;
       ]
     );
     const { post, previousRenderingMode } = postHistory[postHistory.length - 1];
-    const { getRenderingMode } = (0, import_data23.useSelect)(import_editor16.store);
-    const { setRenderingMode } = (0, import_data23.useDispatch)(import_editor16.store);
-    const { editEntityRecord } = (0, import_data23.useDispatch)(import_core_data7.store);
+    const { getRenderingMode } = (0, import_data24.useSelect)(import_editor16.store);
+    const { setRenderingMode } = (0, import_data24.useDispatch)(import_editor16.store);
+    const { editEntityRecord } = (0, import_data24.useDispatch)(import_core_data7.store);
     const onNavigateToEntityRecord = (0, import_element27.useCallback)(
       (params) => {
         const entityEdits = registry.select(import_core_data7.store).getEntityRecordEdits("postType", post.postType, post.postId);
@@ -11239,7 +11274,7 @@ var wp;
   }
 
   // packages/edit-post/build-module/components/meta-boxes/use-meta-box-initialization.mjs
-  var import_data24 = __toESM(require_data(), 1);
+  var import_data25 = __toESM(require_data(), 1);
   var import_editor17 = __toESM(require_editor(), 1);
   var import_core_data8 = __toESM(require_core_data(), 1);
   var import_element28 = __toESM(require_element(), 1);
@@ -11249,7 +11284,7 @@ var wp;
       isCollaborationEnabled,
       hasIncompatibleMetaBoxes,
       hasActiveMetaBoxes
-    } = (0, import_data24.useSelect)(
+    } = (0, import_data25.useSelect)(
       (select3) => {
         const {
           __unstableIsEditorReady,
@@ -11264,9 +11299,9 @@ var wp;
       },
       [enabled]
     );
-    const { setCollaborationSupported } = unlock2((0, import_data24.useDispatch)(import_core_data8.store));
-    const { updateEditorSettings } = (0, import_data24.useDispatch)(import_editor17.store);
-    const { initializeMetaBoxes: initializeMetaBoxes2 } = (0, import_data24.useDispatch)(store);
+    const { setCollaborationSupported } = unlock2((0, import_data25.useDispatch)(import_core_data8.store));
+    const { updateEditorSettings } = (0, import_data25.useDispatch)(import_editor17.store);
+    const { initializeMetaBoxes: initializeMetaBoxes2 } = (0, import_data25.useDispatch)(store);
     (0, import_element28.useEffect)(() => {
       if (isEnabledAndEditorReady) {
         initializeMetaBoxes2();
@@ -11293,7 +11328,6 @@ var wp;
   var { useCommandContext } = unlock2(import_commands2.privateApis);
   var { useDrag } = unlock2(import_components9.privateApis);
   var { Editor, FullscreenMode, UploadProgressSnackbar } = unlock2(import_editor18.privateApis);
-  var { BlockKeyboardShortcuts } = unlock2(import_block_library.privateApis);
   var DESIGN_POST_TYPES = [
     "wp_template",
     "wp_template_part",
@@ -11301,7 +11335,7 @@ var wp;
     "wp_navigation"
   ];
   function useEditorStyles(settings) {
-    const { hasThemeStyleSupport } = (0, import_data25.useSelect)((select3) => {
+    const { hasThemeStyleSupport } = (0, import_data26.useSelect)((select3) => {
       return {
         hasThemeStyleSupport: select3(store).isFeatureActive("themeStyles")
       };
@@ -11335,8 +11369,8 @@ var wp;
     ]);
   }
   function MetaBoxesMain() {
-    const [isOpen, openHeight, hasAnyVisible] = (0, import_data25.useSelect)((select3) => {
-      const { get } = select3(import_preferences10.store);
+    const [isOpen, openHeight, hasAnyVisible] = (0, import_data26.useSelect)((select3) => {
+      const { get } = select3(import_preferences11.store);
       const { isMetaBoxLocationVisible: isMetaBoxLocationVisible2 } = select3(store);
       return [
         !!get("core/edit-post", "metaBoxesMainIsOpen"),
@@ -11344,7 +11378,7 @@ var wp;
         isMetaBoxLocationVisible2("normal") || isMetaBoxLocationVisible2("advanced") || isMetaBoxLocationVisible2("side")
       ];
     }, []);
-    const { set: setPreference } = (0, import_data25.useDispatch)(import_preferences10.store);
+    const { set: setPreference } = (0, import_data26.useDispatch)(import_preferences11.store);
     const isShort = (0, import_compose2.useMediaQuery)("(max-height: 549px)");
     const [{ min: min2 = 0, max: max2 }, setHeightConstraints] = (0, import_element29.useState)(() => ({}));
     const effectSizeConstraints = (0, import_compose2.useRefEffect)((node) => {
@@ -11526,7 +11560,7 @@ var wp;
     initialEdits
   }) {
     useCommands();
-    const { createErrorNotice } = (0, import_data25.useDispatch)(import_notices3.store);
+    const { createErrorNotice } = (0, import_data26.useDispatch)(import_notices3.store);
     const {
       currentPost: { postId: currentPostId, postType: currentPostType },
       onNavigateToEntityRecord,
@@ -11548,9 +11582,9 @@ var wp;
       showMetaBoxes,
       isWelcomeGuideVisible,
       templateId
-    } = (0, import_data25.useSelect)(
+    } = (0, import_data26.useSelect)(
       (select3) => {
-        const { get } = select3(import_preferences10.store);
+        const { get } = select3(import_preferences11.store);
         const { isFeatureActive: isFeatureActive2, hasMetaBoxes: hasMetaBoxes2 } = select3(store);
         const { canUser, getPostType, getTemplateId } = unlock2(
           select3(import_core_data9.store)
@@ -11630,7 +11664,7 @@ var wp;
         )
       );
     }
-    const { createSuccessNotice } = (0, import_data25.useDispatch)(import_notices3.store);
+    const { createSuccessNotice } = (0, import_data26.useDispatch)(import_notices3.store);
     const onActionPerformed = (0, import_element29.useCallback)(
       (actionId, items) => {
         switch (actionId) {
@@ -11714,8 +11748,6 @@ var wp;
             /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(import_editor18.AutosaveMonitor, {}),
             /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(import_editor18.LocalAutosaveMonitor, {}),
             /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(keyboard_shortcuts_default, {}),
-            /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(import_editor18.EditorKeyboardShortcutsRegister, {}),
-            /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(BlockKeyboardShortcuts, {}),
             currentPostType === "wp_block" && /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(InitPatternModal, {}),
             /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(import_plugins.PluginArea, { onError: onPluginAreaError }),
             /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(more_menu_default, {}),
@@ -11825,13 +11857,13 @@ var wp;
     const isMediumOrBigger = window.matchMedia("(min-width: 782px)").matches;
     const target = document.getElementById(id);
     const root = (0, import_element30.createRoot)(target);
-    (0, import_data26.dispatch)(import_preferences11.store).setDefaults("core/edit-post", {
+    (0, import_data27.dispatch)(import_preferences12.store).setDefaults("core/edit-post", {
       fullscreenMode: true,
       themeStyles: true,
       welcomeGuide: true,
       welcomeGuideTemplate: true
     });
-    (0, import_data26.dispatch)(import_preferences11.store).setDefaults("core", {
+    (0, import_data27.dispatch)(import_preferences12.store).setDefaults("core", {
       allowRightClickOverrides: true,
       editorMode: "visual",
       editorTool: "edit",
@@ -11850,21 +11882,21 @@ var wp;
       showCollaborationPostSaveNotifications: true
     });
     if (window.__clientSideMediaProcessing) {
-      (0, import_data26.dispatch)(import_preferences11.store).setDefaults("core/media", {
+      (0, import_data27.dispatch)(import_preferences12.store).setDefaults("core/media", {
         requireApproval: true,
         optimizeOnUpload: true
       });
     }
-    (0, import_data26.dispatch)(import_blocks2.store).reapplyBlockTypeFilters();
-    if (isMediumOrBigger && (0, import_data26.select)(import_preferences11.store).get("core", "showListViewByDefault") && !(0, import_data26.select)(import_preferences11.store).get("core", "distractionFree")) {
-      (0, import_data26.dispatch)(import_editor20.store).setIsListViewOpened(true);
+    (0, import_data27.dispatch)(import_blocks2.store).reapplyBlockTypeFilters();
+    if (isMediumOrBigger && (0, import_data27.select)(import_preferences12.store).get("core", "showListViewByDefault") && !(0, import_data27.select)(import_preferences12.store).get("core", "distractionFree")) {
+      (0, import_data27.dispatch)(import_editor20.store).setIsListViewOpened(true);
     }
-    (0, import_block_library2.registerCoreBlocks)();
+    (0, import_block_library.registerCoreBlocks)();
     registerCoreBlockBindingsSources();
     (0, import_widgets.registerLegacyWidgetBlock)({ inserter: false });
     (0, import_widgets.registerWidgetGroupBlock)({ inserter: false });
     if (true) {
-      (0, import_block_library2.__experimentalRegisterExperimentalCoreBlocks)({
+      (0, import_block_library.__experimentalRegisterExperimentalCoreBlocks)({
         enableFSEBlocks: settings.__unstableEnableFullSiteEditingBlocks
       });
     }
@@ -11881,13 +11913,13 @@ var wp;
     preloadedResolutions.finally(() => {
       clearPreloadedData();
       if (postType && postId) {
-        const post = (0, import_data26.select)(import_core_data10.store).getEntityRecord(
+        const post = (0, import_data27.select)(import_core_data10.store).getEntityRecord(
           "postType",
           postType,
           postId
         );
         if (post) {
-          (0, import_data26.dispatch)(import_editor20.store).setupEditor(
+          (0, import_data27.dispatch)(import_editor20.store).setupEditor(
             post,
             initialEdits,
             settings.template
@@ -11909,8 +11941,8 @@ var wp;
     return root;
   }
   async function preloadResolutions(postType, postId) {
-    const core = (0, import_data26.resolveSelect)(import_core_data10.store);
-    const coreSelect = (0, import_data26.select)(import_core_data10.store);
+    const core = (0, import_data27.resolveSelect)(import_core_data10.store);
+    const coreSelect = (0, import_data27.select)(import_core_data10.store);
     try {
       await Promise.all([
         core.getCurrentUser(),
@@ -11927,7 +11959,6 @@ var wp;
         core.__experimentalGetCurrentThemeBaseGlobalStyles(),
         core.__experimentalGetCurrentThemeGlobalStylesVariations(),
         core.getEntityRecord("root", "__unstableBase"),
-        core.getEntityRecord("root", "site"),
         core.canUser("read", { kind: "root", name: "site" }),
         core.canUser("create", { kind: "postType", name: "attachment" }),
         core.canUser("create", { kind: "postType", name: "page" }),
@@ -11965,11 +11996,13 @@ var wp;
         ] : []
       ]);
       const tasks = [];
+      if (coreSelect.canUser("read", { kind: "root", name: "site" })) {
+        tasks.push(core.getEntityRecord("root", "site"));
+      }
       const globalStylesId = coreSelect.__experimentalGetCurrentGlobalStylesId();
       if (globalStylesId) {
         tasks.push(
-          core.getEntityRecord("root", "globalStyles", globalStylesId),
-          core.canUser("read", {
+          core.canUser("update", {
             kind: "root",
             name: "globalStyles",
             id: globalStylesId
@@ -12000,6 +12033,26 @@ var wp;
       }
       if (tasks.length) {
         await Promise.all(tasks);
+      }
+      if (globalStylesId) {
+        if (coreSelect.canUser("update", {
+          kind: "root",
+          name: "globalStyles",
+          id: globalStylesId
+        })) {
+          await core.getEntityRecord(
+            "root",
+            "globalStyles",
+            globalStylesId
+          );
+        } else {
+          await core.getEntityRecord(
+            "root",
+            "globalStyles",
+            globalStylesId,
+            { context: "view" }
+          );
+        }
       }
     } catch {
     }

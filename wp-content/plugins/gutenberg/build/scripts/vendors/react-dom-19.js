@@ -302,7 +302,7 @@ function __wpWarnCompat(key) {var w = __wpWarnCompat.warned || (__wpWarnCompat.w
         exports.useFormStatus = function() {
           return resolveDispatcher().useHostTransitionStatus();
         };
-        exports.version = "19.2.7";
+        exports.version = "19.2.8";
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
       })();
     }
@@ -20365,9 +20365,9 @@ function __wpWarnCompat(key) {var w = __wpWarnCompat.warned || (__wpWarnCompat.w
         };
         (function() {
           var isomorphicReactPackageVersion = React.version;
-          if ("19.2.7" !== isomorphicReactPackageVersion)
+          if ("19.2.8" !== isomorphicReactPackageVersion)
             throw Error(
-              'Incompatible React versions: The "react" and "react-dom" packages must have the exact same version. Instead got:\n  - react:      ' + (isomorphicReactPackageVersion + "\n  - react-dom:  19.2.7\nLearn more: https://react.dev/warnings/version-mismatch")
+              'Incompatible React versions: The "react" and "react-dom" packages must have the exact same version. Instead got:\n  - react:      ' + (isomorphicReactPackageVersion + "\n  - react-dom:  19.2.8\nLearn more: https://react.dev/warnings/version-mismatch")
             );
         })();
         "function" === typeof Map && null != Map.prototype && "function" === typeof Map.prototype.forEach && "function" === typeof Set && null != Set.prototype && "function" === typeof Set.prototype.clear && "function" === typeof Set.prototype.forEach || console.error(
@@ -20391,10 +20391,10 @@ function __wpWarnCompat(key) {var w = __wpWarnCompat.warned || (__wpWarnCompat.w
         if (!(function() {
           var internals = {
             bundleType: 1,
-            version: "19.2.7",
+            version: "19.2.8",
             rendererPackageName: "react-dom",
             currentDispatcherRef: ReactSharedInternals,
-            reconcilerVersion: "19.2.7"
+            reconcilerVersion: "19.2.8"
           };
           internals.overrideHookState = overrideHookState;
           internals.overrideHookStateDeletePath = overrideHookStateDeletePath;
@@ -20485,7 +20485,7 @@ function __wpWarnCompat(key) {var w = __wpWarnCompat.warned || (__wpWarnCompat.w
           listenToAllSupportedEvents(container);
           return new ReactDOMHydrationRoot(initialChildren);
         };
-        exports.version = "19.2.7";
+        exports.version = "19.2.8";
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
       })();
     }

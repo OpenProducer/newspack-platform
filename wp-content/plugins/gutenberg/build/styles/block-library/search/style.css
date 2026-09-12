@@ -71,7 +71,7 @@
   max-width: 100%;
 }
 
-.wp-block-search__label {
+:where(.wp-block-search__label) {
   width: 100%;
 }
 

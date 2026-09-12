@@ -89,10 +89,12 @@ class WCAdminAssets {
 	public static function get_url( $file, $ext ) {
 		$suffix = '';
 
-		// Potentially enqueue minified JavaScript.
+		// Potentially enqueue minified JavaScript, but only if the minified file exists.
+		// Core builds do not ship minified JS files, so this also guards against the
+		// 'minified-js' feature being force-enabled (e.g. via WooCommerce Beta Tester).
 		if ( $ext === 'js' ) {
 			$script_debug = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG;
-			$suffix       = self::should_use_minified_js_file( $script_debug ) ? '.min' : '';
+			$suffix       = self::should_use_minified_js_file( $script_debug ) && is_readable( WC_ADMIN_ABSPATH . self::get_path( $ext ) . $file . '.min.' . $ext ) ? '.min' : '';
 		}
 
 		return plugins_url( self::get_path( $ext ) . $file . $suffix . '.' . $ext, WC_ADMIN_PLUGIN_FILE );
@@ -314,7 +316,6 @@ class WCAdminAssets {
 			'wc-store-data',
 			'wc-currency',
 			'wc-navigation',
-			'wc-experimental-products-app',
 			'wc-settings-ui',
 			'wc-remote-logging',
 			'wc-sanitize',
@@ -331,7 +332,6 @@ class WCAdminAssets {
 			'wc-date',
 			'wc-components',
 			'wc-customer-effort-score',
-			'wc-experimental-products-app',
 			'wc-experimental',
 			'wc-navigation',
 			'wc-settings-ui',
@@ -383,9 +383,6 @@ class WCAdminAssets {
 			),
 			array(
 				'handle' => 'wc-components',
-			),
-			array(
-				'handle' => 'wc-experimental-products-app',
 			),
 			array(
 				'handle' => 'wc-customer-effort-score',
@@ -466,7 +463,6 @@ class WCAdminAssets {
 				'wc-csv',
 				'wc-currency',
 				'wc-customer-effort-score',
-				'wc-experimental-products-app',
 				'wc-navigation',
 				// NOTE: This should be removed when Gutenberg is updated and
 				// the notices package is removed from WooCommerce Admin.

@@ -225,3 +225,22 @@ function gutenberg_register_media_editor_wp_admin_page_routes() {
 }
 add_action( 'media-editor-wp-admin_init', 'gutenberg_register_media_editor_wp_admin_page_routes' );
 
+// Page-specific route registration functions for theme-preview
+/**
+ * Register routes for theme-preview page (full-page mode).
+ */
+function gutenberg_register_theme_preview_page_routes() {
+	global $gutenberg_theme_preview_routes_data;
+	gutenberg_register_page_routes( $gutenberg_theme_preview_routes_data, 'gutenberg_register_theme_preview_route' );
+}
+add_action( 'theme-preview_init', 'gutenberg_register_theme_preview_page_routes' );
+
+/**
+ * Register routes for theme-preview page (wp-admin mode).
+ */
+function gutenberg_register_theme_preview_wp_admin_page_routes() {
+	global $gutenberg_theme_preview_routes_data;
+	gutenberg_register_page_routes( $gutenberg_theme_preview_routes_data, 'gutenberg_register_theme_preview_wp_admin_route' );
+}
+add_action( 'theme-preview-wp-admin_init', 'gutenberg_register_theme_preview_wp_admin_page_routes' );
+

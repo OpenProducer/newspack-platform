@@ -1824,6 +1824,9 @@ return array(
 			'WooCommerce'
 		),
 		'textdomain' => 'woocommerce',
+		'viewScriptModule' => 'woocommerce/mini-cart',
+		'style' => 'file:../woocommerce/mini-cart-style.css',
+		'editorStyle' => 'file:../woocommerce/mini-cart-editor.css',
 		'supports' => array(
 			'html' => false,
 			'multiple' => false,
@@ -1833,7 +1836,8 @@ return array(
 			'spacing' => array(
 				'margin' => true,
 				'padding' => true
-			)
+			),
+			'interactivity' => true
 		),
 		'example' => array(
 			'attributes' => array(
@@ -2987,8 +2991,10 @@ return array(
 				'padding' => true,
 				'__experimentalSkipSerialization' => true
 			),
-			'email' => true,
-			'__experimentalSelector' => '.wp-block-button.wc-block-components-product-button .wc-block-components-product-button__button'
+			'email' => true
+		),
+		'selectors' => array(
+			'root' => '.wp-block-woocommerce-product-button .wc-block-components-product-button__button'
 		),
 		'ancestor' => array(
 			'woocommerce/all-products',
@@ -3424,6 +3430,20 @@ return array(
 			'align' => array(
 				'wide',
 				'full'
+			),
+			'color' => array(
+				'background' => true,
+				'text' => false
+			),
+			'spacing' => array(
+				'margin' => true,
+				'padding' => true
+			),
+			'__experimentalBorder' => array(
+				'color' => true,
+				'radius' => true,
+				'style' => true,
+				'width' => true
 			)
 		),
 		'attributes' => array(
@@ -4293,8 +4313,10 @@ return array(
 			'__experimentalBorder' => array(
 				'radius' => true,
 				'__experimentalSkipSerialization' => true
-			),
-			'__experimentalSelector' => '.wc-block-next-previous-buttons__button'
+			)
+		),
+		'selectors' => array(
+			'root' => '.wp-block-woocommerce-product-gallery-large-image-next-previous .wc-block-next-previous-buttons__button'
 		),
 		'ancestor' => array(
 			'woocommerce/product-gallery-large-image',
@@ -4411,8 +4433,10 @@ return array(
 				'aspectRatio' => true,
 				'__experimentalSkipSerialization' => true
 			),
-			'email' => true,
-			'__experimentalSelector' => '.wc-block-components-product-image'
+			'email' => true
+		),
+		'selectors' => array(
+			'root' => '.wp-block-woocommerce-product-image.wc-block-components-product-image, .wp-block-woocommerce-product-image .wc-block-components-product-image'
 		),
 		'ancestor' => array(
 			'woocommerce/all-products',
@@ -4719,7 +4743,8 @@ return array(
 			'color' => array(
 				'text' => true,
 				'background' => true,
-				'link' => false
+				'link' => false,
+				'__experimentalSkipSerialization' => true
 			),
 			'typography' => array(
 				'fontSize' => true,
@@ -4727,13 +4752,23 @@ return array(
 				'__experimentalFontFamily' => true,
 				'__experimentalFontWeight' => true,
 				'__experimentalFontStyle' => true,
-				'__experimentalLetterSpacing' => true
+				'__experimentalLetterSpacing' => true,
+				'__experimentalSkipSerialization' => true
 			),
-			'__experimentalSelector' => '.wp-block-woocommerce-product-price .wc-block-components-product-price',
 			'email' => true,
 			'spacing' => array(
 				'margin' => true,
-				'padding' => true
+				'padding' => true,
+				'__experimentalSkipSerialization' => array(
+					'padding'
+				)
+			)
+		),
+		'selectors' => array(
+			'root' => '.wp-block-woocommerce-product-price .wc-block-components-product-price',
+			'spacing' => array(
+				'margin' => '.wp-block-woocommerce-product-price',
+				'padding' => '.wp-block-woocommerce-product-price .wc-block-components-product-price'
 			)
 		),
 		'ancestor' => array(
@@ -4791,8 +4826,10 @@ return array(
 			'typography' => array(
 				'fontSize' => true,
 				'__experimentalSkipSerialization' => true
-			),
-			'__experimentalSelector' => '.wc-block-components-product-rating'
+			)
+		),
+		'selectors' => array(
+			'root' => '.wp-block-woocommerce-product-rating.wc-block-components-product-rating, .wp-block-woocommerce-product-rating .wc-block-components-product-rating'
 		),
 		'ancestor' => array(
 			'woocommerce/all-products',
@@ -4856,8 +4893,10 @@ return array(
 			'typography' => array(
 				'fontSize' => true,
 				'__experimentalSkipSerialization' => true
-			),
-			'__experimentalSelector' => '.wc-block-components-product-rating-counter'
+			)
+		),
+		'selectors' => array(
+			'root' => '.wp-block-woocommerce-product-rating-counter.wc-block-components-product-rating-counter, .wp-block-woocommerce-product-rating-counter .wc-block-components-product-rating-counter'
 		),
 		'usesContext' => array(
 			'query',
@@ -4927,8 +4966,10 @@ return array(
 			'typography' => array(
 				'fontSize' => true,
 				'__experimentalSkipSerialization' => true
-			),
-			'__experimentalSelector' => '.wc-block-components-product-rating'
+			)
+		),
+		'selectors' => array(
+			'root' => '.wp-block-woocommerce-product-rating-stars.wc-block-components-product-rating, .wp-block-woocommerce-product-rating-stars .wc-block-components-product-rating'
 		),
 		'ancestor' => array(
 			'woocommerce/single-product'
@@ -5728,8 +5769,10 @@ return array(
 			'spacing' => array(
 				'margin' => true
 			),
-			'email' => true,
-			'__experimentalSelector' => '.wc-block-components-product-sale-badge'
+			'email' => true
+		),
+		'selectors' => array(
+			'root' => '.wp-block-woocommerce-product-sale-badge .wc-block-components-product-sale-badge'
 		),
 		'ancestor' => array(
 			'woocommerce/single-product',
@@ -6000,8 +6043,10 @@ return array(
 				'__experimentalDefaultControls' => array(
 					'fontSize' => true
 				)
-			),
-			'__experimentalSelector' => '.wc-block-components-product-summary'
+			)
+		),
+		'selectors' => array(
+			'root' => '.wp-block-woocommerce-product-summary.wc-block-components-product-summary, .wp-block-woocommerce-product-summary .wc-block-components-product-summary'
 		),
 		'ancestor' => array(
 			'woocommerce/all-products',
@@ -6207,8 +6252,10 @@ return array(
 			'spacing' => array(
 				'margin' => true,
 				'__experimentalSkipSerialization' => true
-			),
-			'__experimentalSelector' => '.wc-block-components-product-title'
+			)
+		),
+		'selectors' => array(
+			'root' => '.wp-block-woocommerce-product-title .wc-block-components-product-title'
 		),
 		'textdomain' => 'woocommerce',
 		'attributes' => array(

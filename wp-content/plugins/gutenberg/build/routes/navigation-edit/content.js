@@ -132,10 +132,10 @@ function clsx() {
 var clsx_default = clsx;
 
 // node_modules/@base-ui/utils/useRefWithInit.mjs
-var React2 = __toESM(require_react(), 1);
+var React = __toESM(require_react(), 1);
 var UNINITIALIZED = {};
 function useRefWithInit(init, initArg) {
-  const ref = React2.useRef(UNINITIALIZED);
+  const ref = React.useRef(UNINITIALIZED);
   if (ref.current === UNINITIALIZED) {
     ref.current = init(initArg);
   }
@@ -158,7 +158,7 @@ function warn(...messages) {
 }
 
 // node_modules/@base-ui/react/internals/useRenderElement.mjs
-var React5 = __toESM(require_react(), 1);
+var React4 = __toESM(require_react(), 1);
 
 // node_modules/@base-ui/utils/useMergedRefs.mjs
 function useMergedRefs(a, b, c, d) {
@@ -233,7 +233,7 @@ function update(forkRef, refs) {
               if (typeof cleanupCallback === "function") {
                 cleanupCallback();
               } else {
-                ref(null);
+                void ref(null);
               }
               break;
             }
@@ -250,18 +250,18 @@ function update(forkRef, refs) {
 }
 
 // node_modules/@base-ui/utils/getReactElementRef.mjs
-var React4 = __toESM(require_react(), 1);
+var React3 = __toESM(require_react(), 1);
 
 // node_modules/@base-ui/utils/reactVersion.mjs
-var React3 = __toESM(require_react(), 1);
-var majorVersion = parseInt(React3.version, 10);
+var React2 = __toESM(require_react(), 1);
+var majorVersion = parseInt(React2.version, 10);
 function isReactVersionAtLeast(reactVersionToCheck) {
   return majorVersion >= reactVersionToCheck;
 }
 
 // node_modules/@base-ui/utils/getReactElementRef.mjs
 function getReactElementRef(element) {
-  if (!/* @__PURE__ */ React4.isValidElement(element)) {
+  if (!/* @__PURE__ */ React3.isValidElement(element)) {
     return null;
   }
   const reactElement = element;
@@ -507,7 +507,7 @@ function useRenderElementProps(componentProps, params = {}) {
   const outProps = enabled ? mergeObjects(stateProps, resolvedProps) ?? {} : EMPTY_OBJECT;
   if (typeof document !== "undefined") {
     if (!enabled) {
-      useMergedRefs(null, null);
+      void useMergedRefs(null, null);
     } else if (Array.isArray(ref)) {
       outProps.ref = useMergedRefsN([outProps.ref, getReactElementRef(renderProp), ...ref]);
     } else {
@@ -546,15 +546,15 @@ function evaluateRenderProp(element, render, props, state) {
     mergedProps.ref = props.ref;
     let newElement = render;
     if (newElement?.$$typeof === REACT_LAZY_TYPE) {
-      const children = React5.Children.toArray(render);
+      const children = React4.Children.toArray(render);
       newElement = children[0];
     }
     if (true) {
-      if (!/* @__PURE__ */ React5.isValidElement(newElement)) {
+      if (!/* @__PURE__ */ React4.isValidElement(newElement)) {
         throw new Error(["Base UI: The `render` prop was provided an invalid React element as `React.isValidElement(render)` is `false`.", "A valid React element must be provided to the `render` prop because it is cloned with props to replace the default element.", "https://base-ui.com/r/invalid-render-prop"].join("\n"));
       }
     }
-    return /* @__PURE__ */ React5.cloneElement(newElement, mergedProps);
+    return /* @__PURE__ */ React4.cloneElement(newElement, mergedProps);
   }
   if (element) {
     if (typeof element === "string") {
@@ -591,7 +591,7 @@ function renderTag(Tag, props) {
       key: props.key
     });
   }
-  return /* @__PURE__ */ React5.createElement(Tag, props);
+  return /* @__PURE__ */ React4.createElement(Tag, props);
 }
 
 // node_modules/@base-ui/react/use-render/useRender.mjs
@@ -922,7 +922,7 @@ if (typeof process === "undefined" || true) {
 }
 var resets_default = { "box-sizing": "_336cd3e4e743482f__box-sizing" };
 if (typeof process === "undefined" || true) {
-  registerStyle3("2ffedd8246", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer utilities{._64de9947bf305b7a__outset-ring--focus-within-visible:focus-within:has(:focus-visible),.af79fb116edb0dd7__outset-ring--focus:focus,.dfcfdc28396e5d98__outset-ring--focus-visible:focus-visible,.e5cd9ee879f6403a__outset-ring--focus-within:focus-within,:focus-visible ._81935a08e952f267__outset-ring--focus-parent-visible{--focus-color:var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9));--_gcd-a-outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9));--_gcd-div-outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9));outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--focus-color);outline-offset:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px))}._3c9f5ee9fc9c136d__outset-ring--focus-within-except-active:focus-within,.abc777e9713fa711__outset-ring--focus-except-active:focus{outline:none}._3c9f5ee9fc9c136d__outset-ring--focus-within-except-active:focus-within:not(:has(:active)),.abc777e9713fa711__outset-ring--focus-except-active:focus:not(:active){--focus-color:var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9));--_gcd-a-outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9));--_gcd-div-outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9));outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--focus-color);outline-offset:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px))}}}");
+  registerStyle3("96553466c8", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer utilities{._64de9947bf305b7a__outset-ring--focus-within-visible:focus-within:has(:focus-visible),.af79fb116edb0dd7__outset-ring--focus:focus,.dfcfdc28396e5d98__outset-ring--focus-visible:focus-visible,.e5cd9ee879f6403a__outset-ring--focus-within:focus-within,:focus-visible ._81935a08e952f267__outset-ring--focus-parent-visible{--_gcd-a-outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--focus-color,var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9)));--_gcd-div-outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--focus-color,var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9)));outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--focus-color,var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9)));outline-offset:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px))}._3c9f5ee9fc9c136d__outset-ring--focus-within-except-active:focus-within,.abc777e9713fa711__outset-ring--focus-except-active:focus{outline:none}._3c9f5ee9fc9c136d__outset-ring--focus-within-except-active:focus-within:not(:has(:active)),.abc777e9713fa711__outset-ring--focus-except-active:focus:not(:active){--_gcd-a-outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--focus-color,var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9)));--_gcd-div-outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--focus-color,var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9)));outline:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px)) solid var(--focus-color,var(--wpds-color-stroke-focus,var(--wp-admin-theme-color,#3858e9)));outline-offset:var(--wpds-border-width-focus,var(--wp-admin-border-width-focus,2px))}}}");
 }
 var focus_module_default = { "outset-ring--focus": "af79fb116edb0dd7__outset-ring--focus", "outset-ring--focus-visible": "dfcfdc28396e5d98__outset-ring--focus-visible", "outset-ring--focus-within": "e5cd9ee879f6403a__outset-ring--focus-within", "outset-ring--focus-within-visible": "_64de9947bf305b7a__outset-ring--focus-within-visible", "outset-ring--focus-parent-visible": "_81935a08e952f267__outset-ring--focus-parent-visible", "outset-ring--focus-except-active": "abc777e9713fa711__outset-ring--focus-except-active", "outset-ring--focus-within-except-active": "_3c9f5ee9fc9c136d__outset-ring--focus-within-except-active" };
 if (typeof process === "undefined" || true) {
@@ -1159,11 +1159,8 @@ var NavigableRegion = (0, import_element4.forwardRef)(
 NavigableRegion.displayName = "NavigableRegion";
 var navigable_region_default = NavigableRegion;
 
-// packages/admin-ui/build-module/page/sidebar-toggle-slot.mjs
-var import_components = __toESM(require_components(), 1);
-var { Fill: SidebarToggleFill, Slot: SidebarToggleSlot } = (0, import_components.createSlotFill)("SidebarToggle");
-
-// packages/admin-ui/build-module/page/header.mjs
+// packages/admin-ui/build-module/navigation/index.mjs
+var import_i18n3 = __toESM(require_i18n(), 1);
 var import_jsx_runtime7 = __toESM(require_jsx_runtime(), 1);
 var STYLE_HASH_ATTRIBUTE5 = "data-wp-hash";
 function getRuntime5() {
@@ -1246,83 +1243,72 @@ function registerStyle5(hash, css) {
   }
 }
 if (typeof process === "undefined" || true) {
-  registerStyle5("ddd9aab364", "._956b6df0898efed0__page{text-wrap:pretty;background-color:var(--wpds-color-background-surface-neutral,#fcfcfc);color:var(--wpds-color-foreground-content-neutral,#1e1e1e);display:flex;flex-flow:column;height:100%;position:relative;z-index:1}._0625b55e82a0d93d__header{background:var(--wpds-color-background-surface-neutral-strong,#fff);border-block-end:var(--wpds-border-width-xs,1px) solid var(--wpds-color-stroke-surface-neutral-weak,#f0f0f0);inset-block-start:0;padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px);position:sticky;z-index:1}.a43c44d5ae28b2e8__header-content{min-height:var(--wpds-dimension-size-md,32px)}.b7cb5b9daf3a3b25__header-actions{flex-shrink:0}._8113be94e7caf73c__header-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}._9a776c7f70996f61__header-visual{display:grid;flex-shrink:0;grid-template-columns:1fr;grid-template-rows:1fr;height:var(--wpds-dimension-size-sm,24px);width:var(--wpds-dimension-size-sm,24px);>*{grid-column:1/-1;grid-row:1/-1;max-height:100%;max-width:100%}}.d5e0920cd15d35bc__sidebar-toggle-slot:empty{display:none}._60fea2f6bf5319cd__header-subtitle{color:var(--wpds-color-foreground-content-neutral-weak,#707070);padding-block-end:var(--wpds-dimension-padding-xs,4px)}.be5e57d029ec4036__content{display:flex;flex-direction:column;flex-grow:1;overflow:auto;&._128806d0b26e3a50__has-padding{padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px)}}");
+  registerStyle5("72ef022400", ".bfb5a2dd8cceebd3__list{--focus-ring-size:calc(var(--wpds-border-width-focus, var(--wp-admin-border-width-focus, 2px))*2);list-style:none;margin:calc(var(--focus-ring-size)*-1);overflow-x:auto;padding:var(--focus-ring-size);scroll-padding:var(--focus-ring-size)}.a4759b4cb2c8bd92__li{flex-shrink:0}._07da506d3f2d9afe__item{align-items:center;color:var(--wpds-color-foreground-interactive-neutral-weak,#707070);display:flex;font-weight:var(--wpds-typography-font-weight-default,400);min-block-size:44px;min-inline-size:44px;text-decoration:none}._07da506d3f2d9afe__item:hover,._07da506d3f2d9afe__item[aria-current=page]{color:var(--wpds-color-foreground-interactive-neutral-weak-active,#1e1e1e)}._07da506d3f2d9afe__item[aria-current=page]{font-weight:var(--wpds-typography-font-weight-emphasis,600)}");
 }
-var style_default5 = { "page": "_956b6df0898efed0__page", "header": "_0625b55e82a0d93d__header", "header-content": "a43c44d5ae28b2e8__header-content", "header-actions": "b7cb5b9daf3a3b25__header-actions", "header-title": "_8113be94e7caf73c__header-title", "header-visual": "_9a776c7f70996f61__header-visual", "sidebar-toggle-slot": "d5e0920cd15d35bc__sidebar-toggle-slot", "header-subtitle": "_60fea2f6bf5319cd__header-subtitle", "content": "be5e57d029ec4036__content", "has-padding": "_128806d0b26e3a50__has-padding" };
-function Header({
-  headingLevel = 1,
-  breadcrumbs,
-  badges,
-  visual,
-  title,
-  subTitle,
-  actions,
-  showSidebarToggle = true
-}) {
-  const HeadingTag = `h${headingLevel}`;
-  return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(Stack, { direction: "column", className: style_default5.header, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
-      Stack,
-      {
-        className: style_default5["header-content"],
-        direction: "row",
-        gap: "sm",
-        justify: "space-between",
-        children: [
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(Stack, { direction: "row", gap: "sm", align: "center", justify: "start", children: [
-            showSidebarToggle && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
-              SidebarToggleSlot,
-              {
-                bubblesVirtually: true,
-                className: style_default5["sidebar-toggle-slot"]
-              }
-            ),
-            visual && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
-              "div",
-              {
-                className: style_default5["header-visual"],
-                "aria-hidden": "true",
-                children: visual
-              }
-            ),
-            title && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
-              Text,
-              {
-                className: style_default5["header-title"],
-                render: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(HeadingTag, {}),
-                variant: "heading-lg",
-                children: title
-              }
-            ),
-            breadcrumbs,
-            badges
-          ] }),
-          actions && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
-            Stack,
+var style_default5 = { "list": "bfb5a2dd8cceebd3__list", "li": "a4759b4cb2c8bd92__li", "item": "_07da506d3f2d9afe__item" };
+var Navigation = ({
+  items,
+  currentHref,
+  ariaLabel = (0, import_i18n3.__)("Sections"),
+  linkComponent,
+  className
+}) => {
+  if (!items.length) {
+    return null;
+  }
+  const LinkComponent = linkComponent ?? "a";
+  if (true) {
+    const invalidItem = items.find(
+      (item) => typeof item.href !== "string"
+    );
+    if (invalidItem) {
+      throw new Error(
+        `Navigation: item "${invalidItem.label}" is missing an \`href\` prop.`
+      );
+    }
+    const duplicate = items.find(
+      (item, index) => items.findIndex((other) => other.href === item.href) !== index
+    );
+    if (duplicate) {
+      throw new Error(
+        `Navigation: duplicate \`href\` "${duplicate.href}". Each item must have a unique \`href\` so a single item receives \`aria-current="page"\`.`
+      );
+    }
+  }
+  return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("nav", { "aria-label": ariaLabel, className, children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+    Stack,
+    {
+      render: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("ul", { role: "list" }),
+      direction: "row",
+      align: "center",
+      gap: "md",
+      className: style_default5.list,
+      children: items.map((item) => /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("li", { className: style_default5.li, children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+        Text,
+        {
+          variant: "body-md",
+          className: style_default5.item,
+          render: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+            Link,
             {
-              align: "center",
-              className: style_default5["header-actions"],
-              direction: "row",
-              gap: "sm",
-              children: actions
+              variant: "unstyled",
+              "aria-current": item.href === currentHref ? "page" : void 0,
+              render: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(LinkComponent, { href: item.href })
             }
-          )
-        ]
-      }
-    ),
-    subTitle && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
-      Text,
-      {
-        render: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", {}),
-        variant: "body-md",
-        className: style_default5["header-subtitle"],
-        children: subTitle
-      }
-    )
-  ] });
-}
+          ),
+          children: item.label
+        }
+      ) }, item.href))
+    }
+  ) });
+};
+var navigation_default = Navigation;
 
-// packages/admin-ui/build-module/page/index.mjs
+// packages/admin-ui/build-module/page/sidebar-toggle-slot.mjs
+var import_components = __toESM(require_components(), 1);
+var { Fill: SidebarToggleFill, Slot: SidebarToggleSlot } = (0, import_components.createSlotFill)("SidebarToggle");
+
+// packages/admin-ui/build-module/page/header.mjs
 var import_jsx_runtime8 = __toESM(require_jsx_runtime(), 1);
 var STYLE_HASH_ATTRIBUTE6 = "data-wp-hash";
 function getRuntime6() {
@@ -1405,9 +1391,199 @@ function registerStyle6(hash, css) {
   }
 }
 if (typeof process === "undefined" || true) {
-  registerStyle6("ddd9aab364", "._956b6df0898efed0__page{text-wrap:pretty;background-color:var(--wpds-color-background-surface-neutral,#fcfcfc);color:var(--wpds-color-foreground-content-neutral,#1e1e1e);display:flex;flex-flow:column;height:100%;position:relative;z-index:1}._0625b55e82a0d93d__header{background:var(--wpds-color-background-surface-neutral-strong,#fff);border-block-end:var(--wpds-border-width-xs,1px) solid var(--wpds-color-stroke-surface-neutral-weak,#f0f0f0);inset-block-start:0;padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px);position:sticky;z-index:1}.a43c44d5ae28b2e8__header-content{min-height:var(--wpds-dimension-size-md,32px)}.b7cb5b9daf3a3b25__header-actions{flex-shrink:0}._8113be94e7caf73c__header-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}._9a776c7f70996f61__header-visual{display:grid;flex-shrink:0;grid-template-columns:1fr;grid-template-rows:1fr;height:var(--wpds-dimension-size-sm,24px);width:var(--wpds-dimension-size-sm,24px);>*{grid-column:1/-1;grid-row:1/-1;max-height:100%;max-width:100%}}.d5e0920cd15d35bc__sidebar-toggle-slot:empty{display:none}._60fea2f6bf5319cd__header-subtitle{color:var(--wpds-color-foreground-content-neutral-weak,#707070);padding-block-end:var(--wpds-dimension-padding-xs,4px)}.be5e57d029ec4036__content{display:flex;flex-direction:column;flex-grow:1;overflow:auto;&._128806d0b26e3a50__has-padding{padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px)}}");
+  registerStyle6("1f3750277d", "._956b6df0898efed0__page{text-wrap:pretty;background-color:var(--wpds-color-background-surface-neutral,#fcfcfc);color:var(--wpds-color-foreground-content-neutral,#1e1e1e);display:flex;flex-flow:column;height:100%;position:relative;z-index:1}._0625b55e82a0d93d__header{background:var(--wpds-color-background-surface-neutral-strong,#fff);border-block-end:var(--wpds-border-width-xs,1px) solid var(--wpds-color-stroke-surface-neutral-weak,#f0f0f0);inset-block-start:0;padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px);position:sticky;z-index:1}.a43c44d5ae28b2e8__header-content{min-height:var(--wpds-dimension-size-md,32px)}.b7cb5b9daf3a3b25__header-actions{flex-shrink:0}._8bcd33103b451f30__header-lockup{min-width:0}._8113be94e7caf73c__header-title{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}._9a776c7f70996f61__header-visual{display:grid;flex-shrink:0;grid-template-columns:1fr;grid-template-rows:1fr;height:var(--wpds-dimension-size-sm,24px);width:var(--wpds-dimension-size-sm,24px);>*{grid-column:1/-1;grid-row:1/-1;max-height:100%;max-width:100%}}.d5e0920cd15d35bc__sidebar-toggle-slot:empty{display:none}._60fea2f6bf5319cd__header-subtitle{color:var(--wpds-color-foreground-content-neutral-weak,#707070);padding-block-end:var(--wpds-dimension-padding-xs,4px)}._0625b55e82a0d93d__header._4b0f17e503d11619__has-navigation,._0625b55e82a0d93d__header._4b0f17e503d11619__has-navigation ._60fea2f6bf5319cd__header-subtitle{padding-block-end:0}._673c99dcbfb58211__header-navigation{margin-block-start:var(--wpds-dimension-gap-md,12px)}.be5e57d029ec4036__content{display:flex;flex-direction:column;flex-grow:1;overflow:auto;&._128806d0b26e3a50__has-padding{padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px)}}");
 }
-var style_default6 = { "page": "_956b6df0898efed0__page", "header": "_0625b55e82a0d93d__header", "header-content": "a43c44d5ae28b2e8__header-content", "header-actions": "b7cb5b9daf3a3b25__header-actions", "header-title": "_8113be94e7caf73c__header-title", "header-visual": "_9a776c7f70996f61__header-visual", "sidebar-toggle-slot": "d5e0920cd15d35bc__sidebar-toggle-slot", "header-subtitle": "_60fea2f6bf5319cd__header-subtitle", "content": "be5e57d029ec4036__content", "has-padding": "_128806d0b26e3a50__has-padding" };
+var style_default6 = { "page": "_956b6df0898efed0__page", "header": "_0625b55e82a0d93d__header", "header-content": "a43c44d5ae28b2e8__header-content", "header-actions": "b7cb5b9daf3a3b25__header-actions", "header-lockup": "_8bcd33103b451f30__header-lockup", "header-title": "_8113be94e7caf73c__header-title", "header-visual": "_9a776c7f70996f61__header-visual", "sidebar-toggle-slot": "d5e0920cd15d35bc__sidebar-toggle-slot", "header-subtitle": "_60fea2f6bf5319cd__header-subtitle", "has-navigation": "_4b0f17e503d11619__has-navigation", "header-navigation": "_673c99dcbfb58211__header-navigation", "content": "be5e57d029ec4036__content", "has-padding": "_128806d0b26e3a50__has-padding" };
+function Header({
+  headingLevel = 1,
+  breadcrumbs,
+  badges,
+  visual,
+  title,
+  subTitle,
+  actions,
+  navigation,
+  components,
+  showSidebarToggle = true
+}) {
+  const HeadingTag = `h${headingLevel}`;
+  const hasNavigation = !!navigation?.items?.length;
+  return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+    Stack,
+    {
+      direction: "column",
+      className: clsx_default(
+        style_default6.header,
+        hasNavigation && style_default6["has-navigation"]
+      ),
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+          Stack,
+          {
+            className: style_default6["header-content"],
+            direction: "row",
+            gap: "sm",
+            justify: "space-between",
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+                Stack,
+                {
+                  direction: "row",
+                  gap: "sm",
+                  align: "center",
+                  justify: "start",
+                  className: style_default6["header-lockup"],
+                  children: [
+                    showSidebarToggle && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+                      SidebarToggleSlot,
+                      {
+                        bubblesVirtually: true,
+                        className: style_default6["sidebar-toggle-slot"]
+                      }
+                    ),
+                    visual && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+                      "div",
+                      {
+                        className: style_default6["header-visual"],
+                        "aria-hidden": "true",
+                        children: visual
+                      }
+                    ),
+                    title && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+                      Text,
+                      {
+                        className: style_default6["header-title"],
+                        render: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(HeadingTag, {}),
+                        variant: "heading-lg",
+                        children: title
+                      }
+                    ),
+                    breadcrumbs,
+                    badges
+                  ]
+                }
+              ),
+              actions && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+                Stack,
+                {
+                  align: "center",
+                  className: style_default6["header-actions"],
+                  direction: "row",
+                  gap: "sm",
+                  children: actions
+                }
+              )
+            ]
+          }
+        ),
+        subTitle && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+          Text,
+          {
+            render: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", {}),
+            variant: "body-md",
+            className: style_default6["header-subtitle"],
+            children: subTitle
+          }
+        ),
+        hasNavigation && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+          navigation_default,
+          {
+            ...navigation,
+            linkComponent: components?.link,
+            className: style_default6["header-navigation"]
+          }
+        )
+      ]
+    }
+  );
+}
+
+// packages/admin-ui/build-module/page/index.mjs
+var import_jsx_runtime9 = __toESM(require_jsx_runtime(), 1);
+var STYLE_HASH_ATTRIBUTE7 = "data-wp-hash";
+function getRuntime7() {
+  const globalScope = globalThis;
+  if (globalScope.__wpStyleRuntime) {
+    return globalScope.__wpStyleRuntime;
+  }
+  globalScope.__wpStyleRuntime = {
+    documents: /* @__PURE__ */ new Map(),
+    styles: /* @__PURE__ */ new Map(),
+    injectedStyles: /* @__PURE__ */ new WeakMap()
+  };
+  if (typeof document !== "undefined") {
+    registerDocument7(document);
+  }
+  return globalScope.__wpStyleRuntime;
+}
+function documentContainsStyleHash7(targetDocument, hash) {
+  if (!targetDocument.head) {
+    return false;
+  }
+  for (const style of targetDocument.head.querySelectorAll(
+    `style[${STYLE_HASH_ATTRIBUTE7}]`
+  )) {
+    if (style.getAttribute(STYLE_HASH_ATTRIBUTE7) === hash) {
+      return true;
+    }
+  }
+  return false;
+}
+function injectStyle7(targetDocument, hash, css) {
+  if (!targetDocument.head) {
+    return;
+  }
+  const runtime = getRuntime7();
+  let injectedStyles = runtime.injectedStyles.get(targetDocument);
+  if (!injectedStyles) {
+    injectedStyles = /* @__PURE__ */ new Set();
+    runtime.injectedStyles.set(targetDocument, injectedStyles);
+  }
+  if (injectedStyles.has(hash)) {
+    return;
+  }
+  if (documentContainsStyleHash7(targetDocument, hash)) {
+    injectedStyles.add(hash);
+    return;
+  }
+  const style = targetDocument.createElement("style");
+  style.setAttribute(STYLE_HASH_ATTRIBUTE7, hash);
+  style.appendChild(targetDocument.createTextNode(css));
+  targetDocument.head.appendChild(style);
+  injectedStyles.add(hash);
+}
+function registerDocument7(targetDocument) {
+  const runtime = getRuntime7();
+  runtime.documents.set(
+    targetDocument,
+    (runtime.documents.get(targetDocument) ?? 0) + 1
+  );
+  for (const [hash, css] of runtime.styles) {
+    injectStyle7(targetDocument, hash, css);
+  }
+  return () => {
+    const count = runtime.documents.get(targetDocument);
+    if (count === void 0) {
+      return;
+    }
+    if (count <= 1) {
+      runtime.documents.delete(targetDocument);
+      return;
+    }
+    runtime.documents.set(targetDocument, count - 1);
+  };
+}
+function registerStyle7(hash, css) {
+  const runtime = getRuntime7();
+  runtime.styles.set(hash, css);
+  for (const targetDocument of runtime.documents.keys()) {
+    injectStyle7(targetDocument, hash, css);
+  }
+}
+if (typeof process === "undefined" || true) {
+  registerStyle7("1f3750277d", "._956b6df0898efed0__page{text-wrap:pretty;background-color:var(--wpds-color-background-surface-neutral,#fcfcfc);color:var(--wpds-color-foreground-content-neutral,#1e1e1e);display:flex;flex-flow:column;height:100%;position:relative;z-index:1}._0625b55e82a0d93d__header{background:var(--wpds-color-background-surface-neutral-strong,#fff);border-block-end:var(--wpds-border-width-xs,1px) solid var(--wpds-color-stroke-surface-neutral-weak,#f0f0f0);inset-block-start:0;padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px);position:sticky;z-index:1}.a43c44d5ae28b2e8__header-content{min-height:var(--wpds-dimension-size-md,32px)}.b7cb5b9daf3a3b25__header-actions{flex-shrink:0}._8bcd33103b451f30__header-lockup{min-width:0}._8113be94e7caf73c__header-title{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}._9a776c7f70996f61__header-visual{display:grid;flex-shrink:0;grid-template-columns:1fr;grid-template-rows:1fr;height:var(--wpds-dimension-size-sm,24px);width:var(--wpds-dimension-size-sm,24px);>*{grid-column:1/-1;grid-row:1/-1;max-height:100%;max-width:100%}}.d5e0920cd15d35bc__sidebar-toggle-slot:empty{display:none}._60fea2f6bf5319cd__header-subtitle{color:var(--wpds-color-foreground-content-neutral-weak,#707070);padding-block-end:var(--wpds-dimension-padding-xs,4px)}._0625b55e82a0d93d__header._4b0f17e503d11619__has-navigation,._0625b55e82a0d93d__header._4b0f17e503d11619__has-navigation ._60fea2f6bf5319cd__header-subtitle{padding-block-end:0}._673c99dcbfb58211__header-navigation{margin-block-start:var(--wpds-dimension-gap-md,12px)}.be5e57d029ec4036__content{display:flex;flex-direction:column;flex-grow:1;overflow:auto;&._128806d0b26e3a50__has-padding{padding:var(--wpds-dimension-padding-lg,16px) var(--wpds-dimension-padding-2xl,24px)}}");
+}
+var style_default7 = { "page": "_956b6df0898efed0__page", "header": "_0625b55e82a0d93d__header", "header-content": "a43c44d5ae28b2e8__header-content", "header-actions": "b7cb5b9daf3a3b25__header-actions", "header-lockup": "_8bcd33103b451f30__header-lockup", "header-title": "_8113be94e7caf73c__header-title", "header-visual": "_9a776c7f70996f61__header-visual", "sidebar-toggle-slot": "d5e0920cd15d35bc__sidebar-toggle-slot", "header-subtitle": "_60fea2f6bf5319cd__header-subtitle", "has-navigation": "_4b0f17e503d11619__has-navigation", "header-navigation": "_673c99dcbfb58211__header-navigation", "content": "be5e57d029ec4036__content", "has-padding": "_128806d0b26e3a50__has-padding" };
 function Page({
   headingLevel,
   breadcrumbs,
@@ -1418,14 +1594,16 @@ function Page({
   children,
   className,
   actions,
+  navigation,
+  components,
   ariaLabel,
   hasPadding = false,
   showSidebarToggle = true
 }) {
-  const classes = clsx_default(style_default6.page, className);
+  const classes = clsx_default(style_default7.page, className);
   const effectiveAriaLabel = ariaLabel ?? (typeof title === "string" ? title : "");
-  return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(navigable_region_default, { className: classes, ariaLabel: effectiveAriaLabel, children: [
-    (title || breadcrumbs || badges || actions || visual) && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(navigable_region_default, { className: classes, ariaLabel: effectiveAriaLabel, children: [
+    (title || breadcrumbs || badges || actions || visual || !!navigation?.items?.length) && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
       Header,
       {
         headingLevel,
@@ -1435,15 +1613,17 @@ function Page({
         title,
         subTitle,
         actions,
+        navigation,
+        components,
         showSidebarToggle
       }
     ),
-    hasPadding ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+    hasPadding ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
       "div",
       {
         className: clsx_default(
-          style_default6.content,
-          style_default6["has-padding"]
+          style_default7.content,
+          style_default7["has-padding"]
         ),
         children
       }
@@ -1456,7 +1636,7 @@ var page_default = Page;
 // routes/navigation-edit/stage.tsx
 var import_data3 = __toESM(require_data());
 var import_core_data2 = __toESM(require_core_data());
-var import_i18n4 = __toESM(require_i18n());
+var import_i18n5 = __toESM(require_i18n());
 var import_html_entities = __toESM(require_html_entities());
 
 // routes/navigation-edit/editor/index.tsx
@@ -1491,18 +1671,18 @@ var { lock, unlock } = (0, import_private_apis.__dangerousOptInToUnstableAPIsOnl
 // routes/navigation-edit/editor/leaf-more-menu.tsx
 var import_components2 = __toESM(require_components());
 var import_data = __toESM(require_data());
-var import_i18n3 = __toESM(require_i18n());
+var import_i18n4 = __toESM(require_i18n());
 var import_block_editor = __toESM(require_block_editor());
 var import_blocks = __toESM(require_blocks());
+var import_jsx_runtime10 = __toESM(require_jsx_runtime());
 var POPOVER_PROPS = {
   className: "block-editor-block-settings-menu__popover",
   placement: "bottom-start"
 };
 function LeafMoreMenu({
-  block,
+  clientId,
   ...props
 }) {
-  const { clientId } = block;
   const {
     moveBlocksDown,
     moveBlocksUp,
@@ -1511,15 +1691,16 @@ function LeafMoreMenu({
     insertBeforeBlock,
     insertAfterBlock
   } = (0, import_data.useDispatch)(import_block_editor.store);
-  const removeLabel = (0, import_i18n3.sprintf)(
+  const removeLabel = (0, import_i18n4.sprintf)(
     /* translators: %s: block name */
-    (0, import_i18n3.__)("Remove %s"),
+    (0, import_i18n4.__)("Remove %s"),
     (0, import_block_editor.BlockTitle)({ clientId, maximumLength: 25 })
   );
   const { rootClientId, canDuplicate, canInsertBlock, isFirst, isLast } = (0, import_data.useSelect)(
     (select) => {
       const {
         getBlockRootClientId,
+        getBlockName,
         canInsertBlockType,
         getDirectInsertBlock,
         getBlockIndex,
@@ -1527,6 +1708,7 @@ function LeafMoreMenu({
       } = select(import_block_editor.store);
       const { getDefaultBlockName } = select(import_blocks.store);
       const _rootClientId = getBlockRootClientId(clientId);
+      const _blockName = getBlockName(clientId);
       const canInsertDefaultBlock = canInsertBlockType(
         getDefaultBlockName(),
         _rootClientId
@@ -1534,89 +1716,99 @@ function LeafMoreMenu({
       const directInsertBlock = _rootClientId ? getDirectInsertBlock(_rootClientId) : null;
       return {
         rootClientId: _rootClientId,
-        canDuplicate: !!block && (0, import_blocks.hasBlockSupport)(block.name, "multiple", true) && canInsertBlockType(block.name, _rootClientId),
-        canInsertBlock: (canInsertDefaultBlock || !!directInsertBlock) && !!block && canInsertBlockType(block.name, _rootClientId),
+        canDuplicate: (0, import_blocks.hasBlockSupport)(_blockName, "multiple", true) && canInsertBlockType(_blockName, _rootClientId),
+        canInsertBlock: (canInsertDefaultBlock || !!directInsertBlock) && canInsertBlockType(_blockName, _rootClientId),
         isFirst: getBlockIndex(clientId) === 0,
         isLast: getBlockIndex(clientId) === getBlockCount(_rootClientId) - 1
       };
     },
-    [clientId, block]
+    [clientId]
   );
-  return /* @__PURE__ */ React.createElement(
+  return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
     import_components2.DropdownMenu,
     {
       icon: more_vertical_default,
-      label: (0, import_i18n3.__)("Options"),
+      label: (0, import_i18n4.__)("Options"),
       className: "block-editor-block-settings-menu",
       popoverProps: POPOVER_PROPS,
       noIcons: true,
-      ...props
-    },
-    ({ onClose }) => /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(import_components2.MenuGroup, null, /* @__PURE__ */ React.createElement(
-      import_components2.MenuItem,
-      {
-        icon: chevron_up_default,
-        disabled: isFirst,
-        accessibleWhenDisabled: true,
-        onClick: () => {
-          moveBlocksUp([clientId], rootClientId);
-          onClose();
-        }
-      },
-      (0, import_i18n3.__)("Move up")
-    ), /* @__PURE__ */ React.createElement(
-      import_components2.MenuItem,
-      {
-        icon: chevron_down_default,
-        disabled: isLast,
-        accessibleWhenDisabled: true,
-        onClick: () => {
-          moveBlocksDown([clientId], rootClientId);
-          onClose();
-        }
-      },
-      (0, import_i18n3.__)("Move down")
-    ), canDuplicate && /* @__PURE__ */ React.createElement(
-      import_components2.MenuItem,
-      {
-        onClick: () => {
-          duplicateBlocks([clientId]);
-          onClose();
-        }
-      },
-      (0, import_i18n3.__)("Duplicate")
-    ), canInsertBlock && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(
-      import_components2.MenuItem,
-      {
-        onClick: () => {
-          insertBeforeBlock(clientId);
-          onClose();
-        }
-      },
-      (0, import_i18n3.__)("Add before")
-    ), /* @__PURE__ */ React.createElement(
-      import_components2.MenuItem,
-      {
-        onClick: () => {
-          insertAfterBlock(clientId);
-          onClose();
-        }
-      },
-      (0, import_i18n3.__)("Add after")
-    ))), /* @__PURE__ */ React.createElement(import_components2.MenuGroup, null, /* @__PURE__ */ React.createElement(
-      import_components2.MenuItem,
-      {
-        onClick: () => {
-          removeBlocks([clientId], false);
-          onClose();
-        }
-      },
-      removeLabel
-    )))
+      ...props,
+      children: ({ onClose }) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_components2.MenuGroup, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            import_components2.MenuItem,
+            {
+              icon: chevron_up_default,
+              disabled: isFirst,
+              onClick: () => {
+                moveBlocksUp([clientId], rootClientId);
+                onClose();
+              },
+              children: (0, import_i18n4.__)("Move up")
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            import_components2.MenuItem,
+            {
+              icon: chevron_down_default,
+              disabled: isLast,
+              onClick: () => {
+                moveBlocksDown([clientId], rootClientId);
+                onClose();
+              },
+              children: (0, import_i18n4.__)("Move down")
+            }
+          ),
+          canDuplicate && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            import_components2.MenuItem,
+            {
+              onClick: () => {
+                duplicateBlocks([clientId]);
+                onClose();
+              },
+              children: (0, import_i18n4.__)("Duplicate")
+            }
+          ),
+          canInsertBlock && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+              import_components2.MenuItem,
+              {
+                onClick: () => {
+                  insertBeforeBlock(clientId);
+                  onClose();
+                },
+                children: (0, import_i18n4.__)("Add before")
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+              import_components2.MenuItem,
+              {
+                onClick: () => {
+                  insertAfterBlock(clientId);
+                  onClose();
+                },
+                children: (0, import_i18n4.__)("Add after")
+              }
+            )
+          ] })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_components2.MenuGroup, { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+          import_components2.MenuItem,
+          {
+            onClick: () => {
+              removeBlocks([clientId], false);
+              onClose();
+            },
+            children: removeLabel
+          }
+        ) })
+      ] })
+    }
   );
 }
 
 // routes/navigation-edit/editor/content.tsx
+var import_jsx_runtime11 = __toESM(require_jsx_runtime());
 var { PrivateListView } = unlock(import_block_editor2.privateApis);
 var MAX_PAGE_COUNT = 100;
 var PAGES_QUERY = [
@@ -1673,19 +1865,23 @@ function NavigationMenuContent({
     },
     [__unstableMarkNextChangeAsNotPersistent, replaceBlock]
   );
-  return /* @__PURE__ */ React.createElement(React.Fragment, null, !isLoading && /* @__PURE__ */ React.createElement(
-    PrivateListView,
-    {
-      rootClientId: listViewRootClientId,
-      onSelect: offCanvasOnselect,
-      blockSettingsMenu: LeafMoreMenu,
-      showAppender: false,
-      isExpanded: true
-    }
-  ), /* @__PURE__ */ React.createElement("div", { className: "navigation-edit-editor__hidden-blocks" }, /* @__PURE__ */ React.createElement(import_block_editor2.BlockList, null)));
+  return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(import_jsx_runtime11.Fragment, { children: [
+    !isLoading && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+      PrivateListView,
+      {
+        rootClientId: listViewRootClientId,
+        onSelect: offCanvasOnselect,
+        blockSettingsMenu: LeafMoreMenu,
+        showAppender: false,
+        isExpanded: true
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { className: "navigation-edit-editor__hidden-blocks", children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(import_block_editor2.BlockList, {}) })
+  ] });
 }
 
 // routes/navigation-edit/editor/index.tsx
+var import_jsx_runtime12 = __toESM(require_jsx_runtime());
 var noop = () => {
 };
 function NavigationMenuEditor({ id }) {
@@ -1697,7 +1893,7 @@ function NavigationMenuEditor({ id }) {
     return [(0, import_blocks3.createBlock)("core/navigation", { ref: id })];
   }, [assetsReady, id]);
   if (!assetsReady || !blocks.length) {
-    return /* @__PURE__ */ React.createElement(
+    return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
       "div",
       {
         style: {
@@ -1705,24 +1901,25 @@ function NavigationMenuEditor({ id }) {
           justifyContent: "center",
           alignItems: "center",
           height: "100vh"
-        }
-      },
-      /* @__PURE__ */ React.createElement(import_components3.Spinner, null)
+        },
+        children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(import_components3.Spinner, {})
+      }
     );
   }
-  return /* @__PURE__ */ React.createElement(
+  return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
     import_block_editor3.BlockEditorProvider,
     {
       settings: {},
       value: blocks,
       onChange: noop,
-      onInput: noop
-    },
-    /* @__PURE__ */ React.createElement(NavigationMenuContent, { rootClientId: blocks[0].clientId })
+      onInput: noop,
+      children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(NavigationMenuContent, { rootClientId: blocks[0].clientId })
+    }
   );
 }
 
 // routes/navigation-edit/stage.tsx
+var import_jsx_runtime13 = __toESM(require_jsx_runtime());
 var NAVIGATION_POST_TYPE = "wp_navigation";
 function NavigationEditStage() {
   const { id } = useParams({ from: "/navigation/edit/$id" });
@@ -1744,17 +1941,17 @@ function NavigationEditStage() {
     return;
   }
   const menuTitle = navigationMenu.title?.rendered || navigationMenu.title?.raw || "";
-  return /* @__PURE__ */ React.createElement(
+  return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
     page_default,
     {
       ariaLabel: (0, import_html_entities.decodeEntities)(menuTitle),
       headingLevel: 2,
-      breadcrumbs: /* @__PURE__ */ React.createElement(
+      breadcrumbs: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
         breadcrumbs_default,
         {
           items: [
             {
-              label: (0, import_i18n4.__)("Navigation"),
+              label: (0, import_i18n5.__)("Navigation"),
               to: "/navigation/list"
             },
             {
@@ -1763,9 +1960,9 @@ function NavigationEditStage() {
           ]
         }
       ),
-      hasPadding: true
-    },
-    /* @__PURE__ */ React.createElement(NavigationMenuEditor, { id: navigationId })
+      hasPadding: true,
+      children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(NavigationMenuEditor, { id: navigationId })
+    }
   );
 }
 var stage = NavigationEditStage;

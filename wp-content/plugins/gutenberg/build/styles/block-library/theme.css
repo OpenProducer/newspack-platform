@@ -188,7 +188,7 @@
   border: none;
 }
 
-.wp-block-search .wp-block-search__label {
+:where(.wp-block-search .wp-block-search__label) {
   font-weight: bold;
 }
 

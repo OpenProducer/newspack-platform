@@ -123,6 +123,27 @@ $marketplace_links = array(
 	),
 );
 
+// The React recommendations component owns the marketplace link on the main
+// Shipping screen, but it does not render on subsections, zone screens, or for
+// users who cannot install plugins.
+$shipping_zone_id = '';
+// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Used only to select non-mutating view output.
+if ( isset( $_GET['zone_id'] ) && is_string( $_GET['zone_id'] ) ) {
+	$shipping_zone_id = sanitize_text_field( wp_unslash( $_GET['zone_id'] ) );
+}
+// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+$is_shipping_zone_screen = '' !== $shipping_zone_id;
+if (
+	'shipping' === $current_tab
+	&& (
+		'no' === get_option( 'woocommerce_show_marketplace_suggestions', 'yes' )
+		|| ( '' === $current_section && ! $is_shipping_zone_screen && current_user_can( 'install_plugins' ) )
+	)
+) {
+	unset( $marketplace_links['shipping'] );
+}
+
 ?>
 
 <div class="wrap woocommerce">

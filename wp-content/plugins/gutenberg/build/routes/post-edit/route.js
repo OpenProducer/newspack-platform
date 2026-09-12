@@ -114,6 +114,23 @@ var route = {
       postType: params.type,
       postId
     };
+  },
+  async loader(context) {
+    const { params, search } = context;
+    if (search.selectedBlock) {
+      (0, import_data.dispatch)(import_core_data.store).editEntityRecord(
+        "postType",
+        params.type,
+        getPostId(params),
+        {
+          selection: {
+            selectionStart: { clientId: search.selectedBlock },
+            selectionEnd: { clientId: search.selectedBlock }
+          }
+        },
+        { undoIgnore: true }
+      );
+    }
   }
 };
 export {

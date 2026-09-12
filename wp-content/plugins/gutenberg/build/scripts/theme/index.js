@@ -1,4 +1,5 @@
 (function() {
+"use strict";
 var wp;
 (wp ||= {}).theme = (() => {
   var __create = Object.create;
@@ -4056,7 +4057,7 @@ var wp;
     const calculatedColors = /* @__PURE__ */ new Map();
     calculatedColors.set("seed", seed);
     for (const stepName of sortedSteps) {
-      let computeDirection = function(color, followDirection) {
+      let computeDirection2 = function(color, followDirection) {
         if (followDirection === "main") {
           return mainDir;
         }
@@ -4071,6 +4072,7 @@ var wp;
         }
         return followDirection;
       };
+      var computeDirection = computeDirection2;
       const {
         contrast,
         lightness: stepLightnessConstraint,
@@ -4101,7 +4103,7 @@ var wp;
           continue;
         }
       }
-      const computedDir = computeDirection(
+      const computedDir = computeDirection2(
         referenceColor,
         contrast.followDirection
       );
@@ -4188,10 +4190,11 @@ var wp;
       pinLightness
     });
     let bestRamp = rampResults;
+    let bestWarnings = warnings;
     if (maxDeficit > CONTRAST_EPSILON && rescaleToFitContrastTargets) {
-      let getSeedForL = function(l) {
+      let getSeedForL2 = function(l) {
         return clampToGamut(set(clone(seed), [oklch_default, "l"], l));
-      }, getDeficitForSeed = function(s) {
+      }, getDeficitForSeed2 = function(s) {
         const iterationResults = calculateRamp({
           seed: s,
           sortedSteps: iterSteps,
@@ -4202,27 +4205,30 @@ var wp;
         });
         return iterationResults.maxDeficitDirection === maxDeficitDirection ? iterationResults.maxDeficit : -maxDeficit;
       };
+      var getSeedForL = getSeedForL2, getDeficitForSeed = getDeficitForSeed2;
       const iterSteps = stepsForStep(maxDeficitStep, config);
       const lowerSeedL = maxDeficitDirection === "lighter" ? 0 : 1;
       const lowerDeficit = -maxDeficit;
       const upperSeedL = get(seed, [oklch_default, "l"]);
       const upperDeficit = maxDeficit;
       const bestSeed = solveWithBisect(
-        getSeedForL,
-        getDeficitForSeed,
+        getSeedForL2,
+        getDeficitForSeed2,
         lowerSeedL,
         lowerDeficit,
         upperSeedL,
         upperDeficit
       );
-      bestRamp = calculateRamp({
+      const finalResult = calculateRamp({
         seed: bestSeed,
         sortedSteps,
         config,
         mainDir,
         oppDir,
         pinLightness
-      }).rampResults;
+      });
+      bestRamp = finalResult.rampResults;
+      bestWarnings = finalResult.warnings;
     }
     if (mainDir === "darker") {
       const tmpSurface1 = bestRamp.surface1;
@@ -4231,7 +4237,7 @@ var wp;
     }
     return {
       ramp: bestRamp,
-      warnings,
+      warnings: bestWarnings,
       direction: mainDir
     };
   }
@@ -4551,6 +4557,138 @@ var wp;
     return buildRamp(seed, ACCENT_RAMP_CONFIG, bgRampInfo);
   }
 
+  // packages/theme/build-module/semantic-color-contrast-pairs.mjs
+  var MINIMUM_TEXT_CONTRAST = 4.5;
+  var SEMANTIC_COLOR_CONTRAST_PAIRS = [
+    {
+      background: "background.surface.neutral",
+      foreground: "foreground.content.neutral"
+    },
+    {
+      background: "background.surface.neutral-strong",
+      foreground: "foreground.content.neutral"
+    },
+    {
+      background: "background.surface.neutral-weak",
+      foreground: "foreground.content.neutral"
+    },
+    {
+      background: "background.surface.neutral",
+      foreground: "foreground.content.neutral-weak"
+    },
+    {
+      background: "background.surface.info",
+      foreground: "foreground.content.info"
+    },
+    {
+      background: "background.surface.info-weak",
+      foreground: "foreground.content.info-weak"
+    },
+    {
+      background: "background.surface.success",
+      foreground: "foreground.content.success"
+    },
+    {
+      background: "background.surface.success-weak",
+      foreground: "foreground.content.success-weak"
+    },
+    {
+      background: "background.surface.warning",
+      foreground: "foreground.content.warning"
+    },
+    {
+      background: "background.surface.warning-weak",
+      foreground: "foreground.content.warning-weak"
+    },
+    {
+      background: "background.surface.caution",
+      foreground: "foreground.content.caution"
+    },
+    {
+      background: "background.surface.caution-weak",
+      foreground: "foreground.content.caution-weak"
+    },
+    {
+      background: "background.surface.error",
+      foreground: "foreground.content.error"
+    },
+    {
+      background: "background.surface.error-weak",
+      foreground: "foreground.content.error-weak"
+    },
+    {
+      background: "background.interactive.brand-strong",
+      foreground: "foreground.interactive.brand-strong"
+    },
+    {
+      background: "background.interactive.brand-strong-active",
+      foreground: "foreground.interactive.brand-strong-active"
+    },
+    {
+      background: "background.interactive.error-strong",
+      foreground: "foreground.interactive.error-strong"
+    },
+    {
+      background: "background.interactive.error-strong-active",
+      foreground: "foreground.interactive.error-strong-active"
+    },
+    {
+      background: "background.interactive.neutral-strong",
+      foreground: "foreground.interactive.neutral-strong"
+    },
+    {
+      background: "background.interactive.neutral-strong-active",
+      foreground: "foreground.interactive.neutral-strong-active"
+    }
+  ];
+  function getSemanticColorCustomProperty(token) {
+    return `--wpds-color-${token.replaceAll(".", "-")}`;
+  }
+
+  // packages/theme/build-module/theme-provider-color-warnings.mjs
+  function collectThemeProviderColorWarnings(ramps, colorValues) {
+    const warnings = [];
+    for (const [rampName, result] of ramps) {
+      for (const step of result.warnings ?? []) {
+        warnings.push({
+          type: "ramp",
+          ramp: rampName,
+          step
+        });
+      }
+    }
+    for (const {
+      background: backgroundToken,
+      foreground: foregroundToken
+    } of SEMANTIC_COLOR_CONTRAST_PAIRS) {
+      const backgroundColor = colorValues.get(
+        getSemanticColorCustomProperty(backgroundToken)
+      );
+      const foregroundColor = colorValues.get(
+        getSemanticColorCustomProperty(foregroundToken)
+      );
+      if (backgroundColor === void 0 || foregroundColor === void 0) {
+        continue;
+      }
+      const achievedContrast = getContrast(
+        backgroundColor,
+        foregroundColor
+      );
+      if (achievedContrast < MINIMUM_TEXT_CONTRAST) {
+        warnings.push({
+          type: "contrast",
+          backgroundToken,
+          backgroundColor,
+          foregroundToken,
+          foregroundColor,
+          requiredContrast: MINIMUM_TEXT_CONTRAST,
+          achievedContrast
+        });
+      }
+    }
+    return warnings;
+  }
+
   // packages/theme/build-module/use-theme-provider-styles.mjs
   var getCachedBgRamp = memize(buildBgRamp, { maxSize: 10 });
   var getCachedAccentRamp = memize(buildAccentRamp, { maxSize: 10 });
@@ -4648,7 +4786,8 @@ var wp;
     const entries = [];
     for (const [rampName, { ramp }] of computedColorRamps) {
       for (const [tokenName, tokenValue] of Object.entries(ramp)) {
-        const key = `${rampName}-${tokenName}`;
+        const primitiveRampName = rampName === "background" ? "bg" : rampName;
+        const key = `${primitiveRampName}-${tokenName}`;
         const aliasedBy = color_tokens_default[key] ?? [];
         for (const aliasedId of aliasedBy) {
           entries.push([`--wpds-color-${aliasedId}`, tokenValue]);
@@ -4659,17 +4798,44 @@ var wp;
   }
   function generateStyles({
     primary,
-    computedColorRamps
+    colorEntries
   }) {
     return Object.fromEntries(
       [
         // Semantic color tokens
-        colorTokensCSS(computedColorRamps),
+        colorEntries,
         // Legacy overrides
         legacyWpAdminThemeOverridesCSS(primary),
         legacyWpComponentsOverridesCSS
       ].flat()
     );
+  }
+  function generateThemeProviderColors(primary, background) {
+    const seeds = {
+      ...DEFAULT_SEED_COLORS,
+      background,
+      primary
+    };
+    const computedColorRamps = /* @__PURE__ */ new Map();
+    const bgRamp = getCachedBgRamp(seeds.background);
+    for (const [rawRampName, seed] of Object.entries(seeds)) {
+      const rampName = rawRampName;
+      computedColorRamps.set(
+        rampName,
+        rampName === "background" ? bgRamp : getCachedAccentRamp(seed, bgRamp)
+      );
+    }
+    const colorEntries = colorTokensCSS(computedColorRamps);
+    return {
+      styles: generateStyles({
+        primary: seeds.primary,
+        colorEntries
+      }),
+      warnings: collectThemeProviderColorWarnings(
+        computedColorRamps,
+        new Map(colorEntries)
+      )
+    };
   }
   function useThemeProviderStyles({
     color = {},
@@ -4693,44 +4859,28 @@ var wp;
       }),
       [primary, background, cursorControl, cornerRadiusPreset]
     );
-    const colorStyles = (0, import_element2.useMemo)(() => {
+    const generatedColors = (0, import_element2.useMemo)(() => {
       if (primary === void 0 || background === void 0) {
-        return {};
+        return {
+          styles: {},
+          warnings: void 0
+        };
       }
-      const seeds = {
-        ...DEFAULT_SEED_COLORS,
-        background,
-        primary
-      };
-      const computedColorRamps = /* @__PURE__ */ new Map();
-      const bgRamp = getCachedBgRamp(seeds.background);
-      Object.entries(seeds).forEach(([rampName, seed]) => {
-        if (rampName === "background") {
-          computedColorRamps.set("bg", bgRamp);
-        } else {
-          computedColorRamps.set(
-            rampName,
-            getCachedAccentRamp(seed, bgRamp)
-          );
-        }
-      });
-      return generateStyles({
-        primary: seeds.primary,
-        computedColorRamps
-      });
+      return generateThemeProviderColors(primary, background);
     }, [primary, background]);
     const themeProviderStyles = (0, import_element2.useMemo)(
       () => ({
-        ...colorStyles,
+        ...generatedColors.styles,
         ...cursorControl && {
           "--wpds-cursor-control": cursorControl
         }
       }),
-      [colorStyles, cursorControl]
+      [generatedColors.styles, cursorControl]
     );
     return {
       resolvedSettings,
-      themeProviderStyles
+      themeProviderStyles,
+      colorWarnings: generatedColors.warnings
     };
   }
 
@@ -4817,23 +4967,25 @@ var wp;
     }
   }
   if (typeof process === "undefined" || true) {
-    registerStyle("f4e6e06c6a", ".dba930ea7a9438fd__root{display:contents}");
+    registerStyle("8d074a190c", "._0ebd6d9bf8b95794__wrapper{display:contents}");
   }
-  var style_default = { "root": "dba930ea7a9438fd__root" };
+  var style_default = { "wrapper": "_0ebd6d9bf8b95794__wrapper" };
   var rootProviderCountByDocument = /* @__PURE__ */ new WeakMap();
   var ThemeProvider = ({
     children,
     color = {},
     cursor,
     cornerRadius,
-    isRoot = false
+    isRoot = false,
+    onColorWarnings
   }) => {
-    const { themeProviderStyles, resolvedSettings } = useThemeProviderStyles({
+    const { themeProviderStyles, resolvedSettings, colorWarnings } = useThemeProviderStyles({
       color,
       cursor,
       cornerRadius
     });
     const cornerRadiusPreset = resolvedSettings.cornerRadius ?? "subtle";
+    const onColorWarningsEvent = (0, import_compose.useEvent)(onColorWarnings);
     const contextValue = (0, import_element3.useMemo)(
       () => ({
         resolvedSettings
@@ -4841,6 +4993,11 @@ var wp;
       [resolvedSettings]
     );
     const wrapperRef = (0, import_element3.useRef)(null);
+    (0, import_element3.useEffect)(() => {
+      if (colorWarnings !== void 0) {
+        onColorWarningsEvent(colorWarnings);
+      }
+    }, [colorWarnings, onColorWarningsEvent]);
     (0, import_compose.useIsomorphicLayoutEffect)(() => {
       if (!isRoot) {
         return;
@@ -4861,6 +5018,14 @@ var wp;
       }
       const previous = /* @__PURE__ */ new Map();
       const applied = [];
+      const previousRootProvider = root.getAttribute(
+        "data-wpds-root-provider"
+      );
+      const previousCornerRadius = root.getAttribute(
+        "data-wpds-corner-radius"
+      );
+      root.setAttribute("data-wpds-root-provider", "true");
+      root.setAttribute("data-wpds-corner-radius", cornerRadiusPreset);
       for (const [rawKey, rawValue] of Object.entries(
         themeProviderStyles
       )) {
@@ -4888,15 +5053,31 @@ var wp;
             root.style.removeProperty(key);
           }
         }
+        if (previousRootProvider === null) {
+          root.removeAttribute("data-wpds-root-provider");
+        } else {
+          root.setAttribute(
+            "data-wpds-root-provider",
+            previousRootProvider
+          );
+        }
+        if (previousCornerRadius === null) {
+          root.removeAttribute("data-wpds-corner-radius");
+        } else {
+          root.setAttribute(
+            "data-wpds-corner-radius",
+            previousCornerRadius
+          );
+        }
       };
-    }, [isRoot, themeProviderStyles]);
+    }, [cornerRadiusPreset, isRoot, themeProviderStyles]);
     return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
       "div",
       {
         ref: wrapperRef,
         "data-wpds-root-provider": isRoot || void 0,
         "data-wpds-corner-radius": cornerRadiusPreset,
-        className: style_default.root,
+        className: style_default.wrapper,
         style: themeProviderStyles,
         children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ThemeContext.Provider, { value: contextValue, children })
       }

@@ -420,7 +420,8 @@
 .wp-block-categories.wp-block-categories-dropdown.aligncenter {
   text-align: center;
 }
-.wp-block-categories .wp-block-categories__label:not(.screen-reader-text) {
+
+:where(.wp-block-categories__label:not(.screen-reader-text)) {
   width: 100%;
   display: block;
 }
@@ -589,13 +590,6 @@
 .wp-block-post-comments .comment-body .commentmetadata {
   font-size: 0.875em;
 }
-.wp-block-post-comments .comment-form-comment label,
-.wp-block-post-comments .comment-form-author label,
-.wp-block-post-comments .comment-form-email label,
-.wp-block-post-comments .comment-form-url label {
-  display: block;
-  margin-bottom: 0.25em;
-}
 .wp-block-post-comments .comment-form textarea,
 .wp-block-post-comments .comment-form input:not([type=submit]):not([type=checkbox]) {
   display: block;
@@ -629,6 +623,14 @@
 .wp-block-post-comments textarea,
 .wp-block-post-comments input:not([type=submit]):not([type=checkbox]) {
   padding: calc(0.667em + 2px);
+}
+
+:where(.wp-block-post-comments .comment-form-comment label),
+:where(.wp-block-post-comments .comment-form-author label),
+:where(.wp-block-post-comments .comment-form-email label),
+:where(.wp-block-post-comments .comment-form-url label) {
+  display: block;
+  margin-bottom: 0.25em;
 }
 
 :where(.wp-block-post-comments input[type=submit]) {
@@ -1303,35 +1305,35 @@ body:not(.editor-styles-wrapper) .wp-block-cover:not(.wp-block-cover:has(.wp-blo
   text-decoration: none;
 }
 
-.wp-block-form-input__label {
+:where(.wp-block-form-input__label) {
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 0.25em;
   margin-bottom: 0.5em;
 }
-.wp-block-form-input__label.is-label-inline {
+:where(.wp-block-form-input__label).is-label-inline {
   flex-direction: row;
   gap: 0.5em;
   align-items: center;
 }
-.wp-block-form-input__label.is-label-inline .wp-block-form-input__label-content {
+:where(.wp-block-form-input__label).is-label-inline .wp-block-form-input__label-content {
   margin-bottom: 0.5em;
 }
-.wp-block-form-input__label:has(input[type=checkbox]) {
+:where(.wp-block-form-input__label):has(input[type=checkbox]) {
   flex-direction: row;
   width: -moz-fit-content;
   width: fit-content;
 }
-.wp-block-form-input__label:has(input[type=checkbox]) .wp-block-form-input__label-content {
+:where(.wp-block-form-input__label):has(input[type=checkbox]) .wp-block-form-input__label-content {
   margin: 0;
 }
-.wp-block-form-input__label:has(.wp-block-form-input__label-content + input[type=checkbox]) {
+:where(.wp-block-form-input__label):has(.wp-block-form-input__label-content + input[type=checkbox]) {
   /* stylelint-disable-next-line declaration-property-value-allowed-list -- This style is required for old markup. */
   flex-direction: row-reverse;
 }
 
-.wp-block-form-input__label-content {
+:where(.wp-block-form-input__label-content) {
   width: -moz-fit-content;
   width: fit-content;
 }
@@ -3911,12 +3913,6 @@ p.has-text-align-left[style*="writing-mode:vertical-lr"] {
   box-sizing: border-box;
   width: 100%;
 }
-.wp-block-post-comments-form .comment-form-author label,
-.wp-block-post-comments-form .comment-form-email label,
-.wp-block-post-comments-form .comment-form-url label {
-  display: block;
-  margin-bottom: 0.25em;
-}
 .wp-block-post-comments-form .comment-form-cookies-consent {
   display: flex;
   gap: 0.25em;
@@ -3930,6 +3926,13 @@ p.has-text-align-left[style*="writing-mode:vertical-lr"] {
 .wp-block-post-comments-form .comment-reply-title :where(small) {
   font-size: var(--wp--preset--font-size--medium, smaller);
   margin-right: 0.5em;
+}
+
+:where(.wp-block-post-comments-form .comment-form-author label),
+:where(.wp-block-post-comments-form .comment-form-email label),
+:where(.wp-block-post-comments-form .comment-form-url label) {
+  display: block;
+  margin-bottom: 0.25em;
 }
 
 .wp-block-post-comments-count {
@@ -4219,6 +4222,10 @@ p.has-text-align-left[style*="writing-mode:vertical-lr"] {
   margin-inline-end: auto;
 }
 
+:where(.wp-block-query-no-results) {
+  box-sizing: border-box;
+}
+
 .wp-block-query-pagination.is-content-justification-space-between > .wp-block-query-pagination-next:last-of-type {
   margin-inline-start: auto;
 }
@@ -4359,7 +4366,7 @@ ul.wp-block-rss.is-grid li {
   max-width: 100%;
 }
 
-.wp-block-search__label {
+:where(.wp-block-search__label) {
   width: 100%;
 }
 
@@ -5016,8 +5023,12 @@ ul.wp-block-rss.is-grid li {
   bottom: 0;
 }
 
-.wp-block-tab-panel[hidden], .wp-block-tab-panel:empty {
+.wp-block-tab-panel:empty {
   display: none !important;
+}
+.wp-block-tab-panel[hidden] {
+  margin-block-start: 0;
+  padding: 0 !important;
 }
 
 .wp-block-table {
