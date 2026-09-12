@@ -618,7 +618,7 @@ class WC_AJAX {
 			wp_die();
 		}
 
-		if ( ProductStatus::PUBLISH !== $variable_product->get_status() && ! current_user_can( 'edit_post', $variable_product->get_id() ) ) {
+		if ( ! $variable_product->is_viewable() ) {
 			wp_die();
 		}
 
@@ -1037,6 +1037,18 @@ class WC_AJAX {
 		$data  = array();
 		$items = $order->get_items();
 
+		/**
+		 * Customer download data store.
+		 *
+		 * @var WC_Customer_Download_Data_Store $data_store
+		 */
+		$data_store               = WC_Data_Store::load( 'customer-download' );
+		$existing_download_access = array();
+
+		foreach ( $data_store->get_downloads( array( 'order_id' => $order_id ) ) as $download ) {
+			$existing_download_access[ $download->get_product_id() . '|' . $download->get_download_id() ] = true;
+		}
+
 		// Check against order items first.
 		foreach ( $items as $item ) {
 			$product = $item->get_product();
@@ -1065,8 +1077,15 @@ class WC_AJAX {
 
 			if ( ! empty( $download_data['files'] ) ) {
 				foreach ( $download_data['files'] as $download_id => $file ) {
+					$download_access_key = $product_id . '|' . $download_id;
+
+					if ( isset( $existing_download_access[ $download_access_key ] ) ) {
+						continue;
+					}
+
 					$inserted_id = wc_downloadable_file_permission( $download_id, $product->get_id(), $order, $download_data['quantity'], $download_data['order_item'] );
 					if ( $inserted_id ) {
+						$existing_download_access[ $download_access_key ] = true;
 						$download = new WC_Customer_Download( $inserted_id );
 						++$loop;
 						++$file_counter;
@@ -1876,7 +1895,7 @@ class WC_AJAX {
 				}
 
 				if ( ! empty( $stock_parts ) ) {
-					$formatted_name .= ' (' . implode( ' &ndash; ', $stock_parts ) . ')';
+					$formatted_name .= ' (' . implode( ' – ', $stock_parts ) . ')';
 				}
 
 				$product_status = $product_object->get_status();
@@ -1887,7 +1906,7 @@ class WC_AJAX {
 				}
 			}//end if
 
-			$products[ $product_object->get_id() ] = rawurldecode( wp_strip_all_tags( $formatted_name ) );
+			$products[ $product_object->get_id() ] = wp_strip_all_tags( rawurldecode( $formatted_name ) );
 		}
 
 		wp_send_json( apply_filters( 'woocommerce_json_search_found_products', $products ) );
@@ -1932,7 +1951,7 @@ class WC_AJAX {
 		$products        = array();
 
 		foreach ( $product_objects as $product_object ) {
-			$products[ $product_object->get_id() ] = rawurldecode( wp_strip_all_tags( $product_object->get_formatted_name() ) );
+			$products[ $product_object->get_id() ] = wp_strip_all_tags( rawurldecode( $product_object->get_formatted_name() ) );
 		}
 
 		wp_send_json( $products );
@@ -2439,7 +2458,8 @@ class WC_AJAX {
 				$line_items[ $item_id ]['refund_total'] = wc_format_decimal( $total );
 			}
 			foreach ( $line_item_tax_totals as $item_id => $tax_totals ) {
-				$line_items[ $item_id ]['refund_tax'] = array_filter( array_map( 'wc_format_decimal', $tax_totals ) );
+				// Use is_numeric so a 0% tax amount ('0') is preserved. A callback-less array_filter would drop it as falsy, losing the 0-rate tax line (0% is a valid rate, not "no tax"). See #27118.
+				$line_items[ $item_id ]['refund_tax'] = array_filter( array_map( 'wc_format_decimal', $tax_totals ), 'is_numeric' );
 			}
 
 			// Create the refund object.
@@ -3414,7 +3434,7 @@ class WC_AJAX {
 		do_action( 'woocommerce_update_options' );
 		wp_send_json_success(
 			array(
-				'zones' => WC_Shipping_Zones::get_zones( 'json' ),
+				'zones' => WC_Shipping_Zones::get_zones_with_order_conflict_warnings( 'json' ),
 			)
 		);
 	}

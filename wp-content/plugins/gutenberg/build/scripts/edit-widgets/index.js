@@ -239,8 +239,8 @@ var wp;
   var import_blocks3 = __toESM(require_blocks(), 1);
   var import_data32 = __toESM(require_data(), 1);
   var import_deprecated6 = __toESM(require_deprecated(), 1);
-  var import_element27 = __toESM(require_element(), 1);
-  var import_block_library2 = __toESM(require_block_library(), 1);
+  var import_element28 = __toESM(require_element(), 1);
+  var import_block_library = __toESM(require_block_library(), 1);
   var import_core_data12 = __toESM(require_core_data(), 1);
   var import_widgets5 = __toESM(require_widgets(), 1);
   var import_preferences10 = __toESM(require_preferences(), 1);
@@ -359,7 +359,7 @@ var wp;
   var clsx_default = clsx;
 
   // packages/interface/build-module/components/complementary-area/index.mjs
-  var import_components5 = __toESM(require_components(), 1);
+  var import_components4 = __toESM(require_components(), 1);
   var import_data6 = __toESM(require_data(), 1);
   var import_i18n = __toESM(require_i18n(), 1);
 
@@ -429,10 +429,10 @@ var wp;
   var undo_default = /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_primitives13.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", fill: "currentColor", children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(import_primitives13.Path, { d: "M18.3 11.7c-.6-.6-1.4-.9-2.3-.9H6.7l2.9-3.3-1.1-1-4.5 5L8.5 16l1-1-2.7-2.7H16c.5 0 .9.2 1.3.5 1 1 1 3.4 1 4.5v.3h1.5v-.2c0-1.5 0-4.3-1.5-5.7z" }) });
 
   // packages/interface/build-module/components/complementary-area/index.mjs
-  var import_element2 = __toESM(require_element(), 1);
+  var import_element3 = __toESM(require_element(), 1);
   var import_viewport = __toESM(require_viewport(), 1);
   var import_preferences3 = __toESM(require_preferences(), 1);
-  var import_compose = __toESM(require_compose(), 1);
+  var import_compose2 = __toESM(require_compose(), 1);
   var import_plugins2 = __toESM(require_plugins(), 1);
 
   // packages/interface/build-module/components/complementary-area-toggle/index.mjs
@@ -783,64 +783,41 @@ var wp;
   var complementary_area_header_default = ComplementaryAreaHeader;
 
   // packages/interface/build-module/components/complementary-area-more-menu-item/index.mjs
-  var import_components3 = __toESM(require_components(), 1);
+  var import_compose = __toESM(require_compose(), 1);
+  var import_element2 = __toESM(require_element(), 1);
 
   // packages/interface/build-module/components/action-item/index.mjs
   var import_components2 = __toESM(require_components(), 1);
   var import_element = __toESM(require_element(), 1);
   var import_jsx_runtime16 = __toESM(require_jsx_runtime(), 1);
-  var noop = () => {
-  };
   function ActionItemSlot({
     name: name2,
     as: Component2 = import_components2.MenuGroup,
     fillProps = {},
-    bubblesVirtually,
+    children,
     ...props
   }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
-      import_components2.Slot,
-      {
-        name: name2,
-        bubblesVirtually,
-        fillProps,
-        children: (fills) => {
-          if (!import_element.Children.toArray(fills).length) {
-            return null;
-          }
-          const initializedByPlugins = [];
-          import_element.Children.forEach(
-            fills,
-            ({
-              props: { __unstableExplicitMenuItem, __unstableTarget }
-            }) => {
-              if (__unstableTarget && __unstableExplicitMenuItem) {
-                initializedByPlugins.push(__unstableTarget);
-              }
-            }
-          );
-          const children = import_element.Children.map(fills, (child) => {
-            if (!child.props.__unstableExplicitMenuItem && initializedByPlugins.includes(
-              child.props.__unstableTarget
-            )) {
-              return null;
-            }
-            return child;
-          });
-          return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Component2, { ...props, children });
-        }
+    return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(import_components2.Slot, { name: name2, fillProps, children: (fills) => {
+      const items = import_element.Children.toArray(fills);
+      if (!items.length) {
+        return null;
       }
-    );
+      if (typeof children === "function") {
+        return children(items);
+      }
+      return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Component2, { ...props, children: items });
+    } });
   }
-  function ActionItem({ name: name2, as: Component2 = import_components2.Button, onClick, ...props }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(import_components2.Fill, { name: name2, children: ({ onClick: fpOnClick }) => {
+  function ActionItem({ name: name2, as, onClick, ...props }) {
+    return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(import_components2.Fill, { name: name2, children: ({ as: slotAs = import_components2.MenuItem, onClick: slotOnClick }) => {
+      const Component2 = as ?? slotAs;
+      const handlers = [onClick, slotOnClick].filter(Boolean);
       return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
         Component2,
         {
-          onClick: onClick || fpOnClick ? (...args) => {
-            (onClick || noop)(...args);
-            (fpOnClick || noop)(...args);
-          } : void 0,
+          onClick: handlers.length ? (...args) => handlers.forEach(
+            (handler) => handler(...args)
+          ) : void 0,
           ...props
         }
       );
@@ -851,35 +828,25 @@ var wp;
 
   // packages/interface/build-module/components/complementary-area-more-menu-item/index.mjs
   var import_jsx_runtime17 = __toESM(require_jsx_runtime(), 1);
-  var PluginsMenuItem = ({
-    // Menu item is marked with unstable prop for backward compatibility.
-    // They are removed so they don't leak to DOM elements.
-    // @see https://github.com/WordPress/gutenberg/issues/14457
-    __unstableExplicitMenuItem,
-    __unstableTarget,
-    ...restProps
-  }) => /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(import_components3.MenuItem, { ...restProps });
-  function ComplementaryAreaMoreMenuItem({
+  var menuItems = (0, import_compose.observableMap)();
+  function useHasComplementaryAreaMenuItem(scope, target) {
+    return !!(0, import_compose.useObservableValue)(menuItems, `${scope}/${target}`);
+  }
+  function DefaultComplementaryAreaMoreMenuItem({
     scope,
     target,
-    __unstableExplicitMenuItem,
     ...props
   }) {
     return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
       ComplementaryAreaToggle,
       {
-        as: (toggleProps) => {
-          return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
-            action_item_default,
-            {
-              __unstableExplicitMenuItem,
-              __unstableTarget: `${scope}/${target}`,
-              as: PluginsMenuItem,
-              name: `${scope}/plugin-more-menu`,
-              ...toggleProps
-            }
-          );
-        },
+        as: (toggleProps) => /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+          action_item_default,
+          {
+            name: `${scope}/plugin-more-menu`,
+            ...toggleProps
+          }
+        ),
         role: "menuitemcheckbox",
         selectedIcon: check_default,
         name: target,
@@ -890,13 +857,13 @@ var wp;
   }
 
   // packages/interface/build-module/components/pinned-items/index.mjs
-  var import_components4 = __toESM(require_components(), 1);
+  var import_components3 = __toESM(require_components(), 1);
   var import_jsx_runtime18 = __toESM(require_jsx_runtime(), 1);
   function PinnedItems({ scope, ...props }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_components4.Fill, { name: `PinnedItems/${scope}`, ...props });
+    return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_components3.Fill, { name: `PinnedItems/${scope}`, ...props });
   }
   function PinnedItemsSlot({ scope, className, ...props }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_components4.Slot, { name: `PinnedItems/${scope}`, ...props, children: (fills) => fills?.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(import_components3.Slot, { name: `PinnedItems/${scope}`, ...props, children: (fills) => fills?.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
       "div",
       {
         className: clsx_default(
@@ -914,7 +881,7 @@ var wp;
   var import_jsx_runtime19 = __toESM(require_jsx_runtime(), 1);
   var ANIMATION_DURATION = 0.3;
   function ComplementaryAreaSlot({ scope, ...props }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_components5.Slot, { name: `ComplementaryArea/${scope}`, ...props });
+    return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_components4.Slot, { name: `ComplementaryArea/${scope}`, ...props });
   }
   var variants = {
     // `auto` leaves the width to the area's own stylesheet, so it stays in one
@@ -926,8 +893,8 @@ var wp;
     closed: (transition) => ({ width: 0, transition })
   };
   function renderContainer(render, props) {
-    if ((0, import_element2.isValidElement)(render)) {
-      return (0, import_element2.cloneElement)(render, {
+    if ((0, import_element3.isValidElement)(render)) {
+      return (0, import_element3.cloneElement)(render, {
         ...props,
         className: clsx_default(render.props.className, props.className),
         style: { ...render.props.style, ...props.style }
@@ -944,17 +911,17 @@ var wp;
     id,
     render
   }) {
-    const disableMotion = (0, import_compose.useReducedMotion)();
-    const isMobileViewport = (0, import_compose.useViewportMatch)("medium", "<");
-    const previousActiveArea = (0, import_compose.usePrevious)(activeArea);
+    const disableMotion = (0, import_compose2.useReducedMotion)();
+    const isMobileViewport = (0, import_compose2.useViewportMatch)("medium", "<");
+    const previousActiveArea = (0, import_compose2.usePrevious)(activeArea);
     const isSwitchingAreas = !!previousActiveArea && !!activeArea && activeArea !== previousActiveArea;
     const transition = {
       type: "tween",
       duration: disableMotion || isMobileViewport || isSwitchingAreas ? 0 : ANIMATION_DURATION,
       ease: [0.6, 0, 0.4, 1]
     };
-    return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_components5.Fill, { name: `ComplementaryArea/${scope}`, children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_components5.__unstableAnimatePresence, { initial: false, custom: transition, children: isActive && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
-      import_components5.__unstableMotion.div,
+    return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_components4.Fill, { name: `ComplementaryArea/${scope}`, children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_components4.__unstableAnimatePresence, { initial: false, custom: transition, children: isActive && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
+      import_components4.__unstableMotion.div,
       {
         variants,
         initial: "closed",
@@ -971,10 +938,10 @@ var wp;
     ) }) });
   }
   function useAdjustComplementaryListener(scope, identifier, activeArea, isActive, isSmall) {
-    const previousIsSmallRef = (0, import_element2.useRef)(false);
-    const shouldOpenWhenNotSmallRef = (0, import_element2.useRef)(false);
+    const previousIsSmallRef = (0, import_element3.useRef)(false);
+    const shouldOpenWhenNotSmallRef = (0, import_element3.useRef)(false);
     const { enableComplementaryArea: enableComplementaryArea2, disableComplementaryArea: disableComplementaryArea2 } = (0, import_data6.useDispatch)(store);
-    (0, import_element2.useEffect)(() => {
+    (0, import_element3.useEffect)(() => {
       if (isActive && isSmall && !previousIsSmallRef.current) {
         disableComplementaryArea2(scope);
         shouldOpenWhenNotSmallRef.current = true;
@@ -1027,7 +994,7 @@ var wp;
     const context = (0, import_plugins2.usePluginContext)();
     const icon = iconProp || context.icon;
     const identifier = identifierProp || `${context.name}/${name2}`;
-    const [isReady, setIsReady] = (0, import_element2.useState)(false);
+    const [isReady, setIsReady] = (0, import_element3.useState)(false);
     const {
       isLoading,
       isActive,
@@ -1057,7 +1024,8 @@ var wp;
       },
       [identifier, scope]
     );
-    const isMobileViewport = (0, import_compose.useViewportMatch)("medium", "<");
+    const hasMenuItem = useHasComplementaryAreaMenuItem(scope, name2);
+    const isMobileViewport = (0, import_compose2.useViewportMatch)("medium", "<");
     useAdjustComplementaryListener(
       scope,
       identifier,
@@ -1071,7 +1039,7 @@ var wp;
       pinItem: pinItem2,
       unpinItem: unpinItem2
     } = (0, import_data6.useDispatch)(store);
-    (0, import_element2.useEffect)(() => {
+    (0, import_element3.useEffect)(() => {
       if (isActiveByDefault && activeArea === void 0 && !isSmall) {
         enableComplementaryArea2(scope, identifier);
       } else if (activeArea === void 0 && isSmall) {
@@ -1107,8 +1075,8 @@ var wp;
           shortcut: toggleShortcut
         }
       ) }),
-      name2 && isPinnable && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
-        ComplementaryAreaMoreMenuItem,
+      name2 && isPinnable && !hasMenuItem && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
+        DefaultComplementaryAreaMoreMenuItem,
         {
           target: name2,
           scope,
@@ -1143,7 +1111,7 @@ var wp;
                 children: header || /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(import_jsx_runtime19.Fragment, { children: [
                   /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("h2", { className: "interface-complementary-area-header__title", children: title }),
                   isPinnable && !isMobileViewport && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
-                    import_components5.Button,
+                    import_components4.Button,
                     {
                       className: "interface-complementary-area__pin-unpin-item",
                       icon: isPinned ? star_filled_default : star_empty_default,
@@ -1159,7 +1127,7 @@ var wp;
                 ] })
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_components5.Panel, { className: panelClassName, children })
+            /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_components4.Panel, { className: panelClassName, children })
           ]
         }
       )
@@ -1270,7 +1238,7 @@ var wp;
                 if (typeof cleanupCallback === "function") {
                   cleanupCallback();
                 } else {
-                  ref(null);
+                  void ref(null);
                 }
                 break;
               }
@@ -1544,7 +1512,7 @@ var wp;
     const outProps = enabled ? mergeObjects(stateProps, resolvedProps) ?? {} : EMPTY_OBJECT;
     if (typeof document !== "undefined") {
       if (!enabled) {
-        useMergedRefs(null, null);
+        void useMergedRefs(null, null);
       } else if (Array.isArray(ref)) {
         outProps.ref = useMergedRefsN([outProps.ref, getReactElementRef(renderProp), ...ref]);
       } else {
@@ -1637,7 +1605,7 @@ var wp;
   }
 
   // packages/ui/build-module/visually-hidden/visually-hidden.mjs
-  var import_element3 = __toESM(require_element(), 1);
+  var import_element4 = __toESM(require_element(), 1);
   var STYLE_HASH_ATTRIBUTE = "data-wp-hash";
   function getRuntime() {
     const globalScope = globalThis;
@@ -1722,7 +1690,7 @@ var wp;
     registerStyle("fa606a57ae", "@layer wp-ui{@layer utilities, components, compositions, overrides;@layer components{.f37b9e2e191ebd66__visually-hidden{word-wrap:normal;border:0;clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-break:normal}}}");
   }
   var style_default = { "visually-hidden": "f37b9e2e191ebd66__visually-hidden" };
-  var VisuallyHidden = (0, import_element3.forwardRef)(
+  var VisuallyHidden = (0, import_element4.forwardRef)(
     function VisuallyHidden2({ render, ...restProps }, ref) {
       const element = useRender({
         render,
@@ -1741,9 +1709,9 @@ var wp;
   );
 
   // packages/admin-ui/build-module/navigable-region/index.mjs
-  var import_element4 = __toESM(require_element(), 1);
+  var import_element5 = __toESM(require_element(), 1);
   var import_jsx_runtime20 = __toESM(require_jsx_runtime(), 1);
-  var NavigableRegion = (0, import_element4.forwardRef)(
+  var NavigableRegion = (0, import_element5.forwardRef)(
     ({ children, className, ariaLabel, as: Tag = "div", ...props }, ref) => {
       return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
         Tag,
@@ -1769,7 +1737,7 @@ var wp;
   };
   var ADMIN_THEME_COLORS = /* @__PURE__ */ new Map([
     ["modern", DEFAULT_THEME_COLORS],
-    ["fresh", { primary: "#3858e9", background: "#25292b" }],
+    ["fresh", { primary: "#007cba", background: "#25292b" }],
     ["midnight", { primary: "#cf4339", background: "#3d4042" }],
     ["coffee", { primary: "#916745", background: "#5b534d" }],
     ["ocean", { primary: "#567958", background: "#5f787f" }],
@@ -1784,10 +1752,10 @@ var wp;
   }
 
   // packages/interface/build-module/components/interface-skeleton/index.mjs
-  var import_element5 = __toESM(require_element(), 1);
-  var import_components6 = __toESM(require_components(), 1);
+  var import_element6 = __toESM(require_element(), 1);
+  var import_components5 = __toESM(require_components(), 1);
   var import_i18n2 = __toESM(require_i18n(), 1);
-  var import_compose2 = __toESM(require_compose(), 1);
+  var import_compose3 = __toESM(require_compose(), 1);
   var import_jsx_runtime21 = __toESM(require_jsx_runtime(), 1);
   var ANIMATION_DURATION2 = 0.25;
   var commonTransition = {
@@ -1796,7 +1764,7 @@ var wp;
     ease: [0.6, 0, 0.4, 1]
   };
   function useHTMLClass(className) {
-    (0, import_element5.useEffect)(() => {
+    (0, import_element6.useEffect)(() => {
       const element = document && document.querySelector(`html:not(.${className})`);
       if (!element) {
         return;
@@ -1845,8 +1813,8 @@ var wp;
     labels,
     className
   }, ref) {
-    const isMobileViewport = (0, import_compose2.useViewportMatch)("medium", "<");
-    const disableMotion = (0, import_compose2.useReducedMotion)();
+    const isMobileViewport = (0, import_compose3.useViewportMatch)("medium", "<");
+    const disableMotion = (0, import_compose3.useReducedMotion)();
     const defaultTransition = {
       type: "tween",
       duration: disableMotion ? 0 : ANIMATION_DURATION2,
@@ -1879,10 +1847,10 @@ var wp;
         ),
         children: [
           /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "interface-interface-skeleton__editor", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(import_components6.__unstableAnimatePresence, { initial: false, children: !!header && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(import_components5.__unstableAnimatePresence, { initial: false, children: !!header && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
               navigable_region_default,
               {
-                as: import_components6.__unstableMotion.div,
+                as: import_components5.__unstableMotion.div,
                 className: "interface-interface-skeleton__header",
                 ariaLabel: mergedLabels.header,
                 initial: isDistractionFree && !isMobileViewport ? "distractionFreeHidden" : "hidden",
@@ -1896,12 +1864,12 @@ var wp;
             ) }),
             isDistractionFree && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("div", { className: "interface-interface-skeleton__header", children: editorNotices }),
             /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "interface-interface-skeleton__body", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(import_components6.__unstableAnimatePresence, { initial: false, children: !!secondarySidebar && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
+              /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(import_components5.__unstableAnimatePresence, { initial: false, children: !!secondarySidebar && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
                 navigable_region_default,
                 {
                   className: "interface-interface-skeleton__secondary-sidebar",
                   ariaLabel: mergedLabels.secondarySidebar,
-                  as: import_components6.__unstableMotion.div,
+                  as: import_components5.__unstableMotion.div,
                   initial: "closed",
                   animate: "open",
                   exit: "closed",
@@ -1911,7 +1879,7 @@ var wp;
                   },
                   transition: defaultTransition,
                   children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
-                    import_components6.__unstableMotion.div,
+                    import_components5.__unstableMotion.div,
                     {
                       style: {
                         width: isMobileViewport ? "100vw" : "max-content",
@@ -1965,7 +1933,7 @@ var wp;
       }
     );
   }
-  var interface_skeleton_default = (0, import_element5.forwardRef)(InterfaceSkeleton);
+  var interface_skeleton_default = (0, import_element6.forwardRef)(InterfaceSkeleton);
 
   // packages/edit-widgets/build-module/store/actions.mjs
   var import_widgets2 = __toESM(require_widgets(), 1);
@@ -2601,12 +2569,12 @@ var wp;
 
   // packages/edit-widgets/build-module/filters/move-to-widget-area.mjs
   var import_block_editor3 = __toESM(require_block_editor(), 1);
-  var import_compose3 = __toESM(require_compose(), 1);
+  var import_compose4 = __toESM(require_compose(), 1);
   var import_data9 = __toESM(require_data(), 1);
   var import_hooks = __toESM(require_hooks(), 1);
   var import_widgets4 = __toESM(require_widgets(), 1);
   var import_jsx_runtime22 = __toESM(require_jsx_runtime(), 1);
-  var withMoveToWidgetAreaToolbarItem = (0, import_compose3.createHigherOrderComponent)(
+  var withMoveToWidgetAreaToolbarItem = (0, import_compose4.createHigherOrderComponent)(
     (BlockEdit) => (props) => {
       const { clientId, name: blockName } = props;
       const { widgetAreas, currentWidgetAreaId, canInsertBlockInWidgetArea: canInsertBlockInWidgetArea2 } = (0, import_data9.useSelect)(
@@ -2702,22 +2670,22 @@ var wp;
   };
 
   // packages/edit-widgets/build-module/blocks/widget-area/edit/index.mjs
-  var import_element8 = __toESM(require_element(), 1);
+  var import_element9 = __toESM(require_element(), 1);
   var import_data10 = __toESM(require_data(), 1);
   var import_core_data5 = __toESM(require_core_data(), 1);
-  var import_components7 = __toESM(require_components(), 1);
+  var import_components6 = __toESM(require_components(), 1);
   var import_block_editor5 = __toESM(require_block_editor(), 1);
 
   // packages/edit-widgets/build-module/blocks/widget-area/edit/inner-blocks.mjs
   var import_core_data4 = __toESM(require_core_data(), 1);
   var import_block_editor4 = __toESM(require_block_editor(), 1);
-  var import_element7 = __toESM(require_element(), 1);
+  var import_element8 = __toESM(require_element(), 1);
 
   // packages/edit-widgets/build-module/blocks/widget-area/edit/use-is-dragging-within.mjs
-  var import_element6 = __toESM(require_element(), 1);
+  var import_element7 = __toESM(require_element(), 1);
   var useIsDraggingWithin = (elementRef) => {
-    const [isDraggingWithin, setIsDraggingWithin] = (0, import_element6.useState)(false);
-    (0, import_element6.useEffect)(() => {
+    const [isDraggingWithin, setIsDraggingWithin] = (0, import_element7.useState)(false);
+    (0, import_element7.useEffect)(() => {
       const { ownerDocument } = elementRef.current;
       function handleDragStart(event) {
         handleDragEnter(event);
@@ -2752,7 +2720,7 @@ var wp;
       "root",
       "postType"
     );
-    const innerBlocksRef = (0, import_element7.useRef)();
+    const innerBlocksRef = (0, import_element8.useRef)();
     const isDraggingWithinInnerBlocks = use_is_dragging_within_default(innerBlocksRef);
     const shouldHighlightDropZone = isDraggingWithinInnerBlocks;
     const innerBlocksProps = (0, import_block_editor4.useInnerBlocksProps)(
@@ -2791,15 +2759,15 @@ var wp;
       [clientId]
     );
     const { setIsWidgetAreaOpen: setIsWidgetAreaOpen2 } = (0, import_data10.useDispatch)(store2);
-    const wrapper = (0, import_element8.useRef)();
-    const setOpen = (0, import_element8.useCallback)(
+    const wrapper = (0, import_element9.useRef)();
+    const setOpen = (0, import_element9.useCallback)(
       (openState) => setIsWidgetAreaOpen2(clientId, openState),
       [clientId]
     );
     const isDragging = useIsDragging(wrapper);
     const isDraggingWithin = use_is_dragging_within_default(wrapper);
-    const [openedWhileDragging, setOpenedWhileDragging] = (0, import_element8.useState)(false);
-    (0, import_element8.useEffect)(() => {
+    const [openedWhileDragging, setOpenedWhileDragging] = (0, import_element9.useState)(false);
+    (0, import_element9.useEffect)(() => {
       if (!isDragging) {
         setOpenedWhileDragging(false);
         return;
@@ -2812,8 +2780,8 @@ var wp;
       }
     }, [isOpen, isDragging, isDraggingWithin, openedWhileDragging]);
     const blockProps = (0, import_block_editor5.useBlockProps)();
-    return /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("div", { ...blockProps, children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(import_components7.Panel, { ref: wrapper, children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
-      import_components7.PanelBody,
+    return /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("div", { ...blockProps, children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(import_components6.Panel, { ref: wrapper, children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
+      import_components6.PanelBody,
       {
         title: name2,
         opened: isOpen,
@@ -2827,7 +2795,7 @@ var wp;
           // widgets may have unintended consequences (e.g.  TinyMCE
           // not being properly reinitialized)
           /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
-            import_components7.__unstableDisclosureContent,
+            import_components6.__unstableDisclosureContent,
             {
               className: "wp-block-widget-area__panel-body-content",
               visible: opened,
@@ -2847,8 +2815,8 @@ var wp;
     ) }) });
   }
   var useIsDragging = (elementRef) => {
-    const [isDragging, setIsDragging] = (0, import_element8.useState)(false);
-    (0, import_element8.useEffect)(() => {
+    const [isDragging, setIsDragging] = (0, import_element9.useState)(false);
+    (0, import_element9.useEffect)(() => {
       const { ownerDocument } = elementRef.current;
       function handleDragStart() {
         setIsDragging(true);
@@ -2877,24 +2845,24 @@ var wp;
 
   // packages/edit-widgets/build-module/components/layout/index.mjs
   var import_i18n21 = __toESM(require_i18n(), 1);
-  var import_element26 = __toESM(require_element(), 1);
+  var import_element27 = __toESM(require_element(), 1);
   var import_data31 = __toESM(require_data(), 1);
   var import_plugins3 = __toESM(require_plugins(), 1);
   var import_notices4 = __toESM(require_notices(), 1);
-  var import_components22 = __toESM(require_components(), 1);
+  var import_components21 = __toESM(require_components(), 1);
   var import_theme2 = __toESM(require_theme(), 1);
 
   // packages/edit-widgets/build-module/components/error-boundary/index.mjs
-  var import_element9 = __toESM(require_element(), 1);
+  var import_element10 = __toESM(require_element(), 1);
   var import_i18n5 = __toESM(require_i18n(), 1);
-  var import_components8 = __toESM(require_components(), 1);
+  var import_components7 = __toESM(require_components(), 1);
   var import_block_editor6 = __toESM(require_block_editor(), 1);
-  var import_compose4 = __toESM(require_compose(), 1);
+  var import_compose5 = __toESM(require_compose(), 1);
   var import_hooks3 = __toESM(require_hooks(), 1);
   var import_jsx_runtime25 = __toESM(require_jsx_runtime(), 1);
   function CopyButton({ text, children }) {
-    const ref = (0, import_compose4.useCopyToClipboard)(text);
-    return /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(import_components8.Button, { __next40pxDefaultSize: true, variant: "secondary", ref, children });
+    const ref = (0, import_compose5.useCopyToClipboard)(text);
+    return /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(import_components7.Button, { __next40pxDefaultSize: true, variant: "secondary", ref, children });
   }
   function ErrorBoundaryWarning({ message, error }) {
     const actions = [
@@ -2902,7 +2870,7 @@ var wp;
     ];
     return /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(import_block_editor6.Warning, { className: "edit-widgets-error-boundary", actions, children: message });
   }
-  var ErrorBoundary = class extends import_element9.Component {
+  var ErrorBoundary = class extends import_element10.Component {
     constructor() {
       super(...arguments);
       this.state = {
@@ -2932,19 +2900,18 @@ var wp;
   };
 
   // packages/edit-widgets/build-module/components/widget-areas-block-editor-provider/index.mjs
-  var import_components9 = __toESM(require_components(), 1);
-  var import_compose5 = __toESM(require_compose(), 1);
+  var import_components8 = __toESM(require_components(), 1);
+  var import_compose6 = __toESM(require_compose(), 1);
   var import_media_utils2 = __toESM(require_media_utils(), 1);
   var import_data13 = __toESM(require_data(), 1);
   var import_core_data8 = __toESM(require_core_data(), 1);
-  var import_element11 = __toESM(require_element(), 1);
+  var import_element12 = __toESM(require_element(), 1);
   var import_block_editor9 = __toESM(require_block_editor(), 1);
   var import_patterns = __toESM(require_patterns(), 1);
   var import_preferences4 = __toESM(require_preferences(), 1);
-  var import_block_library = __toESM(require_block_library(), 1);
 
   // packages/edit-widgets/build-module/components/keyboard-shortcuts/index.mjs
-  var import_element10 = __toESM(require_element(), 1);
+  var import_element11 = __toESM(require_element(), 1);
   var import_keyboard_shortcuts = __toESM(require_keyboard_shortcuts(), 1);
   var import_keycodes = __toESM(require_keycodes(), 1);
   var import_data11 = __toESM(require_data(), 1);
@@ -2977,7 +2944,7 @@ var wp;
   }
   function KeyboardShortcutsRegister() {
     const { registerShortcut } = (0, import_data11.useDispatch)(import_keyboard_shortcuts.store);
-    (0, import_element10.useEffect)(() => {
+    (0, import_element11.useEffect)(() => {
       registerShortcut({
         name: "core/edit-widgets/undo",
         category: "global",
@@ -3098,14 +3065,13 @@ var wp;
   var import_jsx_runtime26 = __toESM(require_jsx_runtime(), 1);
   var { ExperimentalBlockEditorProvider } = unlock(import_block_editor9.privateApis);
   var { PatternsMenuItems } = unlock(import_patterns.privateApis);
-  var { BlockKeyboardShortcuts } = unlock(import_block_library.privateApis);
   var EMPTY_ARRAY2 = [];
   function WidgetAreasBlockEditorProvider({
     blockEditorSettings,
     children,
     ...props
   }) {
-    const isLargeViewport = (0, import_compose5.useViewportMatch)("medium");
+    const isLargeViewport = (0, import_compose6.useViewportMatch)("medium");
     const {
       hasUploadPermissions,
       reusableBlocks,
@@ -3138,7 +3104,7 @@ var wp;
       };
     }, []);
     const { setIsInserterOpened: setIsInserterOpened2 } = (0, import_data13.useDispatch)(store2);
-    const settings2 = (0, import_element11.useMemo)(() => {
+    const settings2 = (0, import_element12.useMemo)(() => {
       let mediaUploadBlockEditor;
       if (hasUploadPermissions) {
         mediaUploadBlockEditor = ({ onError, ...argumentsObject }) => {
@@ -3178,9 +3144,8 @@ var wp;
       POST_TYPE,
       { id: buildWidgetAreasPostId() }
     );
-    return /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)(import_components9.SlotFillProvider, { children: [
+    return /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)(import_components8.SlotFillProvider, { children: [
       /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(keyboard_shortcuts_default.Register, {}),
-      /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(BlockKeyboardShortcuts, {}),
       /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)(
         ExperimentalBlockEditorProvider,
         {
@@ -3200,17 +3165,17 @@ var wp;
   }
 
   // packages/edit-widgets/build-module/components/sidebar/index.mjs
-  var import_element13 = __toESM(require_element(), 1);
+  var import_element14 = __toESM(require_element(), 1);
   var import_i18n8 = __toESM(require_i18n(), 1);
   var import_block_editor11 = __toESM(require_block_editor(), 1);
-  var import_components11 = __toESM(require_components(), 1);
+  var import_components10 = __toESM(require_components(), 1);
   var import_data15 = __toESM(require_data(), 1);
 
   // packages/edit-widgets/build-module/components/sidebar/widget-areas.mjs
   var import_data14 = __toESM(require_data(), 1);
-  var import_element12 = __toESM(require_element(), 1);
+  var import_element13 = __toESM(require_element(), 1);
   var import_block_editor10 = __toESM(require_block_editor(), 1);
-  var import_components10 = __toESM(require_components(), 1);
+  var import_components9 = __toESM(require_components(), 1);
   var import_i18n7 = __toESM(require_i18n(), 1);
   var import_url = __toESM(require_url(), 1);
   var import_dom = __toESM(require_dom(), 1);
@@ -3220,7 +3185,7 @@ var wp;
       (select) => select(store2).getWidgetAreas(),
       []
     );
-    const selectedWidgetArea = (0, import_element12.useMemo)(
+    const selectedWidgetArea = (0, import_element13.useMemo)(
       () => selectedWidgetAreaId && widgetAreas?.find(
         (widgetArea) => widgetArea.id === selectedWidgetAreaId
       ),
@@ -3254,7 +3219,7 @@ var wp;
           "Your theme does not contain any Widget Areas."
         ) }),
         !selectedWidgetArea && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
-          import_components10.Button,
+          import_components9.Button,
           {
             __next40pxDefaultSize: true,
             href: (0, import_url.addQueryArgs)("customize.php", {
@@ -3274,7 +3239,7 @@ var wp;
   var SIDEBAR_ACTIVE_BY_DEFAULT = true;
   var BLOCK_INSPECTOR_IDENTIFIER = "edit-widgets/block-inspector";
   var WIDGET_AREAS_IDENTIFIER = "edit-widgets/block-areas";
-  var { Tabs } = unlock(import_components11.privateApis);
+  var { Tabs } = unlock(import_components10.privateApis);
   function SidebarHeader({ selectedWidgetAreaBlock }) {
     return /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)(Tabs.TabList, { children: [
       /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(Tabs.Tab, { tabId: WIDGET_AREAS_IDENTIFIER, children: selectedWidgetAreaBlock ? selectedWidgetAreaBlock.attributes.name : (0, import_i18n8.__)("Widget Areas") }),
@@ -3288,7 +3253,7 @@ var wp;
     selectedWidgetAreaBlock
   }) {
     const { enableComplementaryArea: enableComplementaryArea2 } = (0, import_data15.useDispatch)(store);
-    (0, import_element13.useEffect)(() => {
+    (0, import_element14.useEffect)(() => {
       if (hasSelectedNonAreaBlock && currentArea === WIDGET_AREAS_IDENTIFIER && isGeneralSidebarOpen) {
         enableComplementaryArea2(
           "core/edit-widgets",
@@ -3302,7 +3267,7 @@ var wp;
         );
       }
     }, [hasSelectedNonAreaBlock, enableComplementaryArea2]);
-    const tabsContextValue = (0, import_element13.useContext)(Tabs.Context);
+    const tabsContextValue = (0, import_element14.useContext)(Tabs.Context);
     return /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
       complementary_area_default,
       {
@@ -3390,7 +3355,7 @@ var wp;
       };
     }, []);
     const { enableComplementaryArea: enableComplementaryArea2 } = (0, import_data15.useDispatch)(store);
-    const onTabSelect = (0, import_element13.useCallback)(
+    const onTabSelect = (0, import_element14.useCallback)(
       (newSelectedTabId) => {
         if (!!newSelectedTabId) {
           enableComplementaryArea2(
@@ -3423,7 +3388,7 @@ var wp;
   // packages/edit-widgets/build-module/components/layout/interface.mjs
   var import_compose12 = __toESM(require_compose(), 1);
   var import_block_editor18 = __toESM(require_block_editor(), 1);
-  var import_element23 = __toESM(require_element(), 1);
+  var import_element24 = __toESM(require_element(), 1);
   var import_data28 = __toESM(require_data(), 1);
   var import_i18n18 = __toESM(require_i18n(), 1);
   var import_preferences8 = __toESM(require_preferences(), 1);
@@ -3431,27 +3396,27 @@ var wp;
   // packages/edit-widgets/build-module/components/header/index.mjs
   var import_block_editor13 = __toESM(require_block_editor(), 1);
   var import_data22 = __toESM(require_data(), 1);
-  var import_element19 = __toESM(require_element(), 1);
+  var import_element20 = __toESM(require_element(), 1);
   var import_i18n16 = __toESM(require_i18n(), 1);
-  var import_components19 = __toESM(require_components(), 1);
-  var import_compose8 = __toESM(require_compose(), 1);
+  var import_components18 = __toESM(require_components(), 1);
+  var import_compose9 = __toESM(require_compose(), 1);
   var import_preferences6 = __toESM(require_preferences(), 1);
 
   // packages/edit-widgets/build-module/components/header/document-tools/index.mjs
   var import_data18 = __toESM(require_data(), 1);
   var import_i18n11 = __toESM(require_i18n(), 1);
-  var import_components14 = __toESM(require_components(), 1);
+  var import_components13 = __toESM(require_components(), 1);
   var import_block_editor12 = __toESM(require_block_editor(), 1);
-  var import_element16 = __toESM(require_element(), 1);
-  var import_compose6 = __toESM(require_compose(), 1);
+  var import_element17 = __toESM(require_element(), 1);
+  var import_compose7 = __toESM(require_compose(), 1);
 
   // packages/edit-widgets/build-module/components/header/undo-redo/undo.mjs
   var import_i18n9 = __toESM(require_i18n(), 1);
-  var import_components12 = __toESM(require_components(), 1);
+  var import_components11 = __toESM(require_components(), 1);
   var import_data16 = __toESM(require_data(), 1);
   var import_keycodes2 = __toESM(require_keycodes(), 1);
   var import_core_data9 = __toESM(require_core_data(), 1);
-  var import_element14 = __toESM(require_element(), 1);
+  var import_element15 = __toESM(require_element(), 1);
   var import_jsx_runtime29 = __toESM(require_jsx_runtime(), 1);
   function UndoButton(props, ref) {
     const hasUndo = (0, import_data16.useSelect)(
@@ -3460,7 +3425,7 @@ var wp;
     );
     const { undo } = (0, import_data16.useDispatch)(import_core_data9.store);
     return /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
-      import_components12.Button,
+      import_components11.Button,
       {
         ...props,
         ref,
@@ -3473,15 +3438,15 @@ var wp;
       }
     );
   }
-  var undo_default2 = (0, import_element14.forwardRef)(UndoButton);
+  var undo_default2 = (0, import_element15.forwardRef)(UndoButton);
 
   // packages/edit-widgets/build-module/components/header/undo-redo/redo.mjs
   var import_i18n10 = __toESM(require_i18n(), 1);
-  var import_components13 = __toESM(require_components(), 1);
+  var import_components12 = __toESM(require_components(), 1);
   var import_data17 = __toESM(require_data(), 1);
   var import_keycodes3 = __toESM(require_keycodes(), 1);
   var import_core_data10 = __toESM(require_core_data(), 1);
-  var import_element15 = __toESM(require_element(), 1);
+  var import_element16 = __toESM(require_element(), 1);
   var import_jsx_runtime30 = __toESM(require_jsx_runtime(), 1);
   function RedoButton(props, ref) {
     const shortcut = (0, import_keycodes3.isAppleOS)() ? import_keycodes3.displayShortcut.primaryShift("z") : import_keycodes3.displayShortcut.primary("y");
@@ -3491,7 +3456,7 @@ var wp;
     );
     const { redo } = (0, import_data17.useDispatch)(import_core_data10.store);
     return /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
-      import_components13.Button,
+      import_components12.Button,
       {
         ...props,
         ref,
@@ -3504,12 +3469,12 @@ var wp;
       }
     );
   }
-  var redo_default2 = (0, import_element15.forwardRef)(RedoButton);
+  var redo_default2 = (0, import_element16.forwardRef)(RedoButton);
 
   // packages/edit-widgets/build-module/components/header/document-tools/index.mjs
   var import_jsx_runtime31 = __toESM(require_jsx_runtime(), 1);
   function DocumentTools() {
-    const isMediumViewport = (0, import_compose6.useViewportMatch)("medium");
+    const isMediumViewport = (0, import_compose7.useViewportMatch)("medium");
     const {
       isInserterOpen,
       isListViewOpen,
@@ -3530,11 +3495,11 @@ var wp;
       };
     }, []);
     const { setIsInserterOpened: setIsInserterOpened2, setIsListViewOpened: setIsListViewOpened2 } = (0, import_data18.useDispatch)(store2);
-    const toggleListView = (0, import_element16.useCallback)(
+    const toggleListView = (0, import_element17.useCallback)(
       () => setIsListViewOpened2(!isListViewOpen),
       [setIsListViewOpened2, isListViewOpen]
     );
-    const toggleInserterSidebar = (0, import_element16.useCallback)(
+    const toggleInserterSidebar = (0, import_element17.useCallback)(
       () => setIsInserterOpened2(!isInserterOpen),
       [setIsInserterOpened2, isInserterOpen]
     );
@@ -3546,10 +3511,10 @@ var wp;
         variant: "unstyled",
         children: [
           /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(
-            import_components14.ToolbarItem,
+            import_components13.ToolbarItem,
             {
               ref: inserterSidebarToggleRef2,
-              as: import_components14.Button,
+              as: import_components13.Button,
               className: "edit-widgets-header-toolbar__inserter-toggle",
               variant: "primary",
               isPressed: isInserterOpen,
@@ -3566,12 +3531,12 @@ var wp;
             }
           ),
           isMediumViewport && /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)(import_jsx_runtime31.Fragment, { children: [
-            /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(import_components14.ToolbarItem, { as: undo_default2 }),
-            /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(import_components14.ToolbarItem, { as: redo_default2 }),
+            /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(import_components13.ToolbarItem, { as: undo_default2 }),
+            /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(import_components13.ToolbarItem, { as: redo_default2 }),
             /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(
-              import_components14.ToolbarItem,
+              import_components13.ToolbarItem,
               {
-                as: import_components14.Button,
+                as: import_components13.Button,
                 className: "edit-widgets-header-toolbar__list-view-toggle",
                 icon: list_view_default,
                 isPressed: isListViewOpen,
@@ -3589,7 +3554,7 @@ var wp;
   var document_tools_default = DocumentTools;
 
   // packages/edit-widgets/build-module/components/save-button/index.mjs
-  var import_components15 = __toESM(require_components(), 1);
+  var import_components14 = __toESM(require_components(), 1);
   var import_i18n12 = __toESM(require_i18n(), 1);
   var import_data19 = __toESM(require_data(), 1);
   var import_jsx_runtime32 = __toESM(require_jsx_runtime(), 1);
@@ -3612,7 +3577,7 @@ var wp;
     const { saveEditedWidgetAreas: saveEditedWidgetAreas2 } = (0, import_data19.useDispatch)(store2);
     const isDisabled = isWidgetSaveLocked || isSaving || !hasEditedWidgetAreaIds;
     return /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(
-      import_components15.Button,
+      import_components14.Button,
       {
         variant: "primary",
         isBusy: isSaving,
@@ -3626,16 +3591,16 @@ var wp;
   var save_button_default = SaveButton;
 
   // packages/edit-widgets/build-module/components/more-menu/index.mjs
-  var import_components18 = __toESM(require_components(), 1);
-  var import_element18 = __toESM(require_element(), 1);
+  var import_components17 = __toESM(require_components(), 1);
+  var import_element19 = __toESM(require_element(), 1);
   var import_i18n15 = __toESM(require_i18n(), 1);
   var import_preferences5 = __toESM(require_preferences(), 1);
   var import_keycodes5 = __toESM(require_keycodes(), 1);
   var import_keyboard_shortcuts5 = __toESM(require_keyboard_shortcuts(), 1);
-  var import_compose7 = __toESM(require_compose(), 1);
+  var import_compose8 = __toESM(require_compose(), 1);
 
   // packages/edit-widgets/build-module/components/keyboard-shortcut-help-modal/index.mjs
-  var import_components16 = __toESM(require_components(), 1);
+  var import_components15 = __toESM(require_components(), 1);
   var import_i18n14 = __toESM(require_i18n(), 1);
   var import_keyboard_shortcuts4 = __toESM(require_keyboard_shortcuts(), 1);
   var import_data21 = __toESM(require_data(), 1);
@@ -3701,7 +3666,7 @@ var wp;
   ];
 
   // packages/edit-widgets/build-module/components/keyboard-shortcut-help-modal/shortcut.mjs
-  var import_element17 = __toESM(require_element(), 1);
+  var import_element18 = __toESM(require_element(), 1);
   var import_keycodes4 = __toESM(require_keycodes(), 1);
   var import_jsx_runtime33 = __toESM(require_jsx_runtime(), 1);
   function KeyCombination({ keyCombination, forceAriaLabel }) {
@@ -3719,7 +3684,7 @@ var wp;
         "aria-label": forceAriaLabel || ariaLabel,
         children: shortcuts.map((character, index) => {
           if (character === "+") {
-            return /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(import_element17.Fragment, { children: character }, index);
+            return /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(import_element18.Fragment, { children: character }, index);
           }
           return /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
             "kbd",
@@ -3860,7 +3825,7 @@ var wp;
       return null;
     }
     return /* @__PURE__ */ (0, import_jsx_runtime35.jsxs)(
-      import_components16.Modal,
+      import_components15.Modal,
       {
         className: "edit-widgets-keyboard-shortcut-help-modal",
         title: (0, import_i18n14.__)("Keyboard shortcuts"),
@@ -3924,9 +3889,9 @@ var wp;
   }
 
   // packages/edit-widgets/build-module/components/more-menu/tools-more-menu-group.mjs
-  var import_components17 = __toESM(require_components(), 1);
+  var import_components16 = __toESM(require_components(), 1);
   var import_jsx_runtime36 = __toESM(require_jsx_runtime(), 1);
-  var { Fill: ToolsMoreMenuGroup, Slot: Slot4 } = (0, import_components17.createSlotFill)(
+  var { Fill: ToolsMoreMenuGroup, Slot: Slot4 } = (0, import_components16.createSlotFill)(
     "EditWidgetsToolsMoreMenuGroup"
   );
   ToolsMoreMenuGroup.Slot = ({ fillProps }) => /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(Slot4, { fillProps, children: (fills) => fills.length > 0 && fills });
@@ -3938,16 +3903,16 @@ var wp;
     const [
       isKeyboardShortcutsModalActive,
       setIsKeyboardShortcutsModalVisible
-    ] = (0, import_element18.useState)(false);
+    ] = (0, import_element19.useState)(false);
     const toggleKeyboardShortcutsModal = () => setIsKeyboardShortcutsModalVisible(!isKeyboardShortcutsModalActive);
     (0, import_keyboard_shortcuts5.useShortcut)(
       "core/edit-widgets/keyboard-shortcuts",
       toggleKeyboardShortcutsModal
     );
-    const isLargeViewport = (0, import_compose7.useViewportMatch)("medium");
+    const isLargeViewport = (0, import_compose8.useViewportMatch)("medium");
     return /* @__PURE__ */ (0, import_jsx_runtime37.jsxs)(import_jsx_runtime37.Fragment, { children: [
       /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(
-        import_components18.DropdownMenu,
+        import_components17.DropdownMenu,
         {
           icon: more_vertical_default,
           label: (0, import_i18n15.__)("Options"),
@@ -3960,7 +3925,7 @@ var wp;
             size: "compact"
           },
           children: (onClose) => /* @__PURE__ */ (0, import_jsx_runtime37.jsxs)(import_jsx_runtime37.Fragment, { children: [
-            isLargeViewport && /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(import_components18.MenuGroup, { label: (0, import_i18n15._x)("View", "noun"), children: /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(
+            isLargeViewport && /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(import_components17.MenuGroup, { label: (0, import_i18n15._x)("View", "noun"), children: /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(
               import_preferences5.PreferenceToggleMenuItem,
               {
                 scope: "core/edit-widgets",
@@ -3977,9 +3942,9 @@ var wp;
                 )
               }
             ) }),
-            /* @__PURE__ */ (0, import_jsx_runtime37.jsxs)(import_components18.MenuGroup, { label: (0, import_i18n15.__)("Tools"), children: [
+            /* @__PURE__ */ (0, import_jsx_runtime37.jsxs)(import_components17.MenuGroup, { label: (0, import_i18n15.__)("Tools"), children: [
               /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(
-                import_components18.MenuItem,
+                import_components17.MenuItem,
                 {
                   onClick: () => {
                     setIsKeyboardShortcutsModalVisible(true);
@@ -3997,7 +3962,7 @@ var wp;
                 }
               ),
               /* @__PURE__ */ (0, import_jsx_runtime37.jsxs)(
-                import_components18.MenuItem,
+                import_components17.MenuItem,
                 {
                   role: "menuitem",
                   icon: external_default,
@@ -4023,7 +3988,7 @@ var wp;
                 }
               )
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime37.jsxs)(import_components18.MenuGroup, { label: (0, import_i18n15.__)("Preferences"), children: [
+            /* @__PURE__ */ (0, import_jsx_runtime37.jsxs)(import_components17.MenuGroup, { label: (0, import_i18n15.__)("Preferences"), children: [
               /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(
                 import_preferences5.PreferenceToggleMenuItem,
                 {
@@ -4088,8 +4053,8 @@ var wp;
   // packages/edit-widgets/build-module/components/header/index.mjs
   var import_jsx_runtime38 = __toESM(require_jsx_runtime(), 1);
   function Header() {
-    const isLargeViewport = (0, import_compose8.useViewportMatch)("medium");
-    const blockToolbarRef = (0, import_element19.useRef)();
+    const isLargeViewport = (0, import_compose9.useViewportMatch)("medium");
+    const blockToolbarRef = (0, import_element20.useRef)();
     const { hasFixedToolbar } = (0, import_data22.useSelect)(
       (select) => ({
         hasFixedToolbar: !!select(import_preferences6.store).get(
@@ -4114,7 +4079,7 @@ var wp;
         hasFixedToolbar && isLargeViewport && /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)(import_jsx_runtime38.Fragment, { children: [
           /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("div", { className: "selected-block-tools-wrapper", children: /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(import_block_editor13.BlockToolbar, { hideDragHandle: true }) }),
           /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(
-            import_components19.Popover.Slot,
+            import_components18.Popover.Slot,
             {
               ref: blockToolbarRef,
               name: "block-toolbar"
@@ -4133,9 +4098,9 @@ var wp;
 
   // packages/edit-widgets/build-module/components/widget-areas-block-editor-content/index.mjs
   var import_block_editor14 = __toESM(require_block_editor(), 1);
-  var import_compose9 = __toESM(require_compose(), 1);
+  var import_compose10 = __toESM(require_compose(), 1);
   var import_data23 = __toESM(require_data(), 1);
-  var import_element20 = __toESM(require_element(), 1);
+  var import_element21 = __toESM(require_element(), 1);
   var import_preferences7 = __toESM(require_preferences(), 1);
 
   // packages/edit-widgets/build-module/components/notices/index.mjs
@@ -4169,8 +4134,8 @@ var wp;
       ),
       []
     );
-    const isLargeViewport = (0, import_compose9.useViewportMatch)("medium");
-    const styles = (0, import_element20.useMemo)(() => {
+    const isLargeViewport = (0, import_compose10.useViewportMatch)("medium");
+    const styles = (0, import_element21.useMemo)(() => {
       return hasThemeStyles ? blockEditorSettings.styles : [];
     }, [blockEditorSettings, hasThemeStyles]);
     return /* @__PURE__ */ (0, import_jsx_runtime40.jsxs)("div", { className: "edit-widgets-block-editor", children: [
@@ -4195,8 +4160,8 @@ var wp;
 
   // packages/edit-widgets/build-module/components/secondary-sidebar/inserter-sidebar.mjs
   var import_block_editor16 = __toESM(require_block_editor(), 1);
-  var import_compose10 = __toESM(require_compose(), 1);
-  var import_element21 = __toESM(require_element(), 1);
+  var import_compose11 = __toESM(require_compose(), 1);
+  var import_element22 = __toESM(require_element(), 1);
   var import_data25 = __toESM(require_data(), 1);
 
   // packages/edit-widgets/build-module/hooks/use-widget-library-insertion-point.mjs
@@ -4246,13 +4211,13 @@ var wp;
   // packages/edit-widgets/build-module/components/secondary-sidebar/inserter-sidebar.mjs
   var import_jsx_runtime41 = __toESM(require_jsx_runtime(), 1);
   function InserterSidebar() {
-    const isMobileViewport = (0, import_compose10.useViewportMatch)("medium", "<");
+    const isMobileViewport = (0, import_compose11.useViewportMatch)("medium", "<");
     const { rootClientId, insertionIndex } = use_widget_library_insertion_point_default();
     const { setIsInserterOpened: setIsInserterOpened2 } = (0, import_data25.useDispatch)(store2);
-    const closeInserter = (0, import_element21.useCallback)(() => {
+    const closeInserter = (0, import_element22.useCallback)(() => {
       return setIsInserterOpened2(false);
     }, [setIsInserterOpened2]);
-    const libraryRef = (0, import_element21.useRef)();
+    const libraryRef = (0, import_element22.useRef)();
     return /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("div", { className: "edit-widgets-layout__inserter-panel", children: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("div", { className: "edit-widgets-layout__inserter-panel-content", children: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(
       import_block_editor16.__experimentalLibrary,
       {
@@ -4268,23 +4233,21 @@ var wp;
 
   // packages/edit-widgets/build-module/components/secondary-sidebar/list-view-sidebar.mjs
   var import_block_editor17 = __toESM(require_block_editor(), 1);
-  var import_components20 = __toESM(require_components(), 1);
-  var import_compose11 = __toESM(require_compose(), 1);
+  var import_components19 = __toESM(require_components(), 1);
   var import_data26 = __toESM(require_data(), 1);
-  var import_element22 = __toESM(require_element(), 1);
+  var import_element23 = __toESM(require_element(), 1);
   var import_i18n17 = __toESM(require_i18n(), 1);
   var import_keycodes6 = __toESM(require_keycodes(), 1);
   var import_jsx_runtime42 = __toESM(require_jsx_runtime(), 1);
   function ListViewSidebar() {
     const { setIsListViewOpened: setIsListViewOpened2 } = (0, import_data26.useDispatch)(store2);
     const { getListViewToggleRef: getListViewToggleRef2 } = unlock((0, import_data26.useSelect)(store2));
-    const [dropZoneElement, setDropZoneElement] = (0, import_element22.useState)(null);
-    const focusOnMountRef = (0, import_compose11.useFocusOnMount)("firstElement");
-    const closeListView = (0, import_element22.useCallback)(() => {
+    const [dropZoneElement, setDropZoneElement] = (0, import_element23.useState)(null);
+    const closeListView = (0, import_element23.useCallback)(() => {
       setIsListViewOpened2(false);
       getListViewToggleRef2().current?.focus();
     }, [getListViewToggleRef2, setIsListViewOpened2]);
-    const closeOnEscape = (0, import_element22.useCallback)(
+    const closeOnEscape = (0, import_element23.useCallback)(
       (event) => {
         if (event.keyCode === import_keycodes6.ESCAPE && !event.defaultPrevented) {
           event.preventDefault();
@@ -4304,7 +4267,7 @@ var wp;
             /* @__PURE__ */ (0, import_jsx_runtime42.jsxs)("div", { className: "edit-widgets-editor__list-view-panel-header", children: [
               /* @__PURE__ */ (0, import_jsx_runtime42.jsx)("strong", { children: (0, import_i18n17.__)("List View") }),
               /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(
-                import_components20.Button,
+                import_components19.Button,
                 {
                   icon: close_small_default,
                   label: (0, import_i18n17.__)("Close"),
@@ -4317,8 +4280,8 @@ var wp;
               "div",
               {
                 className: "edit-widgets-editor__list-view-panel-content",
-                ref: (0, import_compose11.useMergeRefs)([focusOnMountRef, setDropZoneElement]),
-                children: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(import_block_editor17.__experimentalListView, { dropZoneElement })
+                ref: setDropZoneElement,
+                children: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(import_block_editor17.__experimentalListView, { dropZoneElement, focusOnMount: true })
               }
             )
           ]
@@ -4381,13 +4344,13 @@ var wp;
       }),
       []
     );
-    (0, import_element23.useEffect)(() => {
+    (0, import_element24.useEffect)(() => {
       if (hasSidebarEnabled && !isHugeViewport) {
         setIsInserterOpened2(false);
         setIsListViewOpened2(false);
       }
     }, [hasSidebarEnabled, isHugeViewport]);
-    (0, import_element23.useEffect)(() => {
+    (0, import_element24.useEffect)(() => {
       if ((isInserterOpened2 || isListViewOpened2) && !isHugeViewport) {
         closeGeneralSidebar2();
       }
@@ -4418,7 +4381,7 @@ var wp;
 
   // packages/edit-widgets/build-module/components/layout/unsaved-changes-warning.mjs
   var import_i18n19 = __toESM(require_i18n(), 1);
-  var import_element24 = __toESM(require_element(), 1);
+  var import_element25 = __toESM(require_element(), 1);
   var import_data29 = __toESM(require_data(), 1);
   function UnsavedChangesWarning() {
     const isDirty = (0, import_data29.useSelect)((select) => {
@@ -4426,7 +4389,7 @@ var wp;
       const editedWidgetAreas = getEditedWidgetAreas2();
       return editedWidgetAreas?.length > 0;
     }, []);
-    (0, import_element24.useEffect)(() => {
+    (0, import_element25.useEffect)(() => {
       const warnIfUnsavedChanges = (event) => {
         if (isDirty) {
           event.returnValue = (0, import_i18n19.__)(
@@ -4445,9 +4408,9 @@ var wp;
 
   // packages/edit-widgets/build-module/components/welcome-guide/index.mjs
   var import_data30 = __toESM(require_data(), 1);
-  var import_components21 = __toESM(require_components(), 1);
+  var import_components20 = __toESM(require_components(), 1);
   var import_i18n20 = __toESM(require_i18n(), 1);
-  var import_element25 = __toESM(require_element(), 1);
+  var import_element26 = __toESM(require_element(), 1);
   var import_preferences9 = __toESM(require_preferences(), 1);
   var import_jsx_runtime45 = __toESM(require_jsx_runtime(), 1);
   function WelcomeGuide() {
@@ -4475,7 +4438,7 @@ var wp;
       (widgetArea) => widgetArea.id !== "wp_inactive_widgets"
     ).length ?? 0;
     return /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(
-      import_components21.Guide,
+      import_components20.Guide,
       {
         className: "edit-widgets-welcome-guide",
         contentLabel: (0, import_i18n20.__)("Welcome to block Widgets"),
@@ -4510,7 +4473,7 @@ var wp;
                   ) }),
                   " ",
                   /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(
-                    import_components21.ExternalLink,
+                    import_components20.ExternalLink,
                     {
                       href: (0, import_i18n20.__)(
                         "https://wordpress.org/plugins/classic-widgets/"
@@ -4549,7 +4512,7 @@ var wp;
             ),
             content: /* @__PURE__ */ (0, import_jsx_runtime45.jsxs)(import_jsx_runtime45.Fragment, { children: [
               /* @__PURE__ */ (0, import_jsx_runtime45.jsx)("h1", { className: "edit-widgets-welcome-guide__heading", children: (0, import_i18n20.__)("Explore all blocks") }),
-              /* @__PURE__ */ (0, import_jsx_runtime45.jsx)("p", { className: "edit-widgets-welcome-guide__text", children: (0, import_element25.createInterpolateElement)(
+              /* @__PURE__ */ (0, import_jsx_runtime45.jsx)("p", { className: "edit-widgets-welcome-guide__text", children: (0, import_element26.createInterpolateElement)(
                 (0, import_i18n20.__)(
                   "All of the blocks available to you live in the block library. You\u2019ll find it wherever you see the <InserterIconImage /> icon."
                 ),
@@ -4576,13 +4539,13 @@ var wp;
             ),
             content: /* @__PURE__ */ (0, import_jsx_runtime45.jsxs)(import_jsx_runtime45.Fragment, { children: [
               /* @__PURE__ */ (0, import_jsx_runtime45.jsx)("h1", { className: "edit-widgets-welcome-guide__heading", children: (0, import_i18n20.__)("Learn more") }),
-              /* @__PURE__ */ (0, import_jsx_runtime45.jsx)("p", { className: "edit-widgets-welcome-guide__text", children: (0, import_element25.createInterpolateElement)(
+              /* @__PURE__ */ (0, import_jsx_runtime45.jsx)("p", { className: "edit-widgets-welcome-guide__text", children: (0, import_element26.createInterpolateElement)(
                 (0, import_i18n20.__)(
                   "New to the block editor? Want to learn more about using it? <a>Here's a detailed guide.</a>"
                 ),
                 {
                   a: /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(
-                    import_components21.ExternalLink,
+                    import_components20.ExternalLink,
                     {
                       href: (0, import_i18n20.__)(
                         "https://wordpress.org/documentation/article/wordpress-block-editor/"
@@ -4625,8 +4588,8 @@ var wp;
         )
       );
     }
-    const navigateRegionsProps = (0, import_components22.__unstableUseNavigateRegions)();
-    const adminPrimary = (0, import_element26.useMemo)(() => getAdminThemeColors().primary, []);
+    const navigateRegionsProps = (0, import_components21.__unstableUseNavigateRegions)();
+    const adminPrimary = (0, import_element27.useMemo)(() => getAdminThemeColors().primary, []);
     return /* @__PURE__ */ (0, import_jsx_runtime46.jsx)(import_theme2.ThemeProvider, { isRoot: true, color: { primary: adminPrimary }, children: /* @__PURE__ */ (0, import_jsx_runtime46.jsx)(ErrorBoundary, { children: /* @__PURE__ */ (0, import_jsx_runtime46.jsx)("div", { ...navigateRegionsProps, children: /* @__PURE__ */ (0, import_jsx_runtime46.jsxs)(
       WidgetAreasBlockEditorProvider,
       {
@@ -4658,8 +4621,8 @@ var wp;
   ];
   function initializeEditor(id, settings2) {
     const target = document.getElementById(id);
-    const root = (0, import_element27.createRoot)(target);
-    const coreBlocks = (0, import_block_library2.__experimentalGetCoreBlocks)().filter((block) => {
+    const root = (0, import_element28.createRoot)(target);
+    const coreBlocks = (0, import_block_library.__experimentalGetCoreBlocks)().filter((block) => {
       return !(disabledBlocks.includes(block.name) || block.name.startsWith("core/post") || block.name.startsWith("core/query") || block.name.startsWith("core/site") || block.name.startsWith("core/navigation") || block.name.startsWith("core/term"));
     });
     (0, import_data32.dispatch)(import_preferences10.store).setDefaults("core/edit-widgets", {
@@ -4669,10 +4632,10 @@ var wp;
       themeStyles: true
     });
     (0, import_data32.dispatch)(import_blocks3.store).reapplyBlockTypeFilters();
-    (0, import_block_library2.registerCoreBlocks)(coreBlocks);
+    (0, import_block_library.registerCoreBlocks)(coreBlocks);
     (0, import_widgets5.registerLegacyWidgetBlock)();
     if (true) {
-      (0, import_block_library2.__experimentalRegisterExperimentalCoreBlocks)({
+      (0, import_block_library.__experimentalRegisterExperimentalCoreBlocks)({
         enableFSEBlocks: ENABLE_EXPERIMENTAL_FSE_BLOCKS
       });
     }
@@ -4682,7 +4645,7 @@ var wp;
     settings2.__experimentalFetchLinkSuggestions = (search, searchOptions) => (0, import_core_data12.__experimentalFetchLinkSuggestions)(search, searchOptions, settings2);
     (0, import_blocks3.setFreeformContentHandlerName)("core/html");
     root.render(
-      /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(import_element27.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(layout_default, { blockEditorSettings: settings2 }) })
+      /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(import_element28.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(layout_default, { blockEditorSettings: settings2 }) })
     );
     return root;
   }

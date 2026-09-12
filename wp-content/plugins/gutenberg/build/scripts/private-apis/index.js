@@ -60,6 +60,9 @@ var wp;
     "@wordpress/storybook",
     "@wordpress/sync",
     "@wordpress/theme",
+    // Do not remove: older `@wordpress/dataviews` versions published to npm
+    // call the opt-in at module load, so a plugin bundling one of those
+    // copies throws at load time if this entry is missing.
     "@wordpress/dataviews",
     "@wordpress/fields",
     "@wordpress/lazy-editor",

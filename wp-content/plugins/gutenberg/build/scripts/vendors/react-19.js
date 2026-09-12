@@ -1013,7 +1013,7 @@ function __wpWarnCompat(key) {var w = __wpWarnCompat.warned || (__wpWarnCompat.w
         exports.useTransition = function() {
           return resolveDispatcher().useTransition();
         };
-        exports.version = "19.2.7";
+        exports.version = "19.2.8";
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
       })();
     }

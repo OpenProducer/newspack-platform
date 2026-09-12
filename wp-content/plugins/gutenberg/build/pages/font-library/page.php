@@ -152,8 +152,12 @@ function gutenberg_font_library_render_page() {
 	$menu_items = gutenberg_get_font_library_menu_items();
 	$routes = gutenberg_get_font_library_routes();
 
-	// Get boot module asset file for dependencies
+	// Get boot module asset file for dependencies. Plugins that build their own
+	// boot module use it; everyone else falls back to the copy bundled with Core.
 	$asset_file = __DIR__ . '/../../modules/boot/index.min.asset.php';
+	if ( ! file_exists( $asset_file ) ) {
+		$asset_file = ABSPATH . WPINC . '/js/dist/script-modules/boot/index.min.asset.php';
+	}
 	if ( file_exists( $asset_file ) ) {
 		$asset = require $asset_file;
 

@@ -1,1 +1,1 @@
-<?php return array('dependencies' => array('react'), 'version' => '19.2.7');
+<?php return array('dependencies' => array('react'), 'version' => '19.2.8');

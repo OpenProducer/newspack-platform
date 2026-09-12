@@ -67,6 +67,10 @@ var route = {
     if (Number.isNaN(navigationId)) {
       throw notFound();
     }
+    const theme = await (0, import_data.resolveSelect)(import_core_data.store).getCurrentTheme();
+    if (!theme?.is_block_theme) {
+      throw notFound();
+    }
     try {
       const navigation = await (0, import_data.resolveSelect)(import_core_data.store).getEntityRecord(
         "postType",
@@ -101,8 +105,7 @@ var route = {
     return {
       postType: NAVIGATION_POST_TYPE,
       postId,
-      isPreview: true,
-      editLink: `/types/wp_navigation/edit/${postId}`
+      isPreview: true
     };
   },
   loader: async ({

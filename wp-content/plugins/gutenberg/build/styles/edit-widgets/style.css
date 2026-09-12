@@ -702,8 +702,7 @@ body.is-dragging-components-draggable .wp-block[data-type="core/widget-area"] .c
 }
 .edit-widgets-header-toolbar > .components-button.has-icon.has-icon.has-icon:focus:not(:active),
 .edit-widgets-header-toolbar > .components-dropdown > .components-button.has-icon.has-icon:focus:not(:active) {
-  --focus-color: var(--wpds-color-stroke-focus, var(--wp-admin-theme-color, #3858e9));
-  outline: var(--wpds-border-width-focus, var(--wp-admin-border-width-focus, 2px)) solid var(--focus-color);
+  outline: var(--wpds-border-width-focus, var(--wp-admin-border-width-focus, 2px)) solid var(--focus-color, var(--wpds-color-stroke-focus, var(--wp-admin-theme-color, #3858e9)));
   outline-offset: var(--wpds-border-width-focus, var(--wp-admin-border-width-focus, 2px));
 }
 .edit-widgets-header-toolbar > .components-button.has-icon.has-icon.has-icon::before,

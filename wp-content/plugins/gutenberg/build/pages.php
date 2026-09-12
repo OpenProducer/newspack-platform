@@ -21,6 +21,8 @@ foreach ( [
 	__DIR__ . '/pages/media-editor/page-wp-admin.php',
 	__DIR__ . '/pages/site-editor-v2/page.php',
 	__DIR__ . '/pages/site-editor-v2/page-wp-admin.php',
+	__DIR__ . '/pages/theme-preview/page.php',
+	__DIR__ . '/pages/theme-preview/page-wp-admin.php',
 ] as $file ) {
 	if ( file_exists( $file ) ) {
 		require_once $file;

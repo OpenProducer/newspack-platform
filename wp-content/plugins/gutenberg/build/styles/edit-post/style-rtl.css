@@ -393,9 +393,10 @@ body.js.block-editor-page .media-frame select.attachment-filters:last-of-type {
 @media (min-width: 782px) {
   body.js.block-editor-page.is-fullscreen-mode:has(.editor-editor-interface.is-distraction-free) {
     --wp-admin--admin-bar--height: 0px;
+    --wp-editor-admin-bar-display: none;
   }
-  body.js.block-editor-page.is-fullscreen-mode:has(.editor-editor-interface.is-distraction-free) #wpadminbar {
-    display: none;
+  body.js.block-editor-page.is-fullscreen-mode #wpadminbar {
+    display: var(--wp-editor-admin-bar-display, block);
   }
 }
 

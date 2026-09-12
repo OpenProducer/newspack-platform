@@ -461,6 +461,9 @@ var wp;
   var ForwardRef = (0, import_react.forwardRef)(() => {
     return null;
   });
+  var Memo = (0, import_react.memo)(() => {
+    return null;
+  });
   var ATTRIBUTES_TYPES = /* @__PURE__ */ new Set(["string", "boolean", "number"]);
   var SELF_CLOSING_TAGS = /* @__PURE__ */ new Set([
     "area",
@@ -849,6 +852,12 @@ var wp;
       case ForwardRef.$$typeof:
         return renderElement(
           type.render(props),
+          context,
+          legacyContext
+        );
+      case Memo.$$typeof:
+        return renderElement(
+          (0, import_react.createElement)(type.type, props),
           context,
           legacyContext
         );

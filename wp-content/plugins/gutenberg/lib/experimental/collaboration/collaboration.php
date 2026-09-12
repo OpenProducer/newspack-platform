@@ -66,8 +66,30 @@ if ( ! function_exists( 'gutenberg_register_collaboration_rest_routes' ) ) {
 			return;
 		}
 
-		$sync_storage = new WP_Sync_Post_Meta_Storage();
-		$sync_server  = new WP_HTTP_Polling_Sync_Server( $sync_storage );
+		/**
+		 * Filters the sync storage implementation for collaborative editing.
+		 *
+		 * Allows plugins to replace the default post meta storage with alternative
+		 * backends. The primary use case is the realtime-collaboration plugin,
+		 * which uses Presence API for awareness and a dedicated wp_collaboration
+		 * table for CRDT updates, eliminating cache side effects.
+		 *
+		 * This filter is unstable and may change as RTC explores fundamental changes
+		 * to how syncing works. The current interface assumes a pure naïve relay,
+		 * which could change.
+		 *
+		 * @since Gutenberg 21.x
+		 *
+		 * @param WP_Sync_Storage $sync_storage Storage implementation. Must implement
+		 *                                      the WP_Sync_Storage interface.
+		 */
+		$sync_storage = apply_filters( '__unstable_wp_sync_storage', new WP_Sync_Post_Meta_Storage() );
+
+		if ( ! $sync_storage instanceof WP_Sync_Storage ) {
+			$sync_storage = new WP_Sync_Post_Meta_Storage();
+		}
+
+		$sync_server = new WP_HTTP_Polling_Sync_Server( $sync_storage );
 		$sync_server->register_routes();
 
 		$sync_save_server = new WP_Sync_Save_Server();
@@ -158,6 +180,36 @@ if ( ! function_exists( 'wp_is_post_type_collaboration_disabled' ) ) {
 		return (bool) apply_filters( 'wp_is_post_type_collaboration_disabled', false, $post_type );
 	}
 }
+
+/**
+ * Disables real-time collaboration for post types that cannot persist the
+ * CRDT document.
+ *
+ * Collaboration stores its CRDT document in post meta. The REST API only
+ * exposes post meta for post types that support custom fields, so enabling
+ * collaboration for other post types can cause stale sync updates to replace
+ * newer entity content.
+ *
+ * @param bool   $disabled  Whether real-time collaboration is disabled for the post type.
+ * @param string $post_type Post type name.
+ * @return bool Whether real-time collaboration is disabled for the post type.
+ */
+function gutenberg_disable_collaboration_for_post_types_without_custom_fields( $disabled, $post_type ) {
+	if ( $disabled ) {
+		return $disabled;
+	}
+
+	/*
+	 * The attachments REST controller always exposes meta, regardless of
+	 * whether the attachment post type supports custom fields.
+	 */
+	if ( 'attachment' === $post_type ) {
+		return false;
+	}
+
+	return ! post_type_supports( $post_type, 'custom-fields' );
+}
+add_filter( 'wp_is_post_type_collaboration_disabled', 'gutenberg_disable_collaboration_for_post_types_without_custom_fields', 10, 2 );
 
 if ( ! function_exists( 'gutenberg_get_active_edit_lock_user' ) ) {
 	/**

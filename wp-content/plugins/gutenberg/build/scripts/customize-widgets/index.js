@@ -249,7 +249,7 @@ var wp;
     store: () => store
   });
   var import_element18 = __toESM(require_element(), 1);
-  var import_block_library2 = __toESM(require_block_library(), 1);
+  var import_block_library = __toESM(require_block_library(), 1);
   var import_widgets5 = __toESM(require_widgets(), 1);
   var import_blocks2 = __toESM(require_blocks(), 1);
   var import_data17 = __toESM(require_data(), 1);
@@ -373,7 +373,7 @@ var wp;
                 if (typeof cleanupCallback === "function") {
                   cleanupCallback();
                 } else {
-                  ref(null);
+                  void ref(null);
                 }
                 break;
               }
@@ -647,7 +647,7 @@ var wp;
     const outProps = enabled ? mergeObjects(stateProps, resolvedProps) ?? {} : EMPTY_OBJECT;
     if (typeof document !== "undefined") {
       if (!enabled) {
-        useMergedRefs(null, null);
+        void useMergedRefs(null, null);
       } else if (Array.isArray(ref)) {
         outProps.ref = useMergedRefsN([outProps.ref, getReactElementRef(renderProp), ...ref]);
       } else {
@@ -880,7 +880,7 @@ var wp;
   };
   var ADMIN_THEME_COLORS = /* @__PURE__ */ new Map([
     ["modern", DEFAULT_THEME_COLORS],
-    ["fresh", { primary: "#3858e9", background: "#25292b" }],
+    ["fresh", { primary: "#007cba", background: "#25292b" }],
     ["midnight", { primary: "#cf4339", background: "#3d4042" }],
     ["coffee", { primary: "#916745", background: "#5b534d" }],
     ["ocean", { primary: "#567958", background: "#5f787f" }],
@@ -948,7 +948,6 @@ var wp;
   var import_block_editor9 = __toESM(require_block_editor(), 1);
   var import_media_utils = __toESM(require_media_utils(), 1);
   var import_preferences3 = __toESM(require_preferences(), 1);
-  var import_block_library = __toESM(require_block_library(), 1);
 
   // packages/customize-widgets/build-module/components/block-inspector-button/index.mjs
   var import_element3 = __toESM(require_element(), 1);
@@ -2121,7 +2120,6 @@ var wp;
   var { ExperimentalBlockCanvas: BlockCanvas } = unlock(
     import_block_editor9.privateApis
   );
-  var { BlockKeyboardShortcuts } = unlock(import_block_library.privateApis);
   function SidebarBlockEditor({
     blockEditorSettings,
     sidebar,
@@ -2189,7 +2187,6 @@ var wp;
     }
     return /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(import_jsx_runtime19.Fragment, { children: [
       /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(keyboard_shortcuts_default.Register, {}),
-      /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(BlockKeyboardShortcuts, {}),
       /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(SidebarEditorProvider, { sidebar, settings, children: [
         /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
           keyboard_shortcuts_default,
@@ -3039,13 +3036,13 @@ var wp;
       welcomeGuide: true
     });
     (0, import_data17.dispatch)(import_blocks2.store).reapplyBlockTypeFilters();
-    const coreBlocks = (0, import_block_library2.__experimentalGetCoreBlocks)().filter((block) => {
+    const coreBlocks = (0, import_block_library.__experimentalGetCoreBlocks)().filter((block) => {
       return !(DISABLED_BLOCKS.includes(block.name) || block.name.startsWith("core/post") || block.name.startsWith("core/query") || block.name.startsWith("core/site") || block.name.startsWith("core/navigation") || block.name.startsWith("core/term"));
     });
-    (0, import_block_library2.registerCoreBlocks)(coreBlocks);
+    (0, import_block_library.registerCoreBlocks)(coreBlocks);
     (0, import_widgets5.registerLegacyWidgetBlock)();
     if (true) {
-      (0, import_block_library2.__experimentalRegisterExperimentalCoreBlocks)({
+      (0, import_block_library.__experimentalRegisterExperimentalCoreBlocks)({
         enableFSEBlocks: ENABLE_EXPERIMENTAL_FSE_BLOCKS
       });
     }
