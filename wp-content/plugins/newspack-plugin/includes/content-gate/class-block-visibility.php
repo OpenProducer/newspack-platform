@@ -53,8 +53,24 @@ class Block_Visibility {
 			return $block_content;
 		}
 
-		// Bypass access control in admin screens so blocks are never hidden from
-		// editors during content authoring.
+		$post_id = get_the_ID();
+
+		// A listing teaser answers to the anonymous reader, never to whoever asked
+		// for it. Content_Gate caches the built teaser under a key with no reader
+		// dimension and serves it from every listing for an hour, so a render that
+		// varied by requester would republish the first warm reader's view to the
+		// public. Content_Gate::is_withheld_outside_article() decides the
+		// withholding against the same reader, and this keeps the render and the
+		// decision answering to one.
+		$is_listing = Content_Gate::is_listing_context();
+
+		// Bypass access control in admin screens so blocks are never hidden from the
+		// person authoring them. Gated on that person being able to author the post in
+		// hand — the same `edit_post` entitlement the rest of the gate uses — so an
+		// admin-context request from a reader who cannot edit it is a read like any
+		// other. is_admin() is true under admin-ajax, which serves front-end renders.
+		// With no post in scope there is nothing to ask `edit_post` about, and the
+		// question falls back to whether the requester can author at all.
 		//
 		// REST requests are deliberately NOT exempt: a context check is not a permission
 		// check, and access has to be evaluated per requester. Authoring contexts that
@@ -63,11 +79,15 @@ class Block_Visibility {
 		// in scope — where none is set up, it fails closed. Re-adding a blanket REST
 		// exemption here would widen what is readable; the REST cases in
 		// Newspack_Test_Block_Visibility pin the behaviour.
-		if ( is_admin() ) {
+		//
+		// An editor warming a listing teaser gets no bypass either: the string they
+		// produce is the one every anonymous visitor is then served.
+		if ( ! $is_listing && is_admin() && ( $post_id ? current_user_can( 'edit_post', $post_id ) : current_user_can( 'edit_posts' ) ) ) {
 			return $block_content;
 		}
 
-		$hidden = self::is_hidden_for_user( $block, get_current_user_id(), get_the_ID() );
+		$user_id = $is_listing ? 0 : get_current_user_id();
+		$hidden  = self::is_hidden_for_user( $block, $user_id, $post_id );
 
 		// This response now depends on who asked for it, and the page cache in front of
 		// it cannot always tell requesters apart. Batcache skips a request only when it
@@ -76,7 +96,10 @@ class Block_Visibility {
 		// served to the next anonymous caller. Cancel the store whenever this render
 		// shows a block an anonymous reader would not see -- the withheld render is
 		// still cached normally, which is the common case and the one worth caching.
-		if ( self::render_varies_from_anonymous( $block, get_current_user_id(), get_the_ID() ) ) {
+		//
+		// A listing teaser is anonymous by construction, so it never varies and the
+		// page around it stays cacheable.
+		if ( ! $is_listing && self::render_varies_from_anonymous( $block, $user_id, $post_id ) ) {
 			self::prevent_page_cache();
 		}
 
@@ -168,8 +191,8 @@ class Block_Visibility {
 		// Lives in this shared predicate rather than in filter_render_block() so the
 		// excerpt path answers the same way: with Reader Activation off, an excerpt
 		// must not withhold a block the page around it renders in full.
-		// filter_render_block()'s admin and REST bypass still returns before reaching
-		// here, so editor and REST renders don't pay for the option read.
+		// filter_render_block()'s authoring bypass still returns before reaching here,
+		// so a render for someone editing the post doesn't pay for the option read.
 		if ( ! Reader_Activation::is_enabled() ) {
 			return false;
 		}
@@ -452,11 +475,25 @@ class Block_Visibility {
 	}
 
 	/**
-	 * Per-request cache: keyed by "{user_id}:{md5(rules)}" or "gate:{user_id}:{md5(gate_ids)}".
+	 * Per-request cache: keyed by "{user_id}:{md5(rules)}" or "gate:{user_id}:{md5(gate_ids)}",
+	 * with the suffix {@see self::evaluation_cache_suffix()} adds.
 	 *
 	 * @var bool[]
 	 */
 	private static $rules_match_cache = [];
+
+	/**
+	 * Key suffix separating a listing teaser's evaluations from the rest.
+	 *
+	 * Both run as user 0 and would otherwise share an entry, but they do not
+	 * answer alike: a listing denies the anonymous bypass, so the same rules can
+	 * pass on the article page and fail in a listing.
+	 *
+	 * @return string
+	 */
+	private static function evaluation_cache_suffix() {
+		return Content_Gate::is_listing_context() ? ':listing' : '';
+	}
 
 	/**
 	 * Per-request cache of stripped content, keyed by md5 of the input.
@@ -466,11 +503,46 @@ class Block_Visibility {
 	private static $strip_cache = [];
 
 	/**
+	 * Per-request cache of has_active_gates() results, keyed by
+	 * "{blog_id}:{sorted, de-duplicated gate ids}".
+	 *
+	 * "Cache" here is a static array that lives for one request and is gone when the
+	 * request ends -- the same sense the other two caches in this class use. This
+	 * class writes nothing that outlives a request: no wp_cache_*, no transient, no
+	 * option. So a stale entry cannot reach a later request, and the invalidation
+	 * question below is only about the one it was written in.
+	 *
+	 * The blog id is in the key because gate ids are per-site post ids, so a
+	 * switch_to_blog() mid-request would otherwise answer for the wrong site.
+	 *
+	 * Not flushed when a gate is written, and neither stale answer is safe. A stale
+	 * false returns early from is_hidden_for_user() and renders a block whose gates
+	 * have just become active. A stale true reaches compute_gate_rules_match(), which
+	 * passes through when no gate is active -- and under visibility "hidden" that
+	 * pass-through inverts into withholding a block that should have rendered.
+	 *
+	 * What bounds this is the write window, not the direction. A stale entry takes one
+	 * request that reads a gate set, changes the publish status of a gate in it, then
+	 * reads that same set again. Neither reader writes gates -- filter_render_block()
+	 * renders, strip_hidden() strips for the excerpt -- so it takes a caller outside
+	 * this file interleaving a gate write between two reads, and none is known to. The
+	 * stale true additionally needs the second read to miss $rules_match_cache, which
+	 * happens across user ids: filter_render_block() uses the current reader, while
+	 * strip_hidden() always uses 0. Anything that closes that window needs an
+	 * invalidation hook here, the way Content_Gate flushes its own cache on save_post
+	 * and the post-meta writes.
+	 *
+	 * @var bool[]
+	 */
+	private static $active_gates_cache = [];
+
+	/**
 	 * Reset the per-request caches. Used in unit tests only.
 	 */
 	public static function reset_cache_for_tests() {
-		self::$rules_match_cache = [];
-		self::$strip_cache       = [];
+		self::$rules_match_cache  = [];
+		self::$strip_cache        = [];
+		self::$active_gates_cache = [];
 	}
 
 	/**
@@ -492,7 +564,7 @@ class Block_Visibility {
 	 * @return bool True if user matches (should be treated as "matching reader").
 	 */
 	private static function evaluate_rules_for_user( $rules, $user_id ) {
-		$cache_key = $user_id . ':' . md5( wp_json_encode( $rules ) );
+		$cache_key = $user_id . ':' . md5( wp_json_encode( $rules ) ) . self::evaluation_cache_suffix();
 		if ( isset( self::$rules_match_cache[ $cache_key ] ) ) {
 			return self::$rules_match_cache[ $cache_key ];
 		}
@@ -513,13 +585,28 @@ class Block_Visibility {
 	 * @return bool
 	 */
 	private static function has_active_gates( $gate_ids ) {
+		// The answer does not depend on the order or the repetition of the ids, but the
+		// caller's list carries both -- they arrive from a block attribute in editor
+		// order. Normalizing first lets every block gated by the same set, however its
+		// author happened to arrange them, share one entry.
+		$ids = array_values( array_unique( array_map( 'intval', $gate_ids ) ) );
+		sort( $ids, SORT_NUMERIC );
+		$cache_key = get_current_blog_id() . ':' . implode( ',', $ids );
+		if ( isset( self::$active_gates_cache[ $cache_key ] ) ) {
+			return self::$active_gates_cache[ $cache_key ];
+		}
+
+		$has_active = false;
 		foreach ( $gate_ids as $gate_id ) {
 			$gate = Content_Gate::get_gate( $gate_id );
 			if ( ! \is_wp_error( $gate ) && 'publish' === $gate['status'] ) {
-				return true;
+				$has_active = true;
+				break;
 			}
 		}
-		return false;
+
+		self::$active_gates_cache[ $cache_key ] = $has_active;
+		return $has_active;
 	}
 
 	/**
@@ -533,7 +620,7 @@ class Block_Visibility {
 	 * @return bool
 	 */
 	private static function evaluate_gate_rules_for_user( $gate_ids, $user_id ) {
-		$cache_key = 'gate:' . $user_id . ':' . md5( wp_json_encode( $gate_ids ) );
+		$cache_key = 'gate:' . $user_id . ':' . md5( wp_json_encode( $gate_ids ) ) . self::evaluation_cache_suffix();
 		if ( isset( self::$rules_match_cache[ $cache_key ] ) ) {
 			return self::$rules_match_cache[ $cache_key ];
 		}
@@ -588,27 +675,45 @@ class Block_Visibility {
 	 * @return bool
 	 */
 	private static function compute_rules_match( $rules, $user_id ) {
-		$registration  = $rules['registration'] ?? [];
-		$custom_access = $rules['custom_access'] ?? [];
-
-		$registration_passes = true;
-		if ( ! empty( $registration['active'] ) ) {
-			if ( ! $user_id ) {
-				$registration_passes = false;
-			} elseif ( ! empty( $registration['require_verification'] ) ) {
-				$registration_passes = (bool) get_user_meta( $user_id, Reader_Activation::EMAIL_VERIFIED, true );
-			}
-		}
+		$registration     = $rules['registration'] ?? [];
+		$custom_access    = $rules['custom_access'] ?? [];
+		$has_access_rules = ! empty( $custom_access['active'] ) && ! empty( $custom_access['access_rules'] );
 
 		$access_passes = true;
-		if ( ! empty( $custom_access['active'] ) && ! empty( $custom_access['access_rules'] ) ) {
+		if ( $has_access_rules ) {
 			// Gate-derived rules carry the gate's stored setting; rules parsed from
 			// block attributes never contain the key, so block-attribute visibility
 			// is deliberately always grace-ON — the block editor exposes no
 			// payment-recovery toggle, and a reader in the retry window should see
 			// member-only blocks just as they can pass the gate itself.
-			$rule_context  = [ 'payment_recovery_grace' => $custom_access['payment_recovery_grace'] ?? true ];
-			$access_passes = Access_Rules::evaluate_rules( $custom_access['access_rules'], $user_id, $rule_context );
+			$rule_context = [ 'payment_recovery_grace' => $custom_access['payment_recovery_grace'] ?? true ];
+
+			// A logged-out visitor in a listing teaser passes no rule at all:
+			// Access_Rules::evaluate_anonymous_rules() declines in that context, for
+			// the same reason the withholding decision does. The article page still
+			// honours the grant.
+			$access_passes = Access_Rules::evaluate_rules_for_visitor( $custom_access['access_rules'], $user_id, $rule_context );
+		}
+
+		$registration_passes = true;
+		if ( ! empty( $registration['active'] ) ) {
+			if ( ! $user_id ) {
+				// A signed-out visitor who passes paid access doesn't need to register
+				// first, as on the gate's own page ({@see Content_Restriction_Control::is_post_restricted()}),
+				// so once paid access is on with rules, its answer decides both walls.
+				// Without this, an on-campus visitor reads the post but not the blocks set
+				// to its gate. A block's own rules answer the same way, so a block and a
+				// gate holding the same rules never disagree.
+				//
+				// With no paid rules, registered access's own rules can count the visitor
+				// as registered (NPPD-2310). The block editor never writes registration
+				// rules into block attributes.
+				$registration_passes = $has_access_rules
+					? $access_passes
+					: Access_Rules::evaluate_anonymous_rules( $registration['access_rules'] ?? [] );
+			} elseif ( ! empty( $registration['require_verification'] ) ) {
+				$registration_passes = (bool) get_user_meta( $user_id, Reader_Activation::EMAIL_VERIFIED, true );
+			}
 		}
 
 		// AND logic: both must pass when both are configured.
