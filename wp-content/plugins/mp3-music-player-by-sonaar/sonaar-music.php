@@ -16,7 +16,7 @@
  * Plugin Name:       MP3 Audio Player by Sonaar
  * Plugin URI:        https://sonaar.io/mp3-audio-player-pro/?utm_source=Sonaar+Music+Free+Plugin&utm_medium=plugin
  * Description:       The most popular and complete Music & Podcast Player for WordPress.
- * Version:           5.14.2
+ * Version:           5.15
  * Author:            Sonaar Music
  * Author URI:        https://sonaar.io/?utm_source=Sonaar%20Music%20Free%20Plugin&utm_medium=plugin
  * License:           GPL-2.0+
@@ -30,8 +30,8 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-define('SRMP3_VERSION', '5.14.2'); // important to avoid cache issues on update
-define('SRMP3_PRO_MIN_VERSION', '5.14'); // Minimum pro version required
+define('SRMP3_VERSION', '5.15'); // important to avoid cache issues on update
+define('SRMP3_PRO_MIN_VERSION', '5.15'); // Minimum pro version required
 if ( !defined( 'SRMP3_DIR_PATH' ) ) {
     define( 'SRMP3_DIR_PATH', plugin_dir_path( __FILE__ ) );
 }
@@ -61,6 +61,15 @@ if ( !class_exists( 'Sonaar_Music' )) {
 
 	function srmp3_set_template( $template ){
 		//Add option for plugin to turn this off? If so just return $template
+		/*
+		 * Keep resolved block templates intact so playlists and their taxonomies
+		 * can use templates created with the Gutenberg Site Editor.
+		 */
+		$block_template_canvas = ABSPATH . WPINC . '/template-canvas.php';
+		if ( wp_normalize_path( $template ) === wp_normalize_path( $block_template_canvas ) ) {
+			return $template;
+		}
+
 		//Check if the taxonomy/single is being viewed 
 		if( is_archive() && is_tax('podcast-show') || is_archive() && is_tax('playlist-category'))
 			return srmp3_template_path('taxonomy-show');
@@ -133,43 +142,147 @@ if ( !class_exists( 'Sonaar_Music' )) {
 add_action('wp_ajax_import_srmp3_elementor_template', 'import_srmp3_elementor_template');
 add_action('wp_ajax_load_post_by_ajax', 'load_post_by_ajax_callback');
 add_action('wp_ajax_nopriv_load_post_by_ajax', 'load_post_by_ajax_callback');
- 
+
+/**
+ * Sanitize the HTML rendered inside a store popup.
+ *
+ * Store popups support formatted content, shortcodes, and embedded media. The
+ * iframe attributes below preserve common video/audio embeds while KSES removes
+ * executable tags, event handlers, and unsafe URL protocols.
+ *
+ * @param mixed $content         Popup content.
+ * @param bool  $allow_style_tag Whether trusted shortcode output may keep style elements.
+ * @return string Sanitized popup content.
+ */
+function srmp3_sanitize_store_popup_content( $content, $allow_style_tag = false ) {
+	if ( ! is_string( $content ) ) {
+		return '';
+	}
+
+	$style_blocks = array();
+	if ( ! $allow_style_tag ) {
+		// Do not turn user-supplied CSS into visible text when KSES removes its wrapper.
+		$content = preg_replace( '#<style\b[^>]*>.*?(?:</style\s*>|$)#is', '', $content );
+	} else {
+		// Protect trusted shortcode CSS from KSES entity encoding, then restore it below.
+		$content = preg_replace_callback(
+			'#<style\b[^>]*>(.*?)</style\s*>#is',
+			function ( $matches ) use ( &$style_blocks ) {
+				$placeholder = 'SRMP3STYLEBLOCK' . count( $style_blocks ) . 'PLACEHOLDER';
+				$style_blocks[ $placeholder ] = '<style>' . $matches[1] . '</style>';
+				return $placeholder;
+			},
+			$content
+		);
+	}
+
+	$allowed_html = wp_kses_allowed_html( 'post' );
+	// The karaoke player reads TTML timing from paragraphs, not executable SVG.
+	$allowed_html['p']['begin'] = true;
+	$allowed_html['p']['end'] = true;
+	// Preserve declarative forms (including shortcode output), never inline scripts.
+	$form_attributes = array(
+		'form' => array( 'action', 'method', 'enctype', 'accept-charset', 'autocomplete', 'name', 'target', 'novalidate' ),
+		'input' => array( 'type', 'name', 'value', 'placeholder', 'required', 'disabled', 'readonly', 'checked', 'multiple', 'min', 'max', 'step', 'minlength', 'maxlength', 'pattern', 'size', 'accept', 'autocomplete' ),
+		'select' => array( 'name', 'required', 'disabled', 'multiple', 'size', 'autocomplete' ),
+		'option' => array( 'value', 'selected', 'disabled', 'label' ),
+		'optgroup' => array( 'label', 'disabled' ),
+		'textarea' => array( 'name', 'rows', 'cols', 'placeholder', 'required', 'disabled', 'readonly', 'minlength', 'maxlength', 'wrap', 'autocomplete' ),
+		'label' => array( 'for' ),
+		'fieldset' => array( 'disabled', 'name' ),
+		'legend' => array(),
+	);
+	foreach ( $form_attributes as $tag => $attributes ) {
+		$attributes = array_merge( $attributes, array( 'id', 'class', 'style', 'title', 'role', 'tabindex', 'data-*', 'aria-label', 'aria-labelledby', 'aria-describedby', 'aria-required', 'aria-invalid', 'aria-hidden', 'aria-live' ) );
+		$allowed_html[ $tag ] = array_merge( isset( $allowed_html[ $tag ] ) ? $allowed_html[ $tag ] : array(), array_fill_keys( $attributes, true ) );
+	}
+	$allowed_html['iframe'] = array(
+		'allow'             => true,
+		'allowfullscreen'   => true,
+		'class'             => true,
+		'frameborder'       => true,
+		'height'            => true,
+		'loading'           => true,
+		'referrerpolicy'    => true,
+		'sandbox'           => true,
+		'src'               => true,
+		'style'             => true,
+		'title'             => true,
+		'width'             => true,
+	);
+	/**
+	 * Filters the HTML allowed in store popup content.
+	 *
+	 * @param array $allowed_html Allowed HTML tags and attributes.
+	 */
+	$allowed_html = apply_filters( 'srmp3_store_popup_allowed_html', $allowed_html );
+
+	$content = wp_kses( $content, $allowed_html );
+
+	return $allow_style_tag && ! empty( $style_blocks ) ? strtr( $content, $style_blocks ) : $content;
+}
+
 function load_post_by_ajax_callback() {
-    check_ajax_referer('sonaar_music_ajax_nonce', 'nonce');
-	$stringValue = sanitize_text_field($_POST['store-id']);
+	check_ajax_referer( 'sonaar_music_ajax_nonce', 'nonce' );
 
-	/*Validation*/
-    $validatedCharacters = ['a','0','1','2','3','4','5','6','7','8','9','-'];
-	$validation = true;
-	for ($i=0; $i<strlen($stringValue); $i++) {
-		if( ! in_array($stringValue[$i], $validatedCharacters)){
-			$validation = false;
+	$post_id_raw = isset( $_POST['id'] ) && is_string( $_POST['id'] ) ? wp_unslash( $_POST['id'] ) : '';
+	$store_id = isset( $_POST['store-id'] ) && is_string( $_POST['store-id'] ) ? wp_unslash( $_POST['store-id'] ) : '';
+	$post_id = filter_var( $post_id_raw, FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) );
+
+	if ( ! preg_match( '/\A[1-9][0-9]*\z/', $post_id_raw ) || false === $post_id || ! preg_match( '/\A(a|0|[1-9][0-9]*)-(0|[1-9][0-9]*)\z/', $store_id, $store_matches ) ) {
+		wp_die( '', '', array( 'response' => 400 ) );
+	}
+	foreach ( array( $store_matches[1], $store_matches[2] ) as $index ) {
+		if ( 'a' !== $index && false === filter_var( $index, FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 0 ) ) ) ) {
+			wp_die( '', '', array( 'response' => 400 ) );
 		}
 	}
-	if(!$validation){
-		wp_die();
+
+	$post = get_post( $post_id );
+	if ( ! $post ) {
+		wp_die( '', '', array( 'response' => 404 ) );
 	}
 
-	$storeID = explode('-', $stringValue); 
+	// Anonymous visitors may load popup content only from public, published, non-protected posts.
+	$post_type_object     = get_post_type_object( $post->post_type );
+	$is_publicly_viewable = is_post_type_viewable( $post_type_object );
+	$can_preview          = current_user_can( 'edit_post', $post_id );
+	if ( ( ! $is_publicly_viewable || 'publish' !== $post->post_status || post_password_required( $post ) ) && ! $can_preview ) {
+		wp_die( '', '', array( 'response' => 403 ) );
+	}
 
-	/* $storeID = array[track number, store number]
-	$storeID[track number] == "a" when store is from the "avalable now" section
-	*/
-	if( $storeID[0] == 'a' ){   //store from the "available now" section
-		$response = get_post_meta(sanitize_text_field($_POST['id']), 'alb_store_list', true );
-		echo  json_encode(do_shortcode(nl2br($response[$storeID[1]]['store-content'])));
-	}else{ //store from the tracklist
-		$response = get_post_meta(sanitize_text_field($_POST['id']), 'alb_tracklist', true );
-		$response = json_encode(do_shortcode(nl2br( $response[$storeID[0]]['song_store_list'][$storeID[1]]['store-content'])));
-		if (strpos($response, '\/wp-admin\/admin-ajax.php')) { //Replace the right post url
-			$postPermalink = nl2br(str_replace(home_url(), '', get_permalink($_POST['id']))); 	
-			$response = str_replace('\/wp-admin\/admin-ajax.php', $postPermalink, $response); 
+	$store_id_parts = explode( '-', $store_id, 2 );
+	$track_index    = $store_id_parts[0];
+	$store_index    = absint( $store_id_parts[1] );
+	$popup_content  = '';
+
+	if ( 'a' === $track_index ) {
+		$store_list = get_post_meta( $post_id, 'alb_store_list', true );
+		if ( is_array( $store_list ) && isset( $store_list[ $store_index ]['store-content'] ) ) {
+			$popup_content = $store_list[ $store_index ]['store-content'];
 		}
-		
-	
-		echo   $response   ;
+	} else {
+		$track_list  = get_post_meta( $post_id, 'alb_tracklist', true );
+		$track_index = absint( $track_index );
+		if ( is_array( $track_list ) && isset( $track_list[ $track_index ]['song_store_list'][ $store_index ]['store-content'] ) ) {
+			$popup_content = $track_list[ $track_index ]['song_store_list'][ $store_index ]['store-content'];
+		}
 	}
-	 wp_die();
+
+	// Sanitize before and after shortcode expansion to protect stored and generated HTML.
+	$popup_content = srmp3_sanitize_store_popup_content( $popup_content );
+	$popup_content = do_shortcode( nl2br( $popup_content ) );
+	$popup_content = srmp3_sanitize_store_popup_content( $popup_content, true );
+
+	// Preserve explicit URLs, especially form actions and shortcode AJAX endpoints.
+	$response = wp_json_encode( $popup_content );
+
+	if ( false === $response ) {
+		wp_die( '', '', array( 'response' => 500 ) );
+	}
+
+	echo $response; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON-encoded, KSES-sanitized HTML.
+	wp_die();
 }
 
 

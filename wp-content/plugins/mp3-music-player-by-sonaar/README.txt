@@ -5,7 +5,7 @@ Donate link: https://sonaar.io
 Requires at least: 4.7
 Tested up to: 7.1
 Requires PHP: 5.6
-Stable tag: 5.14.2
+Stable tag: 5.15
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -342,10 +342,18 @@ Yes, with the pro version, you can click on the 'Add to Favorite' icon to store 
 10. Shortcode Builder: Create, Import and Customize audio players using shortcodes in real-time
 
 == Changelog ==
+= 5.15 =
+- Security: Fixed vulnerability
+- New: CSV playlist importer now supports playlist and WooCommerce product tags
+- New: Added subtitle styling options to the Shortcode Player Builder
+- New: Added a button size option to the Elementor Player Button layout
+- Fix: Gutenberg Site Editor templates are now preserved for playlists and playlist taxonomies
+- Fix: Karaoke lyrics now synchronize correctly when timestamps do not include milliseconds
+- Tweak: Restored the previous Save Changes button label
+
 = 5.14.2 =
 - Fix: Audio Player loading issue in certain configurations
 
-== Changelog ==
 = 5.14.1 =
 - Fix: Multiple selected player post are now correctly loaded with WP 7.1
 

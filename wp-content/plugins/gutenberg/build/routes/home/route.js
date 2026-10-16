@@ -37,7 +37,10 @@ var route = {
   title: () => (0, import_i18n.__)("Home"),
   async canvas() {
     return {
-      isPreview: true
+      isPreview: true,
+      // This route shows the site, so it shows the template around
+      // whatever the canvas resolves to, including a static front page.
+      renderingMode: "template-locked"
     };
   }
 };

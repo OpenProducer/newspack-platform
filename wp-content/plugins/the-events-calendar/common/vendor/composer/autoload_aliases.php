@@ -5,6 +5,13 @@
 namespace {
 
 }
+namespace StellarWP\Migrations {
+    if(!function_exists('\\StellarWP\\Migrations\\migrations')){
+        function migrations(...$args) {
+            return \TEC\Common\StellarWP\Migrations\migrations(...func_get_args());
+        }
+    }
+}
 namespace StellarWP\Shepherd {
     if(!function_exists('\\StellarWP\\Shepherd\\shepherd')){
         function shepherd(...$args) {
@@ -1536,6 +1543,30 @@ namespace TEC\Common {
     array (
     ),
   ),
+  'MyCLabs\\Enum\\Enum' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Enum',
+    'isabstract' => true,
+    'namespace' => 'MyCLabs\\Enum',
+    'extends' => 'TEC\\Common\\MyCLabs\\Enum\\Enum',
+    'implements' => 
+    array (
+      0 => 'JsonSerializable',
+      1 => 'Stringable',
+    ),
+  ),
+  'MyCLabs\\Enum\\PHPUnit\\Comparator' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Comparator',
+    'isabstract' => false,
+    'namespace' => 'MyCLabs\\Enum\\PHPUnit',
+    'extends' => 'TEC\\Common\\MyCLabs\\Enum\\PHPUnit\\Comparator',
+    'implements' => 
+    array (
+    ),
+  ),
   'Nyholm\\Psr7\\Factory\\HttplugFactory' => 
   array (
     'type' => 'class',
@@ -1890,6 +1921,61 @@ namespace TEC\Common {
     'isabstract' => false,
     'namespace' => 'StellarWP\\Assets',
     'extends' => 'TEC\\Common\\StellarWP\\Assets\\Utils',
+    'implements' => 
+    array (
+    ),
+  ),
+  'Nexcess\\Banners\\Banner' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Banner',
+    'isabstract' => false,
+    'namespace' => 'Nexcess\\Banners',
+    'extends' => 'TEC\\Common\\Nexcess\\Banners\\Banner',
+    'implements' => 
+    array (
+    ),
+  ),
+  'Nexcess\\Banners\\BannerFields' => 
+  array (
+    'type' => 'class',
+    'classname' => 'BannerFields',
+    'isabstract' => false,
+    'namespace' => 'Nexcess\\Banners',
+    'extends' => 'TEC\\Common\\Nexcess\\Banners\\BannerFields',
+    'implements' => 
+    array (
+    ),
+  ),
+  'Nexcess\\Banners\\Dismissals' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Dismissals',
+    'isabstract' => false,
+    'namespace' => 'Nexcess\\Banners',
+    'extends' => 'TEC\\Common\\Nexcess\\Banners\\Dismissals',
+    'implements' => 
+    array (
+    ),
+  ),
+  'Nexcess\\Banners\\Package' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Package',
+    'isabstract' => false,
+    'namespace' => 'Nexcess\\Banners',
+    'extends' => 'TEC\\Common\\Nexcess\\Banners\\Package',
+    'implements' => 
+    array (
+    ),
+  ),
+  'Nexcess\\Banners\\Registry' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Registry',
+    'isabstract' => false,
+    'namespace' => 'Nexcess\\Banners',
+    'extends' => 'TEC\\Common\\Nexcess\\Banners\\Registry',
     'implements' => 
     array (
     ),
@@ -4504,6 +4590,297 @@ namespace TEC\Common {
     array (
     ),
   ),
+  'StellarWP\\Migrations\\Abstracts\\Migration_Abstract' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Migration_Abstract',
+    'isabstract' => true,
+    'namespace' => 'StellarWP\\Migrations\\Abstracts',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Abstracts\\Migration_Abstract',
+    'implements' => 
+    array (
+      0 => 'StellarWP\\Migrations\\Contracts\\Migration',
+    ),
+  ),
+  'StellarWP\\Migrations\\Admin\\Assets' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Assets',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Admin',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Admin\\Assets',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Admin\\Provider' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Provider',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Admin',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Admin\\Provider',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Admin\\UI' => 
+  array (
+    'type' => 'class',
+    'classname' => 'UI',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Admin',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Admin\\UI',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\CLI\\Commands' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Commands',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\CLI',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\CLI\\Commands',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\CLI\\Provider' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Provider',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\CLI',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\CLI\\Provider',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Config' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Config',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Config',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Enums\\Log_Type' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Log_Type',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Enums',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Enums\\Log_Type',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Enums\\Operation' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Operation',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Enums',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Enums\\Operation',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Enums\\Status' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Status',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Enums',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Enums\\Status',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Exceptions\\ApiMethodException' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ApiMethodException',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Exceptions',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Exceptions\\ApiMethodException',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Models\\Execution' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Execution',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Models',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Models\\Execution',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Provider' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Provider',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Provider',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\REST\\Endpoints' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Endpoints',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\REST',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\REST\\Endpoints',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\REST\\Provider' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Provider',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\REST',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\REST\\Provider',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Registry' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Registry',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Registry',
+    'implements' => 
+    array (
+      0 => 'ArrayAccess',
+      1 => 'Iterator',
+      2 => 'Countable',
+    ),
+  ),
+  'StellarWP\\Migrations\\Tables\\Migration_Executions' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Migration_Executions',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Tables',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Tables\\Migration_Executions',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Tables\\Migration_Logs' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Migration_Logs',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Tables',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Tables\\Migration_Logs',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Tables\\Provider' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Provider',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Tables',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Tables\\Provider',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Tasks\\Clear_Logs' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Clear_Logs',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Tasks',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Tasks\\Clear_Logs',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Tasks\\Execute' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Execute',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Tasks',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Tasks\\Execute',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Utilities\\Cast' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Cast',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Utilities',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Utilities\\Cast',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Utilities\\Default_Template_Engine' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Default_Template_Engine',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Utilities',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Utilities\\Default_Template_Engine',
+    'implements' => 
+    array (
+      0 => 'StellarWP\\Migrations\\Contracts\\Template_Engine',
+    ),
+  ),
+  'StellarWP\\Migrations\\Utilities\\Log_Download_Handler' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Log_Download_Handler',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Utilities',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Utilities\\Log_Download_Handler',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Utilities\\Logger' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Logger',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Utilities',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Utilities\\Logger',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Utilities\\Migration_UI' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Migration_UI',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Utilities',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Utilities\\Migration_UI',
+    'implements' => 
+    array (
+    ),
+  ),
   'StellarWP\\Models\\Config' => 
   array (
     'type' => 'class',
@@ -6925,6 +7302,16 @@ namespace TEC\Common {
       0 => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Concerns\\RebindsRequestHeaderCollection',
     ),
   ),
+  'StellarWP\\Migrations\\Traits\\API_Methods' => 
+  array (
+    'type' => 'trait',
+    'traitname' => 'API_Methods',
+    'namespace' => 'StellarWP\\Migrations\\Traits',
+    'use' => 
+    array (
+      0 => 'TEC\\Common\\StellarWP\\Migrations\\Traits\\API_Methods',
+    ),
+  ),
   'StellarWP\\Schema\\Traits\\Custom_Table_Query_Methods' => 
   array (
     'type' => 'trait',
@@ -7073,6 +7460,16 @@ namespace TEC\Common {
     'extends' => 
     array (
       0 => 'TEC\\Common\\Monolog\\ResettableInterface',
+    ),
+  ),
+  'Stringable' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'Stringable',
+    'namespace' => '\\',
+    'extends' => 
+    array (
+      0 => 'TEC__Common__Stringable',
     ),
   ),
   'Psr\\Container\\ContainerExceptionInterface' => 
@@ -7373,6 +7770,26 @@ namespace TEC\Common {
     'extends' => 
     array (
       0 => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'StellarWP\\Migrations\\Contracts\\Migration' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'Migration',
+    'namespace' => 'StellarWP\\Migrations\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\StellarWP\\Migrations\\Contracts\\Migration',
+    ),
+  ),
+  'StellarWP\\Migrations\\Contracts\\Template_Engine' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'Template_Engine',
+    'namespace' => 'StellarWP\\Migrations\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\StellarWP\\Migrations\\Contracts\\Template_Engine',
     ),
   ),
   'StellarWP\\Models\\Contracts\\Arrayable' => 

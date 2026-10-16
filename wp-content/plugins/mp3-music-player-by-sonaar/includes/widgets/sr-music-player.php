@@ -5888,7 +5888,7 @@ class SR_Audio_Player extends Widget_Base {
 							'{{WRAPPER}} .srp-play-button .sricon-play' => 'font-size: {{SIZE}}px;',
 				],
 				'condition' 				=> [
-					'player_layout' => 'skin_boxed_tracklist',
+					'player_layout!' => 'skin_float_tracklist',
 					'use_play_label!' => 'true',
 					'control_hide!'     => 'yes'
 				],
@@ -5909,7 +5909,7 @@ class SR_Audio_Player extends Widget_Base {
 							'{{WRAPPER}} .srp-play-circle' => 'height: {{SIZE}}px; width: {{SIZE}}px; border-radius: {{SIZE}}px;',
 				],
 				'condition' 				=> [
-					'player_layout' => 'skin_boxed_tracklist',
+					'player_layout!' => 'skin_float_tracklist',
 					'use_play_label!' => 'true',
 					'control_hide!'     => 'yes'
 				],

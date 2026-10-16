@@ -574,7 +574,21 @@ return array(
 		'textdomain' => 'woocommerce',
 		'apiVersion' => 3,
 		'supports' => array(
-			'interactivity' => true
+			'interactivity' => true,
+			'color' => array(
+				'background' => true,
+				'text' => true
+			),
+			'__experimentalBorder' => array(
+				'color' => true,
+				'radius' => true,
+				'style' => true,
+				'width' => true
+			),
+			'shadow' => true
+		),
+		'selectors' => array(
+			'root' => '.wp-block-woocommerce-add-to-cart-with-options-quantity-selector, .wc-block-add-to-cart-with-options-grouped-product-item-selector .wc-block-components-quantity-selector, .wc-block-cart-item__quantity .wc-block-components-quantity-selector'
 		),
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'viewScriptModule' => 'woocommerce/add-to-cart-with-options-quantity-selector'
@@ -1044,6 +1058,7 @@ return array(
 			)
 		),
 		'viewScriptModule' => 'woocommerce/catalog-sorting',
+		'style' => 'file:../woocommerce/catalog-sorting-style.css',
 		'attributes' => array(
 			'fontSize' => array(
 				'type' => 'string',
@@ -3696,6 +3711,25 @@ return array(
 			'interactivity' => true,
 			'woocommerce' => array(
 				'innerBlockDisplayStyle' => true
+			),
+			'typography' => array(
+				'fontSize' => true,
+				'__experimentalLetterSpacing' => true,
+				'__experimentalTextTransform' => true
+			),
+			'__experimentalBorder' => array(
+				'radius' => true,
+				'__experimentalSkipSerialization' => true
+			),
+			'spacing' => array(
+				'padding' => true,
+				'__experimentalSkipSerialization' => true
+			)
+		),
+		'selectors' => array(
+			'border' => '.wp-block-woocommerce-product-filter-chips:not(.is-style-swatch) .wc-block-product-filter-chips__item',
+			'spacing' => array(
+				'padding' => '.wp-block-woocommerce-product-filter-chips:not(.is-style-swatch) .wc-block-product-filter-chips__item'
 			)
 		),
 		'usesContext' => array(
@@ -4164,6 +4198,9 @@ return array(
 				),
 				'allowEditing' => false
 			),
+			'position' => array(
+				'sticky' => true
+			),
 			'spacing' => array(
 				'blockGap' => true
 			)
@@ -4180,9 +4217,20 @@ return array(
 				'type' => 'boolean',
 				'default' => false
 			),
-			'showFilterDrawer' => array(
-				'type' => 'boolean',
-				'default' => true
+			'overlayMode' => array(
+				'type' => 'string',
+				'enum' => array(
+					'off',
+					'mobile',
+					'always'
+				)
+			),
+			'overlayPosition' => array(
+				'type' => 'string',
+				'enum' => array(
+					'left',
+					'right'
+				)
 			)
 		),
 		'example' => array(
@@ -4418,6 +4466,9 @@ return array(
 			),
 			'html' => false,
 			'__experimentalBorder' => array(
+				'color' => true,
+				'width' => true,
+				'style' => true,
 				'radius' => true,
 				'__experimentalSkipSerialization' => true
 			),
@@ -6627,10 +6678,12 @@ return array(
 			'Saved for Later'
 		),
 		'textdomain' => 'woocommerce',
+		'blockHooks' => array(
+			'woocommerce/cart' => 'after'
+		),
 		'attributes' => array(
 			'columnCount' => array(
-				'type' => 'number',
-				'default' => 5
+				'type' => 'number'
 			)
 		),
 		'allowedBlocks' => array(
@@ -6643,6 +6696,7 @@ return array(
 			),
 			'interactivity' => true,
 			'html' => false,
+			'multiple' => false,
 			'reusable' => false,
 			'spacing' => array(
 				'margin' => true,

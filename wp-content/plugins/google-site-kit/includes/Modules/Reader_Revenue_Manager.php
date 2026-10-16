@@ -67,14 +67,13 @@ use Google\Site_Kit\Modules\Reader_Revenue_Manager\Datapoints\Update_Publication
 use Google\Site_Kit\Modules\Reader_Revenue_Manager\Subscribe_With_Google_Block;
 use Google\Site_Kit\Modules\Reader_Revenue_Manager\Post_Product_ID;
 use Google\Site_Kit\Modules\Reader_Revenue_Manager\Settings;
-use Google\Site_Kit\Modules\Reader_Revenue_Manager\Synchronize_Publication;
+use Google\Site_Kit\Modules\Reader_Revenue_Manager\Synchronization;
 use Google\Site_Kit\Modules\Reader_Revenue_Manager\Tag_Guard;
 use Google\Site_Kit\Modules\Reader_Revenue_Manager\Tag_Matchers;
 use Google\Site_Kit\Modules\Reader_Revenue_Manager\User_Settings;
 use Google\Site_Kit\Modules\Reader_Revenue_Manager\Web_Tag;
-use Google\Site_Kit\Modules\Search_Console\Settings as Search_Console_Settings;
 use Google\Site_Kit_Dependencies\Google\Service\SubscribewithGoogle as Google_Service_SubscribewithGoogle;
-use Google\Site_Kit_Dependencies\Google\Service\Webcontentpublisher as Google_Service_Webcontentpublisher;
+use Google\Site_Kit_Dependencies\Google\Service\WebContentPublisher as Google_Service_WebContentPublisher;
 use Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface;
 use WP_Error;
 
@@ -98,6 +97,20 @@ final class Reader_Revenue_Manager extends Module implements Module_With_Scopes,
 	 * Module slug name.
 	 */
 	const MODULE_SLUG = 'reader-revenue-manager';
+
+	/**
+	 * Web Content Publisher read-only scope.
+	 *
+	 * @since 1.189.0
+	 */
+	const READONLY_SCOPE = 'https://www.googleapis.com/auth/webcontentpublisher.publications.readonly';
+
+	/**
+	 * Web Content Publisher manage scope.
+	 *
+	 * @since 1.189.0
+	 */
+	const MANAGE_SCOPE = 'https://www.googleapis.com/auth/webcontentpublisher.publications.manage';
 
 	/**
 	 * Post_Product_ID instance.
@@ -195,13 +208,21 @@ final class Reader_Revenue_Manager extends Module implements Module_With_Scopes,
 
 		if ( Feature_Flags::enabled( 'rrmExpressSetup' ) ) {
 			$this->user_settings->register();
+
+			add_filter(
+				'googlesitekit_auth_scopes',
+				function ( array $scopes ) {
+					return $this->get_refined_scopes( $scopes );
+				}
+			);
 		}
 
-		$synchronize_publication = new Synchronize_Publication(
+		$synchronization = new Synchronization(
 			$this,
 			$this->user_options
 		);
-		$synchronize_publication->register();
+
+		$synchronization->register();
 
 		if ( $this->is_connected() ) {
 			$this->post_product_id->register();
@@ -233,9 +254,6 @@ final class Reader_Revenue_Manager extends Module implements Module_With_Scopes,
 				);
 			}
 		}
-
-		add_action( 'load-toplevel_page_googlesitekit-dashboard', array( $synchronize_publication, 'maybe_schedule_synchronize_publication' ) );
-		add_action( 'load-toplevel_page_googlesitekit-settings', array( $synchronize_publication, 'maybe_schedule_synchronize_publication' ) );
 
 		// Reader Revenue Manager tag placement logic.
 		add_action( 'template_redirect', array( $this, 'register_tag' ) );
@@ -290,7 +308,7 @@ final class Reader_Revenue_Manager extends Module implements Module_With_Scopes,
 		);
 
 		if ( Feature_Flags::enabled( 'rrmExpressSetup' ) ) {
-			$services['webcontentpublisher'] = new Google_Service_Webcontentpublisher( $client );
+			$services['webcontentpublisher'] = new Google_Service_WebContentPublisher( $client );
 		}
 
 		return $services;
@@ -402,6 +420,7 @@ final class Reader_Revenue_Manager extends Module implements Module_With_Scopes,
 		if ( Feature_Flags::enabled( 'rrmExpressSetup' ) ) {
 			$datapoints['POST:create-publication'] = new Create_Publication(
 				array(
+					'scopes'             => array( self::MANAGE_SCOPE ),
 					'reference_site_url' => $this->context->get_reference_site_url(),
 					'service'            => fn() => $this->get_service( 'webcontentpublisher' ),
 				)
@@ -424,6 +443,7 @@ final class Reader_Revenue_Manager extends Module implements Module_With_Scopes,
 
 			$datapoints['POST:publication'] = new Update_Publication(
 				array(
+					'scopes'   => array( self::MANAGE_SCOPE ),
 					'service'  => fn() => $this->get_service( 'webcontentpublisher' ),
 					'settings' => $settings,
 				)
@@ -458,6 +478,7 @@ final class Reader_Revenue_Manager extends Module implements Module_With_Scopes,
 
 			$datapoints['POST:create-cta'] = new Create_CTA(
 				array(
+					'scopes'   => array( self::MANAGE_SCOPE ),
 					'service'  => fn() => $this->get_service( 'webcontentpublisher' ),
 					'settings' => $settings,
 				)
@@ -465,6 +486,32 @@ final class Reader_Revenue_Manager extends Module implements Module_With_Scopes,
 		}
 
 		return $datapoints;
+	}
+
+	/**
+	 * Refines the requested scopes for new setups and previously granted permissions.
+	 *
+	 * @since 1.189.0
+	 *
+	 * @param string[] $scopes Requested scopes.
+	 * @return string[] Refined scopes.
+	 */
+	private function get_refined_scopes( $scopes ) {
+		$granted_scopes = $this->authentication->get_oauth_client()->get_granted_scopes();
+
+		if (
+			! $this->authentication->is_authenticated() ||
+			! $this->is_connected() ||
+			in_array( self::READONLY_SCOPE, $granted_scopes, true )
+		) {
+			$scopes[] = self::READONLY_SCOPE;
+		}
+
+		if ( in_array( self::MANAGE_SCOPE, $granted_scopes, true ) ) {
+			$scopes[] = self::MANAGE_SCOPE;
+		}
+
+		return $scopes;
 	}
 
 	/**
@@ -582,6 +629,7 @@ final class Reader_Revenue_Manager extends Module implements Module_With_Scopes,
 						'googlesitekit-vendor',
 						'googlesitekit-api',
 						'googlesitekit-data',
+						'googlesitekit-feature-discovery',
 						'googlesitekit-modules',
 						'googlesitekit-notifications',
 						'googlesitekit-datastore-site',
@@ -897,8 +945,15 @@ final class Reader_Revenue_Manager extends Module implements Module_With_Scopes,
 	public function get_feature_metrics() {
 		$settings = $this->get_settings()->get();
 
-		return array(
+		$metrics = array(
 			'rrm_publication_onboarding_state' => $settings['publicationOnboardingState'],
 		);
+
+		if ( Feature_Flags::enabled( 'rrmExpressSetup' ) ) {
+			$configured_ctas                            = (array) $settings['configuredCTAs'];
+			$metrics['rrm_publication_configured_ctas'] = array_values( array_unique( $configured_ctas ) );
+		}
+
+		return $metrics;
 	}
 }

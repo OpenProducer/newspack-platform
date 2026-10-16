@@ -6,7 +6,7 @@ var route = {
       throw: true,
       to: "/template-parts/list/$area",
       params: {
-        area: "all"
+        area: "all-parts"
       }
     });
   }

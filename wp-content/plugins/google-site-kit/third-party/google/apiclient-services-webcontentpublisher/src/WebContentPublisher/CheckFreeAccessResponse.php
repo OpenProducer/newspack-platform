@@ -15,17 +15,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-namespace Google\Site_Kit_Dependencies\Google\Service\Webcontentpublisher;
+namespace Google\Site_Kit_Dependencies\Google\Service\WebContentPublisher;
 
 class CheckFreeAccessResponse extends \Google\Site_Kit_Dependencies\Google\Model
 {
     /**
-     * True if free access should be allowed.
+     * Output only. True if free access should be allowed, false otherwise.
      *
      * @var bool
      */
     public $isAllowed;
     /**
+     * Output only. True if free access should be allowed, false otherwise.
+     *
      * @param bool $isAllowed
      */
     public function setIsAllowed($isAllowed)
@@ -40,4 +42,5 @@ class CheckFreeAccessResponse extends \Google\Site_Kit_Dependencies\Google\Model
         return $this->isAllowed;
     }
 }
-class_alias(CheckFreeAccessResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_Webcontentpublisher_CheckFreeAccessResponse');
+// Adding a class alias for backwards compatibility with the previous class name.
+class_alias(CheckFreeAccessResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_WebContentPublisher_CheckFreeAccessResponse');

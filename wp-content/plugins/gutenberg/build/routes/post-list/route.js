@@ -108,6 +108,13 @@ function applyLockedFilters(view, overrides) {
   );
   return { ...view, filters: [...locked, ...rest] };
 }
+function getApplicablePersistedView(persistedView, defaultLayouts) {
+  if (!persistedView || persistedView.type === void 0 || !defaultLayouts || defaultLayouts[persistedView.type]) {
+    return persistedView;
+  }
+  const { type, ...rest } = persistedView;
+  return Object.keys(rest).length > 0 ? rest : void 0;
+}
 function resolveBaseView(layers, effectiveType) {
   const { defaultView, defaultLayouts, activeViewOverrides } = layers;
   const layoutDefaults = defaultLayouts?.[effectiveType];
@@ -120,7 +127,11 @@ function resolveBaseView(layers, effectiveType) {
   );
 }
 function resolveView(args) {
-  const { defaultView, activeViewOverrides, persistedView, page, search } = args;
+  const { defaultView, defaultLayouts, activeViewOverrides, page, search } = args;
+  const persistedView = getApplicablePersistedView(
+    args.persistedView,
+    defaultLayouts
+  );
   const effectiveType = persistedView?.type ?? activeViewOverrides?.type ?? defaultView?.type;
   const baseView = resolveBaseView(args, effectiveType);
   const view = {
@@ -175,58 +186,47 @@ var { lock, unlock } = (0, import_private_apis.__dangerousOptInToUnstableAPIsOnl
 // routes/post-list/view-utils.ts
 var import_data4 = __toESM(require_data());
 var import_core_data2 = __toESM(require_core_data());
-var DEFAULT_VIEW = {
-  type: "table",
-  sort: {
-    field: "date",
-    direction: "desc"
-  },
-  fields: ["author", "status", "date"],
-  titleField: "title",
-  mediaField: "featured_media",
-  descriptionField: "excerpt"
-};
-var DEFAULT_TABLE_LAYOUT = {
-  layout: {
-    styles: {
-      author: {
-        align: "start"
-      }
-    }
-  }
-};
-function getActiveViewOverridesForTab(slug) {
-  if (slug === "all") {
-    return {
-      ...DEFAULT_TABLE_LAYOUT
-    };
-  }
+
+// routes/lock-unlock/index.ts
+var import_private_apis2 = __toESM(require_private_apis());
+var { lock: lock2, unlock: unlock2 } = (0, import_private_apis2.__dangerousOptInToUnstableAPIsOnlyForCoreModules)(
+  "I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.",
+  "@wordpress/routes"
+);
+
+// routes/post-list/view-utils.ts
+async function loadPostTypeViewConfig(postType) {
+  const config = await unlock2((0, import_data4.resolveSelect)(import_core_data2.store)).getViewConfig(
+    "postType",
+    postType
+  );
   return {
-    ...DEFAULT_TABLE_LAYOUT,
-    filters: [
-      {
-        field: "status",
-        operator: "is",
-        value: slug
-      }
-    ]
+    default_view: config?.default_view,
+    default_layouts: config?.default_layouts,
+    view_list: config?.view_list
   };
 }
-function getDefaultView(postType) {
-  return {
-    ...DEFAULT_VIEW,
-    showLevels: postType?.hierarchical
-  };
+function getActiveViewOverrides(viewList, slug) {
+  return viewList?.find((v) => v.slug === slug)?.view ?? {};
 }
 async function ensureView(type, slug, search) {
-  const postTypeObject = await (0, import_data4.resolveSelect)(import_core_data2.store).getPostType(type);
-  const defaultView = getDefaultView(postTypeObject);
+  const {
+    default_view: defaultView,
+    default_layouts: defaultLayouts,
+    view_list: viewList
+  } = await loadPostTypeViewConfig(type);
+  if (!defaultView) {
+    throw new Error(
+      `Missing view configuration for the ${type} post type.`
+    );
+  }
   return loadView({
     kind: "postType",
     name: type,
     slug: "default-new",
     defaultView,
-    activeViewOverrides: getActiveViewOverridesForTab(slug ?? "all"),
+    defaultLayouts,
+    activeViewOverrides: getActiveViewOverrides(viewList, slug ?? "all"),
     queryParams: search
   });
 }

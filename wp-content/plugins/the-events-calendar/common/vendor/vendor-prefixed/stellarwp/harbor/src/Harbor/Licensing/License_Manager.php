@@ -235,7 +235,7 @@ class License_Manager {
 			}
 
 			$this->repository->record_validation_failure( $key, $result, $this->get_validation_retention_seconds() );
-			$this->repository->set_products( $result );
+			$this->record_products_error( $key, $result );
 
 			return $result;
 		}
@@ -350,7 +350,10 @@ class License_Manager {
 	}
 
 	/**
-	 * Flush the cached product catalog and re-fetch from the API.
+	 * Re-fetch the product catalog from the API, bypassing the cache.
+	 *
+	 * A successful response replaces the cached catalog. A definitive license rejection
+	 * clears it; transient or ambiguous failures preserve the last known-good catalog.
 	 *
 	 * @since 1.0.0
 	 *
@@ -368,8 +371,6 @@ class License_Manager {
 				[ 'status' => 422 ]
 			);
 		}
-
-		$this->repository->delete_products();
 
 		return $this->fetch_and_cache( $key, $domain );
 	}
@@ -462,7 +463,7 @@ class License_Manager {
 				)
 			);
 
-			$this->repository->set_products( $result );
+			$this->record_products_error( $key, $result );
 
 			return $result;
 		}
@@ -508,14 +509,72 @@ class License_Manager {
 					$key,
 					$e->getMessage()
 				),
-				[ 'status' => Error_Code::http_status( Error_Code::INVALID_KEY ) ]
+				[
+					'status'           => Error_Code::http_status( Error_Code::INVALID_KEY ),
+					'license_rejected' => $this->is_license_rejection( $e ),
+				]
 			);
 		} catch ( ApiErrorExceptionInterface $e ) {
-			return new WP_Error( $e->errorCode(), $e->getMessage(), array_merge( [ 'status' => $e->statusCode() ], $e->errorPayLoad() ?? [] ) );
+			return new WP_Error(
+				$e->errorCode(),
+				$e->getMessage(),
+				array_merge(
+					$e->errorPayLoad() ?? [],
+					[
+						'status'           => $e->statusCode(),
+						'license_rejected' => $this->is_license_rejection( $e ),
+					]
+				)
+			);
 		} catch ( \Throwable $e ) {
 			static::debug_log( sprintf( 'Products API exception: %s', $e->getMessage() ) );
 			return new WP_Error( Error_Code::INVALID_RESPONSE, __( 'An unexpected error occurred.', 'tribe-common' ), [ 'status' => 500 ] );
 		}
+	}
+
+	/**
+	 * Only structured Licensing responses can revoke the cached purchases.
+	 * The client's fallback code for an unstructured HTTP 404 is also not_found,
+	 * so the exception code alone is not sufficient evidence of rejection.
+	 *
+	 * @param ApiErrorExceptionInterface $error The decoded API error.
+	 *
+	 * @return bool
+	 */
+	private function is_license_rejection( ApiErrorExceptionInterface $error ): bool {
+		$payload = $error->errorPayLoad();
+		$details = $payload['error'] ?? null;
+
+		if ( ! is_array( $details ) ) {
+			return false;
+		}
+
+		$code = $details['code'] ?? null;
+
+		if ( $error->statusCode() === 404 ) {
+			return in_array( $code, [ 'not_found', 'products_not_found' ], true );
+		}
+
+		return $error->statusCode() === 403 && $code === 'license_inactive';
+	}
+
+	/**
+	 * Record a fetch failure, invalidating purchases only for the stored key.
+	 * A rejected replacement key must not discard the existing key's purchases.
+	 *
+	 * @param string   $key   The key used for this request.
+	 * @param WP_Error $error The API failure.
+	 *
+	 * @return void
+	 */
+	private function record_products_error( string $key, WP_Error $error ): void {
+		$data = $error->get_error_data();
+
+		if ( $key === $this->get_key() && is_array( $data ) && ! empty( $data['license_rejected'] ) ) {
+			$this->repository->invalidate_products();
+		}
+
+		$this->repository->set_products( $error );
 	}
 
 	/**

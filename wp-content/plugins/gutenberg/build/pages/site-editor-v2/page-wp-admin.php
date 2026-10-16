@@ -328,10 +328,14 @@ function gutenberg_site_editor_v2_wp_admin_render_page() {
 		);
 		?>
 	</div>
-	<div id="site-editor-v2-wp-admin-app"></div>
+	<?php
+	// Core's pre-CSS Modules Boot layout uses this class for viewport sizing.
+	// Remove it when the minimum supported WordPress version includes the Boot
+	// changes from Gutenberg #81756.
+	?>
+	<div id="site-editor-v2-wp-admin-app" class="boot-layout-container"></div>
 	<?php
 }
 
 // Hook the enqueue function to admin_enqueue_scripts
 add_action( 'admin_enqueue_scripts', 'gutenberg_site_editor_v2_wp_admin_enqueue_scripts' );
-

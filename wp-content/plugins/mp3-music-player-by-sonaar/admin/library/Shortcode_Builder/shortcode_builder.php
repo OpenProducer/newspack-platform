@@ -312,6 +312,7 @@ class SRMP3_ShortcodeBuilder {
             // General
             'hide_artwork',
             'hide_metas',
+            'hide_album_subtitle',
             'display_control_artwork',
             'show_control_on_hover',
             'artwork_background',
@@ -1831,6 +1832,12 @@ class SRMP3_ShortcodeBuilder {
             'type'          => 'switch',
         ) );
         $shortcode_options->add_field( array(
+            'name'          => esc_html__('Hide Subtitle', 'sonaar-music'),
+            'id'            => 'hide_album_subtitle',
+            'type'          => 'switch',
+        ) );
+
+        $shortcode_options->add_field( array(
             'id'            => 'css_player_metas',
             'type'          => 'typography',
             'name'          => esc_html__('Heading Style', 'sonaar-music'),
@@ -1853,6 +1860,19 @@ class SRMP3_ShortcodeBuilder {
                     
                     ),
                 )),
+            ),
+        ) );
+        $shortcode_options->add_field( array(
+            'id'            => 'css_album_subtitle',
+            'type'          => 'typography',
+            'name'          => esc_html__('Subtitle Typography', 'sonaar-music'),
+            'fields'        => array(
+                'background' => false,
+            ),
+            'attributes'    => array(
+                'data-target-selector'    => '.srp_subtitle',
+                'data-conditional-id'     => 'hide_album_subtitle',
+                'data-conditional-value'  => 'false',
             ),
         ) );
         $player_meta_group = $shortcode_options->add_field( array(

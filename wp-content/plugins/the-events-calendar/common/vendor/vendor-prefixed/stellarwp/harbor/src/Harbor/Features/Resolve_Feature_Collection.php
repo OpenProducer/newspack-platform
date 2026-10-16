@@ -2,6 +2,7 @@
 
 namespace TEC\Common\LiquidWeb\Harbor\Features;
 
+use TEC\Common\LiquidWeb\Harbor\Portal\Catalog_Collection;
 use TEC\Common\LiquidWeb\Harbor\Portal\Catalog_Repository;
 use TEC\Common\LiquidWeb\Harbor\Portal\Results\Catalog_Feature;
 use TEC\Common\LiquidWeb\Harbor\Portal\Results\Product_Catalog;
@@ -24,7 +25,7 @@ use WP_Error;
  * Joins catalog and licensing data to produce a resolved Feature_Collection.
  *
  * For each catalog feature, computes is_available and in_catalog_tier by checking
- * the product entry's capabilities array and the user's licensed tier rank.
+ * effective capability grants across purchases and the brand's licensed tier rank.
  * dot.org and free-tier (rank 0) features are unconditionally available regardless of capabilities.
  * A legacy license whose slug matches the catalog feature also grants availability (and counts
  * as in-tier) when it is active, has a non-empty key, and has opted in via `use_for_updates`.
@@ -125,7 +126,7 @@ class Resolve_Feature_Collection {
 	/**
 	 * Fetches catalog and licensing data and resolves them into a Feature_Collection.
 	 *
-	 * Iterates each catalog product, finds the matching license entry,
+	 * Iterates each catalog product, applies effective capability grants,
 	 * and hydrates Feature objects with computed is_available values.
 	 *
 	 * @since 1.0.0
@@ -159,20 +160,20 @@ class Resolve_Feature_Collection {
 			}
 		}
 
-		$collection      = new Feature_Collection();
-		$legacy_licenses = $this->build_legacy_license_map();
+		$collection         = new Feature_Collection();
+		$legacy_licenses    = $this->build_legacy_license_map();
+		$capability_sources = $this->resolve_capability_sources( $products, $catalog );
 
 		foreach ( $catalog as $product ) {
 			if ( ! $product instanceof Product_Catalog ) {
 				continue;
 			}
 
-			$capabilities      = $this->resolve_capabilities( $product, $products );
 			$license_tier_rank = $this->resolve_license_tier_rank( $product, $products );
 
 			foreach ( $product->get_features() as $catalog_feature ) {
 				$legacy_license = $legacy_licenses[ $catalog_feature->get_slug() ] ?? null;
-				$feature        = $this->hydrate_feature( $catalog_feature, $product, $capabilities, $license_tier_rank, $legacy_license );
+				$feature        = $this->hydrate_feature( $catalog_feature, $product, $capability_sources, $license_tier_rank, $legacy_license );
 
 				if ( is_wp_error( $feature ) ) {
 					static::debug_log( $feature->get_error_message() );
@@ -209,38 +210,50 @@ class Resolve_Feature_Collection {
 	}
 
 	/**
-	 * Resolves the capabilities granted by the license for a given product.
+	 * Collects the purchase sources of every effective capability on this site.
 	 *
-	 * Returns null when no license is present or when the license is known to be
-	 * ineffective for this domain (any non-valid validation_status). Returning null
-	 * causes paid-tier features to render as locked rather than "Unavailable".
+	 * Product slugs describe purchases. Capabilities can cover features in any
+	 * brand family. Null preserves the unlicensed display when no source is effective.
 	 *
-	 * @since 1.0.0
-	 *
-	 * @param Product_Catalog    $product  The catalog product.
 	 * @param Product_Collection $products The licensing product collection.
+	 * @param Catalog_Collection $catalog  The catalog used for source display names.
 	 *
-	 * @return string[]|null The capabilities array, or null if the product has no effective license.
+	 * @return array<string, array<string, array<string, string>>>|null Sources by capability, or null when no purchase is effective.
 	 */
-	private function resolve_capabilities( Product_Catalog $product, Product_Collection $products ): ?array {
-		$license = $products->get_activated_entry( $product->get_product_slug() );
+	private function resolve_capability_sources( Product_Collection $products, Catalog_Collection $catalog ): ?array {
+		$sources = null;
 
-		if ( null === $license ) {
-			return null;
+		foreach ( $products as $license ) {
+			if ( ! $license->get_activated_here() || $this->is_license_invalid( $license->get_validation_status() ) ) {
+				continue;
+			}
+
+			$sources ??= [];
+			$product   = $catalog->get( $license->get_product_slug() );
+			$tier      = $product !== null ? $product->get_tier_by_slug( $license->get_tier() ) : null;
+			$source    = [
+				'type'         => 'purchase',
+				'product_slug' => $license->get_product_slug(),
+				'tier'         => $license->get_tier(),
+				'product_name' => $product !== null ? $product->get_product_name() : $license->get_product_slug(),
+				'tier_name'    => $tier !== null ? $tier->get_name() : $license->get_tier(),
+			];
+			$source_id = $license->get_product_slug() . ':' . $license->get_tier();
+
+			foreach ( $license->get_capabilities() as $capability ) {
+				$sources[ $capability ][ $source_id ] = $source;
+			}
 		}
 
-		if ( $this->is_license_invalid( $license->get_validation_status() ) ) {
-			return null;
-		}
-
-		return $license->get_capabilities();
+		return $sources;
 	}
 
 	/**
-	 * Returns the rank of the user's licensed tier for a product, or -1 if unlicensed.
+	 * Returns the rank of the user's highest effective tier for a product, or -1 if unlicensed.
 	 *
-	 * Returns -1 when the license is known to be ineffective for this domain, matching
-	 * the resolve_capabilities() guard so both flags are consistent.
+	 * Only entries activated here and not known to be ineffective count, matching
+	 * the resolve_capability_sources() guard so both flags are consistent. A product
+	 * can have several entries, and an invalid one must not hide a valid one.
 	 *
 	 * @since 1.0.0
 	 *
@@ -250,19 +263,21 @@ class Resolve_Feature_Collection {
 	 * @return int The license tier rank, or -1 if no license covers this product.
 	 */
 	private function resolve_license_tier_rank( Product_Catalog $product, Product_Collection $products ): int {
-		$license = $products->get_activated_entry( $product->get_product_slug() );
+		$rank = -1;
 
-		if ( null === $license ) {
-			return -1;
+		foreach ( $products->get_all_by_slug( $product->get_product_slug() ) as $license ) {
+			if ( ! $license->get_activated_here() || $this->is_license_invalid( $license->get_validation_status() ) ) {
+				continue;
+			}
+
+			$tier = $product->get_tier_by_slug( $license->get_tier() );
+
+			if ( $tier !== null ) {
+				$rank = max( $rank, $tier->get_rank() );
+			}
 		}
 
-		if ( $this->is_license_invalid( $license->get_validation_status() ) ) {
-			return -1;
-		}
-
-		$tier = $product->get_tier_by_slug( $license->get_tier() );
-
-		return $tier !== null ? $tier->get_rank() : -1;
+		return $rank;
 	}
 
 	/**
@@ -296,18 +311,18 @@ class Resolve_Feature_Collection {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param Catalog_Feature     $catalog_feature   The catalog feature entry.
-	 * @param Product_Catalog     $product           The parent catalog product.
-	 * @param string[]|null       $capabilities      The license capabilities, or null if unlicensed.
-	 * @param int                 $license_tier_rank The user's licensed tier rank, or -1 if unlicensed.
-	 * @param Legacy_License|null $legacy_license    The legacy license entry whose slug matches this feature, or null if none.
+	 * @param Catalog_Feature                                          $catalog_feature    The catalog feature entry.
+	 * @param Product_Catalog                                          $product            The parent catalog product.
+	 * @param array<string, array<string, array<string, string>>>|null $capability_sources The effective purchase sources by capability, or null if unlicensed.
+	 * @param int                                                      $license_tier_rank  The user's licensed tier rank, or -1 if unlicensed.
+	 * @param Legacy_License|null                                      $legacy_license     The legacy license entry whose slug matches this feature, or null if none.
 	 *
 	 * @return Feature|WP_Error The hydrated feature, or WP_Error for unknown types.
 	 */
 	private function hydrate_feature(
 		Catalog_Feature $catalog_feature,
 		Product_Catalog $product,
-		?array $capabilities,
+		?array $capability_sources,
 		int $license_tier_rank,
 		?Legacy_License $legacy_license
 	) {
@@ -333,14 +348,29 @@ class Resolve_Feature_Collection {
 			&& $legacy_license->key !== ''
 			&& $legacy_license->use_for_updates;
 
-		if ( $has_legacy_grant || $catalog_feature->is_wporg() || $minimum_rank === 0 ) {
-			// An active legacy grant, WordPress.org, and free-tier features are all unconditionally available.
-			$is_available    = true;
-			$in_catalog_tier = true;
-		} else {
-			$is_available    = $capabilities !== null && in_array( $catalog_feature->get_slug(), $capabilities, true );
-			$in_catalog_tier = $capabilities !== null && $license_tier_rank >= $minimum_rank;
+		$access_sources = array_values( $capability_sources[ $catalog_feature->get_slug() ] ?? [] );
+
+		if ( $catalog_feature->is_wporg() || $minimum_rank === 0 ) {
+			$access_sources[] = [ 'type' => 'free' ];
 		}
+
+		if ( $has_legacy_grant ) {
+			$access_sources[] = [ 'type' => 'legacy' ];
+		}
+
+		// Cross-product purchases include their granted features without changing
+		// the existing distinction between a brand tier and its bonus capabilities.
+		$has_cross_product_grant = false;
+		foreach ( $access_sources as $source ) {
+			if ( $source['type'] === 'purchase' && $source['product_slug'] !== $product->get_product_slug() ) {
+				$has_cross_product_grant = true;
+				break;
+			}
+		}
+
+		$is_available    = $access_sources !== [];
+		$in_catalog_tier = $has_legacy_grant || $catalog_feature->is_wporg() || $minimum_rank === 0
+			|| $has_cross_product_grant || ( $capability_sources !== null && $license_tier_rank >= $minimum_rank );
 
 		$data = [
 			'slug'              => $catalog_feature->get_slug(),
@@ -350,6 +380,7 @@ class Resolve_Feature_Collection {
 			'description'       => $catalog_feature->get_description(),
 			'type'              => $catalog_kind,
 			'is_available'      => $is_available,
+			'access_sources'    => $access_sources,
 			'in_catalog_tier'   => $in_catalog_tier,
 			'documentation_url' => $catalog_feature->get_documentation_url(),
 			'release_date'      => $catalog_feature->get_release_date(),

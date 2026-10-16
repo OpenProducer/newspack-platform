@@ -4,9 +4,9 @@ var React = (() => {
     return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
   };
 
-  // ../../node_modules/react/cjs/react.development.js
+  // ../../node_modules/.store/react@18.3.1-cCN48hRLMdFLNniBzDqPaA/node_modules/react/cjs/react.development.js
   var require_react_development = __commonJS({
-    "../../node_modules/react/cjs/react.development.js"(exports, module) {
+    "../../node_modules/.store/react@18.3.1-cCN48hRLMdFLNniBzDqPaA/node_modules/react/cjs/react.development.js"(exports, module) {
       "use strict";
       if (true) {
         (function() {
@@ -1878,9 +1878,9 @@ var React = (() => {
     }
   });
 
-  // ../../node_modules/react/index.js
+  // ../../node_modules/.store/react@18.3.1-cCN48hRLMdFLNniBzDqPaA/node_modules/react/index.js
   var require_react = __commonJS({
-    "../../node_modules/react/index.js"(exports, module) {
+    "../../node_modules/.store/react@18.3.1-cCN48hRLMdFLNniBzDqPaA/node_modules/react/index.js"(exports, module) {
       "use strict";
       if (false) {
         module.exports = null;

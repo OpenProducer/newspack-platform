@@ -322,6 +322,17 @@ final class License_Repository {
 	}
 
 	/**
+	 * Discard rejected purchases while preserving the fetch history.
+	 *
+	 * @return void
+	 */
+	public function invalidate_products(): void {
+		$state                               = $this->read_products_state();
+		$state[ self::STATE_KEY_COLLECTION ] = null;
+		update_option( self::PRODUCTS_STATE_OPTION_NAME, $state, false );
+	}
+
+	/**
 	 * Delete the entire license state option.
 	 *
 	 * @since 1.0.0

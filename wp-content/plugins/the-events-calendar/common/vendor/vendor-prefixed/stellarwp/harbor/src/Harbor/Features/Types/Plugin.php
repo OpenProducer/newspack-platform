@@ -109,6 +109,16 @@ final class Plugin extends Feature implements Installable {
 	public function get_update_data( Catalog_Feature $catalog_feature, Download_Url_Builder $url_builder ): array {
 		$installed_version = $this->get_installed_version() ?? '';
 		$catalog_version   = $catalog_feature->get_version() ?? '';
+		$changelog         = $catalog_feature->get_changelog();
+
+		$sections = [
+			'description' => $this->get_description(),
+		];
+
+		// WordPress renders each section as a tab in the plugin details modal; only add the changelog when we have one.
+		if ( $changelog !== null && $changelog !== '' ) {
+			$sections['changelog'] = $changelog;
+		}
 
 		return [
 			'name'              => $this->get_name(),
@@ -117,9 +127,7 @@ final class Plugin extends Feature implements Installable {
 			'package'           => $url_builder->build( $this->get_slug() ),
 			'url'               => $this->get_documentation_url(),
 			'author'            => '',
-			'sections'          => [
-				'description' => $this->get_description(),
-			],
+			'sections'          => $sections,
 			'plugin_file'       => $this->get_plugin_file(),
 			'installed_version' => $installed_version,
 			'has_update'        => $installed_version !== '' && $catalog_version !== '' && version_compare( $catalog_version, $installed_version, '>' ),
@@ -177,6 +185,8 @@ final class Plugin extends Feature implements Installable {
 
 		$plugin_data = get_plugin_data( trailingslashit( WP_PLUGIN_DIR ) . $this->get_plugin_file() );
 
-		return $plugin_data['Version'] ?? null;
+		// get_plugin_data() fills every header key, defaulting to an empty string,
+		// so Version is always present and the null coalesce never applied.
+		return $plugin_data['Version'];
 	}
 }

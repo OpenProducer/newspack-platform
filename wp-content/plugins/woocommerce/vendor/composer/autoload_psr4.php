@@ -15,5 +15,6 @@ return array(
     'Automattic\\WooCommerce\\Vendor\\' => array($baseDir . '/lib/packages'),
     'Automattic\\WooCommerce\\Blueprint\\' => array($baseDir . '/packages/blueprint/src'),
     'Automattic\\WooCommerce\\' => array($baseDir . '/src'),
+    'Automattic\\TracksSharedUtils\\' => array($vendorDir . '/automattic/tracks-shared-utils/php/src'),
     'Automattic\\Jetpack\\Autoloader\\' => array($vendorDir . '/automattic/jetpack-autoloader/src'),
 );

@@ -50,7 +50,7 @@ return array(
 	array(
 		'handle' => 'wp-edit-site',
 		'path' => 'edit-site/style',
-		'dependencies' => array('wp-block-editor', 'wp-block-library', 'wp-commands', 'wp-components', 'wp-core-data', 'wp-editor', 'wp-media-utils', 'wp-notices', 'wp-patterns', 'wp-preferences', 'wp-widgets'),
+		'dependencies' => array('wp-block-editor', 'wp-block-library', 'wp-commands', 'wp-components', 'wp-core-data', 'wp-editor', 'wp-notices', 'wp-patterns', 'wp-preferences', 'wp-widgets'),
 	),
 	array(
 		'handle' => 'wp-edit-widgets',
@@ -100,7 +100,7 @@ return array(
 	array(
 		'handle' => 'wp-reusable-blocks',
 		'path' => 'reusable-blocks/style',
-		'dependencies' => array('wp-block-editor', 'wp-components', 'wp-core-data', 'wp-notices'),
+		'dependencies' => array(),
 	),
 	array(
 		'handle' => 'wp-widgets',

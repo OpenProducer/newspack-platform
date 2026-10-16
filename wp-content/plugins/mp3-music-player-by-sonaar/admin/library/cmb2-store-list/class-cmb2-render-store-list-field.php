@@ -221,13 +221,19 @@ class CMB2_Render_Store_list_Field extends CMB2_Type_Base {
 		if ( ! is_array( $meta_value ) || ! $field_args['repeatable'] ) {
 			return $check;
 		}
- 		$allowed_targets = array( '', '_self', '_blank' );
+		$allowed_targets = array( '', '_self', '_blank' );
 		foreach ( $meta_value as $key => $val ) {
-			//Sanitaze all field value except "store-link"
-			$val['store-icon'] = sanitize_text_field($val['store-icon']);
-			$val['store-name'] = sanitize_text_field($val['store-name']);
-			if ( in_array( $val['store-target'], $allowed_targets ) ) {
-				$val['store-target'] = sanitize_text_field($val['store-target']);
+			if ( ! is_array( $val ) ) {
+				unset( $meta_value[ $key ] );
+				continue;
+			}
+			$val['store-icon'] = isset( $val['store-icon'] ) ? sanitize_text_field( $val['store-icon'] ) : '';
+			$val['store-name'] = isset( $val['store-name'] ) ? sanitize_text_field( $val['store-name'] ) : '';
+			if ( isset( $val['store-content'] ) ) {
+				$val['store-content'] = srmp3_sanitize_store_popup_content( $val['store-content'] );
+			}
+			if ( isset( $val['store-target'] ) && in_array( $val['store-target'], $allowed_targets, true ) ) {
+				$val['store-target'] = sanitize_text_field( $val['store-target'] );
 			} else {
 				$val['store-target'] = ''; // Set to default or empty if not valid
 			}

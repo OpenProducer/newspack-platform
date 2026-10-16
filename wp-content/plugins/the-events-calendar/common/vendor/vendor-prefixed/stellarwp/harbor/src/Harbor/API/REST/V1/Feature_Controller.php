@@ -355,8 +355,27 @@ class Feature_Controller extends WP_REST_Controller {
 				'readonly'    => true,
 				'context'     => [ 'view' ],
 			],
+			'access_sources'    => [
+				'description' => __( 'The grants that make the feature available: purchases activated on this site, free access, or an opted-in legacy license.', 'tribe-common' ),
+				'type'        => 'array',
+				'readonly'    => true,
+				'context'     => [ 'view' ],
+				'items'       => [
+					'type'       => 'object',
+					'properties' => [
+						'type'         => [
+							'type' => 'string',
+							'enum' => [ 'purchase', 'free', 'legacy' ],
+						],
+						'product_slug' => [ 'type' => 'string' ],
+						'tier'         => [ 'type' => 'string' ],
+						'product_name' => [ 'type' => 'string' ],
+						'tier_name'    => [ 'type' => 'string' ],
+					],
+				],
+			],
 			'in_catalog_tier'   => [
-				'description' => __( "True when the user's licensed tier covers this feature's minimum tier.", 'tribe-common' ),
+				'description' => __( "True when the user's licensed tier covers this feature's minimum tier, or another product's purchase includes the feature.", 'tribe-common' ),
 				'type'        => 'boolean',
 				'readonly'    => true,
 				'context'     => [ 'view' ],

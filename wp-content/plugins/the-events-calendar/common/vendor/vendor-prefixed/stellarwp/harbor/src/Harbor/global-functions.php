@@ -269,7 +269,7 @@ if ( ! function_exists( 'lw_harbor_display_legacy_license_page_notice' ) ) {
 	 *
 	 * Intended to be called by consuming plugins on their own license settings
 	 * pages to inform users that licensing is now managed centrally through
-	 * Liquid Web's unified system.
+	 * Nexcess's unified system.
 	 *
 	 * @since 1.0.0
 	 *

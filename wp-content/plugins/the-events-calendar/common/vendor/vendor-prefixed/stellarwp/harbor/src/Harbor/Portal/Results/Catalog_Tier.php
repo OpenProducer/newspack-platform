@@ -67,6 +67,12 @@ final class Catalog_Tier {
 	 * @return self
 	 */
 	public static function from_array( array $data ): self {
+		// Portal uses capabilities; earlier catalog fixtures used herald_slugs.
+		// Preserve Harbor's existing serialized field while accepting either input.
+		if ( isset( $data['capabilities'] ) && is_array( $data['capabilities'] ) ) {
+			$data['herald_slugs'] = $data['capabilities'];
+		}
+
 		return new self(
 			[
 				'tier_slug'    => Cast::to_string( $data['tier_slug'] ?? '' ),
@@ -77,10 +83,31 @@ final class Catalog_Tier {
 				'herald_slugs' => isset( $data['herald_slugs'] ) && is_array( $data['herald_slugs'] )
 					? array_map( [ Cast::class, 'to_string' ], array_values( $data['herald_slugs'] ) )
 					: [],
-				'purchase_url' => Cast::to_string( $data['purchase_url'] ?? '' ),
-				'upgrade_url'  => Cast::to_string( $data['upgrade_url'] ?? '' ),
+				'purchase_url' => self::web_url( $data['purchase_url'] ?? '' ),
+				'upgrade_url'  => self::web_url( $data['upgrade_url'] ?? '' ),
 			]
 		);
+	}
+
+	/**
+	 * Keeps a catalog link only when it is http(s), sanitized for storage.
+	 *
+	 * The scheme is checked first because esc_url_raw() prepends one to input
+	 * without a scheme, which would invent a destination the catalog never gave.
+	 *
+	 * @param mixed $value The raw catalog value.
+	 *
+	 * @return string The sanitized URL, or an empty string.
+	 */
+	private static function web_url( $value ): string {
+		$url    = trim( Cast::to_string( $value ) );
+		$scheme = strtolower( (string) wp_parse_url( $url, PHP_URL_SCHEME ) );
+
+		if ( ! in_array( $scheme, [ 'http', 'https' ], true ) ) {
+			return '';
+		}
+
+		return esc_url_raw( $url, [ 'http', 'https' ] );
 	}
 
 	/**

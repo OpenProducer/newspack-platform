@@ -12,8 +12,8 @@
  *
  * @global int $comment_depth
  *
- * @param WP_Comment[] $comments        The array of comments.
- * @param WP_Block     $block           Block instance.
+ * @param WP_Comment[] $comments The array of comments.
+ * @param WP_Block     $block    Block instance.
  * @return string
  */
 function gutenberg_block_core_comment_template_render_comments( $comments, $block ) {

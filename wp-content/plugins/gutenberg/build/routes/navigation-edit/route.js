@@ -96,6 +96,9 @@ var route = {
     if (navigation?.title?.rendered) {
       return (0, import_html_entities.decodeEntities)(navigation.title.rendered);
     }
+    if (navigation?.title?.raw) {
+      return navigation.title.raw;
+    }
     return (0, import_i18n.__)("Navigation");
   },
   canvas: async ({

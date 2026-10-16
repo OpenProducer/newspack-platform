@@ -140,13 +140,13 @@ class Sonaar_Music_Widget extends WP_Widget{
                 }else{
                     $tracklistGrid_col_mobile = false;
                 }
-                $player_datas .= ' data-col="' . $tracklistGrid_col_desktop . '"';
-                $player_datas .= ($tracklistGrid_col_tablet !== false )?' data-col-tablet="' . $tracklistGrid_col_tablet . '"' : '';
-                $player_datas .= ($tracklistGrid_col_mobile !== false )?' data-col-mobile="' . $tracklistGrid_col_mobile . '"' : '';
+                $player_datas .= ' data-col="' . esc_attr( $tracklistGrid_col_desktop ) . '"';
+                $player_datas .= ($tracklistGrid_col_tablet !== false )?' data-col-tablet="' . esc_attr( $tracklistGrid_col_tablet ) . '"' : '';
+                $player_datas .= ($tracklistGrid_col_mobile !== false )?' data-col-mobile="' . esc_attr( $tracklistGrid_col_mobile ) . '"' : '';
             }
-            $player_datas .= (isset($this->shortcodeParams['tracklist_soundwave_color']) && $this->shortcodeParams['tracklist_soundwave_color'] != '') ? ' data-tracklist-wave-color="' . $this->shortcodeParams['tracklist_soundwave_color'] . '"' : '';
-            $player_datas .= (isset($this->shortcodeParams['tracklist_soundwave_progress_color']) && $this->shortcodeParams['tracklist_soundwave_progress_color'] != '') ? ' data-tracklist-wave-progress-color="' . $this->shortcodeParams['tracklist_soundwave_progress_color'] . '"' : '';
-            $player_datas .= (isset($this->shortcodeParams['tracklist_soundwave_style']) && $this->shortcodeParams['tracklist_soundwave_style'] != 'default') ? ' data-tracklist-soundwave-style="' . $this->shortcodeParams['tracklist_soundwave_style'] . '"' : '';
+            $player_datas .= (isset($this->shortcodeParams['tracklist_soundwave_color']) && $this->shortcodeParams['tracklist_soundwave_color'] != '') ? ' data-tracklist-wave-color="' . esc_attr( $this->shortcodeParams['tracklist_soundwave_color'] ) . '"' : '';
+            $player_datas .= (isset($this->shortcodeParams['tracklist_soundwave_progress_color']) && $this->shortcodeParams['tracklist_soundwave_progress_color'] != '') ? ' data-tracklist-wave-progress-color="' . esc_attr( $this->shortcodeParams['tracklist_soundwave_progress_color'] ) . '"' : '';
+            $player_datas .= (isset($this->shortcodeParams['tracklist_soundwave_style']) && $this->shortcodeParams['tracklist_soundwave_style'] != 'default') ? ' data-tracklist-soundwave-style="' . esc_attr( $this->shortcodeParams['tracklist_soundwave_style'] ) . '"' : '';
             $all_category = ( isset($this->shortcodeParams['category']) && $this->shortcodeParams['category'] == 'all' ) ? true : false;
             $category = ( isset( $this->shortcodeParams['category'] ) ) ? $this->shortcodeParams['category'] : false;
             $posts_not_in = ( function_exists( 'run_sonaar_music_pro' ) &&  isset( $this->shortcodeParams['posts_not_in'] ) ) ? $this->shortcodeParams['posts_not_in'] : null;
@@ -1796,7 +1796,7 @@ class Sonaar_Music_Widget extends WP_Widget{
         }
         $albums = str_replace(' ', '', $albums);
 
-        $widgetData = ($artwork)?'data-albumart="' . $artwork. '"' : '';
+        $widgetData = ($artwork)?'data-albumart="' . esc_attr( $artwork ) . '"' : '';
 
         $feed = str_replace('&', 'amp;', $feed); //replace & with amp; to avoid conflict with json
         $feed_title = str_replace( "'", "apos;", $feed_title ); //replace ' with apos; to avoid conflict with json
@@ -1834,8 +1834,8 @@ class Sonaar_Music_Widget extends WP_Widget{
 
         $output = '';
        
-        $total_items = (isset($returned_data['total_items'])) ? ' data-total_items="' . $returned_data['total_items'] . '"' : '';
-        $total_pages = (isset($returned_data['total_pages'])) ? ' data-total_pages="' . $returned_data['total_pages'] . '"' : '';        
+        $total_items = (isset($returned_data['total_items'])) ? ' data-total_items="' . absint( $returned_data['total_items'] ) . '"' : '';
+        $total_pages = (isset($returned_data['total_pages'])) ? ' data-total_pages="' . absint( $returned_data['total_pages'] ) . '"' : '';
 
         if(is_array($terms)){ 
             $all_term_ids = $terms; // Start with the provided terms
@@ -5024,6 +5024,7 @@ public function importFile($import_file, $a = null, $combinedtracks = false, $rs
                     'mp3' => $audioSrc,
                     'loading' => true,
                     'category_slug' => $data_row['playlist_category'] ?? '',
+                    'tag_slug' => $data_row['playlist_tag'] ?? '',
                     'track_title' => $track_title,
                     'track_artist' => $data_row['track_artist'] ?? '',
                     'length' => $data_row['track_length'] ?? '',
