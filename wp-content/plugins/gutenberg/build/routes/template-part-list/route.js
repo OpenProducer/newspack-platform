@@ -67,8 +67,8 @@ var require_private_apis = __commonJS({
 });
 
 // routes/template-part-list/route.ts
-var import_data4 = __toESM(require_data());
-var import_core_data2 = __toESM(require_core_data());
+var import_data5 = __toESM(require_data());
+var import_core_data3 = __toESM(require_core_data());
 var import_i18n = __toESM(require_i18n());
 import { notFound } from "@wordpress/route";
 
@@ -116,6 +116,13 @@ function applyLockedFilters(view, overrides) {
   );
   return { ...view, filters: [...locked, ...rest] };
 }
+function getApplicablePersistedView(persistedView, defaultLayouts) {
+  if (!persistedView || persistedView.type === void 0 || !defaultLayouts || defaultLayouts[persistedView.type]) {
+    return persistedView;
+  }
+  const { type, ...rest } = persistedView;
+  return Object.keys(rest).length > 0 ? rest : void 0;
+}
 function resolveBaseView(layers, effectiveType) {
   const { defaultView, defaultLayouts, activeViewOverrides } = layers;
   const layoutDefaults = defaultLayouts?.[effectiveType];
@@ -128,7 +135,11 @@ function resolveBaseView(layers, effectiveType) {
   );
 }
 function resolveView(args) {
-  const { defaultView, activeViewOverrides, persistedView, page, search } = args;
+  const { defaultView, defaultLayouts, activeViewOverrides, page, search } = args;
+  const persistedView = getApplicablePersistedView(
+    args.persistedView,
+    defaultLayouts
+  );
   const effectiveType = persistedView?.type ?? activeViewOverrides?.type ?? defaultView?.type;
   const baseView = resolveBaseView(args, effectiveType);
   const view = {
@@ -181,37 +192,47 @@ var { lock, unlock } = (0, import_private_apis.__dangerousOptInToUnstableAPIsOnl
 );
 
 // routes/template-part-list/view-utils.ts
-var DEFAULT_VIEW = {
-  type: "grid",
-  sort: {
-    field: "date",
-    direction: "desc"
-  },
-  fields: [],
-  titleField: "title",
-  mediaField: "preview"
-};
-function getActiveViewOverridesForTab(area) {
-  if (area === "all") {
-    return {};
-  }
+var import_data4 = __toESM(require_data());
+var import_core_data2 = __toESM(require_core_data());
+
+// routes/lock-unlock/index.ts
+var import_private_apis2 = __toESM(require_private_apis());
+var { lock: lock2, unlock: unlock2 } = (0, import_private_apis2.__dangerousOptInToUnstableAPIsOnlyForCoreModules)(
+  "I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.",
+  "@wordpress/routes"
+);
+
+// routes/template-part-list/view-utils.ts
+var TEMPLATE_PART_POST_TYPE = "wp_template_part";
+async function loadTemplatePartViewConfig() {
+  const config = await unlock2((0, import_data4.resolveSelect)(import_core_data2.store)).getViewConfig(
+    "postType",
+    TEMPLATE_PART_POST_TYPE
+  );
   return {
-    filters: [
-      {
-        field: "area",
-        operator: "is",
-        value: area
-      }
-    ]
+    default_view: config?.default_view,
+    default_layouts: config?.default_layouts,
+    view_list: config?.view_list
   };
 }
 async function ensureView(area, search) {
+  const {
+    default_view: defaultView,
+    default_layouts: defaultLayouts,
+    view_list: viewList
+  } = await loadTemplatePartViewConfig();
+  if (!defaultView) {
+    throw new Error(
+      `Missing view configuration for the ${TEMPLATE_PART_POST_TYPE} post type.`
+    );
+  }
   return loadView({
     kind: "postType",
-    name: "wp_template_part",
+    name: TEMPLATE_PART_POST_TYPE,
     slug: "default-new",
-    defaultView: DEFAULT_VIEW,
-    activeViewOverrides: getActiveViewOverridesForTab(area ?? "all"),
+    defaultView,
+    defaultLayouts,
+    activeViewOverrides: viewList?.find((v) => v.slug === area)?.view ?? {},
     queryParams: search
   });
 }
@@ -229,7 +250,7 @@ function viewToQuery(view) {
 // routes/template-part-list/route.ts
 var route = {
   async beforeLoad() {
-    const theme = await (0, import_data4.resolveSelect)(import_core_data2.store).getCurrentTheme();
+    const theme = await (0, import_data5.resolveSelect)(import_core_data3.store).getCurrentTheme();
     const supports = theme?.theme_supports;
     if (!supports?.["block-templates"] && !supports?.["block-template-parts"]) {
       throw notFound();
@@ -254,7 +275,7 @@ var route = {
       };
     }
     const query = viewToQuery(view);
-    const posts = await (0, import_data4.resolveSelect)(import_core_data2.store).getEntityRecords(
+    const posts = await (0, import_data5.resolveSelect)(import_core_data3.store).getEntityRecords(
       "postType",
       "wp_template_part",
       query

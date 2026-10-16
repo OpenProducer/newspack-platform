@@ -100,13 +100,13 @@ final class License_Controller extends WP_REST_Controller {
 				[
 					'methods'             => WP_REST_Server::CREATABLE,
 					'callback'            => [ $this, 'store_item' ],
-					'permission_callback' => [ $this, 'check_permissions' ],
+					'permission_callback' => [ $this, 'check_key_write_permissions' ],
 					'args'                => $this->get_store_args(),
 				],
 				[
 					'methods'             => WP_REST_Server::DELETABLE,
 					'callback'            => [ $this, 'delete_item' ],
-					'permission_callback' => [ $this, 'check_permissions' ],
+					'permission_callback' => [ $this, 'check_key_write_permissions' ],
 					'args'                => $this->get_network_args(),
 				],
 				'schema' => [ $this, 'get_public_item_schema' ],
@@ -162,6 +162,30 @@ final class License_Controller extends WP_REST_Controller {
 	}
 
 	/**
+	 * Permission callback for storing or deleting the key.
+	 *
+	 * The network-level key applies to every site, so changing it also needs
+	 * network-level authority.
+	 *
+	 * @since 2.0.2
+	 *
+	 * @param WP_REST_Request $request The request object.
+	 *
+	 * @return bool
+	 */
+	public function check_key_write_permissions( WP_REST_Request $request ): bool {
+		if ( ! $this->check_permissions() ) {
+			return false;
+		}
+
+		if ( is_multisite() && (bool) $request->get_param( 'network' ) ) {
+			return current_user_can( 'manage_network_options' );
+		}
+
+		return true;
+	}
+
+	/**
 	 * Returns the current unified license key and its associated products.
 	 *
 	 * Returns 200 on success. Returns a WP_Error if the API call fails or a
@@ -205,8 +229,9 @@ final class License_Controller extends WP_REST_Controller {
 	/**
 	 * Refreshes the license data from the upstream API.
 	 *
-	 * Flushes cached products and re-fetches from the licensing service.
-	 * Returns the refreshed key + products in the same shape as GET /license.
+	 * Re-fetches products from the licensing service and returns the key +
+	 * products in the same shape as GET /license. When a not-found response
+	 * leaves the cached purchases in place, those are the products returned.
 	 *
 	 * The With_Error_Throttle trait on License_Manager prevents hammering the
 	 * upstream API after a recent failure (60-second TTL).
@@ -231,8 +256,11 @@ final class License_Controller extends WP_REST_Controller {
 
 		if ( is_wp_error( $products ) ) {
 			if ( $products->get_error_code() === Error_Code::INVALID_KEY ) {
+				// Only a confirmed rejection clears the cache; an ambiguous 404 keeps the purchases.
+				$stored = $this->manager->get_products( $domain );
+
 				return new WP_REST_Response(
-					License_Response::make( $key, new Product_Collection(), $products )
+					License_Response::make( $key, $stored instanceof Product_Collection ? $stored : new Product_Collection(), $products )
 				);
 			}
 

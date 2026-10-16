@@ -176,21 +176,35 @@ var { actions, state } = store(
       }
     },
     callbacks: {
-      /**
-       * When the tabs are initialized, we need to check if there is a hash in the url and if so if it exists in the current tabsList, set the active tab to that index.
-       *
-       */
-      onTabsInit: () => {
+      activateTabByHash: () => {
         const { tabsList } = state;
-        if (tabsList.length === 0) {
+        if (!tabsList || tabsList.length === 0) {
           return;
         }
-        const { hash } = window.location;
-        const tabId = hash.replace("#", "");
-        const tabIndex = tabsList.findIndex((t) => t === tabId);
-        if (tabIndex >= 0) {
-          actions.setActiveTab(tabIndex, true);
+        const targetElement = document.querySelector(":target");
+        if (!targetElement) {
+          return;
         }
+        const panelIndex = tabsList.findIndex(
+          (t) => t === targetElement.id
+        );
+        if (panelIndex >= 0) {
+          actions.setActiveTab(panelIndex, true);
+          return;
+        }
+        let panel = targetElement.closest(".wp-block-tab-panel");
+        let tabIndex = -1;
+        while (panel && tabIndex < 0) {
+          tabIndex = tabsList.findIndex((t) => t === panel.id);
+          panel = panel.parentElement?.closest(".wp-block-tab-panel") ?? null;
+        }
+        if (tabIndex < 0) {
+          return;
+        }
+        actions.setActiveTab(tabIndex);
+        window.setTimeout(() => {
+          targetElement.scrollIntoView();
+        }, 0);
       }
     }
   },

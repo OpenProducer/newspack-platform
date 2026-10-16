@@ -34,7 +34,7 @@ class Register_Submenu {
 
 				add_submenu_page(
 					$parent_slug,
-					__( 'Liquid Web Software Manager', 'tribe-common' ),
+					__( 'Nexcess Licensing', 'tribe-common' ),
 					__( 'Licensing', 'tribe-common' ),
 					'manage_options',
 					$page_url

@@ -15,23 +15,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-namespace Google\Site_Kit_Dependencies\Google\Service\Webcontentpublisher;
+namespace Google\Site_Kit_Dependencies\Google\Service\WebContentPublisher;
 
 class SlProduct extends \Google\Site_Kit_Dependencies\Google\Model
 {
     /**
-     * Whether subscription linking is enabled.
+     * Optional. Whether the Subscription Linking product is enabled.
      *
      * @var bool
      */
     public $enabled;
     /**
-     * The Google Cloud project number associated with the publication.
+     * Optional. The Google Cloud Project number associated with the publication.
      *
      * @var string
      */
     public $gcpProjectNumber;
     /**
+     * Optional. Whether the Subscription Linking product is enabled.
+     *
      * @param bool $enabled
      */
     public function setEnabled($enabled)
@@ -46,6 +48,8 @@ class SlProduct extends \Google\Site_Kit_Dependencies\Google\Model
         return $this->enabled;
     }
     /**
+     * Optional. The Google Cloud Project number associated with the publication.
+     *
      * @param string $gcpProjectNumber
      */
     public function setGcpProjectNumber($gcpProjectNumber)
@@ -60,4 +64,5 @@ class SlProduct extends \Google\Site_Kit_Dependencies\Google\Model
         return $this->gcpProjectNumber;
     }
 }
-class_alias(SlProduct::class, 'Google\Site_Kit_Dependencies\Google_Service_Webcontentpublisher_SlProduct');
+// Adding a class alias for backwards compatibility with the previous class name.
+class_alias(SlProduct::class, 'Google\Site_Kit_Dependencies\Google_Service_WebContentPublisher_SlProduct');

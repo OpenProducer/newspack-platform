@@ -85,11 +85,11 @@ class Feature_Manager_Page
         if (!Version::should_handle('admin_page')) {
             return;
         }
-        $this->page_hook = (string) add_submenu_page('options-general.php', __('Liquid Web Software Manager', 'tribe-common'), __('Liquid Web Products', 'tribe-common'), 'manage_options', self::PAGE_SLUG, [$this, 'render']);
+        $this->page_hook = (string) add_submenu_page('options-general.php', __('Nexcess Licensing', 'tribe-common'), __('Nexcess Licensing', 'tribe-common'), 'manage_options', self::PAGE_SLUG, [$this, 'render']);
         /**
-         * Filters whether to hide the Liquid Web Products item from the Settings menu.
+         * Filters whether to hide the Nexcess Licensing item from the Settings menu.
          *
-         * Hiding the menu item does not unregister the page. The Software Manager
+         * Hiding the menu item does not unregister the page. The Nexcess Licensing
          * UI remains accessible at options-general.php?page=lw-software-manager
          * for users who reach it via a direct link or a product plugin's submenu.
          *
@@ -155,7 +155,7 @@ class Feature_Manager_Page
         $asset_data = file_exists($asset_file) ? require $asset_file : ['dependencies' => [], 'version' => null];
         wp_register_script($handle, $plugin_root_url . $build_dir . '/index.js', $asset_data['dependencies'], $asset_data['version'], ['in_footer' => true]);
         wp_localize_script($handle, 'harborData', ['restUrl' => rest_url('liquidweb/harbor/v1/'), 'nonce' => wp_create_nonce('wp_rest'), 'pluginsUrl' => admin_url('plugins.php'), 'activationUrl' => Config::get_portal_base_url() . '/subscriptions/?' . http_build_query(['portal-referral' => 'plugin', 'redirect_url' => admin_url('admin.php?page=' . self::PAGE_SLUG . '&refresh=auto'), 'domain' => $this->site_data->get_domain()], '', '&', PHP_QUERY_RFC3986), 'subscriptionsUrl' => Config::get_portal_base_url() . '/subscriptions/', 'domain' => $this->site_data->get_domain(), 'version' => Harbor::VERSION, 'licenseKeyPrefix' => License_Key::PREFIX]);
-        wp_register_style($handle, $plugin_root_url . $build_dir . '/index.css', [], null);
+        wp_register_style($handle, $plugin_root_url . $build_dir . '/index.css', [], $asset_data['version']);
         wp_set_script_translations($handle, 'tribe-common');
         wp_enqueue_script($handle);
         wp_enqueue_style($handle);

@@ -15,7 +15,7 @@ class Harbor {
 	 *
 	 * @var string
 	 */
-	public const VERSION = '1.6.0';
+	public const VERSION = '2.0.2';
 
 	/**
 	 * Initializes the service provider.
@@ -87,11 +87,19 @@ class Harbor {
 	 * communication between vendor-prefixed copies of Harbor.
 	 *
 	 * @since 1.0.0
+	 * @since 1.6.2 Skip the registry when the host boots after wp_loaded.
 	 *
 	 * @return void
 	 */
 	protected static function register_instance_hooks(): void {
-		_lw_harbor_instance_registry( self::VERSION, Config::get_plugin_basename() ?? '' );
+		/*
+		 * The registry only accepts registrations before wp_loaded. A host that
+		 * boots later, such as a plugin running its activation hook, cannot join
+		 * the registry on that request, so it skips the call.
+		 */
+		if ( ! did_action( 'wp_loaded' ) ) {
+			_lw_harbor_instance_registry( self::VERSION, Config::get_plugin_basename() ?? '' );
+		}
 
 		Version::register_debug_info();
 	}

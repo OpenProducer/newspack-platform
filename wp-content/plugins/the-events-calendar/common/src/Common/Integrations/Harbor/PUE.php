@@ -336,6 +336,7 @@ class PUE extends Integration_Controller {
 	 * are intercepted. All other HTTP traffic is left unchanged.
 	 *
 	 * @since 6.11.0
+	 * @since 6.12.4 Made the parameters non-strict; `WP_Http::request()` forwards whatever it was handed.
 	 *
 	 * @param false|array|\WP_Error $response    The response.
 	 * @param array                 $parsed_args The parsed arguments.
@@ -343,8 +344,12 @@ class PUE extends Integration_Controller {
 	 *
 	 * @return false|array
 	 */
-	public function filter_pre_http_request( $response, array $parsed_args, string $url ) {
+	public function filter_pre_http_request( $response, $parsed_args, $url ) {
 		if ( false !== $response ) {
+			return $response;
+		}
+
+		if ( ! is_string( $url ) || ! is_array( $parsed_args ) ) {
 			return $response;
 		}
 
@@ -375,13 +380,15 @@ class PUE extends Integration_Controller {
 			return $response;
 		}
 
-		if ( is_string( $parsed_args['body'] ) ) {
-			$body = json_decode( $parsed_args['body'], true );
+		$request_body = $parsed_args['body'] ?? null;
+
+		if ( is_string( $request_body ) ) {
+			$body = json_decode( $request_body, true );
 		} else {
-			$body = $parsed_args['body'];
+			$body = $request_body;
 		}
 
-		if ( empty( $body['plugin'] ) || ! is_string( $body['plugin'] ) ) {
+		if ( ! is_array( $body ) || empty( $body['plugin'] ) || ! is_string( $body['plugin'] ) ) {
 			return $response;
 		}
 
@@ -398,7 +405,7 @@ class PUE extends Integration_Controller {
 		$products = tribe( License_Repository::class )->get_products();
 
 		if ( $catalog && ! is_wp_error( $catalog ) && $products && ! is_wp_error( $products ) ) {
-			$tec_product         = $products->get_activated_entry( 'the-events-calendar' );
+			$tec_product         = $this->get_activated_tec_entry( $products );
 			$tec_product_catalog = $catalog->get( 'the-events-calendar' );
 			if ( $tec_product && $tec_product_catalog ) {
 				$response = $this->response_from_catalog( $tec_product_catalog, $tec_product, $body['plugin'] );
@@ -454,6 +461,28 @@ class PUE extends Integration_Controller {
 			],
 			'cookies'  => [],
 		];
+	}
+
+	/**
+	 * Returns the TEC license entry that is activated on this site.
+	 *
+	 * A license collection can hold several entries for the same product, such as a TEC
+	 * license and a Nexcess Plugin Stack license that includes TEC.
+	 *
+	 * @since 6.13.1
+	 *
+	 * @param Product_Collection $products The licensed products from Harbor.
+	 *
+	 * @return Product_Entry|null The activated TEC entry, or null when none is activated here.
+	 */
+	private function get_activated_tec_entry( Product_Collection $products ): ?Product_Entry {
+		foreach ( $products->get_all_by_slug( 'the-events-calendar' ) as $entry ) {
+			if ( $entry->get_activated_here() ) {
+				return $entry;
+			}
+		}
+
+		return null;
 	}
 
 	/**

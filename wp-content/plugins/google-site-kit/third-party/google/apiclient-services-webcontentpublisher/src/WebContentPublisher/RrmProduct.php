@@ -15,18 +15,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-namespace Google\Site_Kit_Dependencies\Google\Service\Webcontentpublisher;
+namespace Google\Site_Kit_Dependencies\Google\Service\WebContentPublisher;
 
 class RrmProduct extends \Google\Site_Kit_Dependencies\Google\Model
 {
     /**
-     * Whether the RRM product is enabled.
+     * Optional. Whether the RRM product is enabled for the publication.
      *
      * @var bool
      */
     public $enabled;
     /**
-     * The URL to the product-specific terms of service.
+     * Output only. The URL to the product-specific Terms of Service.
      *
      * @var string
      */
@@ -34,6 +34,8 @@ class RrmProduct extends \Google\Site_Kit_Dependencies\Google\Model
     protected $tosAcceptanceType = TosAcceptance::class;
     protected $tosAcceptanceDataType = '';
     /**
+     * Optional. Whether the RRM product is enabled for the publication.
+     *
      * @param bool $enabled
      */
     public function setEnabled($enabled)
@@ -48,6 +50,8 @@ class RrmProduct extends \Google\Site_Kit_Dependencies\Google\Model
         return $this->enabled;
     }
     /**
+     * Output only. The URL to the product-specific Terms of Service.
+     *
      * @param string $productTosUrl
      */
     public function setProductTosUrl($productTosUrl)
@@ -62,6 +66,8 @@ class RrmProduct extends \Google\Site_Kit_Dependencies\Google\Model
         return $this->productTosUrl;
     }
     /**
+     * Optional. The details of the TOS acceptance.
+     *
      * @param TosAcceptance $tosAcceptance
      */
     public function setTosAcceptance(TosAcceptance $tosAcceptance)
@@ -76,4 +82,5 @@ class RrmProduct extends \Google\Site_Kit_Dependencies\Google\Model
         return $this->tosAcceptance;
     }
 }
-class_alias(RrmProduct::class, 'Google\Site_Kit_Dependencies\Google_Service_Webcontentpublisher_RrmProduct');
+// Adding a class alias for backwards compatibility with the previous class name.
+class_alias(RrmProduct::class, 'Google\Site_Kit_Dependencies\Google_Service_WebContentPublisher_RrmProduct');

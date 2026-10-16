@@ -105,7 +105,6 @@ figure.wp-block-image:not(.wp-block) {
   position: relative;
 }
 .wp-block-image.is-transient:not(.alignwide):not(.alignfull), .wp-block-image:has(img.is-swapping-media):not(.alignwide):not(.alignfull) {
-  width: -moz-fit-content;
   width: fit-content;
 }
 .wp-block-image .is-applying img, .wp-block-image.is-transient img,
@@ -121,6 +120,12 @@ figure.wp-block-image:not(.wp-block) {
   left: 50%;
   transform: translate(-50%, -50%);
   margin: 0;
+}
+.wp-block-image .components-resizable-box__container {
+  pointer-events: none;
+}
+.wp-block-image .components-resizable-box__handle {
+  pointer-events: auto;
 }
 
 .wp-block-image__placeholder {

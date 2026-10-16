@@ -19,6 +19,55 @@ composer require stellarwp/harbor
 >
 > Luckily, adding Strauss to your `composer.json` is only slightly more complicated than adding a typical dependency, so checkout our [strauss docs](https://github.com/stellarwp/global-docs/blob/main/docs/strauss-setup.md).
 
+### Strauss must not prefix the global functions
+
+Harbor's global functions (`src/Harbor/global-functions.php`) are deliberately non-namespaced. They are how the Harbor copies on a site find each other and route every call to the highest-version copy. Recent Strauss versions prefix global function names as well as namespaces, which breaks that negotiation — each plugin gets a privately-named copy of the helpers and the `function_exists()` guards never see one another.
+
+Exclude the file in your Strauss config:
+
+```json
+"exclude_from_prefix": {
+    "file_patterns": [
+        "/harbor/src/Harbor/global-functions\\.php$"
+    ]
+}
+```
+
+## Agent skill
+
+Harbor ships `skill/SKILL.md`: the rules a consuming plugin has to follow, written for the AI coding agent that will edit your plugin. It covers the free-vs-premium WordPress.org boundary, consuming the `lw_harbor_*` API instead of hand-rolling Portal URLs, Harbor's release train, and how to find the Strauss-prefixed copy that actually runs.
+
+Agents only read it if your plugin tells them to. Paste this into your plugin's `AGENTS.md` (or `CLAUDE.md`):
+
+```markdown
+## Harbor (licensing)
+
+Licensing, license keys, premium or add-on checks, platform fees, and anything calling `lw_harbor_*` go through Harbor, the library vendored at `vendor/vendor-prefixed/stellarwp/harbor/`.
+
+Hard rules, no exceptions:
+
+- A plugin distributed on WordPress.org must not validate a license key, send a request to the Commerce Portal, the Licensing API, or Herald, or install or activate anything from an entered key. That work belongs in the premium plugin.
+- Onboarding for a free plugin never requires a license key, not even as a step that can be skipped.
+- Never build a Portal URL, activation URL, or licensing request by hand. Use the `lw_harbor_*` helpers. A missing helper is a Harbor ticket.
+- Never release or QA with `composer.json` pinned to a Harbor `dev-` branch.
+- Strauss must not prefix `src/Harbor/global-functions.php`.
+- Call the license page "Nexcess Licensing" in anything a user sees.
+
+Before changing any of that code, read `vendor/vendor-prefixed/stellarwp/harbor/skill/SKILL.md` for the API, hooks, and bootstrap order of the installed version. If the file is missing, run `composer install` first.
+```
+
+Replace `vendor/vendor-prefixed` with your Strauss `target_directory` if it differs. Nothing else needs changing.
+
+The hard rules sit in your own file so every agent and review bot sees them on a fresh clone, before `composer install`. The API detail stays in the vendored file so it always matches the Harbor version you have installed.
+
+**If you are an agent reading this from `vendor/`** and the plugin's `AGENTS.md` has no Harbor section, read `skill/SKILL.md` next to this file before writing licensing code, and tell the developer to add the section.
+
+### Harbor and WordPress.org
+
+Harbor is bundled in free WordPress.org plugins as well as paid ones, and stays inert in the free ones by design. Several of the things it does — validating a license key, calling our servers, installing a plugin — could be read as running against the [WordPress.org plugin guidelines](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/) if a plugin distributed there did them.
+
+A plugin on WordPress.org must not present a license field that validates a key, send a request to the Commerce Portal / the Licensing API / Herald at runtime (directly or through Harbor), or install or activate anything from an entered key. All new licensing and activation surface belongs in the premium plugin, behind the premium-plugin gate. The skill and the [Integration Guide](/docs/guides/integration.md#before-you-build-the-free-vs-premium-boundary) carry the full rule.
+
 ## Initialize the library
 
 Initializing the Harbor library should be done within the `plugins_loaded` action, preferably at priority `0`.
@@ -111,6 +160,7 @@ bunx @stellarwp/changelogger write --overwrite-version <version>
 1. Run the **Release Prep** workflow (`Actions → Release Prep → Run workflow`). Supply the target branch, version (e.g. `1.2.0`), and the release date (e.g. `2026-04-29`). The workflow bumps the `VERSION` constant, compiles the changelog, and opens a PR automatically.
 2. Review and merge the PR.
 3. Create a GitHub Release with a new tag in the format `vX.X.X` targeting the merge commit.
+4. Optionally, once the release is checked, run the **Update Consumers** workflow (`Actions → Update Consumers → Run workflow`) instead of bumping each plugin by hand. It opens a PR in every plugin in [Plugins with Harbor](#plugins-with-harbor) that bumps `stellarwp/harbor` to the new version (The Events Calendar and Event Tickets get theirs through tribe-common). To run it locally, or to target specific repos, run `composer release:update-consumers -- [version] [owner/repo ...]`. Add `--dry-run` to see the change without pushing anything. The consumer list lives in `dev_scripts/update-consumers.sh`.
 
 ## Documentation
 

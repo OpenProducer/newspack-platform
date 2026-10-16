@@ -45,19 +45,51 @@ var require_i18n = __commonJS({
   }
 });
 
+// package-external:@wordpress/private-apis
+var require_private_apis = __commonJS({
+  "package-external:@wordpress/private-apis"(exports, module) {
+    module.exports = window.wp.privateApis;
+  }
+});
+
 // routes/identity/route.ts
 var import_data = __toESM(require_data());
 var import_core_data = __toESM(require_core_data());
 var import_i18n = __toESM(require_i18n());
+
+// routes/lock-unlock/index.ts
+var import_private_apis = __toESM(require_private_apis());
+var { lock, unlock } = (0, import_private_apis.__dangerousOptInToUnstableAPIsOnlyForCoreModules)(
+  "I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.",
+  "@wordpress/routes"
+);
+
+// routes/identity/route.ts
+var VIEW_CONFIG_FIELDS = "form";
 var route = {
   title: () => (0, import_i18n._x)("Identity", "site identity"),
   async canvas() {
     return {
-      isPreview: true
+      isPreview: true,
+      // This route shows the site, so it shows the template around
+      // whatever the canvas resolves to, including a static front page.
+      renderingMode: "template-locked"
     };
   },
   loader: async () => {
-    await (0, import_data.resolveSelect)(import_core_data.store).getEntityRecord("root", "site");
+    await Promise.all([
+      // The stage renders a form over the site settings, so preload them
+      // before the surface mounts.
+      (0, import_data.resolveSelect)(import_core_data.store).getEntityRecord("root", "site"),
+      // Preload the form configuration the stage renders.
+      unlock((0, import_data.resolveSelect)(import_core_data.store)).getViewConfig(
+        "root",
+        "site",
+        {
+          fields: VIEW_CONFIG_FIELDS
+        }
+      )
+    ]);
   }
 };
 export {

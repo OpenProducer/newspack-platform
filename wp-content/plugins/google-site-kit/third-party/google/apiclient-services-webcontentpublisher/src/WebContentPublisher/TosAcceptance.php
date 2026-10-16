@@ -15,29 +15,55 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-namespace Google\Site_Kit_Dependencies\Google\Service\Webcontentpublisher;
+namespace Google\Site_Kit_Dependencies\Google\Service\WebContentPublisher;
 
 class TosAcceptance extends \Google\Site_Kit_Dependencies\Google\Model
 {
     /**
-     * The name of the person who accepted the terms.
+     * Optional. Whether the user opted in to receive product updates and email
+     * communications.
+     *
+     * @var bool
+     */
+    public $emailOptIn;
+    /**
+     * Optional. The name of the person who accepted the TOS.
      *
      * @var string
      */
     public $signer;
     /**
-     * The job title or role of the signer.
+     * Optional. The job title or role of the signer.
      *
      * @var string
      */
     public $signerTitle;
     /**
-     * Whether the user accepted the terms.
+     * Required. Whether the user has accepted the Terms of Service.
      *
      * @var bool
      */
     public $userAccepted;
     /**
+     * Optional. Whether the user opted in to receive product updates and email
+     * communications.
+     *
+     * @param bool $emailOptIn
+     */
+    public function setEmailOptIn($emailOptIn)
+    {
+        $this->emailOptIn = $emailOptIn;
+    }
+    /**
+     * @return bool
+     */
+    public function getEmailOptIn()
+    {
+        return $this->emailOptIn;
+    }
+    /**
+     * Optional. The name of the person who accepted the TOS.
+     *
      * @param string $signer
      */
     public function setSigner($signer)
@@ -52,6 +78,8 @@ class TosAcceptance extends \Google\Site_Kit_Dependencies\Google\Model
         return $this->signer;
     }
     /**
+     * Optional. The job title or role of the signer.
+     *
      * @param string $signerTitle
      */
     public function setSignerTitle($signerTitle)
@@ -66,6 +94,8 @@ class TosAcceptance extends \Google\Site_Kit_Dependencies\Google\Model
         return $this->signerTitle;
     }
     /**
+     * Required. Whether the user has accepted the Terms of Service.
+     *
      * @param bool $userAccepted
      */
     public function setUserAccepted($userAccepted)
@@ -80,4 +110,5 @@ class TosAcceptance extends \Google\Site_Kit_Dependencies\Google\Model
         return $this->userAccepted;
     }
 }
-class_alias(TosAcceptance::class, 'Google\Site_Kit_Dependencies\Google_Service_Webcontentpublisher_TosAcceptance');
+// Adding a class alias for backwards compatibility with the previous class name.
+class_alias(TosAcceptance::class, 'Google\Site_Kit_Dependencies\Google_Service_WebContentPublisher_TosAcceptance');

@@ -10,8 +10,7 @@ use TEC\Common\LiquidWeb\Harbor\Utils\Collection;
  *
  * The licensing API returns one entry per tier for each product, so multiple
  * entries with the same slug but different tiers can coexist. Use
- * get_all_by_slug() to retrieve all tiers, or get_activated_entry() to
- * retrieve the single entry activated on the current domain.
+ * get_all_by_slug() to retrieve all tiers.
  *
  * @since 1.0.0
  *
@@ -62,12 +61,15 @@ final class Product_Collection extends Collection {
 	 * Returns null when no entry for the slug has activated_here set to true.
 	 *
 	 * @since 1.0.0
+	 * @deprecated 2.0.1 Use get_all_by_slug() and check get_activated_here() on each entry.
 	 *
 	 * @param string $slug The product slug.
 	 *
 	 * @return Product_Entry|null
 	 */
 	public function get_activated_entry( string $slug ): ?Product_Entry {
+		_deprecated_function( __METHOD__, '2.0.1', __CLASS__ . '::get_all_by_slug()' );
+
 		foreach ( $this as $entry ) {
 			if ( $entry->get_product_slug() === $slug && $entry->get_activated_here() ) {
 				return $entry;

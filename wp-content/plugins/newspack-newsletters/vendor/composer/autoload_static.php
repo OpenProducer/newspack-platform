@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInita5290d8ed1fed5c0b9157176aa7bbfd1
+class ComposerStaticInit9298f54ba77c59e7c48c6ae7bc4f436f
 {
     public static $prefixLengthsPsr4 = array (
         'A' =>
@@ -262,12 +262,14 @@ class ComposerStaticInita5290d8ed1fed5c0b9157176aa7bbfd1
         'Newspack\\Newsletters\\Admin\\Admin_Page' => __DIR__ . '/../..' . '/includes/admin/class-admin-page.php',
         'Newspack\\Newsletters\\Admin\\Admin_Shell' => __DIR__ . '/../..' . '/includes/admin/class-admin-shell.php',
         'Newspack\\Newsletters\\Admin\\Admin_Shell_Assets' => __DIR__ . '/../..' . '/includes/admin/class-admin-shell-assets.php',
+        'Newspack\\Newsletters\\Admin\\Admin_Shell_Collection_Params' => __DIR__ . '/../..' . '/includes/admin/class-admin-shell-collection-params.php',
         'Newspack\\Newsletters\\Admin\\Admin_Shell_Legacy_Redirect' => __DIR__ . '/../..' . '/includes/admin/class-admin-shell-legacy-redirect.php',
         'Newspack\\Newsletters\\Admin\\Admin_Shell_Menu' => __DIR__ . '/../..' . '/includes/admin/class-admin-shell-menu.php',
         'Newspack\\Newsletters\\Admin\\Admin_Shell_Preferences' => __DIR__ . '/../..' . '/includes/admin/class-admin-shell-preferences.php',
         'Newspack\\Newsletters\\Admin\\Ads_List_REST' => __DIR__ . '/../..' . '/includes/admin/class-ads-list-rest.php',
         'Newspack\\Newsletters\\Admin\\Advertisers_List_REST' => __DIR__ . '/../..' . '/includes/admin/class-advertisers-list-rest.php',
         'Newspack\\Newsletters\\Admin\\Asset_Loader' => __DIR__ . '/../..' . '/includes/admin/class-asset-loader.php',
+        'Newspack\\Newsletters\\Admin\\Layouts_List_REST' => __DIR__ . '/../..' . '/includes/admin/class-layouts-list-rest.php',
         'Newspack\\Newsletters\\Admin\\Newsletters_List_REST' => __DIR__ . '/../..' . '/includes/admin/class-newsletters-list-rest.php',
         'Newspack\\Newsletters\\Admin\\Pages\\Ads_List_Page' => __DIR__ . '/../..' . '/includes/admin/pages/class-ads-list-page.php',
         'Newspack\\Newsletters\\Admin\\Pages\\Advertisers_List_Page' => __DIR__ . '/../..' . '/includes/admin/pages/class-advertisers-list-page.php',
@@ -276,7 +278,9 @@ class ComposerStaticInita5290d8ed1fed5c0b9157176aa7bbfd1
         'Newspack\\Newsletters\\Admin\\Pages\\Newsletters_List_Page' => __DIR__ . '/../..' . '/includes/admin/pages/class-newsletters-list-page.php',
         'Newspack\\Newsletters\\Admin\\Pages\\React_List_Page' => __DIR__ . '/../..' . '/includes/admin/pages/class-react-list-page.php',
         'Newspack\\Newsletters\\Admin\\Pages\\Settings_Page' => __DIR__ . '/../..' . '/includes/admin/pages/class-settings-page.php',
+        'Newspack\\Newsletters\\Admin\\Rest_Author_Field' => __DIR__ . '/../..' . '/includes/admin/trait-rest-author-field.php',
         'Newspack\\Newsletters\\Admin\\Rest_Status_Field' => __DIR__ . '/../..' . '/includes/admin/trait-rest-status-field.php',
+        'Newspack\\Newsletters\\Admin\\Rest_Terms_Field' => __DIR__ . '/../..' . '/includes/admin/trait-rest-terms-field.php',
         'Newspack\\Newsletters\\Admin\\Settings_REST' => __DIR__ . '/../..' . '/includes/admin/class-settings-rest.php',
         'Newspack\\Newsletters\\Admin\\Status_Filter_Builder' => __DIR__ . '/../..' . '/includes/admin/trait-status-filter-builder.php',
         'Newspack\\Newsletters\\Email_Renderers\\Block_Renderer_Registry' => __DIR__ . '/../..' . '/includes/email-renderers/class-block-renderer-registry.php',
@@ -358,9 +362,9 @@ class ComposerStaticInita5290d8ed1fed5c0b9157176aa7bbfd1
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInita5290d8ed1fed5c0b9157176aa7bbfd1::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInita5290d8ed1fed5c0b9157176aa7bbfd1::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInita5290d8ed1fed5c0b9157176aa7bbfd1::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9298f54ba77c59e7c48c6ae7bc4f436f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9298f54ba77c59e7c48c6ae7bc4f436f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9298f54ba77c59e7c48c6ae7bc4f436f::$classMap;
 
         }, null, ClassLoader::class);
     }
