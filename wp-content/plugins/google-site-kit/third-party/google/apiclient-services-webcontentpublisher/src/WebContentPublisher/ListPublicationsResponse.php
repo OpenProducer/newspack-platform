@@ -15,34 +15,53 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-namespace Google\Site_Kit_Dependencies\Google\Service\Webcontentpublisher;
+namespace Google\Site_Kit_Dependencies\Google\Service\WebContentPublisher;
 
 class ListPublicationsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'publications';
     /**
-     * The next page token.
+     * Output only. A token to retrieve the next page of results, or empty if
+     * there are no more results.
      *
      * @var string
      */
     public $nextPageToken;
     protected $publicationsType = Publication::class;
     protected $publicationsDataType = 'array';
+    /**
+     * Output only. A token to retrieve the next page of results, or empty if
+     * there are no more results.
+     *
+     * @param string $nextPageToken
+     */
     public function setNextPageToken($nextPageToken)
     {
         $this->nextPageToken = $nextPageToken;
     }
+    /**
+     * @return string
+     */
     public function getNextPageToken()
     {
         return $this->nextPageToken;
     }
+    /**
+     * Output only. The list of publications.
+     *
+     * @param Publication[] $publications
+     */
     public function setPublications($publications)
     {
         $this->publications = $publications;
     }
+    /**
+     * @return Publication[]
+     */
     public function getPublications()
     {
         return $this->publications;
     }
 }
-class_alias(ListPublicationsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_Webcontentpublisher_ListPublicationsResponse');
+// Adding a class alias for backwards compatibility with the previous class name.
+class_alias(ListPublicationsResponse::class, 'Google\Site_Kit_Dependencies\Google_Service_WebContentPublisher_ListPublicationsResponse');

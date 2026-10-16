@@ -102,6 +102,9 @@ var route = {
     if (post?.title?.rendered) {
       return (0, import_html_entities.decodeEntities)(post.title.rendered);
     }
+    if (post?.title?.raw) {
+      return post.title.raw;
+    }
     const postType = await (0, import_data.resolveSelect)(import_core_data.store).getPostType(
       params.type
     );

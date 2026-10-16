@@ -1,10 +1,10 @@
 === The Events Calendar ===
 
-Contributors: theeventscalendar, nexcess, borkweb, bordoni, brianjessee, aguseo, camwynsp, jentheo, leahkoerper, lucatume, neillmcshea, vicskf, zbtirrell
+Contributors: theeventscalendar, stellarwp, nexcess, bordoni, deblynprado, dpantazis, filipecouto, jehromegriffiths1, jentheo, larodiel, leahkoerper, sdokus, vicskf
 Tags: events, calendar, event, schedule, organizer
 Donate link: https://evnt.is/29
-Stable tag: 6.17.4.1
-Requires at least: 6.8
+Stable tag: 6.18.2
+Requires at least: 6.9
 Tested up to: 7.1
 Requires PHP: 7.4
 License: GPLv2 or later
@@ -111,6 +111,13 @@ Ready to dig deeper? Check out these resources:
 We check in on the [The Events Calendar forum here on WordPress.org](https://wordpress.org/support/plugin/the-events-calendar/) about once a week to help users with basic troubleshooting and identifying bugs. If you’re looking for premium, personalized support, consider upgrading to Events Calendar Pro.
 
 Still have a question? Shoot us an email at support@theeventscalendar.com.
+
+== All Time Contributors ==
+
+We want to thank the people that have contributed over the years !
+
+aguseo, bordoni, borkweb, brianjessee, camwynsp, deblynprado, dpantazis, filipecouto, jehromegriffiths1, jentheo,
+larodiel, leahkoerper, lucatume, neillmcshea, rafsuntaskin, redscar, sdokus, tribalmike, vicskf, zbtirrell
 
 == Installation ==
 
@@ -231,6 +238,43 @@ Previous versions of The Events Calendar are not cross-compatible with 6.X add-o
 Remember to always make a backup of your database and files before updating!
 
 == Changelog ==
+
+= [6.18.2] 2026-10-15 =
+
+* Language - 0 new strings added, 13 updated, 0 fuzzied, and 0 obsoleted.
+* Security - Restricted the HTML tag settings of the Elementor widgets to a fixed list of tags.
+* Tweak - Added filters: `tec_events_elementor_widget_allowed_tags`
+
+= [6.18.1] 2026-10-13 =
+
+* Fix - Prevented a fatal error when manually running a Scheduled Import whose child record could not be created, reporting the failure as an import error instead.
+* Fix - Resolved an issue where the List view exposed an internal pagination look-ahead value in generated navigation and canonical URLs, and capped the number of events fetched per page to prevent unbounded queries.
+* Language - 0 new strings added, 61 updated, 1 fuzzied, and 0 obsoleted.
+* Tweak - Added filters: `tec_events_views_v2_max_events_per_page`
+* Tweak - Improved specificity of error handling when syncing events with Event Aggregator.
+* Tweak - Improved the unified licensing page experience.
+
+= [6.18.0] 2026-09-30 =
+
+* Fix - Prevented a rejected CSV import column mapping from being saved as the default, which caused later imports to pre-select "Do Not Import" for required columns.
+* Language - 0 new strings added, 13 updated, 0 fuzzied, and 0 obsoleted.
+* Tweak - Changed views: `v2/widgets/widget-events-qr-code`
+
+= [6.17.5.1] 2026-09-24 =
+
+* Language - 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted.
+* Security - Hardened author assignment in the REST API.
+* Security - Hardened the rendering of the Events QR Code widget. Props to Jakub Herman for reporting.
+
+= [6.17.5] 2026-09-17 =
+
+* Compatibility - Registered the plugin's editor blocks with Block API version 3 so they render correctly inside the iframed block editor introduced in WordPress 6.9.
+* Fix - Prevented event pages and iCal exports from failing when event descriptions contain Single Event or Events Archive blocks.
+* Fix - Resolved an issue where hiding the subscribe links with a snippet that returns a non-array value from the `tec_views_v2_subscribe_links` filter could cause a fatal error on single event pages.
+* Fix - Resolved fatal errors that could occur when WordPress or another plugin passed unexpected data to The Events Calendar, such as while SiteGround Optimizer clears its cache.
+* Language - 0 new strings added, 59 updated, 0 fuzzied, and 0 obsoleted.
+* Security - Hardened access checks on REST API responses. Props to Kaveesha Nirmal for reporting.
+* Security - Strengthened permission checks in the REST API v1. Props to Mohammed Abd Alrahman for reporting.
 
 = [6.17.4.1] 2026-09-10 =
 

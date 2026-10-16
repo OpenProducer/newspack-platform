@@ -332,6 +332,22 @@ function gutenberg_theme_preview_render_page() {
 function gutenberg_theme_preview_intercept_render() {
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( isset( $_GET['page'] ) && 'theme-preview' === $_GET['page'] ) {
+		// The page renders outside the menu page callback flow, so it must
+		// enforce authentication and capability checks itself. Without this,
+		// any admin entry point firing `admin_init` (such as admin-post.php,
+		// which serves logged-out requests) would render the page for
+		// unauthenticated visitors.
+		if ( ! is_user_logged_in() ) {
+			auth_redirect();
+		}
+
+		if ( ! current_user_can( 'switch_themes' ) ) {
+			wp_die(
+				__( 'Sorry, you are not allowed to access this page.' ),
+				403
+			);
+		}
+
 		gutenberg_theme_preview_render_page();
 		exit;
 	}

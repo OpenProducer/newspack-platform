@@ -46,20 +46,19 @@ abstract class WC_Abstract_Order extends WC_Abstract_Legacy_Order {
 	 * @var array
 	 */
 	protected $data = array(
-		'parent_id'          => 0,
-		'status'             => '',
-		'currency'           => '',
-		'version'            => '',
-		'prices_include_tax' => false,
-		'date_created'       => null,
-		'date_modified'      => null,
-		'discount_total'     => 0,
-		'discount_tax'       => 0,
-		'shipping_total'     => 0,
-		'shipping_tax'       => 0,
-		'cart_tax'           => 0,
-		'total'              => 0,
-		'total_tax'          => 0,
+		'parent_id'      => 0,
+		'status'         => '',
+		'currency'       => '',
+		'version'        => '',
+		'date_created'   => null,
+		'date_modified'  => null,
+		'discount_total' => 0,
+		'discount_tax'   => 0,
+		'shipping_total' => 0,
+		'shipping_tax'   => 0,
+		'cart_tax'       => 0,
+		'total'          => 0,
+		'total_tax'      => 0,
 	);
 
 	/**
@@ -187,6 +186,8 @@ abstract class WC_Abstract_Order extends WC_Abstract_Legacy_Order {
 		if ( $this->has_cogs() && $this->cogs_is_enabled() ) {
 			$this->data['cogs_total_value'] = 0;
 		}
+
+		$this->data['prices_include_tax'] = 'yes' === get_option( 'woocommerce_prices_include_tax' );
 
 		parent::__construct( $order );
 
@@ -1747,6 +1748,106 @@ abstract class WC_Abstract_Order extends WC_Abstract_Legacy_Order {
 	}
 
 	/**
+	 * Apply a coupon treating manually edited line item totals as the pre-discount price.
+	 *
+	 * When the order has no coupons yet, line items whose total differs from their subtotal
+	 * adopt that total as the new subtotal, so the discount is calculated from the edited
+	 * price and recalculations keep the manual adjustment. On failure the original subtotals
+	 * are restored. Call this only where a subtotal/total difference is meant to be treated
+	 * as a manual edit, such as the admin order editor; otherwise use apply_coupon().
+	 *
+	 * @since 11.2.0
+	 * @param string|WC_Coupon $raw_coupon Coupon code or object.
+	 * @return true|WP_Error True if applied, error if not.
+	 */
+	public function apply_coupon_using_edited_totals( $raw_coupon ) {
+		// With coupons already applied the subtotal/total difference also contains their
+		// discounts and the manual portion cannot be separated out, so it is left alone.
+		$original_subtotals = empty( $this->get_items( 'coupon' ) ) ? $this->sync_subtotals_with_manually_edited_totals() : array();
+
+		$applied = $this->apply_coupon( $raw_coupon );
+
+		if ( is_wp_error( $applied ) ) {
+			$this->restore_item_subtotals( $original_subtotals );
+		}
+
+		return $applied;
+	}
+
+	/**
+	 * Sync the subtotal of line items whose total was manually edited, adopting the edited
+	 * total as the new pre-discount price that discounts are calculated from.
+	 *
+	 * Only called when the order has no coupons applied, since applied coupons make the
+	 * subtotal/total difference ambiguous (coupon discount vs manual adjustment).
+	 *
+	 * @return array Original tax and subtotal values of the changed items, keyed by item ID.
+	 */
+	private function sync_subtotals_with_manually_edited_totals() {
+		$original_subtotals = array();
+
+		foreach ( $this->get_items() as $item_id => $item ) {
+			if ( ! $item instanceof WC_Order_Item_Product ) {
+				continue;
+			}
+
+			if ( (float) $item->get_subtotal( 'edit' ) === (float) $item->get_total( 'edit' ) && (float) $item->get_subtotal_tax( 'edit' ) === (float) $item->get_total_tax( 'edit' ) ) {
+				continue;
+			}
+
+			$taxes = $item->get_taxes( 'edit' );
+
+			$original_subtotals[ $item_id ] = array(
+				'subtotal'     => $item->get_subtotal( 'edit' ),
+				'subtotal_tax' => $item->get_subtotal_tax( 'edit' ),
+				'total_tax'    => $item->get_total_tax( 'edit' ),
+				'taxes'        => $taxes,
+			);
+
+			$item->set_subtotal( $item->get_total( 'edit' ) );
+
+			// set_taxes() keeps the per-rate tax array and the subtotal_tax/total_tax totals in
+			// sync, so consumers see the same value whichever one they read. It is skipped when
+			// there is no per-rate data, since it would then zero out the stored tax totals.
+			if ( ! empty( $taxes['total'] ) ) {
+				$taxes['subtotal'] = $taxes['total'];
+				$item->set_taxes( $taxes );
+			} else {
+				$item->set_subtotal_tax( $item->get_total_tax( 'edit' ) );
+			}
+		}
+
+		return $original_subtotals;
+	}
+
+	/**
+	 * Restore item subtotals changed by sync_subtotals_with_manually_edited_totals(), so
+	 * that a failed coupon application leaves the in-memory order unchanged.
+	 *
+	 * @param array $original_subtotals Original tax and subtotal values, keyed by item ID.
+	 * @return void
+	 */
+	private function restore_item_subtotals( array $original_subtotals ) {
+		foreach ( $original_subtotals as $item_id => $original ) {
+			$item = $this->get_item( $item_id, false );
+
+			if ( ! $item instanceof WC_Order_Item_Product ) {
+				continue;
+			}
+
+			// Restoring the per-rate taxes recomputes both tax totals, so it runs before the
+			// stored totals are put back.
+			if ( ! empty( $original['taxes']['total'] ) ) {
+				$item->set_taxes( $original['taxes'] );
+			}
+
+			$item->set_subtotal( $original['subtotal'] );
+			$item->set_subtotal_tax( $original['subtotal_tax'] );
+			$item->set_total_tax( $original['total_tax'] );
+		}
+	}
+
+	/**
 	 * Remove a coupon from the order and recalculate totals.
 	 *
 	 * Coupons affect line item totals, but there is no relationship between
@@ -1773,6 +1874,16 @@ abstract class WC_Abstract_Order extends WC_Abstract_Legacy_Order {
 				$coupon_object = new WC_Coupon( $code );
 				$coupon_object->decrease_usage_count( $this->get_user_id() );
 				$this->recalculate_coupons();
+
+				/**
+				 * Action hook fired when a coupon is removed from an order.
+				 *
+				 * @param  WC_Coupon $coupon_object The removed coupon object.
+				 * @param  WC_Order  $order         The current order object.
+				 *
+				 * @since 10.8.0
+				 */
+				do_action( 'woocommerce_order_removed_coupon', $coupon_object, $this );
 
 				return true;
 			}
@@ -3063,7 +3174,7 @@ abstract class WC_Abstract_Order extends WC_Abstract_Legacy_Order {
 		 *
 		 * @param string   $total_html The formatted total COGS HTML.
 		 * @param float    $total      The total COGS value.
-		 * @param WC_Order $order      The order object.
+		 * @param WC_Abstract_Order $order The order object.
 		 */
 		return apply_filters(
 			'woocommerce_order_cogs_total_value_html',

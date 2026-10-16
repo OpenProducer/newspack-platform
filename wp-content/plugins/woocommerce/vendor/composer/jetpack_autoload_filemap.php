@@ -14,28 +14,28 @@ return array(
 		'version' => '6.19.2.0',
 		'path'    => $vendorDir . '/automattic/jetpack-connection/actions.php'
 	),
+	'ca361fc6e355bd746da7c3488077d38a' => array(
+		'version' => '1.0.0.0',
+		'path'    => $vendorDir . '/automattic/tracks-shared-utils/php/src/functions.php'
+	),
 	'2d223b650b5c56928c1affa16ee5cfe2' => array(
 		'version' => '0.4.0.0',
 		'path'    => $vendorDir . '/wordpress/abilities-api/includes/bootstrap.php'
 	),
 	'44e8414cd27982ecf86403af6e48f123' => array(
-		'version' => '11.1.0.0',
+		'version' => '11.2.1.0',
 		'path'    => $baseDir . '/src/StoreApi/deprecated.php'
 	),
 	'9ce98895d0a470c71998c4b530020d26' => array(
-		'version' => '11.1.0.0',
+		'version' => '11.2.1.0',
 		'path'    => $baseDir . '/src/StoreApi/functions.php'
 	),
 	'c379ea42c3f5964a973a7106b08c5ef0' => array(
-		'version' => '11.1.0.0',
+		'version' => '11.2.1.0',
 		'path'    => $baseDir . '/src/Blocks/Domain/Services/functions.php'
 	),
 	'cd726a73edeabe4da44e314a8eebc9bb' => array(
-		'version' => '11.1.0.0',
+		'version' => '11.2.1.0',
 		'path'    => $baseDir . '/src/Deprecated.php'
-	),
-	'ad5cdab5b4b38915b7931301403e5722' => array(
-		'version' => '11.1.0.0',
-		'path'    => $baseDir . '/src/Api/Infrastructure/Schema/aliases.php'
 	),
 );

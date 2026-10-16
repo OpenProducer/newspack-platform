@@ -1,0 +1,45 @@
+{
+	"name": "automattic/tracks-shared-utils",
+	"description": "Shared allowlist and sanitization for URLs sent to Tracks.",
+	"type": "library",
+	"license": "GPL-2.0-or-later",
+	"homepage": "https://github.com/Automattic/tracks-shared-utils",
+	"support": {
+		"issues": "https://github.com/Automattic/tracks-shared-utils/issues",
+		"source": "https://github.com/Automattic/tracks-shared-utils"
+	},
+	"require": {
+		"php": ">=7.2"
+	},
+	"require-dev": {
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+		"phpcompatibility/php-compatibility": "^9.3",
+		"phpunit/phpunit": "^8.5 || ^9.6",
+		"squizlabs/php_codesniffer": "^3.7"
+	},
+	"autoload": {
+		"psr-4": {
+			"Automattic\\TracksSharedUtils\\": "php/src/"
+		},
+		"files": [
+			"php/src/functions.php"
+		]
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Automattic\\TracksSharedUtils\\Tests\\": "php/tests/"
+		}
+	},
+	"scripts": {
+		"test": "phpunit",
+		"lint:compat": "phpcs -p --standard=PHPCompatibility --runtime-set testVersion 7.2- php/src php/generated php/bin php/tests",
+		"build:config": "php php/bin/build-config.php",
+		"parity:check": "php php/bin/parity-check.php"
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		},
+		"sort-packages": true
+	}
+}

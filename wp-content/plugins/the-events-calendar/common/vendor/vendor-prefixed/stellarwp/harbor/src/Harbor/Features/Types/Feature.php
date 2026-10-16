@@ -218,6 +218,7 @@ abstract class Feature {
 			'name'              => Cast::to_string( $data['name'] ?? '' ),
 			'description'       => Cast::to_string( $data['description'] ?? '' ),
 			'is_available'      => Cast::to_bool( $data['is_available'] ?? false ),
+			'access_sources'    => (array) ( $data['access_sources'] ?? [] ),
 			'in_catalog_tier'   => Cast::to_bool( $data['in_catalog_tier'] ?? false ),
 			'is_enabled'        => Cast::to_bool( $data['is_enabled'] ?? false ),
 			'documentation_url' => Cast::to_string( $data['documentation_url'] ?? '' ),

@@ -30,6 +30,8 @@
     --color-blue-50: oklch(97% 0.014 254.604);
     --color-blue-100: oklch(93.2% 0.032 255.585);
     --color-blue-200: oklch(88.2% 0.059 254.128);
+    --color-blue-500: oklch(62.3% 0.214 259.815);
+    --color-blue-600: oklch(54.6% 0.245 262.881);
     --color-blue-800: oklch(42.4% 0.199 265.638);
     --color-blue-900: oklch(37.9% 0.146 265.522);
     --color-gray-100: oklch(96.7% 0.003 264.542);
@@ -336,9 +338,6 @@
   .lw-harbor-ui .bottom-4 {
     bottom: calc(var(--spacing) * 4) !important;
   }
-  .lw-harbor-ui .left-0 {
-    left: calc(var(--spacing) * 0) !important;
-  }
   .lw-harbor-ui .left-3 {
     left: calc(var(--spacing) * 3) !important;
   }
@@ -387,11 +386,17 @@
   .lw-harbor-ui .m-0 {
     margin: calc(var(--spacing) * 0) !important;
   }
+  .lw-harbor-ui .m-0\! {
+    margin: calc(var(--spacing) * 0) !important;
+  }
   .lw-harbor-ui .-mx-1 {
     margin-inline: calc(var(--spacing) * -1) !important;
   }
   .lw-harbor-ui .my-1 {
     margin-block: calc(var(--spacing) * 1) !important;
+  }
+  .lw-harbor-ui .\!mt-1 {
+    margin-top: calc(var(--spacing) * 1) !important;
   }
   .lw-harbor-ui .\!mt-8 {
     margin-top: calc(var(--spacing) * 8) !important;
@@ -411,6 +416,9 @@
   .lw-harbor-ui .mt-2 {
     margin-top: calc(var(--spacing) * 2) !important;
   }
+  .lw-harbor-ui .mt-3 {
+    margin-top: calc(var(--spacing) * 3) !important;
+  }
   .lw-harbor-ui .mt-8 {
     margin-top: calc(var(--spacing) * 8) !important;
   }
@@ -419,6 +427,12 @@
   }
   .lw-harbor-ui .mt-auto {
     margin-top: auto !important;
+  }
+  .lw-harbor-ui .mr-4 {
+    margin-right: calc(var(--spacing) * 4) !important;
+  }
+  .lw-harbor-ui .\!mb-0 {
+    margin-bottom: calc(var(--spacing) * 0) !important;
   }
   .lw-harbor-ui .\!mb-6 {
     margin-bottom: calc(var(--spacing) * 6) !important;
@@ -472,6 +486,10 @@
     width: calc(var(--spacing) * 1.5) !important;
     height: calc(var(--spacing) * 1.5) !important;
   }
+  .lw-harbor-ui .size-4 {
+    width: calc(var(--spacing) * 4) !important;
+    height: calc(var(--spacing) * 4) !important;
+  }
   .lw-harbor-ui .size-6 {
     width: calc(var(--spacing) * 6) !important;
     height: calc(var(--spacing) * 6) !important;
@@ -524,14 +542,17 @@
   .lw-harbor-ui .h-18 {
     height: calc(var(--spacing) * 18) !important;
   }
-  .lw-harbor-ui .h-\[calc\(100vh-32px\)\] {
-    height: calc(100vh - 32px) !important;
-  }
   .lw-harbor-ui .h-\[var\(--radix-select-trigger-height\)\] {
     height: var(--radix-select-trigger-height) !important;
   }
+  .lw-harbor-ui .h-full {
+    height: 100% !important;
+  }
   .lw-harbor-ui .h-px {
     height: 1px !important;
+  }
+  .lw-harbor-ui .max-h-64 {
+    max-height: calc(var(--spacing) * 64) !important;
   }
   .lw-harbor-ui .max-h-96 {
     max-height: calc(var(--spacing) * 96) !important;
@@ -584,11 +605,11 @@
   .lw-harbor-ui .w-32 {
     width: calc(var(--spacing) * 32) !important;
   }
-  .lw-harbor-ui .w-36 {
-    width: calc(var(--spacing) * 36) !important;
-  }
   .lw-harbor-ui .w-48 {
     width: calc(var(--spacing) * 48) !important;
+  }
+  .lw-harbor-ui .w-\[17rem\] {
+    width: 17rem !important;
   }
   .lw-harbor-ui .w-\[130px\] {
     width: 130px !important;
@@ -639,6 +660,9 @@
   .lw-harbor-ui .flex-1 {
     flex: 1 !important;
   }
+  .lw-harbor-ui .flex-\[1_1_12rem\] {
+    flex: 1 1 12rem !important;
+  }
   .lw-harbor-ui .shrink-0 {
     flex-shrink: 0 !important;
   }
@@ -662,14 +686,26 @@
   .lw-harbor-ui .cursor-default {
     cursor: default !important;
   }
+  .lw-harbor-ui .cursor-help {
+    cursor: help !important;
+  }
   .lw-harbor-ui .cursor-pointer {
     cursor: pointer !important;
   }
   .lw-harbor-ui .scroll-mt-20 {
     scroll-margin-top: calc(var(--spacing) * 20) !important;
   }
+  .lw-harbor-ui .list-disc {
+    list-style-type: disc !important;
+  }
+  .lw-harbor-ui .list-none {
+    list-style-type: none !important;
+  }
   .lw-harbor-ui .auto-rows-min {
     grid-auto-rows: min-content !important;
+  }
+  .lw-harbor-ui .grid-cols-\[minmax\(0\,1fr\)_6\.25rem_2rem\] {
+    grid-template-columns: minmax(0,1fr) 6.25rem 2rem !important;
   }
   .lw-harbor-ui .grid-rows-\[auto_auto\] {
     grid-template-rows: auto auto !important;
@@ -764,6 +800,20 @@
       margin-block-end: calc(calc(var(--spacing) * 8) * calc(1 - var(--lw-harbor-tw-space-y-reverse))) !important;
     }
   }
+  .lw-harbor-ui .gap-x-2 {
+    -moz-column-gap: calc(var(--spacing) * 2) !important;
+         column-gap: calc(var(--spacing) * 2) !important;
+  }
+  .lw-harbor-ui .gap-x-4 {
+    -moz-column-gap: calc(var(--spacing) * 4) !important;
+         column-gap: calc(var(--spacing) * 4) !important;
+  }
+  .lw-harbor-ui .gap-y-1\.5 {
+    row-gap: calc(var(--spacing) * 1.5) !important;
+  }
+  .lw-harbor-ui .gap-y-2 {
+    row-gap: calc(var(--spacing) * 2) !important;
+  }
   .lw-harbor-ui .self-start {
     align-self: flex-start !important;
   }
@@ -783,6 +833,9 @@
   }
   .lw-harbor-ui .rounded {
     border-radius: 0.25rem !important;
+  }
+  .lw-harbor-ui .rounded-\[inherit\] {
+    border-radius: inherit !important;
   }
   .lw-harbor-ui .rounded-full {
     border-radius: calc(infinity * 1px) !important;
@@ -849,6 +902,9 @@
   .lw-harbor-ui .border-blue-200 {
     border-color: var(--color-blue-200) !important;
   }
+  .lw-harbor-ui .border-blue-500 {
+    border-color: var(--color-blue-500) !important;
+  }
   .lw-harbor-ui .border-border {
     border-color: oklch(0.9 0 0) !important;
   }
@@ -872,12 +928,6 @@
   }
   .lw-harbor-ui .border-transparent {
     border-color: transparent !important;
-  }
-  .lw-harbor-ui .border-white\/40 {
-    border-color: color-mix(in srgb, #fff 40%, transparent) !important;
-    @supports (color: color-mix(in lab, red, red)) {
-      border-color: color-mix(in oklab, var(--color-white) 40%, transparent) !important;
-    }
   }
   .lw-harbor-ui .bg-amber-50 {
     background-color: var(--color-amber-50) !important;
@@ -981,6 +1031,9 @@
   .lw-harbor-ui .p-0 {
     padding: calc(var(--spacing) * 0) !important;
   }
+  .lw-harbor-ui .p-0\! {
+    padding: calc(var(--spacing) * 0) !important;
+  }
   .lw-harbor-ui .p-1 {
     padding: calc(var(--spacing) * 1) !important;
   }
@@ -1028,6 +1081,9 @@
   }
   .lw-harbor-ui .py-6 {
     padding-block: calc(var(--spacing) * 6) !important;
+  }
+  .lw-harbor-ui .py-px {
+    padding-block: 1px !important;
   }
   .lw-harbor-ui .pt-4 {
     padding-top: calc(var(--spacing) * 4) !important;
@@ -1104,6 +1160,10 @@
   .lw-harbor-ui .text-\[13px\] {
     font-size: 13px !important;
   }
+  .lw-harbor-ui .leading-4 {
+    --lw-harbor-tw-leading: calc(var(--spacing) * 4);
+    line-height: calc(var(--spacing) * 4) !important;
+  }
   .lw-harbor-ui .leading-6 {
     --lw-harbor-tw-leading: calc(var(--spacing) * 6);
     line-height: calc(var(--spacing) * 6) !important;
@@ -1132,6 +1192,10 @@
     --lw-harbor-tw-font-weight: var(--font-weight-medium);
     font-weight: var(--font-weight-medium) !important;
   }
+  .lw-harbor-ui .font-normal {
+    --lw-harbor-tw-font-weight: var(--font-weight-normal);
+    font-weight: var(--font-weight-normal) !important;
+  }
   .lw-harbor-ui .font-semibold {
     --lw-harbor-tw-font-weight: var(--font-weight-semibold);
     font-weight: var(--font-weight-semibold) !important;
@@ -1148,6 +1212,12 @@
     --lw-harbor-tw-tracking: var(--tracking-wider);
     letter-spacing: var(--tracking-wider) !important;
   }
+  .lw-harbor-ui .break-words {
+    overflow-wrap: break-word !important;
+  }
+  .lw-harbor-ui .break-all {
+    word-break: break-all !important;
+  }
   .lw-harbor-ui .whitespace-nowrap {
     white-space: nowrap !important;
   }
@@ -1156,6 +1226,9 @@
   }
   .lw-harbor-ui .text-amber-800 {
     color: var(--color-amber-800) !important;
+  }
+  .lw-harbor-ui .text-blue-600 {
+    color: var(--color-blue-600) !important;
   }
   .lw-harbor-ui .text-blue-800 {
     color: var(--color-blue-800) !important;
@@ -1474,6 +1547,16 @@
       }
     }
   }
+  .lw-harbor-ui .hover\:bg-white\/5 {
+    .lw-harbor-ui &:hover {
+      @media (hover: hover) {
+        background-color: color-mix(in srgb, #fff 5%, transparent) !important;
+        @supports (color: color-mix(in lab, red, red)) {
+          background-color: color-mix(in oklab, var(--color-white) 5%, transparent) !important;
+        }
+      }
+    }
+  }
   .lw-harbor-ui .hover\:text-accent-foreground {
     .lw-harbor-ui &:hover {
       @media (hover: hover) {
@@ -1552,6 +1635,32 @@
   .lw-harbor-ui .focus-visible\:ring-ring\/50 {
     .lw-harbor-ui &:focus-visible {
       --lw-harbor-tw-ring-color: color-mix(in oklab, oklch(0.708 0.165 254.624) 50%, transparent);
+    }
+  }
+  .lw-harbor-ui .focus-visible\:outline-2 {
+    .lw-harbor-ui &:focus-visible {
+      outline-style: var(--lw-harbor-tw-outline-style) !important;
+      outline-width: 2px !important;
+    }
+  }
+  .lw-harbor-ui .focus-visible\:-outline-offset-4 {
+    .lw-harbor-ui &:focus-visible {
+      outline-offset: calc(4px * -1) !important;
+    }
+  }
+  .lw-harbor-ui .focus-visible\:outline-offset-2 {
+    .lw-harbor-ui &:focus-visible {
+      outline-offset: 2px !important;
+    }
+  }
+  .lw-harbor-ui .focus-visible\:outline-ring {
+    .lw-harbor-ui &:focus-visible {
+      outline-color: oklch(0.708 0.165 254.624) !important;
+    }
+  }
+  .lw-harbor-ui .focus-visible\:outline-white {
+    .lw-harbor-ui &:focus-visible {
+      outline-color: var(--color-white) !important;
     }
   }
   .lw-harbor-ui .disabled\:pointer-events-none {
@@ -1938,14 +2047,29 @@
   padding-left: 0;
 }
 #wpcontent:has(.lw-harbor-ui) #wpbody-content {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - var(--wp-admin--admin-bar--height, 32px));
   padding-bottom: 0;
+}
+#wpcontent:has(.lw-harbor-ui) #wpbody-content > .notice,
+#wpcontent:has(.lw-harbor-ui) #wpbody-content > .updated,
+#wpcontent:has(.lw-harbor-ui) #wpbody-content > .error {
+  flex-shrink: 0;
+  margin: 12px 16px 0;
+  border-radius: 4px;
 }
 #wpcontent:has(.lw-harbor-ui) + #wpfooter {
   display: none;
 }
 .wrap:has(> .lw-harbor-ui) {
+  flex: 1;
+  min-height: 0;
   margin: 0;
   padding: 0;
+}
+#lw-harbor-root.lw-harbor-ui {
+  height: 100%;
 }
 @layer base {
   .lw-harbor-ui * {

@@ -74,7 +74,7 @@ class WC_REST_Authentication {
 
 		$resolved_route = $this->resolved_route();
 		$is_wc_route    = $this->is_wc_namespace( $this->route_from_request_uri() )
-			|| ( null !== $resolved_route && $this->is_wc_namespace( $resolved_route ) );
+			|| ( wp_is_rest_endpoint() && null !== $resolved_route && $this->is_wc_namespace( $resolved_route ) );
 
 		/**
 		 * Filters whether the current request is a request to the WooCommerce REST API.
@@ -118,10 +118,9 @@ class WC_REST_Authentication {
 	/**
 	 * The REST route the request URI points to, normalized the way WordPress matches it.
 	 *
-	 * Returns the route without the REST prefix or surrounding slashes, e.g. 'wc/v3/products', or
-	 * an empty string when the URI is not a REST request. This reads the URI and nothing else, so the
-	 * route it returns is always the one the URI names. That is what is_resolved_route_in_scope()
-	 * compares the route WordPress ends up resolving against.
+	 * Returns the route without the REST prefix or surrounding slashes, e.g. 'wc/v3/products'. The
+	 * path is read unconditionally; a route named in the query string is only trusted once
+	 * wp_is_rest_endpoint() confirms genuine REST dispatch, and returns an empty string until then.
 	 *
 	 * @since 11.1.0
 	 *
@@ -157,8 +156,13 @@ class WC_REST_Authentication {
 			parse_str( $query_string, $query_params );
 		}
 
-		// Plain permalinks carry the route in the query string.
-		if ( isset( $query_params['rest_route'] ) && is_string( $query_params['rest_route'] ) ) {
+		// Plain permalinks can carry the route in the query string.
+		if ( isset( $query_params['rest_route'] ) ) {
+			// Only trust and read it once dispatch is confirmed and it's a single value.
+			if ( ! wp_is_rest_endpoint() || ! is_string( $query_params['rest_route'] ) ) {
+				return '';
+			}
+
 			return trim( $query_params['rest_route'], '/' );
 		}
 
@@ -356,15 +360,15 @@ class WC_REST_Authentication {
 		$consumer_secret   = '';
 
 		// If the $_GET parameters are present, use those first.
-		if ( ! empty( $_GET['consumer_key'] ) && ! empty( $_GET['consumer_secret'] ) ) { // WPCS: CSRF ok.
-			$consumer_key    = $_GET['consumer_key']; // WPCS: CSRF ok, sanitization ok.
-			$consumer_secret = $_GET['consumer_secret']; // WPCS: CSRF ok, sanitization ok.
+		if ( ! empty( $_GET['consumer_key'] ) && ! empty( $_GET['consumer_secret'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Raw credentials and request data are required for OAuth signature verification.
+			$consumer_key    = $_GET['consumer_key']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- Raw credentials and request data are required for OAuth signature verification.
+			$consumer_secret = $_GET['consumer_secret']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- Raw credentials and request data are required for OAuth signature verification.
 		}
 
 		// If the above is not present, we will do full basic auth.
 		if ( ! $consumer_key && ! empty( $_SERVER['PHP_AUTH_USER'] ) && ! empty( $_SERVER['PHP_AUTH_PW'] ) ) {
-			$consumer_key    = $_SERVER['PHP_AUTH_USER']; // WPCS: CSRF ok, sanitization ok.
-			$consumer_secret = $_SERVER['PHP_AUTH_PW']; // WPCS: CSRF ok, sanitization ok.
+			$consumer_key    = $_SERVER['PHP_AUTH_USER']; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- Raw credentials and request data are required for OAuth signature verification.
+			$consumer_secret = $_SERVER['PHP_AUTH_PW']; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- Raw credentials and request data are required for OAuth signature verification.
 		}
 
 		// Stop if don't have any key.
@@ -430,12 +434,12 @@ class WC_REST_Authentication {
 	 */
 	public function get_authorization_header() {
 		if ( ! empty( $_SERVER['HTTP_AUTHORIZATION'] ) ) {
-			return wp_unslash( $_SERVER['HTTP_AUTHORIZATION'] ); // WPCS: sanitization ok.
+			return wp_unslash( $_SERVER['HTTP_AUTHORIZATION'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Raw credentials and request data are required for OAuth signature verification.
 		}
 
 		if ( function_exists( 'getallheaders' ) ) {
 			$headers = getallheaders();
-			// Check for the authoization header case-insensitively.
+			// Check for the authorization header case-insensitively.
 			foreach ( $headers as $key => $value ) {
 				if ( 'authorization' === strtolower( $key ) ) {
 					return $value;
@@ -454,7 +458,7 @@ class WC_REST_Authentication {
 	 * @return array|WP_Error
 	 */
 	public function get_oauth_parameters() {
-		$params = array_merge( $_GET, $_POST ); // WPCS: CSRF ok.
+		$params = array_merge( $_GET, $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.NonceVerification.Missing -- Raw credentials and request data are required for OAuth signature verification.
 		$params = wp_unslash( $params );
 		$header = $this->get_authorization_header();
 
@@ -568,8 +572,8 @@ class WC_REST_Authentication {
 	 * @return true|WP_Error
 	 */
 	private function check_oauth_signature( $user, $params ) {
-		$http_method  = isset( $_SERVER['REQUEST_METHOD'] ) ? strtoupper( $_SERVER['REQUEST_METHOD'] ) : ''; // WPCS: sanitization ok.
-		$request_path = isset( $_SERVER['REQUEST_URI'] ) ? wp_parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) : ''; // WPCS: sanitization ok.
+		$http_method  = isset( $_SERVER['REQUEST_METHOD'] ) ? strtoupper( $_SERVER['REQUEST_METHOD'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- Raw credentials and request data are required for OAuth signature verification.
+		$request_path = isset( $_SERVER['REQUEST_URI'] ) ? wp_parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- Raw credentials and request data are required for OAuth signature verification.
 		$wp_base      = get_home_url( null, '/', 'relative' );
 		if ( substr( $request_path, 0, strlen( $wp_base ) ) === $wp_base ) {
 			$request_path = substr( $request_path, strlen( $wp_base ) );
@@ -680,19 +684,26 @@ class WC_REST_Authentication {
 
 		$used_nonces = maybe_unserialize( $user->nonces );
 
-		if ( empty( $used_nonces ) ) {
+		if ( empty( $used_nonces ) || ! is_array( $used_nonces ) ) {
 			$used_nonces = array();
 		}
 
-		if ( in_array( $nonce, $used_nonces, true ) ) {
-			return new WP_Error( 'woocommerce_rest_authentication_error', __( 'Invalid nonce - nonce has already been used.', 'woocommerce' ), array( 'status' => 401 ) );
+		foreach ( $used_nonces as $timestamp_nonces ) {
+			if ( in_array( $nonce, (array) $timestamp_nonces, true ) ) {
+				return new WP_Error( 'woocommerce_rest_authentication_error', __( 'Invalid nonce - nonce has already been used.', 'woocommerce' ), array( 'status' => 401 ) );
+			}
 		}
 
-		$used_nonces[ $timestamp ] = $nonce;
+		if ( isset( $used_nonces[ $timestamp ] ) ) {
+			$used_nonces[ $timestamp ]   = (array) $used_nonces[ $timestamp ];
+			$used_nonces[ $timestamp ][] = $nonce;
+		} else {
+			$used_nonces[ $timestamp ] = $nonce;
+		}
 
 		// Remove expired nonces.
-		foreach ( $used_nonces as $nonce_timestamp => $nonce ) {
-			if ( $nonce_timestamp < ( time() - $valid_window ) ) {
+		foreach ( array_keys( $used_nonces ) as $nonce_timestamp ) {
+			if ( ! is_numeric( $nonce_timestamp ) || $nonce_timestamp < ( time() - $valid_window ) ) {
 				unset( $used_nonces[ $nonce_timestamp ] );
 			}
 		}

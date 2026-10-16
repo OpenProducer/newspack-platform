@@ -15,23 +15,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-namespace Google\Site_Kit_Dependencies\Google\Service\Webcontentpublisher;
+namespace Google\Site_Kit_Dependencies\Google\Service\WebContentPublisher;
 
 class DomainProperty extends \Google\Site_Kit_Dependencies\Google\Model
 {
     /**
-     * Whether domain ownership has been verified.
+     * Optional. Whether the domain ownership has been verified (e.g., via Google
+     * Search Console).
      *
      * @var bool
      */
     public $ownershipVerified;
     /**
-     * The URL of the domain property.
+     * Required. The URL of the domain property (e.g., "https://example.com").
      *
      * @var string
      */
     public $url;
     /**
+     * Optional. Whether the domain ownership has been verified (e.g., via Google
+     * Search Console).
+     *
      * @param bool $ownershipVerified
      */
     public function setOwnershipVerified($ownershipVerified)
@@ -46,6 +50,8 @@ class DomainProperty extends \Google\Site_Kit_Dependencies\Google\Model
         return $this->ownershipVerified;
     }
     /**
+     * Required. The URL of the domain property (e.g., "https://example.com").
+     *
      * @param string $url
      */
     public function setUrl($url)
@@ -60,4 +66,5 @@ class DomainProperty extends \Google\Site_Kit_Dependencies\Google\Model
         return $this->url;
     }
 }
-class_alias(DomainProperty::class, 'Google\Site_Kit_Dependencies\Google_Service_Webcontentpublisher_DomainProperty');
+// Adding a class alias for backwards compatibility with the previous class name.
+class_alias(DomainProperty::class, 'Google\Site_Kit_Dependencies\Google_Service_WebContentPublisher_DomainProperty');
