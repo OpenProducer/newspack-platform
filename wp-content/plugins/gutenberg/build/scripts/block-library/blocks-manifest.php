@@ -122,6 +122,9 @@ return array(
 		),
 		'supports' => array(
 			'anchor' => true,
+			'background' => array(
+				'gradient' => true
+			),
 			'color' => array(
 				'background' => true,
 				'gradients' => true
@@ -2155,8 +2158,21 @@ return array(
 			),
 			'interactivity' => array(
 				'clientNavigation' => true
+			),
+			'spacing' => array(
+				'padding' => true,
+				'__experimentalDefaultControls' => array(
+					'padding' => false
+				)
+			),
+			'__experimentalBorder' => array(
+				'radius' => true,
+				'color' => true,
+				'width' => true,
+				'style' => true
 			)
-		)
+		),
+		'style' => 'wp-block-comments-pagination-next'
 	),
 	'comments-pagination-numbers' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
@@ -2263,8 +2279,21 @@ return array(
 			),
 			'interactivity' => array(
 				'clientNavigation' => true
+			),
+			'spacing' => array(
+				'padding' => true,
+				'__experimentalDefaultControls' => array(
+					'padding' => false
+				)
+			),
+			'__experimentalBorder' => array(
+				'radius' => true,
+				'color' => true,
+				'width' => true,
+				'style' => true
 			)
-		)
+		),
+		'style' => 'wp-block-comments-pagination-previous'
 	),
 	'comments-title' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
@@ -2489,6 +2518,8 @@ return array(
 			'color' => array(
 				'heading' => true,
 				'text' => true,
+				'link' => true,
+				'button' => true,
 				'background' => false,
 				'__experimentalSkipSerialization' => array(
 					'gradients'
@@ -2496,7 +2527,8 @@ return array(
 				'enableContrastChecker' => false
 			),
 			'dimensions' => array(
-				'aspectRatio' => true
+				'aspectRatio' => true,
+				'minWidth' => true
 			),
 			'typography' => array(
 				'fontSize' => true,
@@ -2804,6 +2836,19 @@ return array(
 				)
 			),
 			'shadow' => true,
+			'typography' => array(
+				'fontSize' => true,
+				'lineHeight' => true,
+				'__experimentalFontFamily' => true,
+				'__experimentalFontWeight' => true,
+				'__experimentalFontStyle' => true,
+				'__experimentalTextTransform' => true,
+				'__experimentalTextDecoration' => true,
+				'__experimentalLetterSpacing' => true,
+				'__experimentalDefaultControls' => array(
+					'fontSize' => true
+				)
+			),
 			'interactivity' => true
 		),
 		'editorStyle' => 'wp-block-file-editor',
@@ -3308,6 +3353,7 @@ return array(
 			'className' => true,
 			'splitting' => true,
 			'background' => array(
+				'backgroundClip' => true,
 				'backgroundImage' => true,
 				'backgroundSize' => true,
 				'gradient' => true,
@@ -3527,6 +3573,12 @@ return array(
 				'center',
 				'right'
 			),
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalSkipSerialization' => true
+			),
 			'html' => false,
 			'color' => array(
 				'__experimentalSkipSerialization' => true,
@@ -3537,6 +3589,9 @@ return array(
 			),
 			'interactivity' => array(
 				'clientNavigation' => true
+			),
+			'shadow' => array(
+				'__experimentalSkipSerialization' => true
 			),
 			'__experimentalBorder' => array(
 				'color' => true,
@@ -3564,8 +3619,12 @@ return array(
 			),
 			'dimensions' => array(
 				'width' => true,
+				'minWidth' => true,
+				'minHeight' => true,
 				'__experimentalSkipSerialization' => array(
-					'width'
+					'width',
+					'minWidth',
+					'minHeight'
 				),
 				'__experimentalDefaultControls' => array(
 					'width' => true
@@ -3575,6 +3634,7 @@ return array(
 		'selectors' => array(
 			'root' => '.wp-block-icon svg',
 			'css' => '.wp-block-icon',
+			'shadow' => '.wp-block-icon svg',
 			'spacing' => array(
 				'margin' => '.wp-block-icon'
 			)
@@ -4086,6 +4146,10 @@ return array(
 					'text' => true
 				)
 			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
+			),
 			'spacing' => array(
 				'margin' => true,
 				'padding' => true,
@@ -4105,6 +4169,7 @@ return array(
 		),
 		'selectors' => array(
 			'border' => '.wp-block-list:not(.wp-block-list .wp-block-list)',
+			'dimensions' => '.wp-block-list:not(.wp-block-list .wp-block-list)',
 			'shadow' => '.wp-block-list:not(.wp-block-list .wp-block-list)'
 		),
 		'editorStyle' => 'wp-block-list-editor',
@@ -4269,7 +4334,8 @@ return array(
 			'shadow' => true,
 			'interactivity' => array(
 				'clientNavigation' => true
-			)
+			),
+			'contentRole' => true
 		),
 		'style' => 'wp-block-loginout'
 	),
@@ -4772,6 +4838,9 @@ return array(
 			'interactivity' => true,
 			'renaming' => false
 		),
+		'selectors' => array(
+			'css' => '.wp-block-navigation:not(.wp-block-navigation__container)'
+		),
 		'editorStyle' => 'wp-block-navigation-editor',
 		'style' => 'wp-block-navigation'
 	),
@@ -4909,6 +4978,10 @@ return array(
 				)
 			),
 			'shadow' => true,
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
+			),
 			'__experimentalBorder' => array(
 				'color' => true,
 				'radius' => true,
@@ -4917,6 +4990,7 @@ return array(
 			),
 			'spacing' => array(
 				'padding' => true,
+				'margin' => true,
 				'__experimentalDefaultControls' => array(
 					'padding' => true
 				)
@@ -5270,6 +5344,12 @@ return array(
 			'splitting' => true,
 			'anchor' => true,
 			'className' => false,
+			'background' => array(
+				'backgroundClip' => true,
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true
+			),
 			'__experimentalBorder' => array(
 				'color' => true,
 				'radius' => true,
@@ -5284,6 +5364,10 @@ return array(
 					'background' => true,
 					'text' => true
 				)
+			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
 			),
 			'spacing' => array(
 				'margin' => true,
@@ -5433,6 +5517,15 @@ return array(
 		'supports' => array(
 			'anchor' => true,
 			'align' => true,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalDefaultControls' => array(
+					'backgroundImage' => true,
+					'gradient' => true
+				)
+			),
 			'color' => array(
 				'gradients' => true,
 				'link' => true,
@@ -5450,6 +5543,10 @@ return array(
 					'style' => true,
 					'width' => true
 				)
+			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
 			),
 			'interactivity' => true,
 			'shadow' => true,
@@ -6444,6 +6541,12 @@ return array(
 			'anchor' => true,
 			'reusable' => false,
 			'html' => false,
+			'background' => array(
+				'__experimentalSkipSerialization' => true,
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true
+			),
 			'color' => array(
 				'link' => true
 			),
@@ -6467,6 +6570,11 @@ return array(
 			),
 			'interactivity' => array(
 				'clientNavigation' => true
+			),
+			'dimensions' => array(
+				'__experimentalSkipSerialization' => true,
+				'minHeight' => true,
+				'minWidth' => true
 			),
 			'spacing' => array(
 				'__experimentalSkipSerialization' => true,
@@ -6492,7 +6600,9 @@ return array(
 			)
 		),
 		'selectors' => array(
+			'background' => '.wp-block-post-navigation-link:not(:empty)',
 			'border' => '.wp-block-post-navigation-link:not(:empty)',
+			'dimensions' => '.wp-block-post-navigation-link:not(:empty)',
 			'shadow' => '.wp-block-post-navigation-link:not(:empty)',
 			'spacing' => '.wp-block-post-navigation-link:not(:empty)'
 		),
@@ -6571,6 +6681,10 @@ return array(
 					'padding' => false,
 					'margin' => false
 				)
+			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true
 			),
 			'interactivity' => array(
 				'clientNavigation' => true
@@ -6845,6 +6959,7 @@ return array(
 				'__experimentalTextTransform' => true,
 				'__experimentalTextDecoration' => true,
 				'__experimentalLetterSpacing' => true,
+				'fitText' => true,
 				'__experimentalDefaultControls' => array(
 					'fontSize' => true
 				)
@@ -7000,12 +7115,14 @@ return array(
 				'fontSize' => true,
 				'lineHeight' => true,
 				'textAlign' => true,
+				'textIndent' => true,
 				'__experimentalFontFamily' => true,
 				'__experimentalFontWeight' => true,
 				'__experimentalFontStyle' => true,
 				'__experimentalTextTransform' => true,
 				'__experimentalTextDecoration' => true,
 				'__experimentalLetterSpacing' => true,
+				'__experimentalWritingMode' => true,
 				'__experimentalDefaultControls' => array(
 					'fontSize' => true
 				)
@@ -7694,6 +7811,7 @@ return array(
 				'__experimentalTextTransform' => true,
 				'__experimentalTextDecoration' => true,
 				'__experimentalLetterSpacing' => true,
+				'__experimentalWritingMode' => true,
 				'__experimentalDefaultControls' => array(
 					'fontSize' => true
 				)
@@ -7969,6 +8087,10 @@ return array(
 				'center',
 				'right'
 			),
+			'background' => array(
+				'gradient' => true,
+				'__experimentalSkipSerialization' => true
+			),
 			'color' => array(
 				'gradients' => true,
 				'__experimentalSkipSerialization' => true,
@@ -7996,6 +8118,7 @@ return array(
 			'__experimentalBorder' => array(
 				'color' => true,
 				'radius' => true,
+				'style' => true,
 				'width' => true,
 				'__experimentalSkipSerialization' => true,
 				'__experimentalDefaultControls' => array(
@@ -8003,6 +8126,14 @@ return array(
 					'radius' => true,
 					'width' => true
 				)
+			),
+			'shadow' => array(
+				'__experimentalSkipSerialization' => true
+			),
+			'dimensions' => array(
+				'minHeight' => true,
+				'minWidth' => true,
+				'__experimentalSkipSerialization' => true
 			),
 			'spacing' => array(
 				'margin' => true,
@@ -8014,7 +8145,10 @@ return array(
 		'style' => 'wp-block-search',
 		'selectors' => array(
 			'color' => '.wp-block-search .wp-block-search__button, .wp-block-search.wp-block-search__no-button .wp-block-search__input',
-			'border' => '.wp-block-search.wp-block-search__button-outside .wp-block-search__input, .wp-block-search.wp-block-search__button-outside .wp-block-search__button, .wp-block-search.wp-block-search__no-button .wp-block-search__input, .wp-block-search.wp-block-search__button-only .wp-block-search__input, .wp-block-search.wp-block-search__button-only .wp-block-search__button, .wp-block-search.wp-block-search__button-inside .wp-block-search__inside-wrapper'
+			'background' => '.wp-block-search .wp-block-search__button, .wp-block-search.wp-block-search__no-button .wp-block-search__input',
+			'border' => '.wp-block-search.wp-block-search__button-outside .wp-block-search__input, .wp-block-search.wp-block-search__button-outside .wp-block-search__button, .wp-block-search.wp-block-search__no-button .wp-block-search__input, .wp-block-search.wp-block-search__button-only .wp-block-search__input, .wp-block-search.wp-block-search__button-only .wp-block-search__button, .wp-block-search.wp-block-search__button-inside .wp-block-search__inside-wrapper',
+			'shadow' => '.wp-block-search.wp-block-search__button-outside .wp-block-search__input, .wp-block-search.wp-block-search__button-outside .wp-block-search__button, .wp-block-search.wp-block-search__no-button .wp-block-search__input, .wp-block-search.wp-block-search__button-only .wp-block-search__input, .wp-block-search.wp-block-search__button-only .wp-block-search__button, .wp-block-search.wp-block-search__button-inside .wp-block-search__inside-wrapper',
+			'dimensions' => '.wp-block-search .wp-block-search__inside-wrapper'
 		)
 	),
 	'separator' => array(
@@ -8650,6 +8784,12 @@ return array(
 			'ariaLabel' => true,
 			'visibility' => false,
 			'lock' => false,
+			'background' => array(
+				'backgroundImage' => true,
+				'backgroundSize' => true,
+				'gradient' => true,
+				'__experimentalSkipSerialization' => true
+			),
 			'color' => array(
 				'background' => true,
 				'text' => true,
@@ -8661,7 +8801,11 @@ return array(
 			),
 			'typography' => array(
 				'fontSize' => true,
-				'__experimentalFontFamily' => true
+				'lineHeight' => true,
+				'__experimentalFontFamily' => true,
+				'__experimentalFontWeight' => true,
+				'__experimentalTextTransform' => true,
+				'__experimentalLetterSpacing' => true
 			),
 			'__experimentalBorder' => array(
 				'color' => true,
@@ -8695,6 +8839,7 @@ return array(
 			)
 		),
 		'selectors' => array(
+			'background' => '.wp-block-tab-list button',
 			'border' => '.wp-block-tab-list button',
 			'shadow' => '.wp-block-tab-list button',
 			'color' => array(
@@ -9020,9 +9165,18 @@ return array(
 		'supports' => array(
 			'anchor' => true,
 			'align' => true,
-			'color' => array(
+			'background' => array(
 				'__experimentalSkipSerialization' => true,
+				'gradient' => true
+			),
+			'color' => array(
+				'__experimentalSkipSerialization' => array(
+					'text',
+					'background',
+					'gradients'
+				),
 				'gradients' => true,
+				'link' => true,
 				'__experimentalDefaultControls' => array(
 					'background' => true,
 					'text' => true
@@ -9037,6 +9191,9 @@ return array(
 				)
 			),
 			'typography' => array(
+				'__experimentalSkipSerialization' => array(
+					'textAlign'
+				),
 				'fontSize' => true,
 				'lineHeight' => true,
 				'__experimentalFontFamily' => true,
@@ -9045,6 +9202,7 @@ return array(
 				'__experimentalLetterSpacing' => true,
 				'__experimentalTextTransform' => true,
 				'__experimentalTextDecoration' => true,
+				'textAlign' => true,
 				'__experimentalDefaultControls' => array(
 					'fontSize' => true
 				)
@@ -9095,17 +9253,11 @@ return array(
 			'summary'
 		),
 		'textdomain' => 'default',
+		'usesContext' => array(
+			'postId',
+			'postType'
+		),
 		'attributes' => array(
-			'headings' => array(
-				'type' => 'array',
-				'items' => array(
-					'type' => 'object'
-				),
-				'default' => array(
-					
-				),
-				'role' => 'local'
-			),
 			'onlyIncludeCurrentPage' => array(
 				'type' => 'boolean',
 				'default' => false
@@ -9389,7 +9541,8 @@ return array(
 		'textdomain' => 'default',
 		'usesContext' => array(
 			'termId',
-			'taxonomy'
+			'taxonomy',
+			'termData'
 		),
 		'attributes' => array(
 			'bracketType' => array(
@@ -9660,6 +9813,8 @@ return array(
 			'color' => array(
 				'gradients' => true,
 				'link' => true,
+				'heading' => true,
+				'button' => true,
 				'__experimentalDefaultControls' => array(
 					'background' => true,
 					'text' => true
@@ -9758,6 +9913,11 @@ return array(
 			),
 			'html' => false,
 			'layout' => true,
+			'spacing' => array(
+				'padding' => true,
+				'margin' => true,
+				'blockGap' => true
+			),
 			'interactivity' => true
 		)
 	),
@@ -10007,13 +10167,20 @@ return array(
 				)
 			),
 			'interactivity' => array(
-				'clientNavigation' => true
+				'clientNavigation' => true,
+				'interactive' => true
 			),
 			'shadow' => array(
+				'__experimentalSkipSerialization' => true
+			),
+			'dimensions' => array(
+				'minWidth' => true,
+				'minHeight' => true,
 				'__experimentalSkipSerialization' => true
 			)
 		),
 		'selectors' => array(
+			'dimensions' => '.wp-block-video video',
 			'shadow' => '.wp-block-video video',
 			'filter' => array(
 				'duotone' => '.wp-block-video video'

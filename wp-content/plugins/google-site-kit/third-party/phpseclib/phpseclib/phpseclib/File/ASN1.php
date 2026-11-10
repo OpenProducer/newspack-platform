@@ -123,6 +123,7 @@ abstract class ASN1
      * @see self::decodeDER()
      */
     private static $encoded;
+    private static $use64BitOIDHandling;
     /**
      * Type mapping table for the ANY type.
      *
@@ -172,6 +173,7 @@ abstract class ASN1
      *
      * @param Element|string $encoded
      * @return ?array
+     * @changed in phpseclib 4.0.0
      */
     public static function decodeBER($encoded)
     {
@@ -476,6 +478,7 @@ abstract class ASN1
      * @param array $mapping
      * @param array $special
      * @return array|bool|Element|string|null
+     * @changed in phpseclib 4.0.0
      */
     public static function asn1map(array $decoded, $mapping, $special = [])
     {
@@ -497,7 +500,7 @@ abstract class ASN1
             case $mapping['type'] == self::TYPE_CHOICE:
                 foreach ($mapping['children'] as $key => $option) {
                     switch (\true) {
-                        case isset($option['constant']) && $option['constant'] == $decoded['constant']:
+                        case isset($option['constant']) && isset($decoded['constant']) && $option['constant'] == $decoded['constant']:
                         case !isset($option['constant']) && $option['type'] == $decoded['type']:
                             $value = self::asn1map($decoded, $option, $special);
                             break;
@@ -576,6 +579,11 @@ abstract class ASN1
                                 // Can only match if no constant expected and type matches or is generic.
                                 $maymatch = !isset($child['constant']) && array_search($child['type'], [$temp['type'], self::TYPE_ANY, self::TYPE_CHOICE]) !== \false;
                             }
+                        } elseif (isset($child['constant'])) {
+                            // a CHOICE that is itself tagged is identified by that tag. its alternatives
+                            // can't be used to tell it apart from a sibling with the same CHOICE definition
+                            // (eg. issuerLogo [1] / subjectLogo [2] in RFC 9399's LogotypeExtn).
+                            $maymatch = isset($temp['constant']) && $child['constant'] == $temp['constant'] && $temp['type'] == self::CLASS_CONTEXT_SPECIFIC;
                         }
                     }
                     if ($maymatch) {
@@ -640,6 +648,9 @@ abstract class ASN1
                                 // Can only match if no constant expected and type matches or is generic.
                                 $maymatch = !isset($child['constant']) && array_search($child['type'], [$temp['type'], self::TYPE_ANY, self::TYPE_CHOICE]) !== \false;
                             }
+                        } elseif (isset($child['constant'])) {
+                            // see the comment in the TYPE_SEQUENCE case
+                            $maymatch = isset($temp['constant']) && $child['constant'] == $temp['constant'] && $tempClass == self::CLASS_CONTEXT_SPECIFIC;
                         }
                         if ($maymatch) {
                             // Attempt submapping.
@@ -781,6 +792,7 @@ abstract class ASN1
      * @param array $mapping
      * @param array $special
      * @return string
+     * @changed in phpseclib 4.0.0
      */
     public static function encodeDER($source, $mapping, $special = [])
     {
@@ -1060,6 +1072,17 @@ abstract class ASN1
         }
         return chr($tag) . self::encodeLength(strlen($value)) . $value;
     }
+    public static function enable64BitOIDHandling()
+    {
+        if (\PHP_INT_SIZE === 4) {
+            throw new \RuntimeException('64-bit OID handling is unavailable on 32-bit PHP installs');
+        }
+        self::$use64BitOIDHandling = \true;
+    }
+    public static function disable64BitOIDHandling()
+    {
+        self::$use64BitOIDHandling = \false;
+    }
     /**
      * BER-decode the OID
      *
@@ -1067,6 +1090,7 @@ abstract class ASN1
      *
      * @param string $content
      * @return string
+     * @changed in phpseclib 4.0.0
      */
     public static function decodeOID($content)
     {
@@ -1075,6 +1099,9 @@ abstract class ASN1
         static $eighty;
         if (!$eighty) {
             $eighty = new BigInteger(80);
+        }
+        if (!isset(self::$use64BitOIDHandling)) {
+            self::$use64BitOIDHandling = \PHP_INT_SIZE === 8;
         }
         $oid = [];
         $pos = 0;
@@ -1088,13 +1115,51 @@ abstract class ASN1
             return \false;
         }
         $n = new BigInteger();
-        while ($pos < $len) {
-            $temp = ord($content[$pos++]);
-            $n = $n->bitwise_leftShift(7);
-            $n = $n->bitwise_or(new BigInteger($temp & 0x7f));
-            if (~$temp & 0x80) {
-                $oid[] = $n;
-                $n = new BigInteger();
+        $subn = $numBytes = 0;
+        if (self::$use64BitOIDHandling) {
+            $prefix = '';
+            while ($pos < $len) {
+                $temp = ord($content[$pos++]);
+                $subn <<= 7;
+                $subn |= $temp & 0x7f;
+                $numBytes++;
+                $endByte = ~$temp & 0x80;
+                if ($numBytes === \PHP_INT_SIZE) {
+                    $prefix .= substr(pack('J', $subn), 1);
+                    // we're basically left shifting by 7 bytes
+                    $subn = $numBytes = 0;
+                    if ($endByte) {
+                        $oid[] = new BigInteger($prefix, 256);
+                        $prefix = '';
+                    }
+                } elseif ($endByte) {
+                    if (strlen($prefix)) {
+                        $arc = new BigInteger($prefix, 256);
+                        $arc = $arc->bitwise_leftShift($numBytes * 7);
+                        $oid[] = $arc->bitwise_or(new BigInteger($subn));
+                        $prefix = '';
+                    } else {
+                        $oid[] = new BigInteger($subn);
+                    }
+                    $subn = $numBytes = 0;
+                }
+            }
+        } else {
+            while ($pos < $len) {
+                $temp = ord($content[$pos++]);
+                $subn <<= 7;
+                $subn |= $temp & 0x7f;
+                $numBytes++;
+                $endByte = ~$temp & 0x80;
+                if ($numBytes === \PHP_INT_SIZE || $endByte) {
+                    $n = $n->bitwise_leftShift($numBytes * 7);
+                    $n = $n->bitwise_or(new BigInteger($subn));
+                    $subn = $numBytes = 0;
+                    if ($endByte) {
+                        $oid[] = $n;
+                        $n = new BigInteger();
+                    }
+                }
             }
         }
         $part1 = array_shift($oid);
@@ -1173,6 +1238,7 @@ abstract class ASN1
      * @param string $content
      * @param int $tag
      * @return \DateTime|false
+     * @changed in phpseclib 4.0.0
      */
     private static function decodeTime($content, $tag)
     {
@@ -1212,6 +1278,7 @@ abstract class ASN1
      * Sets the time / date format for asn1map().
      *
      * @param string $format
+     * @removed in phpseclib 4.0.0
      */
     public static function setTimeFormat($format)
     {
@@ -1224,6 +1291,7 @@ abstract class ASN1
      * Previously loaded OIDs are retained.
      *
      * @param array $oids
+     * @changed in phpseclib 4.0.0
      */
     public static function loadOIDs(array $oids)
     {
@@ -1237,6 +1305,7 @@ abstract class ASN1
      * Previously loaded filters are not retained.
      *
      * @param array $filters
+     * @removed in phpseclib 4.0.0
      */
     public static function setFilters(array $filters)
     {
@@ -1252,6 +1321,7 @@ abstract class ASN1
      * @param int $from
      * @param int $to
      * @return string
+     * @removed in phpseclib 4.0.0
      */
     public static function convert($in, $from = self::TYPE_UTF8_STRING, $to = self::TYPE_UTF8_STRING)
     {
@@ -1410,6 +1480,7 @@ abstract class ASN1
      *
      * @param string $name
      * @return string
+     * @removed in phpseclib 4.0.0
      */
     public static function getOID($name)
     {

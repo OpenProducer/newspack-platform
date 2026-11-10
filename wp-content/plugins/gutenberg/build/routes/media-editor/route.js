@@ -52,12 +52,37 @@ var require_i18n = __commonJS({
   }
 });
 
+// package-external:@wordpress/editor
+var require_editor = __commonJS({
+  "package-external:@wordpress/editor"(exports, module) {
+    module.exports = window.wp.editor;
+  }
+});
+
+// package-external:@wordpress/private-apis
+var require_private_apis = __commonJS({
+  "package-external:@wordpress/private-apis"(exports, module) {
+    module.exports = window.wp.privateApis;
+  }
+});
+
 // routes/media-editor/route.ts
 var import_core_data = __toESM(require_core_data());
 var import_data = __toESM(require_data());
 var import_html_entities = __toESM(require_html_entities());
 var import_i18n = __toESM(require_i18n());
+var import_editor = __toESM(require_editor());
 import { notFound } from "@wordpress/route";
+
+// routes/lock-unlock/index.ts
+var import_private_apis = __toESM(require_private_apis());
+var { lock, unlock } = (0, import_private_apis.__dangerousOptInToUnstableAPIsOnlyForCoreModules)(
+  "I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.",
+  "@wordpress/routes"
+);
+
+// routes/media-editor/route.ts
+var VIEW_CONFIG_FIELDS = "form";
 function getAttachmentId(id) {
   const attachmentId = parseInt(id, 10);
   if (Number.isNaN(attachmentId) || attachmentId <= 0) {
@@ -87,6 +112,16 @@ var route = {
     } catch {
       throw notFound();
     }
+  },
+  loader: async () => {
+    await Promise.all([
+      unlock((0, import_data.resolveSelect)(import_editor.store)).getEntityFields("postType", "attachment").catch(() => {
+      }),
+      unlock((0, import_data.resolveSelect)(import_core_data.store)).getViewConfig("postType", "attachment", {
+        fields: VIEW_CONFIG_FIELDS
+      }).catch(() => {
+      })
+    ]);
   },
   title: async ({ params }) => {
     const attachmentId = getAttachmentId(params.id);

@@ -1415,6 +1415,9 @@ var warn = (message) => {
     logged.add(message);
   }
 };
+var isReservedKey = (key) => key === "__proto__" || key === "constructor" || key === "prototype";
+var getOwnProperty = (object, key) => Object.prototype.hasOwnProperty.call(object, key) ? object[key] : void 0;
+var jsonReviver = (key, value) => key === "__proto__" ? void 0 : value;
 var isPlainObject = (candidate) => Boolean(
   candidate && typeof candidate === "object" && candidate.constructor === Object
 );
@@ -1686,7 +1689,7 @@ var peeking = false;
 var PENDING_GETTER = /* @__PURE__ */ Symbol("PENDING_GETTER");
 var stateHandlers = {
   get(target, key, receiver) {
-    if (peeking || !target.hasOwnProperty(key) && key in target || typeof key === "symbol" && wellKnownSymbols.has(key)) {
+    if (peeking || !Object.prototype.hasOwnProperty.call(target, key) && key in target || typeof key === "symbol" && wellKnownSymbols.has(key)) {
       return Reflect.get(target, key, receiver);
     }
     const desc = Object.getOwnPropertyDescriptor(target, key);
@@ -1777,6 +1780,9 @@ var deepMergeRecursive = (target, source, override = true) => {
   }
   let hasNewKeys = false;
   for (const key in source) {
+    if (isReservedKey(key)) {
+      continue;
+    }
     const isNew = !(key in target);
     hasNewKeys = hasNewKeys || isNew;
     const desc = Object.getOwnPropertyDescriptor(source, key);
@@ -1960,14 +1966,14 @@ function store(namespace, { state = {}, ...block } = {}, { lock = false } = {}) 
 var parseServerData = (dom = document) => {
   const jsonDataScriptTag = (
     // Preferred Script Module data passing form
-    dom.getElementById(
-      "wp-script-module-data-@wordpress/interactivity"
+    dom.querySelector(
+      'script[id="wp-script-module-data-@wordpress/interactivity"]'
     ) ?? // Legacy form
-    dom.getElementById("wp-interactivity-data")
+    dom.querySelector('script[id="wp-interactivity-data"]')
   );
-  if (jsonDataScriptTag?.textContent) {
+  if (jsonDataScriptTag instanceof HTMLScriptElement) {
     try {
-      return JSON.parse(jsonDataScriptTag.textContent);
+      return JSON.parse(jsonDataScriptTag.text, jsonReviver);
     } catch {
     }
   }
@@ -2016,6 +2022,231 @@ var populateServerData = (data) => {
   }
 };
 
+// packages/interactivity/build-module/vdom.mjs
+init_preact_module();
+var directivePrefix = `data-wp-`;
+var namespaces = [];
+var currentNamespace = () => namespaces[namespaces.length - 1] ?? null;
+var isObject = (item) => Boolean(item && typeof item === "object" && item.constructor === Object);
+var invalidCharsRegex = /[^a-z0-9-_]/i;
+var isReservedNamePart = (part) => isReservedKey(part.replace(/^-+|-+$/g, "").toLowerCase());
+function parseDirectiveName(directiveName) {
+  const parsed = splitDirectiveName(directiveName);
+  if (parsed && (isReservedNamePart(parsed.prefix) || parsed.suffix !== null && parsed.suffix.split("--").some(isReservedNamePart) || parsed.uniqueId !== null && isReservedNamePart(parsed.uniqueId))) {
+    return null;
+  }
+  return parsed;
+}
+function splitDirectiveName(directiveName) {
+  const name = directiveName.substring(8);
+  if (invalidCharsRegex.test(name)) {
+    return null;
+  }
+  const suffixIndex = name.indexOf("--");
+  if (suffixIndex === 0 || name[0] === "-") {
+    return null;
+  }
+  if (suffixIndex === -1) {
+    return { prefix: name, suffix: null, uniqueId: null };
+  }
+  const prefix = name.substring(0, suffixIndex);
+  const remaining = name.substring(suffixIndex);
+  if (remaining.startsWith("---") && remaining[3] !== "-") {
+    return {
+      prefix,
+      suffix: null,
+      uniqueId: remaining.substring(3) || null
+    };
+  }
+  let suffix = remaining.substring(2);
+  const uniqueIdIndex = suffix.indexOf("---");
+  if (uniqueIdIndex !== -1 && suffix.substring(uniqueIdIndex)[3] !== "-") {
+    const uniqueId = suffix.substring(uniqueIdIndex + 3) || null;
+    suffix = suffix.substring(0, uniqueIdIndex) || null;
+    return { prefix, suffix, uniqueId };
+  }
+  return { prefix, suffix: suffix || null, uniqueId: null };
+}
+var nsPathRegExp = /^([\w_\/-]+)::(.+)$/;
+function parseDirectiveValue(rawValue) {
+  const regexResult = nsPathRegExp.exec(rawValue);
+  const namespace = regexResult?.[1] ?? null;
+  const rawDirectiveValue = regexResult?.[2] ?? rawValue;
+  let value = rawDirectiveValue;
+  if (/^\s*\{/.test(rawDirectiveValue)) {
+    try {
+      const parsedValue = JSON.parse(
+        rawDirectiveValue,
+        jsonReviver
+      );
+      if (isObject(parsedValue)) {
+        value = parsedValue;
+      }
+    } catch {
+    }
+  }
+  return { namespace, value };
+}
+var directiveMaps = /* @__PURE__ */ new WeakSet();
+var isDirectiveMap = (value) => typeof value === "object" && value !== null && directiveMaps.has(value);
+function toVdom(root) {
+  const nodesToRemove = /* @__PURE__ */ new Set();
+  const nodesToReplace = /* @__PURE__ */ new Set();
+  const treeWalker = document.createTreeWalker(
+    root,
+    205
+    // TEXT + CDATA_SECTION + COMMENT + PROCESSING_INSTRUCTION + ELEMENT
+  );
+  function walk(node) {
+    const { nodeType } = node;
+    if (nodeType === 3) {
+      return node.data;
+    }
+    if (nodeType === 4) {
+      nodesToReplace.add(node);
+      return node.data;
+    }
+    if (nodeType === 8 || nodeType === 7) {
+      nodesToRemove.add(node);
+      return null;
+    }
+    const elementNode = node;
+    const localName = elementNode.localName;
+    const props = {};
+    const children = [];
+    const directives = [];
+    let island = false;
+    const attributeNames = elementNode.getAttributeNames();
+    for (let i6 = 0; i6 < attributeNames.length; i6++) {
+      const attributeName = attributeNames[i6];
+      const attributeValue = elementNode.getAttribute(attributeName) ?? "";
+      if (attributeName[directivePrefix.length] && attributeName.slice(0, directivePrefix.length) === directivePrefix) {
+        if (true) {
+          if (attributeName === "data-wp-ignore") {
+            warn(
+              "The data-wp-ignore directive has been removed. The element and its descendants are now hydrated like any other element. Please remove the attribute."
+            );
+          }
+        }
+        const { namespace, value } = parseDirectiveValue(attributeValue);
+        if (attributeName === "data-wp-interactive") {
+          island = true;
+          const islandNamespace = (
+            // eslint-disable-next-line no-nested-ternary
+            typeof value === "string" ? value : typeof value?.namespace === "string" ? value.namespace : null
+          );
+          namespaces.push(
+            isReservedKey(islandNamespace) ? null : islandNamespace
+          );
+        } else if (isReservedKey(namespace)) {
+          if (true) {
+            warn(
+              `Found reserved namespace "${namespace}" in directive: ${attributeName}.`
+            );
+          }
+        } else {
+          directives.push([attributeName, namespace, value]);
+        }
+        props[attributeName] = attributeValue;
+        continue;
+      } else if (attributeName === "ref") {
+        continue;
+      }
+      if (attributeValue === "" && elementNode[attributeName] === true) {
+        props[attributeName] = true;
+      } else {
+        props[attributeName] = attributeValue;
+      }
+    }
+    if (directives.length) {
+      props.__directives = directives.reduce((obj, [name, ns, value]) => {
+        const directiveParsed = parseDirectiveName(name);
+        if (directiveParsed === null) {
+          if (true) {
+            warn(`Found malformed directive name: ${name}.`);
+          }
+          return obj;
+        }
+        const { prefix, suffix, uniqueId } = directiveParsed;
+        obj[prefix] = obj[prefix] || [];
+        obj[prefix].push({
+          namespace: ns ?? currentNamespace(),
+          value,
+          suffix,
+          uniqueId
+        });
+        return obj;
+      }, /* @__PURE__ */ Object.create(null));
+      directiveMaps.add(props.__directives);
+      for (const prefix in props.__directives) {
+        props.__directives[prefix].sort(
+          (a5, b4) => {
+            const aSuffix = a5.suffix ?? "";
+            const bSuffix = b4.suffix ?? "";
+            if (aSuffix !== bSuffix) {
+              return aSuffix < bSuffix ? -1 : 1;
+            }
+            const aId = a5.uniqueId ?? "";
+            const bId = b4.uniqueId ?? "";
+            return +(aId > bId) - +(aId < bId);
+          }
+        );
+      }
+    }
+    if (props.__directives?.html) {
+      const conflictingPrefixes = [
+        "text",
+        "each",
+        "router-region"
+      ].filter((prefix) => prefix in props.__directives);
+      if (conflictingPrefixes.length) {
+        warn(
+          `The data-wp-html directive was ignored because it conflicts with ${conflictingPrefixes.map((prefix) => `data-wp-${prefix}`).join(", ")}.`
+        );
+        delete props.__directives.html;
+      }
+    }
+    const hasDefaultHtmlDirective = props.__directives?.html?.some(
+      ({ suffix }) => suffix === null
+    );
+    if (props.__directives?.["each-child"] || hasDefaultHtmlDirective) {
+      props.dangerouslySetInnerHTML = {
+        __html: elementNode.innerHTML
+      };
+    } else if (localName === "template") {
+      props.content = [
+        ...elementNode.content.childNodes
+      ].map((childNode) => toVdom(childNode));
+    } else {
+      let child = treeWalker.firstChild();
+      if (child) {
+        while (child) {
+          const vnode = walk(child);
+          if (vnode) {
+            children.push(vnode);
+          }
+          child = treeWalker.nextSibling();
+        }
+        treeWalker.parentNode();
+      }
+    }
+    if (island) {
+      namespaces.pop();
+    }
+    return k(localName, props, children);
+  }
+  const vdom = walk(treeWalker.currentNode);
+  nodesToRemove.forEach(
+    (node) => node.remove()
+  );
+  nodesToReplace.forEach(
+    (node) => node.replaceWith(
+      new window.Text(node.data)
+    )
+  );
+  return vdom;
+}
+
 // packages/interactivity/build-module/hooks.mjs
 function isNonDefaultDirectiveSuffix(entry) {
   return entry.suffix !== null;
@@ -2023,18 +2254,47 @@ function isNonDefaultDirectiveSuffix(entry) {
 function isDefaultDirectiveSuffix(entry) {
   return entry.suffix === null;
 }
-var context = X({ client: {}, server: {} });
-var directiveCallbacks = {};
-var directivePriorities = {};
+var context = X({
+  client: /* @__PURE__ */ Object.create(null),
+  server: /* @__PURE__ */ Object.create(null)
+});
+var directiveCallbacks = /* @__PURE__ */ Object.create(null);
+var directivePriorities = /* @__PURE__ */ Object.create(null);
 var directive = (name, callback, { priority = 10 } = {}) => {
   directiveCallbacks[name] = callback;
   directivePriorities[name] = priority;
+};
+var isInheritedMethod = (parent, key, value) => {
+  if (typeof value !== "function" || parent === null || parent === void 0) {
+    return false;
+  }
+  const obj = Object(parent);
+  const target = getObjectFromProxy(obj);
+  if (target && Object.prototype.hasOwnProperty.call(target, key)) {
+    return false;
+  }
+  for (let proto = Object.getPrototypeOf(target ?? obj); proto !== null; proto = Object.getPrototypeOf(proto)) {
+    const descriptor2 = Object.getOwnPropertyDescriptor(proto, key);
+    if (descriptor2) {
+      return target ? typeof descriptor2.value === "function" : descriptor2.value === value;
+    }
+  }
+  return false;
 };
 var resolve = (path, namespace) => {
   if (!namespace) {
     warn(
       `Namespace missing for "${path}". The value for that path won't be resolved.`
     );
+    return;
+  }
+  const pathParts = path.split(".");
+  if (isReservedKey(namespace) || pathParts.some(isReservedKey)) {
+    if (true) {
+      warn(
+        `The path "${path}" in the "${namespace}" namespace contains a reserved property name. The value for that path won't be resolved.`
+      );
+    }
     return;
   }
   let resolvedStore = stores.get(namespace);
@@ -2049,11 +2309,28 @@ var resolve = (path, namespace) => {
   }
   const current = {
     ...resolvedStore,
-    context: getScope().context[namespace]
+    context: getOwnProperty(getScope().context, namespace)
   };
   try {
-    const pathParts = path.split(".");
-    return pathParts.reduce((acc, key) => acc[key], current);
+    let parent;
+    let value = current;
+    for (const key of pathParts) {
+      parent = value;
+      value = value[key];
+    }
+    if (isInheritedMethod(
+      parent,
+      pathParts[pathParts.length - 1],
+      value
+    )) {
+      if (true) {
+        warn(
+          `The path "${path}" in the "${namespace}" namespace ends in an inherited method. The value for that path won't be resolved.`
+        );
+      }
+      return;
+    }
+    return value;
   } catch (e4) {
     if (e4 === PENDING_GETTER) {
       return PENDING_GETTER;
@@ -2079,9 +2356,11 @@ var getEvaluate = ({ scope }) => (entry) => {
     resetScope();
     const wrappedFunction = (...functionArgs) => {
       setScope(scope);
-      const functionResult = value(...functionArgs);
-      resetScope();
-      return functionResult;
+      try {
+        return value(...functionArgs);
+      } finally {
+        resetScope();
+      }
     };
     if (value.sync) {
       const syncAwareFunction = wrappedFunction;
@@ -2145,6 +2424,9 @@ var Directives = ({
 };
 var old = l.vnode;
 l.vnode = (vnode) => {
+  if (vnode.props.__directives && !isDirectiveMap(vnode.props.__directives)) {
+    delete vnode.props.__directives;
+  }
   if (vnode.props.__directives) {
     const props = vnode.props;
     const directives = props.__directives;
@@ -2168,6 +2450,28 @@ l.vnode = (vnode) => {
   if (old) {
     old(vnode);
   }
+};
+
+// packages/interactivity/build-module/directives/utils/restricted-bindings.mjs
+var objectAttributes = /* @__PURE__ */ new Set([
+  "class",
+  "dir",
+  "height",
+  "hidden",
+  "id",
+  "lang",
+  "role",
+  "style",
+  "tabindex",
+  "title",
+  "width"
+]);
+var isBindingAllowed = (type, attribute) => {
+  if (typeof type !== "string" || type.toLowerCase() !== "object") {
+    return true;
+  }
+  const name = attribute.toLowerCase();
+  return objectAttributes.has(name) || name.startsWith("aria-") || name.startsWith("data-") && !name.startsWith("data-wp-");
 };
 
 // packages/interactivity/build-module/directives/utils/warnings.mjs
@@ -2195,6 +2499,20 @@ var warnUniqueIdNotSupported = (prefix, uniqueId) => {
     );
   }
 };
+var warnUnbindableProp = (suffix) => {
+  if (true) {
+    warn(
+      `The data-wp-bind directive can't set the "${suffix}" prop. Ignoring data-wp-bind--${suffix}.`
+    );
+  }
+};
+var warnEventHandlerBindNotSupported = (attribute) => {
+  if (true) {
+    warn(
+      `Binding event handler attributes is not supported. Please use "data-wp-on--${attribute.slice(2)}" instead.`
+    );
+  }
+};
 var warnWithSyncEvent = (wrongPrefix, rightPrefix) => {
   if (true) {
     warn(
@@ -2203,7 +2521,47 @@ var warnWithSyncEvent = (wrongPrefix, rightPrefix) => {
   }
 };
 
+// packages/interactivity/build-module/directives/utils/url.mjs
+var urlAttributes = /* @__PURE__ */ new Set([
+  "action",
+  "archive",
+  "background",
+  "cite",
+  "classid",
+  "codebase",
+  "data",
+  "formaction",
+  "href",
+  "icon",
+  "longdesc",
+  "manifest",
+  "poster",
+  "profile",
+  "src",
+  "usemap",
+  "xlink:href",
+  "xlinkhref",
+  "xmlns"
+]);
+var isJavaScriptProtocol = /^[\u0000-\u001F ]*j[\r\n\t]*a[\r\n\t]*v[\r\n\t]*a[\r\n\t]*s[\r\n\t]*c[\r\n\t]*r[\r\n\t]*i[\r\n\t]*p[\r\n\t]*t[\r\n\t]*\:/i;
+function getSafeUrl(value) {
+  if (value === null || value === void 0 || typeof value === "boolean") {
+    return value;
+  }
+  try {
+    const url = String(value);
+    return isJavaScriptProtocol.test(url) ? null : url;
+  } catch {
+    return null;
+  }
+}
+
 // packages/interactivity/build-module/directives/bind.mjs
+var internalProps = /* @__PURE__ */ new Set([
+  "__directives",
+  "children",
+  "dangerouslysetinnerhtml"
+]);
 directive("bind", ({ directives: { bind }, element, evaluate }) => {
   bind.filter(isNonDefaultDirectiveSuffix).forEach((entry) => {
     if (entry.uniqueId) {
@@ -2213,12 +2571,41 @@ directive("bind", ({ directives: { bind }, element, evaluate }) => {
       return;
     }
     const attribute = entry.suffix;
+    const name = attribute.toLowerCase();
+    if (internalProps.has(name) || // `toVdom()` stores a `<template>`'s markup in its `content` prop.
+    name === "content" && element.type === "template" || isReservedKey(attribute)) {
+      if (true) {
+        warnUnbindableProp(attribute);
+      }
+      return;
+    }
+    if (/^on/i.test(attribute)) {
+      if (true) {
+        warnEventHandlerBindNotSupported(attribute);
+      }
+      return;
+    }
+    if (!isBindingAllowed(element.type, attribute)) {
+      if (true) {
+        warn(
+          `The "${attribute}" attribute cannot be bound on an "object" element. The directive data-wp-bind--${attribute} was ignored.`
+        );
+      }
+      return;
+    }
+    if (attribute === "protocol" && (element.type === "a" || element.type === "area")) {
+      delete element.props[attribute];
+      return;
+    }
     let result = evaluate(entry);
     if (result === PENDING_GETTER) {
       return;
     }
     if (typeof result === "function") {
       result = result();
+    }
+    if (urlAttributes.has(attribute.toLowerCase())) {
+      result = getSafeUrl(result);
     }
     element.props[attribute] = result;
     useInit(() => {
@@ -2271,7 +2658,7 @@ directive(
       if (typeof result === "function") {
         result = result();
       }
-      const currentClass = element.props.class || "";
+      const currentClass = typeof element.props.class === "string" ? element.props.class : "";
       const classFinder = new RegExp(
         `(^|\\s)${className}(\\s|$)`,
         "g"
@@ -2312,11 +2699,13 @@ directive(
     }
     const { Provider } = inheritedContext;
     const { client: inheritedClient, server: inheritedServer } = x2(inheritedContext);
-    const client = A2({});
-    const server = {};
+    const client = A2(
+      /* @__PURE__ */ Object.create(null)
+    );
+    const server = /* @__PURE__ */ Object.create(null);
     const result = {
-      client: { ...inheritedClient },
-      server: { ...inheritedServer }
+      client: Object.assign(/* @__PURE__ */ Object.create(null), inheritedClient),
+      server: Object.assign(/* @__PURE__ */ Object.create(null), inheritedServer)
     };
     const namespaces2 = /* @__PURE__ */ new Set();
     entries.forEach(({ value, namespace, uniqueId }) => {
@@ -2328,7 +2717,7 @@ directive(
         }
         return;
       }
-      if (!client.current[namespace]) {
+      if (!getOwnProperty(client.current, namespace)) {
         client.current[namespace] = proxifyState(namespace, {});
       }
       deepMerge(client.current[namespace], deepClone(value), false);
@@ -2338,11 +2727,11 @@ directive(
     namespaces2.forEach((namespace) => {
       result.client[namespace] = proxifyContext(
         client.current[namespace],
-        inheritedClient[namespace]
+        getOwnProperty(inheritedClient, namespace)
       );
       result.server[namespace] = proxifyContext(
         server[namespace],
-        inheritedServer[namespace]
+        getOwnProperty(inheritedServer, namespace)
       );
     });
     return k(Provider, { value: result }, children);
@@ -2353,13 +2742,16 @@ directive(
 // packages/interactivity/build-module/directives/each.mjs
 init_preact_module();
 var evaluateItemKey = (inheritedValue, namespace, item, itemProp, eachKey) => {
-  const clientContextWithItem = {
-    ...inheritedValue.client,
-    [namespace]: {
-      ...inheritedValue.client[namespace],
-      [itemProp]: item
+  const clientContextWithItem = Object.assign(
+    /* @__PURE__ */ Object.create(null),
+    inheritedValue.client,
+    {
+      [namespace]: {
+        ...getOwnProperty(inheritedValue.client, namespace),
+        [itemProp]: item
+      }
     }
-  };
+  );
   const scope = {
     ...getScope(),
     context: clientContextWithItem,
@@ -2387,7 +2779,7 @@ var useItemContexts = function* (inheritedValue, namespace, items, itemProp, eac
             // value is set in the `wp-each` directive later on.
             [itemProp]: void 0
           }),
-          inheritedValue.client[namespace]
+          getOwnProperty(inheritedValue.client, namespace)
         )
       );
     }
@@ -2449,11 +2841,15 @@ directive(
     );
     for (const [item, itemContext, key] of itemContexts) {
       const mergedContext = {
-        client: {
-          ...inheritedValue.client,
-          [namespace]: itemContext
-        },
-        server: { ...inheritedValue.server }
+        client: Object.assign(
+          /* @__PURE__ */ Object.create(null),
+          inheritedValue.client,
+          { [namespace]: itemContext }
+        ),
+        server: Object.assign(
+          /* @__PURE__ */ Object.create(null),
+          inheritedValue.server
+        )
       };
       mergedContext.client[namespace][itemProp] = item;
       result.push(
@@ -2482,6 +2878,7 @@ directive(
 );
 
 // packages/interactivity/build-module/html.mjs
+var emptyHTML = globalThis.trustedTypes?.emptyHTML ?? "";
 var trustedHtmlByToken = /* @__PURE__ */ new WeakMap();
 function asDangerousHTML(html) {
   const { trustedTypes } = globalThis;
@@ -2502,13 +2899,14 @@ function getDangerousHTML(token) {
 }
 
 // packages/interactivity/build-module/directives/html.mjs
-var STABLE_EMPTY_HTML = Object.freeze({ __html: "" });
+var isServerHTMLRepresentation = (value) => isPlainObject(value) && value.wpServerHtml === true;
 directive(
   "html",
   ({ directives: { html: htmlEntries }, element, evaluate }) => {
     const entry = htmlEntries.find(isDefaultDirectiveSuffix);
-    const lastValue = A2(void 0);
-    const lastWrittenKey = A2(void 0);
+    const lastAppliedKey = A2(void 0);
+    const preactHtml = A2();
+    let result;
     if (!entry) {
       if (true) {
         warn(
@@ -2520,52 +2918,69 @@ directive(
         warnUniqueIdNotSupported("html", entry.uniqueId);
       }
     } else {
-      let result;
       try {
         result = evaluate(entry);
-      } catch {
-        result = void 0;
-      }
-      if (result !== PENDING_GETTER) {
         if (typeof result === "function") {
           result = result();
         }
-        if (isDangerousHTML(result)) {
-          lastValue.current = getDangerousHTML(result);
-        }
+      } catch {
+        result = void 0;
       }
     }
-    const resolvedValue = lastValue.current;
+    const active = !!entry && !entry.uniqueId;
+    const serverHTMLRepresentation = isServerHTMLRepresentation(result);
+    const preserveContent = result === PENDING_GETTER || serverHTMLRepresentation;
+    const trusted = isDangerousHTML(result);
+    const resolvedValue = trusted ? getDangerousHTML(result) : emptyHTML;
     useLayoutEffect(() => {
-      if (resolvedValue === void 0) {
+      if (!active) {
         return;
       }
+      if (preserveContent) {
+        if (serverHTMLRepresentation) {
+          lastAppliedKey.current = void 0;
+        }
+        return;
+      }
+      if (!trusted && result !== null && result !== void 0) {
+        warn(
+          "data-wp-html: the value is not trusted HTML. Use asDangerousHTML() to explicitly trust the markup."
+        );
+      }
       const key = String(resolvedValue);
-      if (lastWrittenKey.current === key) {
+      if (lastAppliedKey.current === key) {
         return;
       }
       const node = element.ref.current;
-      if (lastWrittenKey.current === void 0 && node.innerHTML === key) {
-        lastWrittenKey.current = key;
+      if (lastAppliedKey.current === void 0 && node.innerHTML === key) {
+        lastAppliedKey.current = key;
         return;
       }
       try {
         node.innerHTML = resolvedValue;
-        lastWrittenKey.current = key;
       } catch (error) {
-        lastWrittenKey.current = key;
+        node.innerHTML = emptyHTML;
         if (true) {
           warn(
-            `data-wp-html: the browser rejected this HTML value, so the element's existing content was left in place. ${error}`
+            `data-wp-html: the browser rejected this HTML value, so the element was emptied. ${error}`
           );
         }
       }
-    }, [resolvedValue, element.ref]);
-    if (resolvedValue === void 0) {
-      return;
+      lastAppliedKey.current = key;
+    }, [
+      result,
+      active,
+      preserveContent,
+      serverHTMLRepresentation,
+      trusted,
+      resolvedValue,
+      element.ref
+    ]);
+    if (active) {
+      preactHtml.current ??= preserveContent && element.props.dangerouslySetInnerHTML?.__html ? element.props.dangerouslySetInnerHTML : { __html: emptyHTML };
+      element.props.dangerouslySetInnerHTML = preactHtml.current;
+      element.props.children = void 0;
     }
-    element.props.dangerouslySetInnerHTML = STABLE_EMPTY_HTML;
-    element.props.children = void 0;
   }
 );
 
@@ -2853,19 +3268,39 @@ var ruleClean = /\/\*[^]*?\*\/|  +/g;
 var ruleNewline = /\n+/g;
 var empty = " ";
 var cssStringToObject = (val) => {
-  const tree = [{}];
-  let block, left;
-  while (block = newRule.exec(val.replace(ruleClean, ""))) {
-    if (block[4]) {
-      tree.shift();
-    } else if (block[3]) {
-      left = block[3].replace(ruleNewline, empty).trim();
-      tree.unshift(tree[0][left] = tree[0][left] || {});
-    } else {
-      tree[0][block[1]] = block[2].replace(ruleNewline, empty).trim();
+  const result = /* @__PURE__ */ Object.create(null);
+  const css = val.replace(ruleClean, "");
+  let depth = 0;
+  let block;
+  newRule.lastIndex = 0;
+  while (block = newRule.exec(css)) {
+    if (block[4] !== void 0) {
+      depth = Math.max(0, depth - 1);
+    } else if (block[3] !== void 0) {
+      depth++;
+    } else if (depth === 0) {
+      result[block[1]] = block[2].replace(ruleNewline, empty).trim();
     }
   }
-  return tree[0];
+  return result;
+};
+var isStyleObject = (value) => {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const prototype = Object.getPrototypeOf(value);
+  return prototype === Object.prototype || prototype === null;
+};
+var copyDataProperties = (object) => {
+  const copy = /* @__PURE__ */ Object.create(null);
+  for (const [key, desc] of Object.entries(
+    Object.getOwnPropertyDescriptors(object)
+  )) {
+    if (desc.enumerable && "value" in desc) {
+      copy[key] = desc.value;
+    }
+  }
+  return copy;
 };
 directive("style", ({ directives: { style }, element, evaluate }) => {
   style.filter(isNonDefaultDirectiveSuffix).forEach((entry) => {
@@ -2883,9 +3318,12 @@ directive("style", ({ directives: { style }, element, evaluate }) => {
     if (typeof result === "function") {
       result = result();
     }
-    element.props.style = element.props.style || {};
     if (typeof element.props.style === "string") {
       element.props.style = cssStringToObject(element.props.style);
+    } else if (isStyleObject(element.props.style)) {
+      element.props.style = copyDataProperties(element.props.style);
+    } else {
+      element.props.style = /* @__PURE__ */ Object.create(null);
     }
     if (!result) {
       delete element.props.style[styleProp];
@@ -2978,200 +3416,6 @@ directive("watch", ({ directives: { watch: watch2 }, evaluate }) => {
 
 // packages/interactivity/build-module/hydration.mjs
 init_preact_module();
-
-// packages/interactivity/build-module/vdom.mjs
-init_preact_module();
-var directivePrefix = `data-wp-`;
-var namespaces = [];
-var currentNamespace = () => namespaces[namespaces.length - 1] ?? null;
-var isObject = (item) => Boolean(item && typeof item === "object" && item.constructor === Object);
-var invalidCharsRegex = /[^a-z0-9-_]/i;
-function parseDirectiveName(directiveName) {
-  const name = directiveName.substring(8);
-  if (invalidCharsRegex.test(name)) {
-    return null;
-  }
-  const suffixIndex = name.indexOf("--");
-  if (suffixIndex === -1) {
-    return { prefix: name, suffix: null, uniqueId: null };
-  }
-  const prefix = name.substring(0, suffixIndex);
-  const remaining = name.substring(suffixIndex);
-  if (remaining.startsWith("---") && remaining[3] !== "-") {
-    return {
-      prefix,
-      suffix: null,
-      uniqueId: remaining.substring(3) || null
-    };
-  }
-  let suffix = remaining.substring(2);
-  const uniqueIdIndex = suffix.indexOf("---");
-  if (uniqueIdIndex !== -1 && suffix.substring(uniqueIdIndex)[3] !== "-") {
-    const uniqueId = suffix.substring(uniqueIdIndex + 3) || null;
-    suffix = suffix.substring(0, uniqueIdIndex) || null;
-    return { prefix, suffix, uniqueId };
-  }
-  return { prefix, suffix: suffix || null, uniqueId: null };
-}
-var nsPathRegExp = /^([\w_\/-]+)::(.+)$/;
-function parseDirectiveValue(rawValue) {
-  const regexResult = nsPathRegExp.exec(rawValue);
-  const namespace = regexResult?.[1] ?? null;
-  const rawDirectiveValue = regexResult?.[2] ?? rawValue;
-  let value = rawDirectiveValue;
-  try {
-    const parsedValue = JSON.parse(rawDirectiveValue);
-    if (isObject(parsedValue)) {
-      value = parsedValue;
-    }
-  } catch {
-  }
-  return { namespace, value };
-}
-var hydratedIslands = /* @__PURE__ */ new WeakSet();
-function toVdom(root) {
-  const nodesToRemove = /* @__PURE__ */ new Set();
-  const nodesToReplace = /* @__PURE__ */ new Set();
-  const treeWalker = document.createTreeWalker(
-    root,
-    205
-    // TEXT + CDATA_SECTION + COMMENT + PROCESSING_INSTRUCTION + ELEMENT
-  );
-  function walk(node) {
-    const { nodeType } = node;
-    if (nodeType === 3) {
-      return node.data;
-    }
-    if (nodeType === 4) {
-      nodesToReplace.add(node);
-      return node.nodeValue;
-    }
-    if (nodeType === 8 || nodeType === 7) {
-      nodesToRemove.add(node);
-      return null;
-    }
-    const elementNode = node;
-    const { attributes } = elementNode;
-    const localName = elementNode.localName;
-    const props = {};
-    const children = [];
-    const directives = [];
-    let island = false;
-    for (let i6 = 0; i6 < attributes.length; i6++) {
-      const attributeName = attributes[i6].name;
-      const attributeValue = attributes[i6].value;
-      if (attributeName[directivePrefix.length] && attributeName.slice(0, directivePrefix.length) === directivePrefix) {
-        if (true) {
-          if (attributeName === "data-wp-ignore") {
-            warn(
-              "The data-wp-ignore directive has been removed. The element and its descendants are now hydrated like any other element. Please remove the attribute."
-            );
-          }
-        }
-        const { namespace, value } = parseDirectiveValue(attributeValue);
-        if (attributeName === "data-wp-interactive") {
-          island = true;
-          const islandNamespace = (
-            // eslint-disable-next-line no-nested-ternary
-            typeof value === "string" ? value : typeof value?.namespace === "string" ? value.namespace : null
-          );
-          namespaces.push(islandNamespace);
-        } else {
-          directives.push([attributeName, namespace, value]);
-        }
-      } else if (attributeName === "ref") {
-        continue;
-      }
-      if (attributeValue === "" && elementNode[attributeName] === true) {
-        props[attributeName] = true;
-      } else {
-        props[attributeName] = attributeValue;
-      }
-    }
-    if (island) {
-      hydratedIslands.add(elementNode);
-    }
-    if (directives.length) {
-      props.__directives = directives.reduce((obj, [name, ns, value]) => {
-        const directiveParsed = parseDirectiveName(name);
-        if (directiveParsed === null) {
-          if (true) {
-            warn(`Found malformed directive name: ${name}.`);
-          }
-          return obj;
-        }
-        const { prefix, suffix, uniqueId } = directiveParsed;
-        obj[prefix] = obj[prefix] || [];
-        obj[prefix].push({
-          namespace: ns ?? currentNamespace(),
-          value,
-          suffix,
-          uniqueId
-        });
-        return obj;
-      }, {});
-      for (const prefix in props.__directives) {
-        props.__directives[prefix].sort(
-          (a5, b4) => {
-            const aSuffix = a5.suffix ?? "";
-            const bSuffix = b4.suffix ?? "";
-            if (aSuffix !== bSuffix) {
-              return aSuffix < bSuffix ? -1 : 1;
-            }
-            const aId = a5.uniqueId ?? "";
-            const bId = b4.uniqueId ?? "";
-            return +(aId > bId) - +(aId < bId);
-          }
-        );
-      }
-    }
-    const hasDefaultHtmlDirective = props.__directives?.html?.some(
-      ({ suffix }) => suffix === null
-    );
-    if (props.__directives?.["each-child"] || hasDefaultHtmlDirective) {
-      if (hasDefaultHtmlDirective) {
-        elementNode.querySelectorAll("[data-wp-interactive]").forEach((islandNode) => {
-          hydratedIslands.add(islandNode);
-        });
-      }
-      props.dangerouslySetInnerHTML = {
-        __html: elementNode.innerHTML
-      };
-    } else if (localName === "template") {
-      props.content = [
-        ...elementNode.content.childNodes
-      ].map((childNode) => toVdom(childNode));
-    } else {
-      let child = treeWalker.firstChild();
-      if (child) {
-        while (child) {
-          const vnode = walk(child);
-          if (vnode) {
-            children.push(vnode);
-          }
-          child = treeWalker.nextSibling();
-        }
-        treeWalker.parentNode();
-      }
-    }
-    if (island) {
-      namespaces.pop();
-    }
-    return k(localName, props, children);
-  }
-  const vdom = walk(treeWalker.currentNode);
-  nodesToRemove.forEach(
-    (node) => node.remove()
-  );
-  nodesToReplace.forEach(
-    (node) => node.replaceWith(
-      new window.Text(node.nodeValue ?? "")
-    )
-  );
-  return vdom;
-}
-
-// packages/interactivity/build-module/hydration.mjs
 var regionRootFragments = /* @__PURE__ */ new WeakMap();
 var getRegionRootFragment = (regions) => {
   const region = Array.isArray(regions) ? regions[0] : regions;
@@ -3192,16 +3436,18 @@ var initialVdomPromise = new Promise((resolve2) => {
   resolveInitialVdom = resolve2;
 });
 var hydrateRegions = async () => {
-  const nodes = document.querySelectorAll(`[data-wp-interactive]`);
+  const nodes = [
+    ...document.querySelectorAll(`[data-wp-interactive]`)
+  ].filter(
+    (node) => !node.parentElement?.closest("[data-wp-interactive]")
+  );
   for (const node of nodes) {
-    if (!hydratedIslands.has(node)) {
-      await splitTask();
-      const fragment = getRegionRootFragment(node);
-      const vdom = toVdom(node);
-      initialVdom.set(node, vdom);
-      await splitTask();
-      U(vdom, fragment);
-    }
+    await splitTask();
+    const fragment = getRegionRootFragment(node);
+    const vdom = toVdom(node);
+    initialVdom.set(node, vdom);
+    await splitTask();
+    U(vdom, fragment);
   }
   resolveInitialVdom(initialVdom);
 };

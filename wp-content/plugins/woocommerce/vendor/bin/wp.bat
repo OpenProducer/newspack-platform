@@ -29,9 +29,9 @@ export COMPOSER_RUNTIME_BIN_DIR="$(cd "${self%[/\\]*}" > /dev/null; pwd)"
 bashSource="$BASH_SOURCE"
 if [ -n "$bashSource" ]; then
     if [ "$bashSource" != "$0" ]; then
-        source "${dir}/wp.bat" "$@"
+        source "${dir}/"'wp.bat' "$@"
         return
     fi
 fi
 
-exec "${dir}/wp.bat" "$@"
+exec "${dir}/"'wp.bat' "$@"

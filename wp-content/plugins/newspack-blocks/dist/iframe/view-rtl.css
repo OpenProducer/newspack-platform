@@ -1,1 +1,1 @@
-body.newspack-post-with-fullscreen-iframe #page{visibility:hidden}body.newspack-post-with-fullscreen-iframe .wp-block-newspack-blocks-iframe{visibility:visible}
+body.newspack-post-with-fullscreen-iframe:has(.wp-block-newspack-blocks-iframe iframe[layout=fill]) #page{visibility:hidden}body.newspack-post-with-fullscreen-iframe:has(.wp-block-newspack-blocks-iframe iframe[layout=fill]) .wp-block-newspack-blocks-iframe{visibility:visible}

@@ -47,11 +47,15 @@
 			//only execute if we are in presence of album repeater group.
 			init_TrackTitleOnRepeater();
 			addTrackTitletoTrackRepeater();
+			$myRepeatGroup.on('change input', '[name$="[track_source_purchased_type]"], [name$="[track_source_purchased_url]"]', function() {
+				addTrackTitletoTrackRepeater([this.closest('.cmb-repeatable-grouping')]);
+			});
 			init_toggleTracklistBox();
 			hideShowTracklistStorelist();
 			init_CheckMaxInputVars();
 			
 			$( document ).on('cmb2_add_row', function (event, newRow) {
+				newRow.find('[name$="[track_source_purchased_type]"]').val('none').trigger('change');
 				init_TrackTitleOnRepeater(newRow);
 			});
 
@@ -2307,25 +2311,26 @@
 				}
 				audioElement?.load();
 			}
-			// Handle preview for track_source_purchased (independent field)
-			let purchasedField = trackElement.querySelector('[name$="[track_source_purchased]"]');
-			let purchasedAudioURL = purchasedField?.value || '';
-			let purchasedContainer = purchasedField?.closest('.cmb-td');
-			let purchasedPlayer = purchasedContainer?.querySelector('.srmp3-admin-track-player-container');
-			let purchasedAudioElement = purchasedPlayer?.querySelector('audio');
-			let purchasedAudioSource = purchasedAudioElement?.querySelector('source');
-
-			if (purchasedPlayer) {
-				if (purchasedAudioURL) {
-					purchasedPlayer.style.display = 'block';
-					purchasedAudioSource?.setAttribute('src', purchasedAudioURL);
-					purchasedAudioElement?.load();
-				} else {
-					purchasedPlayer.style.display = 'none';
-					purchasedAudioSource?.removeAttribute('src');
+			// Preview only the selected purchased source, retaining the inactive field's value.
+			let purchasedType = trackElement.querySelector('[name$="[track_source_purchased_type]"]')?.value;
+			['track_source_purchased', 'track_source_purchased_url'].forEach(function(fieldName) {
+				let purchasedField = trackElement.querySelector('[name$="[' + fieldName + ']"]');
+				let fieldType = fieldName === 'track_source_purchased' ? 'mp3' : 'stream';
+				let purchasedAudioURL = (!purchasedType || purchasedType === fieldType) ? purchasedField?.value || '' : '';
+				let purchasedPlayer = purchasedField?.closest('.cmb-td')?.querySelector('.srmp3-admin-track-player-container');
+				let purchasedAudioElement = purchasedPlayer?.querySelector('audio');
+				let purchasedAudioSource = purchasedAudioElement?.querySelector('source');
+				if (purchasedPlayer) {
+					purchasedPlayer.style.display = purchasedAudioURL ? 'block' : 'none';
+					if (purchasedAudioURL) {
+						purchasedAudioSource?.setAttribute('src', purchasedAudioURL);
+					} else {
+						purchasedAudioElement?.pause();
+						purchasedAudioSource?.removeAttribute('src');
+					}
 					purchasedAudioElement?.load();
 				}
-			}
+			});
 			// Set Track Title and Number
 			if (trackTitle && $track) {
 				var trackNumber = trackTitle.innerText.split(' : ')[0];

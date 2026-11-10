@@ -1600,6 +1600,7 @@ class ComposerStaticIniteb35ca63f2409e94839b80ff9a2b637d
         'Automattic\\WooCommerce\\Internal\\RegisterHooksInterface' => __DIR__ . '/../..' . '/src/Internal/RegisterHooksInterface.php',
         'Automattic\\WooCommerce\\Internal\\RestApiControllerBase' => __DIR__ . '/../..' . '/src/Internal/RestApiControllerBase.php',
         'Automattic\\WooCommerce\\Internal\\RestApiParameterUtil' => __DIR__ . '/../..' . '/src/Internal/RestApiParameterUtil.php',
+        'Automattic\\WooCommerce\\Internal\\RestApi\\InteractiveSessionCheck' => __DIR__ . '/../..' . '/src/Internal/RestApi/InteractiveSessionCheck.php',
         'Automattic\\WooCommerce\\Internal\\RestApi\\ProductRequestPreparationTrait' => __DIR__ . '/../..' . '/src/Internal/RestApi/ProductRequestPreparationTrait.php',
         'Automattic\\WooCommerce\\Internal\\RestApi\\Routes\\V4\\AbstractCollectionQuery' => __DIR__ . '/../..' . '/src/Internal/RestApi/Routes/V4/AbstractCollectionQuery.php',
         'Automattic\\WooCommerce\\Internal\\RestApi\\Routes\\V4\\AbstractController' => __DIR__ . '/../..' . '/src/Internal/RestApi/Routes/V4/AbstractController.php',

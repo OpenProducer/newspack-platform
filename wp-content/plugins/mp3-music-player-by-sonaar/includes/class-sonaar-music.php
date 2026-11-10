@@ -31,6 +31,25 @@
 
 class Sonaar_Music {
 	private static $options_cache = array();
+
+	/** Resolve the selected purchased audio, including tracks saved before the selector existed. */
+	public static function get_purchased_audio( $track ) {
+		$type = $track['track_source_purchased_type'] ?? '';
+		if ( $type === '' ) {
+			$type = ! empty( $track['track_source_purchased'] ) ? 'mp3' : 'none';
+		}
+		$url = '';
+		$id = 0;
+		if ( $type === 'mp3' ) {
+			$url = $track['track_source_purchased'] ?? '';
+			$id = $track['track_source_purchased_id'] ?? 0;
+		} elseif ( $type === 'stream' ) {
+			$url = $track['track_source_purchased_url'] ?? '';
+		} else {
+			$type = 'none';
+		}
+		return array( 'type' => $type, 'url' => $url, 'id' => $id );
+	}
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
 	 * the plugin.

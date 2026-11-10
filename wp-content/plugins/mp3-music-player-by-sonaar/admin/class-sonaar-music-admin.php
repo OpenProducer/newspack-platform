@@ -194,9 +194,10 @@ class Sonaar_Music_Admin {
         if ( $field_args['id'] == 'alb_tracklist' ) {
             // Loop through each track and remove it if necessary
             foreach ($value as $key => $track) {
+                $purchased_audio = Sonaar_Music::get_purchased_audio( $track );
                 if ( $track['FileOrStream'] === 'mp3' && empty($track['track_mp3_id']) ) {
                     //if either audio_preview or track_description or track_image or track_lyrics is set, we keep the track
-                    if ( empty($track['audio_preview']) && empty($track['track_description']) && empty($track['track_image']) && empty($track['track_lyrics']) && empty($track['track_source_purchased'])) {
+                    if ( empty($track['audio_preview']) && empty($track['track_description']) && empty($track['track_image']) && empty($track['track_lyrics']) && empty($purchased_audio['url'])) {
                         //error_log("" . print_r($value[$key], true));
                         unset($value[$key]);
                     }
@@ -7485,6 +7486,30 @@ class Sonaar_Music_Admin {
         ));
         if ( function_exists( 'run_sonaar_music_pro' ) && defined( 'WC_VERSION' ) && get_site_option('SRMP3_ecommerce') == '1') {
             $cmb_album->add_group_field($tracklist, array(
+                'id'            => 'track_source_purchased_type',
+                'show_on_cb'    => 'sr_check_if_wc',
+                'object_types'  => 'product',
+                'name'          => esc_html__('Audio to Play After Purchase (Optional)', 'sonaar-music'),
+                'type'          => 'select',
+                'show_option_none' => false,
+                'label_cb'      => 'srmp3_add_tooltip_to_label',
+                'tooltip'       => array(
+                    'title' => esc_html__('Audio File for Purchased Users', 'sonaar-music'),
+                    'text'  => esc_html__('If set, this audio will replace the default track and play in the audio player only for users who have purchased this product.', 'sonaar-music'),
+                    'pro'   => true,
+                ),
+                'options'       => array(
+                    'none'   => esc_html__('- None -', 'sonaar-music'),
+                    'mp3'    => esc_html__('Local MP3', 'sonaar-music'),
+                    'stream' => esc_html__('External Audio File', 'sonaar-music'),
+                ),
+                'default_cb'    => function( $field_args, $field ) {
+                    $tracks = $field->group ? $field->group->value() : array();
+                    $track = $field->group ? ( $tracks[$field->group->index] ?? array() ) : array();
+                    return Sonaar_Music::get_purchased_audio( $track )['type'];
+                },
+            ));
+            $cmb_album->add_group_field($tracklist, array(
                 'description'   => $player,
                 'classes'       => 'srmp3-cmb2-file srmp3-settings--subitem',
                 'show_on_cb'    => 'sr_check_if_wc',
@@ -7504,7 +7529,24 @@ class Sonaar_Music_Admin {
                 'options' => array(
                     'url' => false, // Hide the text input for the url
                 ),  
-            ));       
+                'attributes' => array(
+                    'data-conditional-id' => wp_json_encode( array( $tracklist, 'track_source_purchased_type' ) ),
+                    'data-conditional-value' => 'mp3',
+                ),
+            ));
+            $cmb_album->add_group_field($tracklist, array(
+                'id'            => 'track_source_purchased_url',
+                'show_on_cb'    => 'sr_check_if_wc',
+                'object_types'  => 'product',
+                'name'          => esc_html__('External Audio File URL', 'sonaar-music'),
+                'classes'       => 'srmp3-cmb2-file srmp3-settings--subitem',
+                'type'          => 'text_url',
+                'description'   => esc_html__('Enter the URL of the audio file to play for users who have purchased this product.', 'sonaar-music') . $player,
+                'attributes'    => array(
+                    'data-conditional-id' => wp_json_encode( array( $tracklist, 'track_source_purchased_type' ) ),
+                    'data-conditional-value' => 'stream',
+                ),
+            ));
             
         }
         if ( !function_exists( 'run_sonaar_music_pro' ) || get_site_option('SRMP3_ecommerce') !== '1' || get_site_option('SRMP3_purchased_plan') == false ){
@@ -8188,9 +8230,12 @@ class Sonaar_Music_Admin {
                     'name'          => $this->sr_GetString('The Contract'),
                     //'description'   => esc_html__("BPM, Hashtag, Description, etc. Will appear below track title in the playlist.",'sonaar-music'),
                     'type'          => 'wysiwyg',
-                    'desc'    => __('Use the following variables to dynamize your contract:', 'sonaar-music') . '<br><br>
+                    'desc'    => __('Add logos or signatures using PNG, JPEG, or GIF images stored in this site\'s Media Library.', 'sonaar-music') . '<br><br>' . __('Use the following variables to dynamize your contract:', 'sonaar-music') . '<br><br>
                         <strong>{LICENSE_NAME}</strong> - ' . __('Name of this license', 'sonaar-music') . '<br>
                         <strong>{CONTRACT_DATE}</strong> - ' . __('Date of the contract', 'sonaar-music') . '<br>
+                        <strong>{ORDER_ID}</strong> - ' . __('Internal WooCommerce order ID', 'sonaar-music') . '<br>
+                        <strong>{ORDER_NUMBER}</strong> - ' . __('Customer-facing order number', 'sonaar-music') . '<br>
+                        <strong>{ORDER_TOTAL}</strong> - ' . __('Total order amount including currency', 'sonaar-music') . '<br>
                         <strong>{CUSTOMER_FULLNAME}</strong> - ' . __('Customer full name', 'sonaar-music') . '<br>
                         <strong>{CUSTOMER_EMAIL}</strong> - ' . __('Customer email address', 'sonaar-music') . '<br>
                         <strong>{CUSTOMER_ADDRESS}</strong> - ' . __('Customer address', 'sonaar-music') . '<br>
@@ -8208,7 +8253,7 @@ class Sonaar_Music_Admin {
                     'options' => array(
                         //'textpromo' => esc_html__('Pro Feature', 'sonaar-music'),
                         'wpautop' => false, // use wpautop?
-                        'media_buttons' => false, // show insert/upload button(s)
+                        'media_buttons' => true, // Insert logos and signatures from the media library.
                         'textarea_rows' => get_option('default_post_edit_rows', 40), // rows="..."
                         'tabindex' => '',
                         'editor_css' => '', // intended for extra styles for both visual and HTML editors buttons, needs to include the `<style>` tags, can use "scoped".

@@ -1529,7 +1529,10 @@ class Sonaar_Music_Widget extends WP_Widget{
         
             if($ifNavigationOutside){
                 $navigationVerticalAlignment = (isset($this->shortcodeParams['slider_navigation_vertical_alignment']))?  $this->shortcodeParams['slider_navigation_vertical_alignment'] : 'bottom';
-                $widgetPart_slider .= '<div class="swiper-box-navigation" data-v-align="' . $navigationVerticalAlignment . '">';
+                if (!in_array($navigationVerticalAlignment, array('top', 'center', 'bottom'), true)) {
+                    $navigationVerticalAlignment = 'bottom';
+                }
+                $widgetPart_slider .= '<div class="swiper-box-navigation" data-v-align="' . esc_attr($navigationVerticalAlignment) . '">';
             }
             if($ifNavigationOutsideCenter){
                 $widgetPart_slider .= $navigationTemplate;
@@ -4567,13 +4570,20 @@ class Sonaar_Music_Widget extends WP_Widget{
                         $showLoading = false;
                         $track_length = false;
                         $has_lyric = (isset($album_tracks[$i]['track_lyrics']) && $album_tracks[$i]['track_lyrics'] != false)? true : false;
-                        $has_track_source_purchased_set = (isset($album_tracks[$i]['track_source_purchased']) && $album_tracks[$i]['track_source_purchased'] != false)? true : false;
-                        if($has_purchased){
-                           if (array_key_exists ( "track_source_purchased" , $album_tracks[$i] ) && $album_tracks[$i]["track_source_purchased"] !== '' ){
-                            $album_tracks[$i]["track_mp3"] = $album_tracks[$i]["track_source_purchased"];
-                            $album_tracks[$i]["track_mp3_id"] = $album_tracks[$i]["track_source_purchased_id"];
-                            $fileOrStream = 'mp3';
-                           }
+                        $purchased_audio = Sonaar_Music::get_purchased_audio( $album_tracks[$i] );
+                        $has_track_source_purchased_set = ! empty( $purchased_audio['url'] );
+                        if ( $has_purchased && $has_track_source_purchased_set ) {
+                            if ( $purchased_audio['type'] === 'stream' ) {
+                                $album_tracks[$i]['stream_link'] = $purchased_audio['url'];
+                                // Retain the local track's title when its purchased version is external.
+                                if ( $fileOrStream === 'mp3' && empty( $album_tracks[$i]['stream_title'] ) && ! empty( $album_tracks[$i]['track_mp3_id'] ) ) {
+                                    $album_tracks[$i]['stream_title'] = get_the_title( $album_tracks[$i]['track_mp3_id'] );
+                                }
+                            } else {
+                                $album_tracks[$i]['track_mp3'] = $purchased_audio['url'];
+                                $album_tracks[$i]['track_mp3_id'] = $purchased_audio['id'];
+                            }
+                            $fileOrStream = $purchased_audio['type'];
                         }
                         switch ($fileOrStream) {
                             case 'mp3':
@@ -4750,6 +4760,9 @@ class Sonaar_Music_Widget extends WP_Widget{
                             if( $mp3_id ){
                                 //ita media in the library
                                 $peakFile = $peaks_dir . $mp3_id . '.peak';
+                            }elseif ( $has_purchased && $has_track_source_purchased_set && $purchased_audio['type'] === 'stream' ) {
+                                // Peaks from the default source do not describe the purchased external file.
+                                $peakFile = null;
                             }else{
                                 //its a stream
                                 $peakFile = isset(get_post_meta( $a->ID, 'alb_tracklist' )[0][$i]['track_peaks']) ? get_post_meta( $a->ID, 'alb_tracklist' )[0][$i]['track_peaks'] : null;

@@ -5,7 +5,7 @@ Donate link: https://sonaar.io
 Requires at least: 4.7
 Tested up to: 7.1
 Requires PHP: 5.6
-Stable tag: 5.15
+Stable tag: 5.16
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -268,6 +268,8 @@ The Sonaar Team does not always provide active support for the FREE MP3 Player p
 
 ### ABOUT SONAAR MUSIC
 
+Sonaar also offers [Sonaar Cloud](https://sonaar.com), a separate hosted platform for creating and embedding stunning audio players on WordPress and other websites. This WordPress plugin works independently and does not require a Sonaar Cloud account.
+
 This free WordPress MP3 Player plugin has been developed by [Sonaar Music](https://sonaar.io/?utm_source=Sonaar%20Music%20Free%20Plugin&utm_medium=plugin). Our award-winning Music WordPress Themes & Plugins empower thousands of artists around the world.We provide stunning WordPress themes crafted for DJs, Artists, Podcasters, Music Bands and Record Labels. By offering beautiful and unique themes and plugins to the music industry and providing outstanding friendly customer support, we help our backers to build a strong brand awareness so they can engage more fans and followers. Our design templates for WordPress can be adapted to any style of music from Hip-hop, Jazz, DJ, Techno, Electro, R&B, Rap and EDM Music.
 
 == Installation ==
@@ -342,6 +344,12 @@ Yes, with the pro version, you can click on the 'Add to Favorite' icon to store 
 10. Shortcode Builder: Create, Import and Customize audio players using shortcodes in real-time
 
 == Changelog ==
+= 5.16 =
+- Security: Fixed stored XSS in slider navigation alignment. Thanks to Hexxed BitHeadz for reporting the issue through WPScan.
+- New: Add external audio source after purchase with backward compatibility
+- New: Add secure HTML formatting and order placeholders to license contracts
+- Fix: Podcast RSS cron hook registration order
+
 = 5.15 =
 - Security: Fixed vulnerability
 - New: CSV playlist importer now supports playlist and WooCommerce product tags
