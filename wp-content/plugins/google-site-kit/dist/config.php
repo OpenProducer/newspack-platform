@@ -7,5 +7,5 @@
  */
 
 return array(
-	'features' => array( 'adsConversionTrackingIntent','datePicker','featureDiscoveryHub','freshData','googleTagGateway','gtagUserData','rrmExpressSetup','setupFlowRefresh','setupFlowRefreshPhase4','typicalTraffic' ),
+	'features' => array( 'adsConversionTrackingIntent','datePicker','featureDiscoveryHub','freshData','googleTagGateway','gtagUserData','rrmExpressSetup','rrmSurveyCTA','typicalTraffic' ),
 );

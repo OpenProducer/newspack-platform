@@ -34,7 +34,6 @@ namespace Google\Site_Kit_Dependencies\phpseclib3\System\SSH;
 use Google\Site_Kit_Dependencies\phpseclib3\Common\Functions\Strings;
 use Google\Site_Kit_Dependencies\phpseclib3\Crypt\Common\PublicKey;
 use Google\Site_Kit_Dependencies\phpseclib3\Crypt\PublicKeyLoader;
-use Google\Site_Kit_Dependencies\phpseclib3\Crypt\RSA;
 use Google\Site_Kit_Dependencies\phpseclib3\Exception\BadConfigurationException;
 use Google\Site_Kit_Dependencies\phpseclib3\Net\SSH2;
 use Google\Site_Kit_Dependencies\phpseclib3\System\SSH\Agent\Identity;

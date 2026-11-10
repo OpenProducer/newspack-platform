@@ -469,6 +469,11 @@ function gutenberg_block_core_gallery_render_dynamic_image( $attachment_id, $att
  * @return string The content of the block being rendered.
  */
 function gutenberg_block_core_gallery_render( $attributes, $content, $block ) {
+	/*
+	 * Reads global styles once per request. gutenberg_get_global_styles() has no cache
+	 * of its own, so without this static each gallery would merge the theme.json
+	 * data again wherever the resolver does not cache the merged result.
+	 */
 	static $global_styles = null;
 
 	// Gallery blocks created before layout variations existed do not have an
@@ -554,13 +559,6 @@ function gutenberg_block_core_gallery_render( $attributes, $content, $block ) {
 	$style_attr = is_array( $attributes['style'] ?? null )
 		? $attributes['style']
 		: array();
-	if (
-		defined( 'IS_GUTENBERG_PLUGIN' ) &&
-		IS_GUTENBERG_PLUGIN &&
-		function_exists( 'gutenberg_resolve_style_state_aliases' )
-	) {
-		$style_attr = gutenberg_resolve_style_state_aliases( $style_attr, 'core/gallery' );
-	}
 
 	$global_settings          = gutenberg_get_global_settings();
 	$viewport_settings        = $global_settings['viewport'] ?? null;

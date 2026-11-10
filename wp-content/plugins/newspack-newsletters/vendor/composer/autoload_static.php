@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9298f54ba77c59e7c48c6ae7bc4f436f
+class ComposerStaticInit14e875de1b90e04ca652ab17f36b359c
 {
     public static $prefixLengthsPsr4 = array (
         'A' =>
@@ -293,6 +293,7 @@ class ComposerStaticInit9298f54ba77c59e7c48c6ae7bc4f436f
         'Newspack\\Newsletters\\Email_Renderers\\Blocks\\Share' => __DIR__ . '/../..' . '/includes/email-renderers/blocks/class-share.php',
         'Newspack\\Newsletters\\Email_Renderers\\Blocks\\Social_Links' => __DIR__ . '/../..' . '/includes/email-renderers/blocks/class-social-links.php',
         'Newspack\\Newsletters\\Email_Renderers\\Editor_Bootstrap' => __DIR__ . '/../..' . '/includes/email-renderers/class-editor-bootstrap.php',
+        'Newspack\\Newsletters\\Email_Renderers\\Editor_Logger' => __DIR__ . '/../..' . '/includes/email-renderers/class-editor-logger.php',
         'Newspack\\Newsletters\\Email_Renderers\\Email_Defaults' => __DIR__ . '/../..' . '/includes/email-renderers/class-email-defaults.php',
         'Newspack\\Newsletters\\Email_Renderers\\Feature_Flag' => __DIR__ . '/../..' . '/includes/email-renderers/class-feature-flag.php',
         'Newspack\\Newsletters\\Email_Renderers\\Fonts' => __DIR__ . '/../..' . '/includes/email-renderers/class-fonts.php',
@@ -362,9 +363,9 @@ class ComposerStaticInit9298f54ba77c59e7c48c6ae7bc4f436f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9298f54ba77c59e7c48c6ae7bc4f436f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9298f54ba77c59e7c48c6ae7bc4f436f::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit9298f54ba77c59e7c48c6ae7bc4f436f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit14e875de1b90e04ca652ab17f36b359c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit14e875de1b90e04ca652ab17f36b359c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit14e875de1b90e04ca652ab17f36b359c::$classMap;
 
         }, null, ClassLoader::class);
     }
