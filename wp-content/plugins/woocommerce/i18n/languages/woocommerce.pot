@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the WooCommerce plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WooCommerce 11.2.1\n"
+"Project-Id-Version: WooCommerce 11.2.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-09T15:16:01+00:00\n"
+"POT-Creation-Date: 2026-11-04T14:53:36+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: woocommerce\n"
@@ -21,8 +21,8 @@ msgstr ""
 #: includes/admin/class-wc-admin-setup-wizard.php:456
 #: includes/admin/class-wc-admin.php:297
 #: includes/admin/helper/views/html-oauth-start.php:21
-#: includes/class-wc-order.php:2090
-#: includes/class-wc-order.php:2091
+#: includes/class-wc-order.php:2092
+#: includes/class-wc-order.php:2093
 #: includes/class-wc-privacy.php:54
 #: includes/customizer/class-wc-shop-customizer.php:39
 #: includes/react-admin/connect-existing-pages.php:63
@@ -9910,62 +9910,62 @@ msgstr ""
 msgid "Invalid date provided."
 msgstr ""
 
-#: includes/abstracts/abstract-wc-order.php:305
+#: includes/abstracts/abstract-wc-order.php:322
 msgid "(no ID)"
 msgstr ""
 
 #. translators: 1: Order ID or "(no ID)" if not known.
-#: includes/abstracts/abstract-wc-order.php:311
+#: includes/abstracts/abstract-wc-order.php:328
 #, php-format
 msgid "Error saving order ID %1$s."
 msgstr ""
 
-#: includes/abstracts/abstract-wc-order.php:891
+#: includes/abstracts/abstract-wc-order.php:919
 msgid "Invalid parent ID"
 msgstr ""
 
-#: includes/abstracts/abstract-wc-order.php:962
+#: includes/abstracts/abstract-wc-order.php:990
 msgid "Invalid currency code"
 msgstr ""
 
 #. translators: %s: PHP type that was passed instead of a string.
-#: includes/abstracts/abstract-wc-order.php:1131
+#: includes/abstracts/abstract-wc-order.php:1159
 #, php-format
 msgid "remove_order_items() expects a string item type or null; received %s."
 msgstr ""
 
 #. translators: Actual coupon code.
-#: includes/abstracts/abstract-wc-order.php:1610
-#: includes/abstracts/abstract-wc-order.php:1632
+#: includes/abstracts/abstract-wc-order.php:1638
+#: includes/abstracts/abstract-wc-order.php:1660
 #, php-format
 msgid "An unexpected error happened while applying the Coupon %s."
 msgstr ""
 
 #. translators: Actual coupon code.
-#: includes/abstracts/abstract-wc-order.php:1613
+#: includes/abstracts/abstract-wc-order.php:1641
 #, php-format
 msgid "Coupon %s was used in another transaction during this checkout, and coupon usage limit is reached. Please remove the coupon and try again."
 msgstr ""
 
 #. translators: Actual coupon code.
-#: includes/abstracts/abstract-wc-order.php:1635
+#: includes/abstracts/abstract-wc-order.php:1663
 #, php-format
 msgid "You have used this coupon %s in another transaction during this checkout, and coupon usage limit is reached. Please remove the coupon and try again."
 msgstr ""
 
-#: includes/abstracts/abstract-wc-order.php:1673
+#: includes/abstracts/abstract-wc-order.php:1701
 msgid "Invalid coupon code"
 msgstr ""
 
-#: includes/abstracts/abstract-wc-order.php:1676
-#: includes/class-wc-ajax.php:1517
+#: includes/abstracts/abstract-wc-order.php:1704
+#: includes/class-wc-ajax.php:1518
 #: includes/class-wc-discounts.php:251
 #: src/Internal/Orders/CouponsController.php:70
 msgid "Invalid coupon"
 msgstr ""
 
 #. translators: %s: coupon code
-#: includes/abstracts/abstract-wc-order.php:1687
+#: includes/abstracts/abstract-wc-order.php:1715
 #: includes/class-wc-coupon.php:1161
 #, php-format
 msgid "Coupon code \"%s\" already applied!"
@@ -9974,7 +9974,7 @@ msgstr ""
 #. translators: %s: method
 #. translators: %s: payment method
 #. translators: %s: shipping method
-#: includes/abstracts/abstract-wc-order.php:2799
+#: includes/abstracts/abstract-wc-order.php:2827
 #: src/Internal/Admin/Orders/ListTable.php:1291
 #: src/Internal/Admin/Orders/ListTable.php:1312
 #: src/Internal/Admin/Orders/ListTable.php:1329
@@ -9982,15 +9982,15 @@ msgstr ""
 msgid "via %s"
 msgstr ""
 
-#: includes/abstracts/abstract-wc-order.php:2804
-#: includes/class-wc-cart.php:1940
+#: includes/abstracts/abstract-wc-order.php:2832
+#: includes/class-wc-cart.php:1941
 #: includes/class-wc-product-grouped.php:123
 #: templates/emails/email-order-details.php:168
 #: templates/emails/plain/email-order-details.php:80
 msgid "Free!"
 msgstr ""
 
-#: includes/abstracts/abstract-wc-order.php:2841
+#: includes/abstracts/abstract-wc-order.php:2869
 #: includes/wc-template-functions.php:2798
 #: assets/client/blocks/cart.js:22
 #: assets/client/blocks/checkout.js:21
@@ -9999,7 +9999,7 @@ msgstr ""
 msgid "Subtotal:"
 msgstr ""
 
-#: includes/abstracts/abstract-wc-order.php:2858
+#: includes/abstracts/abstract-wc-order.php:2886
 #: includes/admin/meta-boxes/views/html-order-items.php:179
 #: assets/client/blocks/cart.js:22
 #: assets/client/blocks/checkout.js:21
@@ -10008,7 +10008,7 @@ msgstr ""
 msgid "Discount:"
 msgstr ""
 
-#: includes/abstracts/abstract-wc-order.php:2875
+#: includes/abstracts/abstract-wc-order.php:2903
 #: includes/admin/meta-boxes/views/html-order-items.php:200
 #: assets/client/blocks/cart.js:22
 #: assets/client/blocks/checkout.js:21
@@ -10017,7 +10017,7 @@ msgstr ""
 msgid "Shipping:"
 msgstr ""
 
-#: includes/abstracts/abstract-wc-order.php:2944
+#: includes/abstracts/abstract-wc-order.php:2972
 #: src/Blocks/BlockTypes/OrderConfirmation/Summary.php:34
 #: templates/checkout/order-receipt.php:33
 #: templates/checkout/thankyou.php:81
@@ -10026,7 +10026,7 @@ msgstr ""
 msgid "Total:"
 msgstr ""
 
-#: includes/abstracts/abstract-wc-order.php:3062
+#: includes/abstracts/abstract-wc-order.php:3090
 #: includes/admin/class-wc-admin-dashboard.php:616
 #: includes/admin/list-tables/class-wc-admin-list-table-orders.php:124
 #: includes/admin/meta-boxes/class-wc-meta-box-order-data.php:305
@@ -10157,7 +10157,7 @@ msgstr ""
 #: includes/admin/class-wc-admin-reports.php:196
 #: includes/admin/list-tables/class-wc-admin-list-table-products.php:425
 #: includes/admin/reports/class-wc-report-stock.php:120
-#: includes/class-wc-ajax.php:2155
+#: includes/class-wc-ajax.php:2156
 #: includes/wc-product-functions.php:1406
 #: src/Blocks/Utils/ProductAvailabilityUtils.php:39
 #: assets/client/admin/chunks/analytics-report-stock.js:1
@@ -10347,7 +10347,7 @@ msgstr ""
 #: includes/admin/class-wc-admin-api-keys-table-list.php:185
 #: includes/admin/meta-boxes/views/html-order-notes.php:38
 #: includes/admin/settings/views/html-keys-edit.php:109
-#: includes/class-wc-ajax.php:1833
+#: includes/class-wc-ajax.php:1834
 #: src/Internal/Admin/ProductReviews/ReviewsListTable.php:1127
 #, php-format
 msgid "%1$s at %2$s"
@@ -11150,7 +11150,7 @@ msgstr ""
 #: includes/admin/settings/views/html-admin-page-shipping-providers.php:179
 #: includes/admin/settings/views/html-admin-page-shipping-zone-methods.php:127
 #: includes/admin/settings/views/html-admin-page-shipping-zones.php:119
-#: includes/class-wc-ajax.php:1850
+#: includes/class-wc-ajax.php:1851
 #: includes/wc-account-functions.php:423
 #: packages/action-scheduler/classes/ActionScheduler_ListTable.php:99
 #: src/Admin/RemoteInboxNotifications/RemoteInboxNotificationsEngine.php:277
@@ -11814,7 +11814,7 @@ msgstr ""
 
 #: includes/admin/class-wc-admin-menus.php:126
 #: includes/admin/views/html-admin-page-status-report.php:688
-#: includes/class-wc-install.php:2624
+#: includes/class-wc-install.php:2627
 #: includes/react-admin/connect-existing-pages.php:34
 #: src/Internal/Admin/Analytics.php:720
 #: src/Internal/Admin/Logging/PageController.php:212
@@ -12792,7 +12792,7 @@ msgstr ""
 
 #. translators: 1: page name 2: page ID
 #: includes/admin/class-wc-admin-settings.php:729
-#: includes/class-wc-ajax.php:2676
+#: includes/class-wc-ajax.php:2677
 #, php-format
 msgid "%1$s (ID: %2$s)"
 msgstr ""
@@ -13046,7 +13046,7 @@ msgstr ""
 
 #: includes/admin/class-wc-admin-setup-wizard.php:806
 #: includes/admin/class-wc-admin-setup-wizard.php:847
-#: src/Admin/API/Plugins.php:452
+#: src/Admin/API/Plugins.php:473
 #: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:363
 #: assets/client/admin/data/index.js:2
 msgid "Jetpack"
@@ -13681,7 +13681,7 @@ msgstr ""
 #: includes/admin/class-wc-admin-status.php:462
 #: includes/admin/meta-boxes/views/html-order-notes.php:44
 #: includes/admin/views/html-admin-page-status-report.php:675
-#: includes/class-wc-ajax.php:1839
+#: includes/class-wc-ajax.php:1840
 #: templates/content-widget-reviews.php:38
 #, php-format
 msgid "by %s"
@@ -13739,8 +13739,8 @@ msgid "Product categories for your store can be managed here. To change the orde
 msgstr ""
 
 #: includes/admin/class-wc-admin-taxonomies.php:343
-#: includes/class-wc-install.php:1663
-#: includes/class-wc-install.php:1669
+#: includes/class-wc-install.php:1666
+#: includes/class-wc-install.php:1672
 msgctxt "Default category slug"
 msgid "Uncategorized"
 msgstr ""
@@ -15557,7 +15557,7 @@ msgstr ""
 #: includes/admin/meta-boxes/views/html-order-items.php:57
 #: includes/admin/reports/class-wc-report-taxes-by-code.php:198
 #: includes/admin/settings/class-wc-settings-tax.php:27
-#: includes/class-wc-ajax.php:2042
+#: includes/class-wc-ajax.php:2043
 #: includes/class-wc-countries.php:678
 #: includes/class-wc-order-item-tax.php:170
 #: includes/class-wc-tax.php:1030
@@ -15713,7 +15713,7 @@ msgstr ""
 
 #: includes/admin/list-tables/class-wc-admin-list-table-products.php:421
 #: includes/admin/reports/class-wc-report-stock.php:116
-#: includes/class-wc-ajax.php:2157
+#: includes/class-wc-ajax.php:2158
 #: includes/wc-product-functions.php:1407
 #: assets/client/admin/chunks/analytics-report-stock.js:1
 msgid "On backorder"
@@ -16150,7 +16150,7 @@ msgstr ""
 #. translators: $1: customer name, $2 customer id, $3: customer email
 #: includes/admin/meta-boxes/class-wc-meta-box-order-data.php:478
 #: includes/admin/settings/views/html-keys-edit.php:53
-#: includes/class-wc-ajax.php:2293
+#: includes/class-wc-ajax.php:2294
 #: src/Internal/Admin/Orders/ListTable.php:1010
 #: src/Internal/StockNotifications/Admin/ListTable.php:504
 #: src/Internal/StockNotifications/Admin/Templates/html-admin-notification-create.php:90
@@ -16185,7 +16185,7 @@ msgid "No email address set."
 msgstr ""
 
 #: includes/admin/meta-boxes/class-wc-meta-box-order-data.php:611
-#: includes/class-wc-order.php:2524
+#: includes/class-wc-order.php:2526
 #: templates/checkout/order-receipt.php:38
 #: templates/checkout/thankyou.php:87
 #: assets/client/blocks/order-confirmation-summary.js:1
@@ -16253,7 +16253,7 @@ msgstr ""
 #. translators: file name.
 #. translators: %d file count
 #: includes/admin/meta-boxes/class-wc-meta-box-order-downloads.php:64
-#: includes/class-wc-ajax.php:1134
+#: includes/class-wc-ajax.php:1135
 #, php-format
 msgid "File %d"
 msgstr ""
@@ -16615,7 +16615,7 @@ msgid "This order is no longer editable."
 msgstr ""
 
 #: includes/admin/meta-boxes/views/html-order-items.php:324
-#: includes/class-wc-order.php:2549
+#: includes/class-wc-order.php:2551
 #: assets/client/admin/chunks/analytics-report-orders.js:1
 #: assets/client/admin/chunks/dashboard-charts.js:1
 msgid "Refund"
@@ -16798,20 +16798,20 @@ msgid "Last page"
 msgstr ""
 
 #: includes/admin/meta-boxes/views/html-order-notes.php:23
-#: includes/class-wc-ajax.php:1820
+#: includes/class-wc-ajax.php:1821
 msgid "Sent to customer"
 msgstr ""
 
 #. translators: %s: order note date
 #: includes/admin/meta-boxes/views/html-order-notes.php:51
-#: includes/class-wc-ajax.php:1846
+#: includes/class-wc-ajax.php:1847
 #, php-format
 msgid "Delete system note from %s"
 msgstr ""
 
 #. translators: %1$s: order note author, %2$s: order note date
 #: includes/admin/meta-boxes/views/html-order-notes.php:53
-#: includes/class-wc-ajax.php:1848
+#: includes/class-wc-ajax.php:1849
 #, php-format
 msgid "Delete note from %1$s on %2$s"
 msgstr ""
@@ -16906,7 +16906,7 @@ msgid "Add descriptive pieces of information that customers can use to search fo
 msgstr ""
 
 #: includes/admin/meta-boxes/views/html-product-data-attributes.php:30
-#: includes/class-wc-ajax.php:3158
+#: includes/class-wc-ajax.php:3159
 #: assets/client/admin/app/index.js:2
 msgid "Dismiss this notice."
 msgstr ""
@@ -17478,7 +17478,7 @@ msgstr ""
 #. translators: %s: number of tax rates.
 #: includes/admin/meta-boxes/views/html-product-data-variations.php:128
 #: includes/admin/meta-boxes/views/html-product-data-variations.php:178
-#: includes/class-wc-ajax.php:2065
+#: includes/class-wc-ajax.php:2066
 #, php-format
 msgid "%s item"
 msgid_plural "%s items"
@@ -18003,7 +18003,7 @@ msgid "Name (Last, First)"
 msgstr ""
 
 #: includes/admin/reports/class-wc-report-customer-list.php:216
-#: includes/class-wc-checkout.php:299
+#: includes/class-wc-checkout.php:300
 #: src/Admin/API/Reports/Customers/Controller.php:760
 #: templates/myaccount/form-login.php:79
 #: assets/client/admin/chunks/analytics-report-customers.js:1
@@ -19271,7 +19271,7 @@ msgid "Manual"
 msgstr ""
 
 #: includes/admin/settings/class-wc-settings-emails.php:551
-#: includes/class-wc-ajax.php:2166
+#: includes/class-wc-ajax.php:2167
 #: includes/wc-webhook-functions.php:190
 #: src/Internal/ProductDownloads/ApprovedDirectories/Admin/Table.php:203
 msgid "Disabled"
@@ -20418,7 +20418,7 @@ msgid "Generate API key"
 msgstr ""
 
 #: includes/admin/settings/views/html-keys-edit.php:132
-#: includes/class-wc-ajax.php:3068
+#: includes/class-wc-ajax.php:3069
 msgid "Revoke key"
 msgstr ""
 
@@ -21960,19 +21960,19 @@ msgstr ""
 msgid "Downloadable products give access to a file upon purchase."
 msgstr ""
 
-#: includes/class-wc-ajax.php:322
+#: includes/class-wc-ajax.php:323
 msgid "Sorry there was a problem removing this coupon."
 msgstr ""
 
-#: includes/class-wc-ajax.php:325
+#: includes/class-wc-ajax.php:326
 msgid "Coupon has been removed."
 msgstr ""
 
-#: includes/class-wc-ajax.php:383
+#: includes/class-wc-ajax.php:384
 msgid "Sorry, your session has expired."
 msgstr ""
 
-#: includes/class-wc-ajax.php:383
+#: includes/class-wc-ajax.php:384
 #: src/Blocks/BlockTypes/MiniCartShoppingButtonBlock.php:26
 #: templates/cart/cart-empty.php:35
 #: assets/client/blocks/mini-cart-contents.js:13
@@ -21980,35 +21980,35 @@ msgstr ""
 msgid "Return to shop"
 msgstr ""
 
-#: includes/class-wc-ajax.php:813
+#: includes/class-wc-ajax.php:814
 msgid "Term not found"
 msgstr ""
 
-#: includes/class-wc-ajax.php:1195
-#: includes/class-wc-ajax.php:1227
-#: includes/class-wc-ajax.php:1335
-#: includes/class-wc-ajax.php:1401
-#: includes/class-wc-ajax.php:1446
-#: includes/class-wc-ajax.php:1512
-#: includes/class-wc-ajax.php:1566
+#: includes/class-wc-ajax.php:1196
+#: includes/class-wc-ajax.php:1228
+#: includes/class-wc-ajax.php:1336
+#: includes/class-wc-ajax.php:1402
+#: includes/class-wc-ajax.php:1447
+#: includes/class-wc-ajax.php:1513
+#: includes/class-wc-ajax.php:1567
 #: includes/class-wc-order-item.php:241
 #: src/Internal/Orders/CouponsController.php:65
 msgid "Invalid order"
 msgstr ""
 
-#: includes/class-wc-ajax.php:1253
+#: includes/class-wc-ajax.php:1254
 #: includes/class-wc-order-item-product.php:93
 msgid "Invalid product ID"
 msgstr ""
 
 #. translators: %s product name
-#: includes/class-wc-ajax.php:1257
+#: includes/class-wc-ajax.php:1258
 #, php-format
 msgid "%s is a variable product parent and cannot be added."
 msgstr ""
 
 #. translators: %s: error message
-#: includes/class-wc-ajax.php:1270
+#: includes/class-wc-ajax.php:1271
 #: includes/wc-rest-functions.php:101
 #: assets/client/admin/email-editor/index.js:2
 #: assets/client/admin/wp-admin-scripts/email-editor-integration.js:2
@@ -22017,119 +22017,119 @@ msgid "Error: %s"
 msgstr ""
 
 #. translators: %s item name.
-#: includes/class-wc-ajax.php:1286
+#: includes/class-wc-ajax.php:1287
 #, php-format
 msgid "Added line items: %s"
 msgstr ""
 
 #. translators: %s fee amount
-#: includes/class-wc-ajax.php:1362
+#: includes/class-wc-ajax.php:1363
 #, php-format
 msgid "%s fee"
 msgstr ""
 
-#: includes/class-wc-ajax.php:1452
+#: includes/class-wc-ajax.php:1453
 msgid "Invalid rate"
 msgstr ""
 
 #. translators: %s coupon code.
-#: includes/class-wc-ajax.php:1523
+#: includes/class-wc-ajax.php:1524
 #, php-format
 msgid "Coupon removed: \"%s\"."
 msgstr ""
 
-#: includes/class-wc-ajax.php:1570
+#: includes/class-wc-ajax.php:1571
 msgid "Invalid items"
 msgstr ""
 
 #. translators: %1$s: item name %2$s: stock change
-#: includes/class-wc-ajax.php:1610
+#: includes/class-wc-ajax.php:1611
 #, php-format
 msgid "Deleted %1$s and adjusted stock (%2$s)"
 msgstr ""
 
 #. translators: %s item name.
-#: includes/class-wc-ajax.php:1613
+#: includes/class-wc-ajax.php:1614
 #, php-format
 msgid "Deleted %s"
 msgstr ""
 
-#: includes/class-wc-ajax.php:1683
+#: includes/class-wc-ajax.php:1684
 msgid "Order not editable"
 msgstr ""
 
 #. Translators: %s stock amount
-#: includes/class-wc-ajax.php:2150
+#: includes/class-wc-ajax.php:2151
 #, php-format
 msgid "Stock: %s"
 msgstr ""
 
-#: includes/class-wc-ajax.php:2168
+#: includes/class-wc-ajax.php:2169
 msgid "Draft"
 msgstr ""
 
-#: includes/class-wc-ajax.php:2874
+#: includes/class-wc-ajax.php:2875
 msgid "Invalid refund amount"
 msgstr ""
 
-#: includes/class-wc-ajax.php:2878
+#: includes/class-wc-ajax.php:2879
 msgid "Error processing refund. Please try again."
 msgstr ""
 
-#: includes/class-wc-ajax.php:2989
+#: includes/class-wc-ajax.php:2990
 msgid "Description is missing."
 msgstr ""
 
-#: includes/class-wc-ajax.php:2992
+#: includes/class-wc-ajax.php:2993
 msgid "User is missing."
 msgstr ""
 
-#: includes/class-wc-ajax.php:2995
+#: includes/class-wc-ajax.php:2996
 msgid "Permissions is missing."
 msgstr ""
 
-#: includes/class-wc-ajax.php:3006
+#: includes/class-wc-ajax.php:3007
 msgid "You do not have permission to assign API Keys to the selected user."
 msgstr ""
 
-#: includes/class-wc-ajax.php:3032
+#: includes/class-wc-ajax.php:3033
 msgid "API Key updated successfully."
 msgstr ""
 
-#: includes/class-wc-ajax.php:3060
+#: includes/class-wc-ajax.php:3061
 msgid "There was an error generating your API Key."
 msgstr ""
 
-#: includes/class-wc-ajax.php:3067
+#: includes/class-wc-ajax.php:3068
 msgid "API Key generated successfully. Make sure to copy your new keys now as the secret key will be hidden once you leave this page."
 msgstr ""
 
 #. translators: %s: provider name
-#: includes/class-wc-ajax.php:4463
+#: includes/class-wc-ajax.php:4464
 #, php-format
 msgid "Cannot delete \"%s\" because it is used by existing fulfillments. Remove all fulfillments using this provider first."
 msgstr ""
 
-#: includes/class-wc-ajax.php:4472
+#: includes/class-wc-ajax.php:4473
 msgid "Failed to delete the shipping provider."
 msgstr ""
 
 #. translators: %s: slug value
-#: includes/class-wc-ajax.php:4489
+#: includes/class-wc-ajax.php:4490
 #, php-format
 msgid "The slug \"%s\" is already used by a built-in shipping provider. Please choose a different slug."
 msgstr ""
 
-#: includes/class-wc-ajax.php:4508
+#: includes/class-wc-ajax.php:4509
 msgid "The tracking URL template must be a valid HTTP or HTTPS URL."
 msgstr ""
 
-#: includes/class-wc-ajax.php:4521
+#: includes/class-wc-ajax.php:4522
 msgid "The icon URL must be a valid HTTP or HTTPS URL."
 msgstr ""
 
 #. translators: %s: provider name
-#: includes/class-wc-ajax.php:4548
+#: includes/class-wc-ajax.php:4549
 #, php-format
 msgid "Could not create provider \"%s\" because its auto-generated slug conflicts with a built-in shipping provider. Please specify a different slug."
 msgstr ""
@@ -22389,16 +22389,16 @@ msgstr ""
 
 #. translators: %s: product name
 #: includes/class-wc-cart-session.php:702
-#: includes/class-wc-cart.php:1345
+#: includes/class-wc-cart.php:1346
 #, php-format
 msgid "You cannot add another \"%s\" to your cart."
 msgstr ""
 
 #: includes/class-wc-cart-session.php:706
-#: includes/class-wc-cart.php:1360
-#: includes/class-wc-cart.php:1430
+#: includes/class-wc-cart.php:1361
+#: includes/class-wc-cart.php:1431
 #: includes/class-wc-frontend-scripts.php:742
-#: includes/wc-cart-functions.php:133
+#: includes/wc-cart-functions.php:134
 #: includes/wc-template-functions.php:2773
 #: src/Blocks/BlockTypes/MiniCartCartButtonBlock.php:24
 #: src/Blocks/BlockTypes/ProductButton.php:412
@@ -22469,67 +22469,67 @@ msgid "Invalid value posted for %s"
 msgstr ""
 
 #. translators: %s: Attribute name.
-#: includes/class-wc-cart.php:1308
-#: src/StoreApi/Utilities/CartController.php:1337
+#: includes/class-wc-cart.php:1309
+#: src/StoreApi/Utilities/CartController.php:1342
 #, php-format
 msgid "%s is a required field"
 msgid_plural "%s are required fields"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-wc-cart.php:1322
+#: includes/class-wc-cart.php:1323
 msgid "The selected product is invalid."
 msgstr ""
 
 #. translators: 1: product link, 2: product name
-#: includes/class-wc-cart.php:1326
+#: includes/class-wc-cart.php:1327
 #, php-format
 msgid "The selected product isn't a variation of %2$s, please choose product options by visiting <a href=\"%1$s\" title=\"%2$s\">%2$s</a>."
 msgstr ""
 
-#: includes/class-wc-cart.php:1368
+#: includes/class-wc-cart.php:1369
 msgid "Sorry, this product cannot be purchased."
 msgstr ""
 
 #. translators: %s: product name
-#: includes/class-wc-cart.php:1383
+#: includes/class-wc-cart.php:1384
 #: src/Blocks/BlockTypes/AddToCartWithOptions/AddToCartWithOptions.php:282
-#: src/StoreApi/Utilities/CartController.php:291
+#: src/StoreApi/Utilities/CartController.php:294
 #, php-format
 msgid "You cannot add &quot;%s&quot; to the cart because the product is out of stock."
 msgstr ""
 
 #. translators: 1: product name 2: quantity in stock
-#: includes/class-wc-cart.php:1400
-#: src/StoreApi/Utilities/CartController.php:308
+#: includes/class-wc-cart.php:1401
+#: src/StoreApi/Utilities/CartController.php:311
 #, php-format
 msgid "You cannot add that amount of &quot;%1$s&quot; to the cart because there is not enough stock (%2$s remaining)."
 msgstr ""
 
 #. translators: 1: quantity in stock 2: current quantity
-#: includes/class-wc-cart.php:1427
-#: includes/class-wc-cart.php:1434
+#: includes/class-wc-cart.php:1428
+#: includes/class-wc-cart.php:1435
 #, php-format
 msgid "You cannot add that amount to the cart &mdash; we have %1$s in stock and you already have %2$s in your cart."
 msgstr ""
 
-#: includes/class-wc-cart.php:1790
+#: includes/class-wc-cart.php:1791
 msgctxt "shipping packages"
 msgid "Shipment"
 msgstr ""
 
 #. translators: %d: shipping package number.
-#: includes/class-wc-cart.php:1798
+#: includes/class-wc-cart.php:1799
 #, php-format
 msgctxt "shipping packages"
 msgid "Shipment %d"
 msgstr ""
 
-#: includes/class-wc-cart.php:2032
+#: includes/class-wc-cart.php:2033
 msgid "This method has been deprecated and will be removed soon. Use Automattic\\WooCommerce\\Utilities\\DiscountsUtil::is_coupon_emails_allowed instead."
 msgstr ""
 
-#: includes/class-wc-checkout.php:197
+#: includes/class-wc-checkout.php:198
 #: includes/class-wc-emails.php:73
 #: includes/class-wc-payment-gateways.php:61
 #: includes/class-wc-shipping.php:80
@@ -22537,7 +22537,7 @@ msgstr ""
 msgid "Cloning is forbidden."
 msgstr ""
 
-#: includes/class-wc-checkout.php:204
+#: includes/class-wc-checkout.php:205
 #: includes/class-wc-emails.php:83
 #: includes/class-wc-payment-gateways.php:70
 #: includes/class-wc-shipping.php:89
@@ -22546,26 +22546,26 @@ msgstr ""
 msgid "Unserializing instances of this class is forbidden."
 msgstr ""
 
-#: includes/class-wc-checkout.php:286
+#: includes/class-wc-checkout.php:287
 msgid "Order notes"
 msgstr ""
 
-#: includes/class-wc-checkout.php:287
+#: includes/class-wc-checkout.php:288
 #: assets/client/blocks/checkout-frontend.js:5
 #: assets/client/blocks/checkout.js:21
 #: assets/client/blocks/wc-block-library.js:155
 msgid "Notes about your order, e.g. special notes for delivery."
 msgstr ""
 
-#: includes/class-wc-checkout.php:297
+#: includes/class-wc-checkout.php:298
 msgid "Account username"
 msgstr ""
 
-#: includes/class-wc-checkout.php:307
+#: includes/class-wc-checkout.php:308
 msgid "Create account password"
 msgstr ""
 
-#: includes/class-wc-checkout.php:309
+#: includes/class-wc-checkout.php:310
 #: templates/auth/form-login.php:44
 #: templates/global/form-login.php:38
 #: templates/myaccount/form-login.php:43
@@ -22576,45 +22576,45 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: includes/class-wc-checkout.php:505
+#: includes/class-wc-checkout.php:506
 msgid "Order items could not be saved. Please try again."
 msgstr ""
 
 #. translators: ISO 3166-1 alpha-2 country code
-#: includes/class-wc-checkout.php:932
+#: includes/class-wc-checkout.php:933
 #, php-format
 msgid "'%s' is not a valid country code."
 msgstr ""
 
 #. translators: %s: field name
-#: includes/class-wc-checkout.php:938
+#: includes/class-wc-checkout.php:939
 #, php-format
 msgctxt "checkout-validation"
 msgid "Shipping %s"
 msgstr ""
 
 #. translators: %s: field name
-#: includes/class-wc-checkout.php:942
+#: includes/class-wc-checkout.php:943
 #, php-format
 msgctxt "checkout-validation"
 msgid "Billing %s"
 msgstr ""
 
 #. translators: %1$s: field name, %2$s finder.eircode.ie URL
-#: includes/class-wc-checkout.php:954
+#: includes/class-wc-checkout.php:955
 #, php-format
 msgid "%1$s is not valid. You can look up the correct Eircode <a target=\"_blank\" href=\"%2$s\">here</a>."
 msgstr ""
 
 #. translators: %s: field name
-#: includes/class-wc-checkout.php:958
+#: includes/class-wc-checkout.php:959
 #, php-format
 msgid "%s is not a valid postcode / ZIP."
 msgstr ""
 
 #. translators: %s: phone number
 #. translators: %s: Phone number.
-#: includes/class-wc-checkout.php:971
+#: includes/class-wc-checkout.php:972
 #: includes/class-wc-form-handler.php:289
 #, php-format
 msgid "%s is not a valid phone number."
@@ -22622,47 +22622,47 @@ msgstr ""
 
 #. translators: %s: email address
 #. translators: %s: Email address.
-#: includes/class-wc-checkout.php:981
+#: includes/class-wc-checkout.php:982
 #: includes/class-wc-form-handler.php:297
 #, php-format
 msgid "%s is not a valid email address."
 msgstr ""
 
 #. translators: 1: state field 2: valid states
-#: includes/class-wc-checkout.php:1001
+#: includes/class-wc-checkout.php:1002
 #, php-format
 msgid "%1$s is not valid. Please enter one of the following: %2$s"
 msgstr ""
 
 #. translators: %s: field name
 #. translators: %s: Field name.
-#: includes/class-wc-checkout.php:1008
+#: includes/class-wc-checkout.php:1009
 #: includes/class-wc-form-handler.php:257
 #: includes/class-wc-form-handler.php:426
 #, php-format
 msgid "%s is a required field."
 msgstr ""
 
-#: includes/class-wc-checkout.php:1027
+#: includes/class-wc-checkout.php:1028
 #: includes/class-wc-form-handler.php:580
 msgid "Please read and accept the terms and conditions to proceed with your order."
 msgstr ""
 
-#: includes/class-wc-checkout.php:1034
+#: includes/class-wc-checkout.php:1035
 msgid "Please enter an address to continue."
 msgstr ""
 
 #. translators: %1$s: shipping location prefix 'to' or 'to the', %2$s: shipping location country name
-#: includes/class-wc-checkout.php:1043
+#: includes/class-wc-checkout.php:1044
 #, php-format
 msgid "Unfortunately, <strong>we do not ship %1$s %2$s</strong>. Please enter an alternative shipping address."
 msgstr ""
 
-#: includes/class-wc-checkout.php:1054
+#: includes/class-wc-checkout.php:1055
 msgid "No shipping method has been selected. Please double check your address, or contact us if you need any help."
 msgstr ""
 
-#: includes/class-wc-checkout.php:1064
+#: includes/class-wc-checkout.php:1065
 #: includes/class-wc-form-handler.php:590
 #: includes/class-wc-form-handler.php:597
 #: includes/class-wc-form-handler.php:726
@@ -22670,21 +22670,21 @@ msgstr ""
 msgid "Invalid payment method."
 msgstr ""
 
-#: includes/class-wc-checkout.php:1271
+#: includes/class-wc-checkout.php:1275
 msgid "An account is already registered with your email address. <a href=\"#\" class=\"showlogin\">Please log in.</a>"
 msgstr ""
 
 #. translators: %s: shop cart url
-#: includes/class-wc-checkout.php:1367
+#: includes/class-wc-checkout.php:1376
 #, php-format
 msgid "Sorry, your session has expired. <a href=\"%s\" class=\"wc-backward\">Return to shop</a>"
 msgstr ""
 
-#: includes/class-wc-checkout.php:1378
+#: includes/class-wc-checkout.php:1387
 msgid "We were unable to process your order, please try again."
 msgstr ""
 
-#: includes/class-wc-checkout.php:1433
+#: includes/class-wc-checkout.php:1442
 msgid "Unable to create order."
 msgstr ""
 
@@ -22743,8 +22743,8 @@ msgstr ""
 #. translators: 1: first name 2: last name
 #: includes/class-wc-countries.php:852
 #: includes/class-wc-countries.php:868
-#: includes/class-wc-order.php:1031
-#: includes/class-wc-order.php:1041
+#: includes/class-wc-order.php:1033
+#: includes/class-wc-order.php:1043
 #: includes/rest-api/Controllers/Version2/class-wc-rest-network-orders-v2-controller.php:151
 #: src/Internal/Admin/Orders/ListTable.php:1140
 #, php-format
@@ -23075,7 +23075,7 @@ msgid "Invalid role"
 msgstr ""
 
 #: includes/class-wc-customer.php:1156
-#: includes/class-wc-order.php:1384
+#: includes/class-wc-order.php:1386
 msgid "Invalid billing email address"
 msgstr ""
 
@@ -23367,7 +23367,7 @@ msgstr ""
 #. translators: %s: Item name.
 #. translators: %s: product name
 #: includes/class-wc-form-handler.php:803
-#: includes/wc-cart-functions.php:111
+#: includes/wc-cart-functions.php:112
 #, php-format
 msgctxt "Item name in quotes"
 msgid "&ldquo;%s&rdquo;"
@@ -23529,135 +23529,135 @@ msgstr ""
 msgid "Please enter a stronger password."
 msgstr ""
 
-#: includes/class-wc-install.php:1111
+#: includes/class-wc-install.php:1114
 msgid "Monthly"
 msgstr ""
 
-#: includes/class-wc-install.php:1115
+#: includes/class-wc-install.php:1118
 msgid "Every 15 Days"
 msgstr ""
 
-#: includes/class-wc-install.php:1198
+#: includes/class-wc-install.php:1201
 msgctxt "Page slug"
 msgid "shop"
 msgstr ""
 
-#: includes/class-wc-install.php:1199
+#: includes/class-wc-install.php:1202
 msgctxt "Page title"
 msgid "Shop"
 msgstr ""
 
-#: includes/class-wc-install.php:1203
+#: includes/class-wc-install.php:1206
 msgctxt "Page slug"
 msgid "cart"
 msgstr ""
 
-#: includes/class-wc-install.php:1204
+#: includes/class-wc-install.php:1207
 msgctxt "Page title"
 msgid "Cart"
 msgstr ""
 
-#: includes/class-wc-install.php:1208
+#: includes/class-wc-install.php:1211
 msgctxt "Page slug"
 msgid "checkout"
 msgstr ""
 
-#: includes/class-wc-install.php:1209
+#: includes/class-wc-install.php:1212
 msgctxt "Page title"
 msgid "Checkout"
 msgstr ""
 
-#: includes/class-wc-install.php:1213
+#: includes/class-wc-install.php:1216
 msgctxt "Page slug"
 msgid "my-account"
 msgstr ""
 
-#: includes/class-wc-install.php:1214
+#: includes/class-wc-install.php:1217
 msgctxt "Page title"
 msgid "My account"
 msgstr ""
 
-#: includes/class-wc-install.php:1218
+#: includes/class-wc-install.php:1221
 msgctxt "Page slug"
 msgid "refund_returns"
 msgstr ""
 
-#: includes/class-wc-install.php:1219
+#: includes/class-wc-install.php:1222
 msgctxt "Page title"
 msgid "Refund and Returns Policy"
 msgstr ""
 
-#: includes/class-wc-install.php:1286
+#: includes/class-wc-install.php:1289
 msgid "Reduced rate"
 msgstr ""
 
-#: includes/class-wc-install.php:1287
+#: includes/class-wc-install.php:1290
 msgid "Zero rate"
 msgstr ""
 
 #. translators: user role
-#: includes/class-wc-install.php:2339
+#: includes/class-wc-install.php:2342
 msgctxt "User role"
 msgid "Customer"
 msgstr ""
 
 #. translators: user role
-#: includes/class-wc-install.php:2341
+#: includes/class-wc-install.php:2344
 msgctxt "User role"
 msgid "Shop manager"
 msgstr ""
 
-#: includes/class-wc-install.php:2624
+#: includes/class-wc-install.php:2627
 msgid "View WooCommerce settings"
 msgstr ""
 
-#: includes/class-wc-install.php:2672
+#: includes/class-wc-install.php:2675
 msgid "View WooCommerce documentation"
 msgstr ""
 
-#: includes/class-wc-install.php:2672
+#: includes/class-wc-install.php:2675
 msgid "Docs"
 msgstr ""
 
-#: includes/class-wc-install.php:2673
+#: includes/class-wc-install.php:2676
 msgid "View WooCommerce API docs"
 msgstr ""
 
-#: includes/class-wc-install.php:2673
+#: includes/class-wc-install.php:2676
 msgid "API docs"
 msgstr ""
 
-#: includes/class-wc-install.php:2674
+#: includes/class-wc-install.php:2677
 msgid "Visit community forums"
 msgstr ""
 
-#: includes/class-wc-install.php:2674
+#: includes/class-wc-install.php:2677
 msgid "Community support"
 msgstr ""
 
-#: includes/class-wc-install.php:2678
+#: includes/class-wc-install.php:2681
 msgid "Visit premium customer support"
 msgstr ""
 
-#: includes/class-wc-install.php:2678
+#: includes/class-wc-install.php:2681
 msgid "Premium support"
 msgstr ""
 
 #. translators: 1: plugin name, 2: error message, 3: URL to install plugin manually.
 #. translators: 1: theme slug, 2: error message, 3: URL to install theme manually.
-#: includes/class-wc-install.php:2813
-#: includes/class-wc-install.php:2929
+#: includes/class-wc-install.php:2816
+#: includes/class-wc-install.php:2932
 #, php-format
 msgid "%1$s could not be installed (%2$s). <a href=\"%3$s\">Please install it manually by clicking here.</a>"
 msgstr ""
 
 #. translators: 1: plugin name, 2: URL to WP plugin page.
-#: includes/class-wc-install.php:2846
+#: includes/class-wc-install.php:2849
 #, php-format
 msgid "%1$s was installed but could not be activated. <a href=\"%2$s\">Please activate it manually by clicking here.</a>"
 msgstr ""
 
-#: includes/class-wc-install.php:3175
+#: includes/class-wc-install.php:3178
 #: templates/cart/cross-sells.php:24
 msgid "You may be interested in&hellip;"
 msgstr ""
@@ -23788,7 +23788,7 @@ msgstr ""
 #. translators: %s: taxes
 #. translators: %s: tax amount
 #: includes/class-wc-order.php:242
-#: includes/wc-cart-functions.php:359
+#: includes/wc-cart-functions.php:360
 #, php-format
 msgid "(includes %s)"
 msgstr ""
@@ -23798,18 +23798,18 @@ msgid "Update status event failed."
 msgstr ""
 
 #. translators: 1: old order status 2: new order status
-#: includes/class-wc-order.php:465
+#: includes/class-wc-order.php:467
 #, php-format
 msgid "Order status changed from %1$s to %2$s."
 msgstr ""
 
 #. translators: %s: new order status
-#: includes/class-wc-order.php:469
+#: includes/class-wc-order.php:471
 #, php-format
 msgid "Order status set to %s."
 msgstr ""
 
-#: includes/class-wc-order.php:513
+#: includes/class-wc-order.php:515
 msgid "Error during status transition."
 msgstr ""
 
@@ -25074,59 +25074,59 @@ msgstr ""
 msgid "Cancelled product image regeneration job."
 msgstr ""
 
-#: includes/class-wc-rest-authentication.php:284
+#: includes/class-wc-rest-authentication.php:295
 msgid "The provided API key cannot be used to access this endpoint."
 msgstr ""
 
-#: includes/class-wc-rest-authentication.php:387
+#: includes/class-wc-rest-authentication.php:398
 msgid "Consumer secret is invalid."
 msgstr ""
 
 #. translators: %s: amount of errors
-#: includes/class-wc-rest-authentication.php:505
+#: includes/class-wc-rest-authentication.php:516
 #, php-format
 msgid "Missing OAuth parameter %s"
 msgid_plural "Missing OAuth parameters %s"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-wc-rest-authentication.php:545
+#: includes/class-wc-rest-authentication.php:556
 msgid "Consumer key is invalid."
 msgstr ""
 
-#: includes/class-wc-rest-authentication.php:589
+#: includes/class-wc-rest-authentication.php:600
 msgid "Invalid signature - failed to sort parameters."
 msgstr ""
 
-#: includes/class-wc-rest-authentication.php:598
+#: includes/class-wc-rest-authentication.php:609
 msgid "Invalid signature - signature method is invalid."
 msgstr ""
 
-#: includes/class-wc-rest-authentication.php:606
+#: includes/class-wc-rest-authentication.php:617
 msgid "Invalid signature - provided signature does not match."
 msgstr ""
 
-#: includes/class-wc-rest-authentication.php:682
+#: includes/class-wc-rest-authentication.php:693
 msgid "Invalid timestamp."
 msgstr ""
 
-#: includes/class-wc-rest-authentication.php:693
+#: includes/class-wc-rest-authentication.php:704
 msgid "Invalid nonce - nonce has already been used."
 msgstr ""
 
-#: includes/class-wc-rest-authentication.php:761
+#: includes/class-wc-rest-authentication.php:772
 msgid "The API key provided does not have read permissions."
 msgstr ""
 
-#: includes/class-wc-rest-authentication.php:769
+#: includes/class-wc-rest-authentication.php:780
 msgid "The API key provided does not have write permissions."
 msgstr ""
 
-#: includes/class-wc-rest-authentication.php:776
+#: includes/class-wc-rest-authentication.php:787
 msgid "Unknown request method."
 msgstr ""
 
-#: includes/class-wc-rest-authentication.php:848
+#: includes/class-wc-rest-authentication.php:859
 msgid "WooCommerce API. Use a consumer key in the username field and a consumer secret in the password field."
 msgstr ""
 
@@ -25652,7 +25652,7 @@ msgstr ""
 #. translators: %1$s = order ID, %2$s = order id, %3$s = error message.
 #. translators: %1$d = peoperty name, %2$d = order ID, %3$s = error message.
 #: includes/data-stores/abstract-wc-order-data-store-cpt.php:199
-#: src/Internal/DataStores/Orders/OrdersTableDataStore.php:1871
+#: src/Internal/DataStores/Orders/OrdersTableDataStore.php:1918
 #, php-format
 msgid "Error when setting property '%1$s' for order %2$d: %3$s"
 msgstr ""
@@ -26845,7 +26845,7 @@ msgstr ""
 #: includes/shipping/legacy-free-shipping/class-wc-shipping-legacy-free-shipping.php:107
 #: includes/shipping/legacy-local-delivery/class-wc-shipping-legacy-local-delivery.php:140
 #: includes/shipping/legacy-local-pickup/class-wc-shipping-legacy-local-pickup.php:111
-#: src/Blocks/Shipping/ShippingController.php:246
+#: src/Blocks/Shipping/ShippingController.php:247
 #: src/Internal/RestApi/Routes/V4/Settings/PaymentGateways/Schema/AbstractPaymentGatewaySettingsSchema.php:288
 msgid "This controls the title which the user sees during checkout."
 msgstr ""
@@ -27503,31 +27503,32 @@ msgid "Invalid product type."
 msgstr ""
 
 #. translators: %d: product ID
-#: includes/import/abstract-wc-product-importer.php:220
+#: includes/import/abstract-wc-product-importer.php:195
+#: includes/import/abstract-wc-product-importer.php:236
 #, php-format
 msgid "Invalid product ID %d."
 msgstr ""
 
-#: includes/import/abstract-wc-product-importer.php:277
+#: includes/import/abstract-wc-product-importer.php:293
 msgid "The Global Unique ID matches a product of a different type."
 msgstr ""
 
-#: includes/import/abstract-wc-product-importer.php:548
+#: includes/import/abstract-wc-product-importer.php:564
 msgid "Variation cannot be imported: Missing parent ID or parent does not exist yet."
 msgstr ""
 
-#: includes/import/abstract-wc-product-importer.php:553
+#: includes/import/abstract-wc-product-importer.php:569
 msgid "Variation cannot be imported: Parent product cannot be a product variation"
 msgstr ""
 
 #. translators: %s: image URL
-#: includes/import/abstract-wc-product-importer.php:723
+#: includes/import/abstract-wc-product-importer.php:739
 #, php-format
 msgid "Not able to attach \"%s\"."
 msgstr ""
 
 #. translators: %s: image URL
-#: includes/import/abstract-wc-product-importer.php:732
+#: includes/import/abstract-wc-product-importer.php:748
 #, php-format
 msgid "Unable to use image \"%s\"."
 msgstr ""
@@ -33723,29 +33724,29 @@ msgstr ""
 msgid "Could not update the attribute."
 msgstr ""
 
-#: includes/wc-cart-functions.php:29
+#: includes/wc-cart-functions.php:30
 msgid "This product is protected and cannot be purchased."
 msgstr ""
 
 #. translators: %s: product name
-#: includes/wc-cart-functions.php:123
+#: includes/wc-cart-functions.php:124
 #, php-format
 msgid "%s has been added to your cart."
 msgid_plural "%s have been added to your cart."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/wc-cart-functions.php:129
+#: includes/wc-cart-functions.php:130
 msgid "Continue shopping"
 msgstr ""
 
-#: includes/wc-cart-functions.php:163
+#: includes/wc-cart-functions.php:164
 msgid "and"
 msgstr ""
 
 #. translators: %s: coupon code
 #. translators: %s Coupon code.
-#: includes/wc-cart-functions.php:299
+#: includes/wc-cart-functions.php:300
 #: assets/client/blocks/cart.js:24
 #: assets/client/blocks/checkout.js:22
 #: assets/client/blocks/wc-block-library.js:18
@@ -33754,23 +33755,23 @@ msgstr ""
 msgid "Coupon: %s"
 msgstr ""
 
-#: includes/wc-cart-functions.php:322
+#: includes/wc-cart-functions.php:323
 msgid "Free shipping coupon"
 msgstr ""
 
 #. translators: %s: coupon code.
-#: includes/wc-cart-functions.php:327
+#: includes/wc-cart-functions.php:328
 #, php-format
 msgid "Remove %s coupon"
 msgstr ""
 
 #. translators: %s: coupon code.
-#: includes/wc-cart-functions.php:327
+#: includes/wc-cart-functions.php:328
 msgid "[Remove]"
 msgstr ""
 
 #. translators: 1: tax amount 2: country name
-#: includes/wc-cart-functions.php:356
+#: includes/wc-cart-functions.php:357
 #, php-format
 msgid "(includes %1$s estimated for %2$s)"
 msgstr ""
@@ -36232,10 +36233,10 @@ msgstr ""
 
 #: src/Admin/API/Marketing.php:105
 #: src/Admin/API/MarketingOverview.php:114
-#: src/Admin/API/OnboardingPlugins.php:244
-#: src/Admin/API/OnboardingPlugins.php:261
+#: src/Admin/API/OnboardingPlugins.php:246
+#: src/Admin/API/OnboardingPlugins.php:282
 #: src/Admin/API/PaymentGatewaySuggestions.php:83
-#: src/Admin/API/Plugins.php:218
+#: src/Admin/API/Plugins.php:220
 #: src/Admin/API/ShippingPartnerSuggestions.php:67
 #: src/Internal/Admin/Notes/InstallJPAndWCSPlugins.php:124
 #: assets/client/admin/chunks/core-profiler.js:1
@@ -36613,14 +36614,14 @@ msgid "Registers whether the note is read or not"
 msgstr ""
 
 #. translators: %s: plugin slug (example: woocommerce-services)
-#: src/Admin/API/OnboardingPlugins.php:378
+#: src/Admin/API/OnboardingPlugins.php:399
 #: src/Admin/PluginsHelper.php:509
 #, php-format
 msgid "The requested plugin `%s` could not be installed."
 msgstr ""
 
 #. translators: %s: plugin slug (example: woocommerce-services).
-#: src/Admin/API/OnboardingPlugins.php:398
+#: src/Admin/API/OnboardingPlugins.php:419
 #: src/Admin/PluginsHelper.php:439
 #, php-format
 msgid "We couldn't install `%s`. Try again in a few minutes, or install it later from the Extensions page."
@@ -36927,8 +36928,8 @@ msgstr ""
 msgid "Array of transaction processors and their images."
 msgstr ""
 
-#: src/Admin/API/Plugins.php:247
-#: src/Admin/API/Plugins.php:361
+#: src/Admin/API/Plugins.php:268
+#: src/Admin/API/Plugins.php:382
 #: src/Admin/PluginsHelper.php:395
 #: src/Admin/PluginsHelper.php:604
 #: src/Admin/PluginsHelper.php:627
@@ -36936,69 +36937,69 @@ msgstr ""
 msgid "Plugins must be a non-empty array."
 msgstr ""
 
-#: src/Admin/API/Plugins.php:258
+#: src/Admin/API/Plugins.php:279
 msgid "Plugin installation has been scheduled."
 msgstr ""
 
-#: src/Admin/API/Plugins.php:292
+#: src/Admin/API/Plugins.php:313
 msgid "Plugins were successfully installed."
 msgstr ""
 
-#: src/Admin/API/Plugins.php:293
+#: src/Admin/API/Plugins.php:314
 msgid "There was a problem installing some of the requested plugins."
 msgstr ""
 
-#: src/Admin/API/Plugins.php:372
+#: src/Admin/API/Plugins.php:393
 msgid "Plugin activation has been scheduled."
 msgstr ""
 
-#: src/Admin/API/Plugins.php:405
+#: src/Admin/API/Plugins.php:426
 msgid "Plugins were successfully activated."
 msgstr ""
 
-#: src/Admin/API/Plugins.php:406
+#: src/Admin/API/Plugins.php:427
 msgid "There was a problem activating some of the requested plugins."
 msgstr ""
 
-#: src/Admin/API/Plugins.php:440
+#: src/Admin/API/Plugins.php:461
 msgid "Jetpack is not installed or active."
 msgstr ""
 
-#: src/Admin/API/Plugins.php:465
-#: src/Admin/API/Plugins.php:528
+#: src/Admin/API/Plugins.php:486
+#: src/Admin/API/Plugins.php:549
 msgid "There was an error loading the WooCommerce.com Helper API."
 msgstr ""
 
-#: src/Admin/API/Plugins.php:482
-#: src/Admin/API/Plugins.php:487
-#: src/Admin/API/Plugins.php:544
-#: src/Admin/API/Plugins.php:549
+#: src/Admin/API/Plugins.php:503
+#: src/Admin/API/Plugins.php:508
 #: src/Admin/API/Plugins.php:565
+#: src/Admin/API/Plugins.php:570
+#: src/Admin/API/Plugins.php:586
 msgid "There was an error connecting to WooCommerce.com. Please try again."
 msgstr ""
 
-#: src/Admin/API/Plugins.php:586
+#: src/Admin/API/Plugins.php:607
 msgid "There was an error connecting to Square."
 msgstr ""
 
-#: src/Admin/API/Plugins.php:638
+#: src/Admin/API/Plugins.php:659
 msgid "There was an error communicating with the WooPayments plugin."
 msgstr ""
 
-#: src/Admin/API/Plugins.php:666
+#: src/Admin/API/Plugins.php:687
 msgid "Plugin slug."
 msgstr ""
 
-#: src/Admin/API/Plugins.php:672
+#: src/Admin/API/Plugins.php:693
 #: src/Admin/API/ShippingPartnerSuggestions.php:165
 msgid "Plugin name."
 msgstr ""
 
-#: src/Admin/API/Plugins.php:678
+#: src/Admin/API/Plugins.php:699
 msgid "Plugin status."
 msgstr ""
 
-#: src/Admin/API/Plugins.php:698
+#: src/Admin/API/Plugins.php:719
 msgid "Action that should be completed to connect Jetpack."
 msgstr ""
 
@@ -41101,7 +41102,7 @@ msgstr ""
 #. translators: %s: is the field label
 #. translators: %s Field label.
 #: src/Blocks/Domain/Services/CheckoutFieldsFrontend.php:335
-#: src/StoreApi/Routes/V1/Checkout.php:297
+#: src/StoreApi/Routes/V1/Checkout.php:307
 #: src/StoreApi/Utilities/OrderController.php:507
 #, php-format
 msgid "%s is required"
@@ -41123,7 +41124,7 @@ msgstr ""
 
 #. translators: %s: is the field label
 #: src/Blocks/Domain/Services/CheckoutFieldTypes/DateFieldType.php:175
-#: src/StoreApi/Schemas/V1/AbstractAddressSchema.php:269
+#: src/StoreApi/Schemas/V1/AbstractAddressSchema.php:270
 #, php-format
 msgid "Please provide a valid %s in YYYY-MM-DD format."
 msgstr ""
@@ -41341,33 +41342,33 @@ msgid "List of local pickup locations."
 msgstr ""
 
 #. Translators: %s location name.
-#: src/Blocks/Shipping/ShippingController.php:120
+#: src/Blocks/Shipping/ShippingController.php:121
 #, php-format
 msgid "Collection from <strong>%s</strong>:"
 msgstr ""
 
 #. Translators: %s is the formatted price.
-#: src/Blocks/Shipping/ShippingController.php:185
+#: src/Blocks/Shipping/ShippingController.php:186
 #, php-format
 msgid "Pickup cost: %s"
 msgstr ""
 
 #. translators: %s: URL to the documentation.
-#: src/Blocks/Shipping/ShippingController.php:211
+#: src/Blocks/Shipping/ShippingController.php:212
 #, php-format
 msgid "This feature is not available when using the <a href=\"%s\">Cart and checkout blocks</a>. Shipping will be calculated at checkout."
 msgstr ""
 
-#: src/Blocks/Shipping/ShippingController.php:241
+#: src/Blocks/Shipping/ShippingController.php:242
 msgid "If enabled, this method will appear on the block based checkout."
 msgstr ""
 
-#: src/Blocks/Shipping/ShippingController.php:250
+#: src/Blocks/Shipping/ShippingController.php:251
 #: assets/client/blocks/wc-shipping-method-pickup-location.js:83
 msgid "If a cost is defined, this controls if taxes are applied to that cost."
 msgstr ""
 
-#: src/Blocks/Shipping/ShippingController.php:255
+#: src/Blocks/Shipping/ShippingController.php:256
 #: assets/client/blocks/wc-shipping-method-pickup-location.js:83
 msgid "Optional cost to charge for local pickup."
 msgstr ""
@@ -44762,39 +44763,39 @@ msgid "The provider class for payment extension suggestion ID \"%s\" must extend
 msgstr ""
 
 #: src/Internal/Admin/Settings/PaymentsProviders.php:894
-#: src/Internal/Admin/Settings/PaymentsProviders.php:961
+#: src/Internal/Admin/Settings/PaymentsProviders.php:959
 msgid "Invalid suggestion ID."
 msgstr ""
 
-#: src/Internal/Admin/Settings/PaymentsProviders.php:1004
+#: src/Internal/Admin/Settings/PaymentsProviders.php:1000
 msgid "Wallets & Express checkouts"
 msgstr ""
 
-#: src/Internal/Admin/Settings/PaymentsProviders.php:1005
+#: src/Internal/Admin/Settings/PaymentsProviders.php:1001
 msgid "Allow shoppers to fast-track the checkout process with express options like Apple Pay and Google Pay."
 msgstr ""
 
-#: src/Internal/Admin/Settings/PaymentsProviders.php:1010
+#: src/Internal/Admin/Settings/PaymentsProviders.php:1006
 msgid "Buy Now, Pay Later"
 msgstr ""
 
-#: src/Internal/Admin/Settings/PaymentsProviders.php:1011
+#: src/Internal/Admin/Settings/PaymentsProviders.php:1007
 msgid "Offer flexible payment options to your shoppers."
 msgstr ""
 
-#: src/Internal/Admin/Settings/PaymentsProviders.php:1016
+#: src/Internal/Admin/Settings/PaymentsProviders.php:1012
 msgid "Crypto Payments"
 msgstr ""
 
-#: src/Internal/Admin/Settings/PaymentsProviders.php:1017
+#: src/Internal/Admin/Settings/PaymentsProviders.php:1013
 msgid "Offer cryptocurrency payment options to your shoppers."
 msgstr ""
 
-#: src/Internal/Admin/Settings/PaymentsProviders.php:1022
+#: src/Internal/Admin/Settings/PaymentsProviders.php:1018
 msgid "Payment Providers"
 msgstr ""
 
-#: src/Internal/Admin/Settings/PaymentsProviders.php:1023
+#: src/Internal/Admin/Settings/PaymentsProviders.php:1019
 msgid "Give your shoppers additional ways to pay."
 msgstr ""
 
@@ -46598,52 +46599,58 @@ msgstr[1] ""
 msgid "Unable to create backup post for order %d."
 msgstr ""
 
-#: src/Internal/DataStores/Orders/OrdersTableDataStore.php:1358
+#. translators: 1: database table name, 2: column name.
+#: src/Internal/DataStores/Orders/OrdersTableDataStore.php:900
+#, php-format
+msgid "Could not persist order to database table \"%1$s\": the value for \"%2$s\" is too long."
+msgstr ""
+
+#: src/Internal/DataStores/Orders/OrdersTableDataStore.php:1405
 msgid "Invalid order IDs in call to read_multiple()"
 msgstr ""
 
 #. translators: %1$d order ID.
-#: src/Internal/DataStores/Orders/OrdersTableDataStore.php:1677
+#: src/Internal/DataStores/Orders/OrdersTableDataStore.php:1724
 #, php-format
 msgid "Unable to load the post record for order %1$d"
 msgstr ""
 
-#: src/Internal/DataStores/Orders/OrdersTableDataStore.php:2259
+#: src/Internal/DataStores/Orders/OrdersTableDataStore.php:2306
 msgid "Could not create order in posts table."
 msgstr ""
 
 #. translators: %s is a table name.
-#: src/Internal/DataStores/Orders/OrdersTableDataStore.php:2278
+#: src/Internal/DataStores/Orders/OrdersTableDataStore.php:2327
 #, php-format
 msgid "Could not persist order to database table \"%s\"."
 msgstr ""
 
 #. translators: %s: Taxonomy name.
-#: src/Internal/DataStores/Orders/OrdersTableDataStore.php:2429
+#: src/Internal/DataStores/Orders/OrdersTableDataStore.php:2478
 #, php-format
 msgid "Invalid taxonomy: %s."
 msgstr ""
 
 #. translators: 1: order ID, 2: order status
-#: src/Internal/DataStores/Orders/OrdersTableDataStore.php:2869
+#: src/Internal/DataStores/Orders/OrdersTableDataStore.php:2918
 #, php-format
 msgid "Order %1$d cannot be restored from the trash: it has already been restored to status \"%2$s\"."
 msgstr ""
 
 #. translators: 1: order ID, 2: order status
-#: src/Internal/DataStores/Orders/OrdersTableDataStore.php:2887
+#: src/Internal/DataStores/Orders/OrdersTableDataStore.php:2936
 #, php-format
 msgid "The previous status of order %1$d (\"%2$s\") is invalid. It has been restored to \"pending\" status instead."
 msgstr ""
 
 #. translators: 1: order ID, 2: order status
-#: src/Internal/DataStores/Orders/OrdersTableDataStore.php:2899
+#: src/Internal/DataStores/Orders/OrdersTableDataStore.php:2948
 #, php-format
 msgid "The previous status of order %1$d (\"%2$s\") is invalid. It could not be restored."
 msgstr ""
 
 #. translators: 1: order ID, 2: order status
-#: src/Internal/DataStores/Orders/OrdersTableDataStore.php:2971
+#: src/Internal/DataStores/Orders/OrdersTableDataStore.php:3020
 #, php-format
 msgid "Something went wrong when trying to restore order %d from the trash. It could not be restored."
 msgstr ""
@@ -48601,6 +48608,10 @@ msgstr ""
 
 #: src/Internal/ReceiptRendering/ReceiptRenderingRestController.php:192
 msgid "True to force the creation of a new receipt even if one already exists and has not expired yet."
+msgstr ""
+
+#: src/Internal/RestApi/InteractiveSessionCheck.php:36
+msgid "Sorry, you cannot perform this action without an interactive admin session."
 msgstr ""
 
 #: src/Internal/RestApi/Routes/V4/AbstractController.php:220
@@ -50880,12 +50891,12 @@ msgstr ""
 msgid "The cart could not be loaded. Please try again."
 msgstr ""
 
-#: src/StoreApi/Routes/V1/AbstractCartRoute.php:354
+#: src/StoreApi/Routes/V1/AbstractCartRoute.php:356
 #: src/StoreApi/Routes/V1/ShopperListsNonceCheck.php:83
 msgid "Missing the Nonce header. This endpoint requires a valid nonce."
 msgstr ""
 
-#: src/StoreApi/Routes/V1/AbstractCartRoute.php:358
+#: src/StoreApi/Routes/V1/AbstractCartRoute.php:360
 #: src/StoreApi/Routes/V1/ShopperListsNonceCheck.php:91
 msgid "Nonce is invalid."
 msgstr ""
@@ -50988,9 +50999,14 @@ msgstr ""
 msgid "Unique identifier for the item within the cart."
 msgstr ""
 
-#: src/StoreApi/Routes/V1/CartItemsByKey.php:90
-#: src/StoreApi/Routes/V1/CartItemsByKey.php:128
-#: src/StoreApi/Utilities/CartController.php:242
+#: src/StoreApi/Routes/V1/CartItemsByKey.php:72
+#: src/StoreApi/Routes/V1/CartUpdateItem.php:50
+msgid "New quantity of the item in the cart."
+msgstr ""
+
+#: src/StoreApi/Routes/V1/CartItemsByKey.php:99
+#: src/StoreApi/Routes/V1/CartItemsByKey.php:137
+#: src/StoreApi/Utilities/CartController.php:243
 msgid "Cart item does not exist."
 msgstr ""
 
@@ -51029,17 +51045,13 @@ msgstr ""
 
 #. translators: %s: List of invalid parameters.
 #: src/StoreApi/Routes/V1/CartUpdateCustomer.php:112
-#: src/StoreApi/Routes/V1/Checkout.php:352
+#: src/StoreApi/Routes/V1/Checkout.php:362
 #, php-format
 msgid "Invalid parameter(s): %s"
 msgstr ""
 
 #: src/StoreApi/Routes/V1/CartUpdateItem.php:46
 msgid "Unique identifier (key) for the cart item to update."
-msgstr ""
-
-#: src/StoreApi/Routes/V1/CartUpdateItem.php:50
-msgid "New quantity of the item in the cart."
 msgstr ""
 
 #: src/StoreApi/Routes/V1/Checkout.php:92
@@ -51068,35 +51080,35 @@ msgid "Order notes."
 msgstr ""
 
 #. translators: %s: is the field error message
-#: src/StoreApi/Routes/V1/Checkout.php:300
+#: src/StoreApi/Routes/V1/Checkout.php:310
 #, php-format
 msgid "There was a problem with the provided shipping address: %s"
 msgstr ""
 
 #. translators: %s: is the field error message
-#: src/StoreApi/Routes/V1/Checkout.php:303
+#: src/StoreApi/Routes/V1/Checkout.php:313
 #, php-format
 msgid "There was a problem with the provided billing address: %s"
 msgstr ""
 
-#: src/StoreApi/Routes/V1/Checkout.php:860
+#: src/StoreApi/Routes/V1/Checkout.php:877
 #: src/StoreApi/Utilities/CheckoutTrait.php:55
 msgid "Unable to create order"
 msgstr ""
 
 #. Translators: %s Payment method ID.
-#: src/StoreApi/Routes/V1/Checkout.php:982
+#: src/StoreApi/Routes/V1/Checkout.php:1001
 #, php-format
 msgid "%s is not available for this order—please choose a different payment method"
 msgstr ""
 
 #. translators: %1$s: total the shopper confirmed, %2$s: updated, higher total
-#: src/StoreApi/Routes/V1/Checkout.php:1107
+#: src/StoreApi/Routes/V1/Checkout.php:1126
 #, php-format
 msgid "The order total changed from %1$s to %2$s while you were checking out. Please review the updated total and place your order again."
 msgstr ""
 
-#: src/StoreApi/Routes/V1/Checkout.php:1145
+#: src/StoreApi/Routes/V1/Checkout.php:1164
 #: templates/checkout/form-checkout.php:26
 #: assets/client/blocks/checkout-frontend.js:5
 msgid "You must be logged in to checkout."
@@ -51106,13 +51118,13 @@ msgstr ""
 msgid "This order cannot be paid for."
 msgstr ""
 
-#: src/StoreApi/Routes/V1/CheckoutOrder.php:256
-#: src/StoreApi/Utilities/CheckoutTrait.php:197
+#: src/StoreApi/Routes/V1/CheckoutOrder.php:261
+#: src/StoreApi/Utilities/CheckoutTrait.php:216
 msgid "No payment method provided."
 msgstr ""
 
 #. Translators: %s Payment method ID.
-#: src/StoreApi/Routes/V1/CheckoutOrder.php:270
+#: src/StoreApi/Routes/V1/CheckoutOrder.php:275
 #, php-format
 msgid "The %s payment gateway is not available."
 msgstr ""
@@ -51344,28 +51356,28 @@ msgid "Country/Region code in ISO 3166-1 alpha-2 format."
 msgstr ""
 
 #. translators: %s: field name
-#: src/StoreApi/Schemas/V1/AbstractAddressSchema.php:196
+#: src/StoreApi/Schemas/V1/AbstractAddressSchema.php:197
 #, php-format
 msgid "Invalid %s provided."
 msgstr ""
 
 #. translators: %s valid country codes
-#: src/StoreApi/Schemas/V1/AbstractAddressSchema.php:218
+#: src/StoreApi/Schemas/V1/AbstractAddressSchema.php:219
 #, php-format
 msgid "Invalid country code provided. Must be one of: %s"
 msgstr ""
 
 #. translators: %1$s given state, %2$s valid states
-#: src/StoreApi/Schemas/V1/AbstractAddressSchema.php:230
+#: src/StoreApi/Schemas/V1/AbstractAddressSchema.php:231
 #, php-format
 msgid "The provided state (%1$s) is not valid. Must be one of: %2$s"
 msgstr ""
 
-#: src/StoreApi/Schemas/V1/AbstractAddressSchema.php:240
+#: src/StoreApi/Schemas/V1/AbstractAddressSchema.php:241
 msgid "The provided postcode / ZIP is not valid"
 msgstr ""
 
-#: src/StoreApi/Schemas/V1/AbstractAddressSchema.php:247
+#: src/StoreApi/Schemas/V1/AbstractAddressSchema.php:248
 msgid "The provided phone number is not valid"
 msgstr ""
 
@@ -52373,139 +52385,143 @@ msgstr ""
 msgid "%1$s and %2$s"
 msgstr ""
 
-#: src/StoreApi/Utilities/CartController.php:248
+#: src/StoreApi/Utilities/CartController.php:249
 msgid "Cart item is invalid."
 msgstr ""
 
 #. translators: %s: product name
-#: src/StoreApi/Utilities/CartController.php:279
+#: src/StoreApi/Utilities/CartController.php:282
 #, php-format
 msgid "You cannot add &quot;%s&quot; with a quantity less than or equal to 0 to the cart."
 msgstr ""
 
 #. translators: %s: product name.
-#: src/StoreApi/Utilities/CartController.php:414
+#: src/StoreApi/Utilities/CartController.php:417
 #, php-format
 msgid "%s is out of stock and cannot be purchased. Please remove it from your cart."
 msgstr ""
 
 #. translators: %s: product names.
-#: src/StoreApi/Utilities/CartController.php:419
+#: src/StoreApi/Utilities/CartController.php:422
 #, php-format
 msgid "%s are out of stock and cannot be purchased. Please remove them from your cart."
 msgstr ""
 
 #. translators: %s: product name.
-#: src/StoreApi/Utilities/CartController.php:426
+#: src/StoreApi/Utilities/CartController.php:429
 #, php-format
 msgid "%s cannot be purchased. Please remove it from your cart."
 msgstr ""
 
 #. translators: %s: product names.
-#: src/StoreApi/Utilities/CartController.php:431
+#: src/StoreApi/Utilities/CartController.php:434
 #, php-format
 msgid "%s cannot be purchased. Please remove them from your cart."
 msgstr ""
 
 #. translators: %s: product names.
-#: src/StoreApi/Utilities/CartController.php:438
+#: src/StoreApi/Utilities/CartController.php:441
 #, php-format
 msgid "There are too many %s in the cart. Only 1 can be purchased. Please reduce the quantity in your cart."
 msgstr ""
 
 #. translators: %s: product names.
-#: src/StoreApi/Utilities/CartController.php:443
+#: src/StoreApi/Utilities/CartController.php:446
 #, php-format
 msgid "There are too many %s in the cart. Only 1 of each can be purchased. Please reduce the quantities in your cart."
 msgstr ""
 
 #. translators: %s: product names.
-#: src/StoreApi/Utilities/CartController.php:450
+#: src/StoreApi/Utilities/CartController.php:453
 #, php-format
 msgid "There is not enough %s in stock. Please reduce the quantity in your cart."
 msgstr ""
 
 #. translators: %s: product names.
-#: src/StoreApi/Utilities/CartController.php:455
+#: src/StoreApi/Utilities/CartController.php:458
 #, php-format
 msgid "There are not enough %s in stock. Please reduce the quantities in your cart."
 msgstr ""
 
-#: src/StoreApi/Utilities/CartController.php:469
+#: src/StoreApi/Utilities/CartController.php:472
 msgid "There was an error with an item in your cart."
 msgstr ""
 
-#: src/StoreApi/Utilities/CartController.php:556
+#: src/StoreApi/Utilities/CartController.php:559
 msgid "Cannot place an order, your cart is empty."
 msgstr ""
 
-#: src/StoreApi/Utilities/CartController.php:818
+#: src/StoreApi/Utilities/CartController.php:821
 msgid "Unable to retrieve cart."
 msgstr ""
 
 #. translators: %s coupon code
-#: src/StoreApi/Utilities/CartController.php:956
+#: src/StoreApi/Utilities/CartController.php:961
 #, php-format
 msgid "\"%s\" is an invalid coupon code."
 msgstr ""
 
 #. translators: %s coupon code
-#: src/StoreApi/Utilities/CartController.php:968
+#: src/StoreApi/Utilities/CartController.php:973
 #, php-format
 msgid "Coupon code \"%s\" has already been applied."
 msgstr ""
 
 #. translators: %s: coupon code
-#: src/StoreApi/Utilities/CartController.php:1016
+#: src/StoreApi/Utilities/CartController.php:1021
 #, php-format
 msgid "\"%s\" has already been applied and cannot be used in conjunction with other coupons."
 msgstr ""
 
 #. translators: %1$s coupon code, %2$s reason.
-#: src/StoreApi/Utilities/CartController.php:1077
+#: src/StoreApi/Utilities/CartController.php:1082
 #, php-format
 msgid "The \"%1$s\" coupon has been removed from your cart: %2$s"
 msgstr ""
 
 #. translators: %s: product ID
-#: src/StoreApi/Utilities/CartController.php:1128
+#: src/StoreApi/Utilities/CartController.php:1133
 #, php-format
 msgid "Product with ID \"%s\" was not found and cannot be added to the cart."
 msgstr ""
 
-#: src/StoreApi/Utilities/CartController.php:1182
+#: src/StoreApi/Utilities/CartController.php:1187
 msgid "This item is not available for purchase."
 msgstr ""
 
 #. translators: %s: product name
-#: src/StoreApi/Utilities/CartController.php:1186
+#: src/StoreApi/Utilities/CartController.php:1191
 #, php-format
 msgid "&quot;%s&quot; is not available for purchase."
 msgstr ""
 
 #. translators: %1$s: Attribute name, %2$s: Allowed values.
-#: src/StoreApi/Utilities/CartController.php:1311
+#: src/StoreApi/Utilities/CartController.php:1316
 #, php-format
 msgid "Invalid value posted for %1$s. Allowed values: %2$s"
 msgstr ""
 
-#: src/StoreApi/Utilities/CartController.php:1333
+#: src/StoreApi/Utilities/CartController.php:1338
 msgid "Missing variation data for variable product."
 msgstr ""
 
-#: src/StoreApi/Utilities/CartController.php:1387
+#: src/StoreApi/Utilities/CartController.php:1392
 msgid "Missing attributes for variable product."
 msgstr ""
 
-#: src/StoreApi/Utilities/CartController.php:1393
+#: src/StoreApi/Utilities/CartController.php:1398
 msgid "No matching variation found."
 msgstr ""
 
-#: src/StoreApi/Utilities/CartController.php:1490
+#: src/StoreApi/Utilities/CartController.php:1495
 msgid "This product cannot be added to the cart."
 msgstr ""
 
-#: src/StoreApi/Utilities/CheckoutTrait.php:118
+#: src/StoreApi/Utilities/CheckoutTrait.php:78
+msgid "Your order could not be saved. Please try again."
+msgstr ""
+
+#: src/StoreApi/Utilities/CheckoutTrait.php:140
 msgid "Invalid payment result received from payment method."
 msgstr ""
 

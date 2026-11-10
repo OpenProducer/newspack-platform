@@ -6,8 +6,6 @@ use Google\Site_Kit_Dependencies\Psr\Http\Client\NetworkExceptionInterface;
 use Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface;
 /**
  * Exception thrown when a connection cannot be established.
- *
- * Note that no response is present for a ConnectException
  */
 class ConnectException extends TransferException implements NetworkExceptionInterface
 {

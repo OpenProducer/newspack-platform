@@ -1502,6 +1502,7 @@ return array(
     'Automattic\\WooCommerce\\Internal\\RegisterHooksInterface' => $baseDir . '/src/Internal/RegisterHooksInterface.php',
     'Automattic\\WooCommerce\\Internal\\RestApiControllerBase' => $baseDir . '/src/Internal/RestApiControllerBase.php',
     'Automattic\\WooCommerce\\Internal\\RestApiParameterUtil' => $baseDir . '/src/Internal/RestApiParameterUtil.php',
+    'Automattic\\WooCommerce\\Internal\\RestApi\\InteractiveSessionCheck' => $baseDir . '/src/Internal/RestApi/InteractiveSessionCheck.php',
     'Automattic\\WooCommerce\\Internal\\RestApi\\ProductRequestPreparationTrait' => $baseDir . '/src/Internal/RestApi/ProductRequestPreparationTrait.php',
     'Automattic\\WooCommerce\\Internal\\RestApi\\Routes\\V4\\AbstractCollectionQuery' => $baseDir . '/src/Internal/RestApi/Routes/V4/AbstractCollectionQuery.php',
     'Automattic\\WooCommerce\\Internal\\RestApi\\Routes\\V4\\AbstractController' => $baseDir . '/src/Internal/RestApi/Routes/V4/AbstractController.php',

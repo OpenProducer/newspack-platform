@@ -278,6 +278,7 @@ return array(
     'Newspack\\Newsletters\\Email_Renderers\\Blocks\\Share' => $baseDir . '/includes/email-renderers/blocks/class-share.php',
     'Newspack\\Newsletters\\Email_Renderers\\Blocks\\Social_Links' => $baseDir . '/includes/email-renderers/blocks/class-social-links.php',
     'Newspack\\Newsletters\\Email_Renderers\\Editor_Bootstrap' => $baseDir . '/includes/email-renderers/class-editor-bootstrap.php',
+    'Newspack\\Newsletters\\Email_Renderers\\Editor_Logger' => $baseDir . '/includes/email-renderers/class-editor-logger.php',
     'Newspack\\Newsletters\\Email_Renderers\\Email_Defaults' => $baseDir . '/includes/email-renderers/class-email-defaults.php',
     'Newspack\\Newsletters\\Email_Renderers\\Feature_Flag' => $baseDir . '/includes/email-renderers/class-feature-flag.php',
     'Newspack\\Newsletters\\Email_Renderers\\Fonts' => $baseDir . '/includes/email-renderers/class-fonts.php',
