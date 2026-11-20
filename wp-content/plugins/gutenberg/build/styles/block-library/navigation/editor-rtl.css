@@ -158,13 +158,13 @@
   position: static;
   width: 100%;
 }
-.is-editing > .wp-block-navigation__submenu-container > .block-list-appender .block-editor-button-block-appender {
-  color: #fff;
-  background: #1e1e1e;
-  padding: 0;
-  width: 24px;
+.is-editing > .wp-block-navigation__submenu-container > .block-list-appender .block-editor-inserter__toggle.components-button.has-icon {
+  display: flex;
   margin-left: 0;
   margin-right: auto;
+  border: 1px solid currentColor;
+  background-color: transparent;
+  color: #1e1e1e;
 }
 
 .wp-block-navigation__submenu-container .block-list-appender {
@@ -227,19 +227,8 @@
   display: none;
 }
 
-.wp-block-navigation .wp-block + .block-list-appender .block-editor-button-block-appender {
-  background-color: #1e1e1e;
-  color: #fff;
-  height: 24px;
-  width: 24px;
-}
-.wp-block-navigation .wp-block + .block-list-appender .block-editor-button-block-appender.block-editor-button-block-appender.block-editor-button-block-appender {
-  padding: 0;
-}
-
-.wp-block-navigation .wp-block .wp-block .block-editor-button-block-appender {
-  background-color: transparent;
-  color: #1e1e1e;
+.wp-block-navigation__container > .block-list-appender .block-editor-inserter__toggle.components-button.has-icon {
+  display: flex;
 }
 
 /**

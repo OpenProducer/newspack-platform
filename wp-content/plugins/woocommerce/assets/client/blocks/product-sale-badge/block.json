@@ -5,15 +5,10 @@
 	"category": "woocommerce-product-elements",
 	"attributes": {
 		"productId": { "type": "number", "default": 0 },
-		"isDescendentOfQueryLoop": { "type": "boolean", "default": false },
-		"isDescendentOfSingleProductBlock": {
-			"type": "boolean",
-			"default": false
-		},
-		"isDescendentOfSingleProductTemplate": {
-			"type": "boolean",
-			"default": false
-		}
+		"badgeContent": { "type": "string" },
+		"saleText": { "type": "string" },
+		"prefix": { "type": "string" },
+		"suffix": { "type": "string" }
 	},
 	"supports": {
 		"interactivity": {
@@ -45,7 +40,8 @@
 			"__experimentalSkipSerialization": true
 		},
 		"spacing": {
-			"margin": true
+			"margin": true,
+			"__experimentalSkipSerialization": true
 		},
 		"email": true
 	},

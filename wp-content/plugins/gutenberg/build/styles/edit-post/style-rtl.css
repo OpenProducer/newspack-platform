@@ -209,30 +209,24 @@ body.admin-color-fresh {
   width: 80px;
 }
 
-.edit-post-meta-boxes-main .edit-post-meta-boxes-main__liner {
-  overflow: auto;
-}
 .edit-post-meta-boxes-main__liner {
+  overflow: auto;
   isolation: isolate;
 }
 .is-resizing.edit-post-meta-boxes-main .edit-post-meta-boxes-main__liner {
   display: unset;
 }
 
-.edit-post-layout__metaboxes {
-  clear: both;
-}
-
-.has-metaboxes .interface-interface-skeleton__content:has(.edit-post-meta-boxes-main) .editor-visual-editor,
-.has-metaboxes .interface-interface-skeleton__content:has(.edit-post-meta-boxes-main) .editor-text-editor {
+.has-metaboxes .interface-interface-skeleton__content .editor-visual-editor,
+.has-metaboxes .interface-interface-skeleton__content .editor-text-editor {
   flex-shrink: 1;
   flex-basis: 0%;
   isolation: isolate;
 }
-.has-metaboxes .interface-interface-skeleton__content:has(.edit-post-meta-boxes-main) .editor-visual-editor {
+.has-metaboxes .interface-interface-skeleton__content .editor-visual-editor {
   overflow: hidden;
 }
-.has-metaboxes .interface-interface-skeleton__content:has(.edit-post-meta-boxes-main) .editor-text-editor {
+.has-metaboxes .interface-interface-skeleton__content .editor-text-editor {
   overflow: auto;
 }
 

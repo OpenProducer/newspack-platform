@@ -27,7 +27,7 @@ defined( 'ABSPATH' ) || exit;
  * This function should be used for order retrieval so that when we move to
  * custom tables, functions still work.
  *
- * Args and usage: https://developer.woocommerce.com/docs/extensions/core-concepts/wc-get-orders/
+ * Args and usage: https://developer.woocommerce.com/docs/features/orders/wc-get-orders/
  *
  * @since  2.6.0
  * @param  array $args Array of args (above).
@@ -465,7 +465,7 @@ function wc_downloadable_file_permission( $download_id, $product, $order, $qty =
 function wc_downloadable_product_permissions( $order_id, $force = false ) {
 	$order = wc_get_order( $order_id );
 
-	if ( ! $order || ( $order->get_data_store()->get_download_permissions_granted( $order ) && ! $force ) ) {
+	if ( ! $order instanceof WC_Order || ( $order->get_data_store()->get_download_permissions_granted( $order ) && ! $force ) ) {
 		return;
 	}
 
@@ -473,9 +473,20 @@ function wc_downloadable_product_permissions( $order_id, $force = false ) {
 		return;
 	}
 
+	$refunded_item_ids = array();
+	foreach ( $order->get_refunds() as $refund ) {
+		foreach ( $refund->get_items() as $refund_item ) {
+			$refunded_item_ids[] = absint( $refund_item->get_meta( '_refunded_item_id' ) );
+		}
+	}
+
 	$line_items = $order->get_items();
 	if ( count( $line_items ) > 0 ) {
 		foreach ( $line_items as $item ) {
+			if ( in_array( $item->get_id(), $refunded_item_ids, true ) ) {
+				continue;
+			}
+
 			$product = $item->get_product();
 
 			if ( $product && $product->exists() && $product->is_downloadable() ) {
@@ -1020,7 +1031,20 @@ add_action( 'woocommerce_before_delete_order', 'wc_update_total_sales_counts' );
 function wc_update_coupon_usage_counts( $order_id ) {
 	$order = wc_get_order( $order_id );
 
-	if ( ! $order ) {
+	// Refunds never consume coupon usage.
+	if ( ! $order || $order instanceof WC_Order_Refund ) {
+		return;
+	}
+
+	/**
+	 * Data store wrapper.
+	 *
+	 * @var WC_Data_Store $data_store
+	 */
+	$data_store = $order->get_data_store();
+
+	// Only order data stores can record coupon usage.
+	if ( ! $data_store->has_callable( 'get_recorded_coupon_usage_counts' ) ) {
 		return;
 	}
 
@@ -1061,7 +1085,7 @@ function wc_update_coupon_usage_counts( $order_id ) {
 			$coupon  = new WC_Coupon( $code );
 			$used_by = $order->get_user_id();
 
-			if ( ! $used_by ) {
+			if ( ! $used_by && is_callable( array( $order, 'get_billing_email' ) ) ) {
 				$used_by = $order->get_billing_email();
 			}
 
@@ -1192,7 +1216,8 @@ function wc_get_order_note( $data ) {
 		'woocommerce_get_order_note',
 		array(
 			'id'            => (int) $data->comment_ID,
-			'date_created'  => wc_string_to_datetime( $data->comment_date ),
+			// comment_date is frozen in the timezone the site had when the note was saved, so use the GMT date.
+			'date_created'  => wc_string_to_datetime( mysql_to_rfc3339( $data->comment_date_gmt ) . 'Z' ),
 			'content'       => $data->comment_content,
 			'customer_note' => (bool) get_comment_meta( $data->comment_ID, 'is_customer_note', true ),
 			'added_by'      => __( 'WooCommerce', 'woocommerce' ) === $data->comment_author ? 'system' : $data->comment_author,

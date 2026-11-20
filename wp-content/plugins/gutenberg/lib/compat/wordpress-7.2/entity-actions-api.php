@@ -152,7 +152,7 @@ if ( ! function_exists( '_wp_add_entity_action_modules_to_editor_script' ) ) {
  * those of the edited post, if any, and of the post types of the screen it
  * opens on, whose lists show the actions of their items. A path must match
  * the request of the `getEntityActionsConfig` core data resolver, see
- * packages/core-data/src/resolvers.js.
+ * packages/core-data/src/resolvers.ts.
  *
  * It replaces `_wp_preload_entity_actions()`, which WordPress versions before
  * core#14716 ship without the guards of _wp_add_entity_preload_paths().

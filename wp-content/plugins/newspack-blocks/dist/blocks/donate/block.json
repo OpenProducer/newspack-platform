@@ -48,7 +48,10 @@
       "type": "number"
     },
     "minimumDonation": {
-      "type": "number"
+      "type": [
+        "number",
+        "string"
+      ]
     },
     "layoutOption": {
       "type": "string",

@@ -2122,7 +2122,8 @@ return array(
 		'textdomain' => 'default',
 		'attributes' => array(
 			'label' => array(
-				'type' => 'string'
+				'type' => 'string',
+				'role' => 'content'
 			)
 		),
 		'usesContext' => array(
@@ -2224,6 +2225,12 @@ return array(
 				'__experimentalDefaultControls' => array(
 					'padding' => true
 				)
+			),
+			'__experimentalBorder' => array(
+				'radius' => true,
+				'color' => true,
+				'width' => true,
+				'style' => true
 			)
 		)
 	),
@@ -2240,7 +2247,8 @@ return array(
 		'textdomain' => 'default',
 		'attributes' => array(
 			'label' => array(
-				'type' => 'string'
+				'type' => 'string',
+				'role' => 'content'
 			)
 		),
 		'usesContext' => array(
@@ -5290,6 +5298,7 @@ return array(
 			'submenuVisibility'
 		),
 		'supports' => array(
+			'contentRole' => true,
 			'anchor' => true,
 			'reusable' => false,
 			'html' => false,
@@ -7411,7 +7420,8 @@ return array(
 		'textdomain' => 'default',
 		'attributes' => array(
 			'label' => array(
-				'type' => 'string'
+				'type' => 'string',
+				'role' => 'content'
 			)
 		),
 		'usesContext' => array(
@@ -7504,9 +7514,28 @@ return array(
 			),
 			'interactivity' => array(
 				'clientNavigation' => true
+			),
+			'spacing' => array(
+				'padding' => true,
+				'__experimentalDefaultControls' => array(
+					'padding' => true
+				)
+			),
+			'__experimentalBorder' => array(
+				'radius' => true,
+				'color' => true,
+				'width' => true,
+				'style' => true,
+				'__experimentalDefaultControls' => array(
+					'color' => true,
+					'radius' => true,
+					'style' => true,
+					'width' => true
+				)
 			)
 		),
-		'editorStyle' => 'wp-block-query-pagination-numbers-editor'
+		'editorStyle' => 'wp-block-query-pagination-numbers-editor',
+		'style' => 'wp-block-query-pagination-numbers'
 	),
 	'query-pagination-previous' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
@@ -7521,7 +7550,8 @@ return array(
 		'textdomain' => 'default',
 		'attributes' => array(
 			'label' => array(
-				'type' => 'string'
+				'type' => 'string',
+				'role' => 'content'
 			)
 		),
 		'usesContext' => array(
