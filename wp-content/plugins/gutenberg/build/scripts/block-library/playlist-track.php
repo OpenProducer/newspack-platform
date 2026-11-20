@@ -17,7 +17,8 @@
  * @return string Returns the Playlist Track.
  */
 function gutenberg_render_block_core_playlist_track( $attributes, $content = '', $block = null ) {
-	if ( empty( $attributes['id'] ) ) {
+	// A track needs a source URL to be playable.
+	if ( empty( $attributes['src'] ) ) {
 		return '';
 	}
 

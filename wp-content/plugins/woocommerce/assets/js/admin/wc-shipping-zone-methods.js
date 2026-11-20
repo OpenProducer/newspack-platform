@@ -29,6 +29,10 @@ function isValidFormattedNumber( value, config ) {
         return false;
     }
 
+	// Whitespace or "]" must follow "weight", excluding names such as [weight-foo].
+	// Attributes stop at the first closing bracket; the server validates their dot-decimal limits on save.
+	value = value.replace( /\[weight(?=\s|\])[^\]]*\]/g, '[weight]' );
+
 	var decimalSeparator = config.decimalSeparator || '.';
 	var thousandSeparator = config.thousandSeparator || ',';
 
@@ -99,18 +103,58 @@ function isValidFormattedNumber( value, config ) {
 	} ); // All decimals use the correct separator
 }
 
+/**
+ * Counts the decimal places in a formatted number string
+ *
+ * Only a plain number qualifies: digits and the configured thousand separator, then the decimal
+ * separator exactly once, then one or more digits at the end. Formulas, shortcodes, a trailing
+ * separator and an empty value count as zero decimals.
+ *
+ * @param {string} value - The formatted number to inspect
+ * @param {Object} config - Configuration object with decimal and thousand separators
+ * @param {string} config.decimalSeparator - Decimal separator (e.g., '.' or ',')
+ * @param {string} config.thousandSeparator - Thousand separator (e.g., ',' or ' ' or '.')
+ * @returns {number} The number of digits after the decimal separator, or 0
+ */
+function getDecimalCount( value, config ) {
+	if (
+		typeof value !== 'string'
+		|| ! config
+		|| typeof config !== 'object'
+		|| typeof config.decimalSeparator !== 'string'
+		|| ! config.decimalSeparator
+	) {
+		return 0;
+	}
+
+	const thousandSeparator = typeof config.thousandSeparator === 'string' ? config.thousandSeparator : '';
+	const escapeForRegExp = ( text ) => text.replace( /[.*+?^${}()|[\]\\]/g, '\\$&' );
+	const plainNumber = new RegExp( '^[\\d' + escapeForRegExp( config.decimalSeparator ) + escapeForRegExp( thousandSeparator ) + ']+$' );
+	const trimmed = value.trim();
+	if ( ! plainNumber.test( trimmed ) ) {
+		return 0;
+	}
+
+	const parts = trimmed.split( config.decimalSeparator );
+	if ( parts.length !== 2 || ! /^\d+$/.test( parts[ 1 ] ) ) {
+		return 0;
+	}
+
+	return parts[ 1 ].length;
+}
+
 // Export for different module systems
 if ( typeof module !== 'undefined' && module.exports ) {
 	// CommonJS (Node.js)
-	module.exports = { isValidFormattedNumber };
+	module.exports = { isValidFormattedNumber, getDecimalCount };
 } else if ( typeof define === 'function' && define.amd ) {
 	// AMD
 	define( [], function () {
-		return { isValidFormattedNumber };
+		return { isValidFormattedNumber, getDecimalCount };
 	} );
 } else {
 	// Browser global
-	window.WCNumberValidation = { isValidFormattedNumber };
+	window.WCNumberValidation = { isValidFormattedNumber, getDecimalCount };
 }
 
 /**
@@ -678,7 +722,13 @@ if ( typeof module !== 'undefined' && module.exports ) {
 							// There was an error modifying the decimal, so we leave the original value as-is.
 							return;
 						}
-						const formattedValue = window.wc.currency.localiseMonetaryValue( config, value );
+						// Keep any decimals beyond the store precision, so the stored cost is not rounded on display.
+						// Cap at 15, the digits a double holds exactly. The formatter returns NaN above 20 decimals.
+						const decimals = Math.min( WCNumberValidation.getDecimalCount( value, config ), 15 );
+						const formatConfig = decimals > config.precision
+							? Object.assign( {}, config, { precision: decimals } )
+							: config;
+						const formattedValue = window.wc.currency.localiseMonetaryValue( formatConfig, value );
 						priceInput.attr( 'value', formattedValue );
 					} );
 
@@ -869,7 +919,13 @@ if ( typeof module !== 'undefined' && module.exports ) {
 
 							$('.wc-shipping-modal-price').on('blur', function() {
 								const value = $(this).val();
-								const formattedValue = window.wc.currency.localiseMonetaryValue( config, value );
+								// Keep any decimals beyond the store precision, so the typed cost is not rounded on blur.
+								// Cap at 15, the digits a double holds exactly. The formatter returns NaN above 20 decimals.
+								const decimals = Math.min( WCNumberValidation.getDecimalCount( value, config ), 15 );
+								const formatConfig = decimals > config.precision
+									? Object.assign( {}, config, { precision: decimals } )
+									: config;
+								const formattedValue = window.wc.currency.localiseMonetaryValue( formatConfig, value );
 								$(this).val( formattedValue );
 							});
 						}

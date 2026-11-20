@@ -465,12 +465,13 @@ class WC_Tracker {
 	private static function get_wordpress_info() {
 		$wp_data = array();
 
-		$memory = wc_let_to_num( WP_MEMORY_LIMIT );
+		$memory = wp_convert_hr_to_bytes( WP_MEMORY_LIMIT );
 
 		if ( function_exists( 'memory_get_usage' ) ) {
 			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- False positive.
-			$system_memory = wc_let_to_num( @ini_get( 'memory_limit' ) );
-			$memory        = max( $memory, $system_memory );
+			$system_memory = @wc_get_container()->get( LegacyProxy::class )->call_function( 'ini_get', 'memory_limit' );
+			// Use 32G for no limit (-1), matching the system status REST API.
+			$memory = max( $memory, wp_convert_hr_to_bytes( '-1' === $system_memory ? '32G' : $system_memory ) );
 		}
 
 		// WordPress 5.5+ environment type specification.
@@ -615,7 +616,41 @@ class WC_Tracker {
 			$user_count[ $role ] = $count;
 		}
 
+		$user_count['customer_application_password_users'] = self::get_customer_application_password_user_count();
+
 		return $user_count;
+	}
+
+	/**
+	 * Count current customers with at least one stored Application Password.
+	 *
+	 * @return int
+	 */
+	private static function get_customer_application_password_user_count(): int {
+		global $wpdb;
+
+		$capabilities_meta_key = $wpdb->get_blog_prefix( get_current_blog_id() ) . 'capabilities';
+		// Application Passwords and capabilities are separate rows in user meta, so the query joins them by user ID.
+		// Both values are serialized; these fragments identify an active customer role and a stored credential.
+		$customer_role_pattern = '%' . $wpdb->esc_like( 's:8:"customer";b:1;' ) . '%';
+		$password_data_pattern = '%' . $wpdb->esc_like( 's:4:"uuid";' ) . '%';
+
+		return (int) $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(DISTINCT application_passwords.user_id)
+				FROM {$wpdb->usermeta} AS application_passwords
+				INNER JOIN {$wpdb->usermeta} AS capabilities
+					ON capabilities.user_id = application_passwords.user_id
+					AND capabilities.meta_key = %s
+				WHERE application_passwords.meta_key = %s
+					AND application_passwords.meta_value LIKE %s
+					AND capabilities.meta_value LIKE %s",
+				$capabilities_meta_key,
+				WP_Application_Passwords::USERMETA_KEY_APPLICATION_PASSWORDS,
+				$password_data_pattern,
+				$customer_role_pattern
+			)
+		);
 	}
 
 	/**

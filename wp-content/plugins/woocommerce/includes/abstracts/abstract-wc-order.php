@@ -845,6 +845,18 @@ abstract class WC_Abstract_Order extends WC_Abstract_Legacy_Order {
 	}
 
 	/**
+	 * Whether the order can have a status.
+	 *
+	 * @since 11.3.0
+	 *
+	 * @param string $status Status slug, with or without the `wc-` prefix.
+	 * @return bool
+	 */
+	public function is_valid_status( string $status ): bool {
+		return in_array( 'wc-' . OrderUtil::remove_status_prefix( $status ), $this->get_valid_statuses(), true );
+	}
+
+	/**
 	 * Get user ID. Used by orders, not other order types like refunds.
 	 *
 	 * @param  string $context View or edit context.
@@ -1601,7 +1613,13 @@ abstract class WC_Abstract_Order extends WC_Abstract_Legacy_Order {
 						$user_ids_and_emails = $this->get_billing_and_current_user_ids_and_aliases( $billing_email );
 					}
 
-					$held_key_for_user = $this->hold_coupon_for_users( $coupon, $user_ids_and_emails, $user_alias );
+					$coupon_data_store = $coupon->get_data_store();
+					$coupon_aliases    = $user_ids_and_emails;
+					if ( $coupon_data_store instanceof WC_Data_Store && $coupon_data_store->has_callable( 'add_recorded_user_ids_to_aliases' ) ) {
+						// @phpstan-ignore-next-line method.notFound (Guarded by has_callable() and called via __call() on the coupon data store instance.)
+						$coupon_aliases = $coupon_data_store->add_recorded_user_ids_to_aliases( $coupon, $user_ids_and_emails );
+					}
+					$held_key_for_user = $this->hold_coupon_for_users( $coupon, $coupon_aliases, $user_alias );
 
 					if ( $held_key_for_user ) {
 						$held_keys_for_user[ $coupon->get_id() ] = $held_key_for_user;
@@ -1668,19 +1686,32 @@ abstract class WC_Abstract_Order extends WC_Abstract_Legacy_Order {
 	/**
 	 * Helper method to get all aliases and IDs for current user and provided billing email.
 	 *
+	 * A logged in customer's uses and holds are recorded under their user ID, so the list includes the current
+	 * user's ID and the ID of the account that owns each email.
+	 *
 	 * @param string $billing_email Billing email to look up for.
 	 *
 	 * @return array     Array of all aliases and IDs.
 	 * @throws Exception When validation fails.
 	 */
 	private function get_billing_and_current_user_ids_and_aliases( $billing_email ): array {
-		$emails = array( $billing_email );
+		$emails   = array( $billing_email );
+		$user_ids = array();
 		if ( get_current_user_id() ) {
-			$emails[] = wp_get_current_user()->user_email;
+			$emails[]   = wp_get_current_user()->user_email;
+			$user_ids[] = get_current_user_id();
 		}
 		$emails   = array_unique( array_map( 'strtolower', array_map( 'sanitize_email', $emails ) ) );
-		$user_ids = wc_get_container()->get( CustomersSearchService::class )->find_user_ids_by_billing_email_for_coupons_usage_lookup( $emails );
-		return array_merge( $user_ids, $emails );
+		$user_ids = array_merge( $user_ids, wc_get_container()->get( CustomersSearchService::class )->find_user_ids_by_billing_email_for_coupons_usage_lookup( $emails ) );
+
+		foreach ( array_filter( $emails ) as $email ) {
+			$user = get_user_by( 'email', $email );
+			if ( $user ) {
+				$user_ids[] = $user->ID;
+			}
+		}
+
+		return array_merge( array_unique( array_map( 'intval', $user_ids ) ), $emails );
 	}
 
 	/**
@@ -1729,7 +1760,9 @@ abstract class WC_Abstract_Order extends WC_Abstract_Legacy_Order {
 		$data_store = $coupon->get_data_store();
 
 		// Check specific for guest checkouts here as well since WC_Cart handles that separately in check_customer_coupons.
-		if ( $data_store && 0 === $this->get_customer_id() ) {
+		// Order types without a customer ID are treated as guests.
+		$customer_id = is_callable( array( $this, 'get_customer_id' ) ) ? $this->get_customer_id() : 0;
+		if ( $data_store && 0 === $customer_id && is_callable( array( $this, 'get_billing_email' ) ) ) {
 			$usage_count = $data_store->get_usage_by_email( $coupon, $this->get_billing_email() );
 			if ( 0 < $coupon->get_usage_limit_per_user() && $usage_count >= $coupon->get_usage_limit_per_user() ) {
 				return new WP_Error(
@@ -1761,13 +1794,19 @@ abstract class WC_Abstract_Order extends WC_Abstract_Legacy_Order {
 		// Record usage so counts and validation is correct.
 		$used_by = $this->get_user_id();
 
-		if ( ! $used_by ) {
+		if ( ! $used_by && is_callable( array( $this, 'get_billing_email' ) ) ) {
 			$used_by = $this->get_billing_email();
 		}
 
+		/**
+		 * Data store wrapper.
+		 *
+		 * @var WC_Data_Store $order_data_store
+		 */
 		$order_data_store = $this->get_data_store();
-		if ( $order_data_store->get_recorded_coupon_usage_counts( $this ) ) {
-			$coupon->increase_usage_count( $used_by );
+		// @phpstan-ignore-next-line method.notFound (Guarded by has_callable() and called via __call() on the underlying order data store instance.)
+		if ( $order_data_store->has_callable( 'get_recorded_coupon_usage_counts' ) && $order_data_store->get_recorded_coupon_usage_counts( $this ) ) {
+			$coupon->increase_usage_count( $used_by, $this instanceof WC_Order ? $this : null );
 		}
 
 		wc_update_coupon_usage_counts( $this->get_id() );
@@ -1898,9 +1937,12 @@ abstract class WC_Abstract_Order extends WC_Abstract_Legacy_Order {
 		// Remove the coupon line.
 		foreach ( $coupons as $item_id => $coupon ) {
 			if ( wc_is_same_coupon( $coupon->get_code(), $code ) ) {
+				$stored_item = $this->get_item( $item_id, false );
 				$this->remove_item( $item_id );
 				$coupon_object = new WC_Coupon( $code );
-				$coupon_object->decrease_usage_count( $this->get_user_id() );
+				if ( $this->has_recorded_coupon_usage() && $this->delete_counted_coupon_line( $stored_item ) ) {
+					$coupon_object->decrease_usage_count( $this->get_user_id() );
+				}
 				$this->recalculate_coupons();
 
 				/**
@@ -1918,6 +1960,72 @@ abstract class WC_Abstract_Order extends WC_Abstract_Legacy_Order {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Delete the coupon line of an order that counted its use, and tell whether this call should give the use back.
+	 *
+	 * Only the call that deleted the line gives the use back, and only while the stored order is still counted, so
+	 * parallel removals and a parallel cancellation give it back at most once.
+	 * If a cancellation runs at the same moment, both can skip it and the count stays one too high.
+	 *
+	 * @param WC_Order_Item|false $stored_item Removed coupon line, as stored in this order.
+	 * @return bool|null True if this call should give the coupon's use back, false if not, null if another call deleted the line or the delete failed.
+	 */
+	private function delete_counted_coupon_line( $stored_item ): ?bool {
+		if ( ! $stored_item instanceof WC_Order_Item_Coupon || ! $stored_item->get_id() ) {
+			return true;
+		}
+
+		/**
+		 * Data store wrapper.
+		 *
+		 * @var WC_Data_Store $item_data_store
+		 */
+		$item_data_store = $stored_item->get_data_store();
+		$deleted         = $item_data_store->delete( $stored_item );
+		if ( false === $deleted ) {
+			// A database error. The delete that remove_item() queued runs again on save.
+			return null;
+		}
+
+		// The row is gone, so the delete that remove_item() queued for save() must not run again.
+		$stored_item->set_id( 0 );
+
+		// No row deleted: another call deleted the line first. Item data stores that return nothing (custom or
+		// overridden) cannot report it, so only the counted check below applies to them.
+		if ( null !== $deleted && ! $deleted ) {
+			return null;
+		}
+
+		/**
+		 * Data store wrapper.
+		 *
+		 * @var WC_Data_Store $order_data_store
+		 */
+		$order_data_store = $this->get_data_store();
+		if ( ! $order_data_store->has_callable( 'get_stored_recorded_coupon_usage_counts' ) ) {
+			return true;
+		}
+
+		// @phpstan-ignore-next-line method.notFound (Guarded by has_callable() and called via __call() on the underlying order data store instance.)
+		return $order_data_store->get_stored_recorded_coupon_usage_counts( $this );
+	}
+
+	/**
+	 * Whether the stored order has its coupon usage recorded.
+	 *
+	 * @return bool
+	 */
+	private function has_recorded_coupon_usage(): bool {
+		/**
+		 * Data store wrapper.
+		 *
+		 * @var WC_Data_Store $order_data_store
+		 */
+		$order_data_store = $this->get_data_store();
+		// @phpstan-ignore-next-line method.notFound (Guarded by has_callable() and called via __call() on the underlying order data store instance.)
+		return $order_data_store->has_callable( 'get_recorded_coupon_usage_counts' ) && $order_data_store->get_recorded_coupon_usage_counts( $this );
 	}
 
 	/**
@@ -2021,15 +2129,17 @@ abstract class WC_Abstract_Order extends WC_Abstract_Legacy_Order {
 	 */
 	protected function set_item_discount_amounts( $discounts ) {
 		$item_discounts = $discounts->get_discounts_by_item();
-		$tax_location   = $this->get_tax_location();
-		$tax_location   = array( $tax_location['country'], $tax_location['state'], $tax_location['postcode'], $tax_location['city'] );
+		$is_vat_exempt  = $this->is_vat_exempt();
+
+		$tax_location = $this->get_tax_location();
+		$tax_location = array( $tax_location['country'], $tax_location['state'], $tax_location['postcode'], $tax_location['city'] );
 
 		if ( $item_discounts ) {
 			foreach ( $item_discounts as $item_id => $amount ) {
 				$item = $this->get_item( $item_id, false );
 
 				// If the prices include tax, discounts should be taken off the tax inclusive prices like in the cart.
-				if ( $this->get_prices_include_tax() && wc_tax_enabled() && ProductTaxStatus::TAXABLE === $item->get_tax_status() ) {
+				if ( ! $is_vat_exempt && $this->get_prices_include_tax() && wc_tax_enabled() && ProductTaxStatus::TAXABLE === $item->get_tax_status() ) {
 					$taxes = WC_Tax::calc_tax( $amount, $this->get_tax_rates( $item->get_tax_class(), $tax_location ), true );
 
 					// Use unrounded taxes so totals will be re-calculated accurately, like in cart.
@@ -2053,8 +2163,10 @@ abstract class WC_Abstract_Order extends WC_Abstract_Legacy_Order {
 		$coupon_code_to_id = wc_list_pluck( $coupons, 'get_id', 'get_code' );
 		$all_discounts     = $discounts->get_discounts();
 		$coupon_discounts  = $discounts->get_discounts_by_coupon();
-		$tax_location      = $this->get_tax_location();
-		$tax_location      = array(
+		$is_vat_exempt     = $this->is_vat_exempt();
+
+		$tax_location = $this->get_tax_location();
+		$tax_location = array(
 			$tax_location['country'],
 			$tax_location['state'],
 			$tax_location['postcode'],
@@ -2085,7 +2197,7 @@ abstract class WC_Abstract_Order extends WC_Abstract_Legacy_Order {
 				foreach ( $all_discounts[ $coupon_code ] as $item_id => $item_discount_amount ) {
 					$item = $this->get_item( $item_id, false );
 
-					if ( ProductTaxStatus::TAXABLE !== $item->get_tax_status() || ! wc_tax_enabled() ) {
+					if ( $is_vat_exempt || ProductTaxStatus::TAXABLE !== $item->get_tax_status() || ! wc_tax_enabled() ) {
 						continue;
 					}
 
@@ -2115,7 +2227,7 @@ abstract class WC_Abstract_Order extends WC_Abstract_Legacy_Order {
 	 *
 	 * @param  WC_Product $product Product object.
 	 * @param  int        $qty Quantity to add.
-	 * @param  array      $args Args for the added product.
+	 * @param  array      $args Args for the added product, including an optional tax location for its price.
 	 * @return int
 	 */
 	public function add_product( $product, $qty = 1, $args = array() ) {
@@ -2124,8 +2236,9 @@ abstract class WC_Abstract_Order extends WC_Abstract_Legacy_Order {
 			$total = wc_get_price_excluding_tax(
 				$product,
 				array(
-					'qty'   => $qty,
-					'order' => $order,
+					'qty'          => $qty,
+					'order'        => $order,
+					'tax_location' => ArrayUtil::get_value_or_default( $args, 'tax_location' ),
 				)
 			);
 
@@ -2341,6 +2454,24 @@ abstract class WC_Abstract_Order extends WC_Abstract_Legacy_Order {
 	}
 
 	/**
+	 * Get the filtered VAT exemption for this order.
+	 *
+	 * @return bool Whether the order is exempt from VAT.
+	 */
+	private function is_vat_exempt(): bool {
+		/**
+		 * Filters whether the order is exempt from VAT.
+		 *
+		 * @since 3.3.0
+		 * @since 11.3.0 Also applied to discounts.
+		 *
+		 * @param bool              $is_vat_exempt Whether the order is exempt from VAT.
+		 * @param WC_Abstract_Order $order         Order instance.
+		 */
+		return (bool) apply_filters( 'woocommerce_order_is_vat_exempt', 'yes' === $this->get_meta( 'is_vat_exempt' ), $this );
+	}
+
+	/**
 	 * Calculate taxes for all line items and shipping, and store the totals and tax rows.
 	 *
 	 * If by default the taxes are based on the shipping address and the current order doesn't
@@ -2367,7 +2498,7 @@ abstract class WC_Abstract_Order extends WC_Abstract_Legacy_Order {
 			}
 		}
 
-		$is_vat_exempt = apply_filters( 'woocommerce_order_is_vat_exempt', 'yes' === $this->get_meta( 'is_vat_exempt' ), $this );
+		$is_vat_exempt = $this->is_vat_exempt();
 
 		// Trigger tax recalculation for all items.
 		foreach ( $this->get_items( array( 'line_item', 'fee' ) ) as $item_id => $item ) {

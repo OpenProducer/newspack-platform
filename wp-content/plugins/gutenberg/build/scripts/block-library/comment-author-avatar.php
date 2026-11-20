@@ -51,7 +51,7 @@ function gutenberg_render_block_core_comment_author_avatar( $attributes, $conten
 
 	$avatar_block = get_avatar(
 		$comment,
-		null,
+		max( (int) $width, (int) $height ),
 		'',
 		$alt,
 		array(

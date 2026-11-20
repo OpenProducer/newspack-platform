@@ -285,7 +285,7 @@ class WC_Customer extends WC_Legacy_Customer {
 	 * This method uses the current country's locale to determine if a field is required, or falls back to the default
 	 * locale if there's no country-specific setting for that field.
 	 *
-	 * This method is only used internally by StoreAPI, and not by the classic/shortcode checkout.
+	 * The Store API uses this check. The classic cart uses it only for a show_shipping() call nested twice inside its own read of the shipping address fields.
 	 *
 	 * @since 9.8.0
 	 * @return bool Whether the customer has a full shipping address (city, state, postcode, country).
@@ -331,8 +331,10 @@ class WC_Customer extends WC_Legacy_Customer {
 		 * considered optional and therefore valid, even if empty.
 		 */
 		foreach ( $shipping_address as $key => $value ) {
-			// Skip further checks if the field has a value. From this point on $value is empty.
-			if ( ! empty( $value ) ) {
+			// Skip further checks if the field has a value. From this point on it is blank or not
+			// an address. Must agree with OrderController::validate_address_fields(), which counts
+			// "0" as a value; a getter filter can return any type, and non-scalars are not an address.
+			if ( is_scalar( $value ) && '' !== trim( (string) $value ) ) {
 				continue;
 			}
 

@@ -49,11 +49,25 @@ class WC_Helper_Admin {
 	/**
 	 * Pushes settings onto the WooCommerce Admin global settings object (wcSettings).
 	 *
+	 * Users who can't manage WooCommerce get only the defaults the marketplace client needs.
+	 *
 	 * @param mixed $settings The settings object we're amending.
 	 *
 	 * @return mixed $settings
 	 */
 	public static function add_marketplace_settings( $settings ) {
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			$settings['wccomHelper'] = array(
+				'isConnected'               => false,
+				'storeCountry'              => wc_get_base_location()['country'],
+				'installedProducts'         => array(),
+				'wooUpdateManagerInstalled' => WC_Woo_Update_Manager_Plugin::is_plugin_installed(),
+				'wooUpdateManagerActive'    => WC_Woo_Update_Manager_Plugin::is_plugin_active(),
+				'trackingAllowed'           => 'yes' === get_option( 'woocommerce_allow_tracking' ),
+			);
+			return $settings;
+		}
+
 		if ( ! WC_Helper::is_site_connected() && isset( $_GET['connect'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			wp_safe_redirect( self::get_connection_url() );
 			exit;
@@ -86,7 +100,7 @@ class WC_Helper_Admin {
 			'mySubscriptionsTabLoaded'   => WC_Helper_Options::get( 'my_subscriptions_tab_loaded' ),
 			'wooUpdateManagerInstalled'  => WC_Woo_Update_Manager_Plugin::is_plugin_installed(),
 			'wooUpdateManagerActive'     => WC_Woo_Update_Manager_Plugin::is_plugin_active(),
-			'wooUpdateManagerInstallUrl' => WC_Woo_Update_Manager_Plugin::generate_install_url(),
+			'wooUpdateManagerInstallUrl' => current_user_can( 'install_plugins' ) ? WC_Woo_Update_Manager_Plugin::generate_install_url() : '',
 			'wooUpdateManagerPluginSlug' => WC_Woo_Update_Manager_Plugin::WOO_UPDATE_MANAGER_SLUG,
 			'dismissNoticeNonce'         => wp_create_nonce( 'dismiss_notice' ),
 			'trackingAllowed'            => 'yes' === get_option( 'woocommerce_allow_tracking' ),
@@ -99,6 +113,8 @@ class WC_Helper_Admin {
 			$settings['wccomHelper']['wooUpdateCount']          = WC_Helper_Updater::get_updates_count_based_on_site_status();
 			$settings['wccomHelper']['connected_notice']        = PluginsHelper::get_wccom_connected_notice( $auth_user_email );
 			$settings['wccomHelper']['woocomConnectNoticeType'] = WC_Helper_Updater::get_woo_connect_notice_type();
+			$settings['wccomHelper']['updateCoreUrl']           = current_user_can( 'update_core' ) ? network_admin_url( 'update-core.php' ) : '';
+			$settings['wccomHelper']['updatePhpUrl']            = esc_url_raw( wp_get_update_php_url() );
 
 			if ( WC_Helper::is_site_connected() ) {
 				$settings['wccomHelper']['subscription_expired_notice']  = PluginsHelper::get_expired_subscription_notice( false );

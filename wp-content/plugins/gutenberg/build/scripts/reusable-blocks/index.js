@@ -1,151 +1,158 @@
-(function() {
-var wp;
-(wp ||= {}).reusableBlocks = (() => {
-  var __create = Object.create;
-  var __defProp = Object.defineProperty;
-  var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-  var __getOwnPropNames = Object.getOwnPropertyNames;
-  var __getProtoOf = Object.getPrototypeOf;
-  var __hasOwnProp = Object.prototype.hasOwnProperty;
-  var __commonJS = (cb, mod) => function __require() {
-    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-  };
-  var __export = (target, all) => {
-    for (var name in all)
-      __defProp(target, name, { get: all[name], enumerable: true });
-  };
-  var __copyProps = (to, from, except, desc) => {
-    if (from && typeof from === "object" || typeof from === "function") {
-      for (let key of __getOwnPropNames(from))
-        if (!__hasOwnProp.call(to, key) && key !== except)
-          __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-    }
-    return to;
-  };
-  var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-    // If the importer is in node compatibility mode or this is not an ESM
-    // file that has been converted to a CommonJS file using a Babel-
-    // compatible transform (i.e. "__esModule" has not been set), then set
-    // "default" to the CommonJS "module.exports" for node compatibility.
-    isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-    mod
-  ));
-  var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+(function(exports, _wordpress_data, _wordpress_deprecated) {
 
-  // package-external:@wordpress/data
-  var require_data = __commonJS({
-    "package-external:@wordpress/data"(exports, module) {
-      module.exports = window.wp.data;
-    }
-  });
+"use strict";
+// \0rolldown/runtime.js
+	var __create = Object.create;
+	var __defProp = Object.defineProperty;
+	var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+	var __getOwnPropNames = Object.getOwnPropertyNames;
+	var __getProtoOf = Object.getPrototypeOf;
+	var __hasOwnProp = Object.prototype.hasOwnProperty;
+	var __exportAll = (all, no_symbols) => {
+		let target = {};
+		for (var name in all) {
+			__defProp(target, name, {
+				get: all[name],
+				enumerable: true
+			});
+		}
+		if (!no_symbols) {
+			__defProp(target, Symbol.toStringTag, { value: "Module" });
+		}
+		return target;
+	};
+	var __copyProps = (to, from, except, desc) => {
+		if (from && typeof from === "object" || typeof from === "function") {
+			for (var keys = __getOwnPropNames(from), i = 0, n = keys.length, key; i < n; i++) {
+				key = keys[i];
+				if (!__hasOwnProp.call(to, key) && key !== except) {
+					__defProp(to, key, {
+						get: ((k) => from[k]).bind(null, key),
+						enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
+					});
+				}
+			}
+		}
+		return to;
+	};
+	var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule || !__hasOwnProp.call(mod, "default") ? __defProp(target, "default", {
+		value: mod,
+		enumerable: true
+	}) : target, mod));
 
-  // package-external:@wordpress/deprecated
-  var require_deprecated = __commonJS({
-    "package-external:@wordpress/deprecated"(exports, module) {
-      module.exports = window.wp.deprecated;
-    }
-  });
+_wordpress_deprecated = __toESM(_wordpress_deprecated, 1);
 
-  // packages/reusable-blocks/build-module/index.mjs
-  var index_exports = {};
-  __export(index_exports, {
-    ReusableBlocksMenuItems: () => ReusableBlocksMenuItems,
-    store: () => store
-  });
+// packages/reusable-blocks/build-module/store/actions.mjs
+	var actions_exports = /* @__PURE__ */ __exportAll({
+		__experimentalConvertBlockToStatic: () => __experimentalConvertBlockToStatic,
+		__experimentalConvertBlocksToReusable: () => __experimentalConvertBlocksToReusable,
+		__experimentalDeleteReusableBlock: () => __experimentalDeleteReusableBlock,
+		__experimentalSetEditingReusableBlock: () => __experimentalSetEditingReusableBlock
+	}, 1);
+	/**
+	* Returns a no-op thunk. This package is deprecated and converting reusable
+	* blocks is now handled elsewhere, but the action remains for backward
+	* compatibility.
+	*/
+	const __experimentalConvertBlockToStatic = () => () => {
+		(0, _wordpress_deprecated.default)("wp.data.dispatch( 'core/reusable-blocks' ).__experimentalConvertBlockToStatic", { since: "7.1" });
+	};
+	/**
+	* Returns a no-op thunk. This package is deprecated and converting blocks into
+	* patterns is now handled elsewhere, but the action remains for backward
+	* compatibility.
+	*/
+	const __experimentalConvertBlocksToReusable = () => async () => {
+		(0, _wordpress_deprecated.default)("wp.data.dispatch( 'core/reusable-blocks' ).__experimentalConvertBlocksToReusable", { since: "7.1" });
+	};
+	/**
+	* Returns a no-op thunk. This package is deprecated and deleting reusable
+	* blocks is now handled elsewhere, but the action remains for backward
+	* compatibility.
+	*/
+	const __experimentalDeleteReusableBlock = () => async () => {
+		(0, _wordpress_deprecated.default)("wp.data.dispatch( 'core/reusable-blocks' ).__experimentalDeleteReusableBlock", { since: "7.1" });
+	};
+	/**
+	* Returns a no-op action object. This package is deprecated and tracking the
+	* editing state of reusable blocks is no longer handled here, but the action
+	* remains for backward compatibility.
+	*
+	* @param {string}  clientId  The clientID of the reusable block to target.
+	* @param {boolean} isEditing Whether the block should be in editing state.
+	*
+	* @return {Object} Action object.
+	*/
+	function __experimentalSetEditingReusableBlock(clientId, isEditing) {
+		(0, _wordpress_deprecated.default)("wp.data.dispatch( 'core/reusable-blocks' ).__experimentalSetEditingReusableBlock", { since: "7.1" });
+		return {
+			type: "SET_EDITING_REUSABLE_BLOCK",
+			clientId,
+			isEditing
+		};
+	}
 
-  // packages/reusable-blocks/build-module/store/index.mjs
-  var import_data = __toESM(require_data(), 1);
+// packages/reusable-blocks/build-module/store/reducer.mjs
+/**
+	* Deprecated reusable blocks store state kept only so the
+	* `core/reusable-blocks` store can still be registered for backward
+	* compatibility.
+	*/
+	const DEFAULT_STATE = { isEditingReusableBlock: {} };
+	/**
+	* Reducer that preserves the default state without responding to actions.
+	*
+	* @param {Object} state Current state.
+	*
+	* @return {Object} Current state.
+	*/
+	function reducer(state = DEFAULT_STATE) {
+		return state;
+	}
 
-  // packages/reusable-blocks/build-module/store/actions.mjs
-  var actions_exports = {};
-  __export(actions_exports, {
-    __experimentalConvertBlockToStatic: () => __experimentalConvertBlockToStatic,
-    __experimentalConvertBlocksToReusable: () => __experimentalConvertBlocksToReusable,
-    __experimentalDeleteReusableBlock: () => __experimentalDeleteReusableBlock,
-    __experimentalSetEditingReusableBlock: () => __experimentalSetEditingReusableBlock
-  });
-  var import_deprecated = __toESM(require_deprecated(), 1);
-  var __experimentalConvertBlockToStatic = () => () => {
-    (0, import_deprecated.default)(
-      "wp.data.dispatch( 'core/reusable-blocks' ).__experimentalConvertBlockToStatic",
-      {
-        since: "7.1"
-      }
-    );
-  };
-  var __experimentalConvertBlocksToReusable = () => async () => {
-    (0, import_deprecated.default)(
-      "wp.data.dispatch( 'core/reusable-blocks' ).__experimentalConvertBlocksToReusable",
-      {
-        since: "7.1"
-      }
-    );
-  };
-  var __experimentalDeleteReusableBlock = () => async () => {
-    (0, import_deprecated.default)(
-      "wp.data.dispatch( 'core/reusable-blocks' ).__experimentalDeleteReusableBlock",
-      {
-        since: "7.1"
-      }
-    );
-  };
-  function __experimentalSetEditingReusableBlock(clientId, isEditing) {
-    (0, import_deprecated.default)(
-      "wp.data.dispatch( 'core/reusable-blocks' ).__experimentalSetEditingReusableBlock",
-      {
-        since: "7.1"
-      }
-    );
-    return {
-      type: "SET_EDITING_REUSABLE_BLOCK",
-      clientId,
-      isEditing
-    };
-  }
+// packages/reusable-blocks/build-module/store/selectors.mjs
+	var selectors_exports = /* @__PURE__ */ __exportAll({ __experimentalIsEditingReusableBlock: () => __experimentalIsEditingReusableBlock }, 1);
+	/**
+	* Returns false because the deprecated reusable blocks package no longer tracks
+	* editing state.
+	*
+	* @return {boolean} Whether the reusable block is in the editing state.
+	*/
+	function __experimentalIsEditingReusableBlock() {
+		(0, _wordpress_deprecated.default)("wp.data.select( 'core/reusable-blocks' ).__experimentalIsEditingReusableBlock", { since: "7.1" });
+		return false;
+	}
 
-  // packages/reusable-blocks/build-module/store/reducer.mjs
-  var DEFAULT_STATE = {
-    isEditingReusableBlock: {}
-  };
-  function reducer(state = DEFAULT_STATE) {
-    return state;
-  }
+// packages/reusable-blocks/build-module/store/index.mjs
+/**
+	* Store definition for the reusable blocks namespace.
+	*
+	* @see https://github.com/WordPress/gutenberg/blob/HEAD/packages/data/README.md#createReduxStore
+	*
+	* @type {Object}
+	*/
+	const store = (0, _wordpress_data.createReduxStore)("core/reusable-blocks", {
+		actions: actions_exports,
+		reducer,
+		selectors: selectors_exports
+	});
+	(0, _wordpress_data.register)(store);
 
-  // packages/reusable-blocks/build-module/store/selectors.mjs
-  var selectors_exports = {};
-  __export(selectors_exports, {
-    __experimentalIsEditingReusableBlock: () => __experimentalIsEditingReusableBlock
-  });
-  var import_deprecated2 = __toESM(require_deprecated(), 1);
-  function __experimentalIsEditingReusableBlock() {
-    (0, import_deprecated2.default)(
-      "wp.data.select( 'core/reusable-blocks' ).__experimentalIsEditingReusableBlock",
-      {
-        since: "7.1"
-      }
-    );
-    return false;
-  }
+// packages/reusable-blocks/build-module/components/reusable-blocks-menu-items/index.mjs
+/**
+	* Deprecated no-op ReusableBlocksMenuItems component.
+	*
+	* @return {null} Nothing.
+	*/
+	function ReusableBlocksMenuItems() {
+		(0, _wordpress_deprecated.default)("wp.reusableBlocks.ReusableBlocksMenuItems", { since: "7.1" });
+		return null;
+	}
 
-  // packages/reusable-blocks/build-module/store/index.mjs
-  var STORE_NAME = "core/reusable-blocks";
-  var store = (0, import_data.createReduxStore)(STORE_NAME, {
-    actions: actions_exports,
-    reducer,
-    selectors: selectors_exports
-  });
-  (0, import_data.register)(store);
-
-  // packages/reusable-blocks/build-module/components/reusable-blocks-menu-items/index.mjs
-  var import_deprecated3 = __toESM(require_deprecated(), 1);
-  function ReusableBlocksMenuItems() {
-    (0, import_deprecated3.default)("wp.reusableBlocks.ReusableBlocksMenuItems", {
-      since: "7.1"
-    });
-    return null;
-  }
-  return __toCommonJS(index_exports);
-})();
-(window.wp ||= {}).reusableBlocks = wp.reusableBlocks;
-})();
+exports.ReusableBlocksMenuItems = ReusableBlocksMenuItems;
+exports.store = store;
+Object.defineProperty(exports, '__esModule', { value: true });
+(window.wp ||= {}).reusableBlocks = exports;
+return exports;
+})({}, window.wp.data, window.wp.deprecated);
 //# sourceMappingURL=index.js.map
