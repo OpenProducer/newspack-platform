@@ -71,6 +71,11 @@ function wc_get_attribute_taxonomies() {
 		set_transient( 'wc_attribute_taxonomies', $raw_attribute_taxonomies );
 	}
 
+	// Stored labels are plain text for every reader, as the admin form stores them.
+	foreach ( (array) $raw_attribute_taxonomies as $raw_attribute_taxonomy ) {
+		$raw_attribute_taxonomy->attribute_label = sanitize_text_field( (string) $raw_attribute_taxonomy->attribute_label );
+	}
+
 	/**
 	 * Filter attribute taxonomies.
 	 *
@@ -440,14 +445,46 @@ function wc_attributes_array_filter_variation( $attribute ) {
 /**
  * Check if an attribute is included in the attributes area of a variation name.
  *
+ * A variation name is the parent product name followed by an optional attribute
+ * list ("Parent - Red, Large"). When the variation is given, only that attribute
+ * list is searched, so a parent name that ends with an attribute value
+ * ("Vienna Black") does not hide the "Black" attribute.
+ *
  * @since  3.0.2
- * @param  string $attribute Attribute value to check for.
- * @param  string $name      Product name to check in.
+ * @param  string          $attribute Attribute value to check for.
+ * @param  string          $name      Product name to check in.
+ * @param  WC_Product|null $product   Variation the name belongs to, when known. Since 11.3.0.
  * @return bool
  */
-function wc_is_attribute_in_product_name( $attribute, $name ) {
-	$is_in_name = stristr( $name, ' ' . $attribute . ',' ) || 0 === stripos( strrev( $name ), strrev( ' ' . $attribute ) );
-	return apply_filters( 'woocommerce_is_attribute_in_product_name', $is_in_name, $attribute, $name );
+function wc_is_attribute_in_product_name( $attribute, $name, $product = null ) {
+	$attributes_area = $name;
+
+	if ( $product instanceof WC_Product_Variation && $product->is_type( ProductType::VARIATION ) ) {
+		// The raw parent title, as the name is built from it without the `woocommerce_product_title` filter.
+		$parent_name = $product->get_parent_data()['title'] ?? '';
+
+		// Callers may pass the name raw or entity-decoded, so try both forms of the parent name.
+		foreach ( array_unique( array( $parent_name, wp_specialchars_decode( $parent_name, ENT_QUOTES ) ) ) as $prefix ) {
+			if ( '' !== $prefix && 0 === stripos( $name, $prefix ) ) {
+				$attributes_area = substr( $name, strlen( $prefix ) );
+				break;
+			}
+		}
+	}
+
+	$is_in_name = stristr( $attributes_area, ' ' . $attribute . ',' ) || 0 === stripos( strrev( $attributes_area ), strrev( ' ' . $attribute ) );
+
+	/**
+	 * Filters whether an attribute value is already shown in the attributes area of a variation name.
+	 *
+	 * @since 3.0.2
+	 * @since 11.3.0 Added the `$product` parameter.
+	 * @param bool            $is_in_name Whether the attribute value was found in the name.
+	 * @param string          $attribute  Attribute value checked for.
+	 * @param string          $name       Product name checked in.
+	 * @param WC_Product|null $product    Variation the name belongs to, when known.
+	 */
+	return apply_filters( 'woocommerce_is_attribute_in_product_name', $is_in_name, $attribute, $name, $product );
 }
 
 /**
@@ -495,7 +532,7 @@ function wc_get_attribute( $id ) {
  *     Array of attribute parameters.
  *
  *     @type int    $id           Unique identifier, used to update an attribute.
- *     @type string $name         Attribute name. Always required.
+ *     @type string $name         Attribute name. Always required. Stored as plain text (sanitize_text_field()).
  *     @type string $slug         Attribute alphanumeric identifier.
  *     @type string $type         Type of attribute.
  *                                Core by default accepts: 'select' and
@@ -516,13 +553,15 @@ function wc_create_attribute( $args ) {
 	$format = array( '%s', '%s', '%s', '%s', '%d' );
 
 	// Name is required.
+	$raw_name     = isset( $args['name'] ) && is_scalar( $args['name'] ) ? (string) $args['name'] : '';
+	$args['name'] = sanitize_text_field( $raw_name );
 	if ( empty( $args['name'] ) ) {
 		return new WP_Error( 'missing_attribute_name', __( 'Please, provide an attribute name.', 'woocommerce' ), array( 'status' => 400 ) );
 	}
 
-	// Set the attribute slug.
+	// Set the attribute slug. Derive it from the name as given so the default slug does not change with the label cleanup.
 	if ( empty( $args['slug'] ) ) {
-		$slug = wc_sanitize_taxonomy_name( $args['name'] );
+		$slug = wc_sanitize_taxonomy_name( $raw_name );
 	} else {
 		$slug = (string) preg_replace( '/^pa\_/', '', wc_sanitize_taxonomy_name( $args['slug'] ) );
 	}

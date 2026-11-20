@@ -1,138 +1,84 @@
-var __create = Object.create;
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __commonJS = (cb, mod) => function __require() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
-
-// package-external:@wordpress/core-data
-var require_core_data = __commonJS({
-  "package-external:@wordpress/core-data"(exports, module) {
-    module.exports = window.wp.coreData;
-  }
-});
-
-// package-external:@wordpress/data
-var require_data = __commonJS({
-  "package-external:@wordpress/data"(exports, module) {
-    module.exports = window.wp.data;
-  }
-});
-
-// package-external:@wordpress/html-entities
-var require_html_entities = __commonJS({
-  "package-external:@wordpress/html-entities"(exports, module) {
-    module.exports = window.wp.htmlEntities;
-  }
-});
-
-// package-external:@wordpress/i18n
-var require_i18n = __commonJS({
-  "package-external:@wordpress/i18n"(exports, module) {
-    module.exports = window.wp.i18n;
-  }
-});
-
-// package-external:@wordpress/editor
-var require_editor = __commonJS({
-  "package-external:@wordpress/editor"(exports, module) {
-    module.exports = window.wp.editor;
-  }
-});
-
-// package-external:@wordpress/private-apis
-var require_private_apis = __commonJS({
-  "package-external:@wordpress/private-apis"(exports, module) {
-    module.exports = window.wp.privateApis;
-  }
-});
-
-// routes/media-editor/route.ts
-var import_core_data = __toESM(require_core_data());
-var import_data = __toESM(require_data());
-var import_html_entities = __toESM(require_html_entities());
-var import_i18n = __toESM(require_i18n());
-var import_editor = __toESM(require_editor());
 import { notFound } from "@wordpress/route";
 
+// \0rolldown/runtime.js
+var __commonJSMin = (cb, mod) => () => (mod || (cb((mod = { exports: {} }).exports, mod, mod.exports), cb = null), mod.exports);
+
+// \0wp-global:@wordpress/core-data
+var require_core_data = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = window.wp.coreData;
+}));
+
+// \0wp-global:@wordpress/data
+var require_data = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = window.wp.data;
+}));
+
+// \0wp-global:@wordpress/html-entities
+var require_html_entities = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = window.wp.htmlEntities;
+}));
+
+// \0wp-global:@wordpress/i18n
+var require_i18n = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = window.wp.i18n;
+}));
+
+// \0wp-global:@wordpress/editor
+var require_editor = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = window.wp.editor;
+}));
+
+// \0wp-global:@wordpress/private-apis
+var require_private_apis = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = window.wp.privateApis;
+}));
+
 // routes/lock-unlock/index.ts
-var import_private_apis = __toESM(require_private_apis());
-var { lock, unlock } = (0, import_private_apis.__dangerousOptInToUnstableAPIsOnlyForCoreModules)(
-  "I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.",
-  "@wordpress/routes"
-);
+var import_core_data = require_core_data();
+var import_data = require_data();
+var import_html_entities = require_html_entities();
+var import_i18n = require_i18n();
+var import_editor = require_editor();
+var import_private_apis = require_private_apis();
+const { lock, unlock } = (0, import_private_apis.__dangerousOptInToUnstableAPIsOnlyForCoreModules)("I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.", "@wordpress/routes");
 
 // routes/media-editor/route.ts
-var VIEW_CONFIG_FIELDS = "form";
+/**
+* The stage only renders a form, so it requests the `form` of the entity view
+* configuration alone. Must match the fields the stage requests, so both
+* resolve under the same cache key.
+*/
+const VIEW_CONFIG_FIELDS = "form";
 function getAttachmentId(id) {
-  const attachmentId = parseInt(id, 10);
-  if (Number.isNaN(attachmentId) || attachmentId <= 0) {
-    throw notFound();
-  }
-  return attachmentId;
+	const attachmentId = parseInt(id, 10);
+	if (Number.isNaN(attachmentId) || attachmentId <= 0) throw notFound();
+	return attachmentId;
 }
 function getAttachmentTitle(attachment) {
-  const title = typeof attachment.title === "string" ? attachment.title : attachment.title?.rendered || attachment.title?.raw;
-  return title ? (0, import_html_entities.decodeEntities)(title) : (0, import_i18n.__)("Edit media");
+	const title = typeof attachment.title === "string" ? attachment.title : attachment.title?.rendered || attachment.title?.raw;
+	return title ? (0, import_html_entities.decodeEntities)(title) : (0, import_i18n.__)("Edit media");
 }
-var route = {
-  beforeLoad: async ({ params }) => {
-    if (!window?.__experimentalMediaEditor) {
-      throw notFound();
-    }
-    const attachmentId = getAttachmentId(params.id);
-    try {
-      const attachment = await (0, import_data.resolveSelect)(import_core_data.store).getEntityRecord(
-        "postType",
-        "attachment",
-        attachmentId
-      );
-      if (!attachment) {
-        throw notFound();
-      }
-    } catch {
-      throw notFound();
-    }
-  },
-  loader: async () => {
-    await Promise.all([
-      unlock((0, import_data.resolveSelect)(import_editor.store)).getEntityFields("postType", "attachment").catch(() => {
-      }),
-      unlock((0, import_data.resolveSelect)(import_core_data.store)).getViewConfig("postType", "attachment", {
-        fields: VIEW_CONFIG_FIELDS
-      }).catch(() => {
-      })
-    ]);
-  },
-  title: async ({ params }) => {
-    const attachmentId = getAttachmentId(params.id);
-    const attachment = await (0, import_data.resolveSelect)(import_core_data.store).getEntityRecord(
-      "postType",
-      "attachment",
-      attachmentId
-    );
-    return attachment ? getAttachmentTitle(attachment) : (0, import_i18n.__)("Edit media");
-  }
+/**
+* Route configuration for the dedicated media editor screen.
+*/
+const route = {
+	beforeLoad: async ({ params }) => {
+		if (!window?.__experimentalMediaEditor) throw notFound();
+		const attachmentId = getAttachmentId(params.id);
+		try {
+			if (!await (0, import_data.resolveSelect)(import_core_data.store).getEntityRecord("postType", "attachment", attachmentId)) throw notFound();
+		} catch {
+			throw notFound();
+		}
+	},
+	loader: async () => {
+		await Promise.all([unlock((0, import_data.resolveSelect)(import_editor.store)).getEntityFields("postType", "attachment").catch(() => {}), unlock((0, import_data.resolveSelect)(import_core_data.store)).getViewConfig("postType", "attachment", { fields: VIEW_CONFIG_FIELDS }).catch(() => {})]);
+	},
+	title: async ({ params }) => {
+		const attachmentId = getAttachmentId(params.id);
+		const attachment = await (0, import_data.resolveSelect)(import_core_data.store).getEntityRecord("postType", "attachment", attachmentId);
+		return attachment ? getAttachmentTitle(attachment) : (0, import_i18n.__)("Edit media");
+	}
 };
-export {
-  route
-};
+
+export { route };

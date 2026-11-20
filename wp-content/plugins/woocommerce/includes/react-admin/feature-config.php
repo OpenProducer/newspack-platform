@@ -10,6 +10,7 @@ if ( ! function_exists( 'wc_admin_get_feature_config' ) ) {
 			'store-alerts' => true,
 			'rest-api-v4' => false,
 			'order-detail-redesign' => false,
+			'payment-settings-screen' => false,
 		);
 	}
 }

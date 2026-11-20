@@ -1,6 +1,7 @@
 <?php
 namespace Automattic\WooCommerce\StoreApi\Routes\V1;
 
+use Automattic\WooCommerce\Enums\OrderStatus;
 use Automattic\WooCommerce\StoreApi\Payments\PaymentResult;
 use Automattic\WooCommerce\StoreApi\Exceptions\InvalidStockLevelsInCartException;
 use Automattic\WooCommerce\StoreApi\Exceptions\RouteException;
@@ -91,6 +92,46 @@ class CheckoutOrder extends AbstractCartRoute {
 	}
 
 	/**
+	 * Process an order as a request to its order-pay endpoint.
+	 *
+	 * Gateways decide whether they can pay an order from the order-pay endpoint, e.g. the shipping
+	 * method restrictions of offline gateways, and fall back to the cart otherwise. This request
+	 * pays an order and not the cart, so the endpoint is set for the order while it is processed.
+	 * It is restored afterwards because batched requests share it.
+	 *
+	 * @throws RouteException On error.
+	 * @throws InvalidStockLevelsInCartException On error.
+	 *
+	 * @param \WP_REST_Request $request Request object.
+	 *
+	 * @return \WP_REST_Response
+	 */
+	protected function get_route_post_response( \WP_REST_Request $request ) {
+		global $wp, $wp_query;
+
+		$order_id      = absint( $request['id'] );
+		$wp_query_vars = $wp->query_vars;
+		$had_query_var = isset( $wp_query->query_vars['order-pay'] );
+		$old_query_var = $had_query_var ? $wp_query->query_vars['order-pay'] : null;
+
+		// is_wc_endpoint_url() looks the endpoint up under its configured slug, get_query_var() under 'order-pay'.
+		$wp->query_vars[ WC()->query->get_query_vars()['order-pay'] ?? 'order-pay' ] = $order_id;
+		$wp->query_vars['order-pay'] = $order_id;
+		set_query_var( 'order-pay', $order_id );
+
+		try {
+			return $this->pay_for_order( $request );
+		} finally {
+			$wp->query_vars = $wp_query_vars;
+			if ( $had_query_var ) {
+				set_query_var( 'order-pay', $old_query_var );
+			} else {
+				unset( $wp_query->query_vars['order-pay'] );
+			}
+		}
+	}
+
+	/**
 	 * Process an order.
 	 *
 	 * 1. Process Request
@@ -105,14 +146,15 @@ class CheckoutOrder extends AbstractCartRoute {
 	 *
 	 * @return \WP_REST_Response
 	 */
-	protected function get_route_post_response( \WP_REST_Request $request ) {
+	private function pay_for_order( \WP_REST_Request $request ) {
 		$order_id = absint( $request['id'] );
 		$order    = wc_get_order( $order_id );
 
-		if ( ! $order instanceof \WC_Order || ! $order->needs_payment() ) {
+		if ( ! $order instanceof \WC_Order || ! $order->needs_payment() || $order->has_status( OrderStatus::CHECKOUT_DRAFT ) ) {
 			return new \WP_Error(
 				'invalid_order_update_status',
-				__( 'This order cannot be paid for.', 'woocommerce' )
+				__( 'This order cannot be paid for.', 'woocommerce' ),
+				array( 'status' => 400 )
 			);
 		}
 		$this->order = $order;
@@ -144,7 +186,9 @@ class CheckoutOrder extends AbstractCartRoute {
 		 * Fires after the Checkout Block/Store API request has populated and validated the order.
 		 *
 		 * The action runs before payment is processed, so callbacks can still act on the order
-		 * on its way to the gateway.
+		 * on its way to the gateway. Do not use this action for payment-completion logic or to
+		 * call WC_Order::payment_complete(). Use woocommerce_payment_complete or
+		 * woocommerce_order_status_completed instead.
 		 *
 		 * This is similar to existing core hook woocommerce_checkout_order_processed. We're using a new action:
 		 * - To keep the interface focused (only pass $order, not passing request data).
@@ -208,12 +252,7 @@ class CheckoutOrder extends AbstractCartRoute {
 		// Billing address is a required field.
 		$billing = $request['billing_address'];
 
-		// If shipping address (optional field) was not provided, set it to the given billing address (required field).
-		$shipping = $request['shipping_address'] ?? $billing;
-
-		$this->order->set_billing_address( $billing );
-		$this->order->set_shipping_address( $shipping );
-		$this->order_controller->validate_existing_order_before_update( $this->order );
+		$shipping = $this->order_controller->update_existing_order_addresses( $this->order, $billing, $request['shipping_address'] );
 
 		// Update customer object with validated order addresses.
 		foreach ( $billing as $key => $value ) {
@@ -222,7 +261,8 @@ class CheckoutOrder extends AbstractCartRoute {
 			}
 		}
 
-		foreach ( $shipping as $key => $value ) {
+		// When the order keeps its own shipping address, the customer's shipping follows billing.
+		foreach ( $shipping ?? $billing as $key => $value ) {
 			if ( is_callable( [ $customer, "set_shipping_$key" ] ) ) {
 				$customer->{"set_shipping_$key"}( $value );
 			}

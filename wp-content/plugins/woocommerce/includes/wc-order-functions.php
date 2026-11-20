@@ -27,7 +27,7 @@ defined( 'ABSPATH' ) || exit;
  * This function should be used for order retrieval so that when we move to
  * custom tables, functions still work.
  *
- * Args and usage: https://developer.woocommerce.com/docs/extensions/core-concepts/wc-get-orders/
+ * Args and usage: https://developer.woocommerce.com/docs/features/orders/wc-get-orders/
  *
  * @since  2.6.0
  * @param  array $args Array of args (above).
@@ -465,7 +465,7 @@ function wc_downloadable_file_permission( $download_id, $product, $order, $qty =
 function wc_downloadable_product_permissions( $order_id, $force = false ) {
 	$order = wc_get_order( $order_id );
 
-	if ( ! $order || ( $order->get_data_store()->get_download_permissions_granted( $order ) && ! $force ) ) {
+	if ( ! $order instanceof WC_Order || ( $order->get_data_store()->get_download_permissions_granted( $order ) && ! $force ) ) {
 		return;
 	}
 
@@ -473,9 +473,20 @@ function wc_downloadable_product_permissions( $order_id, $force = false ) {
 		return;
 	}
 
+	$refunded_item_ids = array();
+	foreach ( $order->get_refunds() as $refund ) {
+		foreach ( $refund->get_items() as $refund_item ) {
+			$refunded_item_ids[] = absint( $refund_item->get_meta( '_refunded_item_id' ) );
+		}
+	}
+
 	$line_items = $order->get_items();
 	if ( count( $line_items ) > 0 ) {
 		foreach ( $line_items as $item ) {
+			if ( in_array( $item->get_id(), $refunded_item_ids, true ) ) {
+				continue;
+			}
+
 			$product = $item->get_product();
 
 			if ( $product && $product->exists() && $product->is_downloadable() ) {
@@ -1020,7 +1031,20 @@ add_action( 'woocommerce_before_delete_order', 'wc_update_total_sales_counts' );
 function wc_update_coupon_usage_counts( $order_id ) {
 	$order = wc_get_order( $order_id );
 
-	if ( ! $order ) {
+	// Refunds never consume coupon usage.
+	if ( ! $order || $order instanceof WC_Order_Refund ) {
+		return;
+	}
+
+	/**
+	 * Data store wrapper.
+	 *
+	 * @var WC_Data_Store $data_store
+	 */
+	$data_store = $order->get_data_store();
+
+	// Only order data stores can record coupon usage.
+	if ( ! $data_store->has_callable( 'get_recorded_coupon_usage_counts' ) ) {
 		return;
 	}
 
@@ -1039,9 +1063,36 @@ function wc_update_coupon_usage_counts( $order_id ) {
 		$invalid_statuses
 	);
 
+	$stored_coupon_codes = null;
 	if ( $order->has_status( $invalid_statuses ) && $has_recorded ) {
 		$action = 'reduce';
-		$order->get_data_store()->set_recorded_coupon_usage_counts( $order, false );
+		if ( $data_store->has_callable( 'clear_recorded_coupon_usage_counts' ) ) {
+			// @phpstan-ignore-next-line method.notFound (Guarded by has_callable() and called via __call() on the underlying order data store instance.)
+			if ( ! $data_store->clear_recorded_coupon_usage_counts( $order ) ) {
+				// Another request already gave the uses back, or changed the order status since this order was loaded.
+				wc_release_coupons_for_order( $order );
+				return;
+			}
+		} else {
+			$order->get_data_store()->set_recorded_coupon_usage_counts( $order, false );
+		}
+
+		if ( $data_store->has_callable( 'get_item_ids' ) ) {
+			try {
+				// @phpstan-ignore-next-line method.notFound (Guarded by has_callable() and called via __call() on the underlying order data store instance.)
+				$stored_item_ids = $data_store->get_item_ids( $order, 'coupon' );
+			} catch ( Exception $e ) {
+				// Give nothing back rather than risk giving a use back twice.
+				$stored_item_ids = array();
+			}
+
+			$stored_coupon_codes = array();
+			foreach ( $order->get_items( 'coupon' ) as $coupon_item ) {
+				if ( $coupon_item instanceof WC_Order_Item_Coupon && in_array( $coupon_item->get_id(), $stored_item_ids, true ) ) {
+					$stored_coupon_codes[] = $coupon_item->get_code();
+				}
+			}
+		}
 	} elseif ( ! $order->has_status( $invalid_statuses ) && ! $has_recorded ) {
 		$action = 'increase';
 		$order->get_data_store()->set_recorded_coupon_usage_counts( $order, true );
@@ -1061,13 +1112,16 @@ function wc_update_coupon_usage_counts( $order_id ) {
 			$coupon  = new WC_Coupon( $code );
 			$used_by = $order->get_user_id();
 
-			if ( ! $used_by ) {
+			if ( ! $used_by && is_callable( array( $order, 'get_billing_email' ) ) ) {
 				$used_by = $order->get_billing_email();
 			}
 
 			switch ( $action ) {
 				case 'reduce':
-					$coupon->decrease_usage_count( $used_by );
+					// A coupon removed from the order after it was loaded here already gave its use back.
+					if ( null === $stored_coupon_codes || in_array( $code, $stored_coupon_codes, true ) ) {
+						$coupon->decrease_usage_count( $used_by );
+					}
 					break;
 				case 'increase':
 					$coupon->increase_usage_count( $used_by, $order );
@@ -1192,7 +1246,8 @@ function wc_get_order_note( $data ) {
 		'woocommerce_get_order_note',
 		array(
 			'id'            => (int) $data->comment_ID,
-			'date_created'  => wc_string_to_datetime( $data->comment_date ),
+			// comment_date is frozen in the timezone the site had when the note was saved, so use the GMT date.
+			'date_created'  => wc_string_to_datetime( mysql_to_rfc3339( $data->comment_date_gmt ) . 'Z' ),
 			'content'       => $data->comment_content,
 			'customer_note' => (bool) get_comment_meta( $data->comment_ID, 'is_customer_note', true ),
 			'added_by'      => __( 'WooCommerce', 'woocommerce' ) === $data->comment_author ? 'system' : $data->comment_author,

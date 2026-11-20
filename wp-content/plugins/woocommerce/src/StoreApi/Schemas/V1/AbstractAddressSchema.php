@@ -124,25 +124,33 @@ abstract class AbstractAddressSchema extends AbstractSchema {
 		$schema            = $this->get_properties();
 		// omit all keys from address that are not in the schema. This should account for email.
 		$address = array_intersect_key( $address, $schema );
+		// Format the state and postcode for the upper-cased country, which is what is stored and matched.
+		$country = wc_strtoupper( sanitize_text_field( $address['country'] ?? '' ) );
 		$address = array_reduce(
 			array_keys( $address ),
-			function ( $carry, $key ) use ( $address, $validation_util, $schema ) {
+			function ( $carry, $key ) use ( $address, $country, $validation_util, $sanitization_util, $schema ) {
 				switch ( $key ) {
 					case 'country':
-						$carry[ $key ] = wc_strtoupper( sanitize_text_field( $address[ $key ] ) );
+						$carry[ $key ] = $country;
 						break;
 					case 'state':
-						$carry[ $key ] = $validation_util->format_state( sanitize_text_field( $address[ $key ] ), $address['country'] );
+						$carry[ $key ] = $validation_util->format_state( sanitize_text_field( $address[ $key ] ), $country );
 						break;
 					case 'postcode':
-						$carry[ $key ] = $address['postcode'] ? wc_format_postcode( sanitize_text_field( $address['postcode'] ), $address['country'] ) : '';
+						$carry[ $key ] = $address['postcode'] ? wc_format_postcode( sanitize_text_field( $address['postcode'] ), $country ) : '';
 						break;
 					default:
 						$carry[ $key ] = rest_sanitize_value_from_schema( $address[ $key ], $schema[ $key ], $key );
+						// Additional fields are sanitized separately below, via sanitize_field().
+						// Email is excluded because its own schema sanitizer already applies sanitize_email().
+						if ( 'email' !== $key && ! $this->additional_fields_controller->is_field( $key ) && is_string( $carry[ $key ] ) ) {
+							$carry[ $key ] = sanitize_text_field( $carry[ $key ] );
+						}
 						break;
 				}
 				if ( $this->additional_fields_controller->is_field( $key ) ) {
 					$carry[ $key ] = $this->additional_fields_controller->sanitize_field( $key, $carry[ $key ] );
+					$carry[ $key ] = $sanitization_util->wp_kses_array( [ $key => $carry[ $key ] ] )[ $key ];
 				}
 				return $carry;
 			},
@@ -155,7 +163,7 @@ abstract class AbstractAddressSchema extends AbstractSchema {
 			$address['phone'] = wc_remove_non_displayable_chars( $address['phone'] );
 		}
 
-		return $sanitization_util->wp_kses_array( $address );
+		return $address;
 	}
 
 	/**
@@ -210,8 +218,11 @@ abstract class AbstractAddressSchema extends AbstractSchema {
 		// Validation runs before sanitization in the REST dispatcher, so sanitize here to check
 		// the same value that will be stored. The phone checks below rely on it.
 		$address = $this->sanitize_callback( $address, $request, $param );
+		$country = $address['country'] ?? '';
+		$state   = $address['state'] ?? '';
 
-		if ( ! empty( $address['country'] ) && ! in_array( $address['country'], array_keys( wc()->countries->get_countries() ), true ) ) {
+		// Only blank values are left for the full address validation later. empty() would also skip "0".
+		if ( '' !== $country && ! in_array( $country, array_keys( wc()->countries->get_countries() ), true ) ) {
 			$errors->add(
 				'invalid_country',
 				sprintf(
@@ -223,19 +234,19 @@ abstract class AbstractAddressSchema extends AbstractSchema {
 			return $errors;
 		}
 
-		if ( ! empty( $address['state'] ) && ! $validation_util->validate_state( $address['state'], $address['country'] ) ) {
+		if ( '' !== $state && ! $validation_util->validate_state( $state, $country ) ) {
 			$errors->add(
 				'invalid_state',
 				sprintf(
 					/* translators: %1$s given state, %2$s valid states */
 					__( 'The provided state (%1$s) is not valid. Must be one of: %2$s', 'woocommerce' ),
-					esc_html( $address['state'] ),
-					implode( ', ', array_keys( $validation_util->get_states_for_country( $address['country'] ) ) )
+					esc_html( $state ),
+					implode( ', ', array_keys( $validation_util->get_states_for_country( $country ) ) )
 				)
 			);
 		}
 
-		if ( ! empty( $address['postcode'] ) && ! \WC_Validation::is_postcode( $address['postcode'], $address['country'] ) ) {
+		if ( '' !== ( $address['postcode'] ?? '' ) && ! \WC_Validation::is_postcode( $address['postcode'], $country ) ) {
 			$errors->add(
 				'invalid_postcode',
 				__( 'The provided postcode / ZIP is not valid', 'woocommerce' )

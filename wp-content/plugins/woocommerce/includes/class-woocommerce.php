@@ -21,8 +21,9 @@ use Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableControlle
 use Automattic\WooCommerce\Internal\DownloadPermissionsAdjuster;
 use Automattic\WooCommerce\Internal\Features\FeaturesController;
 use Automattic\WooCommerce\Internal\LegacyAssets\LegacySelect2UsageTracker;
-use Automattic\WooCommerce\Internal\MCP\MCPAdapterProvider;
+use Automattic\WooCommerce\Internal\MCP\McpEndpointRemoval;
 use Automattic\WooCommerce\Internal\Abilities\AbilitiesRegistry;
+use Automattic\WooCommerce\Internal\Abilities\AbilitiesTracking;
 use Automattic\WooCommerce\Internal\ProductAttributes\VisualAttributeTermAdmin;
 use Automattic\WooCommerce\Internal\ProductAttributesLookup\DataRegenerator;
 use Automattic\WooCommerce\Internal\ProductAttributesLookup\LookupDataStore;
@@ -36,13 +37,16 @@ use Automattic\WooCommerce\Internal\Admin\EmailImprovements\EmailImprovements;
 use Automattic\WooCommerce\Internal\Email\DeferredEmailQueue;
 use Automattic\WooCommerce\Internal\Email\EmailLogger;
 use Automattic\WooCommerce\Internal\Admin\Marketplace;
+use Automattic\WooCommerce\Internal\Admin\MenuIcons;
 use Automattic\WooCommerce\Internal\Admin\OrderMilestoneEasterEgg;
+use Automattic\WooCommerce\Internal\Admin\Settings\PaymentSettingsScreen;
 use Automattic\WooCommerce\Proxies\LegacyProxy;
 use Automattic\WooCommerce\Utilities\{LoggingUtil, TimeUtil};
 use Automattic\WooCommerce\Internal\Logging\OrderLogsCleanupHelper;
 use Automattic\WooCommerce\Internal\Logging\RemoteLogger;
 use Automattic\WooCommerce\Caches\OrderCountCacheService;
 use Automattic\WooCommerce\Caches\ProductCountCacheService;
+use Automattic\WooCommerce\Internal\Caches\CouponCodeLookupInvalidator;
 use Automattic\WooCommerce\Internal\Caches\ProductVersionStringInvalidator;
 use Automattic\WooCommerce\Internal\Caches\OrdersVersionStringInvalidator;
 use Automattic\WooCommerce\Internal\Caches\TaxRateVersionStringInvalidator;
@@ -60,7 +64,7 @@ final class WooCommerce {
 	 *
 	 * @var string
 	 */
-	public $version = '11.2.2';
+	public $version = '11.3.1';
 
 	/**
 	 * WooCommerce Schema version.
@@ -402,13 +406,17 @@ final class WooCommerce {
 		$container->get( DeferredEmailQueue::class );
 		$container->get( AddressProviderController::class );
 		$container->get( AbilitiesRegistry::class );
-		$container->get( MCPAdapterProvider::class );
+		$container->get( McpEndpointRemoval::class );
+		$container->get( CouponCodeLookupInvalidator::class );
 		$container->get( ProductVersionStringInvalidator::class );
 		$container->get( OrdersVersionStringInvalidator::class );
 		$container->get( TaxRateVersionStringInvalidator::class );
 		$container->get( OrderMilestoneEasterEgg::class );
 		$container->get( CustomerEmailVerification::class );
 		$container->get( OrderLogsCleanupHelper::class );
+		$container->get( PaymentSettingsScreen::class );
+		$container->get( AbilitiesTracking::class );
+		$container->get( MenuIcons::class );
 
 		/**
 		 * These classes have a register method for attaching hooks.
@@ -423,6 +431,7 @@ final class WooCommerce {
 		$container->get( Automattic\WooCommerce\Internal\Utilities\LegacyRestApiStub::class )->register();
 		$container->get( LegacySelect2UsageTracker::class )->register();
 		$container->get( Automattic\WooCommerce\Internal\VariationGallery\Telemetry::class )->register();
+		$container->get( Automattic\WooCommerce\Internal\ProductCustoms\Telemetry::class )->register();
 		$container->get( Automattic\WooCommerce\Internal\Email\EmailStyleSync::class )->register();
 		$container->get( EmailLogger::class )->register();
 		$container->get( VisualAttributeTermAdmin::class )->register();
@@ -435,7 +444,9 @@ final class WooCommerce {
 		$container->get( Automattic\WooCommerce\Internal\StockNotifications\StockNotifications::class )->register();
 		$container->get( Automattic\WooCommerce\Internal\ScheduledSalePriceReconciler::class )->register();
 		$container->get( Automattic\WooCommerce\Internal\OrderWithdrawal\OrderWithdrawalController::class )->register();
+		$container->get( Automattic\WooCommerce\Internal\Ucp\UcpDiscovery::class )->register();
 		$container->get( Automattic\WooCommerce\Internal\Admin\OrderTaxLookupMigrator::class )->register();
+		$container->get( Automattic\WooCommerce\Internal\ProductDownloads\DownloadableFileAttachments::class )->register();
 
 		// Classes inheriting from RestApiControllerBase.
 		$container->get( Automattic\WooCommerce\Internal\ReceiptRendering\ReceiptRenderingRestController::class )->register();
@@ -505,14 +516,22 @@ final class WooCommerce {
 			);
 
 			if ( false !== strpos( $message, 'Stack trace:' ) ) {
-				$segments  = explode( 'Stack trace:', $message );
-				$message   = str_replace( PHP_EOL, ' ', trim( $segments[0] ) );
-				$backtrace = array_map(
-					'trim',
-					explode( PHP_EOL, $segments[1] )
-				);
+				$segments = explode( 'Stack trace:', $message, 2 );
+				$message  = str_replace( PHP_EOL, ' ', trim( $segments[0] ) );
 
-				$context['backtrace'] = $backtrace;
+				$context['backtrace'] = array();
+				foreach ( explode( "\n", trim( $segments[1] ) ) as $line ) {
+					// Cap each line so one huge line cannot hit the PCRE backtrack limit.
+					$line = substr( $line, 0, 4096 );
+					// Keep only frame headers, including eval, anonymous class and PHP 8.4 closure frames, and drop their arguments.
+					// PHP escapes newlines inside trace arguments, so an argument cannot start a frame line of its own.
+					if ( preg_match( '/^#\d+ (?:(?:\[internal function\]|.*?\(\d+\)): (?:\{closure[^{}\'\r\n]*+\}|[^(\r\n])++\(|\{main\})/', $line, $frame ) ) {
+						$context['backtrace'][] = '(' === substr( $frame[0], -1 ) ? $frame[0] . ')' : $frame[0];
+					} elseif ( preg_match( '/^Next ([\w\\\\]+): /', $line, $next ) ) {
+						// Keep the chained exception class, not its message.
+						$context['backtrace'][] = 'Next ' . $next[1];
+					}
+				}
 			} else {
 				$context['backtrace'] = true;
 			}
@@ -667,10 +686,11 @@ final class WooCommerce {
 
 		// Pretty permalinks: the Store API namespace is part of the path, e.g. /wp-json/wc/store/v1/cart. Match the
 		// path only (a leading slash anchors the prefix) so a REST-like query argument such as
-		// /some-page/?arg=/wp-json/wc/store/ is not mistaken for a Store API request.
+		// /some-page/?arg=/wp-json/wc/store/ is not mistaken for a Store API request. Decode the path because WordPress
+		// also matches rewrite rules against the decoded path, so /wp%2Djson/wc/store/v1/cart reaches the Store API.
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$path = wp_parse_url( '/' . ltrim( (string) wp_unslash( $_SERVER['REQUEST_URI'] ), '/' ), PHP_URL_PATH );
-		if ( is_string( $path ) && false !== strpos( $path, '/' . trailingslashit( rest_get_url_prefix() ) . 'wc/store/' ) ) {
+		if ( is_string( $path ) && false !== stripos( rawurldecode( $path ), '/' . trailingslashit( rest_get_url_prefix() ) . 'wc/store/' ) ) {
 			return true;
 		}
 
@@ -679,7 +699,7 @@ final class WooCommerce {
 		if ( isset( $_GET['rest_route'] ) && is_string( $_GET['rest_route'] ) ) {
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Reading the route only, no state change.
 			$rest_route = '/' . ltrim( rawurldecode( sanitize_text_field( wp_unslash( $_GET['rest_route'] ) ) ), '/' );
-			if ( 0 === strpos( $rest_route, '/wc/store/' ) ) {
+			if ( 0 === stripos( $rest_route, '/wc/store/' ) ) {
 				return true;
 			}
 		}
@@ -1139,7 +1159,10 @@ final class WooCommerce {
 	 * @return string
 	 */
 	public function plugin_path() {
-		return untrailingslashit( plugin_dir_path( WC_PLUGIN_FILE ) );
+		static $plugin_path = null;
+		$plugin_path        = $plugin_path ?? untrailingslashit( plugin_dir_path( WC_PLUGIN_FILE ) );
+
+		return $plugin_path;
 	}
 
 	/**
@@ -1596,7 +1619,7 @@ final class WooCommerce {
 	 *
 	 * @param string $old_value The old value for the woocommerce_allow_tracking option.
 	 * @param string $value The current value for the woocommerce_allow_tracking option.
-	 * @since x.x.x
+	 * @since 9.5.2
 	 *
 	 * @return void
 	 */

@@ -21,9 +21,7 @@ function gutenberg_block_core_tab_panel_render( array $attributes, string $conte
 
 	static $tab_counters = array();
 
-	if ( ! isset( $tab_counters[ $tabs_id ] ) ) {
-		$tab_counters[ $tabs_id ] = 1;
-	}
+	$tab_counters[ $tabs_id ] ??= 1;
 
 	$tab_number = $tab_counters[ $tabs_id ];
 	++$tab_counters[ $tabs_id ];
