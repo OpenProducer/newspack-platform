@@ -21,6 +21,8 @@
 * @author     Edouard Duplessis <eduplessis@gmail.com>
 */
 
+require_once dirname( __DIR__ ) . '/includes/class-sonaar-license-client-v1.php';
+
 class Sonaar_Music_Admin {
 
     /**
@@ -70,6 +72,8 @@ class Sonaar_Music_Admin {
     * @since		1.0.0
     */
     public function load_dependencies(){
+        // Update hooks must be available to cron and WP-CLI as well as wp-admin.
+        add_action( 'plugins_loaded', array( $this, 'srmp3_addon_api_check' ) );
 
         if ( is_admin() && ! wp_doing_ajax() ) {
             require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/library/cmb2-calltoaction/cmb2-calltoaction.php';
@@ -91,6 +95,7 @@ class Sonaar_Music_Admin {
         
         if ( is_admin() ) {
             require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/library/cmb2/init.php';
+            require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-sonaar-cmb2-compat.php';
             require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/library/cmb2-post-search-field/cmb2_post_search_field.php';
             require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/library/cmb-field-select2-master/cmb-field-select2.php';
             require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/library/Shortcode_Button/shortcode-button.php';  
@@ -101,7 +106,6 @@ class Sonaar_Music_Admin {
             }
             require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/srmp3_templates_shortcode_importer.php';
             
-            add_action( 'plugins_loaded', array( $this, 'srmp3_addon_api_check' ) );
             add_action( 'wp_ajax_copy_SR_theme_playlist_to_MP3AudioPlayer_playlist', array($this, 'copy_SR_theme_playlist_to_MP3AudioPlayer_playlist'));
             add_action( 'save_post', array( $this, 'count_input_vars_on_save_post' ) );
 
@@ -225,68 +229,37 @@ class Sonaar_Music_Admin {
                 'update_action' => $action, 
                 'request' 		=> $args,
                 'licence' 		=> get_site_option('sonaar_music_licence'),
-                'siteurl' 		=> $_SERVER['SERVER_NAME']
+                'siteurl' 		=> Sonaar_License_Client_V1::site()
             ),
             'user-agent' => 'SRMP3PRO/' . SRMP3PRO_VERSION . ' WordPress/' . $wp_version . '; ' . get_bloginfo('url')
         );	
     }
-    public function srp_check_for_plugin_update($checked_data) {
-        if ( !defined( 'SRMP3PRO_VERSION' ) || !defined( 'PLUGIN_INSTALLATION_NAME' ) ) {
+    public function srp_check_for_plugin_update( $checked_data ) {
+        if ( ! defined( 'SRMP3PRO_VERSION' ) || ! defined( 'PLUGIN_INSTALLATION_NAME' ) ||
+            ! is_object( $checked_data ) || empty( $checked_data->checked ) ) {
             return $checked_data;
         }
-
-        $sonaar_music_licence = get_site_option('sonaar_music_licence');
-        
-        if ($sonaar_music_licence == '' ) {
-            return $checked_data;
-        }		
-    
-        if (empty($checked_data->checked)) {
+        $key = get_site_option( 'sonaar_music_licence', '' );
+        if ( ! is_string( $key ) || '' === $key ) {
             return $checked_data;
         }
-    
-        if ( !empty($checked_data->response) && array_key_exists(PLUGIN_INSTALLATION_NAME, $checked_data->response)){			
-            return $checked_data;
-        }
-
-        $plugin_version = SRMP3PRO_VERSION;
-       
-        // Check for cached update data
-        $cache_key = 'SRMP3_plugin_update_transient';
-        $cached_response = get_site_transient($cache_key);
-        if ($cached_response !== false) {
-            $response = $cached_response;
-        } else {
-            $request_args = array(
-                'slug' => 'sonaar-music-pro',
-                'version' => $plugin_version
-            );
-    
-            $request_string = $this->prepare_request('basic_check', $request_args);
-    
-            //$api_url = 'https://sonaar.io/api/';
-            $api_url = 'https://sonaar.io/wp-json/wp/v2/sonaar-api/version-check/';
-            $raw_response = wp_remote_post($api_url, $request_string);
-    
-            if (!is_wp_error($raw_response) && ($raw_response['response']['code'] == 200)) {
-                $response = json_decode($raw_response['body']);
-                //cache for 8 hours
-                set_site_transient($cache_key, $response, 8 * HOUR_IN_SECONDS);
+        $args = $this->prepare_request( 'basic_check', array( 'slug' => 'sonaar-music-pro', 'version' => SRMP3PRO_VERSION ) );
+        $args['timeout'] = 15;
+        $identity = wp_json_encode( array( $key, Sonaar_License_Client_V1::site(), 'sonaar-music-pro', SRMP3PRO_VERSION ) );
+        $data = Sonaar_License_Client_V1::update( 'SRMP3_plugin_update_transient', $identity,
+            'https://sonaar.io/wp-json/wp/v2/sonaar-api/version-check/', $args );
+        // A previous offer must not survive a newer authoritative no-update response.
+        unset( $checked_data->response[PLUGIN_INSTALLATION_NAME], $checked_data->no_update[PLUGIN_INSTALLATION_NAME] );
+        $checked_data->checked[PLUGIN_INSTALLATION_NAME] = SRMP3PRO_VERSION;
+        if ( is_array( $data ) && ! empty( $data['new_version'] ) ) {
+            $data['plugin'] = PLUGIN_INSTALLATION_NAME;
+            $data['slug'] = 'sonaar-music-pro';
+            if ( version_compare( SRMP3PRO_VERSION, $data['new_version'], '<' ) ) {
+                $checked_data->response[PLUGIN_INSTALLATION_NAME] = (object) $data;
             } else {
-                return $checked_data;
+                $checked_data->no_update[PLUGIN_INSTALLATION_NAME] = (object) $data;
             }
         }
-    
-        if (!empty($response)){ // Feed the update data into WP updater            
-            if (version_compare($plugin_version, $response->new_version, '<')) {
-                $checked_data->response[PLUGIN_INSTALLATION_NAME] = $response;
-                $checked_data->checked[PLUGIN_INSTALLATION_NAME] = $response->new_version;
-            } else {
-                $checked_data->no_update[PLUGIN_INSTALLATION_NAME] = $response;
-                $checked_data->checked[PLUGIN_INSTALLATION_NAME] = $plugin_version;
-            }
-        }
-    
         return $checked_data;
     }
     public function capture_sonaar_music_licence_transient($transient) {
@@ -309,7 +282,9 @@ class Sonaar_Music_Admin {
     }
     public function srmp3_addon_api_check(){
         if( function_exists('run_sonaar_music_pro') ){ 
-            add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'srp_check_for_plugin_update'),99);
+            if ( ! function_exists( 'sonaar_music_pro_register_updater' ) ) {
+                add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'srp_check_for_plugin_update'),99);
+            }
             //Before version 5.4 or lower, the pro version deleted the transient on every admin page load. We want to prevent this with a hook, so we get less call to the API.
             if ( defined( 'SRMP3PRO_VERSION' ) && version_compare( SRMP3PRO_VERSION, '5.4', '<=' ) ) {   
                 add_action('delete_site_transient_sonaar_music_licence', array($this, 'capture_sonaar_music_licence_transient'));

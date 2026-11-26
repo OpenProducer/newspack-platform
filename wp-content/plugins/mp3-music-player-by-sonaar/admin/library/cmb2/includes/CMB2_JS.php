@@ -82,7 +82,7 @@ class CMB2_JS {
 		// Only use minified files if SCRIPT_DEBUG is off.
 		$debug = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG;
 
-		$min = $debug ? '' : '';
+		$min = $debug ? '' : '.min';
 
 		// if colorpicker.
 		if ( isset( $dependencies['wp-color-picker'] ) ) {
@@ -122,8 +122,8 @@ class CMB2_JS {
 		// Enqueue cmb JS.
 		wp_enqueue_script( self::$handle, CMB2_Utils::url( "js/cmb2{$min}.js" ), array_values( $dependencies ), CMB2_VERSION, true );
 
-		// if SCRIPT_DEBUG or wysiwyg from MP3 Audio Player Pro is set, we need to enqueue separately. We are not sure why exactly at this time.
-		if ( $enqueue_wysiwyg || Sonaar_Music::get_option('use_wysiwyg_for_trackdesc', 'srmp3_settings_general') === "true") {
+		// if SCRIPT_DEBUG, we need to enqueue separately.
+		if ( $enqueue_wysiwyg ) {
 			wp_enqueue_script( 'cmb2-wysiwyg', CMB2_Utils::url( 'js/cmb2-wysiwyg.js' ), array( 'jquery', 'wp-util' ), CMB2_VERSION );
 		}
 		if ( $enqueue_char_counter ) {
@@ -148,7 +148,7 @@ class CMB2_JS {
 		// Only use minified files if SCRIPT_DEBUG is off.
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		$func = $enqueue ? 'wp_enqueue_script' : 'wp_register_script';
-		$func( 'wp-color-picker-alpha', CMB2_Utils::url( "js/wp-color-picker-alpha{$min}.js" ), array( 'wp-color-picker' ), '2.1.3' );
+		$func( 'wp-color-picker-alpha', CMB2_Utils::url( "js/wp-color-picker-alpha{$min}.js" ), array( 'wp-color-picker' ), '3.0.4' );
 	}
 
 	/**

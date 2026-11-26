@@ -4,8 +4,8 @@ Tags: MP3, music player, podcast player, audio player, woocommerce
 Donate link: https://sonaar.io
 Requires at least: 4.7
 Tested up to: 7.1
-Requires PHP: 5.6
-Stable tag: 5.16
+Requires PHP: 7.4
+Stable tag: 5.17.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -344,6 +344,25 @@ Yes, with the pro version, you can click on the 'Add to Favorite' icon to store 
 10. Shortcode Builder: Create, Import and Customize audio players using shortcodes in real-time
 
 == Changelog ==
+= 5.17.1 =
+Release Date: 2026-11-24
+
+- Hotfix: Restored missing plugin dependencies in the release package to prevent fatal errors when loading the plugin
+
+= 5.17 =
+Release Date: 2026-11-24
+
+- Security: Enforced WordPress visibility and password protection for playlists
+- Security: Enforced WordPress access checks for track notes loaded via AJAX
+- Security: Updated the bundled CMB2 library to 2.13.5, including security fixes. Requires PHP 7.4 or later.
+- Fix: Purchased audio files now take priority over role-based previews for customers who purchased the track
+- Fix: Improved license registration and preserved saved license keys during temporary connection issues
+- Fix: Improved Pro update detection and compatibility, including scheduled updates and WP-CLI
+- Fix: Prevent conflicts with Swiper loaded by other themes or plugins
+- Fix: PHP 8.5 deprecation when the option name is omitted
+- Fix: Preserved track sorting and conditional fields after the CMB2 update
+- Fix: Track numbers now update immediately after reordering, and code editors refresh when conditional fields become visible
+
 = 5.16 =
 - Security: Fixed stored XSS in slider navigation alignment. Thanks to Hexxed BitHeadz for reporting the issue through WPScan.
 - New: Add external audio source after purchase with backward compatibility

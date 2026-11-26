@@ -558,7 +558,7 @@
 		// Helper function to manage opacity and class
 		function manageOpacityAndClass(element) {
 			const parentElement = $(element).closest('.wp-picker-container');
-			const inputElement = parentElement.find('input.wp-color-picker').not('[data-alpha="true"]');;
+			const inputElement = parentElement.find('input.wp-color-picker').not('[data-alpha="true"], [data-alpha-enabled="true"]');
 			const inputVal = inputElement.val();
 			
 			if (inputVal === '' || inputVal === '#') {

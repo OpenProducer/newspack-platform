@@ -275,7 +275,7 @@ class Sonaar_Music {
 	}
 	
 	public static function get_option($id, $option_name = null, $default = null){
-		if (!isset(self::$options_cache[$option_name])) {
+		if (!empty($option_name) && !isset(self::$options_cache[$option_name])) {
             self::$options_cache[$option_name] = get_option($option_name);
         }
 

@@ -16,7 +16,8 @@
  * Plugin Name:       MP3 Audio Player by Sonaar
  * Plugin URI:        https://sonaar.io/mp3-audio-player-pro/?utm_source=Sonaar+Music+Free+Plugin&utm_medium=plugin
  * Description:       The most popular and complete Music & Podcast Player for WordPress.
- * Version:           5.16
+ * Version:           5.17.1
+ * Requires PHP:      7.4
  * Author:            Sonaar Music
  * Author URI:        https://sonaar.io/?utm_source=Sonaar%20Music%20Free%20Plugin&utm_medium=plugin
  * License:           GPL-2.0+
@@ -30,8 +31,8 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-define('SRMP3_VERSION', '5.16'); // important to avoid cache issues on update
-define('SRMP3_PRO_MIN_VERSION', '5.16'); // Minimum pro version required
+define('SRMP3_VERSION', '5.17.1'); // important to avoid cache issues on update
+define('SRMP3_PRO_MIN_VERSION', '5.17'); // Minimum pro version required
 if ( !defined( 'SRMP3_DIR_PATH' ) ) {
     define( 'SRMP3_DIR_PATH', plugin_dir_path( __FILE__ ) );
 }
@@ -292,24 +293,26 @@ add_action('wp_ajax_nopriv_load_track_note_ajax', 'load_track_note_ajax_callback
 function load_track_note_ajax_callback() {
 	check_ajax_referer('sonaar_music_ajax_nonce', 'nonce');
 
-	$post_id = absint($_POST['post-id']);
-	if (!$post_id) {
-		wp_send_json_error('Invalid post ID');
+	$post_id = isset( $_POST['post-id'] ) ? absint( $_POST['post-id'] ) : 0;
+	if ( ! $post_id ) {
+		wp_send_json_error( 'Invalid post ID' );
+	}
+
+	$postobj = get_post( $post_id );
+	if ( ! $postobj ) {
+		wp_send_json_error( 'Post not found' );
+	}
+
+	$is_published = 'publish' === $postobj->post_status;
+	$is_public = $is_published && is_post_type_viewable( $postobj->post_type );
+	$read_capability = $is_published ? 'edit_post' : 'read_post';
+	if ( post_password_required( $postobj )
+		|| ( ! $is_public && ( ! is_user_logged_in() || ! current_user_can( $read_capability, $post_id ) ) )
+	) {
+		wp_send_json_error( 'Permission denied' );
 	}
 
 	if (!empty($_POST['track-desc-postcontent']) && $_POST['track-desc-postcontent'] == '1') {
-
-		$postobj = get_post($post_id);
-		if (!$postobj) {
-			wp_send_json_error('Post not found');
-		}
-
-		if ($postobj->post_status !== 'publish') {
-			if (!is_user_logged_in() || !current_user_can('read_post', $post_id)) {
-				wp_send_json_error('Permission denied');
-			}
-		}
-
 		$description = wp_kses_post($postobj->post_content);
 
 	} else {

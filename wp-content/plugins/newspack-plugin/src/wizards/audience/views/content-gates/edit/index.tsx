@@ -40,6 +40,7 @@ import { useAccessRuleOptions } from '../use-access-rule-options';
 import SavePanel from './save-panel';
 import PreferencesModal from './preferences-modal';
 import NewsletterSettings from './newsletter-settings';
+import { PUBLISHED_AGE_RULE, isUsableAgeDuration, normalizeAgeDuration } from '../../../../../content-gate/utils/published-age';
 
 const { useHistory } = Router;
 
@@ -152,6 +153,8 @@ const Edit = ( { match, updateGatesData, slug = AUDIENCE_CONTENT_GATES_WIZARD_SL
 	const isSaving = useRef( false );
 	const gatesRef = useRef< Gate[] >( gates ?? [] );
 	const savedCustomRules = useRef< GateContentRule[] >( gate.content_rules );
+	// The stored gate as last copied into the form, serialized for comparison.
+	const syncedGate = useRef< string | null >( null );
 
 	useEffect( () => {
 		if ( Array.isArray( gates ) ) {
@@ -420,6 +423,7 @@ const Edit = ( { match, updateGatesData, slug = AUDIENCE_CONTENT_GATES_WIZARD_SL
 			subTitle: getGatesSubTitle( isNewsletter ),
 		} );
 		if ( isNew ) {
+			syncedGate.current = null;
 			return;
 		}
 		const matchedGate = gates ? gates.find( g => g.id === id ) : null;
@@ -446,6 +450,14 @@ const Edit = ( { match, updateGatesData, slug = AUDIENCE_CONTENT_GATES_WIZARD_SL
 			history.push( `/edit/new/all` );
 			return;
 		}
+		// Copy the stored gate only when it changed. A refused save, a failed status change or
+		// delete, and writes to other wizard data in the store all re-run this with the gate as
+		// it was, and copying it then would discard the operator's edits.
+		const serializedGate = JSON.stringify( matchedGate );
+		if ( serializedGate === syncedGate.current ) {
+			return;
+		}
+		syncedGate.current = serializedGate;
 		setGate( matchedGate );
 		setTitle( matchedGate.title );
 		setContentRules( matchedGate.content_rules );
@@ -460,6 +472,10 @@ const Edit = ( { match, updateGatesData, slug = AUDIENCE_CONTENT_GATES_WIZARD_SL
 		resetError();
 	}, [ gates, id, isDeleting, isFetching, isSaving, isNew ] );
 
+	const hasUnusableAgeRule = contentRules.some(
+		rule => PUBLISHED_AGE_RULE === rule.slug && ! isUsableAgeDuration( normalizeAgeDuration( rule.value ) )
+	);
+
 	// Set header actions.
 	useEffect( () => {
 		const actions: HeaderAction[] = [
@@ -472,6 +488,7 @@ const Edit = ( { match, updateGatesData, slug = AUDIENCE_CONTENT_GATES_WIZARD_SL
 					! isDirty ||
 					! title ||
 					! contentRules.length ||
+					hasUnusableAgeRule ||
 					( ! registration.active && ! customAccess.active ) ||
 					( ! registration.active &&
 						! customAccess.access_rules.some( ruleGroup =>
@@ -524,6 +541,7 @@ const Edit = ( { match, updateGatesData, slug = AUDIENCE_CONTENT_GATES_WIZARD_SL
 		handleCreate,
 		handleSave,
 		handleSaveButtonClick,
+		hasUnusableAgeRule,
 		isDirty,
 		isFetching,
 		isNew,
@@ -727,6 +745,8 @@ const Edit = ( { match, updateGatesData, slug = AUDIENCE_CONTENT_GATES_WIZARD_SL
 											label: __( 'Edit layout', 'newspack-plugin' ),
 											href: ! isNew ? getEditGateLayoutUrl( gate.id, 'registration' ) : undefined,
 											onClick: isNew ? () => handleCreate( 'registration' ) : undefined,
+											// On a new gate this saves first, so it waits for a usable age rule like Save does.
+											disabled: isNew && hasUnusableAgeRule,
 											icon: pencil,
 									  }
 									: undefined
@@ -753,6 +773,8 @@ const Edit = ( { match, updateGatesData, slug = AUDIENCE_CONTENT_GATES_WIZARD_SL
 										label: __( 'Edit layout', 'newspack-plugin' ),
 										href: ! isNew ? getEditGateLayoutUrl( gate.id, 'custom_access' ) : undefined,
 										onClick: isNew ? () => handleCreate( 'custom_access' ) : undefined,
+										// On a new gate this saves first, so it waits for a usable age rule like Save does.
+										disabled: isNew && hasUnusableAgeRule,
 										icon: pencil,
 								  }
 								: undefined

@@ -67,7 +67,7 @@ function yourprefix_render_row_cb( $field_args, $field ) {
 	?>
 	<div class="custom-field-row <?php echo esc_attr( $classes ); ?>">
 		<p><label for="<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $label ); ?></label></p>
-		<p><input id="<?php echo esc_attr( $id ); ?>" type="text" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr($value); ?>"/></p>
+		<p><input id="<?php echo esc_attr( $id ); ?>" type="text" name="<?php echo esc_attr( $name ); ?>" value="<?php echo $value; ?>"/></p>
 		<p class="description"><?php echo esc_html( $description ); ?></p>
 	</div>
 	<?php
@@ -82,7 +82,7 @@ function yourprefix_render_row_cb( $field_args, $field ) {
 function yourprefix_display_text_small_column( $field_args, $field ) {
 	?>
 	<div class="custom-column-display <?php echo esc_attr( $field->row_classes() ); ?>">
-		<p><?php echo esc_html($field->escaped_value()); ?></p>
+		<p><?php echo $field->escaped_value(); ?></p>
 		<p class="description"><?php echo esc_html( $field->args( 'description' ) ); ?></p>
 	</div>
 	<?php
@@ -785,6 +785,10 @@ function yourprefix_register_rest_api_box() {
 		'title'         => esc_html__( 'REST Test Box', 'cmb2' ),
 		'object_types'  => array( 'page' ), // Post type
 		'show_in_rest' => WP_REST_Server::ALLMETHODS, // WP_REST_Server::READABLE|WP_REST_Server::EDITABLE, // Determines which HTTP methods the box is visible in.
+		// Declares who may read this box via the REST API. `false` (no one), `true` (everyone),
+		// 'box-capability' (holders of this box's 'capability'), or any capability string.
+		// See: https://cmb2.io/docs/REST-API-Read-Permissions
+		// 'rest_read_capability' => 'edit_posts',
 		// Optional callback to limit box visibility.
 		// See: https://github.com/CMB2/CMB2/wiki/REST-API#permissions
 		// 'get_box_permissions_check_cb' => 'yourprefix_limit_rest_view_to_logged_in_users',
@@ -803,5 +807,6 @@ function yourprefix_register_rest_api_box() {
 		'id'         => 'yourprefix_rest_editable_text',
 		'type'       => 'text',
 		'show_in_rest' => WP_REST_Server::EDITABLE,// WP_REST_Server::ALLMETHODS|WP_REST_Server::READABLE, // Determines which HTTP methods the field is visible in. Will override the cmb2_box 'show_in_rest' param.
+		// 'rest_read_capability' => true, // Same values as the cmb2_box param, and overrides it for reads of this field.
 	) );
 }

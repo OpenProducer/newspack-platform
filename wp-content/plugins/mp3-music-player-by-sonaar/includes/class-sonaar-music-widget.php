@@ -299,8 +299,12 @@ class Sonaar_Music_Widget extends WP_Widget{
                 }
             }
 
-            $import_file = (get_post_meta( $albums, 'playlist_csv_file', true)) ? get_post_meta( $albums, 'playlist_csv_file', true) : $import_file;
-            $import_file = (get_post_meta( $albums, 'playlist_rss', true)) ? get_post_meta( $albums, 'playlist_rss', true) : $import_file;
+            $import_post = is_numeric( $albums ) && (int) $albums > 0 ? get_post( $albums ) : null;
+            if ( $this->can_read_playlist_post( $import_post ) ) {
+                $import_file = get_post_meta( $import_post->ID, 'playlist_rss', true )
+                    ?: get_post_meta( $import_post->ID, 'playlist_csv_file', true )
+                    ?: $import_file;
+            }
             if($isPlayer_Favorite) {
                 echo '<div class="srp-fav-notfound" style="display:none;" data-label="' . $fav_label_notfound . '"><i class="' . esc_html($fav_icon_add) . '"></i>' . $fav_label_notfound . '</div>';
             }
@@ -2291,7 +2295,6 @@ class Sonaar_Music_Widget extends WP_Widget{
 
             $query_args = array(
                 'fields'         => $fields,
-                'post_status'    => 'publish',
                 'paged'          => $paged,
                 'posts_per_page' => $posts_per_page,
                 'post_type'      => 'any',
@@ -2304,7 +2307,6 @@ class Sonaar_Music_Widget extends WP_Widget{
             // Remove overlapping IDs
             $query_args = array(
                 'fields'         => $fields,
-                'post_status'    => 'publish',
                 'paged'          => $paged,
                 'posts_per_page' => $posts_per_page,
                 'post_type'      => $sr_postypes,
@@ -2313,6 +2315,12 @@ class Sonaar_Music_Widget extends WP_Widget{
                 //'tax_query'      => $tax_query,
             );
             
+        }
+
+        $query_args['post_status'] = 'publish';
+        if ( is_user_logged_in() ) {
+            $query_args['post_status'] = array( 'publish', 'private' );
+            $query_args['perm'] = 'readable';
         }
 
         $query_args['post__not_in'] = $posts_not_in_array;
@@ -3823,12 +3831,34 @@ class Sonaar_Music_Widget extends WP_Widget{
         }
         return false;
     }
+    private function can_read_playlist_post( $source_post, $is_elementor_editor = false ) {
+        if ( ! $source_post || post_password_required( $source_post ) ) {
+            return false;
+        }
+
+        if ( 'private' === $source_post->post_status ) {
+            return is_user_logged_in() && current_user_can( 'read_post', $source_post->ID );
+        }
+
+        if ( 'publish' === $source_post->post_status && is_post_type_viewable( $source_post->post_type ) ) {
+            return true;
+        }
+
+        return ( 'draft' === $source_post->post_status || $is_elementor_editor )
+            && (int) $source_post->ID === (int) get_the_ID()
+            && current_user_can( 'edit_post', $source_post->ID );
+    }
+
     private function checkACF($field, $ids, $loop = true){
         if ($field !== null && substr( $field, 0, 3 ) === "acf") { 
             if (!function_exists('get_field')) return $field;
             if (empty($ids[0])){
                 // make sure to get current post id if no album id has been specified so we can run the checkACF function.
-                $ids[0] = get_post(get_the_ID());
+                $source_post = get_post( get_the_ID() );
+                if ( ! $this->can_read_playlist_post( $source_post ) ) {
+                    return '';
+                }
+                $ids[0] = $source_post;
             }
             $strings = '';
             foreach ( $ids as $a ) {
@@ -4001,6 +4031,7 @@ class Sonaar_Music_Widget extends WP_Widget{
                 $args = array(
                     'posts_per_page' => $posts_per_pages,
                     'post_type'      => $sr_postypes,
+                    'post_status'    => 'publish',
                     'post__in'       => $album_ids,
                     'lang'           => '',
                     'order'          => $ordering['order'],
@@ -4012,7 +4043,8 @@ class Sonaar_Music_Widget extends WP_Widget{
                     $post_id = reset($album_ids);
                     if (
                         (string) $post_id === (string) get_the_ID() &&
-                        get_post_status($post_id) === 'draft'
+                        get_post_status($post_id) === 'draft' &&
+                        current_user_can( 'edit_post', $post_id )
                     ) {
                         $args['post_status'] = array('draft', 'publish');
                     }
@@ -4042,6 +4074,11 @@ class Sonaar_Music_Widget extends WP_Widget{
                     $args['post_type'][] = $postTypeFromTheCurrentPost;
                 }
             }   
+            // Include explicitly selected private playlists for users who can read them.
+            if ( ! empty( $args['post__in'] ) && array_filter( $args['post__in'] ) && is_user_logged_in() ) {
+                $args['post_status'] = array_merge( (array) $args['post_status'], array( 'private' ) );
+                $args['perm'] = 'readable';
+            }
             $albums = get_posts($args);
         }else{
             // retrieve albums from category
@@ -4049,6 +4086,9 @@ class Sonaar_Music_Widget extends WP_Widget{
             $albums = $returned_data['albums'];// true means get post objects. false means get Ids only
     
         }
+
+        // Check each post before reading the tracks or other playlist metadata.
+        $albums = array_values( array_filter( $albums, array( $this, 'can_read_playlist_post' ) ) );
 
         if(Sonaar_Music::get_option('show_artist_name', 'srmp3_settings_general') ){
             $artistSeparator = (Sonaar_Music::get_option('artist_separator', 'srmp3_settings_general') && Sonaar_Music::get_option('artist_separator', 'srmp3_settings_general') != '' && Sonaar_Music::get_option('artist_separator', 'srmp3_settings_general') != 'by' )?Sonaar_Music::get_option('artist_separator', 'srmp3_settings_general'): esc_html__('by', 'sonaar-music');
@@ -4059,7 +4099,13 @@ class Sonaar_Music_Widget extends WP_Widget{
     
         if( $feed == '1' ){
             //001. FEED = 1 MEANS ITS A FEED BUILT WITH ELEMENTOR AND USE TRACKS UPLOAD. IF A PREDEFINED PLAYLIST IS SET, GO TO 003. FEED = 1 VALUE IS SET IN THE SR-MUSIC-PLAYER.PHP
-            if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
+            $source_post = ! empty( $album_ids[0] ) ? get_post( $album_ids[0] ) : null;
+            $is_elementor_editor = \Elementor\Plugin::$instance->editor->is_edit_mode();
+            if ( ! $this->can_read_playlist_post( $source_post, $is_elementor_editor ) ) {
+                return;
+            }
+
+            if ( $is_elementor_editor ) {
                 //__A. WE ARE IN EDITOR SO USE CURRENT POST META SOURCE TO UPDATE THE WIDGET LIVE OTHERWISE IT WONT UPDATE WITH LIVE DATA
                 $album_tracks =  get_post_meta( $album_ids[0], 'srmp3_elementor_tracks', true);
                 if($album_tracks == ''){
@@ -4650,7 +4696,8 @@ class Sonaar_Music_Widget extends WP_Widget{
                         }
 
                         $isPreview = false;
-                        if ($isPreviewEnabled) {
+                        // A configured after-purchase source takes priority over role-based previews for buyers.
+                        if ($isPreviewEnabled && !($has_purchased && $has_track_source_purchased_set)) {
                             if (isset($album_tracks[$i]["audio_preview"]) && $album_tracks[$i]["audio_preview"] != '') {
                                 $audio_preview_url = $album_tracks[$i]["audio_preview"];
                                 $file_path = str_replace($upload_dir['baseurl'], $upload_dir['basedir'], $audio_preview_url);
