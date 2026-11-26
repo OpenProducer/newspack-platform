@@ -1803,6 +1803,7 @@ return array(
     'Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits' => $baseDir . '/src/StoreApi/Utilities/QuantityLimits.php',
     'Automattic\\WooCommerce\\StoreApi\\Utilities\\RateLimits' => $baseDir . '/src/StoreApi/Utilities/RateLimits.php',
     'Automattic\\WooCommerce\\StoreApi\\Utilities\\SanitizationUtils' => $baseDir . '/src/StoreApi/Utilities/SanitizationUtils.php',
+    'Automattic\\WooCommerce\\StoreApi\\Utilities\\SessionConcurrencyGuard' => $baseDir . '/src/StoreApi/Utilities/SessionConcurrencyGuard.php',
     'Automattic\\WooCommerce\\StoreApi\\Utilities\\UcpUtils' => $baseDir . '/src/StoreApi/Utilities/UcpUtils.php',
     'Automattic\\WooCommerce\\StoreApi\\Utilities\\UnexpectedErrorResponse' => $baseDir . '/src/StoreApi/Utilities/UnexpectedErrorResponse.php',
     'Automattic\\WooCommerce\\StoreApi\\Utilities\\ValidationUtils' => $baseDir . '/src/StoreApi/Utilities/ValidationUtils.php',

@@ -1,0 +1,1 @@
+window.wp.data.dispatch("core/notices").createNotice("info",newspack_handoff.text,{isDismissible:!0,actions:[{url:newspack_handoff.returnURL,label:newspack_handoff.buttonText}]});

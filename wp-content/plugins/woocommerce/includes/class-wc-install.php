@@ -379,6 +379,10 @@ class WC_Install {
 			// Run again for stores whose database was already at 11.3.0 or later, as they skip the 11.2.2 key.
 			'wc_update_1122_remove_objects_from_default_attributes',
 		),
+		'11.3.1'   => array(
+			'wc_update_1131_redact_deferred_customer_passwords',
+			'wc_update_1131_invalidate_postcode_match_caches',
+		),
 	);
 
 	/**
@@ -1827,6 +1831,7 @@ class WC_Install {
 
 		// Clear table caches.
 		delete_transient( 'wc_attribute_taxonomies' );
+		WC_Cache_Helper::invalidate_cache_group( 'woocommerce-attributes' );
 		TaxesDataStore::flush_lookup_columns_cache();
 		OrdersStatsDataStore::flush_payment_method_column_cache();
 

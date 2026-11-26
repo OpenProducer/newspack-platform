@@ -1892,6 +1892,7 @@ class ComposerStaticInit3d2aab352543dade8fac919263db0017
         'Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits' => __DIR__ . '/../..' . '/src/StoreApi/Utilities/QuantityLimits.php',
         'Automattic\\WooCommerce\\StoreApi\\Utilities\\RateLimits' => __DIR__ . '/../..' . '/src/StoreApi/Utilities/RateLimits.php',
         'Automattic\\WooCommerce\\StoreApi\\Utilities\\SanitizationUtils' => __DIR__ . '/../..' . '/src/StoreApi/Utilities/SanitizationUtils.php',
+        'Automattic\\WooCommerce\\StoreApi\\Utilities\\SessionConcurrencyGuard' => __DIR__ . '/../..' . '/src/StoreApi/Utilities/SessionConcurrencyGuard.php',
         'Automattic\\WooCommerce\\StoreApi\\Utilities\\UcpUtils' => __DIR__ . '/../..' . '/src/StoreApi/Utilities/UcpUtils.php',
         'Automattic\\WooCommerce\\StoreApi\\Utilities\\UnexpectedErrorResponse' => __DIR__ . '/../..' . '/src/StoreApi/Utilities/UnexpectedErrorResponse.php',
         'Automattic\\WooCommerce\\StoreApi\\Utilities\\ValidationUtils' => __DIR__ . '/../..' . '/src/StoreApi/Utilities/ValidationUtils.php',
